@@ -1,0 +1,9 @@
+{
+  "scripts": {
+    "build": "npm i && sfa-router-build"
+  },
+  "devDependencies": {
+    "sfa": "C:/dev/sfajs/sfa",
+    "sfa-router": "../.."
+  }
+}

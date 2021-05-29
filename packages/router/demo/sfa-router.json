@@ -1,0 +1,53 @@
+{
+  "router": {
+    "dir": "controllers",
+    "strict": false
+  },
+  "ts": {
+    "static": [
+      {
+        "source": "static",
+        "target": "assets"
+      },
+      "static.txt"
+    ]
+  },
+  "doc": {
+    "output": "../docs/api/README.md",
+    "title": "sfa-title",
+    "subtitle": "sfa-subtitle",
+    "parts": [
+      {
+        "name": "part1",
+        "inputHeaders": [
+          {
+            "name": "base-input-header",
+            "desc": "this is a base input header",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "name": "part2",
+        "outputHeaders": [
+          {
+            "name": "base-output-header",
+            "desc": "this is a base output header",
+            "type": "string"
+          }
+        ]
+      },
+      {
+        "name": "part3",
+        "query": [
+          {
+            "name": "base-query",
+            "desc": "this is a base query",
+            "type": "string"
+          }
+        ]
+      }
+    ],
+    "partsFromAuth": true
+  }
+}
