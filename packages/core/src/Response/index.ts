@@ -2,8 +2,8 @@ import StatusCode from "./StatusCode";
 
 export default class Response {
   constructor(
-    public status: StatusCode | number,
-    public body: unknown = {},
+    public status: StatusCode | number = StatusCode.notFound,
+    public body: unknown = undefined,
     public readonly headers = <Record<string, string | string[] | undefined>>{}
   ) {}
 

@@ -4,16 +4,15 @@ import HttpContext from "./HttpContext";
 import SimpleMiddleware from "./Middleware/SimpleMiddleware";
 import ResponseError from "./Response/ResponseError";
 import Request from "./Request";
-import StatusCode from "./Response/StatusCode";
 
 export default class Startup {
+  constructor(req?: Request) {
+    this.#ctx = new HttpContext(req || new Request());
+  }
+
   #ctx: HttpContext;
   public get ctx(): HttpContext {
     return this.#ctx;
-  }
-
-  constructor(req: Request) {
-    this.#ctx = new HttpContext(req, new Response(StatusCode.notFound));
   }
 
   use(
@@ -42,16 +41,13 @@ export default class Startup {
   }
 
   async invoke(): Promise<Response> {
+    if (!this.ctx.mds.length) {
+      return this.ctx.res;
+    }
+
     try {
       const { mdf, md } = this.ctx.mds[0];
-      let mdw;
-      if (md) {
-        mdw = md;
-      } else {
-        mdw = mdf();
-      }
-      mdw.init(this.ctx, 0);
-      await mdw.invoke();
+      await (md ?? mdf()).init(this.ctx, 0).invoke();
     } catch (err) {
       if (err instanceof ResponseError) {
         this.#handleError(err);

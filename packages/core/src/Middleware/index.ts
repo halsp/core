@@ -4,6 +4,8 @@ import ErrorMessage from "../Response/ErrorMessage";
 import StatusCode from "../Response/StatusCode";
 
 export default abstract class Middleware {
+  constructor(public readonly cache: boolean = true) {}
+
   #index!: number;
 
   #ctx!: HttpContext;
@@ -16,20 +18,20 @@ export default abstract class Middleware {
     if (this.ctx.mds.length <= this.#index + 1) return;
 
     const { mdf, md } = this.ctx.mds[this.#index + 1];
-    if (md) {
+    if (md && md.cache) {
       await md.invoke();
     } else {
-      if (!mdf) return;
       const nextMd = mdf();
-      this.ctx.mds[this.#index].md = nextMd;
+      this.ctx.mds[this.#index + 1].md = nextMd;
       nextMd.init(this.ctx, this.#index + 1);
       await nextMd.invoke();
     }
   }
 
-  public init(ctx: HttpContext, index: number): void {
+  public init(ctx: HttpContext, index: number): Middleware {
     this.#ctx = ctx;
     this.#index = index;
+    return this;
   }
 
   protected ok = (body?: unknown): Response => {

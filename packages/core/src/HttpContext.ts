@@ -3,6 +3,10 @@ import Request from "./Request";
 import Response from "./Response";
 
 export default class HttpContext {
+  constructor(req: Request) {
+    this.#req = req;
+  }
+
   readonly #bag: { [k: string]: unknown } = {};
 
   public readonly mds: {
@@ -10,7 +14,21 @@ export default class HttpContext {
     md?: Middleware;
   }[] = [];
 
-  constructor(public readonly req: Request, public readonly res: Response) {}
+  #res: Response = new Response();
+  public get res(): Response {
+    return this.#res;
+  }
+
+  #req: Request;
+  public get req(): Request {
+    return this.#req;
+  }
+
+  refresh(req: Request): HttpContext {
+    this.#req = req;
+    this.#res = new Response();
+    return this;
+  }
 
   public bag<T>(key: string): T;
   public bag<T>(key: string, value: T): HttpContext;
