@@ -89,6 +89,8 @@ export default class Router {
   }
 
   private setQuery(): void {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (this.startup.ctx.req as any).query = {};
     if (!this.mapItem.path.includes("^")) return;
 
     const reqPath = this.startup.ctx.req.path;

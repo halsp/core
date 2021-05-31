@@ -42,6 +42,10 @@ declare module "sfa" {
   interface Startup {
     useRouter(config?: { authFunc?: () => Authority }): sfa.Startup;
   }
+
+  interface Request {
+    readonly query: Record<string, string>;
+  }
 }
 
 sfa.Startup.prototype.useRouter = function (config?: {
