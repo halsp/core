@@ -20,16 +20,14 @@ class Login extends Action {
 
 test("action test", async function () {
   const loginAction = new Login();
-  loginAction.init(
-    new HttpContext(
-      new Request().setData({
-        account: "abc",
-        password: "123456",
-      }),
-      new Response(StatusCode.ok)
-    ),
-    0
+  const ctx = new HttpContext(
+    new Request().setData({
+      account: "abc",
+      password: "123456",
+    })
   );
+  ctx.res.status = StatusCode.ok;
+  loginAction.init(ctx, 0);
 
   await loginAction.invoke();
   expect(loginAction.ctx.res.status).toBe(StatusCode.ok);

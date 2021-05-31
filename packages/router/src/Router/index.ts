@@ -1,4 +1,4 @@
-import { existsSync } from "fs";
+import { existsSync, readFileSync } from "fs";
 import linq = require("linq");
 import path = require("path");
 import Config, { RouterConfig } from "../Config";
@@ -20,12 +20,12 @@ export default class Router {
     return this.startup.ctx.bag<RouterConfig>("B-UnitTest");
   }
 
-  private _mapItem: MapItem | undefined;
+  #mapItem: MapItem | undefined;
   public get mapItem(): MapItem {
-    if (!this._mapItem) {
-      this._mapItem = this.getMapItem();
+    if (!this.#mapItem) {
+      this.#mapItem = this.getMapItem();
     }
-    return this._mapItem;
+    return this.#mapItem;
   }
 
   use(): void {
@@ -35,12 +35,15 @@ export default class Router {
         const auth = authFunc();
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (auth.roles as any) = this.mapItem.roles;
+        this.#mapItem = undefined;
         return auth;
       });
     }
     this.startup.use(() => {
       this.setQuery();
-      return this.getAction();
+      const action = this.getAction();
+      this.#mapItem = undefined;
+      return action;
     });
   }
 
@@ -236,8 +239,7 @@ export default class Router {
   private getMap(): MapItem[] {
     const mapPath = path.join(process.cwd(), Constant.mapFileName);
     if (existsSync(mapPath)) {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      return require(mapPath);
+      return JSON.parse(readFileSync(mapPath, "utf-8"));
     } else {
       return new MapCreater(this.dir).map;
     }

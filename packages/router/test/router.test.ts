@@ -80,5 +80,5 @@ test("null body test", async function () {
     .useRouter()
     .invoke();
 
-  expect(result.status).toBe(200);
+  expect(result.status).toBe(404);
 });

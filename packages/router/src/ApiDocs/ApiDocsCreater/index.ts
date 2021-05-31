@@ -86,9 +86,17 @@ export default class ApiDocsCreater {
 
   private readFile(rPath: string): string {
     const file = path.join(process.cwd(), this.routerDir, rPath);
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const actionClass = require(file).default;
-    const action = new actionClass() as Action;
+    let action: Action;
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const actionClass = require(file).default;
+      action = new actionClass();
+      if (!(action instanceof Action)) {
+        return "";
+      }
+    } catch (err) {
+      return "";
+    }
 
     let docs;
     if (action.docs) {
