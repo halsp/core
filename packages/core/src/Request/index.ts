@@ -84,15 +84,4 @@ export default class Request {
   setParam(key: string, value?: string): Request {
     return this.setParams({ key, value });
   }
-
-  setQueries(...queries: { key: string; value: string }[]): Request {
-    queries.forEach((query) => {
-      this.query[query.key] = query.value;
-    });
-    return this;
-  }
-
-  setQuery(key: string, value: string): Request {
-    return this.setQueries({ key, value });
-  }
 }
