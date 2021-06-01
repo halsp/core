@@ -1,9 +1,9 @@
 import { Middleware } from "../../src/index";
 import Request from "../../src/Request";
-import TestStartup from "../TestStartup";
+import { SimpleStartup } from "../../src";
 
 test("middleware additives", async function () {
-  const startup = new TestStartup(new Request())
+  const startup = new SimpleStartup(new Request())
     .use(() => new Mdw1())
     .use(() => new Mdw2())
     .use(() => new Mdw3())

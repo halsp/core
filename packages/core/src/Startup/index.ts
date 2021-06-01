@@ -1,9 +1,9 @@
-import Middleware from "./Middleware";
-import Response from "./Response";
-import HttpContext from "./HttpContext";
-import SimpleMiddleware from "./Middleware/SimpleMiddleware";
-import ResponseError from "./Response/ResponseError";
-import Request from "./Request";
+import Middleware from "../Middleware";
+import Response from "../Response";
+import HttpContext from "../HttpContext";
+import SimpleMiddleware from "../Middleware/SimpleMiddleware";
+import ResponseError from "../Response/ResponseError";
+import Request from "../Request";
 
 export default abstract class Startup {
   constructor(req?: Request) {

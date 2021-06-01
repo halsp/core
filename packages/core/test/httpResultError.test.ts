@@ -1,10 +1,10 @@
 import { ErrorMessage } from "../src";
 import StatusCode from "../src/Response/StatusCode";
 import Request from "../src/Request";
-import TestStartup from "./TestStartup";
+import { SimpleStartup } from "../src";
 
 test("router test", async function () {
-  const result = await new TestStartup(
+  const result = await new SimpleStartup(
     new Request().setHeader("custom-header", "aaa")
   )
     .use(async (ctx) => {
