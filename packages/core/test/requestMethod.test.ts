@@ -1,8 +1,9 @@
-import { HttpMethod, Startup } from "../src/index";
+import { HttpMethod } from "../src/index";
 import Request from "../src/Request";
+import TestStartup from "./TestStartup";
 
 test("request method lower case", async function () {
-  const startup = new Startup(
+  const startup = new TestStartup(
     new Request().setMethod(HttpMethod.post.toLowerCase())
   );
 
@@ -10,7 +11,7 @@ test("request method lower case", async function () {
 });
 
 test("request method upper case", async function () {
-  const startup = new Startup(
+  const startup = new TestStartup(
     new Request().setMethod(HttpMethod.post.toUpperCase())
   );
 

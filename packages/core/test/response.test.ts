@@ -1,7 +1,7 @@
 import ErrorMessage from "../src/Response/ErrorMessage";
 import StatusCode from "../src/Response/StatusCode";
 import HttpContext from "../src/HttpContext";
-import { Middleware, Response } from "../src";
+import { Middleware } from "../src";
 import Request from "../src/Request";
 
 const normalMethod = [
@@ -56,10 +56,7 @@ for (let i = 0; i < normalMethod.length; i++) {
     }
     constructor() {
       super();
-      this.init(
-        new HttpContext(new Request(), new Response(StatusCode.notFound)),
-        0
-      );
+      this.init(new HttpContext(new Request()), 0);
     }
   }
   const md = new Md();
@@ -105,10 +102,7 @@ for (let i = 0; i < msgMethods.length; i++) {
     }
     constructor() {
       super();
-      this.init(
-        new HttpContext(new Request(), new Response(StatusCode.notFound)),
-        0
-      );
+      this.init(new HttpContext(new Request()), 0);
     }
   }
 
@@ -137,10 +131,7 @@ class RedirectMd extends Middleware {
   constructor(readonly code: StatusCode, readonly location: string) {
     super();
 
-    this.init(
-      new HttpContext(new Request(), new Response(StatusCode.notFound)),
-      0
-    );
+    this.init(new HttpContext(new Request()), 0);
   }
 
   async invoke(): Promise<void> {

@@ -1,5 +1,6 @@
-import { HttpMethod, Startup, StatusCode } from "../src/index";
+import { HttpMethod, StatusCode } from "../src/index";
 import Request from "../src/Request";
+import TestStartup from "./TestStartup";
 
 test("method override", async function () {
   const req = new Request()
@@ -18,7 +19,7 @@ test("method override upper case", async function () {
 });
 
 test(`method override request`, async function () {
-  const result = await new Startup(
+  const result = await new TestStartup(
     new Request().setMethod(HttpMethod.patch.toUpperCase())
   )
     .use(async (ctx) => {
@@ -27,7 +28,7 @@ test(`method override request`, async function () {
         method: HttpMethod.get,
       };
     })
-    .invoke();
+    .run();
 
   expect(result.status).toBe(200);
   expect((result.body as Record<string, unknown>).method).toBe(HttpMethod.get);

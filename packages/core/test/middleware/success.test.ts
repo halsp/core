@@ -1,18 +1,19 @@
-import { Middleware, Startup } from "../../src/index";
+import { Middleware } from "../../src/index";
 import Request from "../../src/Request";
+import TestStartup from "../TestStartup";
 
 test("middleware test success", async function () {
   const stepResult: Record<string, number> = {
     step: 0,
   };
 
-  const startup = new Startup(new Request())
+  const startup = new TestStartup(new Request())
     .use(() => new Mdw1(stepResult))
     .use(() => new Mdw2(stepResult))
     .use(() => new Mdw3(stepResult))
     .use(() => new Mdw4(stepResult));
 
-  await startup.invoke();
+  await startup.run();
   expect(startup.ctx.res.status).toBe(200);
   expect(stepResult.step).toBe(111);
   expect(startup.ctx.res.body).toBe("middleware-success");

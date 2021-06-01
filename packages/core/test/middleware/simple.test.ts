@@ -1,8 +1,8 @@
-import { Startup } from "../../src";
 import Request from "../../src/Request";
+import TestStartup from "../TestStartup";
 
 test("simpple middleware", async function () {
-  const startup = new Startup(new Request())
+  const startup = new TestStartup(new Request())
     .use(async (ctx, next) => {
       ctx.res.headers.mdw1 = "mdw1";
       await next();
@@ -28,7 +28,7 @@ test("simpple middleware", async function () {
       ctx.res.status = 200;
     });
 
-  const result = await startup.invoke();
+  const result = await startup.run();
   expect(result.status).toBe(200);
   expect(result.headers.mdw1).toBe("mdw1");
   expect(result.headers.mdw2).toBe("mdw2");

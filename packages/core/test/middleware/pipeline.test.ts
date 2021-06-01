@@ -1,14 +1,15 @@
-import { Middleware, Startup } from "../../src/index";
+import { Middleware } from "../../src/index";
 import Request from "../../src/Request";
+import TestStartup from "../TestStartup";
 
 test("middleware additives", async function () {
-  const startup = new Startup(new Request())
+  const startup = new TestStartup(new Request())
     .use(() => new Mdw1())
     .use(() => new Mdw2())
     .use(() => new Mdw3())
     .use(() => new Mdw4());
 
-  const result = await startup.invoke();
+  const result = await startup.run();
   expect(result.status).toBe(200);
   expect(result.headers.mdw1).toBe("mdw1");
   expect(result.headers.mdw2).toBe("mdw2");

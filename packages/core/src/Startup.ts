@@ -5,7 +5,7 @@ import SimpleMiddleware from "./Middleware/SimpleMiddleware";
 import ResponseError from "./Response/ResponseError";
 import Request from "./Request";
 
-export default class Startup {
+export default abstract class Startup {
   constructor(req?: Request) {
     this.#ctx = new HttpContext(req || new Request());
   }
@@ -15,11 +15,11 @@ export default class Startup {
     return this.#ctx;
   }
 
-  use(
+  use<T extends this>(
     mdf:
       | (() => Middleware)
       | ((ctx: HttpContext, next: () => Promise<void>) => Promise<void>)
-  ): Startup {
+  ): T {
     if (!mdf) throw new Error();
 
     let mdFunc;
@@ -37,10 +37,10 @@ export default class Startup {
       mdf: mdFunc,
     });
 
-    return this;
+    return this as T;
   }
 
-  async invoke(): Promise<Response> {
+  protected async invoke(): Promise<Response> {
     if (!this.ctx.mds.length) {
       return this.ctx.res;
     }
