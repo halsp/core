@@ -1,6 +1,6 @@
 {
-  "name": "sfa-cloudbase",
-  "version": "0.0.1-beta.1",
+  "name": "@sfajs/cloudbase",
+  "version": "0.0.1-beta.3",
   "description": "sfa-cloudbase",
   "homepage": "https://github.com/sfajs/sfa-cloudbase",
   "repository": {
@@ -35,11 +35,10 @@
   "license": "MIT",
   "dependencies": {
     "@types/node": "^15.6.0",
-    "sfa": "0.0.1-beta.2"
+    "sfa": "0.0.1-beta.3"
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",
-    "@types/url-parse": "^1.4.3",
     "@typescript-eslint/eslint-plugin": "^4.24.0",
     "@typescript-eslint/parser": "^4.24.0",
     "eslint": "^7.27.0",

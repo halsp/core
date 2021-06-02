@@ -4,7 +4,7 @@
   },
   "devDependencies": {
     "sfa": "0.0.1-beta.2",
-    "sfa-router": "0.0.1-beta.1",
-    "sfa-cloudbase": ".."
+    "@sfajs/router": "0.0.1-beta.1",
+    "@sfajs/cloudbase": ".."
   }
 }

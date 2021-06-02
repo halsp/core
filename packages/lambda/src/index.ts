@@ -1,6 +1,5 @@
 import { Request, Startup } from "sfa";
 import ResponseStruct from "./ResponseStruct";
-import "sfa-router";
 
 declare module "sfa" {
   interface Request {
@@ -35,12 +34,17 @@ export default class SfaCloudbase extends Startup {
     (this.ctx.req as any).event = event;
   }
 
+  async run(): Promise<ResponseStruct> {
+    await super.invoke();
+    return this.struct;
+  }
+
   get struct(): ResponseStruct {
     return <ResponseStruct>{
-      headers: this.ctx.res.headers,
-      statusCode: this.ctx.res.status,
-      isBase64Encoded: this.ctx.res.isBase64Encoded,
-      body: this.ctx.res.body,
+      headers: this.ctx.res?.headers ?? {},
+      statusCode: this.ctx.res?.status ?? 0,
+      isBase64Encoded: this.ctx.res?.isBase64Encoded ?? false,
+      body: this.ctx.res?.body ?? {},
     };
   }
 }

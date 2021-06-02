@@ -1,5 +1,5 @@
 import SfaCloudbase from "sfa-cloudbase";
-import "sfa-router";
+import "@sfajs/router";
 
 export const main = async (
   event: Record<string, unknown>,
