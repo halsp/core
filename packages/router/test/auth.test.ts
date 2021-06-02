@@ -2,11 +2,11 @@ import linq = require("linq");
 import global from "./global";
 import "./UseTest";
 import "../src";
-import { Startup, StatusCode, Request } from "sfa";
+import { Request, SimpleStartup } from "sfa";
 import Authority from "../src/Authority";
 
 test("router test login access", async function () {
-  const result = await new Startup(
+  const result = await new SimpleStartup(
     new Request()
       .setData({
         account: "abc",
@@ -18,16 +18,16 @@ test("router test login access", async function () {
       .setMethod("POST")
   )
     .useTest()
-    .useRouter({
+    .useRouter<SimpleStartup>({
       authFunc: () => new Auth(),
     })
-    .invoke();
+    .run();
 
   expect(result.status).toBe(200);
 });
 
 test("router test login not access", async function () {
-  const result = await new Startup(
+  const result = await new SimpleStartup(
     new Request()
       .setHeader("account", global.users[0].account)
       .setHeader("password", global.users[0].password + "1")
@@ -35,16 +35,16 @@ test("router test login not access", async function () {
       .setMethod("POST")
   )
     .useTest()
-    .useRouter({
+    .useRouter<SimpleStartup>({
       authFunc: () => new Auth(),
     })
-    .invoke();
+    .run();
 
   expect(result.status).toBe(403);
 });
 
 test("router test admin access", async function () {
-  const result = await new Startup(
+  const result = await new SimpleStartup(
     new Request()
       .setHeader("account", global.users[1].account)
       .setHeader("password", global.users[1].password)
@@ -52,16 +52,16 @@ test("router test admin access", async function () {
       .setMethod("POST")
   )
     .useTest()
-    .useRouter({
+    .useRouter<SimpleStartup>({
       authFunc: () => new Auth(),
     })
-    .invoke();
+    .run();
 
   expect(result.status).toBe(200);
 });
 
 test("router test admin not access", async function () {
-  const result = await new Startup(
+  const result = await new SimpleStartup(
     new Request()
       .setHeader("account", global.users[0].account)
       .setHeader("password", global.users[0].password)
@@ -69,10 +69,10 @@ test("router test admin not access", async function () {
       .setMethod("POST")
   )
     .useTest()
-    .useRouter({
+    .useRouter<SimpleStartup>({
       authFunc: () => new Auth(),
     })
-    .invoke();
+    .run();
 
   expect(result.status).toBe(403);
 });

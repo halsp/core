@@ -1,12 +1,12 @@
-const { Request, Startup } = require("sfa");
+const { Request, SimpleStartup } = require("sfa");
 import "sfa-router";
 
 exports.main = async () => {
-  return await new Startup(new Request())
+  return await new SimpleStartup(new Request())
     .use(async (ctx, next) => {
       ctx.res.headers.demo = "js";
       await next();
     })
-    .useRouter()
-    .invoke();
+    .useRouter<SimpleStartup>()
+    .run();
 };

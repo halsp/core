@@ -1,16 +1,14 @@
-import * as sfa from "sfa";
-import Router from "./Router";
+import Startup from "sfa/dist/Startup";
 
+import Router from "./Router";
 import Config, {
   TsConfig,
   AppConfig,
   RouterConfig,
   TsStaticItemConfig,
 } from "./Config";
-
 import Action from "./Action";
 import Authority from "./Authority";
-
 import ApiDocs from "./ApiDocs";
 import ApiDocsParam from "./ApiDocs/ApiDocsParam";
 import ApiDocsIOParams from "./ApiDocs/ApiDocsParam/ApiDocsIOParams";
@@ -40,7 +38,7 @@ export {
 
 declare module "sfa" {
   interface Startup {
-    useRouter(config?: { authFunc?: () => Authority }): sfa.Startup;
+    useRouter<T extends this>(config?: { authFunc?: () => Authority }): T;
   }
 
   interface Request {
@@ -48,9 +46,9 @@ declare module "sfa" {
   }
 }
 
-sfa.Startup.prototype.useRouter = function (config?: {
+Startup.prototype.useRouter = function <T extends Startup>(config?: {
   authFunc?: () => Authority;
-}): sfa.Startup {
-  new Router(this, config).use();
-  return this;
+}): T {
+  new Router(this, config?.authFunc).use();
+  return this as T;
 };

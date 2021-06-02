@@ -1,13 +1,13 @@
 import "../UseTest";
 import "../../src";
-import { Startup, Request } from "sfa";
+import { SimpleStartup, Request } from "sfa";
 
 test(`method not allowed`, async function () {
-  const result = await new Startup(
+  const result = await new SimpleStartup(
     new Request().setPath("/restful/1").setMethod("NO")
   )
     .useTest()
-    .useRouter()
-    .invoke();
+    .useRouter<SimpleStartup>()
+    .run();
   expect(result.status).toBe(405);
 });

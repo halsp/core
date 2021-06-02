@@ -1,17 +1,17 @@
 import "../UseTest";
 import "../../src";
-import { HttpMethod, Startup, Request } from "sfa";
+import { HttpMethod, SimpleStartup, Request } from "sfa";
 
 const methods = ["test", "aaa", "NO"];
 
 methods.forEach((method) => {
   test(`${method} -> any restful test`, async function () {
-    const result = await new Startup(
+    const result = await new SimpleStartup(
       new Request().setPath("/restful").setMethod(method)
     )
       .useTest()
-      .useRouter()
-      .invoke();
+      .useRouter<SimpleStartup>()
+      .run();
 
     expect(result.status).toBe(200);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

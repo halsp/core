@@ -13,7 +13,7 @@ import { HttpMethod, ResponseError, Startup, StatusCode } from "sfa";
 export default class Router {
   constructor(
     private readonly startup: Startup,
-    private readonly config?: { authFunc?: () => Authority }
+    private readonly authFunc?: () => Authority
   ) {}
 
   private get unitTest(): RouterConfig {
@@ -29,8 +29,8 @@ export default class Router {
   }
 
   use(): void {
-    if (this.config && this.config.authFunc) {
-      const authFunc = this.config.authFunc;
+    if (this.authFunc) {
+      const authFunc = this.authFunc;
       this.startup.use(() => {
         const auth = authFunc();
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

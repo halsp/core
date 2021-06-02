@@ -37,7 +37,7 @@
     "@types/node": "^15.6.0",
     "linq": "^3.2.3",
     "shelljs": "^0.8.4",
-    "sfa": "^0.0.1-beta.2"
+    "sfa": "../sfa"
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",

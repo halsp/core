@@ -6,7 +6,6 @@ import "../UseTest";
 import "../../src";
 
 const configPath = `./demo/${Constant.configFileName}`;
-console.log("configPath", configPath);
 const config = JSON.parse(fs.readFileSync(configPath, "utf-8")) as AppConfig;
 if (!config || !config.router) {
   throw new Error();

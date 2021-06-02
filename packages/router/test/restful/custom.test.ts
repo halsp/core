@@ -1,25 +1,25 @@
 import "../UseTest";
 import "../../src";
-import { HttpMethod, Startup, Request } from "sfa";
+import { HttpMethod, SimpleStartup, Request } from "sfa";
 
 test(`custom httpMethod test`, async function () {
   HttpMethod.custom.push("CUSTOM");
-  const result = await new Startup(
+  const result = await new SimpleStartup(
     new Request().setPath("/restful/1").setMethod("CUSTOM")
   )
     .useTest()
-    .useRouter()
-    .invoke();
+    .useRouter<SimpleStartup>()
+    .run();
   expect(result.status).toBe(200);
 });
 
 test(`custom httpMethod test err`, async function () {
   HttpMethod.custom.splice(0);
-  const result = await new Startup(
+  const result = await new SimpleStartup(
     new Request().setPath("/restful/1").setMethod("CUSTOM")
   )
     .useTest()
-    .useRouter()
-    .invoke();
+    .useRouter<SimpleStartup>()
+    .run();
   expect(result.status).toBe(405);
 });
