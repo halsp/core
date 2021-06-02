@@ -3,7 +3,7 @@
     "build": "npm i && sfa-router-build"
   },
   "devDependencies": {
-    "sfa": "../../../sfa",
+    "sfa": "^0.0.1-beta.3",
     "sfa-router": "../.."
   }
 }
