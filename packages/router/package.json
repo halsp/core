@@ -10,11 +10,9 @@
   "keywords": [
     "sfa",
     "restful",
-    "nodejs-server",
     "serverless",
     "nodejs",
-    "typescript",
-    "javascript"
+    "typescript"
   ],
   "bugs": {
     "url": "https://github.com/sfajs/router/issues",

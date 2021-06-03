@@ -8,7 +8,7 @@ import Authority from "../src/Authority";
 test("router test login access", async function () {
   const result = await new SimpleStartup(
     new Request()
-      .setData({
+      .setBody({
         account: "abc",
         password: "123456",
       })

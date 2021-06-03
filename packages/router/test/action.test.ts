@@ -1,9 +1,9 @@
-import { HttpContext, StatusCode, Request, Response } from "sfa";
+import { HttpContext, StatusCode, Request } from "sfa";
 import { Action } from "../src/index";
 
 class Login extends Action {
   async invoke(): Promise<void> {
-    const { account, password } = <Record<string, unknown>>this.ctx.req.data;
+    const { account, password } = <Record<string, unknown>>this.ctx.req.body;
 
     if (account != "abc") {
       this.notFound("用户不存在");
@@ -21,7 +21,7 @@ class Login extends Action {
 test("action test", async function () {
   const loginAction = new Login();
   const ctx = new HttpContext(
-    new Request().setData({
+    new Request().setBody({
       account: "abc",
       password: "123456",
     })
@@ -32,11 +32,11 @@ test("action test", async function () {
   await loginAction.invoke();
   expect(loginAction.ctx.res.status).toBe(StatusCode.ok);
 
-  loginAction.ctx.req.data.password = "12345";
+  loginAction.ctx.req.body.password = "12345";
   await loginAction.invoke();
   expect(loginAction.ctx.res.status).toBe(StatusCode.badRequest);
 
-  loginAction.ctx.req.data.account = "12";
+  loginAction.ctx.req.body.account = "12";
   await loginAction.invoke();
   expect(loginAction.ctx.res.status).toBe(StatusCode.notFound);
 });
