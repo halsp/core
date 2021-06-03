@@ -1,6 +1,6 @@
 {
   "name": "sfa",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "serverless function api",
   "homepage": "https://github.com/sfajs/sfa",
   "repository": {
@@ -8,12 +8,9 @@
     "url": "https://github.com/sfajs/sfa"
   },
   "keywords": [
-    "restful",
-    "nodejs-server",
     "serverless",
     "nodejs",
-    "typescript",
-    "javascript"
+    "typescript"
   ],
   "bugs": {
     "url": "https://github.com/sfajs/sfa/issues",
