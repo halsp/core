@@ -9,12 +9,10 @@
   },
   "keywords": [
     "sfa",
-    "nodejs-server",
+    "cloudbase",
     "serverless",
     "nodejs",
-    "typescript",
-    "javascript",
-    "http"
+    "typescript"
   ],
   "bugs": {
     "url": "https://github.com/sfajs/cloudbase/issues",
