@@ -1,11 +1,11 @@
 {
   "name": "@sfajs/cloudbase",
-  "version": "0.0.1-beta.3",
-  "description": "sfa-cloudbase",
-  "homepage": "https://github.com/sfajs/sfa-cloudbase",
+  "version": "0.0.1-beta.7",
+  "description": "Hosting sfa in cloudbase",
+  "homepage": "https://github.com/sfajs/cloudbase",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sfajs/sfa-cloudbase"
+    "url": "https://github.com/sfajs/cloudbase"
   },
   "keywords": [
     "sfa",
@@ -17,7 +17,7 @@
     "http"
   ],
   "bugs": {
-    "url": "https://github.com/sfajs/sfa-cloudbase/issues",
+    "url": "https://github.com/sfajs/cloudbase/issues",
     "email": "support@hal.wang"
   },
   "main": "dist/index.js",
@@ -35,7 +35,7 @@
   "license": "MIT",
   "dependencies": {
     "@types/node": "^15.6.0",
-    "sfa": "0.0.1-beta.3"
+    "sfa": "^0.0.2"
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",

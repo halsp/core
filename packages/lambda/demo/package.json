@@ -3,8 +3,8 @@
     "build": "sfa-router-build"
   },
   "devDependencies": {
-    "sfa": "0.0.1-beta.2",
-    "@sfajs/router": "0.0.1-beta.1",
+    "sfa": "^0.0.2",
+    "@sfajs/router": "^0.0.1",
     "@sfajs/cloudbase": ".."
   }
 }

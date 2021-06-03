@@ -1,4 +1,4 @@
-import SfaCloudbase from "sfa-cloudbase";
+import SfaCloudbase from "@sfajs/cloudbase";
 import "@sfajs/router";
 
 export const main = async (

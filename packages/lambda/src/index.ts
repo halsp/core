@@ -16,12 +16,12 @@ export { ResponseStruct };
 
 export default class SfaCloudbase extends Startup {
   constructor(
-    context: Record<string, unknown>,
-    event: Record<string, unknown>
+    event: Record<string, unknown>,
+    context: Record<string, unknown>
   ) {
     super(
       new Request()
-        .setData(event.data)
+        .setBody(event.data)
         .setMethod(event.httpMethod as string)
         .setHeaders(...getPairs<string | string[] | undefined>(event.headers))
         .setParams(...getPairs<string | undefined>(event.queryStringParameters))
@@ -50,6 +50,8 @@ export default class SfaCloudbase extends Startup {
 }
 
 function getPairs<T>(map: unknown) {
+  if (!map) return [];
+
   return Object.keys(map as Record<string, T>[]).map((key) => ({
     key: key,
     value: (map as Record<string, T>)["key"],
