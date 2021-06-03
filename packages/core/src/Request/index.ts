@@ -5,10 +5,10 @@ export default class Request {
   readonly headers: Record<string, string | string[] | undefined> = {};
   readonly params: Record<string, string | undefined> = {};
 
-  #data: unknown;
+  #body: unknown;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  public get data(): any {
-    return this.#data;
+  public get body(): any {
+    return this.#body;
   }
 
   #path = "";
@@ -56,8 +56,8 @@ export default class Request {
     return this;
   }
 
-  setData(data: unknown): Request {
-    this.#data = data;
+  setBody(body: unknown): Request {
+    this.#body = body;
     return this;
   }
 
