@@ -5,11 +5,11 @@ export const main = async (
   event: Record<string, unknown>,
   context: Record<string, unknown>
 ): Promise<unknown> => {
-  const startup = new SfaCloudbase(event, context)
+  return new SfaCloudbase(event, context)
     .use(async (ctx, next) => {
-      ctx.res.headers.demo = "ts";
+      ctx.res.headers.demo = "@sfajs/cloudbase";
       await next();
     })
-    .useRouter();
-  return await startup.invoke();
+    .useRouter()
+    .run();
 };
