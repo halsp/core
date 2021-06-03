@@ -1,7 +1,7 @@
 {
   "name": "@sfajs/router",
-  "version": "0.0.1-beta.4",
-  "description": "sfa router",
+  "version": "0.0.1",
+  "description": "Router middleware for sfa",
   "homepage": "https://github.com/sfajs/router",
   "repository": {
     "type": "git",
