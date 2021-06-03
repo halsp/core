@@ -1,11 +1,11 @@
 {
-  "name": "sfa-router",
-  "version": "0.0.1-beta.2",
-  "description": "sfa-router",
-  "homepage": "https://github.com/sfajs/sfa-router",
+  "name": "@sfajs/router",
+  "version": "0.0.1-beta.4",
+  "description": "sfa router",
+  "homepage": "https://github.com/sfajs/router",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sfajs/sfa-router"
+    "url": "https://github.com/sfajs/router"
   },
   "keywords": [
     "sfa",
@@ -17,7 +17,7 @@
     "javascript"
   ],
   "bugs": {
-    "url": "https://github.com/sfajs/sfa-router/issues",
+    "url": "https://github.com/sfajs/router/issues",
     "email": "support@hal.wang"
   },
   "main": "dist/index.js",
@@ -37,7 +37,7 @@
     "@types/node": "^15.6.0",
     "linq": "^3.2.3",
     "shelljs": "^0.8.4",
-    "sfa": "^0.0.1-beta.3"
+    "sfa": "^0.0.2"
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",

@@ -1,5 +1,5 @@
-import Startup from "sfa/dist/Startup";
-
+import "sfa";
+import { Startup } from "sfa";
 import Router from "./Router";
 import Config, {
   TsConfig,

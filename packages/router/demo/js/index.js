@@ -1,5 +1,5 @@
 const { Request, SimpleStartup } = require("sfa");
-import "sfa-router";
+import "@sfajs/router";
 
 exports.main = async () => {
   return await new SimpleStartup(new Request())
@@ -7,6 +7,6 @@ exports.main = async () => {
       ctx.res.headers.demo = "js";
       await next();
     })
-    .useRouter<SimpleStartup>()
+    .useRouter()
     .run();
 };

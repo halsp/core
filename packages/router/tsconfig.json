@@ -6,7 +6,7 @@
     "module": "commonjs",
     "declaration": true,
     "outDir": "./dist",
-    "target": "esnext",
+    "target": "es6",
     "strict": true
   },
   "include": [
