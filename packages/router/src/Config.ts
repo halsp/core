@@ -59,9 +59,7 @@ export default class Config {
 
     const result = path.join(
       this.outDir,
-      config.router && config.router.dir
-        ? config.router.dir
-        : Constant.defaultRouterDir
+      config.router && (config?.router?.dir || Constant.defaultRouterDir)
     );
 
     if (!existsSync(result) || !lstatSync(result).isDirectory()) {
@@ -72,11 +70,6 @@ export default class Config {
   }
 
   public static get outDir(): string {
-    const tsconfig = this.tsconfig;
-    return tsconfig &&
-      tsconfig.compilerOptions &&
-      tsconfig.compilerOptions.outDir
-      ? tsconfig.compilerOptions.outDir
-      : "";
+    return this.tsconfig?.compilerOptions?.outDir || "";
   }
 }

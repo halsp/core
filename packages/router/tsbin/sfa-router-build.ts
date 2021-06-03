@@ -19,7 +19,9 @@ if (Config.tsconfig) {
   } else {
     console.log(tscResult.stdout);
   }
-  deleteFile(outDir, ".d.ts");
+  if (outDir) {
+    deleteFile(outDir, ".d.ts");
+  }
 
   if (outDir) {
     if (Config.default.ts && Config.default.ts.static) {
