@@ -21,7 +21,7 @@ export default class SfaCloudbase extends Startup {
   ) {
     super(
       new Request()
-        .setBody(event.data)
+        .setBody(event.body)
         .setMethod(event.httpMethod as string)
         .setHeaders(...getPairs<string | string[] | undefined>(event.headers))
         .setParams(...getPairs<string | undefined>(event.queryStringParameters))
