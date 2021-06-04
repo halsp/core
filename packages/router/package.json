@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/router",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Router middleware for sfa",
   "homepage": "https://github.com/sfajs/router",
   "repository": {
@@ -32,7 +32,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@types/node": "^15.6.0",
+    "@types/node": "^15.12.0",
     "linq": "^3.2.3",
     "shelljs": "^0.8.4",
     "sfa": "^0.0.2"
@@ -40,18 +40,18 @@
   "devDependencies": {
     "@types/jest": "^26.0.23",
     "@types/shelljs": "^0.8.8",
-    "@typescript-eslint/eslint-plugin": "^4.24.0",
-    "@typescript-eslint/parser": "^4.24.0",
+    "@typescript-eslint/eslint-plugin": "^4.26.0",
+    "@typescript-eslint/parser": "^4.26.0",
     "eslint": "^7.27.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
-    "jest": "^26.6.3",
+    "jest": "^27.0.4",
     "prettier": "^2.3.0",
-    "ts-jest": "^26.5.6",
-    "typescript": "^4.2.4"
+    "ts-jest": "^27.0.2",
+    "typescript": "^4.3.2"
   },
   "bin": {
-    "sfa-doc": "bin/sfa-doc.js",
+    "sfa-router-doc": "bin/sfa-router-doc.js",
     "sfa-router-build": "bin/sfa-router-build.js"
   },
   "files": [

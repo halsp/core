@@ -69,7 +69,7 @@ ts 项目，将按 `tsconfig.json` 中的 `compilerOptions/target` 生成目标�
       }
     ]
   },
-  "doc": { // 使用 sfa-doc 命令生成文档时必须，详情参考后面的 “自动化文档”
+  "doc": { // 使用 sfa-router-doc 命令生成文档时必须，详情参考后面的 “自动化文档”
     "output": "../docs/api/README.md",
     "title": "sfa-title",
     "subtitle": "sfa-subtitle",
@@ -384,7 +384,7 @@ startup.useRouter({
 
 ```json
   "scripts": {
-    "doc": "sfa-doc",
+    "doc": "sfa-router-doc",
   },
 ```
 
