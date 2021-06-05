@@ -4,10 +4,10 @@ export default class Response {
   constructor(
     public status: StatusCode | number = StatusCode.notFound,
     public body: unknown = undefined,
-    public readonly headers = <Record<string, string | string[] | undefined>>{}
+    public readonly headers = <Record<string, string | string[] | undefined>>{
+      sfa: "https://github.com/sfajs/sfa",
+    }
   ) {}
-
-  [key: string]: unknown;
 
   get isSuccess(): boolean {
     return this.status >= 200 && this.status < 300;

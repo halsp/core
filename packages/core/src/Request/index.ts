@@ -61,27 +61,23 @@ export default class Request {
     return this;
   }
 
-  setHeaders(
-    ...headers: { key: string; value?: string | string[] }[]
-  ): Request {
-    headers.forEach((header) => {
-      this.headers[header.key] = header.value;
-    });
+  setHeaders(headers: Record<string, string | string[] | undefined>): Request {
+    Object.assign(this.headers, headers);
     return this;
   }
 
   setHeader(key: string, value?: string | string[]): Request {
-    return this.setHeaders({ key, value });
+    this.headers[key] = value;
+    return this;
   }
 
-  setParams(...params: { key: string; value?: string }[]): Request {
-    params.forEach((param) => {
-      this.params[param.key] = param.value;
-    });
+  setParams(params: Record<string, string | undefined>): Request {
+    Object.assign(this.params, params);
     return this;
   }
 
   setParam(key: string, value?: string): Request {
-    return this.setParams({ key, value });
+    this.params[key] = value;
+    return this;
   }
 }
