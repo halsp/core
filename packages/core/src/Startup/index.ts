@@ -47,7 +47,8 @@ export default abstract class Startup {
 
     try {
       const { mdf, md } = this.ctx.mds[0];
-      await (md ?? mdf()).init(this.ctx, 0).invoke();
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await ((md ?? mdf()) as any).init(this.ctx, 0).invoke();
     } catch (err) {
       if (err instanceof ResponseError) {
         this.#handleError(err);

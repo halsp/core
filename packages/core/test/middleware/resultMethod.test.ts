@@ -56,7 +56,8 @@ for (let i = 0; i < normalMethod.length; i++) {
     }
     constructor() {
       super();
-      this.init(new HttpContext(new Request()), 0);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (this as any).init(new HttpContext(new Request()), 0);
     }
   }
   const md = new Md();
@@ -102,7 +103,8 @@ for (let i = 0; i < msgMethods.length; i++) {
     }
     constructor() {
       super();
-      this.init(new HttpContext(new Request()), 0);
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (this as any).init(new HttpContext(new Request()), 0);
     }
   }
 
@@ -131,7 +133,8 @@ class RedirectMd extends Middleware {
   constructor(readonly code: StatusCode, readonly location: string) {
     super();
 
-    this.init(new HttpContext(new Request()), 0);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (this as any).init(new HttpContext(new Request()), 0);
   }
 
   async invoke(): Promise<void> {

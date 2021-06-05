@@ -28,7 +28,7 @@ export default abstract class Middleware {
     }
   }
 
-  public init(ctx: HttpContext, index: number): Middleware {
+  private init(ctx: HttpContext, index: number): Middleware {
     this.#ctx = ctx;
     this.#index = index;
     return this;
