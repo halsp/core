@@ -1,4 +1,4 @@
-import Request from "../src/Request";
+import Request from "../../src/Request";
 
 test("short path", async function () {
   const req = new Request().setPath("/user").setHeader("custom-header", "aaa");

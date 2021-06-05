@@ -1,6 +1,6 @@
-import { HttpMethod } from "../src/index";
-import Request from "../src/Request";
-import { SimpleStartup } from "../src";
+import { HttpMethod } from "../../src/index";
+import Request from "../../src/Request";
+import { SimpleStartup } from "../../src";
 
 test("request method lower case", async function () {
   const startup = new SimpleStartup(

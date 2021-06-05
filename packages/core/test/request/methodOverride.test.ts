@@ -1,6 +1,6 @@
-import { HttpMethod, StatusCode } from "../src/index";
-import Request from "../src/Request";
-import { SimpleStartup } from "../src";
+import { HttpMethod, StatusCode } from "../../src/index";
+import Request from "../../src/Request";
+import { SimpleStartup } from "../../src";
 
 test("method override", async function () {
   const req = new Request()

@@ -1,12 +1,9 @@
-import { ErrorMessage } from "../src";
-import StatusCode from "../src/Response/StatusCode";
-import Request from "../src/Request";
-import { SimpleStartup } from "../src";
+import { ErrorMessage } from "../../src";
+import StatusCode from "../../src/Response/StatusCode";
+import { SimpleStartup } from "../../src";
 
 test("router test", async function () {
-  const result = await new SimpleStartup(
-    new Request().setHeader("custom-header", "aaa")
-  )
+  const result = await new SimpleStartup()
     .use(async (ctx) => {
       ctx.res.status = StatusCode.badRequest;
       ctx.res.body = <ErrorMessage>{ message: "br" };

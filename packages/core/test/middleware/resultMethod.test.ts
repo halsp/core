@@ -1,8 +1,8 @@
-import ErrorMessage from "../src/Response/ErrorMessage";
-import StatusCode from "../src/Response/StatusCode";
-import HttpContext from "../src/HttpContext";
-import { Middleware } from "../src";
-import Request from "../src/Request";
+import ErrorMessage from "../../src/Response/ErrorMessage";
+import StatusCode from "../../src/Response/StatusCode";
+import HttpContext from "../../src/HttpContext";
+import { Middleware } from "../../src";
+import Request from "../../src/Request";
 
 const normalMethod = [
   {

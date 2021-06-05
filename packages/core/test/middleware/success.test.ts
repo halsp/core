@@ -1,13 +1,12 @@
 import { Middleware } from "../../src/index";
-import Request from "../../src/Request";
 import { SimpleStartup } from "../../src";
 
-test("middleware test success", async function () {
+test("middleware success", async function () {
   const stepResult: Record<string, number> = {
     step: 0,
   };
 
-  const startup = new SimpleStartup(new Request())
+  const startup = new SimpleStartup()
     .use(() => new Mdw1(stepResult))
     .use(() => new Mdw2(stepResult))
     .use(() => new Mdw3(stepResult))
