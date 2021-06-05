@@ -21,7 +21,7 @@ export default class SfaCloudbase extends Startup {
   ) {
     super(
       new Request()
-        .setBody(event.body)
+        .setBody(getBody(event))
         .setMethod(event.httpMethod as string)
         .setHeaders(...getPairs<string | string[] | undefined>(event.headers))
         .setParams(...getPairs<string | undefined>(event.queryStringParameters))
@@ -56,4 +56,19 @@ function getPairs<T>(map: unknown) {
     key: key,
     value: (map as Record<string, T>)["key"],
   }));
+}
+
+function getBody(event: Record<string, unknown>): unknown {
+  const body = event.body;
+  const headers = event.headers as Record<string, string | string[]>;
+  if (
+    body &&
+    typeof body == "string" &&
+    headers &&
+    headers["content-type"]?.includes("application/json")
+  ) {
+    return <Record<string, unknown>>JSON.parse(body);
+  } else {
+    return body || {};
+  }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/cloudbase",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Hosting sfa in cloudbase",
   "homepage": "https://github.com/sfajs/cloudbase",
   "repository": {
