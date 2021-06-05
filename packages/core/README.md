@@ -1,4 +1,10 @@
-# sfa ( serverless function api )
+# sfa
+
+serverless function api framework （ serverless 云函数 API 框架 ）
+
+使用 sfa 你能够将 API 托管到各服务商的云函数，充分利用云函数的优越性
+
+sfa 提供可配置的基础功能，添加插件或中间件以支持不同运行环境，包括但不限于 云函数 / 云调用 / http(s) 等
 
 ## 安装
 
@@ -12,11 +18,7 @@ npm i sfa
 import { SimpleStartup, Request } from "sfa";
 const result = await new SimpleStartup(new Request())
     .use(async (ctx, next) => {
-      ctx.res.headers.app = "sfa";
-      await next();
-    })
-    .use(async (ctx) => {
-      ctx.res.status = 200;
+      ctx.res.body = "sfa";
     })
     .run();
 console.log('result',result);
@@ -178,6 +180,18 @@ API 返回错误时，可统一返回 `ErrorMessage`，命名以 `Msg` 结尾的
 - 任意键值对，如 `res['demo']="demo";`
 
 在每个中间件都可以修改 `this.ctx.res` 中的内容
+
+#### X-HTTP-Method-Override
+
+如果请求头部包含 `X-HTTP-Method-Override` 参数，则访问方法 `httpMethod` 以 `X-HTTP-Method-Override` 值为准
+
+比如 Action 要求 `PATCH` 请求，但微信小程序不支持 `PATCH`，那么可以使用 `POST` 访问，并在头部加上此参数，值为 `PATCH`
+
+```JSON
+"headers":{
+  "X-HTTP-Method-Override":"PATCH"
+}
+```
 
 ### Request
 
