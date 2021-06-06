@@ -1,7 +1,6 @@
 import Response from "./Response";
 import ErrorMessage from "./Response/ErrorMessage";
 import ResponseError from "./Response/ResponseError";
-import StatusCode from "./Response/StatusCode";
 
 import Startup from "./Startup";
 import SimpleStartup from "./Startup/SimpleStartup";
@@ -16,7 +15,6 @@ export {
   Response,
   ErrorMessage,
   ResponseError,
-  StatusCode,
   Startup,
   SimpleStartup,
   Request,

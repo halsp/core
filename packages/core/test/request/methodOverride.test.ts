@@ -1,4 +1,4 @@
-import { HttpMethod, StatusCode } from "../../src/index";
+import { HttpMethod } from "../../src/index";
 import Request from "../../src/Request";
 import { SimpleStartup } from "../../src";
 
@@ -23,7 +23,7 @@ test(`method override request`, async function () {
     new Request().setMethod(HttpMethod.patch.toUpperCase())
   )
     .use(async (ctx) => {
-      ctx.res.status = StatusCode.ok;
+      ctx.res.status = 200;
       ctx.res.body = {
         method: HttpMethod.get,
       };

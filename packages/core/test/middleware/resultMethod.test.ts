@@ -1,5 +1,4 @@
 import ErrorMessage from "../../src/Response/ErrorMessage";
-import StatusCode from "../../src/Response/StatusCode";
 import HttpContext from "../../src/HttpContext";
 import { Middleware } from "../../src";
 import Request from "../../src/Request";
@@ -130,7 +129,7 @@ for (let i = 0; i < redirectCodes.length; i++) {
 }
 
 class RedirectMd extends Middleware {
-  constructor(readonly code: StatusCode, readonly location: string) {
+  constructor(readonly code: number, readonly location: string) {
     super();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

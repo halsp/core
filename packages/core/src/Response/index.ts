@@ -1,8 +1,8 @@
-import StatusCode from "./StatusCode";
+import { StatusCodes } from "http-status-codes";
 
 export default class Response {
   constructor(
-    public status: StatusCode | number = StatusCode.notFound,
+    public status: StatusCodes = StatusCodes.NOT_FOUND,
     public body: unknown = undefined,
     public readonly headers = <Record<string, string | string[] | undefined>>{
       sfa: "https://github.com/sfajs/sfa",

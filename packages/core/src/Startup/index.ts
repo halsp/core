@@ -61,14 +61,12 @@ export default abstract class Startup {
   }
 
   #handleError = function (this: Startup, err: ResponseError): void {
-    if (err.status) {
+    if (err.status != undefined) {
       this.ctx.res.status = err.status;
     }
-    if (err.body) {
+    if (err.body != undefined) {
       this.ctx.res.body = err.body;
     }
-    Object.keys(err.headers).forEach((key) => {
-      this.ctx.res.headers[key] = err.headers[key];
-    });
+    Object.assign(this.ctx.res.headers, err.headers);
   };
 }

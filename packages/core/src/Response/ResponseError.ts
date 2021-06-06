@@ -1,9 +1,9 @@
-import StatusCode from "./StatusCode";
+import { StatusCodes } from "http-status-codes";
 
 export default class ResponseError extends Error {
   public readonly headers = <Record<string, string>>{};
   public body?: unknown = {};
-  public status?: StatusCode | number;
+  public status?: StatusCodes;
 
   constructor(message?: string) {
     super(message);
@@ -14,7 +14,7 @@ export default class ResponseError extends Error {
     return this;
   }
 
-  public setStatus(status: StatusCode | number): ResponseError {
+  public setStatus(status: StatusCodes): ResponseError {
     this.status = status;
     return this;
   }
