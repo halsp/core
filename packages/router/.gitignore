@@ -4,5 +4,5 @@ package-lock.json
 yarn.lock
 
 sfa-router.map
-test.*
+test.md
 bin
