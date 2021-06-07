@@ -14,7 +14,6 @@
   ],
   "exclude": [
     "test",
-    "dist",
-    "demo"
+    "dist"
   ]
 }

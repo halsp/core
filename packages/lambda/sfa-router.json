@@ -1,7 +1,0 @@
-{
-  "router": {
-    "dir": "controllers",
-    "strict": false
-  },
-  "ts": {}
-}
