@@ -34,7 +34,7 @@
   "dependencies": {
     "@cloudbase/node-sdk": "^2.5.2",
     "@types/node": "^15.12.1",
-    "sfa": "^0.0.5"
+    "sfa": "^0.1.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",
@@ -47,10 +47,11 @@
     "jest": "^27.0.4",
     "prettier": "^2.3.1",
     "shelljs": "^0.8.4",
-    "ts-jest": "^27.0.2",
+    "ts-jest": "^27.0.3",
     "typescript": "^4.3.2"
   },
   "files": [
+    ".github",
     "demo",
     "dist",
     "scripts",
