@@ -1,5 +1,8 @@
+import { ICloudBaseConfig } from "@cloudbase/node-sdk";
 import { Request, Startup } from "sfa";
 import ResponseStruct from "./ResponseStruct";
+import tcb = require("@cloudbase/node-sdk");
+import Dbhelper from "./Dbhelper";
 
 declare module "sfa" {
   interface Request {
@@ -12,7 +15,7 @@ declare module "sfa" {
   }
 }
 
-export { ResponseStruct };
+export { ResponseStruct, Dbhelper, Startup };
 
 export default class SfaCloudbase extends Startup {
   constructor(
@@ -23,8 +26,8 @@ export default class SfaCloudbase extends Startup {
       new Request()
         .setBody(getBody(event))
         .setMethod(event.httpMethod as string)
-        .setHeaders(...getPairs<string | string[] | undefined>(event.headers))
-        .setParams(...getPairs<string | undefined>(event.queryStringParameters))
+        .setHeaders(event.headers as Record<string, string | string[]>)
+        .setParams(event.queryStringParameters as Record<string, string>)
         .setPath(event.path as string)
     );
 
@@ -32,6 +35,8 @@ export default class SfaCloudbase extends Startup {
     (this.ctx.req as any).context = context;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (this.ctx.req as any).event = event;
+
+    this.ctx.res.headers["content-type"] = "application/json";
   }
 
   async run(): Promise<ResponseStruct> {
@@ -47,15 +52,32 @@ export default class SfaCloudbase extends Startup {
       body: this.ctx.res?.body ?? {},
     };
   }
-}
 
-function getPairs<T>(map: unknown) {
-  if (!map) return [];
+  useCloudbaseApp<T extends this>(config?: ICloudBaseConfig): T {
+    this.use(async (ctx, next) => {
+      const tcbConfig: ICloudBaseConfig = config || {
+        env: process.env.SCF_NAMESPACE,
+      };
 
-  return Object.keys(map as Record<string, T>[]).map((key) => ({
-    key: key,
-    value: (map as Record<string, T>)["key"],
-  }));
+      const app = tcb.init(tcbConfig);
+      const db = app.database();
+
+      ctx.bag("CB_APP", app);
+      ctx.bag("CB_DB", db);
+
+      await next();
+    });
+    return this as T;
+  }
+
+  useCloudbaseDbhelper<T extends this>(): T {
+    this.use(async (ctx, next) => {
+      const dbhelper = new Dbhelper(ctx);
+      ctx.bag("CB_DBHELPER", dbhelper);
+      await next();
+    });
+    return this as T;
+  }
 }
 
 function getBody(event: Record<string, unknown>): unknown {
