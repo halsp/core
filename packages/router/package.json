@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/router",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "Router middleware for sfa",
   "homepage": "https://github.com/sfajs/router",
   "repository": {
@@ -21,7 +21,6 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "sh scripts/build.sh",
-    "publish": "npm run build && npm publish --access=public",
     "publish:beta": "npm run build && npm publish --tag=beta --access=public",
     "test": "jest",
     "tests": "sh scripts/tests.sh",
@@ -56,12 +55,14 @@
     "sfa-router-build": "bin/sfa-router-build.js"
   },
   "files": [
-    "dist",
+    ".github",
     "bin",
-    "tsbin",
     "demo",
+    "dist",
+    "scripts",
     "src",
     "test",
+    "tsbin",
     ".eslintrc.js",
     ".gitignore",
     "build.sh",
