@@ -1,6 +1,6 @@
 {
   "name": "sfa",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "serverless function api",
   "homepage": "https://github.com/sfajs/sfa",
   "repository": {
@@ -19,8 +19,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "sh build.sh",
-    "deploy": "sh build.sh && npm publish --access=public",
-    "deploy:beta": "sh build.sh && npm publish --tag=beta --access=public",
+    "publish:beta": "sh build.sh && npm publish --tag=beta --access=public",
     "test": "npm run build && jest",
     "lint": "eslint src test --ext .ts"
   },
@@ -30,7 +29,8 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@types/node": "^15.12.1"
+    "@types/node": "^15.12.1",
+    "http-status-codes": "^2.1.4"
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",
@@ -45,6 +45,7 @@
     "typescript": "^4.3.2"
   },
   "files": [
+    ".github",
     "dist",
     "src",
     "test",
