@@ -16,25 +16,28 @@ export default abstract class Startup {
   }
 
   use<T extends this>(
-    mdf:
+    builder:
       | (() => Middleware)
       | ((ctx: HttpContext, next: () => Promise<void>) => Promise<void>)
   ): T {
-    if (!mdf) throw new Error();
+    if (!builder) throw new Error();
 
     let mdFunc;
-    if (mdf.length) {
+    if (builder.length) {
       mdFunc = () => {
         return new SimpleMiddleware(
-          mdf as (ctx: HttpContext, next: () => Promise<void>) => Promise<void>
+          builder as (
+            ctx: HttpContext,
+            next: () => Promise<void>
+          ) => Promise<void>
         );
       };
     } else {
-      mdFunc = mdf as () => Middleware;
+      mdFunc = builder as () => Middleware;
     }
 
     this.ctx.mds.push({
-      mdf: mdFunc,
+      builder: mdFunc,
     });
 
     return this as T;
@@ -46,9 +49,9 @@ export default abstract class Startup {
     }
 
     try {
-      const { mdf, md } = this.ctx.mds[0];
+      const { builder, md } = this.ctx.mds[0];
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await ((md ?? mdf()) as any).init(this.ctx, 0).invoke();
+      await ((md ?? builder()) as any).init(this.ctx, 0).invoke();
     } catch (err) {
       if (err instanceof ResponseError) {
         this.#handleError(err);

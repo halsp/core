@@ -17,11 +17,11 @@ export default abstract class Middleware {
   protected async next(): Promise<void> {
     if (this.ctx.mds.length <= this.#index + 1) return;
 
-    const { mdf, md } = this.ctx.mds[this.#index + 1];
+    const { builder, md } = this.ctx.mds[this.#index + 1];
     if (md && md.cache) {
       await md.invoke();
     } else {
-      const nextMd = mdf();
+      const nextMd = builder();
       this.ctx.mds[this.#index + 1].md = nextMd;
       nextMd.init(this.ctx, this.#index + 1);
       await nextMd.invoke();
