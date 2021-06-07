@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/router",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Router middleware for sfa",
   "homepage": "https://github.com/sfajs/router",
   "repository": {
@@ -20,10 +20,11 @@
   },
   "main": "dist/index.js",
   "scripts": {
-    "build": "sh build.sh",
-    "deploy": "sh build.sh && npm publish --access=public",
-    "deploy:beta": "sh build.sh && npm publish --tag=beta --access=public",
-    "test": "npm run build && jest",
+    "build": "sh scripts/build.sh",
+    "publish": "npm run build && npm publish --access=public",
+    "publish:beta": "npm run build && npm publish --tag=beta --access=public",
+    "test": "jest",
+    "tests": "sh scripts/tests.sh",
     "lint": "eslint src test --ext .ts"
   },
   "jest": {
@@ -32,7 +33,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@types/node": "^15.12.0",
+    "@types/node": "^15.12.1",
     "linq": "^3.2.3",
     "shelljs": "^0.8.4",
     "sfa": "^0.0.2"
@@ -42,12 +43,12 @@
     "@types/shelljs": "^0.8.8",
     "@typescript-eslint/eslint-plugin": "^4.26.0",
     "@typescript-eslint/parser": "^4.26.0",
-    "eslint": "^7.27.0",
+    "eslint": "^7.28.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
     "jest": "^27.0.4",
-    "prettier": "^2.3.0",
-    "ts-jest": "^27.0.2",
+    "prettier": "^2.3.1",
+    "ts-jest": "^27.0.3",
     "typescript": "^4.3.2"
   },
   "bin": {

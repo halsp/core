@@ -19,7 +19,7 @@ test("sfa build command", async function () {
 
     try {
       {
-        const execResult = shell.exec(`npm i && npm run build`);
+        const execResult = shell.exec(`npm run build`);
         expect(execResult.code).toBe(0);
         expectFile(tsconfig.compilerOptions.outDir);
       }

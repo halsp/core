@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "npm i && sfa-router-build"
+    "build": "sfa-router-build"
   },
   "devDependencies": {
     "sfa": "^0.0.2",

@@ -10,7 +10,7 @@ test("js demo", async function () {
       fs.unlinkSync(routerMapPath);
     }
 
-    const execResult = shell.exec(`npm i && npm run build`);
+    const execResult = shell.exec(`npm run build`);
     expect(execResult.code).toBe(0);
     expect(fs.existsSync(routerMapPath)).toBeTruthy();
   } finally {
@@ -26,7 +26,7 @@ test("ts demo", async function () {
       fs.unlinkSync(routerMapPath);
     }
 
-    const execResult = shell.exec(`npm i && npm run build`);
+    const execResult = shell.exec(`npm run build`);
     expect(execResult.code).toBe(0);
     expect(fs.existsSync(routerMapPath)).toBeTruthy();
     expect(fs.existsSync("./dist")).toBeTruthy();
