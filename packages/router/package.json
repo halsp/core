@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/router",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "description": "Router middleware for sfa",
   "homepage": "https://github.com/sfajs/router",
   "repository": {
@@ -33,9 +33,10 @@
   "license": "MIT",
   "dependencies": {
     "@types/node": "^15.12.1",
+    "http-status-codes": "^2.1.4",
     "linq": "^3.2.3",
-    "shelljs": "^0.8.4",
-    "sfa": "^0.0.2"
+    "sfa": "^0.1.0",
+    "shelljs": "^0.8.4"
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",

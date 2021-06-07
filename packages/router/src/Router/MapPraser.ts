@@ -7,7 +7,8 @@ import MapCreater from "./MapCreater";
 import MapItem from "./MapItem";
 import PathParser from "./PathParser";
 import Action from "../Action";
-import { HttpContext, HttpMethod, ResponseError, StatusCode } from "sfa";
+import { HttpContext, HttpMethod, ResponseError } from "sfa";
+import { StatusCodes } from "http-status-codes";
 
 export default class MapPraser {
   #mapItem: MapItem | undefined;
@@ -196,7 +197,7 @@ export default class MapPraser {
 
   private get notFoundErr(): ResponseError {
     const msg = `Can't find the path：${this.ctx.req.path}`;
-    return new ResponseError(msg).setStatus(StatusCode.notFound).setBody({
+    return new ResponseError(msg).setStatus(StatusCodes.NOT_FOUND).setBody({
       message: msg,
       path: this.ctx.req.path,
     });
@@ -205,7 +206,7 @@ export default class MapPraser {
   private get methodNotAllowedErr(): ResponseError {
     const msg = `method not allowed：${this.ctx.req.method}`;
     return new ResponseError(msg)
-      .setStatus(StatusCode.methodNotAllowedMsg)
+      .setStatus(StatusCodes.METHOD_NOT_ALLOWED)
       .setBody({
         message: msg,
         method: this.ctx.req.method,
