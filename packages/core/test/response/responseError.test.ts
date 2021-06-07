@@ -1,7 +1,7 @@
 import { ErrorMessage } from "../../src";
 import { SimpleStartup } from "../../src";
 
-test("router test", async function () {
+test("response error", async function () {
   const result = await new SimpleStartup()
     .use(async (ctx) => {
       ctx.res.status = 400;

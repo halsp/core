@@ -1,6 +1,6 @@
-import Middleware from "./Middleware";
-import Request from "./Request";
-import Response from "./Response";
+import Middleware from "../Middleware";
+import Request from "../Request";
+import Response from "../Response";
 
 export default class HttpContext {
   constructor(req: Request) {
@@ -32,10 +32,16 @@ export default class HttpContext {
 
   public bag<T>(key: string): T;
   public bag<T>(key: string, value: T): HttpContext;
+  public bag<T>(key: string, builder: () => T): HttpContext;
 
-  public bag<T>(key: string, value?: T): HttpContext | T {
+  public bag<T>(key: string, value?: T | (() => T)): HttpContext | T {
     if (value == undefined) {
-      return this.#bag[key] as T;
+      const result = this.#bag[key];
+      if (typeof result == "function") {
+        return result();
+      } else {
+        return result as T;
+      }
     } else {
       this.#bag[key] = value;
       return this;

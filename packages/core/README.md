@@ -30,8 +30,8 @@ Startup 类是 sfa 的入口
 
 为了让 sfa 能够在各类生产环境中使用，该类设计的较为开放，在 ts 中是个抽象类，因此该类不能直接使用，需要定义派生类并在合适的函数中调用 `invoke` 函数。上述示例的 `SimpleStartup` 是一个简单的 Startup 派生类，没有对 Request 和 Response 进行任何解析。
 
-- 在 cloudbase 云函数环境中，可以使用 `sfa-cloudbase`。`sfa-cloudbase` 中有继承于类 `Startup` 的 `SfaCloudbase`，并对云函数入参 event 和 context 进行了解析
-- 在 http 环境中，可以使用 `sfa-http`。`sfa-http` 中有继承于类 `Startup` 的 `SfaHttp`，并对 Request 和 Response 进行了解析
+- 在 cloudbase 云函数环境中，可以使用 `@sfajs/cloudbase`。`@sfajs/cloudbase` 中有继承于类 `Startup` 的 `SfaCloudbase`，并对云函数入参 event 和 context 进行了解析
+- 在 http 环境中，可以使用 `@sfajs/http`。`@sfajs/http` 中有继承于类 `Startup` 的 `SfaHttp`，并对 Request 和 Response 进行了解析
 
 其他更多环境，欢迎你参考以上方案来实现。
 
@@ -210,10 +210,25 @@ API 返回错误时，可统一返回 `ErrorMessage`，命名以 `Msg` 结尾的
 
 如果使用 TS，可以借泛型特性获得更多智能提示。
 
+sfa 支持两种引用类型的 bag
+
+- Singleton: 单例模式，添加后可多次获取同一引用
+- Transient: 临时模式，添加后每次获取都会创建一个新引用
+
+如果是值类型，每次获取的都是该值的拷贝
+
 #### 添加或修改 bag
 
 ```JS
-this.ctx.bag("BAG_NAME", /*bag content*/ {})
+// 单例模式
+this.ctx.bag("BAG_NAME", { /*bag content*/ });
+```
+
+或
+
+```JS
+// 临时模式
+this.ctx.bag("BAG_NAME", () => { /*bag content*/ });
 ```
 
 #### 获取 bag
