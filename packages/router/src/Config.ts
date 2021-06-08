@@ -1,4 +1,4 @@
-import { existsSync, lstatSync } from "fs";
+import { existsSync, lstatSync, readFileSync } from "fs";
 import * as path from "path";
 import ApiDocsConfig from "./ApiDocs/ApiDocsConfig";
 import Constant from "./Constant";
@@ -32,8 +32,8 @@ export default class Config {
     if (!existsSync(configPath)) {
       throw new Error("the config file is not exist");
     } else {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      this._default = require(configPath) as AppConfig;
+      const str = readFileSync(configPath, "utf-8");
+      this._default = JSON.parse(str) as AppConfig;
       return this._default;
     }
   }
@@ -59,7 +59,7 @@ export default class Config {
 
     const result = path.join(
       this.outDir,
-      config.router && (config?.router?.dir || Constant.defaultRouterDir)
+      config.router.dir || Constant.defaultRouterDir
     );
 
     if (!existsSync(result) || !lstatSync(result).isDirectory()) {

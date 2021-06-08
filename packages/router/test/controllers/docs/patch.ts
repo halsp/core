@@ -1,23 +1,29 @@
 import { Action } from "../../../src";
 
 /**
- * @action put docs
+ * @action patch docs
  *
- * a docs test named put
+ * a docs test named patch
  *
- * @parts @auth
+ * @parts
  * @input input desc
+ * @@headers
+ * @@params
+ * @@query
  * @@body
- * @@@test-body1 {string} a test body of putting docs NO.1
+ * @output out desc
+ * @@headers
+ * @@body
+ * @@codes
  */
 export default class extends Action {
   constructor() {
-    super(["test1", "custom"]);
+    super([]);
   }
 
   async invoke(): Promise<void> {
     this.ok({
-      method: "PUT",
+      method: "PATCH",
     });
   }
 }

@@ -22,7 +22,7 @@
   "scripts": {
     "build": "sh scripts/build.sh",
     "publish:beta": "npm run build && npm publish --tag=beta --access=public",
-    "test": "jest",
+    "test": "npm run build && jest --coverage",
     "tests": "sh scripts/tests.sh",
     "lint": "eslint src test --ext .ts"
   },

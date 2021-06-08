@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import * as fs from "fs";
+import { SimpleStartup } from "sfa";
 import * as shell from "shelljs";
 import Constant from "../src/Constant";
+import "../src";
 
 test("sfa build command", async function () {
   const sourceConfig = `./demo/${Constant.configFileName}`;
@@ -47,3 +49,14 @@ function expectFile(outDir: string) {
   expect(fs.existsSync(`${outDir}/assets/file2.txt`)).toBe(true);
   expect(fs.existsSync(`${outDir}/README.md`)).toBe(false);
 }
+
+test("run", async function () {
+  shell.cd("./test/command");
+
+  try {
+    const result = await new SimpleStartup().useRouter().run();
+    expect(result.status).toBe(404);
+  } finally {
+    shell.cd("../..");
+  }
+});

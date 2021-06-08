@@ -86,3 +86,17 @@ test("null body test", async function () {
 
   expect(result.status).toBe(404);
 });
+
+test("startup without useTest", async function () {
+  try {
+    await new SimpleStartup(
+      new Request().setPath("/simple/router").setMethod("POST")
+    )
+      .useRouter<SimpleStartup>()
+      .run();
+  } catch (err) {
+    expect(err.message).toBe("the config file is not exist");
+    return;
+  }
+  expect(true).toBeFalsy();
+});

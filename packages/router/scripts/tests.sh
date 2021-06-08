@@ -7,4 +7,5 @@ cd demo/js && npm install && cd ../..
 cd demo/ts && npm install && cd ../..
 cd test/command && npm install && cd ../..
 
+npm run lint
 npm run test

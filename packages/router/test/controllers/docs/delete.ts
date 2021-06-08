@@ -18,8 +18,12 @@ import { Action } from "../../../src";
  * @@body {object} ok result
  * @@@method {string} http method
  * @@params
+ * @@@test-param1 {string} a test param of deleting docs NO.1
  * @@query
+ * @@@test-query1 {string} a test query of deleting docs NO.1
  * @output
+ * @@headers
+ * @@@test-header1 {string} a test output header of deleting docs NO.1
  * @@codes
  * @@@200 success
  * @@@404
