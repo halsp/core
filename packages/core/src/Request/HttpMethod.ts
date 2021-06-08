@@ -12,11 +12,7 @@ export default class HttpMethod {
 
   static readonly custom = <string[]>[];
 
-  static matched(
-    method: string | undefined,
-    any = true,
-    custom = true
-  ): string | undefined {
+  static matched(method: string | undefined): string | undefined {
     if (!method) return undefined;
     switch (method.toString().toUpperCase()) {
       case this.get:
@@ -30,14 +26,8 @@ export default class HttpMethod {
       case this.connect:
         return method.toString().toUpperCase();
       case this.any:
-        if (!any) {
-          return;
-        } else {
-          return method.toString().toUpperCase();
-        }
+        return method.toString().toUpperCase();
       default:
-        if (!custom) return;
-
         return this.custom.filter((item) => this.equal(item, method))[0];
     }
   }

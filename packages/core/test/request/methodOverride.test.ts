@@ -4,7 +4,7 @@ import { SimpleStartup } from "../../src";
 
 test("method override", async function () {
   const req = new Request()
-    .setMethod(HttpMethod.patch.toUpperCase())
+    .setMethod(HttpMethod.patch)
     .setHeader("X-HTTP-Method-Override", "POST");
   expect(req.method).toBe(HttpMethod.post);
   expect(req.method).not.toBe(HttpMethod.patch);
@@ -12,8 +12,16 @@ test("method override", async function () {
 
 test("method override upper case", async function () {
   const req = new Request()
-    .setMethod(HttpMethod.patch.toUpperCase())
-    .setHeader("X-HTTP-METHOD-OVERRIDE", "POST");
+    .setMethod(HttpMethod.patch)
+    .setHeader("X-HTTP-Method-Override".toUpperCase(), "POST");
+  expect(req.method).toBe(HttpMethod.post);
+  expect(req.method).not.toBe(HttpMethod.patch);
+});
+
+test("method override lower case", async function () {
+  const req = new Request()
+    .setMethod(HttpMethod.patch)
+    .setHeader("X-HTTP-Method-Override".toLowerCase(), "POST");
   expect(req.method).toBe(HttpMethod.post);
   expect(req.method).not.toBe(HttpMethod.patch);
 });
