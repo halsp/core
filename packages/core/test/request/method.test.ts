@@ -18,6 +18,13 @@ test("request method upper case", async function () {
   expect(startup.ctx.req.method).toBe("POST");
 });
 
+test("empty method", async function () {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const req = new Request().setMethod(null as any);
+
+  expect(req.method).toBeUndefined();
+});
+
 test("http methods", async function () {
   expect(HttpMethod.post.toUpperCase()).toBe("POST");
   expect(HttpMethod.get.toUpperCase()).toBe("GET");

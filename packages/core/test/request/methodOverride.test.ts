@@ -38,6 +38,14 @@ test("method override array", async function () {
   expect(req.overrideMethod).toBe("PATCH");
 });
 
+test("method override without value", async function () {
+  const req = new Request()
+    .setMethod(HttpMethod.patch)
+    .setHeader("X-HTTP-Method-Override".toLowerCase(), "");
+  expect(req.method).toBe(HttpMethod.patch);
+  expect(req.overrideMethod).toBe(undefined);
+});
+
 test(`method override request`, async function () {
   const result = await new SimpleStartup(
     new Request().setMethod(HttpMethod.patch.toUpperCase())

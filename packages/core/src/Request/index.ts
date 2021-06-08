@@ -19,7 +19,7 @@ export default class Request {
   public get overrideMethod(): string | undefined {
     if (
       this.#method &&
-      this.#method.toUpperCase() != this.method?.toUpperCase()
+      this.#method.toUpperCase() != this.method.toUpperCase()
     ) {
       return this.#method;
     }
@@ -29,7 +29,7 @@ export default class Request {
   public get method(): string {
     const ovrdHeaderKey = "X-HTTP-Method-Override";
     const ovrdKey = Object.keys(this.headers).filter(
-      (h) => h?.toUpperCase() == ovrdHeaderKey.toUpperCase()
+      (h) => h.toUpperCase() == ovrdHeaderKey.toUpperCase()
     )[0];
     if (ovrdKey) {
       const ovrdValue = this.headers[ovrdKey];
