@@ -8,6 +8,7 @@ test("method override", async function () {
     .setHeader("X-HTTP-Method-Override", "POST");
   expect(req.method).toBe(HttpMethod.post);
   expect(req.method).not.toBe(HttpMethod.patch);
+  expect(req.overrideMethod).toBe("PATCH");
 });
 
 test("method override upper case", async function () {
@@ -16,6 +17,7 @@ test("method override upper case", async function () {
     .setHeader("X-HTTP-Method-Override".toUpperCase(), "POST");
   expect(req.method).toBe(HttpMethod.post);
   expect(req.method).not.toBe(HttpMethod.patch);
+  expect(req.overrideMethod).toBe("PATCH");
 });
 
 test("method override lower case", async function () {
@@ -24,6 +26,16 @@ test("method override lower case", async function () {
     .setHeader("X-HTTP-Method-Override".toLowerCase(), "POST");
   expect(req.method).toBe(HttpMethod.post);
   expect(req.method).not.toBe(HttpMethod.patch);
+  expect(req.overrideMethod).toBe("PATCH");
+});
+
+test("method override array", async function () {
+  const req = new Request()
+    .setMethod(HttpMethod.patch)
+    .setHeader("X-HTTP-Method-Override".toLowerCase(), ["POST"]);
+  expect(req.method).toBe(HttpMethod.post);
+  expect(req.method).not.toBe(HttpMethod.patch);
+  expect(req.overrideMethod).toBe("PATCH");
 });
 
 test(`method override request`, async function () {

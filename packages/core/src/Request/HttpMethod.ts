@@ -24,7 +24,6 @@ export default class HttpMethod {
       case this.options:
       case this.trace:
       case this.connect:
-        return method.toString().toUpperCase();
       case this.any:
         return method.toString().toUpperCase();
       default:
