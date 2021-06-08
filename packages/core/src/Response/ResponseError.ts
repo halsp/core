@@ -1,9 +1,9 @@
 import { StatusCodes } from "http-status-codes";
 
 export default class ResponseError extends Error {
-  public readonly headers = <Record<string, string>>{};
+  public readonly headers = <Record<string, string | string[] | undefined>>{};
   public body?: unknown = {};
-  public status?: StatusCodes;
+  public status?: StatusCodes = StatusCodes.INTERNAL_SERVER_ERROR;
 
   constructor(message?: string) {
     super(message);
@@ -19,7 +19,14 @@ export default class ResponseError extends Error {
     return this;
   }
 
-  public setHeaders(key: string, value: string): ResponseError {
+  setHeaders(
+    headers: Record<string, string | string[] | undefined>
+  ): ResponseError {
+    Object.assign(this.headers, headers);
+    return this;
+  }
+
+  setHeader(key: string, value?: string | string[]): ResponseError {
     this.headers[key] = value;
     return this;
   }

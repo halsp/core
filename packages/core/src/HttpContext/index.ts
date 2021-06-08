@@ -33,7 +33,6 @@ export default class HttpContext {
   public bag<T>(key: string): T;
   public bag<T>(key: string, value: T): HttpContext;
   public bag<T>(key: string, builder: () => T): HttpContext;
-
   public bag<T>(key: string, value?: T | (() => T)): HttpContext | T {
     if (value == undefined) {
       const result = this.#bag[key];

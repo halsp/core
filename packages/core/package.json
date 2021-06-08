@@ -20,7 +20,7 @@
   "scripts": {
     "build": "sh build.sh",
     "publish:beta": "sh build.sh && npm publish --tag=beta --access=public",
-    "test": "npm run build && jest",
+    "test": "npm run build && jest --coverage",
     "lint": "eslint src test --ext .ts"
   },
   "jest": {
