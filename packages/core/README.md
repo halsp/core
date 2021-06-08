@@ -4,7 +4,7 @@ serverless function api framework （ serverless 云函数 API 框架 ）
 
 使用 sfa 你能够将 API 托管到各服务商的云函数，充分利用云函数的优越性
 
-sfa 提供可配置的基础功能，添加插件或中间件以支持不同运行环境，包括但不限于 云函数 / 云调用 / http(s) 等
+sfa 提供可配置的基础功能，添加插件或中间件以支持不同运行环境，包括但不限于 云函数 / 云调用/ 云托管 / http(s) 等
 
 ## 安装
 
@@ -33,7 +33,7 @@ Startup 类是 sfa 的入口
 - 在 cloudbase 云函数环境中，可以使用 `@sfajs/cloudbase`。`@sfajs/cloudbase` 中有继承于类 `Startup` 的 `SfaCloudbase`，并对云函数入参 event 和 context 进行了解析
 - 在 http 环境中，可以使用 `@sfajs/http`。`@sfajs/http` 中有继承于类 `Startup` 的 `SfaHttp`，并对 Request 和 Response 进行了解析
 
-其他更多环境，欢迎你参考以上方案来实现。
+其他更多环境，欢迎你参考以上方案来实现
 
 ## 中间件
 
