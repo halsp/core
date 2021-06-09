@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/cloudbase",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "Hosting sfa in cloudbase",
   "homepage": "https://github.com/sfajs/cloudbase",
   "repository": {
@@ -22,7 +22,7 @@
   "scripts": {
     "build": "sh scripts/build.sh",
     "publish:beta": "sh build.sh && npm publish --tag=beta --access=public",
-    "test": "jest",
+    "test": "npm run build && jest --coverage",
     "tests": "sh scripts/tests.sh",
     "lint": "eslint src test --ext .ts"
   },
@@ -33,14 +33,14 @@
   "license": "MIT",
   "dependencies": {
     "@cloudbase/node-sdk": "^2.5.2",
-    "@types/node": "^15.12.1",
-    "sfa": "^0.1.0"
+    "@types/node": "^15.12.2",
+    "sfa": "^0.1.2"
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",
     "@types/shelljs": "^0.8.8",
-    "@typescript-eslint/eslint-plugin": "^4.26.0",
-    "@typescript-eslint/parser": "^4.26.0",
+    "@typescript-eslint/eslint-plugin": "^4.26.1",
+    "@typescript-eslint/parser": "^4.26.1",
     "eslint": "^7.28.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",

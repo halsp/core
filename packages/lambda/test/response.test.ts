@@ -29,10 +29,11 @@ test("base response", async function () {
 test("error response", async function () {
   const result = await new SfaCloudbase({}, {})
     .use(async (ctx, next) => {
-      ctx.res.status = 400;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ctx.res.status = undefined as any;
       await next();
     })
     .run();
 
-  expect(result.statusCode).toBe(400);
+  expect(result.statusCode).toBe(0);
 });
