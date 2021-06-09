@@ -1,12 +1,11 @@
 # @sfajs/router
 
-Router middleware for sfa
+sfa 路由中间件
 
 - 支持 RESTful 规范
 - 根据文件系统映射访问路径，彻底解耦无关联的功能
 - 支持自动化文档
 - 内置权限认证
-- 支持 typescript 项目
 
 ## 安装
 
@@ -30,8 +29,8 @@ npm i @sfajs/router
     "build": "sfa-router-build"
   },
   "dependencies": {
-    "sfa": "^0.0.2",
-    "@sfajs/router": "^0.0.1"
+    "sfa": "^0.1.1",
+    "@sfajs/router": "^0.1.0"
   }
 }
 ```
@@ -71,8 +70,8 @@ ts 项目，将按 `tsconfig.json` 中的 `compilerOptions/target` 生成目标�
   },
   "doc": { // 使用 sfa-router-doc 命令生成文档时必须，详情参考后面的 “自动化文档”
     "output": "../docs/api/README.md",
-    "title": "sfa-title",
-    "subtitle": "sfa-subtitle",
+    "title": "@sfajs/router-title",
+    "subtitle": "@sfajs/router-subtitle",
     "parts": [
       {
         "name": "part1",
@@ -121,9 +120,13 @@ import "@sfajs/router";
 然后调用 `startup.useRouter` 函数即可开启路由中间件，开启后能够支持路由功能
 
 ```JS
-const result = await new SimpleStartup(new Request())
-  .useRouter()
-  .run();
+const result = await new SimpleStartup().useRouter().run();
+```
+
+或
+
+```JS
+const result = await new OtherStartup().useRouter().run();
 ```
 
 `useRouter` 接收一个可选配置参数 `config` ，该参数包含一个可选字段
@@ -134,7 +137,7 @@ const result = await new SimpleStartup(new Request())
 
 ### 路由文件夹
 
-配置文件的 `router.dir` 值是路由文件夹路径，`sfa` 能够将路由文件夹下的所有 `Action` 映射为 `http` 访问路径
+配置文件的 `router.dir` 值是路由文件夹路径，`@sfajs/router` 能够将路由文件夹下的所有 `Action` 映射为 `http` 访问路径
 
 如果配置文件没有该值，默认为 `controllers`，并且在根目录下（ts 则是生成目录下）需要定义此文件夹
 
@@ -142,9 +145,9 @@ const result = await new SimpleStartup(new Request())
 
 ### 路由匹配
 
-在`sfa`中，路由与文件系统匹配。
+在`@sfajs/router`中，路由与文件系统匹配。
 
-路由查询参数命名以 `^` 开头（文件系统中命名不允许出现字符 `:`），如果存在多个查询参数则后面的会覆盖前面的，如 `get user/^id/todo/^id`，则 `id` 值为 `todoId`。正确命名应如 `user/^userId/todo/^todoId`。
+路由查询参数命名以 `^` 开头（文件系统中命名不允许出现字符 `:`），如果存在多个查询参数则后面的会覆盖前面的，如 `GET user/^id/todo/^id`，则 `id` 值为 `todoId`。正确命名应如 `user/^userId/todo/^todoId`。
 
 如果限制 `httpMethod`, `action` 应以 `post.ts`、`get.ts`、`delete.ts`、`patch.ts`、`put.ts` （或其他自定义 method，扩展名为.js 效果相同 ）命名，否则任意 `httpMethod` 都可以访问。
 
@@ -154,7 +157,7 @@ const result = await new SimpleStartup(new Request())
 
 开启严格模式后，`action` 将只能以 httpMethod 命名，与 RESTFul 规范相符，否则会找不到路由并返回 `404`
 
-如果 `strict` 为 `false` 或不设置，则 RESTFul 规范的 API 可能会以非 RESTFul 方式调用。如路由 `user/login`，本应是 `get user/login`，但 `post user/login/get` 也能调用。因此如果使用 RESTFul 或限制 method，建议设置 `strict` 为 `true`。
+如果 `strict` 为 `false` 或不设置，则 RESTFul 规范的 API 可能会以非 RESTFul 方式调用。如文件系统为`controllers/user/login/get.ts`，访问本应是 `GET user/login`，但 `POST user/login/get` 也能调用。因此如果使用 RESTFul 或限制 method，建议设置 `strict` 为 `true`。
 
 #### 例 1
 
@@ -170,7 +173,7 @@ const result = await new SimpleStartup(new Request())
 |       +-- get.ts
 ```
 
-访问地址为 `get /todo`，
+访问地址为 `GET /todo`，
 
 ##### 方式 2
 
@@ -182,7 +185,7 @@ const result = await new SimpleStartup(new Request())
 |       +-- getTodoList.ts
 ```
 
-访问地址为 `get /todo/getTodoList` 、 `post /todo/getTodoList` 、 `put /todo/getTodoList` 等等，效果相同。
+访问地址为 `GET /todo/getTodoList` 、 `POST /todo/getTodoList` 、 `PUT /todo/getTodoList` 等等，效果相同。
 
 #### 例 2
 
@@ -199,7 +202,7 @@ const result = await new SimpleStartup(new Request())
 |           +-- get.ts
 ```
 
-访问地址为 `get /todo/66`
+访问地址为 `GET /todo/66`
 
 ##### 方式 2
 
@@ -211,7 +214,7 @@ const result = await new SimpleStartup(new Request())
 |       +-- getTodoItem.ts
 ```
 
-访问地址为 `get(post 等) /todo/getTodoItem`，需要在 `body` 、 `header` 或 `queryParams` 传入 `todoId` 参数
+访问地址为 `GET(POST 等) /todo/getTodoItem`，需要在 `body` 、 `header` 或 `queryParams` 传入 `todoId` 参数
 
 #### 示例建议
 
@@ -262,7 +265,7 @@ action 的名称和路径会映射为访问路径，每个文件对应一个 `ac
 在 action 文件 (`.ts/.js`) 中创建继承 `Action` 的类，并重写 `invoke` 函数
 
 ```JS
-import { Action } from "sfa";
+import { Action } from "@sfajs/router";
 export default class extends Action {
   async invoke() {
     this.ok({
@@ -299,7 +302,7 @@ export default class extends Action {
 ```
 
 ```ts
-import { Action } from "sfa";
+import { Action } from "@sfajs/router";
 export default class extends Action {
   constructor() {
     super(["login"]);
@@ -548,8 +551,8 @@ parts 的内容较为复杂，参考 [parts](###parts) 部分
 {
   "doc": {
     "output": "../docs/api/README.md",
-    "title": "sfa-title",
-    "subtitle": "sfa-subtitle",
+    "title": "@sfajs/router-title",
+    "subtitle": "@sfajs/router-subtitle",
     "parts": [
       {
         "name": "part1",
