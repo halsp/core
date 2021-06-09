@@ -21,9 +21,9 @@ test("response error 1", async function () {
     throw new ResponseError("error test");
   } catch (err) {
     expect(err.message).toBe("error test");
-    expect(err.body).toEqual({});
+    expect(err.body).toBeUndefined();
     expect(err instanceof ResponseError).toBeTruthy();
-    expect(err.status).toBe(500);
+    expect(err.status).toBeUndefined();
   }
 });
 

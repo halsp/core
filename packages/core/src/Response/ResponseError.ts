@@ -2,8 +2,8 @@ import { StatusCodes } from "http-status-codes";
 
 export default class ResponseError extends Error {
   public readonly headers = <Record<string, string | string[] | undefined>>{};
-  public body?: unknown = {};
-  public status?: StatusCodes = StatusCodes.INTERNAL_SERVER_ERROR;
+  public body?: unknown;
+  public status?: StatusCodes;
 
   constructor(message?: string) {
     super(message);
