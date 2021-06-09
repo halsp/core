@@ -55,20 +55,20 @@ export default class Dbhelper {
     let limit: number | undefined;
 
     const request = this.ctx.req;
-    if (request.params && request.params.page) {
+    if (request.params && request.params.page != undefined) {
       page = Number(request.params.page);
-    } else if (request.body && request.body.page) {
-      page = request.body.page as number;
+    } else if (request.body && request.body.page != undefined) {
+      page = Number(request.body.page);
     }
 
-    if (request.params && request.params.limit) {
+    if (request.params && request.params.limit != undefined) {
       limit = Number(request.params.limit);
-    } else if (request.params && request.params.pageSize) {
+    } else if (request.params && request.params.pageSize != undefined) {
       limit = Number(request.params.pageSize);
-    } else if (request.body && request.body.limit) {
-      limit = request.body.limit as number;
-    } else if (request.body && request.body.pageSize) {
-      limit = request.body.pageSize as number;
+    } else if (request.body && request.body.limit != undefined) {
+      limit = Number(request.body.limit);
+    } else if (request.body && request.body.pageSize != undefined) {
+      limit = Number(request.body.pageSize);
     }
 
     if (!page) page = 1;

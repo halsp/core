@@ -15,7 +15,7 @@ declare module "sfa" {
   }
 }
 
-export { ResponseStruct, Dbhelper, Startup };
+export { ResponseStruct, Dbhelper };
 
 export default class SfaCloudbase extends Startup {
   constructor(
@@ -46,10 +46,10 @@ export default class SfaCloudbase extends Startup {
 
   get struct(): ResponseStruct {
     return <ResponseStruct>{
-      headers: this.ctx.res?.headers ?? {},
-      statusCode: this.ctx.res?.status ?? 0,
-      isBase64Encoded: this.ctx.res?.isBase64Encoded ?? false,
-      body: this.ctx.res?.body ?? {},
+      headers: this.ctx.res.headers,
+      statusCode: this.ctx.res.status ?? 0,
+      isBase64Encoded: this.ctx.res.isBase64Encoded ?? false,
+      body: this.ctx.res.body ?? {},
     };
   }
 
