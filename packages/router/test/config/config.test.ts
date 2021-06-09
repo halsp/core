@@ -31,7 +31,9 @@ test("simple config", function () {
     expect(Config.default).toBe(Config.default);
 
     expect(Config.outDir).toBe("");
-    expect(Config.getRouterDirPath(Config.default)).toBe("..\\controllers");
+    expect(Config.getRouterDirPath(Config.default).replace(/\\/g, "/")).toBe(
+      "../controllers"
+    );
   });
 });
 

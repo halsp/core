@@ -26,4 +26,24 @@ test("api docs creater", async function () {
 
 test("api docs write", async function () {
   creater.write("./test.md");
+  expect(fs.existsSync("./test.md")).toBeTruthy();
+  fs.unlinkSync("./test.md");
+});
+
+test("api docs write empty", async function () {
+  expect(() => creater.write("")).toThrow(
+    `please input target file path, for example 'docs/api.md'`
+  );
+});
+
+test("without doc config", async function () {
+  const cfg = Object.assign({}, config);
+  delete cfg.doc;
+  const creater = new ApiDocsCreater(cfg);
+  expect(() => creater.docConfig).toThrow("there is no doc config");
+});
+
+test("default router dir", async function () {
+  const creater = new ApiDocsCreater(config);
+  expect(() => creater.docs).toThrow("the router dir is not exist");
 });
