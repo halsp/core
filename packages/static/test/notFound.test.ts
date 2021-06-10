@@ -2,7 +2,9 @@ import { SimpleStartup, Request } from "sfa";
 import "../src";
 
 test("not found", async function () {
-  const result = await new SimpleStartup(new Request().setMethod("get").setPath("not-exist"))
+  const result = await new SimpleStartup(
+    new Request().setMethod("get").setPath("not-exist")
+  )
     .useStatic({
       dir: "test/static",
       encoding: "utf-8",
@@ -13,7 +15,9 @@ test("not found", async function () {
 
 test("404 page", async function () {
   {
-    const result = await new SimpleStartup(new Request().setMethod("get").setPath("not-exist"))
+    const result = await new SimpleStartup(
+      new Request().setMethod("get").setPath("not-exist")
+    )
       .useStatic({
         dir: "test/static",
         encoding: "utf-8",
@@ -24,7 +28,9 @@ test("404 page", async function () {
     expect(result.body).toBe("404 page");
   }
   {
-    const result = await new SimpleStartup(new Request().setMethod("get").setPath("not-exist"))
+    const result = await new SimpleStartup(
+      new Request().setMethod("get").setPath("not-exist")
+    )
       .useStatic({
         dir: "test/static",
         encoding: "utf-8",
@@ -37,7 +43,9 @@ test("404 page", async function () {
 });
 
 test("404 page not found", async function () {
-  const result = await new SimpleStartup(new Request().setMethod("get").setPath("not-exist"))
+  const result = await new SimpleStartup(
+    new Request().setMethod("get").setPath("not-exist")
+  )
     .useStatic({
       dir: "test/static",
       encoding: "utf-8",

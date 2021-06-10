@@ -47,7 +47,7 @@ export default class StaticMiddleware extends BaseMiddleware {
   }
 
   get filePath(): string | undefined {
-    let reqPath = this.ctx.req.path ?? "";
+    let reqPath = this.trimPath(this.ctx.req.path ?? "");
     if (this.cfg.prefix) {
       reqPath = reqPath.substr(
         this.cfg.prefix.length,
