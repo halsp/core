@@ -16,25 +16,19 @@ export default class SingleStaticMiddleware extends BaseMiddleware {
 
     if (
       this.trimPath(this.ctx.req.path ?? "") !=
-      this.trimPath(this.cfg.reqPath || (this.ctx.req.path ?? ""))
+      this.trimPath(this.cfg.reqPath ?? this.cfg.file)
     ) {
       await this.next();
       return;
     }
 
-    if (fs.existsSync(this.cfg.file)) {
-      if (fs.statSync(this.cfg.file).isFile()) {
-        this.ok(fs.readFileSync(this.cfg.file, this.cfg.encoding)).setHeader(
-          "content-type",
-          mime.getType(this.cfg.file) || "*/*"
-        );
-      } else {
-        this.errRequestMsg({
-          message: "illegal operation on a directory, read",
-        });
-      }
-    } else {
-      this.notFound();
+    if (fs.existsSync(this.cfg.file) && fs.statSync(this.cfg.file).isFile()) {
+      this.ok(fs.readFileSync(this.cfg.file, this.cfg.encoding)).setHeader(
+        "content-type",
+        mime.getType(this.cfg.file) || "*/*"
+      );
     }
+
+    await this.next();
   }
 }

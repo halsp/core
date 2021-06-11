@@ -37,10 +37,8 @@ export default class StaticMiddleware extends BaseMiddleware {
         this.notFound(
           fs.readFileSync(file404Path, this.cfg.encoding)
         ).setHeader("content-type", mime.getType(file404Path) || "*/*");
-      } else {
-        this.notFound();
+        return;
       }
-      return;
     }
 
     await this.next();

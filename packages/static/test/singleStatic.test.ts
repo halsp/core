@@ -79,8 +79,43 @@ test("found dir instead of file", async function () {
       encoding: "utf-8",
     })
     .run();
-  expect(result.status).toBe(500);
-  expect(result.body).toEqual({
-    message: "illegal operation on a directory, read",
-  });
+  expect(result.status).toBe(404);
+});
+
+test("empty req path", async function () {
+  {
+    const result = await new SimpleStartup(
+      new Request().setMethod("get").setPath("")
+    )
+      .useStatic({
+        file: "test/static/index.html",
+        reqPath: "",
+      })
+      .run();
+    expect(result.status).toBe(200);
+  }
+
+  {
+    const result = await new SimpleStartup(
+      new Request().setMethod("get").setPath("/")
+    )
+      .useStatic({
+        file: "test/static/index.html",
+        reqPath: "",
+      })
+      .run();
+    expect(result.status).toBe(200);
+  }
+
+  {
+    const result = await new SimpleStartup(
+      new Request().setMethod("get").setPath("ind")
+    )
+      .useStatic({
+        file: "test/static/index.html",
+        reqPath: "",
+      })
+      .run();
+    expect(result.status).toBe(404);
+  }
 });

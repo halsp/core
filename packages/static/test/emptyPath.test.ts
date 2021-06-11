@@ -24,7 +24,7 @@ test("null path", async function () {
         file: "test/static/index.html",
       })
       .run();
-    expect(result.status).toBe(200);
+    expect(result.status).toBe(404);
   }
 });
 

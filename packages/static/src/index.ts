@@ -24,6 +24,11 @@ Startup.prototype.useStatic = function <T extends Startup>(
     };
   }
 
+  this.use(async (ctx, next) => {
+    ctx.res.headers["@sfajs/static"] = "https://github.com/sfajs/static";
+    await next();
+  });
+
   if (Object.keys(cfg).includes("file")) {
     this.use(() => new SingleStaticMiddleware(cfg as SingleStaticConfig));
   } else {
