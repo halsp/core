@@ -1,7 +1,6 @@
 import HttpMethod from "./HttpMethod";
 
 export default class Request {
-  readonly query: Record<string, string> = {};
   readonly headers: Record<string, string | string[] | undefined> = {};
   readonly params: Record<string, string | undefined> = {};
 
