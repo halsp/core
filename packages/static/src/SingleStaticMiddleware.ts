@@ -27,6 +27,8 @@ export default class SingleStaticMiddleware extends BaseMiddleware {
         "content-type",
         mime.getType(this.cfg.file) || "*/*"
       );
+      this.setFile(this.cfg.file);
+      return;
     }
 
     await this.next();

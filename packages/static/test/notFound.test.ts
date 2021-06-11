@@ -18,6 +18,11 @@ test("404 page", async function () {
     const result = await new SimpleStartup(
       new Request().setMethod("get").setPath("not-exist")
     )
+      .use(async (ctx, next) => {
+        await next();
+        expect(ctx.bag<string>("STATIC_FILE")).not.toBeUndefined();
+        expect(ctx.bag<boolean>("STATIC_FILE_404")).toBeTruthy();
+      })
       .useStatic({
         dir: "test/static",
         encoding: "utf-8",

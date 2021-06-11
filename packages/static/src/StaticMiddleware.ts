@@ -27,6 +27,7 @@ export default class StaticMiddleware extends BaseMiddleware {
           "content-type",
           mime.getType(filePath) || "*/*"
         );
+        this.setFile(filePath);
         return;
       }
     }
@@ -37,6 +38,7 @@ export default class StaticMiddleware extends BaseMiddleware {
         this.notFound(
           fs.readFileSync(file404Path, this.cfg.encoding)
         ).setHeader("content-type", mime.getType(file404Path) || "*/*");
+        this.setFile(file404Path, true);
         return;
       }
     }

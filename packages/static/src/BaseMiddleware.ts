@@ -43,4 +43,11 @@ export abstract class BaseMiddleware extends Middleware {
     }
     return result;
   }
+
+  protected setFile(file: string, is404 = false): void {
+    this.ctx.bag("STATIC_FILE", file);
+    if (is404) {
+      this.ctx.bag("STATIC_FILE_404", true);
+    }
+  }
 }

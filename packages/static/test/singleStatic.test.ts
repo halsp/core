@@ -6,6 +6,10 @@ test("match", async function () {
     const result = await new SimpleStartup(
       new Request().setMethod("get").setPath("ind")
     )
+      .use(async (ctx, next) => {
+        await next();
+        expect(ctx.bag<string>("STATIC_FILE")).not.toBeUndefined();
+      })
       .useStatic({
         file: "test/static/index.html",
         reqPath: "ind",
@@ -47,6 +51,10 @@ test("not found path", async function () {
   const result = await new SimpleStartup(
     new Request().setMethod("get").setPath("ind1")
   )
+    .use(async (ctx, next) => {
+      await next();
+      expect(ctx.bag<string>("STATIC_FILE")).toBeUndefined();
+    })
     .useStatic({
       file: "test/static/index.html",
       reqPath: "ind",
