@@ -12,6 +12,7 @@ test("middleware pipeline", async function () {
 
   const result = await startup.run();
   expect(result.status).toBe(200);
+  expect(result.body).toBe("OK");
   expect(result.headers.mdw1).toBe("mdw1");
   expect(result.headers.mdw2).toBe("mdw2");
   expect(!!result.headers.mdw2).toBe(true);
@@ -39,7 +40,7 @@ class Mdw2 extends Middleware {
 
 class Mdw3 extends Middleware {
   async invoke(): Promise<void> {
-    this.ok();
+    this.ok("OK");
   }
 }
 

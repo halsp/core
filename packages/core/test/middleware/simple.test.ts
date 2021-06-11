@@ -25,12 +25,13 @@ test("simpple middleware", async function () {
       await next();
     })
     .use(async (ctx, next) => {
-      ctx.res.status = 200;
+      ctx.ok("OK");
       await next();
     });
 
   const result = await startup.run();
   expect(result.status).toBe(200);
+  expect(result.body).toBe("OK");
   expect(result.headers.mdw1).toBe("mdw1");
   expect(result.headers.mdw2).toBe("mdw2");
   expect(result.headers.mdw3).toBe("mdw3");

@@ -1,9 +1,11 @@
 import Middleware from "../Middleware";
 import Request from "../Request";
 import Response from "../Response";
+import ResultHandler from "./ResultHandler";
 
-export default class HttpContext {
+export default class HttpContext extends ResultHandler {
   constructor(req: Request) {
+    super();
     this.#req = req;
   }
 
