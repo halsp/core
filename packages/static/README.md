@@ -17,14 +17,14 @@ npm i @sfajs/static
 使用 `startup.useStatic()`
 
 ```JS
-import "@sfajs/static";
+require("@sfajs/static");
 const result = await new SimpleStartup().useStatic().run();
 ```
 
 或
 
 ```JS
-import "@sfajs/static";
+require("@sfajs/static");
 const result = await new OtherStartup().useStatic().run();
 ```
 

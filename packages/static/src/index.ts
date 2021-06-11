@@ -25,7 +25,7 @@ Startup.prototype.useStatic = function <T extends Startup>(
   }
 
   this.use(async (ctx, next) => {
-    ctx.res.headers["@sfajs/static"] = "https://github.com/sfajs/static";
+    ctx.res.setHeader("sfa-static", "https://github.com/sfajs/static");
     await next();
   });
 
