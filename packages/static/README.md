@@ -102,3 +102,14 @@ const result = await new SimpleStartup()
 ### method
 
 与 `匹配文件夹` 中的参数相同
+
+## bag
+
+如果成功找到文件，将在 `ctx.bag` 中注入
+
+> `STATIC_FILE`: 文件相对路径
+
+如果根据配置中的 `file404` 找到的 404 文件，将在 `ctx.bag` 中加入
+
+> `STATIC_FILE`: 文件相对路径
+> `STATIC_FILE_404`: 值为 `true`
