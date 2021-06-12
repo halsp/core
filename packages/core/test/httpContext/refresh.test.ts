@@ -7,15 +7,15 @@ test("bag", async function () {
   context.req.setHeader("h1", "a");
   context.req.setHeader("h2", "b");
 
-  expect(context.res.headers.h1).toBe("1");
-  expect(context.res.headers.h2).toBe("2");
+  expect(context.res.getHeader("h1")).toBe("1");
+  expect(context.res.getHeader("h2")).toBe("2");
   expect(context.req.headers.h1).toBe("a");
   expect(context.req.headers.h2).toBe("b");
 
   context.refresh(new Request());
 
-  expect(context.res.headers.h1).toBe(undefined);
-  expect(context.res.headers.h2).toBe(undefined);
-  expect(context.req.headers.h1).toBe(undefined);
-  expect(context.req.headers.h2).toBe(undefined);
+  expect(context.res.getHeader("h1")).toBeUndefined();
+  expect(context.res.getHeader("h2")).toBeUndefined();
+  expect(context.req.headers.h1).toBeUndefined();
+  expect(context.req.headers.h2).toBeUndefined();
 });

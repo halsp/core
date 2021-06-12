@@ -1,5 +1,5 @@
 import HttpContext from "../HttpContext";
-import ResultHandler from "../HttpContext/ResultHandler";
+import ResultHandler from "../ResultHandler";
 
 export default abstract class Middleware extends ResultHandler {
   constructor(public readonly cache: boolean = true) {

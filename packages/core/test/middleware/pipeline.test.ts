@@ -13,16 +13,16 @@ test("middleware pipeline", async function () {
   const result = await startup.run();
   expect(result.status).toBe(200);
   expect(result.body).toBe("OK");
-  expect(result.headers.mdw1).toBe("mdw1");
-  expect(result.headers.mdw2).toBe("mdw2");
-  expect(!!result.headers.mdw2).toBe(true);
-  expect(!!result.headers.mdw3).toBe(false);
-  expect(!!result.headers.mdw4).toBe(false);
+  expect(result.getHeader("mdw1")).toBe("mdw1");
+  expect(result.getHeader("mdw2")).toBe("mdw2");
+  expect(!!result.getHeader("mdw2")).toBeTruthy();
+  expect(!!result.getHeader("mdw3")).toBeFalsy();
+  expect(!!result.getHeader("mdw4")).toBeFalsy();
 });
 
 class Mdw1 extends Middleware {
   async invoke(): Promise<void> {
-    this.ctx.res.headers.mdw1 = "mdw1";
+    this.ctx.res.setHeader("mdw1", "mdw1");
     await this.next();
   }
 }
@@ -33,7 +33,7 @@ class Mdw2 extends Middleware {
   }
 
   async invoke(): Promise<void> {
-    this.ctx.res.headers.mdw2 = "mdw2";
+    this.ctx.res.setHeader("mdw2", "mdw2");
     await this.next();
   }
 }
@@ -46,7 +46,7 @@ class Mdw3 extends Middleware {
 
 class Mdw4 extends Middleware {
   async invoke(): Promise<void> {
-    this.ctx.res.headers.mdw4 = "mdw4";
+    this.ctx.res.setHeader("mdw4", "mdw4");
     await this.next();
   }
 }

@@ -147,7 +147,7 @@ for (let i = 0; i < redirectCodes.length; i++) {
     const md = new RedirectMd(code, location);
     await md.invoke();
     expect(md.ctx.res.status).toBe(code || 302);
-    expect(md.ctx.res.headers.location).toBe(location);
+    expect(md.ctx.res.getHeader("location")).toBe(location);
   });
 }
 

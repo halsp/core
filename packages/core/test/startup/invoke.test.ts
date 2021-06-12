@@ -43,7 +43,7 @@ test("invoke multiple", async function () {
 test("handle error", async function () {
   const startup = new SimpleStartup();
   startup.use(async (ctx) => {
-    ctx.res.headers.h1 = "1";
+    ctx.res.setHeader("h1", "1");
     throw new ResponseError()
       .setBody({
         message: "handle error",
@@ -53,8 +53,8 @@ test("handle error", async function () {
   });
   await startup.run();
 
-  expect(startup.ctx.res.headers.h1).toBe("1");
-  expect(startup.ctx.res.headers.h2).toBe("2");
+  expect(startup.ctx.res.getHeader("h1")).toBe("1");
+  expect(startup.ctx.res.getHeader("h2")).toBe("2");
   expect(startup.ctx.res.status).toBe(400);
   expect(startup.ctx.res.body).toEqual({
     message: "handle error",
@@ -85,7 +85,7 @@ test("handle error null value", async function () {
 test("throw error", async function () {
   const startup = new SimpleStartup();
   startup.use(async (ctx) => {
-    ctx.res.headers.h1 = "1";
+    ctx.res.setHeader("h1", "1");
     throw new Error("msg");
   });
   try {

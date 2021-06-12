@@ -30,10 +30,10 @@ test("custom param", async function () {
   const result = await new SimpleStartup(new Request())
     .use(async (ctx) => {
       ctx.res.status = 200;
-      ctx.res.headers["custom-param"] = "aaa";
+      ctx.res.setHeader("custom-param", "aaa");
     })
     .run();
 
   expect(result.status).toBe(200);
-  expect(result.headers["custom-param"]).toBe("aaa");
+  expect(result.getHeader("custom-param")).toBe("aaa");
 });

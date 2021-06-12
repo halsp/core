@@ -70,6 +70,8 @@ export default abstract class Startup {
     if (err.body != undefined) {
       this.ctx.res.body = err.body;
     }
-    Object.assign(this.ctx.res.headers, err.headers);
+    Object.keys(err.headers).forEach((key) => {
+      this.ctx.res.setHeader(key, err.headers[key]);
+    });
   };
 }

@@ -1,6 +1,6 @@
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import Response from "../Response";
-import ErrorMessage from "../Response/ErrorMessage";
+import Response from "./Response";
+import ErrorMessage from "./Response/ErrorMessage";
 
 export default abstract class ResultHandler {
   private get response(): Response {
@@ -19,7 +19,7 @@ export default abstract class ResultHandler {
   created = (location: string, body?: unknown): Response => {
     this.response.body = body;
     this.response.status = StatusCodes.CREATED;
-    this.response.headers.location = location;
+    this.response.setHeader("location", location);
     return this.response;
   };
 
@@ -105,7 +105,7 @@ export default abstract class ResultHandler {
       | StatusCodes.PERMANENT_REDIRECT = StatusCodes.MOVED_TEMPORARILY
   ): Response => {
     this.response.status = code;
-    this.response.headers.location = location;
+    this.response.setHeader("location", location);
     return this.response;
   };
 }

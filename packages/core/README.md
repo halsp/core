@@ -86,10 +86,10 @@ startup.use(async (ctx) => {
 或
 
 ```JS
-startup.use(async (ctx,next) => {
+startup.use(async (ctx, next) => {
   ctx.res.body = "hello world";
   await next();
-  ctx.res.headers.h = "h";
+  ctx.res.setHeader("h", "h");
 });
 ```
 
@@ -197,7 +197,7 @@ API 返回错误时，可统一返回 `ErrorMessage`，命名以 `Msg` 结尾的
 
 在中间件中，可通过 `this.ctx.req` 方式获取请求内容
 
-`req` 对象包含以下字段
+`req` 对象包含以下内容
 
 - path: 访问路径，不带域名和查询参数，自动去除开头 `/`
 - headers: 访问头部

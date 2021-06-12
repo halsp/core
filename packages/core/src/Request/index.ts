@@ -1,7 +1,7 @@
+import HeadersHandler from "../HeadersHandler";
 import HttpMethod from "./HttpMethod";
 
-export default class Request {
-  readonly headers: Record<string, string | string[] | undefined> = {};
+export default class Request extends HeadersHandler {
   readonly params: Record<string, string | undefined> = {};
 
   #body: unknown;
@@ -57,16 +57,6 @@ export default class Request {
 
   setBody(body: unknown): Request {
     this.#body = body;
-    return this;
-  }
-
-  setHeaders(headers: Record<string, string | string[] | undefined>): Request {
-    Object.assign(this.headers, headers);
-    return this;
-  }
-
-  setHeader(key: string, value?: string | string[]): Request {
-    this.headers[key] = value;
     return this;
   }
 
