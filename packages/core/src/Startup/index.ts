@@ -7,7 +7,12 @@ import Request from "../Request";
 
 export default abstract class Startup {
   constructor(req?: Request) {
-    this.#ctx = new HttpContext(req || new Request());
+    this.#ctx = new HttpContext(req ?? new Request());
+  }
+
+  refresh(req?: Request): Startup {
+    this.#ctx = new HttpContext(req ?? new Request());
+    return this;
   }
 
   #ctx: HttpContext;

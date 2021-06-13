@@ -26,12 +26,6 @@ export default class HttpContext extends ResultHandler {
     return this.#req;
   }
 
-  refresh(req: Request): HttpContext {
-    this.#req = req;
-    this.#res = new Response();
-    return this;
-  }
-
   public bag<T>(key: string): T;
   public bag<T>(key: string, value: T): HttpContext;
   public bag<T>(key: string, builder: () => T): HttpContext;

@@ -1,6 +1,6 @@
 {
   "name": "sfa",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "serverless function api",
   "homepage": "https://github.com/sfajs/sfa",
   "repository": {
