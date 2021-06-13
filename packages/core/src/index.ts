@@ -13,7 +13,7 @@ import HttpMethod from "./Request/HttpMethod";
 
 import Middleware from "./Middleware";
 import { MdType } from "./Middleware";
-import { SimpleMdType } from "./Middleware/SimpleMiddleware";
+import { LambdaMdType } from "./Middleware/LambdaMiddleware";
 
 export {
   Response,
@@ -26,6 +26,6 @@ export {
   HttpMethod,
   Middleware,
   MdType,
-  SimpleMdType,
+  LambdaMdType,
   status,
 };

@@ -1,12 +1,12 @@
 import Middleware from ".";
 import HttpContext from "../HttpContext";
 
-export type SimpleMdType = (
+export type LambdaMdType = (
   ctx: HttpContext,
   next: () => Promise<void>
 ) => Promise<void>;
 
-class SimpleMiddleware extends Middleware {
+class LambdaMiddleware extends Middleware {
   constructor(
     private readonly builder: (
       ctx: HttpContext,
@@ -21,4 +21,4 @@ class SimpleMiddleware extends Middleware {
   }
 }
 
-export default SimpleMiddleware;
+export default LambdaMiddleware;

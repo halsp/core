@@ -1,18 +1,18 @@
 import { MdType } from "../Middleware";
 import Response from "../Response";
 import HttpContext from "../HttpContext";
-import SimpleMiddleware, { SimpleMdType } from "../Middleware/SimpleMiddleware";
+import LambdaMiddleware, { LambdaMdType } from "../Middleware/LambdaMiddleware";
 import ResponseError from "../Response/ResponseError";
 
 export default abstract class Startup {
   #mds: MdType[] = [];
 
-  use<T extends this>(mdBuilder: MdType | SimpleMdType): T {
+  use<T extends this>(mdBuilder: MdType | LambdaMdType): T {
     if (!mdBuilder) throw new Error();
 
     let builder;
     if (mdBuilder.length > 0) {
-      builder = () => new SimpleMiddleware(mdBuilder as SimpleMdType);
+      builder = () => new LambdaMiddleware(mdBuilder as LambdaMdType);
     } else {
       builder = mdBuilder as MdType;
     }
