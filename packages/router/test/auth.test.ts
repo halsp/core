@@ -2,11 +2,11 @@ import linq = require("linq");
 import global from "./global";
 import "./UseTest";
 import "../src";
-import { Request, SimpleStartup } from "sfa";
+import { Request, TestStartup } from "sfa";
 import Authority from "../src/Authority";
 
 test("router test login access", async function () {
-  const result = await new SimpleStartup(
+  const result = await new TestStartup(
     new Request()
       .setBody({
         account: "abc",
@@ -18,7 +18,7 @@ test("router test login access", async function () {
       .setMethod("POST")
   )
     .useTest()
-    .useRouter<SimpleStartup>({
+    .useRouter<TestStartup>({
       authFunc: () => new Auth(),
     })
     .run();
@@ -27,7 +27,7 @@ test("router test login access", async function () {
 });
 
 test("router test login not access", async function () {
-  const result = await new SimpleStartup(
+  const result = await new TestStartup(
     new Request()
       .setHeader("account", global.users[0].account)
       .setHeader("password", global.users[0].password + "1")
@@ -35,7 +35,7 @@ test("router test login not access", async function () {
       .setMethod("POST")
   )
     .useTest()
-    .useRouter<SimpleStartup>({
+    .useRouter<TestStartup>({
       authFunc: () => new Auth(),
     })
     .run();
@@ -44,7 +44,7 @@ test("router test login not access", async function () {
 });
 
 test("router test admin access", async function () {
-  const result = await new SimpleStartup(
+  const result = await new TestStartup(
     new Request()
       .setHeader("account", global.users[1].account)
       .setHeader("password", global.users[1].password)
@@ -52,7 +52,7 @@ test("router test admin access", async function () {
       .setMethod("POST")
   )
     .useTest()
-    .useRouter<SimpleStartup>({
+    .useRouter<TestStartup>({
       authFunc: () => new Auth(),
     })
     .run();
@@ -61,7 +61,7 @@ test("router test admin access", async function () {
 });
 
 test("router test admin not access", async function () {
-  const result = await new SimpleStartup(
+  const result = await new TestStartup(
     new Request()
       .setHeader("account", global.users[0].account)
       .setHeader("password", global.users[0].password)
@@ -69,7 +69,7 @@ test("router test admin not access", async function () {
       .setMethod("POST")
   )
     .useTest()
-    .useRouter<SimpleStartup>({
+    .useRouter<TestStartup>({
       authFunc: () => new Auth(),
     })
     .run();

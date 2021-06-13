@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import * as fs from "fs";
-import { SimpleStartup } from "sfa";
+import { TestStartup } from "sfa";
 import * as shell from "shelljs";
 import Constant from "../src/Constant";
 import "../src";
@@ -54,7 +54,7 @@ test("run", async function () {
   shell.cd("./test/command");
 
   try {
-    const result = await new SimpleStartup().useRouter().run();
+    const result = await new TestStartup().useRouter().run();
     expect(result.status).toBe(404);
   } finally {
     shell.cd("../..");

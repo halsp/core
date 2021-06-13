@@ -120,7 +120,7 @@ import "@sfajs/router";
 然后调用 `startup.useRouter` 函数即可开启路由中间件，开启后能够支持路由功能
 
 ```JS
-const result = await new SimpleStartup().useRouter().run();
+const result = await new TestStartup().useRouter().run();
 ```
 
 或

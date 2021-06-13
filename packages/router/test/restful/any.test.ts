@@ -1,16 +1,16 @@
 import "../UseTest";
 import "../../src";
-import { HttpMethod, SimpleStartup, Request } from "sfa";
+import { HttpMethod, TestStartup, Request } from "sfa";
 
 const methods = ["test", "aaa", "NO"];
 
 methods.forEach((method) => {
   test(`${method} -> any restful test`, async function () {
-    const result = await new SimpleStartup(
+    const result = await new TestStartup(
       new Request().setPath("/restful").setMethod(method)
     )
       .useTest()
-      .useRouter<SimpleStartup>()
+      .useRouter<TestStartup>()
       .run();
 
     expect(result.status).toBe(200);

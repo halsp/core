@@ -1,4 +1,4 @@
-import { Startup } from "sfa";
+import { HttpContext, Startup } from "sfa";
 import Authority from "../Authority";
 import MapPraser from "./MapPraser";
 
@@ -13,7 +13,7 @@ export default class Router {
   use(): void {
     this.startup.use(async (ctx, next) => {
       this.#mapPraser = new MapPraser(ctx);
-      this.setQuery();
+      this.setQuery(ctx);
       await next();
     });
     if (this.authFunc) {
@@ -28,12 +28,12 @@ export default class Router {
     this.startup.use(() => this.#mapPraser.action);
   }
 
-  private setQuery(): void {
+  private setQuery(ctx: HttpContext): void {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (this.startup.ctx.req as any).query = {};
+    (ctx.req as any).query = {};
     if (!this.#mapPraser.mapItem.path.includes("^")) return;
 
-    const reqPath = this.startup.ctx.req.path;
+    const reqPath = ctx.req.path;
     const mapPathStrs = this.#mapPraser.mapItem.path.split("/");
     const reqPathStrs = reqPath.split("/");
     for (let i = 0; i < Math.min(mapPathStrs.length, reqPathStrs.length); i++) {
@@ -43,7 +43,7 @@ export default class Router {
 
       const key = mapPathStr.substr(1, mapPathStr.length - 1);
       const value = decodeURIComponent(reqPathStr);
-      this.startup.ctx.req.query[key] = value;
+      ctx.req.query[key] = value;
     }
   }
 }

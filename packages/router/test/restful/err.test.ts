@@ -1,13 +1,13 @@
 import "../UseTest";
 import "../../src";
-import { HttpMethod, SimpleStartup, Request } from "sfa";
+import { HttpMethod, TestStartup, Request } from "sfa";
 
 test(`action name error`, async function () {
-  const result = await new SimpleStartup(
+  const result = await new TestStartup(
     new Request().setPath("/err").setMethod(HttpMethod.post)
   )
     .useTest()
-    .useRouter<SimpleStartup>()
+    .useRouter<TestStartup>()
     .run();
 
   expect(result.status).toBe(404);

@@ -3,7 +3,7 @@ import ApiDocs from "./ApiDocs";
 
 export default abstract class Action extends Middleware {
   constructor(public readonly roles: Array<string> = new Array<string>()) {
-    super(false);
+    super();
   }
 
   //#region will be set before doing

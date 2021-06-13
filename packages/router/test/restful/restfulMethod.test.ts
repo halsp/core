@@ -1,4 +1,4 @@
-import { HttpMethod, SimpleStartup, Request } from "sfa";
+import { HttpMethod, TestStartup, Request } from "sfa";
 import "../UseTest";
 import "../../src";
 
@@ -16,11 +16,11 @@ const methods = [
 
 methods.forEach((method) => {
   test(`${method} restful test`, async function () {
-    const result = await new SimpleStartup(
+    const result = await new TestStartup(
       new Request().setPath("/restful").setMethod(method)
     )
       .useTest()
-      .useRouter<SimpleStartup>()
+      .useRouter<TestStartup>()
       .run();
     expect(result.status).toBe(200);
     expect((result.body as Record<string, unknown>).method).toBe(method);

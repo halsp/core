@@ -1,8 +1,8 @@
-const { Request, SimpleStartup } = require("sfa");
+const { Request, TestStartup } = require("sfa");
 import "@sfajs/router";
 
 exports.main = async () => {
-  return await new SimpleStartup()
+  return await new TestStartup()
     .use(async (ctx, next) => {
       ctx.res.headers.demo = "js";
       await next();

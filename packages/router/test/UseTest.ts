@@ -18,6 +18,9 @@ sfa.Startup.prototype.useTest = function (
     config.dir = "./test/controllers";
   }
 
-  this.ctx.bag("B-UnitTest", config);
+  this.use(async (ctx, next) => {
+    ctx.bag("B-UnitTest", config);
+    await next();
+  });
   return this;
 };
