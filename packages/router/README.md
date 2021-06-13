@@ -29,8 +29,8 @@ npm i @sfajs/router
     "build": "sfa-router-build"
   },
   "dependencies": {
-    "sfa": "^0.1.1",
-    "@sfajs/router": "^0.1.0"
+    "sfa": "^0.3.0",
+    "@sfajs/router": "^0.3.0"
   }
 }
 ```
