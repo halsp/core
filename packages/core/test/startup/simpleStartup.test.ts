@@ -1,8 +1,8 @@
-import { HttpContext, Request, SimpleStartup } from "../../src";
+import { HttpContext, Request, TestStartup } from "../../src";
 
 test("simple startup", async function () {
   let context!: HttpContext;
-  await new SimpleStartup()
+  await new TestStartup()
     .use(async (ctx) => {
       context = ctx;
     })
@@ -14,7 +14,7 @@ test("simple startup", async function () {
 });
 
 test("without md", async function () {
-  const res = await new SimpleStartup().run(new Request());
+  const res = await new TestStartup().run(new Request());
 
   expect(res).not.toBeUndefined();
 });

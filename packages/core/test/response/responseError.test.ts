@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { StatusCodes } from "http-status-codes";
 import { ErrorMessage, ResponseError } from "../../src";
-import { SimpleStartup } from "../../src";
+import { TestStartup } from "../../src";
 
 test("response error message", async function () {
-  const result = await new SimpleStartup()
+  const result = await new TestStartup()
     .use(async (ctx) => {
       ctx.res.status = StatusCodes.BAD_REQUEST;
       ctx.res.body = <ErrorMessage>{ message: "error msg" };

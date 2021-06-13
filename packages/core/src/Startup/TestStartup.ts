@@ -3,7 +3,7 @@ import HttpContext from "../HttpContext";
 import Response from "../Response";
 import Request from "../Request";
 
-export default class SimpleStartup extends Startup {
+export default class TestStartup extends Startup {
   #req?: Request;
   constructor(req?: Request) {
     super();

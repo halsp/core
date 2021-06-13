@@ -12,11 +12,11 @@ sfa 提供可配置的基础功能，添加插件或中间件以支持不同运�
 npm i sfa
 ```
 
-## 像 1，2，3 一样简单
+## 开始使用
 
 ```JS
-import { SimpleStartup, Request } from "sfa";
-const result = await new SimpleStartup(new Request())
+const { TestStartup, Request } = require("sfa");
+const result = await new TestStartup(new Request())
     .use(async (ctx, next) => {
       ctx.res.body = "sfa";
     })
@@ -28,7 +28,7 @@ console.log('result',result);
 
 Startup 类是 sfa 的入口
 
-为了让 sfa 能够在各类生产环境中使用，该类设计的较为开放，在 ts 中是个抽象类，因此该类不能直接使用，需要定义派生类并在合适的函数中调用 `invoke` 函数。上述示例的 `SimpleStartup` 是一个简单的 Startup 派生类，没有对 Request 和 Response 进行任何解析。
+为了让 sfa 能够在各类生产环境中使用，该类设计的较为开放，在 ts 中是个抽象类，因此该类不能直接使用，需要定义派生类并在合适的函数中调用 `invoke` 函数。上述示例的 `TestStartup` 是一个简单的 Startup 派生类，没有对 Request 和 Response 进行任何解析。
 
 - 在 cloudbase 云函数环境中，可以使用 `@sfajs/cloudbase`。`@sfajs/cloudbase` 中有继承于类 `Startup` 的 `SfaCloudbase`，并对云函数入参 event 和 context 进行了解析
 - 在 http 环境中，可以使用 `@sfajs/http`。`@sfajs/http` 中有继承于类 `Startup` 的 `SfaHttp`，并对 Request 和 Response 进行了解析
@@ -61,8 +61,8 @@ Startup 类是 sfa 的入口
 你需要使用 `startup.use` 注册中间件，传参是一个创建中间件的回调函数，如
 
 ```js
-const { SimpleStartup } = require("sfa");
-const startup = new SimpleStartup(event, context);
+const { TestStartup } = require("sfa");
+const startup = new TestStartup(event, context);
 // 简单中间件
 startup.use(async (ctx) => {
   ctx.res.body = "hello world";
@@ -129,7 +129,7 @@ this.ctx.res.status=200;
 #### 在中间件中
 
 ```JS
-import { Middleware } from "sfa";
+const { Middleware } = require("sfa");
 export default class extends Middleware {
   async invoke() {
     this.noContent();
@@ -139,7 +139,7 @@ export default class extends Middleware {
 ```
 
 ```JS
-import { Middleware } from "sfa";
+const { Middleware } = require("sfa");
 export default class extends Middleware {
   async invoke() {
     const { account, password } = this.ctx.req.params;

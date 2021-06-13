@@ -1,6 +1,6 @@
 import { HttpMethod } from "../../src/index";
 import Request from "../../src/Request";
-import { SimpleStartup } from "../../src";
+import { TestStartup } from "../../src";
 
 test("method override", async function () {
   const req = new Request()
@@ -47,7 +47,7 @@ test("method override without value", async function () {
 });
 
 test(`method override request`, async function () {
-  const result = await new SimpleStartup(
+  const result = await new TestStartup(
     new Request().setMethod(HttpMethod.patch.toUpperCase())
   )
     .use(async (ctx) => {

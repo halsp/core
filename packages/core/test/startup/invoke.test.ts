@@ -1,8 +1,8 @@
 import { StatusCodes } from "http-status-codes";
-import { ResponseError, SimpleStartup } from "../../src";
+import { ResponseError, TestStartup } from "../../src";
 
 test("invoke multiple", async function () {
-  const startup = new SimpleStartup()
+  const startup = new TestStartup()
     .use(async (ctx, next) => {
       if (!ctx.res.body) {
         ctx.res.body = 0;
@@ -22,7 +22,7 @@ test("invoke multiple", async function () {
 });
 
 test("handle error", async function () {
-  const res = await new SimpleStartup()
+  const res = await new TestStartup()
     .use(async (ctx) => {
       ctx.res.setHeader("h1", "1");
       throw new ResponseError()
@@ -44,7 +44,7 @@ test("handle error", async function () {
 
 test("handle error null value", async function () {
   try {
-    const startup = new SimpleStartup();
+    const startup = new TestStartup();
     startup.use(async (ctx) => {
       ctx.res.setHeader("h1", "sfa");
       throw (
@@ -64,7 +64,7 @@ test("handle error null value", async function () {
 });
 
 test("throw error", async function () {
-  const startup = new SimpleStartup();
+  const startup = new TestStartup();
   startup.use(async (ctx) => {
     ctx.res.setHeader("h1", "1");
     throw new Error("msg");

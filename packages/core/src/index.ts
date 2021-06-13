@@ -5,7 +5,7 @@ import ErrorMessage from "./Response/ErrorMessage";
 import ResponseError from "./Response/ResponseError";
 
 import Startup from "./Startup";
-import SimpleStartup from "./Startup/SimpleStartup";
+import TestStartup from "./Startup/TestStartup";
 import HttpContext from "./HttpContext";
 
 import Request from "./Request";
@@ -20,7 +20,7 @@ export {
   ErrorMessage,
   ResponseError,
   Startup,
-  SimpleStartup,
+  TestStartup,
   Request,
   HttpContext,
   HttpMethod,

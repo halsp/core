@@ -1,7 +1,7 @@
-import { SimpleStartup } from "../../src";
+import { TestStartup } from "../../src";
 
 test("null error build 1", async function () {
-  const startup = new SimpleStartup();
+  const startup = new TestStartup();
   try {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     startup.use(null as any);
@@ -13,7 +13,7 @@ test("null error build 1", async function () {
 });
 
 test("null error build 2", async function () {
-  const startup = new SimpleStartup();
+  const startup = new TestStartup();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   startup.use(() => null as any);
   try {

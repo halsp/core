@@ -1,4 +1,4 @@
-import { SimpleStartup, Request } from "../../src";
+import { TestStartup, Request } from "../../src";
 
 test("request setParam", async function () {
   const req = new Request()
@@ -26,7 +26,7 @@ function expectParams(params: Record<string, string | string[] | undefined>) {
 }
 
 test("custom param", async function () {
-  const result = await new SimpleStartup(new Request())
+  const result = await new TestStartup(new Request())
     .use(async (ctx) => {
       ctx.res.status = 200;
       ctx.res.setHeader("custom-param", "aaa");
