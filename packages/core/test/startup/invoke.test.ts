@@ -1,26 +1,5 @@
 import { StatusCodes } from "http-status-codes";
-import { Middleware, ResponseError, SimpleStartup } from "../../src";
-
-test("invoke without md", async function () {
-  const startup = new SimpleStartup();
-  await startup.run();
-  expect(startup.ctx.mds.length).toBe(0);
-});
-
-test("set md", async function () {
-  class Md extends Middleware {
-    async invoke(): Promise<void> {
-      startup.ctx.res.body = "sfa";
-    }
-  }
-
-  const startup = new SimpleStartup().use(async (ctx) => {
-    ctx.res.body = "sfa md1";
-  });
-  startup.ctx.mds[0].md = new Md();
-  await startup.run();
-  expect(startup.ctx.res.body).toBe("sfa");
-});
+import { ResponseError, SimpleStartup } from "../../src";
 
 test("invoke multiple", async function () {
   const startup = new SimpleStartup()
@@ -34,29 +13,31 @@ test("invoke multiple", async function () {
     .use(async (ctx) => {
       (ctx.res.body as number)++;
     });
-  await startup.run();
-  await startup.run();
-  await startup.run();
-  expect(startup.ctx.res.body).toBe(3 * 2);
+  let res = await startup.run();
+  expect(res.body).toBe(2);
+  res = await startup.run();
+  expect(res.body).toBe(2);
+  res = await startup.run();
+  expect(res.body).toBe(2);
 });
 
 test("handle error", async function () {
-  const startup = new SimpleStartup();
-  startup.use(async (ctx) => {
-    ctx.res.setHeader("h1", "1");
-    throw new ResponseError()
-      .setBody({
-        message: "handle error",
-      })
-      .setHeader("h2", "2")
-      .setStatus(StatusCodes.BAD_REQUEST);
-  });
-  await startup.run();
+  const res = await new SimpleStartup()
+    .use(async (ctx) => {
+      ctx.res.setHeader("h1", "1");
+      throw new ResponseError()
+        .setBody({
+          message: "handle error",
+        })
+        .setHeader("h2", "2")
+        .setStatus(StatusCodes.BAD_REQUEST);
+    })
+    .run();
 
-  expect(startup.ctx.res.getHeader("h1")).toBe("1");
-  expect(startup.ctx.res.getHeader("h2")).toBe("2");
-  expect(startup.ctx.res.status).toBe(400);
-  expect(startup.ctx.res.body).toEqual({
+  expect(res.getHeader("h1")).toBe("1");
+  expect(res.getHeader("h2")).toBe("2");
+  expect(res.status).toBe(400);
+  expect(res.body).toEqual({
     message: "handle error",
   });
 });

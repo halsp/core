@@ -1,22 +1,21 @@
 import { SimpleStartup, Request } from "../../src";
 
 test("request setParam", async function () {
-  const startup = new SimpleStartup(
-    new Request().setParam("p1", "1").setParam("p2", "2").setParam("p3", "3")
-  );
+  const req = new Request()
+    .setParam("p1", "1")
+    .setParam("p2", "2")
+    .setParam("p3", "3");
 
-  expectParams(startup.ctx.req.params);
+  expectParams(req.params);
 });
 
 test("request setParams", async function () {
-  const startup = new SimpleStartup(
-    new Request().setParams({
-      p1: "1",
-      p2: "2",
-      p3: "3",
-    })
-  );
-  expectParams(startup.ctx.req.params);
+  const req = new Request().setParams({
+    p1: "1",
+    p2: "2",
+    p3: "3",
+  });
+  expectParams(req.params);
 });
 
 function expectParams(params: Record<string, string | string[] | undefined>) {

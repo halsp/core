@@ -1,82 +1,60 @@
-import Middleware from "../Middleware";
+import { MdType } from "../Middleware";
 import Response from "../Response";
 import HttpContext from "../HttpContext";
-import SimpleMiddleware from "../Middleware/SimpleMiddleware";
+import SimpleMiddleware, { SimpleMdType } from "../Middleware/SimpleMiddleware";
 import ResponseError from "../Response/ResponseError";
-import Request from "../Request";
 
 export default abstract class Startup {
-  constructor(req?: Request) {
-    this.#ctx = new HttpContext(req ?? new Request());
-  }
+  #mds: MdType[] = [];
 
-  refresh(req?: Request): Startup {
-    this.#ctx = new HttpContext(req ?? new Request());
-    return this;
-  }
+  use<T extends this>(mdBuilder: MdType | SimpleMdType): T {
+    if (!mdBuilder) throw new Error();
 
-  #ctx: HttpContext;
-  public get ctx(): HttpContext {
-    return this.#ctx;
-  }
-
-  use<T extends this>(
-    builder:
-      | (() => Middleware)
-      | ((ctx: HttpContext, next: () => Promise<void>) => Promise<void>)
-  ): T {
-    if (!builder) throw new Error();
-
-    let mdFunc;
-    if (builder.length) {
-      mdFunc = () => {
-        return new SimpleMiddleware(
-          builder as (
-            ctx: HttpContext,
-            next: () => Promise<void>
-          ) => Promise<void>
-        );
-      };
+    let builder;
+    if (mdBuilder.length > 0) {
+      builder = () => new SimpleMiddleware(mdBuilder as SimpleMdType);
     } else {
-      mdFunc = builder as () => Middleware;
+      builder = mdBuilder as MdType;
     }
 
-    this.ctx.mds.push({
-      builder: mdFunc,
-    });
+    this.#mds.push(builder);
 
     return this as T;
   }
 
-  protected async invoke(): Promise<Response> {
-    if (!this.ctx.mds.length) {
-      return this.ctx.res;
+  protected async invoke(ctx: HttpContext): Promise<Response> {
+    if (!this.#mds.length) {
+      return ctx.res;
     }
 
     try {
-      const { builder, md } = this.ctx.mds[0];
+      const md = this.#mds[0]();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await ((md ?? builder()) as any).init(this.ctx, 0).invoke();
+      await (md as any).init(ctx, 0, this.#mds).invoke();
     } catch (err) {
       if (err instanceof ResponseError) {
-        this.#handleError(err);
+        this.#handleError(ctx, err);
       } else {
         throw err;
       }
     }
 
-    return this.ctx.res;
+    return ctx.res;
   }
 
-  #handleError = function (this: Startup, err: ResponseError): void {
+  #handleError = function (
+    this: Startup,
+    ctx: HttpContext,
+    err: ResponseError
+  ): void {
     if (err.status != undefined) {
-      this.ctx.res.status = err.status;
+      ctx.res.status = err.status;
     }
     if (err.body != undefined) {
-      this.ctx.res.body = err.body;
+      ctx.res.body = err.body;
     }
     Object.keys(err.headers).forEach((key) => {
-      this.ctx.res.setHeader(key, err.headers[key]);
+      ctx.res.setHeader(key, err.headers[key]);
     });
   };
 }

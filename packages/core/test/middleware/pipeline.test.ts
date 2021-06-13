@@ -8,7 +8,7 @@ test("middleware pipeline", async function () {
     .use(() => new Mdw3())
     .use(() => new Mdw4());
 
-  startup.ctx.mds[2].md = startup.ctx.mds[2].builder();
+  // startup.ctx.mds[2].md = startup.ctx.mds[2].builder();
 
   const result = await startup.run();
   expect(result.status).toBe(200);
@@ -28,10 +28,6 @@ class Mdw1 extends Middleware {
 }
 
 class Mdw2 extends Middleware {
-  constructor() {
-    super(true);
-  }
-
   async invoke(): Promise<void> {
     this.ctx.res.setHeader("mdw2", "mdw2");
     await this.next();

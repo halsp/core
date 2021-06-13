@@ -1,12 +1,11 @@
 import HttpContext from "../HttpContext";
 import ResultHandler from "../ResultHandler";
 
-export default abstract class Middleware extends ResultHandler {
-  constructor(public readonly cache: boolean = true) {
-    super();
-  }
+export type MdType = () => Middleware;
 
+export default abstract class Middleware extends ResultHandler {
   #index!: number;
+  #mds!: readonly MdType[];
 
   #ctx!: HttpContext;
   public get ctx(): HttpContext {
@@ -15,20 +14,18 @@ export default abstract class Middleware extends ResultHandler {
 
   abstract invoke(): Promise<void>;
   protected async next(): Promise<void> {
-    if (this.ctx.mds.length <= this.#index + 1) return;
-    const { builder, md } = this.ctx.mds[this.#index + 1];
-    let nextMd;
-    if (md && md.cache) {
-      nextMd = md;
-    } else {
-      nextMd = builder();
-    }
-    this.ctx.mds[this.#index + 1].md = nextMd;
-    nextMd.init(this.ctx, this.#index + 1);
+    if (this.#mds.length <= this.#index + 1) return;
+    const nextMd = this.#mds[this.#index + 1]();
+    nextMd.init(this.ctx, this.#index + 1, this.#mds);
     await nextMd.invoke();
   }
 
-  private init(ctx: HttpContext, index: number): Middleware {
+  private init(
+    ctx: HttpContext,
+    index: number,
+    mds: readonly MdType[]
+  ): Middleware {
+    this.#mds = mds;
     this.#ctx = ctx;
     this.#index = index;
     return this;

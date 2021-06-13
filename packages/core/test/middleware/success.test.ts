@@ -6,16 +6,16 @@ test("middleware success", async function () {
     step: 0,
   };
 
-  const startup = new SimpleStartup()
+  const res = await new SimpleStartup()
     .use(() => new Mdw1(stepResult))
     .use(() => new Mdw2(stepResult))
     .use(() => new Mdw3(stepResult))
-    .use(() => new Mdw4(stepResult));
+    .use(() => new Mdw4(stepResult))
+    .run();
 
-  await startup.run();
-  expect(startup.ctx.res.status).toBe(200);
+  expect(res.status).toBe(200);
   expect(stepResult.step).toBe(111);
-  expect(startup.ctx.res.body).toBe("middleware-success");
+  expect(res.body).toBe("middleware-success");
 });
 
 class Mdw1 extends Middleware {

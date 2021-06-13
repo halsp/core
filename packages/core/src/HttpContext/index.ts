@@ -1,4 +1,3 @@
-import Middleware from "../Middleware";
 import Request from "../Request";
 import Response from "../Response";
 import ResultHandler from "../ResultHandler";
@@ -10,11 +9,6 @@ export default class HttpContext extends ResultHandler {
   }
 
   readonly #bag: { [k: string]: unknown } = {};
-
-  public readonly mds: {
-    builder: () => Middleware;
-    md?: Middleware;
-  }[] = [];
 
   #res: Response = new Response();
   public get res(): Response {
