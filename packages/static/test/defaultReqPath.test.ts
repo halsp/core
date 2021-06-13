@@ -1,8 +1,8 @@
-import { SimpleStartup, Request } from "sfa";
+import { TestStartup, Request } from "sfa";
 import "../src";
 
 test("default req path not found", async function () {
-  const result = await new SimpleStartup(
+  const result = await new TestStartup(
     new Request().setMethod("get").setPath("ind")
   )
     .useStatic({
@@ -14,7 +14,7 @@ test("default req path not found", async function () {
 
 test("default req path found", async function () {
   {
-    const result = await new SimpleStartup(
+    const result = await new TestStartup(
       new Request().setMethod("get").setPath("test/static/index.html")
     )
       .useStatic({
@@ -24,7 +24,7 @@ test("default req path found", async function () {
     expect(result.status).toBe(200);
   }
   {
-    const result = await new SimpleStartup(
+    const result = await new TestStartup(
       new Request().setMethod("get").setPath("test/static/index.html/")
     )
       .useStatic({

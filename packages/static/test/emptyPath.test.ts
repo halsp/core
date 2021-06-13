@@ -1,9 +1,9 @@
-import { SimpleStartup, Request } from "sfa";
+import { TestStartup, Request } from "sfa";
 import "../src";
 
 test("null path", async function () {
   {
-    const result = await new SimpleStartup(
+    const result = await new TestStartup(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       new Request().setMethod("get").setPath(null as any)
     )
@@ -16,7 +16,7 @@ test("null path", async function () {
     expect(result.body).toBe("TEST");
   }
   {
-    const result = await new SimpleStartup(
+    const result = await new TestStartup(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       new Request().setMethod("get").setPath(null as any)
     )
@@ -29,7 +29,7 @@ test("null path", async function () {
 });
 
 test("undefined path", async function () {
-  const result = await new SimpleStartup(
+  const result = await new TestStartup(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     new Request().setMethod("get").setPath(undefined as any)
   )
@@ -43,7 +43,7 @@ test("undefined path", async function () {
 });
 
 test("prefix", async function () {
-  const result = await new SimpleStartup(
+  const result = await new TestStartup(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     new Request().setMethod("get").setPath(null as any)
   )

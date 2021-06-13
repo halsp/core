@@ -1,9 +1,9 @@
-import { SimpleStartup, Request } from "sfa";
+import { TestStartup, Request } from "sfa";
 import "../src";
 
 test("match", async function () {
   {
-    const result = await new SimpleStartup(
+    const result = await new TestStartup(
       new Request().setMethod("get").setPath("ind")
     )
       .use(async (ctx, next) => {
@@ -20,7 +20,7 @@ test("match", async function () {
     expect(result.body).toBe("TEST");
   }
   {
-    const result = await new SimpleStartup(
+    const result = await new TestStartup(
       new Request().setMethod("get").setPath("/ind/")
     )
       .useStatic({
@@ -33,7 +33,7 @@ test("match", async function () {
     expect(result.body).toBe("TEST");
   }
   {
-    const result = await new SimpleStartup(
+    const result = await new TestStartup(
       new Request().setMethod("get").setPath("ind")
     )
       .useStatic({
@@ -48,7 +48,7 @@ test("match", async function () {
 });
 
 test("not found path", async function () {
-  const result = await new SimpleStartup(
+  const result = await new TestStartup(
     new Request().setMethod("get").setPath("ind1")
   )
     .use(async (ctx, next) => {
@@ -65,7 +65,7 @@ test("not found path", async function () {
 });
 
 test("not found file", async function () {
-  const result = await new SimpleStartup(
+  const result = await new TestStartup(
     new Request().setMethod("get").setPath("ind")
   )
     .useStatic({
@@ -78,7 +78,7 @@ test("not found file", async function () {
 });
 
 test("found dir instead of file", async function () {
-  const result = await new SimpleStartup(
+  const result = await new TestStartup(
     new Request().setMethod("get").setPath("sta")
   )
     .useStatic({
@@ -92,7 +92,7 @@ test("found dir instead of file", async function () {
 
 test("empty req path", async function () {
   {
-    const result = await new SimpleStartup(
+    const result = await new TestStartup(
       new Request().setMethod("get").setPath("")
     )
       .useStatic({
@@ -104,7 +104,7 @@ test("empty req path", async function () {
   }
 
   {
-    const result = await new SimpleStartup(
+    const result = await new TestStartup(
       new Request().setMethod("get").setPath("/")
     )
       .useStatic({
@@ -116,7 +116,7 @@ test("empty req path", async function () {
   }
 
   {
-    const result = await new SimpleStartup(
+    const result = await new TestStartup(
       new Request().setMethod("get").setPath("ind")
     )
       .useStatic({

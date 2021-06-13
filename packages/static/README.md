@@ -18,14 +18,14 @@ npm i @sfajs/static
 
 ```JS
 require("@sfajs/static");
-const result = await new SimpleStartup().useStatic().run();
+const res = await new TestStartup().useStatic().run();
 ```
 
 或
 
 ```JS
 require("@sfajs/static");
-const result = await new OtherStartup().useStatic().run();
+const res = await new OtherStartup().useStatic().run();
 ```
 
 `useStatic` 如果不传任何参数，将匹配 `static` 文件夹
@@ -51,7 +51,7 @@ url 访问前缀
 `GET file/1.png`, `GET file/2.txt` 等
 
 ```JS
-const result = await new SimpleStartup()
+const res = await new TestStartup()
   .useStatic({
     dir: "static",
     prefix: "file",

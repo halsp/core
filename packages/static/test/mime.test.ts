@@ -1,9 +1,9 @@
-import { SimpleStartup, Request } from "sfa";
+import { TestStartup, Request } from "sfa";
 import "../src";
 
 test("unknown mime", async function () {
   {
-    const result = await new SimpleStartup(
+    const result = await new TestStartup(
       new Request().setMethod("get").setPath("index.un")
     )
       .useStatic({
@@ -16,7 +16,7 @@ test("unknown mime", async function () {
     expect(result.headers["content-type"]).toBe("*/*");
   }
   {
-    const result = await new SimpleStartup(
+    const result = await new TestStartup(
       new Request().setMethod("get").setPath("not-exist")
     )
       .useStatic({
@@ -32,7 +32,7 @@ test("unknown mime", async function () {
 });
 
 test("single unknown mime", async function () {
-  const result = await new SimpleStartup(
+  const result = await new TestStartup(
     new Request().setMethod("get").setPath("ind")
   )
     .useStatic({

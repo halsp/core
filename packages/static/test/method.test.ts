@@ -1,9 +1,9 @@
-import { SimpleStartup, Request } from "sfa";
+import { TestStartup, Request } from "sfa";
 import "../src";
 
 test("method", async function () {
   {
-    const result = await new SimpleStartup(new Request().setMethod("GET"))
+    const result = await new TestStartup(new Request().setMethod("GET"))
       .useStatic({
         dir: "test/static",
       })
@@ -11,7 +11,7 @@ test("method", async function () {
     expect(result.status).toBe(200);
   }
   {
-    const result = await new SimpleStartup(new Request().setMethod("POST"))
+    const result = await new TestStartup(new Request().setMethod("POST"))
       .useStatic({
         dir: "test/static",
         method: "GET",
@@ -20,7 +20,7 @@ test("method", async function () {
     expect(result.status).toBe(404);
   }
   {
-    const result = await new SimpleStartup(new Request())
+    const result = await new TestStartup(new Request())
       .useStatic({
         dir: "test/static",
       })
@@ -31,7 +31,7 @@ test("method", async function () {
 
 test("single method", async function () {
   {
-    const result = await new SimpleStartup(
+    const result = await new TestStartup(
       new Request().setMethod("get").setPath("ind")
     )
       .useStatic({
@@ -42,7 +42,7 @@ test("single method", async function () {
     expect(result.status).toBe(200);
   }
   {
-    const result = await new SimpleStartup(new Request().setPath("ind"))
+    const result = await new TestStartup(new Request().setPath("ind"))
       .useStatic({
         file: "test/static/index.html",
         reqPath: "ind",
@@ -54,7 +54,7 @@ test("single method", async function () {
 
 test("custom method", async function () {
   {
-    const result = await new SimpleStartup(
+    const result = await new TestStartup(
       new Request().setMethod("head").setPath("ind")
     )
       .useStatic({
@@ -66,7 +66,7 @@ test("custom method", async function () {
     expect(result.status).toBe(200);
   }
   {
-    const result = await new SimpleStartup(new Request().setMethod("HEAD"))
+    const result = await new TestStartup(new Request().setMethod("HEAD"))
       .useStatic({
         dir: "test/static",
         method: "HEAD",
@@ -78,7 +78,7 @@ test("custom method", async function () {
 
 test("array method", async function () {
   {
-    const result = await new SimpleStartup(
+    const result = await new TestStartup(
       new Request().setMethod("head").setPath("ind")
     )
       .useStatic({
@@ -90,7 +90,7 @@ test("array method", async function () {
     expect(result.status).toBe(200);
   }
   {
-    const result = await new SimpleStartup(new Request().setMethod("HEAD"))
+    const result = await new TestStartup(new Request().setMethod("HEAD"))
       .useStatic({
         dir: "test/static",
         method: ["HEAD"],
@@ -102,7 +102,7 @@ test("array method", async function () {
 
 test("any method", async function () {
   {
-    const result = await new SimpleStartup(new Request().setMethod("HEAD"))
+    const result = await new TestStartup(new Request().setMethod("HEAD"))
       .useStatic({
         dir: "test/static",
         method: ["ANY"],
@@ -111,7 +111,7 @@ test("any method", async function () {
     expect(result.status).toBe(200);
   }
   {
-    const result = await new SimpleStartup(new Request().setMethod("HEAD"))
+    const result = await new TestStartup(new Request().setMethod("HEAD"))
       .useStatic({
         dir: "test/static",
         method: "ANY",

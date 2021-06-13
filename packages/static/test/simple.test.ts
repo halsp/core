@@ -1,9 +1,9 @@
-import { SimpleStartup, Request } from "sfa";
+import { TestStartup, Request } from "sfa";
 import "../src";
 
 test("index html", async function () {
   {
-    const result = await new SimpleStartup(new Request().setMethod("get"))
+    const result = await new TestStartup(new Request().setMethod("get"))
       .useStatic({
         dir: "test/static",
         encoding: "utf-8",
@@ -13,7 +13,7 @@ test("index html", async function () {
     expect(result.body).toBe("TEST");
   }
   {
-    const result = await new SimpleStartup(
+    const result = await new TestStartup(
       new Request().setMethod("get").setPath("index.html")
     )
       .use(async (ctx, next) => {
@@ -31,7 +31,7 @@ test("index html", async function () {
 });
 
 test("default static dir", async function () {
-  const result = await new SimpleStartup(new Request().setMethod("get"))
+  const result = await new TestStartup(new Request().setMethod("get"))
     .use(async (ctx, next) => {
       await next();
       expect(ctx.bag<string>("STATIC_FILE")).toBeUndefined();
