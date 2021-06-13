@@ -15,13 +15,13 @@ npm i sfa
 ## 开始使用
 
 ```JS
-const { TestStartup, Request } = require("sfa");
-const result = await new TestStartup(new Request())
+const { TestStartup } = require("sfa");
+const res = await new TestStartup()
     .use(async (ctx, next) => {
       ctx.res.body = "sfa";
     })
     .run();
-console.log('result',result);
+console.log('res',res);
 ```
 
 ## Startup
@@ -70,12 +70,12 @@ startup.use(async (ctx) => {
 // 类中间件
 startup.use(() => new YourMiddleware());
 
-const result = await startup.run();
+const res = await startup.run();
 ```
 
 ### 简单中间件
 
-简单中间件不需要单独写一个中间件类，但其底层仍然会被转化为普通中间件来执行
+简单中间件不需要单独写一个中间件类，但其底层仍然会被转化为普通类中间件来执行
 
 ```JS
 startup.use(async (ctx) => {
@@ -89,7 +89,7 @@ startup.use(async (ctx) => {
 startup.use(async (ctx, next) => {
   ctx.res.body = "hello world";
   await next();
-  ctx.res.setHeader("h", "h");
+  ctx.res.setHeader("app", "sfa");
 });
 ```
 
@@ -177,7 +177,13 @@ API 返回错误时，可统一返回 `ErrorMessage`，命名以 `Msg` 结尾的
 - headers: 返回的头部
 - body: 返回的内容
 - status: 返回状态码
-- 任意键值对，如 `res['demo']="demo";`
+- isSuccess: 返回值是否成功，status >= 200 && status < 300
+- headers: 获取 header 的深拷贝值，get 属性
+- setHeaders: 设置多个 header
+- setHeader: 设置单个 header
+- hasHeader: 判断 header 是否存在，忽略 key 大小写
+- removeHeader: 移除一个 header，忽略 key 大小写
+- getHeader: 获取一个 header 值，忽略 key 大小写
 
 在每个中间件都可以修改 `this.ctx.res` 中的内容
 
@@ -200,9 +206,14 @@ API 返回错误时，可统一返回 `ErrorMessage`，命名以 `Msg` 结尾的
 `req` 对象包含以下内容
 
 - path: 访问路径，不带域名和查询参数，自动去除开头 `/`
-- headers: 访问头部
 - params: 查询参数
 - body: body 内容
+- headers: 获取 header 的深拷贝值，get 属性
+- setHeaders: 设置多个 header
+- setHeader: 设置单个 header
+- hasHeader: 判断 header 是否存在，忽略 key 大小写
+- removeHeader: 移除一个 header，忽略 key 大小写
+- getHeader: 获取一个 header 值，忽略 key 大小写
 
 ### bag 函数
 
