@@ -26,7 +26,7 @@ function expectParams(params: Record<string, string | string[] | undefined>) {
 }
 
 test("custom param", async function () {
-  const result = await new TestStartup(new Request())
+  const result = await new TestStartup()
     .use(async (ctx) => {
       ctx.res.status = 200;
       ctx.res.setHeader("custom-param", "aaa");

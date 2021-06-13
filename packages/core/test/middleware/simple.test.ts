@@ -1,8 +1,7 @@
-import Request from "../../src/Request";
 import { TestStartup } from "../../src";
 
 test("simpple middleware", async function () {
-  const startup = new TestStartup(new Request())
+  const startup = new TestStartup()
     .use(async (ctx, next) => {
       ctx.res.setHeader("mdw1", "mdw1");
       await next();
