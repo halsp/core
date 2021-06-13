@@ -19,7 +19,7 @@ test("router test login access", async function () {
   )
     .useTest()
     .useRouter<TestStartup>({
-      authFunc: () => new Auth(),
+      authBuilder: () => new Auth(),
     })
     .run();
 
@@ -36,7 +36,7 @@ test("router test login not access", async function () {
   )
     .useTest()
     .useRouter<TestStartup>({
-      authFunc: () => new Auth(),
+      authBuilder: () => new Auth(),
     })
     .run();
 
@@ -53,7 +53,7 @@ test("router test admin access", async function () {
   )
     .useTest()
     .useRouter<TestStartup>({
-      authFunc: () => new Auth(),
+      authBuilder: () => new Auth(),
     })
     .run();
 
@@ -70,7 +70,7 @@ test("router test admin not access", async function () {
   )
     .useTest()
     .useRouter<TestStartup>({
-      authFunc: () => new Auth(),
+      authBuilder: () => new Auth(),
     })
     .run();
 

@@ -7,7 +7,7 @@ export default class Router {
 
   constructor(
     private readonly startup: Startup,
-    private readonly authFunc?: () => Authority
+    private readonly authBuilder?: () => Authority
   ) {}
 
   use(): void {
@@ -16,10 +16,10 @@ export default class Router {
       this.setQuery(ctx);
       await next();
     });
-    if (this.authFunc) {
-      const authFunc = this.authFunc;
+    if (this.authBuilder) {
+      const authBuilder = this.authBuilder;
       this.startup.use(() => {
-        const auth = authFunc();
+        const auth = authBuilder();
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (auth.roles as any) = this.#mapPraser.mapItem.roles;
         return auth;

@@ -38,7 +38,7 @@ export {
 
 declare module "sfa" {
   interface Startup {
-    useRouter<T extends this>(config?: { authFunc?: () => Authority }): T;
+    useRouter<T extends this>(config?: { authBuilder?: () => Authority }): T;
   }
 
   interface Request {
@@ -47,8 +47,8 @@ declare module "sfa" {
 }
 
 Startup.prototype.useRouter = function <T extends Startup>(config?: {
-  authFunc?: () => Authority;
+  authBuilder?: () => Authority;
 }): T {
-  new Router(this, config?.authFunc).use();
+  new Router(this, config?.authBuilder).use();
   return this as T;
 };

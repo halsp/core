@@ -131,7 +131,7 @@ const result = await new OtherStartup().useRouter().run();
 
 `useRouter` 接收一个可选配置参数 `config` ，该参数包含一个可选字段
 
-- authFunc: 函数类型，函数返回值为权限认证对象，详情后面 [权限](#权限) 部分有介绍。
+- authBuilder: 函数类型，函数返回值为权限认证对象，详情后面 [权限](#权限) 部分有介绍。
 
 > `useRouter` 实际上可能会注册多个中间件
 
@@ -279,7 +279,7 @@ export default class extends Action {
 
 默认的权限功能是用于判断用户能否使用 API，可以精确到控制每个 `Action`
 
-`startup.useRouter()` 参数接收一个 `authFunc` 字段，值为创建 `Authority` 派生类对象的回调
+`startup.useRouter()` 参数接收一个 `authBuilder` 字段，值为创建 `Authority` 派生类对象的回调
 
 `Authority` 类继承于中间件类 `Middleware`，因此该类对象也是中间件，但加载方式比较特殊
 
@@ -348,7 +348,7 @@ class Auth extends Authority {
 
 ```JS
 startup.useRouter({
-  authFunc: () => new Auth(),
+  authBuilder: () => new Auth(),
 })
 ```
 
