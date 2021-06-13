@@ -1,5 +1,5 @@
 import { ICloudBaseConfig } from "@cloudbase/node-sdk";
-import { Request, Startup } from "sfa";
+import { HttpContext, Request, Startup } from "sfa";
 import ResponseStruct from "./ResponseStruct";
 import tcb = require("@cloudbase/node-sdk");
 import Dbhelper from "./Dbhelper";
@@ -18,11 +18,15 @@ declare module "sfa" {
 export { ResponseStruct, Dbhelper };
 
 export default class SfaCloudbase extends Startup {
+  readonly #ctx: HttpContext;
+
   constructor(
     event: Record<string, unknown>,
     context: Record<string, unknown>
   ) {
-    super(
+    super();
+
+    this.#ctx = new HttpContext(
       new Request()
         .setBody(getBody(event))
         .setMethod(event.httpMethod as string)
@@ -30,26 +34,28 @@ export default class SfaCloudbase extends Startup {
         .setParams(event.queryStringParameters as Record<string, string>)
         .setPath(event.path as string)
     );
-
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (this.ctx.req as any).context = context;
+    (this.#ctx.req as any).context = context;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (this.ctx.req as any).event = event;
-
-    this.ctx.res.headers["content-type"] = "application/json";
+    (this.#ctx.req as any).event = event;
+    this.#ctx.res.setHeader("content-type", "application/json");
+    this.#ctx.res.setHeader(
+      "sfa-cloudbase",
+      "https://github.com/sfajs/cloudbase"
+    );
   }
 
   async run(): Promise<ResponseStruct> {
-    await super.invoke();
+    await super.invoke(this.#ctx);
     return this.struct;
   }
 
   get struct(): ResponseStruct {
     return <ResponseStruct>{
-      headers: this.ctx.res.headers,
-      statusCode: this.ctx.res.status ?? 0,
-      isBase64Encoded: this.ctx.res.isBase64Encoded ?? false,
-      body: this.ctx.res.body ?? {},
+      headers: this.#ctx.res.headers,
+      statusCode: this.#ctx.res.status ?? 0,
+      isBase64Encoded: this.#ctx.res.isBase64Encoded ?? false,
+      body: this.#ctx.res.body ?? {},
     };
   }
 

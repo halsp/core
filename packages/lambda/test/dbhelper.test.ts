@@ -1,15 +1,19 @@
 import "../src";
 import Dbhelper from "../src/Dbhelper";
 import SfaCloudbase from "../src";
+import { HttpContext } from "sfa";
 
 test("dbhelper", async function () {
-  const startup = new SfaCloudbase({}, {}).useCloudbaseDbhelper();
-  await startup.run();
+  let context!: HttpContext;
+  await new SfaCloudbase({}, {})
+    .useCloudbaseDbhelper()
+    .use(async (ctx) => {
+      context = ctx;
+    })
+    .run();
 
-  expect(!!startup.ctx.bag<Dbhelper>("CB_DBHELPER")).toBeTruthy();
-  expect(
-    startup.ctx.bag<Dbhelper>("CB_DBHELPER") instanceof Dbhelper
-  ).toBeTruthy();
+  expect(!!context.bag<Dbhelper>("CB_DBHELPER")).toBeTruthy();
+  expect(context.bag<Dbhelper>("CB_DBHELPER") instanceof Dbhelper).toBeTruthy();
 });
 
 test("dbhelper getPageList", async function () {
@@ -61,9 +65,14 @@ async function testPageList(
   page: number,
   limit: number
 ) {
-  const startup = new SfaCloudbase(event, {}).useCloudbaseDbhelper();
-  await startup.run();
-  const dbhelper = startup.ctx.bag<Dbhelper>("CB_DBHELPER");
+  let context!: HttpContext;
+  await new SfaCloudbase(event, {})
+    .useCloudbaseDbhelper()
+    .use(async (ctx) => {
+      context = ctx;
+    })
+    .run();
+  const dbhelper = context.bag<Dbhelper>("CB_DBHELPER");
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   expect((dbhelper as any).pageQuery).toEqual({

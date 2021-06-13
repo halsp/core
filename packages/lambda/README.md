@@ -6,11 +6,10 @@ Hosting sfa in cloudbase
 
 npm i @sfajs/cloudbase
 
-## 像 1，2，3 一样简单
+## 开始使用
 
 ```JS
-import SfaCloudbase from "@sfajs/cloudbase";
-
+const SfaCloudbase = require("@sfajs/cloudbase");
 exports.main = async (event, context) => {
   return await new SfaCloudbase(event, context)
     .use(async (ctx, next) => {
@@ -24,9 +23,8 @@ exports.main = async (event, context) => {
 如果添加 `@sfajs/router`
 
 ```JS
-import SfaCloudbase from "@sfajs/cloudbase";
-import "@sfajs/router";
-
+const SfaCloudbase = require("@sfajs/cloudbase");
+require("@sfajs/router");
 exports.main = async (event, context) => {
   return await new SfaCloudbase(event, context)
     .use(async (ctx, next) => {

@@ -14,7 +14,7 @@ test("base response", async function () {
     .use(async (ctx, next) => {
       ctx.res.isBase64Encoded = true;
       ctx.res.body = "str body";
-      ctx.res.headers.t = "test";
+      ctx.res.setHeader("t", "test");
       ctx.res.status = 200;
       await next();
     })

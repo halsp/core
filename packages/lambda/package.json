@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/cloudbase",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "description": "Hosting sfa in cloudbase",
   "homepage": "https://github.com/sfajs/cloudbase",
   "repository": {
@@ -21,7 +21,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "sh scripts/build.sh",
-    "publish:beta": "sh build.sh && npm publish --tag=beta --access=public",
+    "publish:beta": "sh scripts/build.sh && npm publish --tag=beta --access=public",
     "test": "npm run build && jest --coverage",
     "tests": "sh scripts/tests.sh",
     "lint": "eslint src test --ext .ts"
@@ -34,7 +34,7 @@
   "dependencies": {
     "@cloudbase/node-sdk": "^2.5.2",
     "@types/node": "^15.12.2",
-    "sfa": "^0.1.2"
+    "sfa": "^0.3.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",
