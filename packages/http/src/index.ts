@@ -1,9 +1,10 @@
 import * as http from "http";
 import "sfa";
 
-import { MultipartBody } from "./HttpStartup";
+import { MultipartBody } from "./BaseHttpStartup";
 import SfaHttp from "./SfaHttp";
 import SfaHttps from "./SfaHttps";
+import BaseHttpStartup from "./BaseHttpStartup";
 
 declare module "sfa" {
   interface HttpContext {
@@ -12,4 +13,4 @@ declare module "sfa" {
   }
 }
 
-export { SfaHttp, SfaHttps, MultipartBody };
+export { SfaHttp, SfaHttps, BaseHttpStartup, MultipartBody };
