@@ -68,29 +68,51 @@ export default abstract class HttpStartup extends Startup {
   }
 
   private writeBody(sfaRes: Response, httpRes: http.ServerResponse) {
-    sfaRes.removeHeader("Content-Type");
-    sfaRes.removeHeader("Content-Length");
     if (!sfaRes.body) {
+      if (!httpRes.headersSent) {
+        httpRes.removeHeader("Content-Type");
+        httpRes.removeHeader("Content-Length");
+      }
       httpRes.end();
       return;
     }
 
+    const writeType =
+      !sfaRes.hasHeader("content-type") && !httpRes.hasHeader("Content-Type");
+    const writeLength =
+      !sfaRes.hasHeader("content-length") &&
+      !httpRes.hasHeader("Content-Length");
+
     if (typeof sfaRes.body == "string") {
-      httpRes.setHeader("Content-Length", Buffer.byteLength(sfaRes.body));
-      const type = /^\s*</.test(sfaRes.body) ? "html" : "text";
-      httpRes.setHeader("Content-Type", mime.contentType(type) as string);
+      if (writeLength) {
+        httpRes.setHeader("Content-Length", Buffer.byteLength(sfaRes.body));
+      }
+      if (writeType) {
+        const type = /^\s*</.test(sfaRes.body) ? "html" : "text";
+        httpRes.setHeader("Content-Type", mime.contentType(type) as string);
+      }
       httpRes.end(sfaRes.body);
     } else if (Buffer.isBuffer(sfaRes.body)) {
-      httpRes.setHeader("Content-Length", sfaRes.body.byteLength);
-      httpRes.setHeader("Content-Type", mime.contentType("bin") as string);
+      if (writeLength) {
+        httpRes.setHeader("Content-Length", sfaRes.body.byteLength);
+      }
+      if (writeType) {
+        httpRes.setHeader("Content-Type", mime.contentType("bin") as string);
+      }
       httpRes.end(sfaRes.body);
     } else if (sfaRes.body instanceof Stream) {
-      httpRes.setHeader("Content-Type", mime.contentType("bin") as string);
+      if (writeType) {
+        httpRes.setHeader("Content-Type", mime.contentType("bin") as string);
+      }
       sfaRes.body.pipe(httpRes);
     } else {
       const str = JSON.stringify(sfaRes.body);
-      httpRes.setHeader("Content-Length", Buffer.byteLength(str));
-      httpRes.setHeader("Content-Type", mime.contentType("json") as string);
+      if (writeLength) {
+        httpRes.setHeader("Content-Length", Buffer.byteLength(str));
+      }
+      if (writeType) {
+        httpRes.setHeader("Content-Type", mime.contentType("json") as string);
+      }
       httpRes.end(str);
     }
   }
