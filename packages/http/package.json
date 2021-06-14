@@ -1,0 +1,81 @@
+{
+  "name": "@sfajs/http",
+  "version": "0.3.0-beta.1",
+  "description": "Hosting sfa in http(s)",
+  "homepage": "https://github.com/sfajs/http",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sfajs/http"
+  },
+  "keywords": [
+    "sfa",
+    "nodejs-server",
+    "serverless",
+    "nodejs",
+    "typescript",
+    "http",
+    "https"
+  ],
+  "bugs": {
+    "url": "https://github.com/sfajs/http/issues",
+    "email": "support@hal.wang"
+  },
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "sh scripts/build.sh",
+    "deploy:beta": "sh scripts/build.sh && npm publish --tag=beta --access=public",
+    "test": "npm run build && jest --coverage",
+    "tests": "sh scripts/tests.sh",
+    "lint": "eslint src test --ext .ts"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  },
+  "author": "hal-wang",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^15.12.2",
+    "co-body": "^6.1.0",
+    "formidable": "^1.2.2",
+    "mime-types": "^2.1.31",
+    "sfa": "^0.3.0",
+    "type-is": "^1.6.18",
+    "url-parse": "^1.5.1"
+  },
+  "devDependencies": {
+    "@types/co-body": "^5.1.0",
+    "@types/formidable": "^1.2.2",
+    "@types/jest": "^26.0.23",
+    "@types/mime-types": "^2.1.0",
+    "@types/shelljs": "^0.8.8",
+    "@types/supertest": "^2.0.11",
+    "@types/type-is": "^1.6.3",
+    "@types/url-parse": "^1.4.3",
+    "@typescript-eslint/eslint-plugin": "^4.26.1",
+    "@typescript-eslint/parser": "^4.26.1",
+    "eslint": "^7.28.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "jest": "^27.0.4",
+    "prettier": "^2.3.1",
+    "qs": "^6.10.1",
+    "shelljs": "^0.8.4",
+    "supertest": "^6.1.3",
+    "ts-jest": "^27.0.3",
+    "typescript": "^4.3.2"
+  },
+  "files": [
+    "demo",
+    "dist",
+    "scripts",
+    "src",
+    "test",
+    ".eslintrc.js",
+    ".gitignore",
+    "jest.config.js",
+    "LICENSE",
+    "package.json",
+    "README.md",
+    "tsconfig.json"
+  ]
+}
