@@ -1,6 +1,6 @@
 # @sfajs/cloudbase
 
-Hosting sfa in cloudbase
+将 sfa 托管到腾讯云 CloudBase
 
 ## 安装
 
@@ -10,7 +10,8 @@ npm i @sfajs/cloudbase
 
 ```JS
 const SfaCloudbase = require("@sfajs/cloudbase");
-exports.main = async (event, context) => {
+
+const main = async (event, context) => {
   return await new SfaCloudbase(event, context)
     .use(async (ctx, next) => {
       ctx.res.headers.demo = "@sfajs/cloudbase";
@@ -18,6 +19,7 @@ exports.main = async (event, context) => {
     })
     .run();
 };
+exports.main = main;
 ```
 
 如果添加 `@sfajs/router`
@@ -25,7 +27,8 @@ exports.main = async (event, context) => {
 ```JS
 const SfaCloudbase = require("@sfajs/cloudbase");
 require("@sfajs/router");
-exports.main = async (event, context) => {
+
+const main = async (event, context) => {
   return await new SfaCloudbase(event, context)
     .use(async (ctx, next) => {
       ctx.res.headers.demo = "@sfajs/cloudbase";
@@ -34,6 +37,7 @@ exports.main = async (event, context) => {
     .useRouter()
     .run();
 };
+exports.main = main;
 ```
 
 ## 简单 demo

@@ -1,7 +1,7 @@
 {
   "name": "@sfajs/cloudbase",
-  "version": "0.3.0",
-  "description": "Hosting sfa in cloudbase",
+  "version": "0.3.1",
+  "description": "将 sfa 托管到腾讯云 CloudBase",
   "homepage": "https://github.com/sfajs/cloudbase",
   "repository": {
     "type": "git",
