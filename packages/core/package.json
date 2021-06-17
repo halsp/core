@@ -18,9 +18,10 @@
   },
   "main": "dist/index.js",
   "scripts": {
-    "build": "sh build.sh",
-    "publish:beta": "sh build.sh && npm publish --tag=beta --access=public",
+    "build": "sh scripts/build.sh",
+    "publish:beta": "sh scripts/build.sh && npm publish --tag=beta --access=public",
     "test": "npm run build && jest --coverage",
+    "tests": "sh scripts/tests.sh",
     "lint": "eslint src test --ext .ts"
   },
   "jest": {
