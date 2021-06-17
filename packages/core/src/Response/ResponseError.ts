@@ -1,4 +1,5 @@
 import { StatusCodes } from "http-status-codes";
+import HttpContext from "../HttpContext";
 
 export default class ResponseError extends Error {
   public readonly headers = <Record<string, string | string[] | undefined>>{};
@@ -28,6 +29,17 @@ export default class ResponseError extends Error {
 
   setHeader(key: string, value?: string | string[]): ResponseError {
     this.headers[key] = value;
+    return this;
+  }
+
+  writeToCtx(ctx: HttpContext): ResponseError {
+    if (this.status != undefined) {
+      ctx.res.status = this.status;
+    }
+    if (this.body != undefined) {
+      ctx.res.body = this.body;
+    }
+    ctx.res.setHeaders(this.headers);
     return this;
   }
 }

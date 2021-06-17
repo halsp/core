@@ -15,6 +15,9 @@ import Middleware from "./Middleware";
 import { MdType } from "./Middleware";
 import { LambdaMdType } from "./Middleware/LambdaMiddleware";
 
+import ResultHandler from "./ResultHandler";
+import HeadersHandler from "./HeadersHandler";
+
 export {
   Response,
   ErrorMessage,
@@ -27,5 +30,7 @@ export {
   Middleware,
   MdType,
   LambdaMdType,
+  ResultHandler,
+  HeadersHandler,
   status,
 };

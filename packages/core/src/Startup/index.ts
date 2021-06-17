@@ -33,7 +33,7 @@ export default abstract class Startup {
       await (md as any).init(ctx, 0, this.#mds).invoke();
     } catch (err) {
       if (err instanceof ResponseError) {
-        this.#handleError(ctx, err);
+        err.writeToCtx(ctx);
       } else {
         throw err;
       }
@@ -41,20 +41,4 @@ export default abstract class Startup {
 
     return ctx.res;
   }
-
-  #handleError = function (
-    this: Startup,
-    ctx: HttpContext,
-    err: ResponseError
-  ): void {
-    if (err.status != undefined) {
-      ctx.res.status = err.status;
-    }
-    if (err.body != undefined) {
-      ctx.res.body = err.body;
-    }
-    Object.keys(err.headers).forEach((key) => {
-      ctx.res.setHeader(key, err.headers[key]);
-    });
-  };
 }
