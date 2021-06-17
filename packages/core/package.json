@@ -1,6 +1,6 @@
 {
   "name": "sfa",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "serverless function api",
   "homepage": "https://github.com/sfajs/sfa",
   "repository": {
@@ -8,9 +8,8 @@
     "url": "https://github.com/sfajs/sfa"
   },
   "keywords": [
-    "serverless",
-    "nodejs",
-    "typescript"
+    "sfa",
+    "serverless"
   ],
   "bugs": {
     "url": "https://github.com/sfajs/sfa/issues",
@@ -48,11 +47,12 @@
   "files": [
     ".github",
     "dist",
+    "scripts",
     "src",
     "test",
+    ".eslintignore",
     ".eslintrc.js",
     ".gitignore",
-    "build.sh",
     "jest.config.js",
     "LICENSE",
     "package.json",
