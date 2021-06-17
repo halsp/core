@@ -253,3 +253,18 @@ const val = this.ctx.bag("BAG_NAME")
 ```TS
 const val = this.ctx.bag<string>("BAG_NAME")
 ```
+
+## sfa 环境
+
+- 腾讯云 CloudBase: [@sfajs/cloudbase](https://github.com/sfajs/cloudbase)
+- 阿里云 HTTP 函数: [@sfajs/alifunc](https://github.com/sfajs/alifunc)
+- http(s): [@sfajs/http](https://github.com/sfajs/http)
+
+> 🎉 更多环境欢迎贡献并编辑此 [README](https://github.com/sfajs/sfa/edit/main/README.md) 以添加
+
+## sfa 中间件
+
+- 路由: [@sfajs/router](https://github.com/sfajs/router)
+- 静态资源: [@sfajs/static](https://github.com/sfajs/static)
+
+> 🎉 更多中间件欢迎贡献并编辑此 [README](https://github.com/sfajs/sfa/edit/main/README.md) 以添加
