@@ -29,11 +29,13 @@ npm i @sfajs/router
     "build": "sfa-router-build"
   },
   "dependencies": {
-    "sfa": "^0.3.0",
-    "@sfajs/router": "^0.3.0"
+    "sfa": "^0.3.2",
+    "@sfajs/router": "^0.3.1"
   }
 }
 ```
+
+根目录添加路由文件夹 `controllers` （可以为项目下任意位置任意命名，后面有介绍）
 
 构建时运行
 
@@ -232,7 +234,7 @@ const result = await new OtherStartup().useRouter().run();
 
 ### 创建一个 Action
 
-#### 创建 controllers 文件夹
+#### 创建路由文件夹
 
 在项目下任意位置创建一个任意命名的文件夹
 
