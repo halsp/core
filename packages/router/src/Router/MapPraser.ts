@@ -7,19 +7,23 @@ import MapCreater from "./MapCreater";
 import MapItem from "./MapItem";
 import PathParser from "./PathParser";
 import Action from "../Action";
-import { HttpContext, HttpMethod, ResponseError } from "sfa";
-import { StatusCodes } from "http-status-codes";
+import { HttpContext, HttpMethod } from "sfa";
 
 export default class MapPraser {
-  #mapItem: MapItem | undefined;
+  #mapItem!: MapItem;
   public get mapItem(): MapItem {
-    if (!this.#mapItem) {
-      this.#mapItem = this.getMapItem();
-    }
     return this.#mapItem;
   }
 
-  constructor(private readonly ctx: HttpContext) {}
+  public notFound = false;
+  public methodNotAllowed = false;
+
+  constructor(private readonly ctx: HttpContext) {
+    const mapItem = this.getMapItem();
+    if (mapItem) {
+      this.#mapItem = mapItem;
+    }
+  }
 
   private get unitTest(): RouterConfig {
     return this.ctx.bag<RouterConfig>("B-UnitTest");
@@ -72,7 +76,7 @@ export default class MapPraser {
     return this.#action;
   }
 
-  private getMapItem(): MapItem {
+  private getMapItem(): MapItem | undefined {
     const map = this.getMap();
     let mapItem;
     if (!this.strict) {
@@ -105,9 +109,12 @@ export default class MapPraser {
       .where((item) => !!new PathParser(item.path).httpMethod)
       .where((item) => this.isMethodPathMatched(item.path, false))
       .count();
-    if (otherMethodPathCount) throw this.methodNotAllowedErr;
 
-    throw this.notFoundErr;
+    if (otherMethodPathCount) {
+      this.methodNotAllowed = true;
+    } else {
+      this.notFound = true;
+    }
   }
 
   private isSimplePathMatched(mapPath: string): boolean {
@@ -193,25 +200,6 @@ export default class MapPraser {
       name = name.substr(0, dotIndex);
     }
     return name;
-  }
-
-  private get notFoundErr(): ResponseError {
-    const msg = `Can't find the path：${this.ctx.req.path}`;
-    return new ResponseError(msg).setStatus(StatusCodes.NOT_FOUND).setBody({
-      message: msg,
-      path: this.ctx.req.path,
-    });
-  }
-
-  private get methodNotAllowedErr(): ResponseError {
-    const msg = `method not allowed：${this.ctx.req.method}`;
-    return new ResponseError(msg)
-      .setStatus(StatusCodes.METHOD_NOT_ALLOWED)
-      .setBody({
-        message: msg,
-        method: this.ctx.req.method,
-        path: this.ctx.req.path,
-      });
   }
 
   private isPathMatched(mapPathStrs: string[], reqUrlStrs: string[]): boolean {

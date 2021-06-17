@@ -1,5 +1,4 @@
-import { StatusCodes } from "http-status-codes";
-import { HttpContext, Request } from "sfa";
+import { HttpContext, Request, status } from "sfa";
 import { Action } from "../src/index";
 
 class Login extends Action {
@@ -27,18 +26,18 @@ test("action test", async function () {
       password: "123456",
     })
   );
-  ctx.res.status = StatusCodes.OK;
+  ctx.res.status = status.StatusCodes.OK;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (loginAction as any).init(ctx, 0);
 
   await loginAction.invoke();
-  expect(loginAction.ctx.res.status).toBe(StatusCodes.OK);
+  expect(loginAction.ctx.res.status).toBe(status.StatusCodes.OK);
 
   loginAction.ctx.req.body.password = "12345";
   await loginAction.invoke();
-  expect(loginAction.ctx.res.status).toBe(StatusCodes.BAD_REQUEST);
+  expect(loginAction.ctx.res.status).toBe(status.StatusCodes.BAD_REQUEST);
 
   loginAction.ctx.req.body.account = "12";
   await loginAction.invoke();
-  expect(loginAction.ctx.res.status).toBe(StatusCodes.NOT_FOUND);
+  expect(loginAction.ctx.res.status).toBe(status.StatusCodes.NOT_FOUND);
 });

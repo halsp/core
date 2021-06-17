@@ -1,4 +1,4 @@
-import { HttpContext, Startup } from "sfa";
+import { HttpContext, Startup, status } from "sfa";
 import Authority from "../Authority";
 import MapPraser from "./MapPraser";
 
@@ -12,9 +12,27 @@ export default class Router {
 
   use(): void {
     this.startup.use(async (ctx, next) => {
+      ctx.res.setHeader("sfa-router", "https://github.com/sfajs/router");
       this.#mapPraser = new MapPraser(ctx);
+      if (this.#mapPraser.notFound) {
+        ctx.notFoundMsg({
+          message: `Can't find the path：${ctx.req.path}`,
+          path: ctx.req.path,
+        });
+        return;
+      }
+      if (this.#mapPraser.methodNotAllowed) {
+        ctx.res.body = {
+          message: `method not allowed：${ctx.req.method}`,
+          method: ctx.req.method,
+          path: ctx.req.path,
+        };
+        ctx.res.status = status.StatusCodes.METHOD_NOT_ALLOWED;
+        return;
+      }
       this.setQuery(ctx);
       await next();
+      ctx.bag("ROUTER_ACTION_REALPATH", this.#mapPraser.action.realPath);
     });
     if (this.authBuilder) {
       const authBuilder = this.authBuilder;
