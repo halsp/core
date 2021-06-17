@@ -2,7 +2,6 @@ import { MdType } from "../Middleware";
 import Response from "../Response";
 import HttpContext from "../HttpContext";
 import LambdaMiddleware, { LambdaMdType } from "../Middleware/LambdaMiddleware";
-import ResponseError from "../Response/ResponseError";
 
 export default abstract class Startup {
   #mds: MdType[] = [];
@@ -27,17 +26,9 @@ export default abstract class Startup {
       return ctx.res;
     }
 
-    try {
-      const md = this.#mds[0]();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (md as any).init(ctx, 0, this.#mds).invoke();
-    } catch (err) {
-      if (err instanceof ResponseError) {
-        err.writeToCtx(ctx);
-      } else {
-        throw err;
-      }
-    }
+    const md = this.#mds[0]();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (md as any).init(ctx, 0, this.#mds).invoke();
 
     return ctx.res;
   }

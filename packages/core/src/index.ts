@@ -2,7 +2,6 @@ import * as status from "http-status-codes";
 
 import Response from "./Response";
 import ErrorMessage from "./Response/ErrorMessage";
-import ResponseError from "./Response/ResponseError";
 
 import Startup from "./Startup";
 import TestStartup from "./Startup/TestStartup";
@@ -21,7 +20,6 @@ import HeadersHandler from "./HeadersHandler";
 export {
   Response,
   ErrorMessage,
-  ResponseError,
   Startup,
   TestStartup,
   Request,
