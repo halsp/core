@@ -95,7 +95,7 @@ test("startup without useTest", async function () {
       .useRouter<TestStartup>()
       .run();
   } catch (err) {
-    expect(err.message).toBe("the config file is not exist");
+    expect(err.message).toBe("the router dir is not exist");
     return;
   }
   expect(true).toBeFalsy();

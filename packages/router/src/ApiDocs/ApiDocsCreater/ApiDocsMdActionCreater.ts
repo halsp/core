@@ -6,6 +6,8 @@ import ApiDocsIOParams from "../ApiDocsParam/ApiDocsIOParams";
 import ApiDocsStateCode from "../ApiDocsParam/ApiDocsStateCode";
 import ApiDocsConfigPart from "../ApiDocsConfig/ApiDocsConfigPart";
 import Action from "../../Action";
+import ApiDocsInputParams from "../ApiDocsParam/ApiDocsInputParams";
+import ApiDocsOutputParams from "../ApiDocsParam/ApiDocsOutputParams";
 
 export default class ApiDocsMdActionCreater {
   constructor(
@@ -22,19 +24,19 @@ export default class ApiDocsMdActionCreater {
     result += "\n\n";
 
     if (this.docs.input) {
-      result += this.getInputParams();
+      result += this.getInputParams(this.docs.input);
       result += "\n\n";
     }
 
     if (this.docs.output) {
-      result += this.getOutputParams();
+      result += this.getOutputParams(this.docs.output);
     }
 
     return result.trimEnd();
   }
 
   private get partConfigs(): ApiDocsConfigPart[] {
-    if (!this.config || !this.config.parts) return [];
+    if (!this.config.parts) return [];
     return this.config.parts;
   }
 
@@ -64,17 +66,16 @@ export default class ApiDocsMdActionCreater {
     return result;
   }
 
-  private getInputParams(): string {
-    if (!this.docs.input) return "";
+  private getInputParams(input: ApiDocsInputParams): string {
     let result = "### Input\n\n";
 
-    if (this.docs.input.desc) {
-      result += this.docs.input.desc;
+    if (input.desc) {
+      result += input.desc;
       result += "\n\n";
     }
 
     const bpResult = this.getBaseParams(
-      this.docs.input,
+      input,
       this.getBasePartParams("inputHeaders")
     );
     if (bpResult) {
@@ -84,7 +85,7 @@ export default class ApiDocsMdActionCreater {
 
     const params = <ApiDocsParam[]>[];
     params.push(...(this.getBasePartParams("params") || <ApiDocsParam[]>[]));
-    params.push(...(this.docs.input.params || <ApiDocsParam[]>[]));
+    params.push(...(input.params || <ApiDocsParam[]>[]));
     if (params && params.length) {
       result += "#### Params\n\n";
       result += this.getParams(params);
@@ -93,7 +94,7 @@ export default class ApiDocsMdActionCreater {
 
     const query = <ApiDocsParam[]>[];
     query.push(...(this.getBasePartParams("query") || <ApiDocsParam[]>[]));
-    query.push(...(this.docs.input.query || <ApiDocsParam[]>[]));
+    query.push(...(input.query || <ApiDocsParam[]>[]));
     if (query && query.length) {
       result += "#### Query\n\n";
       result += this.getParams(query);
@@ -103,12 +104,11 @@ export default class ApiDocsMdActionCreater {
     return result.trimEnd();
   }
 
-  private getOutputParams(): string {
-    if (!this.docs.output) return "";
+  private getOutputParams(output: ApiDocsOutputParams): string {
     let result = "### Output\n\n";
 
-    if (this.docs.output.desc) {
-      result += this.docs.output.desc;
+    if (output.desc) {
+      result += output.desc;
       result += "\n\n";
     }
 
@@ -117,7 +117,7 @@ export default class ApiDocsMdActionCreater {
       ...(<ApiDocsStateCode[]>this.getBasePartParams("codes") ||
         <ApiDocsStateCode[]>[])
     );
-    codes.push(...(this.docs.output.codes || <ApiDocsStateCode[]>[]));
+    codes.push(...(output.codes || <ApiDocsStateCode[]>[]));
     if (codes && codes.length) {
       result += `#### Status Code\n\n`;
       for (let i = 0; i < codes.length; i++) {
@@ -132,7 +132,7 @@ export default class ApiDocsMdActionCreater {
     }
 
     const bpResult = this.getBaseParams(
-      this.docs.output,
+      output,
       this.getBasePartParams("outputHeaders")
     );
     if (bpResult) {

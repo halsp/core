@@ -2,18 +2,26 @@ import { Config } from "../../src";
 import * as shell from "shelljs";
 import * as path from "path";
 import * as fs from "fs";
+import Constant from "../../src/Constant";
 
 const configPath = path.join(process.cwd(), "test/config/sfa-router.json");
 const tsconfigPath = path.join(process.cwd(), "test/config/tsconfig.json");
 
 test("not exist", function () {
   testConfig(() => {
-    expect(() => Config.default).toThrow(Error("the config file is not exist"));
+    expect(Config.default).toEqual({});
     expect(Config.tsconfig).toBeNull();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    expect(() => Config.getRouterDirPath(null as any)).toThrow(
-      Error("the config file is not exist")
-    );
+    if (!fs.existsSync(Constant.defaultRouterDir)) {
+      fs.mkdirSync(Constant.defaultRouterDir);
+    }
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      expect(Config.getRouterDirPath(null as any)).toBe(
+        Constant.defaultRouterDir
+      );
+    } finally {
+      fs.rmdirSync(Constant.defaultRouterDir);
+    }
   });
 });
 
@@ -62,11 +70,11 @@ test("default router dir not exist", function () {
   });
 });
 
-test("there is no router config", function () {
+test("no router config", function () {
   testConfig(() => {
     fs.writeFileSync(configPath, JSON.stringify({}));
     expect(() => Config.getRouterDirPath(Config.default)).toThrow(
-      Error("there is no router config")
+      Error("the router dir is not exist")
     );
   });
 });

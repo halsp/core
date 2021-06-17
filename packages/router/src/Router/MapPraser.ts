@@ -55,12 +55,7 @@ export default class MapPraser {
         : this.unitTest.strict;
     }
 
-    const config = Config.default;
-    if (config && config.router && config.router.strict != undefined) {
-      return config.router.strict;
-    }
-
-    return false;
+    return !!Config.default.router?.strict;
   }
 
   #action?: Action;

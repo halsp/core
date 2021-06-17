@@ -30,12 +30,12 @@ export default class Config {
 
     const configPath = path.join(process.cwd(), Constant.configFileName);
     if (!existsSync(configPath)) {
-      throw new Error("the config file is not exist");
+      this._default = <AppConfig>{};
     } else {
       const str = readFileSync(configPath, "utf-8");
       this._default = JSON.parse(str) as AppConfig;
-      return this._default;
     }
+    return this._default;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -50,16 +50,9 @@ export default class Config {
   }
 
   public static getRouterDirPath(config: AppConfig): string {
-    if (!config) {
-      throw new Error("the config file is not exist");
-    }
-    if (!config.router) {
-      throw new Error("there is no router config");
-    }
-
     const result = path.join(
       this.outDir,
-      config.router.dir || Constant.defaultRouterDir
+      config?.router?.dir || Constant.defaultRouterDir
     );
 
     if (!existsSync(result) || !lstatSync(result).isDirectory()) {
