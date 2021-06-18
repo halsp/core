@@ -266,5 +266,6 @@ const val = this.ctx.bag<string>("BAG_NAME")
 
 - 路由: [@sfajs/router](https://github.com/sfajs/router)
 - 静态资源: [@sfajs/static](https://github.com/sfajs/static)
+- 视图渲染: [@sfajs/views](https://github.com/sfajs/views)
 
 > 🎉 更多中间件欢迎贡献并编辑此 [README](https://github.com/sfajs/sfa/edit/main/README.md) 以添加
