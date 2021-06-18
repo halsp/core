@@ -11,20 +11,26 @@ export default abstract class ResultHandler {
   }
 
   ok(body?: unknown): Response {
-    this.response.body = body;
+    if (body != undefined) {
+      this.response.body = body;
+    }
     this.response.status = StatusCodes.OK;
     return this.response;
   }
 
   created(location: string, body?: unknown): Response {
-    this.response.body = body;
+    if (body != undefined) {
+      this.response.body = body;
+    }
     this.response.status = StatusCodes.CREATED;
     this.response.setHeader("location", location);
     return this.response;
   }
 
   accepted(body?: unknown): Response {
-    this.response.body = body;
+    if (body != undefined) {
+      this.response.body = body;
+    }
     this.response.status = StatusCodes.ACCEPTED;
     return this.response;
   }
@@ -35,13 +41,17 @@ export default abstract class ResultHandler {
   }
 
   partialContent(body?: unknown): Response {
-    this.response.body = body;
+    if (body != undefined) {
+      this.response.body = body;
+    }
     this.response.status = StatusCodes.PARTIAL_CONTENT;
     return this.response;
   }
 
   badRequest(body?: unknown): Response {
-    this.response.body = body;
+    if (body != undefined) {
+      this.response.body = body;
+    }
     this.response.status = StatusCodes.BAD_REQUEST;
     return this.response;
   }
@@ -52,7 +62,9 @@ export default abstract class ResultHandler {
   }
 
   unauthorized(body?: unknown): Response {
-    this.response.body = body;
+    if (body != undefined) {
+      this.response.body = body;
+    }
     this.response.status = StatusCodes.UNAUTHORIZED;
     return this.response;
   }
@@ -63,7 +75,9 @@ export default abstract class ResultHandler {
   }
 
   forbidden(body?: unknown): Response {
-    this.response.body = body;
+    if (body != undefined) {
+      this.response.body = body;
+    }
     this.response.status = StatusCodes.FORBIDDEN;
     return this.response;
   }
@@ -74,7 +88,9 @@ export default abstract class ResultHandler {
   }
 
   notFound(body?: unknown): Response {
-    this.response.body = body;
+    if (body != undefined) {
+      this.response.body = body;
+    }
     this.response.status = StatusCodes.NOT_FOUND;
     return this.response;
   }
@@ -85,7 +101,9 @@ export default abstract class ResultHandler {
   }
 
   errRequest(body?: unknown): Response {
-    this.response.body = body;
+    if (body != undefined) {
+      this.response.body = body;
+    }
     this.response.status = StatusCodes.INTERNAL_SERVER_ERROR;
     return this.response;
   }
