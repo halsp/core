@@ -33,33 +33,21 @@ Startup.prototype.useViews = function <T extends Startup>(
     options: {},
   }
 ): T {
+  Middleware.prototype.view = async function (
+    tmpPath = "",
+    locals: Record<string, unknown> = {}
+  ) {
+    return await render(this.ctx, dir, tmpPath, locals, cfg);
+  };
+
+  HttpContext.prototype.view = async function (
+    tmpPath = "",
+    locals: Record<string, unknown> = {}
+  ) {
+    return await render(this, dir, tmpPath, locals, cfg);
+  };
+
   this.use(async (ctx, next) => {
-    if (
-      !Middleware.prototype.view ||
-      Middleware.prototype.view.prototype.viewsDir != dir
-    ) {
-      Middleware.prototype.view = async function (
-        tmpPath = "",
-        locals: Record<string, unknown> = {}
-      ) {
-        return await render(this.ctx, dir, tmpPath, locals, cfg);
-      };
-      Middleware.prototype.view.prototype.viewsDir = dir;
-    }
-
-    if (
-      !HttpContext.prototype.view ||
-      HttpContext.prototype.view.prototype.viewsDir != dir
-    ) {
-      HttpContext.prototype.view = async function (
-        tmpPath = "",
-        locals: Record<string, unknown> = {}
-      ) {
-        return await render(this, dir, tmpPath, locals, cfg);
-      };
-      HttpContext.prototype.view.prototype.viewsDir = dir;
-    }
-
     ctx.state = {};
     ctx.res.setHeader("sfa-views", "https://github.com/sfajs/views");
     await next();
@@ -75,7 +63,7 @@ async function render(
   locals: Record<string, unknown>,
   cfg: ViewsConfig
 ): Promise<Response> {
-  tmpPath = path.join(dir, tmpPath);
+  tmpPath = path.join(dir ?? "", tmpPath ?? "");
   const options = Object.assign(
     cfg.options ?? {},
     ctx.state ?? {},

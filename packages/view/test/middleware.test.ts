@@ -12,7 +12,7 @@ test("middleware class", async function () {
 
   const res = await new TestStartup()
     .useViews("test/views")
-    .use(() => new Md())
+    .add(() => new Md())
     .run();
 
   expect(res.getHeader("content-type")).toBe("text/html");
@@ -29,7 +29,7 @@ test("middleware class default", async function () {
 
   const res = await new TestStartup()
     .useViews("test/views")
-    .use(() => new Md())
+    .add(() => new Md())
     .run();
 
   expect(res.status).toBe(404);

@@ -57,3 +57,18 @@ test("default dir", async function () {
 
   expect(res.status).toBe(404);
 });
+
+test("null", async function () {
+  const res = await new TestStartup()
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .useViews(null as any)
+    .use(async (ctx) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ctx.state = null as any;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await ctx.view(null as any, null as any);
+    })
+    .run();
+
+  expect(res.status).toBe(404);
+});

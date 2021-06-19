@@ -21,8 +21,6 @@ test("str engine", async function () {
 });
 
 test("func engine", async function () {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  HttpContext.prototype.view = undefined as any;
   const res = await new TestStartup()
     .useViews("test/views", {
       engines: { ejs: consolidate.ejs },
@@ -39,8 +37,6 @@ test("func engine", async function () {
 });
 
 test("empty engine", async function () {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  HttpContext.prototype.view = undefined as any;
   const res = await new TestStartup()
     .useViews("test/views", {
       engines: undefined,
