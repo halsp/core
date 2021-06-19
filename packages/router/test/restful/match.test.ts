@@ -1,6 +1,6 @@
 import "../UseTest";
 import "../../src";
-import { HttpMethod, TestStartup, Request } from "sfa";
+import { HttpMethod, TestStartup, Request, HttpContext } from "sfa";
 
 test(`find next`, async function () {
   const result = await new TestStartup(
@@ -79,4 +79,20 @@ test(`find miss next 4`, async function () {
   expect((result.body as Record<string, string>).action).toBe(
     "query2/nextQuery"
   );
+});
+
+test(`mostLikePathParts`, async function () {
+  let context!: HttpContext;
+  const result = await new TestStartup(
+    new Request().setPath("/restful/mostLike/q/act").setMethod(HttpMethod.post)
+  )
+    .use(async (ctx, next) => {
+      context = ctx;
+      await next();
+    })
+    .useTest()
+    .useRouter()
+    .run();
+  expect(result.status).toBe(204);
+  expect(context.actionPath).toBe("restful/mostLike/^id1/act/post.ts");
 });

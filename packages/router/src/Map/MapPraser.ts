@@ -140,28 +140,21 @@ export default class MapPraser {
     const mostLikePathParts = linq
       .from(pathsParts)
       .orderBy((pp) => pp.parts.length)
-      .firstOrDefault();
+      .first();
     if (!mostLikePathParts) return;
     return mostLikePathParts.mapItem;
   }
 
   private removeExtension(name: string): string {
-    const dotIndex = name.lastIndexOf(".");
-    if (dotIndex > 0) {
-      name = name.substr(0, dotIndex);
-    }
-    return name;
+    return name.replace(/\.[^\.]+$/, "");
   }
 
   private isPathMatched(mapPathStrs: string[], reqUrlStrs: string[]): boolean {
-    if (mapPathStrs.length != reqUrlStrs.length) return false;
-
     for (let i = 0; i < mapPathStrs.length; i++) {
       if (mapPathStrs[i] != reqUrlStrs[i] && !mapPathStrs[i].startsWith("^")) {
         return false;
       }
     }
-
     return true;
   }
 

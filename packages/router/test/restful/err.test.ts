@@ -12,3 +12,14 @@ test(`action name error`, async function () {
 
   expect(result.status).toBe(404);
 });
+
+test(`without method`, async function () {
+  const result = await new TestStartup(
+    new Request().setPath("/restful").setMethod("")
+  )
+    .useTest()
+    .useRouter()
+    .run();
+
+  expect(result.status).toBe(404);
+});
