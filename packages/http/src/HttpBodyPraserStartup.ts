@@ -1,4 +1,4 @@
-import { HttpContext, ResponseError, Startup, status } from "sfa";
+import { HttpContext, Startup, status } from "sfa";
 import * as typeis from "type-is";
 import * as cobody from "co-body";
 import * as qs from "qs";
@@ -154,11 +154,7 @@ export default abstract class HttpBodyPraserStartup extends Startup {
         if (onError) {
           await onError(ctx, err);
         } else {
-          throw new ResponseError(err.message)
-            .setBody({
-              message: err.message,
-            })
-            .setStatus(status.StatusCodes.BAD_REQUEST);
+          throw err;
         }
         return;
       }

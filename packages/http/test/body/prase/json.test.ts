@@ -46,6 +46,13 @@ test("parse json error", async function () {
 
 test("parse json error default", async function () {
   const server = new SfaHttp()
+    .use(async (ctx, next) => {
+      try {
+        await next();
+      } catch (err) {
+        ctx.badRequestMsg({ message: err.message });
+      }
+    })
     .useHttpJsonBody()
     .use(async (ctx) => {
       ctx.ok(ctx.req.body);
