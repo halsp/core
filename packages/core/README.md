@@ -14,14 +14,14 @@ npm i sfa
 
 ## 开始使用
 
-```JS
-const { TestStartup } = require("sfa");
+```TS
+import { TestStartup } from "sfa";
 const res = await new TestStartup()
-    .use(async (ctx, next) => {
-      ctx.res.body = "sfa";
-    })
-    .run();
-console.log('res',res);
+  .use(async (ctx) => {
+    ctx.ok("sfa");
+  })
+  .run();
+console.log("res", res);
 ```
 
 ## Startup
@@ -30,10 +30,9 @@ Startup 类是 sfa 的入口
 
 为了让 sfa 能够在各类生产环境中使用，该类设计的较为开放，在 ts 中是个抽象类，因此该类不能直接使用，需要定义派生类并在合适的函数中调用 `invoke` 函数。上述示例的 `TestStartup` 是一个简单的 Startup 派生类，没有对 Request 和 Response 进行任何解析。
 
-- 在 cloudbase 云函数环境中，可以使用 `@sfajs/cloudbase`。`@sfajs/cloudbase` 中有继承于类 `Startup` 的 `SfaCloudbase`，并对云函数入参 event 和 context 进行了解析
-- 在 http 环境中，可以使用 `@sfajs/http`。`@sfajs/http` 中有继承于类 `Startup` 的 `SfaHttp`，并对 Request 和 Response 进行了解析
+目前已支持的运行环境参考后面的 **sfa 环境** 部分
 
-其他更多环境，欢迎你参考以上方案来实现
+其他更多环境，欢迎你来实现
 
 ## 中间件
 
@@ -58,14 +57,21 @@ Startup 类是 sfa 的入口
 
 ### 注册中间件
 
-你需要使用 `startup.use` 注册中间件，传参是一个创建中间件的回调函数，如
+在 `sfa` 中有两种中间件：
 
-```js
-const { TestStartup } = require("sfa");
-const startup = new TestStartup(event, context);
+- startup.add( ): 类中间件
+- startup.use( ): 简单中间件
+
+类中间件更适合用于大型项目，让你的代码更易读
+
+简单中间件适合小型快速开发的代码
+
+```TS
+import { TestStartup } from "sfa";
+const startup = new TestStartup();
 // 简单中间件
 startup.use(async (ctx) => {
-  ctx.res.body = "hello world";
+  ctx.ok("sfa");
 });
 // 类中间件
 startup.use(() => new YourMiddleware());
@@ -73,13 +79,34 @@ startup.use(() => new YourMiddleware());
 const res = await startup.run();
 ```
 
+### 类中间件
+
+你需要定义一个类，继承 `Middleware` 并实现 `invoke` 函数，在中间件管道中，将自动执行 `invoke`
+
+类中间件有两种生命周期：
+
+- 单例模式
+- 访问级别
+
+```TS
+import { TestStartup } from "sfa";
+
+// 单例模式
+const res = await new TestStartup().use(new YourMiddleware()).run();
+
+// 访问级别
+const res = await new TestStartup().use((ctx) => new YourMiddleware()).run();
+```
+
+应当注意在单例模式中，如果项目存在并发情况，使用管道中的内容如 `this.ctx`，可能会出错，因为管道内容可能会被刷新，你无法保证处理的是预期管道。
+
 ### 简单中间件
 
 简单中间件不需要单独写一个中间件类，但其底层仍然会被转化为普通类中间件来执行
 
 ```JS
 startup.use(async (ctx) => {
-  ctx.res.body = "hello world";
+  ctx.ok("sfa");
 });
 ```
 
@@ -87,76 +114,11 @@ startup.use(async (ctx) => {
 
 ```JS
 startup.use(async (ctx, next) => {
-  ctx.res.body = "hello world";
+  ctx.ok("sfa");
   await next();
   ctx.res.setHeader("app", "sfa");
 });
 ```
-
-### 内置结果函数
-
-目前中间件中内置一些返回结果：
-
-- ok, 200
-- accepted, 202
-- created, 201
-- noContent, 204
-- partialContent, 206
-- redirect, 30\*
-- badRequest, 400
-- badRequestMsg, 400
-- forbidden, 403
-- forbiddenMsg, 403
-- notFound, 404
-- notFoundMsg, 404
-- methodNotAllowed, 405
-- errRequest, 500
-- errRequestMsg, 500
-
-如
-
-```TS
-this.ok("success");
-```
-
-等同于
-
-```TS
-this.ctx.res.body="success";
-this.ctx.res.status=200;
-```
-
-#### 在中间件中
-
-```JS
-const { Middleware } = require("sfa");
-export default class extends Middleware {
-  async invoke() {
-    this.noContent();
-    // or this.ok('success');
-  }
-}
-```
-
-```JS
-const { Middleware } = require("sfa");
-export default class extends Middleware {
-  async invoke() {
-    const { account, password } = this.ctx.req.params;
-
-    if (/*账号或密码错误*/) {
-      this.notFoundMsg({ message: "账号或密码错误" });
-    } else {
-      this.ok({
-        /*返回信息*/
-      });
-    }
-  }
-}
-```
-
-多数内置类型支持传入 `body` 可选参数，`body` 为返回的内容。
-API 返回错误时，可统一返回 `ErrorMessage`，命名以 `Msg` 结尾的内置类型接受 `ErrorMessage` 参数。
 
 ## HttpContext
 
@@ -253,6 +215,69 @@ const val = this.ctx.bag("BAG_NAME")
 ```TS
 const val = this.ctx.bag<string>("BAG_NAME")
 ```
+
+## 内置结果函数
+
+目前 `ctx` 和中间件中内置一些返回结果：
+
+- ok, 200
+- accepted, 202
+- created, 201
+- noContent, 204
+- partialContent, 206
+- redirect, 30\*
+- badRequest, 400
+- badRequestMsg, 400
+- forbidden, 403
+- forbiddenMsg, 403
+- notFound, 404
+- notFoundMsg, 404
+- methodNotAllowed, 405
+- errRequest, 500
+- errRequestMsg, 500
+
+如在类中间件中
+
+```TS
+this.ok("success");
+```
+
+等同于
+
+```TS
+this.ctx.res.body="success";
+this.ctx.res.status=200;
+```
+
+```TS
+import { Middleware } from "sfa";
+export default class extends Middleware {
+  async invoke() {
+    this.noContent();
+    // or this.ok('success');
+  }
+}
+```
+
+```TS
+import { Middleware } from "sfa";
+export default class extends Middleware {
+  async invoke() {
+    const { account, password } = this.ctx.req.params;
+
+    if (/*账号或密码错误*/) {
+      this.notFoundMsg({ message: "账号或密码错误" });
+    } else {
+      this.ok({
+        /*返回信息*/
+      });
+    }
+  }
+}
+```
+
+多数内置类型支持传入 `body` 可选参数，`body` 为返回的内容。
+API 返回错误时，可统一返回 `ErrorMessage`，命名以 `Msg` 结尾的内置类型接受 `ErrorMessage` 参数。
 
 ## sfa 环境
 
