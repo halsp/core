@@ -1,4 +1,5 @@
 import PathParser from "../src/Router/PathParser";
+
 test("path parser", async function () {
   const pathParser = new PathParser("./test/controllers/get.ts");
   expect(pathParser.fileName).toBe("get.ts");

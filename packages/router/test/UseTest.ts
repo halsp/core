@@ -3,14 +3,14 @@ import { RouterConfig } from "../src";
 
 declare module "sfa" {
   interface Startup {
-    useTest(config?: RouterConfig): sfa.Startup;
+    useTest<T extends this>(config?: RouterConfig): T;
   }
 }
 
-sfa.Startup.prototype.useTest = function (
+sfa.Startup.prototype.useTest = function <T extends sfa.Startup>(
   this: sfa.Startup,
   config?: RouterConfig
-) {
+): T {
   if (!config) {
     config = {};
   }
@@ -22,5 +22,5 @@ sfa.Startup.prototype.useTest = function (
     ctx.bag("B-UnitTest", config);
     await next();
   });
-  return this;
+  return this as T;
 };

@@ -18,9 +18,8 @@ test("router test login access", async function () {
       .setMethod("POST")
   )
     .useTest()
-    .useRouter<TestStartup>({
-      authBuilder: () => new Auth(),
-    })
+    .useRouteAuth(() => new Auth())
+    .useRouter()
     .run();
 
   expect(result.status).toBe(200);
@@ -35,9 +34,8 @@ test("router test login not access", async function () {
       .setMethod("POST")
   )
     .useTest()
-    .useRouter<TestStartup>({
-      authBuilder: () => new Auth(),
-    })
+    .useRouteAuth(() => new Auth())
+    .useRouter()
     .run();
 
   expect(result.status).toBe(403);
@@ -52,9 +50,8 @@ test("router test admin access", async function () {
       .setMethod("POST")
   )
     .useTest()
-    .useRouter<TestStartup>({
-      authBuilder: () => new Auth(),
-    })
+    .useRouteAuth(() => new Auth())
+    .useRouter()
     .run();
 
   expect(result.status).toBe(200);
@@ -69,9 +66,8 @@ test("router test admin not access", async function () {
       .setMethod("POST")
   )
     .useTest()
-    .useRouter<TestStartup>({
-      authBuilder: () => new Auth(),
-    })
+    .useRouteAuth(() => new Auth())
+    .useRouter()
     .run();
 
   expect(result.status).toBe(403);

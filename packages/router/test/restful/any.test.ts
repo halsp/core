@@ -10,7 +10,7 @@ methods.forEach((method) => {
       new Request().setPath("/restful").setMethod(method)
     )
       .useTest()
-      .useRouter<TestStartup>()
+      .useRouter()
       .run();
 
     expect(result.status).toBe(200);

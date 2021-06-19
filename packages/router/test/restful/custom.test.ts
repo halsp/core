@@ -8,7 +8,7 @@ test(`custom httpMethod test`, async function () {
     new Request().setPath("/restful/1").setMethod("CUSTOM")
   )
     .useTest()
-    .useRouter<TestStartup>()
+    .useRouter()
     .run();
   expect(result.status).toBe(200);
 });
@@ -19,7 +19,7 @@ test(`custom httpMethod test err`, async function () {
     new Request().setPath("/restful/1").setMethod("CUSTOM")
   )
     .useTest()
-    .useRouter<TestStartup>()
+    .useRouter()
     .run();
   expect(result.status).toBe(405);
 });

@@ -1,12 +1,10 @@
 import { existsSync, readFileSync } from "fs";
 import linq = require("linq");
 import path = require("path");
-import Config, { RouterConfig } from "../Config";
 import Constant from "../Constant";
 import MapCreater from "./MapCreater";
 import MapItem from "./MapItem";
 import PathParser from "./PathParser";
-import Action from "../Action";
 import { HttpContext, HttpMethod } from "sfa";
 
 export default class MapPraser {
@@ -18,57 +16,15 @@ export default class MapPraser {
   public notFound = false;
   public methodNotAllowed = false;
 
-  constructor(private readonly ctx: HttpContext) {
+  constructor(
+    private readonly ctx: HttpContext,
+    private readonly dir: string,
+    private readonly strict: boolean
+  ) {
     const mapItem = this.getMapItem();
     if (mapItem) {
       this.#mapItem = mapItem;
     }
-  }
-
-  private get unitTest(): RouterConfig {
-    return this.ctx.bag<RouterConfig>("B-UnitTest");
-  }
-
-  private get dirPath(): string {
-    return path.join(process.cwd(), this.dir);
-  }
-
-  private get dir(): string {
-    if (this.unitTest) {
-      return this.unitTest.dir || Constant.defaultRouterDir;
-    }
-
-    return Config.getRouterDirPath(Config.default);
-  }
-  /**
-   * strict
-   *
-   * if not, the path end with the httpMethod word will be matched.
-   * for example, the post request with path 'user/get' match 'user.ts'.
-   *
-   * if true, the action in definition must appoint method.
-   */
-  private get strict(): boolean {
-    if (this.unitTest) {
-      return this.unitTest.strict == undefined
-        ? !!Constant.defaultStrict
-        : this.unitTest.strict;
-    }
-
-    return !!Config.default.router?.strict;
-  }
-
-  #action?: Action;
-  public get action(): Action {
-    if (!this.#action) {
-      const filePath = path.join(this.dirPath, this.mapItem.path);
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const actionClass = require(filePath).default;
-      this.#action = new actionClass() as Action;
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (this.#action as any).realPath = this.mapItem.path;
-    }
-    return this.#action;
   }
 
   private getMapItem(): MapItem | undefined {

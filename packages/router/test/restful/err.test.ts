@@ -7,7 +7,7 @@ test(`action name error`, async function () {
     new Request().setPath("/err").setMethod(HttpMethod.post)
   )
     .useTest()
-    .useRouter<TestStartup>()
+    .useRouter()
     .run();
 
   expect(result.status).toBe(404);

@@ -7,7 +7,7 @@ test(`method not allowed`, async function () {
     new Request().setPath("/restful/1").setMethod("NO")
   )
     .useTest()
-    .useRouter<TestStartup>()
+    .useRouter()
     .run();
   expect(result.status).toBe(405);
 });

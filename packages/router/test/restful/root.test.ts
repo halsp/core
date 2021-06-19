@@ -7,7 +7,7 @@ test("restful root get", async function () {
     new Request().setPath("/").setMethod(HttpMethod.get.toUpperCase())
   )
     .useTest()
-    .useRouter<TestStartup>()
+    .useRouter()
     .run();
   expect(result.status).toBe(200);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
