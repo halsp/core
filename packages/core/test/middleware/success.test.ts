@@ -7,10 +7,10 @@ test("middleware success", async function () {
   };
 
   const res = await new TestStartup()
-    .use(() => new Mdw1(stepResult))
-    .use(() => new Mdw2(stepResult))
-    .use(() => new Mdw3(stepResult))
-    .use(() => new Mdw4(stepResult))
+    .add(() => new Mdw1(stepResult))
+    .add(() => new Mdw2(stepResult))
+    .add(() => new Mdw3(stepResult))
+    .add(() => new Mdw4(stepResult))
     .run();
 
   expect(res.status).toBe(200);

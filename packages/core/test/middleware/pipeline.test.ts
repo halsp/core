@@ -3,10 +3,10 @@ import { TestStartup } from "../../src";
 
 test("middleware pipeline", async function () {
   const startup = new TestStartup()
-    .use(() => new Mdw1())
-    .use(() => new Mdw2())
-    .use(() => new Mdw3())
-    .use(() => new Mdw4());
+    .add(() => new Mdw1())
+    .add(() => new Mdw2())
+    .add(() => new Mdw3())
+    .add(() => new Mdw4());
 
   // startup.ctx.mds[2].md = startup.ctx.mds[2].builder();
 

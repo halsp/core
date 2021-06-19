@@ -11,8 +11,6 @@ import Request from "./Request";
 import HttpMethod from "./Request/HttpMethod";
 
 import Middleware from "./Middleware";
-import { MdType } from "./Middleware";
-import { LambdaMdType } from "./Middleware/LambdaMiddleware";
 
 import ResultHandler from "./ResultHandler";
 import HeadersHandler from "./HeadersHandler";
@@ -26,8 +24,6 @@ export {
   HttpContext,
   HttpMethod,
   Middleware,
-  MdType,
-  LambdaMdType,
   ResultHandler,
   HeadersHandler,
   status,

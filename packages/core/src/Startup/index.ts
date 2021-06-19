@@ -1,23 +1,24 @@
-import { MdType } from "../Middleware";
 import Response from "../Response";
 import HttpContext from "../HttpContext";
-import LambdaMiddleware, { LambdaMdType } from "../Middleware/LambdaMiddleware";
+import LambdaMiddleware from "../Middleware/LambdaMiddleware";
+import Middleware from "../Middleware";
 
 export default abstract class Startup {
-  #mds: MdType[] = [];
+  #mds: ((ctx: HttpContext) => Middleware)[] = [];
 
-  use<T extends this>(mdBuilder: MdType | LambdaMdType): T {
-    if (!mdBuilder) throw new Error();
+  use<T extends this>(
+    builder: (ctx: HttpContext, next: () => Promise<void>) => Promise<void>
+  ): T {
+    this.#mds.push(() => new LambdaMiddleware(builder));
+    return this as T;
+  }
 
-    let builder;
-    if (mdBuilder.length > 0) {
-      builder = () => new LambdaMiddleware(mdBuilder as LambdaMdType);
+  add<T extends this>(md: ((ctx: HttpContext) => Middleware) | Middleware): T {
+    if (md instanceof Middleware) {
+      this.#mds.push(() => md);
     } else {
-      builder = mdBuilder as MdType;
+      this.#mds.push(md);
     }
-
-    this.#mds.push(builder);
-
     return this as T;
   }
 
@@ -26,7 +27,7 @@ export default abstract class Startup {
       return ctx.res;
     }
 
-    const md = this.#mds[0]();
+    const md = this.#mds[0](ctx);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (md as any).init(ctx, 0, this.#mds).invoke();
 

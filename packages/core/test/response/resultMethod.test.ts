@@ -1,6 +1,6 @@
 import ErrorMessage from "../../src/Response/ErrorMessage";
 import HttpContext from "../../src/HttpContext";
-import { Middleware } from "../../src";
+import { Middleware, TestStartup } from "../../src";
 import Request from "../../src/Request";
 import { getReasonPhrase } from "http-status-codes";
 
@@ -10,16 +10,8 @@ const normalMethod = [
     code: 200,
   },
   {
-    method: "created",
-    code: 201,
-  },
-  {
     method: "accepted",
     code: 202,
-  },
-  {
-    method: "noContent",
-    code: 204,
   },
   {
     method: "partialContent",
@@ -41,36 +33,63 @@ const normalMethod = [
     method: "notFound",
     code: 404,
   },
-  // {
-  //   method: "methodNotAllowed",
-  //   code: 405,
-  // },
   {
     method: "errRequest",
     code: 500,
   },
 ];
 
-for (let i = 0; i < normalMethod.length; i++) {
-  const methodItem = normalMethod[i];
-  class Md extends Middleware {
-    async invoke(): Promise<void> {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (this as any)[methodItem.method]();
-    }
-    constructor() {
-      super();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (this as any).init(new HttpContext(new Request()), 0);
-    }
+async function testBody(body?: unknown) {
+  for (let i = 0; i < normalMethod.length; i++) {
+    const methodItem = normalMethod[i];
+    const res = await new TestStartup()
+      .use(async (ctx) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (ctx as any)[methodItem.method](body);
+      })
+      .run();
+
+    expect(res.status).toBe(methodItem.code);
+    expect(res.body).toBe(body);
   }
-  const md = new Md();
-  md.invoke();
-  test(`http result ${methodItem.method}`, async function () {
-    const result = md.ctx.res;
-    expect(result.status).toBe(methodItem.code);
-  });
 }
+
+test(`test handler func`, async function () {
+  await testBody();
+  await testBody("body");
+});
+
+test(`http result created`, async function () {
+  {
+    const res = await new TestStartup()
+      .use(async (ctx) => {
+        ctx.created("loca");
+      })
+      .run();
+    expect(res.status).toBe(201);
+    expect(res.getHeader("location")).toBe("loca");
+  }
+  {
+    const res = await new TestStartup()
+      .use(async (ctx) => {
+        ctx.created("loca", "body");
+      })
+      .run();
+    expect(res.status).toBe(201);
+    expect(res.body).toBe("body");
+    expect(res.getHeader("location")).toBe("loca");
+  }
+});
+
+test(`http result noContent`, async function () {
+  const res = await new TestStartup()
+    .use(async (ctx) => {
+      ctx.noContent();
+    })
+    .run();
+  expect(res.status).toBe(204);
+  expect(res.body).toBe(undefined);
+});
 
 const msgMethods = [
   {
