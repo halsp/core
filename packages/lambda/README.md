@@ -8,8 +8,8 @@ npm i @sfajs/cloudbase
 
 ## 开始使用
 
-```JS
-const SfaCloudbase = require("@sfajs/cloudbase");
+```TS
+import SfaCloudbase from "@sfajs/cloudbase";
 
 const main = async (event, context) => {
   return await new SfaCloudbase(event, context)
@@ -25,8 +25,8 @@ exports.main = main;
 如果添加 `@sfajs/router`
 
 ```JS
-const SfaCloudbase = require("@sfajs/cloudbase");
-require("@sfajs/router");
+import SfaCloudbase from "@sfajs/cloudbase";
+import "@sfajs/router";
 
 const main = async (event, context) => {
   return await new SfaCloudbase(event, context)
