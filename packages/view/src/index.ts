@@ -61,7 +61,7 @@ Startup.prototype.useViews = function <T extends Startup>(
     }
 
     ctx.state = {};
-    ctx.res.setHeader("sfa-view", "https://github.com/sfajs/view");
+    ctx.res.setHeader("sfa-views", "https://github.com/sfajs/views");
     await next();
   });
 
@@ -76,7 +76,11 @@ async function render(
   cfg: ViewsConfig
 ): Promise<Response> {
   tmpPath = path.join(dir, tmpPath);
-  const options = Object.assign(cfg.options ?? {}, ctx.state ?? {}, locals);
+  const options = Object.assign(
+    cfg.options ?? {},
+    ctx.state ?? {},
+    locals ?? {}
+  );
   const file = getFile(tmpPath, cfg.engines ?? {});
   if (!file) return ctx.res;
 
