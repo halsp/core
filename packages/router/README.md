@@ -119,21 +119,17 @@ ts 项目，将按 `tsconfig.json` 中的 `compilerOptions/target` 生成目标�
 import "@sfajs/router";
 ```
 
-然后调用 `startup.useRouter` 函数即可开启路由中间件，开启后能够支持路由功能
+然后注册路由中间件 `startup.useRouter` 以支持路由功能
 
 ```JS
-const result = await new TestStartup().useRouter().run();
+const res = await new TestStartup().useRouter().run();
 ```
 
 或
 
 ```JS
-const result = await new OtherStartup().useRouter().run();
+const res = await new OtherStartup().useRouter().run();
 ```
-
-`useRouter` 接收一个可选配置参数 `config` ，该参数包含一个可选字段
-
-- authBuilder: 函数类型，函数返回值为权限认证对象，详情后面 [权限](#权限) 部分有介绍。
 
 > `useRouter` 实际上可能会注册多个中间件
 
@@ -281,9 +277,9 @@ export default class extends Action {
 
 默认的权限功能是用于判断用户能否使用 API，可以精确到控制每个 `Action`
 
-`startup.useRouter()` 参数接收一个 `authBuilder` 字段，值为创建 `Authority` 派生类对象的回调
+`startup.useRouteAuth` 注册权限中间件，该函数接收一个参数 `builder`
 
-`Authority` 类继承于中间件类 `Middleware`，因此该类对象也是中间件，但加载方式比较特殊
+`builder` 为函数类型，函数返回值为权限认证对象，该对象的类继承于 `Authority` 类，因此该类对象也是中间件，但加载方式比较特殊
 
 你需要新写个类，继承 `Authority`，并实现 `invoke` 函数
 
@@ -354,9 +350,38 @@ startup.useRouter({
 })
 ```
 
+## 路由解析
+
+`startup.useRoutePraser` 会在管道 `ctx` 中加入
+
+- actionPath: `action` 实际相对路径
+- actionRoles: `action` 的 `roles` 属性值，用于权限验证
+
+默认你无需主动调用路由解析，因为 `startup.useRouter` 和 `startup.useRouteAuth` 也会解析路由并在管道加入以上两个字段
+
+但当你要使用 `action` 的实际路径，或默认权限验证无法满足需求时，你就需要在 `startup.useRoutePraser` 之后实现需求
+
+```TS
+import { TestStartup } from "sfa";
+import "@sfajs/router";
+
+const res = await new TestStartup()
+  .useRoutePraser()
+  .use(async (ctx) => {
+    ctx.ok({
+      actionPath: ctx.actionPath,
+      actionRoles: ctx.actionRoles,
+    });
+  })
+  .useRouter()
+  .run();
+```
+
 ## query
 
-`@sfajs/router` 会在 `ctx.req` 中添加 `query` 字段
+`@sfajs/router` 会在 `ctx.req` 中添加 `query` 属性
+
+在 `startup.useRouter`、`startup.useRoutePraser`、`startup.useRouteAuth` 之后的中间件，都可以获取 `ctx.req.query`
 
 `query` 内容是 RESTful 路径中的参数，如
 

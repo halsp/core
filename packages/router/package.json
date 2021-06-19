@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/router",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Router middleware for sfa",
   "homepage": "https://github.com/sfajs/router",
   "repository": {
@@ -10,8 +10,6 @@
   "keywords": [
     "sfa",
     "restful",
-    "serverless",
-    "nodejs",
     "typescript"
   ],
   "bugs": {
