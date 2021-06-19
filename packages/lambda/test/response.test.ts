@@ -1,12 +1,13 @@
 import SfaCloudbase from "../src";
 
 test("default response", async function () {
-  const result = await new SfaCloudbase({}, {}).run();
+  const res = await new SfaCloudbase({}, {}).run();
 
-  expect(result.isBase64Encoded).toBeFalsy();
-  expect(result.headers.t).toBe(undefined);
-  expect(Object.keys(result.body as Record<string, unknown>).length).toBe(0);
-  expect(result.statusCode).toBe(404);
+  expect(res.isBase64Encoded).toBeFalsy();
+  expect(res.headers.t).toBeUndefined();
+  expect(res.headers["content-type"]).toBeUndefined();
+  expect(res.body).toEqual({});
+  expect(res.statusCode).toBe(404);
 });
 
 test("base response", async function () {
@@ -35,5 +36,25 @@ test("error response", async function () {
     })
     .run();
 
-  expect(result.statusCode).toBe(0);
+  expect(result.statusCode).toBe(undefined);
+});
+
+test("set json type", async function () {
+  const res = await new SfaCloudbase({}, {})
+    .use(async (ctx, next) => {
+      ctx.res.setHeader("content-type", "application/json");
+      ctx.res.setHeader("content-length", "10");
+      ctx.ok({
+        body: "BODY",
+      });
+      await next();
+    })
+    .run();
+
+  expect(res.headers["content-type"]).toBe("application/json");
+  expect(res.headers["content-length"]).toBe("10");
+  expect(res.body).toEqual({
+    body: "BODY",
+  });
+  expect(res.statusCode).toBe(200);
 });

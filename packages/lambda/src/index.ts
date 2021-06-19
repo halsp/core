@@ -3,6 +3,7 @@ import { HttpContext, Request, Startup } from "sfa";
 import ResponseStruct from "./ResponseStruct";
 import tcb = require("@cloudbase/node-sdk");
 import Dbhelper from "./Dbhelper";
+import * as mime from "mime-types";
 
 declare module "sfa" {
   interface Request {
@@ -38,7 +39,6 @@ export default class SfaCloudbase extends Startup {
     (this.#ctx.req as any).context = context;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (this.#ctx.req as any).event = event;
-    this.#ctx.res.setHeader("content-type", "application/json");
     this.#ctx.res.setHeader(
       "sfa-cloudbase",
       "https://github.com/sfajs/cloudbase"
@@ -47,13 +47,39 @@ export default class SfaCloudbase extends Startup {
 
   async run(): Promise<ResponseStruct> {
     await super.invoke(this.#ctx);
+
+    const writeType = !this.#ctx.res.hasHeader("content-type");
+    const writeLength = !this.#ctx.res.hasHeader("content-length");
+
+    const res = this.#ctx.res;
+    const body = res.body;
+    if (typeof body == "string") {
+      if (writeLength) {
+        res.setHeader("content-length", Buffer.byteLength(body).toString());
+      }
+      if (writeType) {
+        const type = /^\s*</.test(body) ? "html" : "text";
+        res.setHeader("content-type", mime.contentType(type) as string);
+      }
+    } else if (body) {
+      if (writeLength) {
+        res.setHeader(
+          "content-length",
+          Buffer.byteLength(JSON.stringify(body)).toString()
+        );
+      }
+      if (writeType) {
+        res.setHeader("content-type", mime.contentType("json") as string);
+      }
+    }
+
     return this.struct;
   }
 
   get struct(): ResponseStruct {
     return <ResponseStruct>{
       headers: this.#ctx.res.headers,
-      statusCode: this.#ctx.res.status ?? 0,
+      statusCode: this.#ctx.res.status,
       isBase64Encoded: this.#ctx.res.isBase64Encoded ?? false,
       body: this.#ctx.res.body ?? {},
     };
