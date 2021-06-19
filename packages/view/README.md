@@ -16,8 +16,8 @@ npm i @sfajs/views
 
 2. 启用中间件 `startup.useViews()`
 
-```JS
-require("@sfajs/views");
+```TS
+import("@sfajs/views");
 const res = await new TestStartup()
   .useViews()
   .use(async (ctx) => {
@@ -45,16 +45,18 @@ const res = await new TestStartup()
 
 - engines
 
-视图渲染引擎，用于文件扩展名与 [consolidate](https://github.com/tj/consolidate.js) 对应，如
+视图渲染引擎列表，用于文件扩展名与 [consolidate](https://github.com/tj/consolidate.js) 对应，如
 
 ```JS
 startup.useViews("views", {
-  engines: {
-    custom: "ejs",
-    hbs: "handlebars",
-  },
+  engines: [
+    { ext: "custom", render: "ejs" },
+    { ext: "hbs", render: "handlebars" },
+  ],
 });
 ```
+
+如果扩展名与渲染引擎名称相同，可省略配置
 
 ## ctx.view && md.view
 
@@ -64,6 +66,10 @@ startup.useViews("views", {
 
 - tmpPath: 视图文件夹中的相对路径
 - locals: 渲染参数
+
+其中 `tmpPath` 可省略模板文件扩展名，也可省略 `index` 命名的文件
+
+值为 `user/todo/index.ejs`, `user/todo/index`, `user/todo` 效果相同
 
 ## ctx.state
 

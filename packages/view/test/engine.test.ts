@@ -1,12 +1,11 @@
 import { TestStartup } from "sfa";
 import "../src";
 import { consolidate } from "../src";
-import { HttpContext } from "sfa";
 
 test("str engine", async function () {
   const res = await new TestStartup()
     .useViews("test/views", {
-      engines: { ejs: "ejs" },
+      engines: [{ ext: "ejs", render: "ejs" }],
     })
     .use(async (ctx) => {
       await ctx.view("ejs/index.ejs", {
@@ -23,7 +22,7 @@ test("str engine", async function () {
 test("func engine", async function () {
   const res = await new TestStartup()
     .useViews("test/views", {
-      engines: { ejs: consolidate.ejs },
+      engines: [{ ext: "ejs", render: consolidate.ejs }],
     })
     .use(async (ctx) => {
       await ctx.view("ejs/index.ejs", {

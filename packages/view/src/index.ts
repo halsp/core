@@ -3,12 +3,14 @@ import { Startup, HttpContext, Middleware, Response } from "sfa";
 import * as consolidate from "consolidate";
 import * as path from "path";
 import * as fs from "fs";
+import * as linq from "linq";
 
 type RendererInterface = typeof consolidate.ejs;
+type Engine = { ext: string; render: RendererInterface | string };
 
 interface ViewsConfig {
   options?: Record<string, unknown>;
-  engines?: Record<string, RendererInterface | string>;
+  engines?: Engine[];
 }
 
 declare module "sfa" {
@@ -69,7 +71,7 @@ async function render(
     ctx.state ?? {},
     locals ?? {}
   );
-  const file = getFile(tmpPath, cfg.engines ?? {});
+  const file = getFile(tmpPath, cfg.engines ?? []);
   if (!file) return ctx.res;
 
   if (file.ext == "html") {
@@ -77,7 +79,7 @@ async function render(
     ctx.res.setHeader("content-type", "text/html");
   }
 
-  const engine = getEngine(file.ext, cfg.engines ?? {});
+  const engine = getEngine(file.ext, cfg.engines ?? []);
   if (engine) {
     ctx.ok(await engine(file.filePath, options));
     ctx.res.setHeader("content-type", "text/html");
@@ -87,7 +89,7 @@ async function render(
 
 function getFile(
   tmpPath: string,
-  engines: Record<string, RendererInterface | string>
+  engines: Engine[]
 ): { filePath: string; ext: string } | undefined {
   tmpPath = tmpPath.replace(/\\/g, "/");
   const ext = getExt(tmpPath);
@@ -104,7 +106,7 @@ function getFile(
 
 function findFile(
   tmpPath: string,
-  engines: Record<string, RendererInterface | string>
+  engines: Engine[]
 ): { filePath: string; ext: string } | undefined {
   tmpPath = tmpPath.replace(/\\/g, "/");
   if (!tmpPath.includes("/")) {
@@ -154,20 +156,21 @@ function getExt(filePath: string): string | undefined {
 
 function getEngine(
   ext: string,
-  engines: Record<string, RendererInterface | string>
+  engines: Engine[]
 ): RendererInterface | undefined {
-  let engine;
-  if (Object.keys(engines).includes(ext)) {
-    engine = engines[ext];
-    if (typeof engine == "string") {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      engine = (consolidate as any)[engine];
-    }
+  let engine = linq
+    .from(engines)
+    .where((e) => e.ext == ext)
+    .select((e) => e.render)
+    .firstOrDefault();
+  if (engine != undefined && typeof engine == "string") {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    engine = (consolidate as any)[engine] as RendererInterface;
   } else if (Object.keys(consolidate).includes(ext)) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    engine = (consolidate as any)[ext];
+    engine = (consolidate as any)[ext] as RendererInterface;
   }
   return engine;
 }
 
-export { consolidate, ViewsConfig, RendererInterface };
+export { consolidate, ViewsConfig, RendererInterface, Engine };
