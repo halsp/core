@@ -30,9 +30,9 @@ Startup.prototype.useStatic = function <T extends Startup>(
   });
 
   if (Object.keys(cfg).includes("file")) {
-    this.use(() => new SingleStaticMiddleware(cfg as SingleStaticConfig));
+    this.add(() => new SingleStaticMiddleware(cfg as SingleStaticConfig));
   } else {
-    this.use(() => new StaticMiddleware(cfg as StaticConfig));
+    this.add(() => new StaticMiddleware(cfg as StaticConfig));
   }
   return this as T;
 };
