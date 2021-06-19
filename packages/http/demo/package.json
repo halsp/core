@@ -6,16 +6,16 @@
   },
   "dependencies": {
     "@sfajs/http": "..",
-    "@types/node": "^15.6.0",
-    "sfa": "^0.3.0"
+    "@types/node": "^15.12.4",
+    "sfa": "^0.4.0"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^4.24.0",
-    "@typescript-eslint/parser": "^4.24.0",
-    "eslint": "^7.27.0",
+    "@typescript-eslint/eslint-plugin": "^4.27.0",
+    "@typescript-eslint/parser": "^4.27.0",
+    "eslint": "^7.29.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
-    "prettier": "^2.3.0",
-    "typescript": "^4.2.4"
+    "prettier": "^2.3.1",
+    "typescript": "^4.3.4"
   }
 }

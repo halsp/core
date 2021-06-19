@@ -7,7 +7,7 @@
 ## 安装
 
 ```
-npm install @sfajs/http
+npm i @sfajs/http
 ```
 
 ## 快速开始
@@ -15,7 +15,7 @@ npm install @sfajs/http
 以下示例开启一个服务，端口当然是 2333 啦
 
 ```JS
-const { SfaHttp } = require('@sfajs/http');
+import { SfaHttp } from "@sfajs/http";
 
 new SfaHttp()
   .use(async (ctx) => {
@@ -31,8 +31,8 @@ new SfaHttp()
 ### @sfajs/router
 
 ```JS
-const { SfaHttp } = require('@sfajs/http');
-require('@sfajs/router')
+import { SfaHttp } from "@sfajs/http";
+import "@sfajs/router";
 
 new SfaHttp()
   .useRouter()
@@ -42,8 +42,8 @@ new SfaHttp()
 ### @sfajs/static
 
 ```JS
-const { SfaHttp } = require('@sfajs/http');
-require('@sfajs/router')
+import { SfaHttp } from "@sfajs/http";
+import "@sfajs/router";
 
 new SfaHttp()
   .useStatic()
@@ -55,7 +55,7 @@ new SfaHttp()
 内置四种 body 解析
 
 ```JS
-const { SfaHttp } = require('@sfajs/http');
+import { SfaHttp } from "@sfajs/http";
 new SfaHttp()
   .useHttpJsonBody()
   .useHttpTextBody()
