@@ -4,7 +4,7 @@ import * as fs from "fs";
 import * as path from "path";
 import * as shell from "shelljs";
 import { Config } from "../dist";
-import MapCreater from "../dist/Router/MapCreater";
+import MapCreater from "../dist/Map/MapCreater";
 import Constant from "../dist/Constant";
 
 const outDir = Config.outDir;

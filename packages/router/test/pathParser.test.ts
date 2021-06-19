@@ -1,4 +1,4 @@
-import PathParser from "../src/Router/PathParser";
+import PathParser from "../src/Map/PathParser";
 
 test("path parser", async function () {
   const pathParser = new PathParser("./test/controllers/get.ts");

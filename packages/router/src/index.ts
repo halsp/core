@@ -16,7 +16,7 @@ import ApiDocsOutputParams from "./ApiDocs/ApiDocsParam/ApiDocsOutputParams";
 import ApiDocsStateCode from "./ApiDocs/ApiDocsParam/ApiDocsStateCode";
 import ApiDocsConfig from "./ApiDocs/ApiDocsConfig";
 import ApiDocsConfigPart from "./ApiDocs/ApiDocsConfig/ApiDocsConfigPart";
-import MapPraser from "./Router/MapPraser";
+import MapPraser from "./Map/MapPraser";
 import path = require("path");
 import Constant from "./Constant";
 

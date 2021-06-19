@@ -1,4 +1,4 @@
-import MapCreater from "../src/Router/MapCreater";
+import MapCreater from "../src/Map/MapCreater";
 import * as fs from "fs";
 import Constant from "../src/Constant";
 

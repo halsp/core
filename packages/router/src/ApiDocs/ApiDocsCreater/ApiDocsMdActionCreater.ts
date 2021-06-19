@@ -1,5 +1,5 @@
 import ApiDocs from "..";
-import PathParser from "../../Router/PathParser";
+import PathParser from "../../Map/PathParser";
 import ApiDocsConfig from "../ApiDocsConfig";
 import ApiDocsParam from "../ApiDocsParam";
 import ApiDocsIOParams from "../ApiDocsParam/ApiDocsIOParams";
