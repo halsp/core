@@ -26,13 +26,3 @@ test("api docs write empty", async function () {
     `please input target file path, for example 'docs/api.md'`
   );
 });
-
-// test("without doc config", async function () {
-//   const creater = new ApiDocsCreater(undefined as any,'');
-//   expect(() => creater.docConfig).toThrow("there is no doc config");
-// });
-
-// test("default router dir", async function () {
-//   const creater = new ApiDocsCreater(config);
-//   expect(() => creater.docs).toThrow("the router dir is not exist");
-// });

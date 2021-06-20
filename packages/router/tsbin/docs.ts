@@ -8,7 +8,7 @@ import ApiDocsCreater from "../dist/ApiDocs/ApiDocsCreater";
 const dir = process.argv[2];
 if (!dir || typeof dir != "string") {
   throw new Error(
-    "You need to specify a router dir, like 'sfa-router-doc controllers'"
+    "You need to specify a router dir, like 'router-docs controllers'"
   );
 }
 const outDir = TsConfig.outDir;
@@ -19,10 +19,10 @@ if (!fs.existsSync(routerDir) || !fs.statSync(routerDir).isDirectory()) {
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const pkgCfg = require(path.join(process.cwd(), "package.json"));
-const docCfg = pkgCfg?.doc as ApiDocsConfig;
+const docCfg = pkgCfg?.docs as ApiDocsConfig;
 if (!docCfg) {
   throw new Error(
-    "There is no doc config, you need to add doc config in package.json"
+    "There is no docs config, you need to add docs config in package.json"
   );
 }
 

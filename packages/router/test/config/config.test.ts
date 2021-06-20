@@ -15,8 +15,42 @@ test("ts config", function () {
         },
       })
     );
-    expect(TsConfig.cfg).not.toBeUndefined();
+    expect(TsConfig.cfg).toEqual({
+      compilerOptions: {
+        outDir: "./dist",
+      },
+    });
     expect(TsConfig.outDir).toBe("./dist");
+    expect(TsConfig.tsStatic).toEqual([]);
+  });
+});
+
+test("ts static", function () {
+  testConfig(() => {
+    fs.writeFileSync(
+      tsconfigPath,
+      JSON.stringify({
+        compilerOptions: {
+          outDir: "./dist",
+        },
+        static: ["static.txt"],
+      })
+    );
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (TsConfig as any)._cfg = undefined;
+
+    expect(TsConfig.tsStatic).toEqual(["static.txt"]);
+  });
+});
+
+test("not exist", function () {
+  testConfig(() => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (TsConfig as any)._cfg = undefined;
+
+    expect(TsConfig.cfg).toBeNull();
+    expect(TsConfig.outDir).toBe("");
+    expect(TsConfig.tsStatic).toEqual([]);
   });
 });
 
@@ -24,9 +58,6 @@ function testConfig(invoke: () => void) {
   if (fs.existsSync(tsconfigPath)) {
     fs.unlinkSync(tsconfigPath);
   }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (TsConfig as any)._default = undefined;
 
   shell.cd("./test/config");
   try {

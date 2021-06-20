@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "sfa-router-build controllers"
+    "build": "router-build controllers"
   },
   "devDependencies": {
     "sfa": "^0.4.0",

@@ -10,7 +10,7 @@ import Constant from "../dist/Constant";
 const dir = process.argv[2];
 if (!dir || typeof dir != "string") {
   throw new Error(
-    "You need to specify a router dir, like 'sfa-router-build controllers'"
+    "You need to specify a router dir, like 'router-build controllers'"
   );
 }
 const outDir = TsConfig.outDir;
