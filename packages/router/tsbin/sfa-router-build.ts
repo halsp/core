@@ -7,7 +7,20 @@ import { Config } from "../dist";
 import MapCreater from "../dist/Map/MapCreater";
 import Constant from "../dist/Constant";
 
+const dir = process.argv[2];
+if (!dir || typeof dir != "string") {
+  throw new Error(
+    "You need to specify a router dir, like 'sfa-router-build controllers'"
+  );
+}
+
 const outDir = Config.outDir;
+
+const routerDir = path.join(outDir, process.argv[2]);
+if (!fs.existsSync(routerDir) || !fs.statSync(routerDir).isDirectory()) {
+  throw new Error("The router dir is not exist");
+}
+
 if (Config.tsconfig) {
   if (outDir) {
     deleteFile(path.join(process.cwd(), outDir));
@@ -24,22 +37,20 @@ if (Config.tsconfig) {
   }
 
   if (outDir) {
-    if (Config.default.ts && Config.default.ts.static) {
-      Config.default.ts.static.forEach((staticItem) => {
-        let source: string;
-        let target: string;
-        if (typeof staticItem == "string") {
-          source = staticItem;
-          target = staticItem;
-        } else {
-          source = staticItem.source;
-          target = staticItem.target;
-        }
-        const sourcePath = path.join(process.cwd(), source);
-        const targetPath = path.join(process.cwd(), outDir, target);
-        copyFile(sourcePath, targetPath);
-      });
-    }
+    Config.tsStatic.forEach((staticItem) => {
+      let source: string;
+      let target: string;
+      if (typeof staticItem == "string") {
+        source = staticItem;
+        target = staticItem;
+      } else {
+        source = staticItem.source;
+        target = staticItem.target;
+      }
+      const sourcePath = path.join(process.cwd(), source);
+      const targetPath = path.join(process.cwd(), outDir, target);
+      copyFile(sourcePath, targetPath);
+    });
     copyFile(
       path.join(process.cwd(), "package.json"),
       path.join(process.cwd(), outDir, "package.json")
@@ -51,9 +62,7 @@ if (Config.tsconfig) {
   }
 }
 
-new MapCreater(Config.getRouterDirPath(Config.default)).write(
-  path.join(Config.outDir, Constant.mapFileName)
-);
+new MapCreater(routerDir).write(path.join(Config.outDir, Constant.mapFileName));
 
 function deleteFile(filePath: string, type?: string) {
   if (!fs.existsSync(filePath)) return;

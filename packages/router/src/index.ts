@@ -1,11 +1,6 @@
 import "sfa";
 import { HttpContext, Startup, status } from "sfa";
-import Config, {
-  TsConfig,
-  AppConfig,
-  RouterConfig,
-  TsStaticItemConfig,
-} from "./Config";
+import Config, { AppConfig, RouterConfig, TsStaticItemConfig } from "./Config";
 import Action from "./Action";
 import Authority from "./Authority";
 import ApiDocs from "./ApiDocs";
@@ -19,7 +14,6 @@ import ApiDocsConfigPart from "./ApiDocs/ApiDocsConfig/ApiDocsConfigPart";
 import MapPraser from "./Map/MapPraser";
 import path = require("path");
 import Constant from "./Constant";
-import { existsSync, lstatSync } from "fs";
 
 export {
   Action,
@@ -33,7 +27,6 @@ export {
   ApiDocsConfigPart,
   ApiDocsConfig,
   Config,
-  TsConfig,
   AppConfig,
   RouterConfig,
   TsStaticItemConfig,

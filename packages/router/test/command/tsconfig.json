@@ -11,5 +11,12 @@
   },
   "include": [
     "src/**/*"
+  ],
+  "static": [
+    {
+      "source": "static",
+      "target": "assets"
+    },
+    "static.txt"
   ]
 }

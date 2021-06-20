@@ -5,7 +5,6 @@ import Constant from "./Constant";
 
 export interface AppConfig {
   router?: RouterConfig;
-  ts?: TsConfig;
   doc?: ApiDocsConfig;
 }
 
@@ -17,10 +16,6 @@ export interface RouterConfig {
 export interface TsStaticItemConfig {
   source: string;
   target: string;
-}
-
-export interface TsConfig {
-  static?: (TsStaticItemConfig | string)[];
 }
 
 export default class Config {
@@ -52,7 +47,7 @@ export default class Config {
   public static getRouterDirPath(config: AppConfig): string {
     const result = path.join(
       this.outDir,
-      config?.router?.dir || Constant.defaultRouterDir
+      config?.router?.dir ?? Constant.defaultRouterDir
     );
 
     if (!existsSync(result) || !lstatSync(result).isDirectory()) {
@@ -63,6 +58,9 @@ export default class Config {
   }
 
   public static get outDir(): string {
-    return this.tsconfig?.compilerOptions?.outDir || "";
+    return this.tsconfig?.compilerOptions?.outDir ?? "";
+  }
+  public static get tsStatic(): (TsStaticItemConfig | string)[] {
+    return this.tsconfig?.static ?? [];
   }
 }
