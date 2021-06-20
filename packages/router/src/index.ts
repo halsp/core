@@ -19,6 +19,7 @@ import ApiDocsConfigPart from "./ApiDocs/ApiDocsConfig/ApiDocsConfigPart";
 import MapPraser from "./Map/MapPraser";
 import path = require("path");
 import Constant from "./Constant";
+import { existsSync, lstatSync } from "fs";
 
 export {
   Action,
@@ -41,8 +42,8 @@ export {
 declare module "sfa" {
   interface Startup {
     useRouter<T extends this>(): T;
-    useRoutePraser<T extends this>(): T;
-    useRouteAuth<T extends this>(builder: (ctx: HttpContext) => Authority): T;
+    useRouterPraser<T extends this>(dir?: string, strict?: boolean): T;
+    useRouterAuth<T extends this>(builder: (ctx: HttpContext) => Authority): T;
   }
 
   interface Request {
@@ -56,18 +57,21 @@ declare module "sfa" {
 }
 
 Startup.prototype.useRouter = function <T extends Startup>(): T {
-  return useRoutePraser(this).add((ctx) => {
-    const filePath = path.join(process.cwd(), getDir(ctx), ctx.actionPath);
+  return ensureRouterPraser(this).add((ctx) => {
+    const dir = ctx.bag<string>("ROUTER_DIR");
+    const filePath = path
+      .join(process.cwd(), dir, ctx.actionPath)
+      .replace(/\\/g, "/");
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const actionClass = require(filePath).default;
     return new actionClass() as Action;
   });
 };
 
-Startup.prototype.useRouteAuth = function <T extends Startup>(
+Startup.prototype.useRouterAuth = function <T extends Startup>(
   builder: (ctx: HttpContext) => Authority
 ): T {
-  return useRoutePraser(this).add((ctx) => {
+  return ensureRouterPraser(this).add((ctx) => {
     const auth = builder(ctx);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (auth.roles as any) = ctx.actionRoles;
@@ -75,26 +79,51 @@ Startup.prototype.useRouteAuth = function <T extends Startup>(
   });
 };
 
-Startup.prototype.useRoutePraser = function <T extends Startup>(): T {
-  return useRoutePraser(this) as T;
+Startup.prototype.useRouterPraser = function <T extends Startup>(
+  dir: string = Constant.defaultRouterDir,
+  strict = !!Constant.defaultStrict
+): T {
+  return useRouterPraser(this, dir, strict) as T;
 };
 
-function useRoutePraser<T extends Startup>(startup: T): T {
-  return startup
-    .use(async (ctx, next) => {
-      ctx.res.setHeader("sfa-router", "https://github.com/sfajs/router");
-      await next();
-    })
-    .use(async (ctx, next) => {
-      if (!ctx.actionPath) {
-        if (!praseRouter(ctx)) return;
-      }
-      await next();
-    });
+function ensureRouterPraser<T extends Startup>(startup: T) {
+  return startup.use(async (ctx, next) => {
+    ctx.res.setHeader("sfa-router", "https://github.com/sfajs/router");
+    if (ctx.bag<string>("ROUTER_DIR") == undefined) {
+      setConfig(ctx, Constant.defaultRouterDir, !!Constant.defaultStrict);
+    }
+    if (!ctx.actionPath) {
+      if (!praseRouter(ctx)) return;
+    }
+    await next();
+  });
+}
+
+function useRouterPraser<T extends Startup>(
+  startup: T,
+  dir: string,
+  strict: boolean
+): T {
+  return startup.use(async (ctx, next) => {
+    setConfig(ctx, dir, strict);
+    if (!ctx.actionPath) {
+      if (!praseRouter(ctx)) return;
+    }
+    await next();
+  });
+}
+
+function setConfig(ctx: HttpContext, dir: string, strict: boolean) {
+  ctx.res.setHeader("sfa-router", "https://github.com/sfajs/router");
+  ctx.bag("ROUTER_DIR", path.join(Config.outDir, dir));
+  ctx.bag("ROUTER_STRICT", strict);
 }
 
 function praseRouter(ctx: HttpContext): boolean {
-  const mapPraser = new MapPraser(ctx, getDir(ctx), getStrict(ctx));
+  const dir = ctx.bag<string>("ROUTER_DIR");
+  const strict = ctx.bag<boolean>("ROUTER_STRICT");
+
+  const mapPraser = new MapPraser(ctx, dir, strict);
   if (mapPraser.notFound) {
     ctx.notFoundMsg({
       message: `Can't find the path：${ctx.req.path}`,
@@ -135,22 +164,4 @@ function praseRouter(ctx: HttpContext): boolean {
   }
 
   return true;
-}
-
-function getDir(ctx: HttpContext): string {
-  const unitTest = ctx.bag<RouterConfig>("B-UnitTest");
-  if (unitTest) {
-    return unitTest.dir ?? Constant.defaultRouterDir;
-  } else {
-    return Config.getRouterDirPath(Config.default);
-  }
-}
-
-function getStrict(ctx: HttpContext): boolean {
-  const unitTest = ctx.bag<RouterConfig>("B-UnitTest");
-  if (unitTest) {
-    return unitTest.strict ?? !!Constant.defaultStrict;
-  } else {
-    return !!Config.default.router?.strict;
-  }
 }

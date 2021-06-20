@@ -1,4 +1,4 @@
-import { existsSync, readFileSync } from "fs";
+import { existsSync, lstatSync, readFileSync } from "fs";
 import linq = require("linq");
 import path = require("path");
 import Constant from "../Constant";
@@ -21,6 +21,11 @@ export default class MapPraser {
     private readonly dir: string,
     private readonly strict: boolean
   ) {
+    if (!existsSync(dir) || !lstatSync(dir).isDirectory()) {
+      this.notFound = true;
+      return;
+    }
+
     const mapItem = this.getMapItem();
     if (mapItem) {
       this.#mapItem = mapItem;

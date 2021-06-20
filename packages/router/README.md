@@ -277,7 +277,7 @@ export default class extends Action {
 
 默认的权限功能是用于判断用户能否使用 API，可以精确到控制每个 `Action`
 
-`startup.useRouteAuth` 注册权限中间件，该函数接收一个参数 `builder`
+`startup.useRouterAuth` 注册权限中间件，该函数接收一个参数 `builder`
 
 `builder` 为函数类型，函数返回值为权限认证对象，该对象的类继承于 `Authority` 类，因此该类对象也是中间件，但加载方式比较特殊
 
@@ -352,21 +352,21 @@ startup.useRouter({
 
 ## 路由解析
 
-`startup.useRoutePraser` 会在管道 `ctx` 中加入
+`startup.useRouterPraser` 会在管道 `ctx` 中加入
 
 - actionPath: `action` 实际相对路径
 - actionRoles: `action` 的 `roles` 属性值，用于权限验证
 
-默认你无需主动调用路由解析，因为 `startup.useRouter` 和 `startup.useRouteAuth` 也会解析路由并在管道加入以上两个字段
+默认你无需主动调用路由解析，因为 `startup.useRouter` 和 `startup.useRouterAuth` 也会解析路由并在管道加入以上两个字段
 
-但当你要使用 `action` 的实际路径，或默认权限验证无法满足需求时，你就需要在 `startup.useRoutePraser` 之后实现需求
+但当你要使用 `action` 的实际路径，或默认权限验证无法满足需求时，你就需要在 `startup.useRouterPraser` 之后实现需求
 
 ```TS
 import { TestStartup } from "sfa";
 import "@sfajs/router";
 
 const res = await new TestStartup()
-  .useRoutePraser()
+  .useRouterPraser()
   .use(async (ctx) => {
     ctx.ok({
       actionPath: ctx.actionPath,
@@ -381,7 +381,7 @@ const res = await new TestStartup()
 
 `@sfajs/router` 会在 `ctx.req` 中添加 `query` 属性
 
-在 `startup.useRouter`、`startup.useRoutePraser`、`startup.useRouteAuth` 之后的中间件，都可以获取 `ctx.req.query`
+在 `startup.useRouter`、`startup.useRouterPraser`、`startup.useRouterAuth` 之后的中间件，都可以获取 `ctx.req.query`
 
 `query` 内容是 RESTful 路径中的参数，如
 

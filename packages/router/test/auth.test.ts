@@ -18,7 +18,7 @@ test("router test login access", async function () {
       .setMethod("POST")
   )
     .useTest()
-    .useRouteAuth(() => new Auth())
+    .useRouterAuth(() => new Auth())
     .useRouter()
     .run();
 
@@ -34,7 +34,7 @@ test("router test login not access", async function () {
       .setMethod("POST")
   )
     .useTest()
-    .useRouteAuth(() => new Auth())
+    .useRouterAuth(() => new Auth())
     .useRouter()
     .run();
 
@@ -50,7 +50,7 @@ test("router test admin access", async function () {
       .setMethod("POST")
   )
     .useTest()
-    .useRouteAuth(() => new Auth())
+    .useRouterAuth(() => new Auth())
     .useRouter()
     .run();
 
@@ -66,7 +66,7 @@ test("router test admin not access", async function () {
       .setMethod("POST")
   )
     .useTest()
-    .useRouteAuth(() => new Auth())
+    .useRouterAuth(() => new Auth())
     .useRouter()
     .run();
 

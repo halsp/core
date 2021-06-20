@@ -86,17 +86,3 @@ test("null body test", async function () {
 
   expect(result.status).toBe(404);
 });
-
-test("startup without useTest", async function () {
-  try {
-    await new TestStartup(
-      new Request().setPath("/simple/router").setMethod("POST")
-    )
-      .useRouter()
-      .run();
-  } catch (err) {
-    expect(err.message).toBe("the router dir is not exist");
-    return;
-  }
-  expect(true).toBeFalsy();
-});
