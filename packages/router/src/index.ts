@@ -1,6 +1,6 @@
 import "sfa";
 import { HttpContext, Startup, status } from "sfa";
-import Config, { AppConfig, RouterConfig, TsStaticItemConfig } from "./Config";
+import TsConfig, { TsStaticItemConfig } from "./TsConfig";
 import Action from "./Action";
 import Authority from "./Authority";
 import ApiDocs from "./ApiDocs";
@@ -26,9 +26,7 @@ export {
   ApiDocsStateCode,
   ApiDocsConfigPart,
   ApiDocsConfig,
-  Config,
-  AppConfig,
-  RouterConfig,
+  TsConfig,
   TsStaticItemConfig,
 };
 
@@ -108,7 +106,7 @@ function useRouterPraser<T extends Startup>(
 
 function setConfig(ctx: HttpContext, dir: string, strict: boolean) {
   ctx.res.setHeader("sfa-router", "https://github.com/sfajs/router");
-  ctx.bag("ROUTER_DIR", path.join(Config.outDir, dir));
+  ctx.bag("ROUTER_DIR", path.join(TsConfig.outDir, dir));
   ctx.bag("ROUTER_STRICT", strict);
 }
 

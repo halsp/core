@@ -3,7 +3,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as shell from "shelljs";
-import { Config } from "../dist";
+import { TsConfig } from "../dist";
 import MapCreater from "../dist/Map/MapCreater";
 import Constant from "../dist/Constant";
 
@@ -13,13 +13,13 @@ if (!dir || typeof dir != "string") {
     "You need to specify a router dir, like 'sfa-router-build controllers'"
   );
 }
-const outDir = Config.outDir;
+const outDir = TsConfig.outDir;
 const routerDir = path.join(outDir, process.argv[2]);
 if (!fs.existsSync(routerDir) || !fs.statSync(routerDir).isDirectory()) {
   throw new Error("The router dir is not exist");
 }
 
-if (Config.tsconfig) {
+if (TsConfig.cfg) {
   if (outDir) {
     deleteFile(path.join(process.cwd(), outDir));
   }
@@ -35,7 +35,7 @@ if (Config.tsconfig) {
   }
 
   if (outDir) {
-    Config.tsStatic.forEach((staticItem) => {
+    TsConfig.tsStatic.forEach((staticItem) => {
       let source: string;
       let target: string;
       if (typeof staticItem == "string") {
@@ -60,7 +60,9 @@ if (Config.tsconfig) {
   }
 }
 
-new MapCreater(routerDir).write(path.join(Config.outDir, Constant.mapFileName));
+new MapCreater(routerDir).write(
+  path.join(TsConfig.outDir, Constant.mapFileName)
+);
 
 function deleteFile(filePath: string, type?: string) {
   if (!fs.existsSync(filePath)) return;

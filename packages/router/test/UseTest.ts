@@ -1,15 +1,14 @@
 import * as sfa from "sfa";
-import { RouterConfig } from "../src";
 
 declare module "sfa" {
   interface Startup {
-    useTest<T extends this>(config?: RouterConfig): T;
+    useTest<T extends this>(config?: { dir?: string; strict?: boolean }): T;
   }
 }
 
 sfa.Startup.prototype.useTest = function <T extends sfa.Startup>(
   this: sfa.Startup,
-  config?: RouterConfig
+  config?: { dir: string; strict: boolean }
 ): T {
   this.use(async (ctx, next) => {
     ctx.bag("ROUTER_DIR", config?.dir ?? "test/controllers");

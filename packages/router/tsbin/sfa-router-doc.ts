@@ -2,7 +2,7 @@
 
 import * as fs from "fs";
 import * as path from "path";
-import { ApiDocsConfig, Config } from "../dist";
+import { ApiDocsConfig, TsConfig } from "../dist";
 import ApiDocsCreater from "../dist/ApiDocs/ApiDocsCreater";
 
 const dir = process.argv[2];
@@ -11,7 +11,7 @@ if (!dir || typeof dir != "string") {
     "You need to specify a router dir, like 'sfa-router-doc controllers'"
   );
 }
-const outDir = Config.outDir;
+const outDir = TsConfig.outDir;
 const routerDir = path.join(outDir, process.argv[2]);
 if (!fs.existsSync(routerDir) || !fs.statSync(routerDir).isDirectory()) {
   throw new Error("The router dir is not exist");
