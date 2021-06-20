@@ -49,7 +49,6 @@
     "typescript": "^4.3.4"
   },
   "bin": {
-    "router-docs": "bin/docs.js",
     "router-build": "bin/build.js"
   },
   "files": [

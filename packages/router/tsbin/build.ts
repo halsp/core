@@ -3,7 +3,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as shell from "shelljs";
-import { TsConfig } from "../dist";
+import TsConfig from "../dist/TsConfig";
 import MapCreater from "../dist/Map/MapCreater";
 import Constant from "../dist/Constant";
 

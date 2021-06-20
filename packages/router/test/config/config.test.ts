@@ -1,4 +1,4 @@
-import { TsConfig } from "../../src";
+import TsConfig from "../../src/TsConfig";
 import * as shell from "shelljs";
 import * as path from "path";
 import * as fs from "fs";

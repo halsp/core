@@ -33,10 +33,6 @@ export default class PathParser {
     return this.getPathWithoutHttpMethod(this.relativePath);
   }
 
-  public get pathWithoutHttpMethodAndExtension(): string {
-    return this.getPathWithoutHttpMethod(this.relativePathWithoutExtension);
-  }
-
   private getPathWithoutHttpMethod(path: string) {
     if (!this.httpMethod) return path;
     else {

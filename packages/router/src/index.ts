@@ -1,34 +1,13 @@
 import "sfa";
 import { HttpContext, Startup, status } from "sfa";
-import TsConfig, { TsStaticItemConfig } from "./TsConfig";
+import TsConfig from "./TsConfig";
 import Action from "./Action";
 import Authority from "./Authority";
-import ApiDocs from "./ApiDocs";
-import ApiDocsParam from "./ApiDocs/ApiDocsParam";
-import ApiDocsIOParams from "./ApiDocs/ApiDocsParam/ApiDocsIOParams";
-import ApiDocsInputParams from "./ApiDocs/ApiDocsParam/ApiDocsInputParams";
-import ApiDocsOutputParams from "./ApiDocs/ApiDocsParam/ApiDocsOutputParams";
-import ApiDocsStateCode from "./ApiDocs/ApiDocsParam/ApiDocsStateCode";
-import ApiDocsConfig from "./ApiDocs/ApiDocsConfig";
-import ApiDocsConfigPart from "./ApiDocs/ApiDocsConfig/ApiDocsConfigPart";
 import MapPraser from "./Map/MapPraser";
 import path = require("path");
 import Constant from "./Constant";
 
-export {
-  Action,
-  Authority,
-  ApiDocs,
-  ApiDocsParam,
-  ApiDocsIOParams,
-  ApiDocsInputParams,
-  ApiDocsOutputParams,
-  ApiDocsStateCode,
-  ApiDocsConfigPart,
-  ApiDocsConfig,
-  TsConfig,
-  TsStaticItemConfig,
-};
+export { Action, Authority };
 
 declare module "sfa" {
   interface Startup {
