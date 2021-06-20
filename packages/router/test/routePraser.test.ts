@@ -24,8 +24,8 @@ test("useRouterPraser once more", async function () {
   const res = await new TestStartup(
     new Request().setPath("/simple/adminAuth").setMethod("POST")
   )
-    .useRouterPraser("../test/controllers")
-    .useRouterPraser("../test/controllers")
+    .useRouterPraser("../test/controllers", false)
+    .useRouterPraser("../test/controllers", false)
     .use(async (ctx) => {
       ctx.res.body = {
         path: ctx.actionPath,

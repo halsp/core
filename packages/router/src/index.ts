@@ -71,8 +71,8 @@ Startup.prototype.useRouterAuth = function <T extends Startup>(
 };
 
 Startup.prototype.useRouterPraser = function <T extends Startup>(
-  dir: string = Constant.defaultRouterDir,
-  strict = !!Constant.defaultStrict
+  dir = Constant.defaultRouterDir,
+  strict = Constant.defaultStrict
 ): T {
   return useRouterPraser(this, dir, strict) as T;
 };
@@ -81,7 +81,7 @@ function ensureRouterPraser<T extends Startup>(startup: T) {
   return startup.use(async (ctx, next) => {
     ctx.res.setHeader("sfa-router", "https://github.com/sfajs/router");
     if (ctx.bag<string>("ROUTER_DIR") == undefined) {
-      setConfig(ctx, Constant.defaultRouterDir, !!Constant.defaultStrict);
+      setConfig(ctx, Constant.defaultRouterDir, Constant.defaultStrict);
     }
     if (!ctx.actionPath) {
       if (!praseRouter(ctx)) return;
