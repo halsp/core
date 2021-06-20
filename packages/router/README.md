@@ -15,18 +15,32 @@ npm i @sfajs/router
 
 项目 demo 目录下包含 `ts 项目` 和 `js 项目` 的简单 demo
 
+## 简单使用
+
+```TS
+startup.useRouter()
+```
+
+```TS
+import { TestStartup } from "sfa";
+import "@sfajs/router";
+const res = await new TestStartup()
+  .useRouter()
+  .run();
+```
+
 ## 构建
 
 在 package.json 文件的 scripts 节点下添加
 
 ```JSON
-"build": "sfa-router-build"
+"build": "router-build"
 ```
 
 ```JSON
 {
   "scripts": {
-    "build": "sfa-router-build"
+    "build": "router-build controllers" // controllers 为路由文件夹路径
   },
   "dependencies": {
     "sfa": "^0.3.2",
@@ -47,69 +61,6 @@ npm run build
 
 js 项目，将生成 `sfa-router.map` 文件，你可能需要将该文件添加至 `.gitignore` 中
 ts 项目，将按 `tsconfig.json` 中的 `compilerOptions/target` 生成目标文件，同时也会在目标文件夹下生成 `sfa-router.map` 文件
-
-## 配置文件
-
-在项目目录下定义 `sfa-router.json` 文件，一个常规配置文件如下：
-
-```JSON
-{
-  "router": {  // 路由相关
-    "dir": "controllers", // 路由文件夹目录
-    "strict": false // 是否严格控制 httpMethod
-  },
-  "ts": { // ts编写代码的配置
-    "static": [ // 静态文件/文件夹。由于ts的生成目录一般在其他位置，如果有生产环境需要的非 .ts 文件，需要在此声明
-      {
-        "source": "static", // 原文件/文件夹相对路径
-        "target": "assets" // 目标文件/文件夹相对路径
-      },
-      {
-        "source": "static.txt",
-        "target": "read.txt"
-      }
-    ]
-  },
-  "doc": { // 使用 sfa-router-doc 命令生成文档时必须，详情参考后面的 “自动化文档”
-    "output": "../docs/api/README.md",
-    "title": "@sfajs/router-title",
-    "subtitle": "@sfajs/router-subtitle",
-    "parts": [
-      {
-        "name": "part1",
-        "inputHeaders": [
-          {
-            "name": "base-input-header",
-            "desc": "this is a base input header",
-            "type": "string"
-          }
-        ]
-      },
-      {
-        "name": "part2",
-        "outputHeaders": [
-          {
-            "name": "base-output-header",
-            "desc": "this is a base output header",
-            "type": "string"
-          }
-        ]
-      },
-      {
-        "name": "part3",
-        "query": [
-          {
-            "name": "base-query",
-            "desc": "this is a base query",
-            "type": "string"
-          }
-        ]
-      }
-    ],
-    "partsFromAuth": true
-  }
-}
-```
 
 ## 路由（useRouter）
 
@@ -133,29 +84,45 @@ const res = await new OtherStartup().useRouter().run();
 
 > `useRouter` 实际上可能会注册多个中间件
 
-### 路由文件夹
+## 路由解析
 
-配置文件的 `router.dir` 值是路由文件夹路径，`@sfajs/router` 能够将路由文件夹下的所有 `Action` 映射为 `http` 访问路径
+`startup.useRouterPraser` 接收两个参数：
 
-如果配置文件没有该值，默认为 `controllers`，并且在根目录下（ts 则是生成目录下）需要定义此文件夹
+- dir: 路由文件夹，`@sfajs/router` 能够将路由文件夹下的所有 `Action` 映射为 `http` 访问路径。所有 API Action 统一放在这个文件夹中，在该目录中，建立各 `Action` 文件或文件夹。`Action` 文件是 API 的最小执行单元，详情后面 [Action](##Action) 部分有介绍
+- strict: 严格模式，默认值为 true，建议为 true。如果值为 true，文件命名必须与 httpMethod 相同，如果 `strict` 为 `false` ，则 RESTFul 规范的 API 可能会以非 RESTFul 方式调用。如文件系统为`controllers/user/login/get.ts`，访问本应是 `GET user/login`，但 `POST user/login/get` 也能调用。因此如果使用 RESTFul 或限制 method，建议设置 `strict` 为 `true`。
 
-所有 API Action 统一放在这个文件夹中，在 `controllers` 目录中，建立各文件或文件夹。文件是 API 的最小执行单元 Action，详情后面 [Action](##Action) 部分有介绍。
+`startup.useRouterPraser` 会在管道 `ctx` 中加入
 
-### 路由匹配
+- actionPath: `action` 实际相对路径
+- actionRoles: `action` 的 `roles` 属性值，用于权限验证
+
+一般情况你无需主动调用路由解析，因为 `startup.useRouter` 也会解析路由并在管道加入以上两个字段
+
+但当你要使用 `action` 的实际路径，或默认权限验证无法满足需求时，你就需要在 `startup.useRouterPraser` 之后实现需求
+
+```TS
+import { TestStartup } from "sfa";
+import "@sfajs/router";
+
+const res = await new TestStartup()
+  .useRouterPraser()
+  .use(async (ctx) => {
+    ctx.ok({
+      actionPath: ctx.actionPath,
+      actionRoles: ctx.actionRoles,
+    });
+  })
+  .useRouter()
+  .run();
+```
+
+## 路由匹配
 
 在`@sfajs/router`中，路由与文件系统匹配。
 
 路由查询参数命名以 `^` 开头（文件系统中命名不允许出现字符 `:`），如果存在多个查询参数则后面的会覆盖前面的，如 `GET user/^id/todo/^id`，则 `id` 值为 `todoId`。正确命名应如 `user/^userId/todo/^todoId`。
 
 如果限制 `httpMethod`, `action` 应以 `post.ts`、`get.ts`、`delete.ts`、`patch.ts`、`put.ts` （或其他自定义 method，扩展名为.js 效果相同 ）命名，否则任意 `httpMethod` 都可以访问。
-
-### strict
-
-配置文件的 `router.strict` 值决定是否开启严格模式，建议开启
-
-开启严格模式后，`action` 将只能以 httpMethod 命名，与 RESTFul 规范相符，否则会找不到路由并返回 `404`
-
-如果 `strict` 为 `false` 或不设置，则 RESTFul 规范的 API 可能会以非 RESTFul 方式调用。如文件系统为`controllers/user/login/get.ts`，访问本应是 `GET user/login`，但 `POST user/login/get` 也能调用。因此如果使用 RESTFul 或限制 method，建议设置 `strict` 为 `true`。
 
 #### 例 1
 
@@ -220,7 +187,7 @@ const res = await new OtherStartup().useRouter().run();
 
 ## Action
 
-`Action` 也是中间件，该类继承于中间件类 `Middleware`，但 `Action` 中间件会在 `userRouter` 中自动注册，无需手动注册
+`Action` 也是中间件，该类继承于中间件类 `Middleware`，但 `Action` 中间件会在 `userRouter` 中自动注册，你无需手动注册
 
 正常情况 Action 会终止管道继续向后执行，不会执行 `next`，除非有其他特殊需求
 
@@ -232,29 +199,29 @@ const res = await new OtherStartup().useRouter().run();
 
 #### 创建路由文件夹
 
-在项目下任意位置创建一个任意命名的文件夹
+在项目下任意位置创建一个任意命名的文件夹（如果不存在）
 
 建议在与 `index.ts` / `index.js` 同级目录下， 创建名为 `controllers` 的文件夹
 
 #### 创建 action 文件
 
-根据各业务，创建 `.ts/.js` 文件或文件夹，名称自定，但名称和路径会映射为访问路径，每个文件对应一个 `action`
+根据各业务，创建文件夹或 `.ts/.js` 文件，名称自定，但名称和路径会映射为访问路径，每个文件对应一个 `action`
 
 action 的名称和路径会映射为访问路径，每个文件对应一个 `action`
 
-建议对 action 文件的命名为 get.ts/post.ts/patch.ts 等
+建议对 action 文件的命名为 get.ts/post.ts/patch.ts 等 httpMethod（否则 strict 为 true 的情况将忽略其他命名）
 
 ```
 +-- controllers
 |   +-- type1
-|       +-- action1.ts
-|       +-- action2.ts
+|       +-- post.ts
+|       +-- get.ts
 |       +-- ...
 |   +-- type2
-|       +-- action3.ts
-|       +-- action4.ts
+|       +-- patch.ts
+|       +-- delete.ts
 |       +-- ^id
-|           +-- action5.ts
+|           +-- put.ts
 |           +-- ...
 ```
 
@@ -315,7 +282,7 @@ export default class extends Action {
 }
 ```
 
-下例创建类 `Auth`，继承于 `Authority`，使用请求头部的账号信息验证调用者信息：
+下例用 ts 创建类 `Auth`，继承于 `Authority`，使用请求头部的账号信息验证调用者信息：
 
 ```TS
 // Authority 类，用于权限验证
@@ -345,36 +312,7 @@ class Auth extends Authority {
 在 `useRouter` 使用
 
 ```JS
-startup.useRouter({
-  authBuilder: () => new Auth(),
-})
-```
-
-## 路由解析
-
-`startup.useRouterPraser` 会在管道 `ctx` 中加入
-
-- actionPath: `action` 实际相对路径
-- actionRoles: `action` 的 `roles` 属性值，用于权限验证
-
-默认你无需主动调用路由解析，因为 `startup.useRouter` 和 `startup.useRouterAuth` 也会解析路由并在管道加入以上两个字段
-
-但当你要使用 `action` 的实际路径，或默认权限验证无法满足需求时，你就需要在 `startup.useRouterPraser` 之后实现需求
-
-```TS
-import { TestStartup } from "sfa";
-import "@sfajs/router";
-
-const res = await new TestStartup()
-  .useRouterPraser()
-  .use(async (ctx) => {
-    ctx.ok({
-      actionPath: ctx.actionPath,
-      actionRoles: ctx.actionRoles,
-    });
-  })
-  .useRouter()
-  .run();
+startup.useRouterAuth(() => new Auth())
 ```
 
 ## query
@@ -414,11 +352,11 @@ const res = await new TestStartup()
 
 ```json
   "scripts": {
-    "doc": "sfa-router-doc",
+    "docs": "router-docs controllers", // controllers 为路由文件夹路径
   },
 ```
 
-执行 `npm run doc`
+执行 `npm run docs`
 
 ### `action` 注释
 
@@ -572,11 +510,11 @@ parts 的内容较为复杂，参考 [parts](###parts) 部分
 
 ### 自动化文档配置文件
 
-在 `sfa-router.json` 配置文件中，doc 字段即为自动化文档的相关配置，配置格式如下：
+在 `package.json` 文件中，docs 字段即为自动化文档的相关配置，配置格式如下：
 
 ```JSON
 {
-  "doc": {
+  "docs": {
     "output": "../docs/api/README.md",
     "title": "@sfajs/router-title",
     "subtitle": "@sfajs/router-subtitle",
