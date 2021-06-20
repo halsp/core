@@ -2,14 +2,9 @@
 import * as fs from "fs";
 import { TestStartup } from "sfa";
 import * as shell from "shelljs";
-import Constant from "../src/Constant";
 import "../src";
 
 test("sfa build command", async function () {
-  const sourceConfig = `./demo/${Constant.configFileName}`;
-  const targetConfig = `./test/command/${Constant.configFileName}`;
-  fs.copyFileSync(sourceConfig, targetConfig);
-
   shell.cd("./test/command");
 
   try {

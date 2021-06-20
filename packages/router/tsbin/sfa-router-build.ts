@@ -53,10 +53,6 @@ if (TsConfig.cfg) {
       path.join(process.cwd(), "package.json"),
       path.join(process.cwd(), outDir, "package.json")
     );
-    copyFile(
-      path.join(process.cwd(), Constant.configFileName),
-      path.join(process.cwd(), outDir, Constant.configFileName)
-    );
   }
 }
 

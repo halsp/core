@@ -2,4 +2,3 @@ node_modules
 dist
 package-lock.json
 sfa-router.map
-sfa-router.json

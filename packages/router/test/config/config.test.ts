@@ -3,19 +3,10 @@ import * as shell from "shelljs";
 import * as path from "path";
 import * as fs from "fs";
 
-const configPath = path.join(process.cwd(), "test/config/sfa-router.json");
 const tsconfigPath = path.join(process.cwd(), "test/config/tsconfig.json");
 
 test("ts config", function () {
   testConfig(() => {
-    fs.writeFileSync(
-      configPath,
-      JSON.stringify({
-        router: {
-          dir: "../controllers",
-        },
-      })
-    );
     fs.writeFileSync(
       tsconfigPath,
       JSON.stringify({
@@ -30,9 +21,6 @@ test("ts config", function () {
 });
 
 function testConfig(invoke: () => void) {
-  if (fs.existsSync(configPath)) {
-    fs.unlinkSync(configPath);
-  }
   if (fs.existsSync(tsconfigPath)) {
     fs.unlinkSync(tsconfigPath);
   }
