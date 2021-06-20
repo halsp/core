@@ -13,12 +13,12 @@ npm i @sfajs/alifunc
 ## 开始使用
 
 ```JS
-const SfaAlifunc = require("@sfajs/alifunc");
+import SfaAlifunc from "@sfajs/alifunc";
 
 const handler = async function (req, resp, context) {
   await new SfaAlifunc(req, resp, context)
     .use(async (ctx) => {
-      ctx.res.headers.demo = "@sfajs/alifunc";
+      ctx.ok("@sfajs/alifunc");
     })
     .run();
 };
@@ -28,8 +28,8 @@ module.exports.handler = handler;
 如果添加 `@sfajs/router`
 
 ```JS
-const SfaAlifunc = require("@sfajs/alifunc");
-require("@sfajs/router");
+import SfaAlifunc from "@sfajs/alifunc";
+import "@sfajs/router";
 
 const handler = async function (req, resp, context) {
   await new SfaAlifunc(req, resp, context)
@@ -47,12 +47,12 @@ module.exports.handler = handler;
 
 阿里云函数计算没有解析 body，但 `@sfajs/alifunc` 支持四种 body 解析
 
-使用详情参考 [@sfajs/http](https://github.com/sfajs/http)
-
 - json
 - text
 - urlencoded
 - multipart
+
+使用详情参考 [@sfajs/http](https://github.com/sfajs/http)
 
 ```JS
 await new SfaAlifunc(req, resp, context)
