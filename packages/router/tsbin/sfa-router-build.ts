@@ -13,9 +13,7 @@ if (!dir || typeof dir != "string") {
     "You need to specify a router dir, like 'sfa-router-build controllers'"
   );
 }
-
 const outDir = Config.outDir;
-
 const routerDir = path.join(outDir, process.argv[2]);
 if (!fs.existsSync(routerDir) || !fs.statSync(routerDir).isDirectory()) {
   throw new Error("The router dir is not exist");

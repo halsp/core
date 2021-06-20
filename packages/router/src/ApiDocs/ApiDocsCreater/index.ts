@@ -6,20 +6,15 @@ import ApiDocsConfig from "../ApiDocsConfig";
 import ApiDocsMdActionCreater from "./ApiDocsMdActionCreater";
 import ApiDocsNoteParser from "../ApiDocsNoteParser";
 import ApiDocsMdPart from "./ApiDocsMdPart";
-import Config, { AppConfig } from "../../Config";
 
 export default class ApiDocsCreater {
-  constructor(private readonly config: AppConfig) {}
-
-  get docConfig(): ApiDocsConfig {
-    if (!this.config.doc) {
-      throw new Error("there is no doc config");
-    }
-    return this.config.doc;
-  }
+  constructor(
+    private readonly cfg: ApiDocsConfig,
+    private readonly dir: string
+  ) {}
 
   get docs(): string {
-    const part = new ApiDocsMdPart(this.docConfig);
+    const part = new ApiDocsMdPart(this.cfg);
     let result = part.title;
     result += this.readFilesFromFolder("");
     if (result.endsWith(part.separation)) {
@@ -42,14 +37,14 @@ export default class ApiDocsCreater {
   private readFilesFromFolder(folderRPath: string): string {
     let result = "";
     const storageItems = linq
-      .from(readdirSync(path.join(this.routerDir, folderRPath)))
+      .from(readdirSync(path.join(this.dir, folderRPath)))
       .select((item) => path.join(folderRPath, item))
       .toArray();
 
     const files = linq
       .from(storageItems)
       .where((storageItem) => {
-        const stat = lstatSync(path.join(this.routerDir, storageItem));
+        const stat = lstatSync(path.join(this.dir, storageItem));
         return (
           stat.isFile() &&
           (storageItem.endsWith(".js") || storageItem.endsWith(".ts"))
@@ -61,14 +56,14 @@ export default class ApiDocsCreater {
       const readFileResult = this.readFile(files[i]);
       if (readFileResult) {
         result += readFileResult;
-        result += new ApiDocsMdPart(this.docConfig).separation;
+        result += new ApiDocsMdPart(this.cfg).separation;
       }
     }
 
     const folders = linq
       .from(storageItems)
       .where((storageItem) => {
-        const stat = lstatSync(path.join(this.routerDir, storageItem));
+        const stat = lstatSync(path.join(this.dir, storageItem));
         return stat.isDirectory();
       })
       .orderBy((item) => item)
@@ -80,12 +75,8 @@ export default class ApiDocsCreater {
     return result;
   }
 
-  private get routerDir(): string {
-    return Config.getRouterDirPath(this.config);
-  }
-
   private readFile(rPath: string): string {
-    const file = path.join(process.cwd(), this.routerDir, rPath);
+    const file = path.join(process.cwd(), this.dir, rPath);
     let action: Action;
     try {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -106,7 +97,6 @@ export default class ApiDocsCreater {
     }
     if (!docs) return "";
 
-    return new ApiDocsMdActionCreater(rPath, docs, this.docConfig, action)
-      .result;
+    return new ApiDocsMdActionCreater(rPath, docs, this.cfg, action).result;
   }
 }
