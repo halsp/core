@@ -4,9 +4,10 @@ import { consolidate } from "../src";
 
 test("str engine", async function () {
   const res = await new TestStartup()
-    .useViews("test/views", {
-      engines: [{ ext: "ejs", render: "ejs" }],
-    })
+    .useViews("test/views", undefined, [
+      { ext: "ejs", render: "ejs" },
+      { ext: "custom", render: "ejs" },
+    ])
     .use(async (ctx) => {
       await ctx.view("ejs/index.ejs", {
         name: "test ejs",
@@ -21,9 +22,9 @@ test("str engine", async function () {
 
 test("func engine", async function () {
   const res = await new TestStartup()
-    .useViews("test/views", {
-      engines: [{ ext: "ejs", render: consolidate.ejs }],
-    })
+    .useViews("test/views", undefined, [
+      { ext: "ejs", render: consolidate.ejs },
+    ])
     .use(async (ctx) => {
       await ctx.view("ejs/index.ejs", {
         name: "test ejs",
@@ -37,9 +38,8 @@ test("func engine", async function () {
 
 test("empty engine", async function () {
   const res = await new TestStartup()
-    .useViews("test/views", {
-      engines: undefined,
-    })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .useViews("test/views", null as any, null as any)
     .use(async (ctx) => {
       await ctx.view("ejs/index.ejs", {
         name: "test ejs",

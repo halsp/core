@@ -8,14 +8,13 @@ import * as linq from "linq";
 type RendererInterface = typeof consolidate.ejs;
 type Engine = { ext: string; render: RendererInterface | string };
 
-interface ViewsConfig {
-  options?: Record<string, unknown>;
-  engines?: Engine[];
-}
-
 declare module "sfa" {
   interface Startup {
-    useViews<T extends this>(dir?: string, cfg?: ViewsConfig): T;
+    useViews<T extends this>(
+      dir?: string,
+      options?: Record<string, unknown>,
+      engines?: Engine[]
+    ): T;
   }
 
   interface HttpContext {
@@ -30,23 +29,21 @@ declare module "sfa" {
 
 Startup.prototype.useViews = function <T extends Startup>(
   dir = "views",
-  cfg = <ViewsConfig>{
-    engines: {},
-    options: {},
-  }
+  options: Record<string, unknown> = {},
+  engines: Engine[] = []
 ): T {
   Middleware.prototype.view = async function (
     tmpPath = "",
     locals: Record<string, unknown> = {}
   ) {
-    return await render(this.ctx, dir, tmpPath, locals, cfg);
+    return await render(this.ctx, dir, tmpPath, locals, options, engines);
   };
 
   HttpContext.prototype.view = async function (
     tmpPath = "",
     locals: Record<string, unknown> = {}
   ) {
-    return await render(this, dir, tmpPath, locals, cfg);
+    return await render(this, dir, tmpPath, locals, options, engines);
   };
 
   this.use(async (ctx, next) => {
@@ -63,15 +60,12 @@ async function render(
   dir: string,
   tmpPath: string,
   locals: Record<string, unknown>,
-  cfg: ViewsConfig
+  options: Record<string, unknown>,
+  engines: Engine[]
 ): Promise<Response> {
   tmpPath = path.join(dir ?? "", tmpPath ?? "");
-  const options = Object.assign(
-    cfg.options ?? {},
-    ctx.state ?? {},
-    locals ?? {}
-  );
-  const file = getFile(tmpPath, cfg.engines ?? []);
+  options = Object.assign(options ?? {}, ctx.state ?? {}, locals ?? {});
+  const file = getFile(tmpPath, engines ?? []);
   if (!file) return ctx.res;
 
   if (file.ext == "html") {
@@ -79,7 +73,7 @@ async function render(
     ctx.res.setHeader("content-type", "text/html");
   }
 
-  const engine = getEngine(file.ext, cfg.engines ?? []);
+  const engine = getEngine(file.ext, engines ?? []);
   if (engine) {
     ctx.ok(await engine(file.filePath, options));
     ctx.res.setHeader("content-type", "text/html");
@@ -173,4 +167,4 @@ function getEngine(
   return engine;
 }
 
-export { consolidate, ViewsConfig, RendererInterface, Engine };
+export { consolidate, RendererInterface, Engine };

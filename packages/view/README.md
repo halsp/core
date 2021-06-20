@@ -28,24 +28,13 @@ const res = await new TestStartup()
 
 ## `useViews`
 
-`useViews` 接收两个可选参数
+`useViews` 接收三个可选参数
 
 - dir: 视图文件夹
-- cfg: 配置
+- options: 通用参数，如网站名称和其他通用信息
+- engines: 视图渲染引擎列表
 
-### 视图文件夹
-
-默认为 `views`, 所有视图将在视图文件夹中查找
-
-### `useViews` 配置参数
-
-- options
-
-通用参数，如网站名称和其他通用信息
-
-- engines
-
-视图渲染引擎列表，用于文件扩展名与 [consolidate](https://github.com/tj/consolidate.js) 对应，如
+`engines` 用于文件扩展名与 [consolidate](https://github.com/tj/consolidate.js) 对应，如
 
 ```JS
 startup.useViews("views", {
@@ -57,6 +46,10 @@ startup.useViews("views", {
 ```
 
 如果扩展名与渲染引擎名称相同，可省略配置
+
+### 视图文件夹
+
+默认为 `views`, 所有视图将在视图文件夹中查找
 
 ## ctx.view && md.view
 
