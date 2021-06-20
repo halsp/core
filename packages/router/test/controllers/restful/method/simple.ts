@@ -5,7 +5,6 @@ export default class extends Action {
     this.ok({
       method: "ANY",
       action: "simple",
-      realPath: this.realPath,
     });
   }
 }

@@ -6,10 +6,6 @@ export default abstract class Action extends Middleware {
     super();
   }
 
-  //#region will be set before doing
-  readonly realPath!: string;
-  //#endregion
-
   /** docs of action */
   docs?: ApiDocs;
 }

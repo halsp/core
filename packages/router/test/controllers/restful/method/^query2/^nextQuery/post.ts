@@ -5,7 +5,6 @@ export default class extends Action {
     this.ok({
       method: "POST",
       action: "query2/nextQuery",
-      realPath: this.realPath,
     });
   }
 }
