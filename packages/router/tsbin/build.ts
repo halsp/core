@@ -7,18 +7,7 @@ import TsConfig from "../dist/TsConfig";
 import MapCreater from "../dist/Map/MapCreater";
 import Constant from "../dist/Constant";
 
-const dir = process.argv[2];
-if (!dir || typeof dir != "string") {
-  throw new Error(
-    "You need to specify a router dir, like 'router-build controllers'"
-  );
-}
 const outDir = TsConfig.outDir;
-const routerDir = path.join(outDir, process.argv[2]);
-if (!fs.existsSync(routerDir) || !fs.statSync(routerDir).isDirectory()) {
-  throw new Error("The router dir is not exist");
-}
-
 if (TsConfig.cfg) {
   if (outDir) {
     deleteFile(path.join(process.cwd(), outDir));
@@ -54,6 +43,17 @@ if (TsConfig.cfg) {
       path.join(process.cwd(), outDir, "package.json")
     );
   }
+}
+
+const dir = process.argv[2];
+if (!dir || typeof dir != "string") {
+  throw new Error(
+    "You need to specify a router dir, like 'router-build controllers'"
+  );
+}
+const routerDir = path.join(outDir, process.argv[2]);
+if (!fs.existsSync(routerDir) || !fs.statSync(routerDir).isDirectory()) {
+  throw new Error("The router dir is not exist");
 }
 
 new MapCreater(routerDir).write(
