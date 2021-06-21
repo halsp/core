@@ -3,12 +3,15 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as shell from "shelljs";
-import TsConfig from "../dist/TsConfig";
 import MapCreater from "../dist/Map/MapCreater";
 import Constant from "../dist/Constant";
 
-const outDir = TsConfig.outDir;
-if (TsConfig.cfg) {
+let outDir = "";
+const tsconfigPath = path.join(process.cwd(), "tsconfig.json");
+if (fs.existsSync(tsconfigPath)) {
+  const cfg = JSON.parse(fs.readFileSync(tsconfigPath, "utf-8"));
+  outDir = cfg?.compilerOptions?.outDir ?? "";
+
   if (outDir) {
     deleteFile(path.join(process.cwd(), outDir));
   }
@@ -24,20 +27,22 @@ if (TsConfig.cfg) {
   }
 
   if (outDir) {
-    TsConfig.tsStatic.forEach((staticItem) => {
-      let source: string;
-      let target: string;
-      if (typeof staticItem == "string") {
-        source = staticItem;
-        target = staticItem;
-      } else {
-        source = staticItem.source;
-        target = staticItem.target;
+    (cfg?.static ?? []).forEach(
+      (staticItem: { source: string; target: string }) => {
+        let source: string;
+        let target: string;
+        if (typeof staticItem == "string") {
+          source = staticItem;
+          target = staticItem;
+        } else {
+          source = staticItem.source;
+          target = staticItem.target;
+        }
+        const sourcePath = path.join(process.cwd(), source);
+        const targetPath = path.join(process.cwd(), outDir, target);
+        copyFile(sourcePath, targetPath);
       }
-      const sourcePath = path.join(process.cwd(), source);
-      const targetPath = path.join(process.cwd(), outDir, target);
-      copyFile(sourcePath, targetPath);
-    });
+    );
     copyFile(
       path.join(process.cwd(), "package.json"),
       path.join(process.cwd(), outDir, "package.json")
@@ -56,9 +61,7 @@ if (!fs.existsSync(routerDir) || !fs.statSync(routerDir).isDirectory()) {
   throw new Error("The router dir is not exist");
 }
 
-new MapCreater(routerDir).write(
-  path.join(TsConfig.outDir, Constant.mapFileName)
-);
+new MapCreater(routerDir).write(path.join(outDir, Constant.mapFileName));
 
 function deleteFile(filePath: string, type?: string) {
   if (!fs.existsSync(filePath)) return;
