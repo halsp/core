@@ -4,8 +4,9 @@ import Action from "./Action";
 import MapParser from "./Map/MapParser";
 import path = require("path");
 import Constant from "./Constant";
+import MapItem from "./Map/MapItem";
 
-export { Action };
+export { Action, MapItem };
 
 declare module "sfa" {
   interface Startup {
@@ -20,15 +21,23 @@ declare module "sfa" {
   interface HttpContext {
     readonly actionPath: string;
     readonly actionRoles: string[];
+    readonly routerMap: MapItem[];
   }
 }
 
 Startup.prototype.useRouter = function <T extends Startup>(): T {
-  return ensureRouterParser(this).add((ctx) => {
+  return this.use(async (ctx, next) => {
+    ctx.res.setHeader("sfa-router", "https://github.com/sfajs/router");
+    if (ctx.bag<string>("ROUTER_DIR") == undefined) {
+      setConfig(ctx, Constant.defaultRouterDir, Constant.defaultStrict);
+    }
+    if (!ctx.actionPath) {
+      if (!parseRouter(ctx)) return;
+    }
+    await next();
+  }).add((ctx) => {
     const dir = ctx.bag<string>("ROUTER_DIR");
-    const filePath = path
-      .join(process.cwd(), dir, ctx.actionPath)
-      .replace(/\\/g, "/");
+    const filePath = path.join(process.cwd(), dir, ctx.actionPath);
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const actionClass = require(filePath).default;
     return new actionClass() as Action;
@@ -41,19 +50,6 @@ Startup.prototype.useRouterParser = function <T extends Startup>(
 ): T {
   return useRouterParser(this, dir, strict) as T;
 };
-
-function ensureRouterParser<T extends Startup>(startup: T) {
-  return startup.use(async (ctx, next) => {
-    ctx.res.setHeader("sfa-router", "https://github.com/sfajs/router");
-    if (ctx.bag<string>("ROUTER_DIR") == undefined) {
-      setConfig(ctx, Constant.defaultRouterDir, Constant.defaultStrict);
-    }
-    if (!ctx.actionPath) {
-      if (!parseRouter(ctx)) return;
-    }
-    await next();
-  });
-}
 
 function useRouterParser<T extends Startup>(
   startup: T,
@@ -101,6 +97,8 @@ function parseRouter(ctx: HttpContext): boolean {
   (ctx as any).actionPath = mapItem.path;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (ctx as any).actionRoles = mapItem.roles;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (ctx as any).routerMap = mapParser.map;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (ctx.req as any).query = {};
 

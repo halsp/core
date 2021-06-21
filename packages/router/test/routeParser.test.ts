@@ -62,3 +62,20 @@ test("router parser default", async function () {
 
   expect(res.status).toBe(404);
 });
+
+test("router parser default", async function () {
+  try {
+    await new TestStartup(
+      new Request().setPath("/simple/adminAuth").setMethod("POST")
+    )
+      .use(async (ctx, next) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (ctx as any).actionPath = "not-exist";
+        await next();
+      })
+      .useRouter()
+      .run();
+
+    expect(true).toBeFalsy();
+  } catch (err) {}
+});

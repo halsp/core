@@ -13,6 +13,11 @@ export default class MapParser {
     return this.#mapItem;
   }
 
+  #map!: MapItem[];
+  public get map(): MapItem[] {
+    return this.#map;
+  }
+
   public notFound = false;
   public methodNotAllowed = false;
 
@@ -26,6 +31,7 @@ export default class MapParser {
       return;
     }
 
+    this.#map = this.getMap();
     const mapItem = this.getMapItem();
     if (mapItem) {
       this.#mapItem = mapItem;
@@ -33,11 +39,10 @@ export default class MapParser {
   }
 
   private getMapItem(): MapItem | undefined {
-    const map = this.getMap();
     let mapItem;
     if (!this.strict) {
       const matchedPaths = linq
-        .from(map)
+        .from(this.#map)
         .where((item) => this.isSimplePathMatched(item.path))
         .toArray();
       mapItem = this.getMostLikeMapItem(matchedPaths);
@@ -45,7 +50,7 @@ export default class MapParser {
     }
 
     const matchedPaths = linq
-      .from(map)
+      .from(this.#map)
       .where((item) => !!new PathParser(item.path).httpMethod)
       .where((item) => this.isMethodPathMatched(item.path, true))
       .toArray();
@@ -53,7 +58,7 @@ export default class MapParser {
     if (mapItem) return mapItem;
 
     const anyMethodPaths = linq
-      .from(map)
+      .from(this.#map)
       .where((item) => new PathParser(item.path).httpMethod == HttpMethod.any)
       .where((item) => this.isMethodPathMatched(item.path, false))
       .toArray();
@@ -61,7 +66,7 @@ export default class MapParser {
     if (mapItem) return mapItem;
 
     const otherMethodPathCount = linq
-      .from(map)
+      .from(this.#map)
       .where((item) => !!new PathParser(item.path).httpMethod)
       .where((item) => this.isMethodPathMatched(item.path, false))
       .count();
