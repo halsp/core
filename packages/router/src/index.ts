@@ -22,13 +22,15 @@ declare module "sfa" {
     readonly actionPath: string;
     readonly actionRoles: string[];
     readonly routerMap: MapItem[];
+    readonly routerDir: string;
+    readonly routerStrict: boolean;
   }
 }
 
 Startup.prototype.useRouter = function <T extends Startup>(): T {
   return this.use(async (ctx, next) => {
     ctx.res.setHeader("sfa-router", "https://github.com/sfajs/router");
-    if (ctx.bag<string>("ROUTER_DIR") == undefined) {
+    if (ctx.routerDir == undefined) {
       setConfig(ctx, Constant.defaultRouterDir, Constant.defaultStrict);
     }
     if (!ctx.actionPath) {
@@ -36,8 +38,7 @@ Startup.prototype.useRouter = function <T extends Startup>(): T {
     }
     await next();
   }).add((ctx) => {
-    const dir = ctx.bag<string>("ROUTER_DIR");
-    const filePath = path.join(process.cwd(), dir, ctx.actionPath);
+    const filePath = path.join(process.cwd(), ctx.routerDir, ctx.actionPath);
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const actionClass = require(filePath).default;
     return new actionClass() as Action;
@@ -67,15 +68,14 @@ function useRouterParser<T extends Startup>(
 
 function setConfig(ctx: HttpContext, dir: string, strict: boolean) {
   ctx.res.setHeader("sfa-router", "https://github.com/sfajs/router");
-  ctx.bag("ROUTER_DIR", dir);
-  ctx.bag("ROUTER_STRICT", strict);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (ctx as any).routerDir = dir;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (ctx as any).routerStrict = strict;
 }
 
 function parseRouter(ctx: HttpContext): boolean {
-  const dir = ctx.bag<string>("ROUTER_DIR");
-  const strict = ctx.bag<boolean>("ROUTER_STRICT");
-
-  const mapParser = new MapParser(ctx, dir, strict);
+  const mapParser = new MapParser(ctx, ctx.routerDir, ctx.routerStrict);
   if (mapParser.notFound) {
     ctx.notFoundMsg({
       message: `Can't find the path：${ctx.req.path}`,

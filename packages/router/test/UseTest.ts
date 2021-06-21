@@ -1,4 +1,5 @@
 import * as sfa from "sfa";
+import "../src";
 
 declare module "sfa" {
   interface Startup {
@@ -11,8 +12,10 @@ sfa.Startup.prototype.useTest = function <T extends sfa.Startup>(
   config?: { dir: string; strict: boolean }
 ): T {
   this.use(async (ctx, next) => {
-    ctx.bag("ROUTER_DIR", config?.dir ?? "test/controllers");
-    ctx.bag("ROUTER_STRICT", !!(config?.strict ?? false));
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (ctx as any).routerDir = config?.dir ?? "test/controllers";
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (ctx as any).routerStrict = config?.strict ?? false;
     await next();
   });
   return this as T;
