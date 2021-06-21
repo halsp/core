@@ -2,18 +2,16 @@ import "sfa";
 import { HttpContext, Startup, status } from "sfa";
 import TsConfig from "./TsConfig";
 import Action from "./Action";
-import Authority from "./Authority";
 import MapPraser from "./Map/MapPraser";
 import path = require("path");
 import Constant from "./Constant";
 
-export { Action, Authority };
+export { Action };
 
 declare module "sfa" {
   interface Startup {
     useRouter<T extends this>(): T;
     useRouterPraser<T extends this>(dir?: string, strict?: boolean): T;
-    useRouterAuth<T extends this>(builder: (ctx: HttpContext) => Authority): T;
   }
 
   interface Request {
@@ -35,17 +33,6 @@ Startup.prototype.useRouter = function <T extends Startup>(): T {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const actionClass = require(filePath).default;
     return new actionClass() as Action;
-  });
-};
-
-Startup.prototype.useRouterAuth = function <T extends Startup>(
-  builder: (ctx: HttpContext) => Authority
-): T {
-  return ensureRouterPraser(this).add((ctx) => {
-    const auth = builder(ctx);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (auth.roles as any) = ctx.actionRoles;
-    return auth;
   });
 };
 

@@ -4,7 +4,7 @@ sfa 路由中间件
 
 - 支持 RESTful 规范
 - 根据文件系统映射访问路径，彻底解耦无关联的功能
-- 内置权限认证
+- 支持身份权限认证
 
 ## 安装
 
@@ -241,13 +241,7 @@ export default class extends Action {
 
 ## 权限
 
-默认的权限功能是用于判断用户能否使用 API，可以精确到控制每个 `Action`
-
-`startup.useRouterAuth` 注册权限中间件，该函数接收一个参数 `builder`
-
-`builder` 为函数类型，函数返回值为权限认证对象，该对象的类继承于 `Authority` 类，因此该类对象也是中间件，但加载方式比较特殊
-
-你需要新写个类，继承 `Authority`，并实现 `invoke` 函数
+默认的权限可以精确到控制每个 `Action`，你需要在中间件 `startup.useRouterPraser` 之后加入权限中间件
 
 ### Action 权限参数
 
@@ -281,18 +275,18 @@ export default class extends Action {
 }
 ```
 
-下例用 ts 创建类 `Auth`，继承于 `Authority`，使用请求头部的账号信息验证调用者信息：
+下例用 ts 创建中间件类 `Auth`，继承于 `Middleware`，使用请求头部的账号信息验证调用者信息：
 
 ```TS
-// Authority 类，用于权限验证
-class Auth extends Authority {
+// 中间件，用于权限验证
+class Auth extends Middleware {
   async invoke(): Promise<void> {
-    if (!this.roles || !this.roles.length) {
+    if (!this.ctx.actionRoles || !this.ctx.actionRoles.length) {
       await this.next(); // 无需验证，执行下一个中间件
       return;
     }
 
-    if (this.roles.includes("login") && !this.loginAuth()) {
+    if (this.ctx.actionRoles.includes("login") && !this.loginAuth()) {
       this.forbidden("账号或密码错误"); // 终止中间件的执行
       return;
     }
@@ -308,17 +302,17 @@ class Auth extends Authority {
 }
 ```
 
-在 `useRouter` 使用
+注册中间件
 
 ```JS
-startup.useRouterAuth(() => new Auth())
+startup.add(() => new Auth())
 ```
 
 ## query
 
 `@sfajs/router` 会在 `ctx.req` 中添加 `query` 属性
 
-在 `startup.useRouter`、`startup.useRouterPraser`、`startup.useRouterAuth` 之后的中间件，都可以获取 `ctx.req.query`
+在 `startup.useRouter`、`startup.useRouterPraser` 之后的中间件，都可以获取 `ctx.req.query`
 
 `query` 内容是 RESTful 路径中的参数，如
 
