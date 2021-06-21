@@ -58,8 +58,9 @@ npm run build
 
 ### 构建结果
 
-js 项目，将生成 `sfa-router.map` 文件，你可能需要将该文件添加至 `.gitignore` 中
-ts 项目，将按 `tsconfig.json` 中的 `compilerOptions/target` 生成目标文件，同时也会在目标文件夹下生成 `sfa-router.map` 文件
+- js 项目，将生成 `sfa-router.map` 文件，你可能需要将该文件添加至 `.gitignore` 中
+
+- ts 项目，将按 `tsconfig.json` 中的 `compilerOptions/target` 生成目标文件，同时也会在目标文件夹下生成 `sfa-router.map` 文件
 
 ## 路由（useRouter）
 
