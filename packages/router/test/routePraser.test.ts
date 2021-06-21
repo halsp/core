@@ -1,11 +1,11 @@
 import { TestStartup, Request } from "sfa";
 import "../src";
 
-test("useRouterPraser", async function () {
+test("useRouterParser", async function () {
   const res = await new TestStartup(
     new Request().setPath("/simple/adminAuth").setMethod("POST")
   )
-    .useRouterPraser("../test/controllers", false)
+    .useRouterParser("../test/controllers", false)
     .use(async (ctx) => {
       ctx.res.body = {
         path: ctx.actionPath,
@@ -20,12 +20,12 @@ test("useRouterPraser", async function () {
   });
 });
 
-test("useRouterPraser once more", async function () {
+test("useRouterParser once more", async function () {
   const res = await new TestStartup(
     new Request().setPath("/simple/adminAuth").setMethod("POST")
   )
-    .useRouterPraser("../test/controllers", false)
-    .useRouterPraser("../test/controllers", false)
+    .useRouterParser("../test/controllers", false)
+    .useRouterParser("../test/controllers", false)
     .use(async (ctx) => {
       ctx.res.body = {
         path: ctx.actionPath,
@@ -40,23 +40,23 @@ test("useRouterPraser once more", async function () {
   });
 });
 
-test("router praser error", async function () {
+test("router parser error", async function () {
   const res = await new TestStartup(
     new Request().setPath("/simple/adminAuth").setMethod("POST")
   )
-    .useRouterPraser("notexist")
-    .useRouterPraser("notexist")
+    .useRouterParser("notexist")
+    .useRouterParser("notexist")
     .useRouter()
     .run();
 
   expect(res.status).toBe(404);
 });
 
-test("router praser default", async function () {
+test("router parser default", async function () {
   const res = await new TestStartup(
     new Request().setPath("/simple/adminAuth").setMethod("POST")
   )
-    .useRouterPraser()
+    .useRouterParser()
     .useRouter()
     .run();
 

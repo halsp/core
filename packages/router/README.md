@@ -85,26 +85,26 @@ const res = await new OtherStartup().useRouter().run();
 
 ## 路由解析
 
-`startup.useRouterPraser` 接收两个参数：
+`startup.useRouterParser` 接收两个参数：
 
 - dir: 路由文件夹，`@sfajs/router` 能够将路由文件夹下的所有 `Action` 映射为 `http` 访问路径。所有 API Action 统一放在这个文件夹中，在该目录中，建立各 `Action` 文件或文件夹。`Action` 文件是 API 的最小执行单元，详情后面 [Action](##Action) 部分有介绍
 - strict: 严格模式，默认值为 true，建议为 true。如果值为 true，文件命名必须与 httpMethod 相同，如果 `strict` 为 `false` ，则 RESTFul 规范的 API 可能会以非 RESTFul 方式调用。如文件系统为`controllers/user/login/get.ts`，访问本应是 `GET user/login`，但 `POST user/login/get` 也能调用。因此如果使用 RESTFul 或限制 method，建议设置 `strict` 为 `true`。
 
-`startup.useRouterPraser` 会在管道 `ctx` 中加入
+`startup.useRouterParser` 会在管道 `ctx` 中加入
 
 - actionPath: `action` 实际相对路径
 - actionRoles: `action` 的 `roles` 属性值，用于权限验证
 
 一般情况你无需主动调用路由解析，因为 `startup.useRouter` 也会解析路由并在管道加入以上两个字段
 
-但当你要使用 `action` 的实际路径，或默认权限验证无法满足需求时，你就需要在 `startup.useRouterPraser` 之后实现需求
+但当你要使用 `action` 的实际路径，或默认权限验证无法满足需求时，你就需要在 `startup.useRouterParser` 之后实现需求
 
 ```TS
 import { TestStartup } from "sfa";
 import "@sfajs/router";
 
 const res = await new TestStartup()
-  .useRouterPraser()
+  .useRouterParser()
   .use(async (ctx) => {
     ctx.ok({
       actionPath: ctx.actionPath,
@@ -241,7 +241,7 @@ export default class extends Action {
 
 ## 权限
 
-默认的权限可以精确到控制每个 `Action`，你需要在中间件 `startup.useRouterPraser` 之后加入权限中间件
+默认的权限可以精确到控制每个 `Action`，你需要在中间件 `startup.useRouterParser` 之后加入权限中间件
 
 ### Action 权限参数
 
@@ -312,7 +312,7 @@ startup.add(() => new Auth())
 
 `@sfajs/router` 会在 `ctx.req` 中添加 `query` 属性
 
-在 `startup.useRouter`、`startup.useRouterPraser` 之后的中间件，都可以获取 `ctx.req.query`
+在 `startup.useRouter`、`startup.useRouterParser` 之后的中间件，都可以获取 `ctx.req.query`
 
 `query` 内容是 RESTful 路径中的参数，如
 

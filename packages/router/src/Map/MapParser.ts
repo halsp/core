@@ -7,7 +7,7 @@ import MapItem from "./MapItem";
 import PathParser from "./PathParser";
 import { HttpContext, HttpMethod } from "sfa";
 
-export default class MapPraser {
+export default class MapParser {
   #mapItem!: MapItem;
   public get mapItem(): MapItem {
     return this.#mapItem;
