@@ -53,7 +53,7 @@ if (fs.existsSync(tsconfigPath)) {
 const dir = process.argv[2];
 if (!dir || typeof dir != "string") {
   throw new Error(
-    "You need to specify a router dir, like 'router-build controllers'"
+    "You need to specify a router dir, like 'sfa-router-build controllers'"
   );
 }
 const routerDir = path.join(outDir, process.argv[2]);

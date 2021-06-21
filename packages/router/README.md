@@ -33,13 +33,13 @@ const res = await new TestStartup()
 在 package.json 文件的 scripts 节点下添加
 
 ```JSON
-"build": "router-build"
+"build": "sfa-router-build"
 ```
 
 ```JSON
 {
   "scripts": {
-    "build": "router-build controllers" // controllers 为路由文件夹路径
+    "build": "sfa-router-build controllers" // controllers 为路由文件夹路径
   },
   "dependencies": {
     "sfa": "^0.3.2",
@@ -331,7 +331,7 @@ startup.add(() => new Auth())
 
 ## 关于 TS
 
-如果你在 `tsconfig.json` 中设置了输出文件夹 `compilerOptions/outDir`，那么 `router-build` 命令参数中的路由文件夹是 `outDir` 下的相对路径
+如果你在 `tsconfig.json` 中设置了输出文件夹 `compilerOptions/outDir`，那么 `sfa-router-build` 命令参数中的路由文件夹是 `outDir` 下的相对路径
 
 ```JSON
 // tsconfig.json
@@ -342,4 +342,4 @@ startup.add(() => new Auth())
 }
 ```
 
-如 `outDir` 值为 `dist`，构建命令为 `router-build controllers`，那么 `dist/controllers` 应该是生产用的路由文件夹
+如 `outDir` 值为 `dist`，构建命令为 `sfa-router-build controllers`，那么 `dist/controllers` 应该是生产用的路由文件夹
