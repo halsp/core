@@ -1,9 +1,9 @@
 import PathParser from "../src/Map/PathParser";
 
 test("path parser", async function () {
-  const pathParser = new PathParser("./test/controllers/get.ts");
+  const pathParser = new PathParser("test/controllers/get.ts");
   expect(pathParser.fileName).toBe("get.ts");
-  expect(pathParser.pathWithoutHttpMethod).toBe("./test/controllers");
+  expect(pathParser.pathWithoutHttpMethod).toBe("test/controllers");
 });
 
 test("single path", async function () {

@@ -327,3 +327,18 @@ startup.add(() => new Auth())
   "todoId": 88
 }
 ```
+
+## 关于 TS
+
+如果你在 `tsconfig.json` 中设置了输出文件夹 `compilerOptions/outDir`，那么 `router-build` 命令参数中的路由文件夹是 `outDir` 下的相对路径
+
+```JSON
+// tsconfig.json
+{
+  "compilerOptions": {
+    "outDir": "dist"
+  }
+}
+```
+
+如 `outDir` 值为 `dist`，构建命令为 `router-build controllers`，那么 `dist/controllers` 应该是生产用的路由文件夹

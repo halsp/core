@@ -1,6 +1,5 @@
 import "sfa";
 import { HttpContext, Startup, status } from "sfa";
-import TsConfig from "./TsConfig";
 import Action from "./Action";
 import MapParser from "./Map/MapParser";
 import path = require("path");
@@ -72,7 +71,7 @@ function useRouterParser<T extends Startup>(
 
 function setConfig(ctx: HttpContext, dir: string, strict: boolean) {
   ctx.res.setHeader("sfa-router", "https://github.com/sfajs/router");
-  ctx.bag("ROUTER_DIR", path.join(TsConfig.outDir, dir));
+  ctx.bag("ROUTER_DIR", dir);
   ctx.bag("ROUTER_STRICT", strict);
 }
 

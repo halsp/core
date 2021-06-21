@@ -5,7 +5,7 @@ test("useRouterParser", async function () {
   const res = await new TestStartup(
     new Request().setPath("/simple/adminAuth").setMethod("POST")
   )
-    .useRouterParser("../test/controllers", false)
+    .useRouterParser("test/controllers", false)
     .use(async (ctx) => {
       ctx.res.body = {
         path: ctx.actionPath,
@@ -24,8 +24,8 @@ test("useRouterParser once more", async function () {
   const res = await new TestStartup(
     new Request().setPath("/simple/adminAuth").setMethod("POST")
   )
-    .useRouterParser("../test/controllers", false)
-    .useRouterParser("../test/controllers", false)
+    .useRouterParser("test/controllers", false)
+    .useRouterParser("test/controllers", false)
     .use(async (ctx) => {
       ctx.res.body = {
         path: ctx.actionPath,
