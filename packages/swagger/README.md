@@ -70,7 +70,7 @@ console.log(res.body); // html
 
 如果你想自定义 swagger 页面，需要传入一个函数。函数入参为 json 字符串，返回值为 html 字符串或 `Promise<string>`
 
-但你需要注意，`SwaggerUIBundle` 参数 `spec` 的应该是传入的字符串，如：
+但你需要注意，`SwaggerUIBundle` 参数 `spec` 的值应该是传入的字符串，如：
 
 ```TS
 startup.useSwagger({
@@ -134,3 +134,9 @@ const getHtml = (jsonStr) => `<!DOCTYPE html>
 ```
 
 上述 `getHtml` 为 `@sfajs/swagger` 的默认实现
+
+### 示例项目
+
+- todo
+   - github: https://github.com/hal-wang/todo
+   - swagger: https://todo-5gcg801923564f08-1253337886.ap-shanghai.app.tcloudbase.com/v2

@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/swagger",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "使用 swagger 自动生成你的 sfa 文档",
   "homepage": "https://github.com/sfajs/swagger",
   "repository": {
