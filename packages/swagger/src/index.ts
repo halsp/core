@@ -22,11 +22,10 @@ Startup.prototype.useSwagger = function <T extends Startup>(
   cfg: SfaSwaggerConfig = {}
 ): T {
   return this.use(async (ctx, next) => {
-    ctx.res.setHeader("sfa-swagger", "https://github.com/sfajs/swagger");
-
     if (fixPath(ctx.req.path) != fixPath(cfg.url)) {
       return await next();
     }
+    ctx.res.setHeader("sfa-swagger", "https://github.com/sfajs/swagger");
 
     const jsonStr = JSON.stringify(swaggerJSDoc(cfg.options ?? defaultOptions));
     let body;
