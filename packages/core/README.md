@@ -232,7 +232,6 @@ const val = this.ctx.bag<string>("BAG_NAME")
 - forbiddenMsg, 403
 - notFound, 404
 - notFoundMsg, 404
-- methodNotAllowed, 405
 - errRequest, 500
 - errRequestMsg, 500
 
@@ -292,5 +291,7 @@ API 返回错误时，可统一返回 `ErrorMessage`，命名以 `Msg` 结尾的
 - 路由: [@sfajs/router](https://github.com/sfajs/router)
 - 静态资源: [@sfajs/static](https://github.com/sfajs/static)
 - 视图渲染: [@sfajs/views](https://github.com/sfajs/views)
+- MVC 框架: [@sfajs/mvc](https://github.com/sfajs/mvc)
+- swagger 文档: [@sfajs/swagger](https://github.com/sfajs/swagger)
 
 > 🎉 更多中间件欢迎贡献并编辑此 [README](https://github.com/sfajs/sfa/edit/main/README.md) 以添加
