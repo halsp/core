@@ -4,7 +4,9 @@ import swaggerJSDoc = require("swagger-jsdoc");
 
 interface SfaSwaggerConfig {
   url?: string;
-  customHtml?: string;
+  customHtml?:
+    | ((jsonStr: string) => Promise<string>)
+    | ((jsonStr: string) => string);
   options?: swaggerJSDoc.Options;
 }
 
@@ -26,13 +28,19 @@ Startup.prototype.useSwagger = function <T extends Startup>(
       return await next();
     }
 
-    if (ctx.req.params.type == "json") {
-      ctx
-        .ok(JSON.stringify(swaggerJSDoc(cfg.options ?? defaultOptions)))
-        .setHeader("content-type", "application/json");
+    const jsonStr = JSON.stringify(swaggerJSDoc(cfg.options ?? defaultOptions));
+    let body;
+    if (cfg.customHtml) {
+      const html = cfg.customHtml(jsonStr);
+      if (html instanceof Promise) {
+        body = await html;
+      } else {
+        body = html;
+      }
     } else {
-      ctx.ok(cfg.customHtml ?? html).setHeader("content-type", "text/html");
+      body = getHtml(jsonStr);
     }
+    ctx.ok(body).setHeader("content-type", "text/html");
   });
 };
 
@@ -54,7 +62,7 @@ function fixPath(path?: string): string {
     .replace(/\/+$/, "");
 }
 
-const html = `<!DOCTYPE html>
+const getHtml = (jsonStr: string) => `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
@@ -90,7 +98,7 @@ const html = `<!DOCTYPE html>
     <script>
     window.onload = function() {
       const ui = SwaggerUIBundle({
-        url: window.location.href + '?type=json',
+        spec: ${jsonStr},
         dom_id: '#swagger-ui',
         deepLinking: true,
         presets: [

@@ -10,44 +10,6 @@ test("default html", async function () {
   expect(res.status).toBe(200);
 });
 
-test("default json", async function () {
-  const res = await new TestStartup(
-    new Request().setParam("type", "json").setMethod("GET")
-  )
-    .use(async (ctx, next) => {
-      try {
-        await next();
-      } catch (err) {
-        ctx.badRequest(err.message);
-      }
-    })
-    .useSwagger()
-    .run();
-  expect(res.status).toBe(200);
-});
-
-test("json", async function () {
-  const res = await new TestStartup(
-    new Request().setParam("type", "json").setMethod("GET")
-  )
-    .useSwagger({
-      options: {
-        definition: {
-          swagger: "2.0",
-          info: {
-            title: "Test",
-            version: "1.0.0",
-          },
-        },
-        apis: ["test/docs/*.ts"],
-      },
-    })
-    .run();
-
-  expect(res.getHeader("content-type")).toBe("application/json");
-  expect(res.status).toBe(200);
-});
-
 test("not exist", async function () {
   const res = await new TestStartup(
     new Request().setPath("not-exist").setMethod("GET")
@@ -61,10 +23,56 @@ test("not exist", async function () {
 test("custom html", async function () {
   const res = await new TestStartup(new Request().setMethod("GET"))
     .useSwagger({
-      customHtml: "html",
+      customHtml: () => "html",
     })
     .run();
 
   expect(res.status).toBe(200);
   expect(res.body).toBe("html");
+});
+
+test("custom html with promise", async function () {
+  {
+    const res = await new TestStartup(new Request().setMethod("GET"))
+      .useSwagger({
+        customHtml: () =>
+          new Promise((resolve) => {
+            resolve("html");
+          }),
+      })
+      .run();
+
+    expect(res.status).toBe(200);
+    expect(res.body).toBe("html");
+  }
+
+  {
+    const res = await new TestStartup(new Request().setMethod("GET"))
+      .useSwagger({
+        customHtml: async () => "html",
+      })
+      .run();
+
+    expect(res.status).toBe(200);
+    expect(res.body).toBe("html");
+  }
+});
+
+test("error options", async function () {
+  const res = await new TestStartup(new Request().setMethod("GET"))
+    .use(async (ctx, next) => {
+      try {
+        await next();
+      } catch (err) {
+        ctx.badRequest();
+      }
+    })
+    .useSwagger({
+      customHtml: async () => "html",
+      options: {},
+    })
+    .run();
+
+  expect(res.status).toBe(400);
+  expect(res.body).toBeUndefined();
 });

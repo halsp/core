@@ -2,7 +2,7 @@
 
 使用 swagger 自动生成你的 sfa 文档
 
-基于 [swagger-jsdoc](https://github.com/Surnet/swagger-jsdoc) 生成 `swagger` json 配置文件，下载到浏览器使用 [swagger-ui](https://github.com/swagger-api/swagger-ui) 渲染 UI
+基于 [swagger-jsdoc](https://github.com/Surnet/swagger-jsdoc) 生成页面，在浏览器中使用 [swagger-ui](https://github.com/swagger-api/swagger-ui) 渲染 UI
 
 ## 快速开始
 
@@ -14,11 +14,12 @@ import "@sfajs/swagger";
 
 const res = await new TestStartup()
   .useSwagger()
-  .useRouter()
   .run();
+
+console.log(res.body); // html
 ```
 
-在 `@sfajs/router` 的路由文件夹 `controllers` 下 `Action` 文件中
+在项目下任意 `.js`/`.ts` 文件中
 
 ```TS
 /**
@@ -30,20 +31,15 @@ const res = await new TestStartup()
  *       200:
  *         description: Returns a mysterious string.
  */
-export default class extends Action{
-  async invoke(){
-    this.ok("@sfajs/swagger");
-  }
-}
 ```
 
 ## 配置
 
 `startup.useSwagger` 接收三个参数：
 
-- swaggerJSDoc:
+- swaggerJSDoc
 - url
-- customHtml: 如果你想自定义 swagger 页面，可传入字符串以替换默认页面
+- customHtml
 
 ### swaggerJSDoc
 
@@ -72,10 +68,16 @@ export default class extends Action{
 
 ### customHtml
 
-默认内容：
+如果你想自定义 swagger 页面，需要传入一个函数。函数入参为 json 字符串，返回值为 html 字符串或 `Promise<string>`
 
-```HTML
-<!DOCTYPE html>
+但你需要注意，`SwaggerUIBundle` 参数 `spec` 的应该是传入的字符串，如：
+
+```TS
+startup.useSwagger({
+  customHtml: getHtml,
+});
+
+const getHtml = (jsonStr) => `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
@@ -111,7 +113,7 @@ export default class extends Action{
     <script>
     window.onload = function() {
       const ui = SwaggerUIBundle({
-        url: window.location.href + '?type=json',
+        spec: ${jsonStr},
         dom_id: '#swagger-ui',
         deepLinking: true,
         presets: [
@@ -128,9 +130,7 @@ export default class extends Action{
     };
   </script>
   </body>
-</html>
+</html>`;
 ```
 
-如果你想自定义 swagger 页面，可传入字符串以替换默认页面
-
-但你需要注意，`SwaggerUIBundle` 参数 `url` 的应该是 `window.location.href + '?type=json'`
+上述 `getHtml` 为 `@sfajs/swagger` 的默认实现
