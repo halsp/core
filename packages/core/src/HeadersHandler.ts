@@ -1,16 +1,29 @@
-type headerValueType = string | string[] | undefined;
+type headerValueType = string | string[];
+type numericalHeaderValueType = headerValueType | number | (number | string)[];
 type headersType = Record<string, headerValueType>;
 
 export default class HeadersHandler {
   #headers: headersType = {};
 
-  setHeaders(headers: headersType): this {
-    Object.assign(this.#headers, headers);
+  setHeaders(headers: Record<string, numericalHeaderValueType>): this {
+    for (const key in headers) {
+      this.setHeader(key, headers[key]);
+    }
     return this;
   }
 
-  setHeader(key: string, value?: string | string[]): this {
-    this.#headers[key] = value;
+  setHeader(key: string, value: numericalHeaderValueType): this {
+    if (value == undefined) return this;
+
+    if (Array.isArray(value)) {
+      this.#headers[key] = value.map((item) =>
+        typeof item == "string" ? item : String(item)
+      );
+    } else if (typeof value != "string") {
+      this.#headers[key] = String(value);
+    } else {
+      this.#headers[key] = value;
+    }
     return this;
   }
 
@@ -31,7 +44,7 @@ export default class HeadersHandler {
     return this;
   }
 
-  getHeader(key: string): string | string[] | undefined {
+  getHeader(key: string): headerValueType | undefined {
     const existKey = this.hasHeader(key);
     if (existKey) {
       return this.#headers[existKey];
@@ -44,10 +57,8 @@ export default class HeadersHandler {
       const value = this.#headers[key];
       if (Array.isArray(value)) {
         result[key] = (<string[]>[]).concat(value);
-      } else if (typeof value == "string") {
-        result[key] = value;
       } else {
-        result[key] = undefined;
+        result[key] = value;
       }
     });
     return result;

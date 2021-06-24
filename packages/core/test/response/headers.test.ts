@@ -28,9 +28,10 @@ function expectHeaders(headers: Record<string, string | string[] | undefined>) {
 
 test("get headers", async function () {
   const res = new Response().setHeaders({
-    h1: "1",
-    h2: ["2.1", "2.2"],
-    h3: undefined,
+    h1: 1,
+    h2: ["2.1", 2.2],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    h3: undefined as any,
   });
   expect(res.headers.h1).toBe("1");
   expect(res.headers.h2).toEqual(["2.1", "2.2"]);
