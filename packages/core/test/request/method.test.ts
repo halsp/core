@@ -66,6 +66,7 @@ test("custom methods", async function () {
 });
 
 test("equal", async function () {
+  expect(HttpMethod.equal(undefined, undefined)).toBeTruthy();
   expect(HttpMethod.equal("", "")).toBeTruthy();
   expect(HttpMethod.equal("", undefined)).toBeTruthy();
   expect(HttpMethod.equal("POST", undefined)).toBeFalsy();

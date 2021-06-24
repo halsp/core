@@ -10,11 +10,11 @@ export default class HttpMethod {
   static readonly trace = "TRACE";
   static readonly connect = "CONNECT";
 
-  static readonly custom = <string[]>[];
+  static readonly custom: string[] = [];
 
-  static matched(method: string | undefined): string | undefined {
+  static matched(method?: string): string | undefined {
     if (!method) return undefined;
-    switch (method.toString().toUpperCase()) {
+    switch (method.toUpperCase()) {
       case this.get:
       case this.post:
       case this.put:
@@ -25,24 +25,13 @@ export default class HttpMethod {
       case this.trace:
       case this.connect:
       case this.any:
-        return method.toString().toUpperCase();
+        return method.toUpperCase();
       default:
         return this.custom.filter((item) => this.equal(item, method))[0];
     }
   }
 
-  static equal(
-    method1: string | undefined,
-    method2: string | undefined
-  ): boolean {
-    if (!method1 && !method2) {
-      return true;
-    } else if (method1 && method2) {
-      const m1 = method1.toString().toUpperCase();
-      const m2 = method2.toString().toUpperCase();
-      return m1 == m2;
-    } else {
-      return false;
-    }
+  static equal(method1?: string, method2?: string): boolean {
+    return (method1 ?? "").toUpperCase() == (method2 ?? "").toUpperCase();
   }
 }
