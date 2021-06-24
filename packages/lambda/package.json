@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/cloudbase",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "将 sfa 托管到腾讯云 CloudBase",
   "homepage": "https://github.com/sfajs/cloudbase",
   "repository": {

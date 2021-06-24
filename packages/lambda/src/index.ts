@@ -7,7 +7,6 @@ import * as mime from "mime-types";
 
 declare module "sfa" {
   interface Request {
-    readonly isBase64Encoded: boolean;
     readonly context: Record<string, unknown>;
     readonly event: Record<string, unknown>;
   }
@@ -27,7 +26,7 @@ export default class SfaCloudbase extends Startup {
   ) {
     super();
 
-    this.#ctx = new HttpContext(
+    const ctx = new HttpContext(
       new Request()
         .setBody(getBody(event))
         .setMethod(event.httpMethod as string)
@@ -36,13 +35,12 @@ export default class SfaCloudbase extends Startup {
         .setPath(event.path as string)
     );
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (this.#ctx.req as any).context = context;
+    (ctx.req as any).context = context;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (this.#ctx.req as any).event = event;
-    this.#ctx.res.setHeader(
-      "sfa-cloudbase",
-      "https://github.com/sfajs/cloudbase"
-    );
+    (ctx.req as any).event = event;
+    ctx.res.setHeader("sfa-cloudbase", "https://github.com/sfajs/cloudbase");
+
+    this.#ctx = ctx;
   }
 
   async run(): Promise<ResponseStruct> {
@@ -115,14 +113,16 @@ export default class SfaCloudbase extends Startup {
 function getBody(event: Record<string, unknown>): unknown {
   const body = event.body;
   const headers = event.headers as Record<string, string | string[]>;
-  if (
-    body &&
-    typeof body == "string" &&
-    headers &&
-    headers["content-type"]?.includes("application/json")
-  ) {
-    return <Record<string, unknown>>JSON.parse(body);
-  } else {
-    return body || {};
+  if (body && typeof body == "string") {
+    if (event.isBase64Encoded) {
+      return Buffer.from(body, "base64");
+    } else if (
+      headers &&
+      headers["content-type"]?.includes("application/json")
+    ) {
+      return JSON.parse(body);
+    }
   }
+
+  return body || {};
 }
