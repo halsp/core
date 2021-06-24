@@ -4,14 +4,12 @@ import ResponseStruct from "./ResponseStruct";
 import tcb = require("@cloudbase/node-sdk");
 import Dbhelper from "./Dbhelper";
 import * as mime from "mime-types";
+import { Stream } from "stream";
 
 declare module "sfa" {
   interface Request {
     readonly context: Record<string, unknown>;
     readonly event: Record<string, unknown>;
-  }
-  interface Response {
-    isBase64Encoded: boolean;
   }
 }
 
@@ -38,7 +36,6 @@ export default class SfaCloudbase extends Startup {
     (ctx.req as any).context = context;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (ctx.req as any).event = event;
-    ctx.res.setHeader("sfa-cloudbase", "https://github.com/sfajs/cloudbase");
 
     this.#ctx = ctx;
   }
@@ -53,33 +50,52 @@ export default class SfaCloudbase extends Startup {
     const body = res.body;
     if (typeof body == "string") {
       if (writeLength) {
-        res.setHeader("content-length", Buffer.byteLength(body).toString());
+        res.setHeader("content-length", Buffer.byteLength(body));
       }
       if (writeType) {
         const type = /^\s*</.test(body) ? "html" : "text";
         res.setHeader("content-type", mime.contentType(type) as string);
       }
-    } else if (body) {
+    } else if (Buffer.isBuffer(body)) {
+      if (writeLength) {
+        res.setHeader("content-length", body.byteLength);
+      }
+      if (writeType) {
+        res.setHeader("content-type", mime.contentType("bin") as string);
+      }
+    } else if (
+      Object.prototype.toString.call(body).toLowerCase() == "[object object]" &&
+      (!Object.getPrototypeOf(body) ||
+        Object.getPrototypeOf(body) == Object.prototype)
+    ) {
       if (writeLength) {
         res.setHeader(
           "content-length",
-          Buffer.byteLength(JSON.stringify(body)).toString()
+          Buffer.byteLength(JSON.stringify(body))
         );
       }
       if (writeType) {
         res.setHeader("content-type", mime.contentType("json") as string);
       }
+    } else if (body instanceof Stream) {
+      throw new Error("Cloudbase is does support streaming! ");
     }
 
     return this.struct;
   }
 
   get struct(): ResponseStruct {
+    let body = this.#ctx.res.body;
+    const isBase64Encoded = Buffer.isBuffer(body);
+    if (isBase64Encoded) {
+      body = (body as Buffer).toString("base64");
+    }
+
     return <ResponseStruct>{
       headers: this.#ctx.res.headers,
       statusCode: this.#ctx.res.status,
-      isBase64Encoded: this.#ctx.res.isBase64Encoded ?? false,
-      body: this.#ctx.res.body ?? {},
+      isBase64Encoded: isBase64Encoded,
+      body: body ?? "",
     };
   }
 

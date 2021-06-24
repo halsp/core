@@ -6,14 +6,13 @@ test("default response", async function () {
   expect(res.isBase64Encoded).toBeFalsy();
   expect(res.headers.t).toBeUndefined();
   expect(res.headers["content-type"]).toBeUndefined();
-  expect(res.body).toEqual({});
+  expect(res.body).toBe("");
   expect(res.statusCode).toBe(404);
 });
 
 test("base response", async function () {
   const result = await new SfaCloudbase({}, {})
     .use(async (ctx, next) => {
-      ctx.res.isBase64Encoded = true;
       ctx.res.body = "str body";
       ctx.res.setHeader("t", "test");
       ctx.res.status = 200;
@@ -21,7 +20,6 @@ test("base response", async function () {
     })
     .run();
 
-  expect(result.isBase64Encoded).toBeTruthy();
   expect(result.headers.t).toBe("test");
   expect(result.body).toBe("str body");
   expect(result.statusCode).toBe(200);

@@ -6,7 +6,7 @@ export const main = async (
 ): Promise<unknown> => {
   return new SfaCloudbase(event, context)
     .use(async (ctx) => {
-      ctx.res.headers.demo = "@sfajs/cloudbase";
+      ctx.res.setHeader("demo", "@sfajs/cloudbase");
     })
     .run();
 };
