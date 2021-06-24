@@ -1,18 +1,17 @@
-type headerValueType = string | string[];
-type numericalHeaderValueType = headerValueType | number | (number | string)[];
-type headersType = Record<string, headerValueType>;
+type HeaderValueType = string | string[];
+type NumericalHeaderValueType = HeaderValueType | number | (number | string)[];
 
 export default class HeadersHandler {
-  #headers: headersType = {};
+  #headers: NodeJS.Dict<HeaderValueType> = {};
 
-  setHeaders(headers: Record<string, numericalHeaderValueType>): this {
+  setHeaders(headers: Record<string, NumericalHeaderValueType>): this {
     for (const key in headers) {
       this.setHeader(key, headers[key]);
     }
     return this;
   }
 
-  setHeader(key: string, value: numericalHeaderValueType): this {
+  setHeader(key: string, value: NumericalHeaderValueType): this {
     if (value == undefined) return this;
 
     if (Array.isArray(value)) {
@@ -25,6 +24,14 @@ export default class HeadersHandler {
       this.#headers[key] = value;
     }
     return this;
+  }
+
+  appendHeader(key: string, value: NumericalHeaderValueType): this {
+    const prev = this.getHeader(key) as NumericalHeaderValueType;
+    if (prev) {
+      value = (Array.isArray(prev) ? prev : [prev]).concat(value);
+    }
+    return this.setHeader(key, value);
   }
 
   hasHeader(key: string): string | false {
@@ -44,23 +51,14 @@ export default class HeadersHandler {
     return this;
   }
 
-  getHeader(key: string): headerValueType | undefined {
+  getHeader(key: string): HeaderValueType | undefined {
     const existKey = this.hasHeader(key);
     if (existKey) {
       return this.#headers[existKey];
     }
   }
 
-  get headers(): headersType {
-    const result = <headersType>{};
-    Object.keys(this.#headers).forEach((key) => {
-      const value = this.#headers[key];
-      if (Array.isArray(value)) {
-        result[key] = (<string[]>[]).concat(value);
-      } else {
-        result[key] = value;
-      }
-    });
-    return result;
+  get headers(): NodeJS.ReadOnlyDict<HeaderValueType> {
+    return this.#headers;
   }
 }

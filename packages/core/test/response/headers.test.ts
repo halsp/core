@@ -37,3 +37,11 @@ test("get headers", async function () {
   expect(res.headers.h2).toEqual(["2.1", "2.2"]);
   expect(res.headers.h3).toBeUndefined();
 });
+
+test("append header", async function () {
+  const res = new Response()
+    .appendHeader("h1", 1)
+    .appendHeader("h1", "2")
+    .appendHeader("h1", [3, "4"]);
+  expect(res.headers.h1).toEqual(["1", "2", "3", "4"]);
+});
