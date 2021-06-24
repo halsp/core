@@ -56,7 +56,7 @@ export default abstract class ResultHandler {
     return this.response;
   }
 
-  badRequestMsg(msg?: ErrorMessage & Record<string, unknown>): Response {
+  badRequestMsg(msg?: ErrorMessage & NodeJS.Dict<unknown>): Response {
     if (!msg) msg = { message: ReasonPhrases.BAD_REQUEST };
     return this.badRequest(msg);
   }
@@ -69,7 +69,7 @@ export default abstract class ResultHandler {
     return this.response;
   }
 
-  unauthorizedMsg(msg?: ErrorMessage & Record<string, unknown>): Response {
+  unauthorizedMsg(msg?: ErrorMessage & NodeJS.Dict<unknown>): Response {
     if (!msg) msg = { message: ReasonPhrases.UNAUTHORIZED };
     return this.unauthorized(msg);
   }
@@ -82,7 +82,7 @@ export default abstract class ResultHandler {
     return this.response;
   }
 
-  forbiddenMsg(msg?: ErrorMessage & Record<string, unknown>): Response {
+  forbiddenMsg(msg?: ErrorMessage & NodeJS.Dict<unknown>): Response {
     if (!msg) msg = { message: ReasonPhrases.FORBIDDEN };
     return this.forbidden(msg);
   }
@@ -95,7 +95,7 @@ export default abstract class ResultHandler {
     return this.response;
   }
 
-  notFoundMsg(msg?: ErrorMessage & Record<string, unknown>): Response {
+  notFoundMsg(msg?: ErrorMessage & NodeJS.Dict<unknown>): Response {
     if (!msg) msg = { message: ReasonPhrases.NOT_FOUND };
     return this.notFound(msg);
   }
@@ -108,7 +108,7 @@ export default abstract class ResultHandler {
     return this.response;
   }
 
-  errRequestMsg(msg?: ErrorMessage & Record<string, unknown>): Response {
+  errRequestMsg(msg?: ErrorMessage & NodeJS.Dict<unknown>): Response {
     if (!msg) msg = { message: ReasonPhrases.INTERNAL_SERVER_ERROR };
     return this.errRequest(msg);
   }

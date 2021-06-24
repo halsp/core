@@ -2,7 +2,7 @@ import HeadersHandler from "../HeadersHandler";
 import HttpMethod from "./HttpMethod";
 
 export default class Request extends HeadersHandler {
-  readonly params: Record<string, string | undefined> = {};
+  readonly params: NodeJS.Dict<string> = {};
 
   #body: unknown;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -60,7 +60,7 @@ export default class Request extends HeadersHandler {
     return this;
   }
 
-  setParams(params: Record<string, string | undefined>): Request {
+  setParams(params: NodeJS.Dict<string>): Request {
     Object.assign(this.params, params);
     return this;
   }
