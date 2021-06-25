@@ -1,8 +1,6 @@
 # @sfajs/koa
 
-让 koa 成为 sfa 的中间件，并支持大部分 koa 中间件
-
-Sfa loves Koa
+让 koa 成为 sfa 的中间件，并打通二者中间件管道
 
 ## 安装
 
