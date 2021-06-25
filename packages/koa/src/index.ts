@@ -8,7 +8,7 @@ import TransResponse from "./TransResponse";
 import * as compose from "koa-compose";
 
 interface SfaKoaOptions {
-  streamingBody?: (ctx: HttpContext) => NodeJS.ReadableStream;
+  streamingBody?: (sfaCtx: HttpContext) => NodeJS.ReadableStream;
 }
 
 declare module "sfa" {
@@ -22,95 +22,97 @@ Startup.prototype.useKoa = function <T extends Startup>(
   app: Koa,
   cfg: SfaKoaOptions = {}
 ): T {
-  app.use(async (ctx) => {
-    await koaResToSfaRes(ctx, ctx.sfaCtx.res); // step 2. koa -> sfa
-    await ctx.sfaNext();
-    await sfaResToKoaRes(ctx.sfaCtx.res, ctx); // step 3. sfa-> koa
+  app.use(async (koaCtx) => {
+    await koaResToSfaRes(koaCtx, koaCtx.sfaCtx.res); // step 2. koa -> sfa
+    await koaCtx.sfaNext();
+    await sfaResToKoaRes(koaCtx.sfaCtx.res, koaCtx); // step 3. sfa-> koa
   });
   const fn = compose(app.middleware);
   if (!app.listenerCount("error")) app.on("error", app.onerror);
 
-  this.use(async (ctx, next) => {
-    const httpReq = await getHttpReq(ctx, cfg); // step 1. sfa-> koa
-    const httpRes = new TransResponse(httpReq);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (httpRes as any).sfaRes = ctx.res;
-
-    const koaCtx = app.createContext(httpReq, httpRes);
+  this.use(async (sfaCtx, next) => {
+    const koaCtx = await createContext(app, sfaCtx, cfg); // step 1. sfa-> koa
     koaCtx.sfaNext = next;
-    koaCtx.sfaCtx = ctx;
+    koaCtx.sfaCtx = sfaCtx;
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (app as any).handleRequest(koaCtx, fn);
-    await koaResToSfaRes(koaCtx, ctx.res); // step 4. koa -> sfa
+    await koaResToSfaRes(koaCtx, sfaCtx.res); // step 4. koa -> sfa
   });
   return this as T;
 };
 
 async function koaResToSfaRes(
-  kaoContext: Koa.ParameterizedContext,
-  res: Response
+  koaCtx: Koa.ParameterizedContext,
+  sfaRes: Response
 ) {
-  const httpRes = kaoContext.res as TransResponse;
-  const headers = httpRes.headers;
-  Object.keys(res.headers).forEach((key) => {
-    res.removeHeader(key);
+  Object.keys(sfaRes.headers).forEach((key) => {
+    sfaRes.removeHeader(key);
   });
-  Object.keys(headers).forEach((key) => {
-    const value = headers[key];
+  Object.keys(koaCtx.response.headers).forEach((key) => {
+    const value = koaCtx.res.getHeader(key);
     if (value) {
-      res.setHeader(key, value);
+      sfaRes.setHeader(key, value);
     }
   });
 
-  res.status = httpRes.statusCode;
-  res.body = kaoContext.body ?? undefined;
+  sfaRes.status = koaCtx.status;
+  sfaRes.body = koaCtx.body ?? undefined;
 }
 
 async function sfaResToKoaRes(
-  res: Response,
-  kaoContext: Koa.ParameterizedContext
+  sfaRes: Response,
+  koaCtx: Koa.ParameterizedContext
 ) {
-  kaoContext.body = res.body ?? null;
-  const httpRes = kaoContext.res as TransResponse;
-  httpRes.statusCode = res.status;
-  Object.keys(kaoContext.headers).forEach((key) => {
-    httpRes.removeHeader(key);
+  koaCtx.body = sfaRes.body ?? null;
+  Object.keys(koaCtx.response.headers).forEach((key) => {
+    koaCtx.remove(key);
   });
-  for (const key in res.headers) {
-    const value = res.headers[key];
+  for (const key in sfaRes.headers) {
+    const value = sfaRes.getHeader(key);
     if (value) {
-      httpRes.setHeader(key, value);
+      koaCtx.set(key, value);
     }
   }
+  koaCtx.status = sfaRes.status;
+}
+
+async function createContext(
+  koaApp: Koa,
+  sfaCtx: HttpContext,
+  cfg: SfaKoaOptions
+): Promise<Koa.ParameterizedContext> {
+  const httpReq = await getHttpReq(sfaCtx, cfg);
+  const httpRes = new TransResponse(httpReq);
+
+  const koaCtx = koaApp.createContext(httpReq, httpRes);
+  await sfaResToKoaRes(sfaCtx.res, koaCtx);
+  return koaCtx;
 }
 
 async function getHttpReq(
-  ctx: HttpContext,
+  sfaCtx: HttpContext,
   cfg: SfaKoaOptions
 ): Promise<http.IncomingMessage> {
   let httpReq;
   if (cfg.streamingBody) {
-    httpReq = <http.IncomingMessage>cfg.streamingBody(ctx);
+    httpReq = <http.IncomingMessage>cfg.streamingBody(sfaCtx);
   } else {
     httpReq = new http.IncomingMessage(new net.Socket());
   }
-  httpReq.headers = ctx.req.headers;
+  httpReq.headers = Object.assign({}, sfaCtx.req.headers);
   httpReq.url = queryString.stringifyUrl({
-    url: ctx.req.path,
-    query: ctx.req.params,
+    url: sfaCtx.req.path,
+    query: sfaCtx.req.params,
   });
-  httpReq.method = ctx.req.method;
+  httpReq.method = sfaCtx.req.method;
   httpReq.complete = true;
   httpReq.httpVersion = "1.1";
   httpReq.httpVersionMajor = 1;
   httpReq.httpVersionMinor = 1;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (httpReq as any).sfaReq = ctx.req;
-
   if (!cfg.streamingBody) {
-    const body = ctx.req.body;
+    const body = sfaCtx.req.body;
     if (Buffer.isBuffer(body)) {
       httpReq.push(body);
     } else if (typeof body == "string") {

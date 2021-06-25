@@ -7,19 +7,13 @@ export default class TransResponse extends http.ServerResponse {
     return this.#headers;
   }
 
-  setHeader(key: string, value: http.OutgoingHttpHeader): this {
-    this.#headers[key] = value;
-    if (!this.headersSent) {
-      super.setHeader(key, value);
-    }
+  setHeader(name: string, value: http.OutgoingHttpHeader): this {
+    this.#headers[name] = value;
     return this;
   }
 
   removeHeader(name: string): void {
     delete this.#headers[name];
-    if (!this.headersSent) {
-      super.removeHeader(name);
-    }
   }
 
   writeHead(statusCode: number, ...params: unknown[]): this {
@@ -39,5 +33,27 @@ export default class TransResponse extends http.ServerResponse {
 
     super.writeHead(statusCode, reasonPhrase, headers);
     return this;
+  }
+
+  getHeaders(): NodeJS.ReadOnlyDict<http.OutgoingHttpHeader> {
+    return this.#headers;
+  }
+
+  getHeaderNames(): string[] {
+    return Object.keys(this.#headers);
+  }
+
+  hasHeader(name: string): boolean {
+    return this.getHeaderNames()
+      .map((h) => h.toLowerCase())
+      .includes(name.toLowerCase());
+  }
+
+  getHeader(name: string): string | string[] | number | undefined {
+    for (const key of this.getHeaderNames()) {
+      if (key.toLowerCase() == name.toLowerCase()) {
+        return this.#headers[key];
+      }
+    }
   }
 }
