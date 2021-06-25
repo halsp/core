@@ -280,18 +280,19 @@ API 返回错误时，可统一返回 `ErrorMessage`，命名以 `Msg` 结尾的
 
 ## sfa 环境
 
-- [@sfajs/cloudbase](https://github.com/sfajs/cloudbase): 腾讯云 CloudBase
-- [@sfajs/alifunc](https://github.com/sfajs/alifunc): 阿里云 HTTP 函数
-- [@sfajs/http](https://github.com/sfajs/http): http(s)
+- [@sfajs/cloudbase](https://github.com/sfajs/cloudbase): 将 sfa 托管到腾讯云 CloudBase
+- [@sfajs/alifunc](https://github.com/sfajs/alifunc): 将 sfa 托管到阿里云函数计算
+- [@sfajs/http](https://github.com/sfajs/http): 将 sfa 托管到 http(s) 环境
 
 > 🎉 更多环境欢迎贡献并编辑此 [README](https://github.com/sfajs/sfa/edit/main/README.md) 以添加
 
 ## sfa 中间件
 
-- [@sfajs/router](https://github.com/sfajs/router): 路由
-- [@sfajs/static](https://github.com/sfajs/static): 静态资源
-- [@sfajs/views](https://github.com/sfajs/views): 视图渲染
+- [@sfajs/router](https://github.com/sfajs/router): 路由中间件
+- [@sfajs/static](https://github.com/sfajs/static): 静态资源中间件
+- [@sfajs/views](https://github.com/sfajs/views): 视图渲染中间件
 - [@sfajs/mvc](https://github.com/sfajs/mvc): MVC 框架
-- [@sfajs/swagger](https://github.com/sfajs/swagger): 自动生成 swagger 文档
+- [@sfajs/swagger](https://github.com/sfajs/swagger): 使用 swagger 自动生成你的 sfa 文档
+- [@sfajs/koa](https://github.com/sfajs/koa): 让 koa 成为 sfa 的中间件，并打通二者中间件管道
 
 > 🎉 更多中间件欢迎贡献并编辑此 [README](https://github.com/sfajs/sfa/edit/main/README.md) 以添加
