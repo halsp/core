@@ -108,10 +108,12 @@ async function getHttpReq(
     httpReq = new http.IncomingMessage(new net.Socket());
   }
   httpReq.headers = Object.assign({}, sfaCtx.req.headers);
-  httpReq.url = queryString.stringifyUrl({
-    url: sfaCtx.req.path,
-    query: sfaCtx.req.params,
-  });
+  httpReq.url =
+    "/" +
+    queryString.stringifyUrl({
+      url: sfaCtx.req.path,
+      query: sfaCtx.req.params,
+    });
   httpReq.method = sfaCtx.req.method;
   httpReq.complete = true;
   httpReq.httpVersion = "1.1";
