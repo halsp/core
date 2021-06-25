@@ -2,6 +2,7 @@ import * as http from "http";
 
 export default class TransResponse extends http.ServerResponse {
   #headers: NodeJS.Dict<http.OutgoingHttpHeader> = {};
+  #status = 404;
 
   get headers(): NodeJS.Dict<http.OutgoingHttpHeader> {
     return this.#headers;

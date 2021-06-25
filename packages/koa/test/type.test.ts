@@ -14,7 +14,6 @@ test("arr header type", async function () {
     )
     .run();
 
-  console.log('res.getHeader("content-type")', res.getHeader("content-type"));
   expect(res.status).toBe(200);
   expect(res.body).toBe("sfa");
   expect(res.getHeader("content-type")).toEqual([
