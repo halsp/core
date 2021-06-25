@@ -3,7 +3,7 @@ import { TestStartup, Request } from "sfa";
 import * as Koa from "koa";
 import * as cors from "koa-cors";
 
-test("cors", async function () {
+test("koa-cors", async function () {
   const res = await new TestStartup(new Request().setMethod("POST"))
     .useKoa(
       new Koa().use(

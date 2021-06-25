@@ -3,7 +3,7 @@ import { TestStartup } from "sfa";
 import * as Koa from "koa";
 import TransResponse from "../src/TransResponse";
 
-test("without type", async function () {
+test("middleware pipe", async function () {
   const res = await new TestStartup()
     .use(async (ctx, next) => {
       ctx.res.status = 201;
@@ -40,5 +40,29 @@ test("without type", async function () {
 
   expect(res.body).toBe("sfaaaa");
   expect(res.getHeader("h")).toBe("hhhh");
+  expect(res.status).toBe(201);
+});
+
+test("koa break", async function () {
+  const res = await new TestStartup()
+    .use(async (ctx, next) => {
+      await next();
+    })
+    .useKoa(
+      new Koa().use(async (ctx) => {
+        ctx.body = "sfa";
+        ctx.status = 201;
+        ctx.set("h", "h");
+      })
+    )
+    .use(async (ctx, next) => {
+      ctx.res.body += "a";
+      ctx.res.status = 200;
+      await next();
+    })
+    .run();
+
+  expect(res.body).toBe("sfa");
+  expect(res.getHeader("h")).toBe("h");
   expect(res.status).toBe(201);
 });
