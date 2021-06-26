@@ -1,18 +1,16 @@
-# sfa
+# Sfa
 
-serverless function api framework （ serverless 云函数 API 框架 ）
+**Super flexible web app framework**
 
-使用 sfa 你能够将 API 托管到各服务商的云函数，充分利用云函数的优越性
+sfa provides configurable basic functions. You can add middleware to support different environments, including but not limited to cloud functions, http(s), etc.
 
-sfa 提供可配置的基础功能，添加插件或中间件以支持不同运行环境，包括但不限于 云函数 / 云调用/ 云托管 / http(s) 等
-
-## 安装
+## Installation
 
 ```
 npm i sfa
 ```
 
-## 开始使用
+## Quick Start
 
 ```TS
 import { TestStartup } from "sfa";
@@ -26,83 +24,83 @@ console.log("res", res);
 
 ## Startup
 
-Startup 类是 sfa 的入口
+The startup class is the entry to sfa
 
-为了让 sfa 能够在各类生产环境中使用，该类设计的较为开放，在 ts 中是个抽象类，因此该类不能直接使用，需要定义派生类并在合适的函数中调用 `invoke` 函数。上述示例的 `TestStartup` 是一个简单的 Startup 派生类，没有对 Request 和 Response 进行任何解析。
+In order to enable sfa to be used in all kinds of production environments, the design is relatively open, and thr Startup is an abstract class in TS, so it can not be used directly. It is necessary to define derived classes and call `invoke` functions in suitable functions. The `TestStartup` in the above example is a simple startup derived class, which does not parse request and response
 
-目前已支持的运行环境参考后面的 **sfa 环境** 部分
+Refer to the **Sfa environment** section below for the currently supported running environment
 
-其他更多环境，欢迎你来实现
+Other more environment, welcome you to realize
 
-## 中间件
+## Middleware
 
-中间件是 `sfa` 最重要的部分之一，如记录日志，验证权限等
+Middleware is one of the most important parts of sfa, such as logging, verifying authority and so on
 
-所有中间件应派生自类 `Middleware`，并实现 `invoke` 函数
+All middlewares should be derived from the class `Middleware` and implement the `invoke` function
 
-### 执行顺序
+### Execution order
 
-中间件是以递归方式严格按声明顺序执行，每个中间件都可以修改正向或反向管道内容
+Middleware is executed recursively in strict order of declaration, and each middleware can modify the forward or reverse pipeline data
 
-在中间件里如果需要调用下一个中间件，需执行 `await this.next()`，若不调用下一个中间件，中间件将反向递归执行，并最终返回当前管道内容
+If you need to call the next middleware in the middleware, you need to execute `await this.next()`. If you do not call the next middleware, the middleware will execute backward recursively, and finally return the current pipeline data
 
 ```
- 中间件1   中间件2 ... 中间件n
+   md1     md2   ...   mdN
     _       _           _
-->-|-|-----|-|---------|-|-->   没有执行 next
-   | |     | |         | |   ↓  或是最后一个
--<-|-|-----|-|---------|-|--<   反向递归
+->-|-|-----|-|---------|-|-->   without `next`
+   | |     | |         | |   ↓  or the last one.
+-<-|-|-----|-|---------|-|--<   backward recursion
     -       -           -
 ```
 
-### 注册中间件
+### Registration middleware
 
-在 `sfa` 中有两种中间件：
+There are two kinds of middleware in `sfa`:
 
-- startup.add( ): 类中间件
-- startup.use( ): 简单中间件
+- startup.add( ): Class middleware
+- startup.use( ): Simple middleware
 
-类中间件更适合用于大型项目，让你的代码更易读
+Class middleware is more suitable for large projects and makes your code easier to read
 
-简单中间件适合小型快速开发的代码
+Simple middleware is suitable for small and fast projects
 
 ```TS
 import { TestStartup } from "sfa";
 const startup = new TestStartup();
-// 简单中间件
+// Simple middleware
 startup.use(async (ctx) => {
   ctx.ok("sfa");
 });
-// 类中间件
-startup.use(() => new YourMiddleware());
+// Class middleware
+startup.add(() => new YourMiddleware());
 
 const res = await startup.run();
 ```
 
-### 类中间件
+### Class middleware
 
-你需要定义一个类，继承 `Middleware` 并实现 `invoke` 函数，在中间件管道中，将自动执行 `invoke`
+You need to define a class, inherit `Middleware` and implement the `invoke` function. In the pipeline, the `invoke` function will be executed automatically
 
-类中间件有两种生命周期：
+Class middleware has two types of life cycle:
 
-- 单例模式
-- 访问级别
+- Singleton
+- Scoped
 
 ```TS
 import { TestStartup } from "sfa";
 
-// 单例模式
-const res = await new TestStartup().use(new YourMiddleware()).run();
+// Singleton
+const res = await new TestStartup().add(new YourMiddleware()).run();
 
-// 访问级别
-const res = await new TestStartup().use((ctx) => new YourMiddleware()).run();
+// Scoped
+const res = await new TestStartup().add((ctx) => new YourMiddleware()).run();
 ```
 
-应当注意在单例模式中，如果项目存在并发情况，使用管道中的内容如 `this.ctx`，可能会出错，因为管道内容可能会被刷新，你无法保证处理的是预期管道。
+> It should be noted that in singleton mode, if there is concurrency in the project, using the data in the pipeline, such as `this.ctx`, may cause errors, because the pipeline data may be refreshed, and you cannot guarantee that you are dealing with the expected pipeline.
 
-### 简单中间件
+### Simple middleware
 
-简单中间件不需要单独写一个中间件类，但其底层仍然会被转化为普通类中间件来执行
+When using simple middleware, you don't need to write a separate middleware class, but in the underlying implementation, it will still be converted into ordinary class middleware for execution
 
 ```JS
 startup.use(async (ctx) => {
@@ -110,7 +108,7 @@ startup.use(async (ctx) => {
 });
 ```
 
-或
+OR
 
 ```JS
 startup.use(async (ctx, next) => {
@@ -122,103 +120,102 @@ startup.use(async (ctx, next) => {
 
 ## HttpContext
 
-管道中的内容都在 `HttpContext` 对象之中，每个中间件都可以调用 `this.ctx` 来获取或修改管道内容
+The data in the pipeline is in the `HttpContext` object, and each middleware can call `this.ctx` to get or modify the pipeline data
 
-该对象包含以下内容：
+The `HttpContext` object contains the following:
 
-- res 字段: `Response` 对象
-- req 字段: `Request` 对象
-- bag 函数：用于在管道中传递更多内容
+- res property: `Response` object
+- req property: `Request` object
+- bag function: Used to pass more data in a pipe
 
 ### Response
 
-作为 API 返回内容（在 Startup 可能会被解析后返回）
+Return data (It will be parsed in a specific environment)
 
-包含以下内容
+includes:
 
-- headers: 返回的头部
-- body: 返回的内容
-- status: 返回状态码
-- isSuccess: 返回值是否成功，status >= 200 && status < 300
-- headers: 获取 header 的深拷贝值，get 属性
-- setHeaders: 设置多个 header
-- setHeader: 设置单个 header
-- hasHeader: 判断 header 是否存在，忽略 key 大小写
-- removeHeader: 移除一个 header，忽略 key 大小写
-- getHeader: 获取一个 header 值，忽略 key 大小写
+- headers: headers
+- body: Content returned
+- status: Status code
+- isSuccess: If status >= 200 && status < 300
+- setHeaders: Set headers
+- setHeader: Set a header
+- hasHeader: Is the header name existed, ignore name case
+- removeHeader: remove a header, ignore name case
+- getHeader: get a header value, ignore name case
 
-在每个中间件都可以修改 `this.ctx.res` 中的内容
+In each middleware, you can modify the data in `this.ctx.res`
 
 #### X-HTTP-Method-Override
 
-如果请求头部包含 `X-HTTP-Method-Override` 参数，则访问方法 `httpMethod` 以 `X-HTTP-Method-Override` 值为准
+If the request headers contain the `X-HTTP-Method-Override` item, the `httpMethod` will based on the value of `X-HTTP-Method-Override`
 
-比如 Action 要求 `PATCH` 请求，但微信小程序不支持 `PATCH`，那么可以使用 `POST` 访问，并在头部加上此参数，值为 `PATCH`
+For example, if a `Action` requires `PATCH` request, but wechat miniapp does not support `PATCH`. Then you can use `POST` to access and add this parameter to the headers with the value of `PATCH`
 
 ```JSON
 "headers":{
-  "X-HTTP-Method-Override":"PATCH"
+  "X-HTTP-Method-Override": "PATCH"
 }
 ```
 
 ### Request
 
-在中间件中，可通过 `this.ctx.req` 方式获取请求内容
+In the middleware, you can get the request content through `this.ctx.req`
 
-`req` 对象包含以下内容
+The `req` object contains the following:
 
-- path: 访问路径，不带域名和查询参数，自动去除开头 `/`
-- params: 查询参数
-- body: body 内容
-- headers: 获取 header 的深拷贝值，get 属性
-- setHeaders: 设置多个 header
-- setHeader: 设置单个 header
-- hasHeader: 判断 header 是否存在，忽略 key 大小写
-- removeHeader: 移除一个 header，忽略 key 大小写
-- getHeader: 获取一个 header 值，忽略 key 大小写
+- path: Access path, without domain name and query parameters, automatically remove the beginning `/`
+- params: Query parameters
+- body: Body content
+- headers: headers
+- setHeaders: Set headers
+- setHeader: Set a header
+- hasHeader: Is the header name existed, ignore name case
+- removeHeader: remove a header, ignore name case
+- getHeader: get a header value, ignore name case
 
-### bag 函数
+### `bag` function
 
-可以在管道中传递更多自定义内容。
+You can pass more custom content in the pipeline
 
-如果使用 TS，可以借泛型特性获得更多智能提示。
+If you use TS, you can use the template feature to get more smart tips
 
-sfa 支持两种引用类型的 bag
+Sfa supports two reference types of bags:
 
-- Singleton: 单例模式，添加后可多次获取同一引用
-- Transient: 临时模式，添加后每次获取都会创建一个新引用
+- Singleton: The same reference can be getting multiple times after adding
+- Transient: A new reference is created for each getting after adding
 
-如果是值类型，每次获取的都是该值的拷贝
+If it is a value type, every time you get a copy of the value
 
-#### 添加或修改 bag
+#### Add or modify `bag`
 
 ```JS
-// 单例模式
+// Singleton
 this.ctx.bag("BAG_NAME", { /*bag content*/ });
 ```
 
-或
+OR
 
 ```JS
-// 临时模式
+// Transient
 this.ctx.bag("BAG_NAME", () => { /*bag content*/ });
 ```
 
-#### 获取 bag
+#### Get bag
 
 ```JS
 const val = this.ctx.bag("BAG_NAME")
 ```
 
-或 TS
+OR TS
 
 ```TS
 const val = this.ctx.bag<string>("BAG_NAME")
 ```
 
-## 内置结果函数
+## Built-in result functions
 
-目前 `ctx` 和中间件中内置一些返回结果：
+`ctx` and the middleware have some built-in result functions:
 
 - ok, 200
 - accepted, 202
@@ -235,13 +232,13 @@ const val = this.ctx.bag<string>("BAG_NAME")
 - errRequest, 500
 - errRequestMsg, 500
 
-如在类中间件中
+As in class middleware
 
 ```TS
 this.ok("success");
 ```
 
-等同于
+Equivalent to
 
 ```TS
 this.ctx.res.body="success";
@@ -264,35 +261,36 @@ export default class extends Middleware {
   async invoke() {
     const { account, password } = this.ctx.req.params;
 
-    if (/*账号或密码错误*/) {
-      this.notFoundMsg({ message: "账号或密码错误" });
+    if (/*Incorrect username or password*/) {
+      this.notFoundMsg({ message: "Incorrect username or password" });
     } else {
       this.ok({
-        /*返回信息*/
+        /*messages*/
       });
     }
   }
 }
 ```
 
-多数内置类型支持传入 `body` 可选参数，`body` 为返回的内容。
-API 返回错误时，可统一返回 `ErrorMessage`，命名以 `Msg` 结尾的内置类型接受 `ErrorMessage` 参数。
+Most built-in result functions pass in optional `body` parameters
 
-## sfa 环境
+When an error occurs, `ErrorMessage` can be returned uniformly, and the built-in functions whose name ends with `Msg` accepts the `ErrorMessage` parameter
+
+## Sfa environment
 
 - [@sfajs/cloudbase](https://github.com/sfajs/cloudbase): 将 sfa 托管到腾讯云 CloudBase
 - [@sfajs/alifunc](https://github.com/sfajs/alifunc): 将 sfa 托管到阿里云函数计算
-- [@sfajs/http](https://github.com/sfajs/http): 将 sfa 托管到 http(s) 环境
+- [@sfajs/http](https://github.com/sfajs/http): Host sfa to http(s) environment
 
-> 🎉 更多环境欢迎贡献并编辑此 [README](https://github.com/sfajs/sfa/edit/main/README.md) 以添加
+> 🎉 You are welcome to contribute more environments and edit this [README](https://github.com/sfajs/sfa/edit/main/README.md) to add
 
-## sfa 中间件
+## Sfa middlewares
 
-- [@sfajs/router](https://github.com/sfajs/router): 路由中间件
-- [@sfajs/static](https://github.com/sfajs/static): 静态资源中间件
-- [@sfajs/views](https://github.com/sfajs/views): 视图渲染中间件
-- [@sfajs/mvc](https://github.com/sfajs/mvc): MVC 框架
-- [@sfajs/swagger](https://github.com/sfajs/swagger): 使用 swagger 自动生成你的 sfa 文档
-- [@sfajs/koa](https://github.com/sfajs/koa): 让 koa 成为 sfa 的中间件，并打通二者中间件管道
+- [@sfajs/router](https://github.com/sfajs/router): Routing middleware
+- [@sfajs/static](https://github.com/sfajs/static): Static resource middleware
+- [@sfajs/views](https://github.com/sfajs/views): View rendering middleware
+- [@sfajs/mvc](https://github.com/sfajs/mvc): MVC framework
+- [@sfajs/swagger](https://github.com/sfajs/swagger): Use swagger to automatically generate your sfa document
+- [@sfajs/koa](https://github.com/sfajs/koa): Let koa become the middleware of sfa and connect their middleware pipeline
 
-> 🎉 更多中间件欢迎贡献并编辑此 [README](https://github.com/sfajs/sfa/edit/main/README.md) 以添加
+> 🎉 You are welcome to contribute more middleware and edit this [README](https://github.com/sfajs/sfa/edit/main/README.md) to add
