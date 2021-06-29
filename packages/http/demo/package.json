@@ -7,7 +7,7 @@
   "dependencies": {
     "@sfajs/http": "..",
     "@types/node": "^15.12.4",
-    "sfa": "^0.4.0"
+    "sfa": "^0.5.1"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.27.0",

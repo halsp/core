@@ -28,10 +28,9 @@ export default abstract class HttpStartup extends HttpBodyPraserStartup {
       new Request()
         .setPath(url.pathname)
         .setMethod(httpReq.method as string)
-        .setParams(url.query)
+        .setQuery(url.query)
         .setHeaders(httpReq.headers)
     );
-    ctx.res.setHeader("sfa-http", "https://github.com/sfajs/http");
 
     httpRes.statusCode = 404;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
