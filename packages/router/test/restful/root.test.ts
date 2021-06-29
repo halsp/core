@@ -11,5 +11,5 @@ test("restful root get", async function () {
     .run();
   expect(result.status).toBe(200);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  expect((result.body as any).method).toBe(HttpMethod.get);
+  expect(result.body.method).toBe(HttpMethod.get);
 });

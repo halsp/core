@@ -23,6 +23,6 @@ methods.forEach((method) => {
       .useRouter()
       .run();
     expect(result.status).toBe(200);
-    expect((result.body as Record<string, unknown>).method).toBe(method);
+    expect(result.body.method).toBe(method);
   });
 });

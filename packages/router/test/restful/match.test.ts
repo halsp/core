@@ -20,7 +20,7 @@ test(`find simple`, async function () {
     .useRouter()
     .run();
   expect(result.status).toBe(200);
-  expect((result.body as Record<string, string>).action).toBe("simple");
+  expect(result.body.action).toBe("simple");
 });
 
 test(`find simple next`, async function () {
@@ -31,7 +31,7 @@ test(`find simple next`, async function () {
     .useRouter()
     .run();
   expect(result.status).toBe(200);
-  expect((result.body as Record<string, string>).action).toBe("params");
+  expect(result.body.action).toBe("params");
 });
 
 test(`find miss next`, async function () {
@@ -42,8 +42,8 @@ test(`find miss next`, async function () {
     .useRouter()
     .run();
   expect(result.status).toBe(200);
-  expect((result.body as Record<string, string>).action).toBe("miss");
-  expect((result.body as Record<string, string>).action).not.toBe("params");
+  expect(result.body.action).toBe("miss");
+  expect(result.body.action).not.toBe("params");
 });
 
 test(`find miss next 2`, async function () {
@@ -54,7 +54,7 @@ test(`find miss next 2`, async function () {
     .useRouter()
     .run();
   expect(result.status).toBe(200);
-  expect((result.body as Record<string, string>).action).toBe("miss/params");
+  expect(result.body.action).toBe("miss/params");
 });
 
 test(`find miss next 3`, async function () {
@@ -65,7 +65,7 @@ test(`find miss next 3`, async function () {
     .useRouter()
     .run();
   expect(result.status).toBe(200);
-  expect((result.body as Record<string, string>).action).toBe("params/miss");
+  expect(result.body.action).toBe("params/miss");
 });
 
 test(`find miss next 4`, async function () {
@@ -76,9 +76,7 @@ test(`find miss next 4`, async function () {
     .useRouter()
     .run();
   expect(result.status).toBe(200);
-  expect((result.body as Record<string, string>).action).toBe(
-    "params2/nextParams"
-  );
+  expect(result.body.action).toBe("params2/nextParams");
 });
 
 test(`mostLikePathParts`, async function () {

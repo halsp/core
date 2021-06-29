@@ -10,7 +10,7 @@ test(`restful params test1`, async function () {
     .useRouter()
     .run();
   expect(result.status).toBe(200);
-  expect((result.body as Record<string, unknown>).id).toBe("45");
+  expect(result.body.id).toBe("45");
 });
 
 test(`restful params test2`, async function () {
@@ -21,5 +21,5 @@ test(`restful params test2`, async function () {
     .useRouter()
     .run();
   expect(result.status).toBe(200);
-  expect((result.body as Record<string, unknown>).id).toBe("11");
+  expect(result.body.id).toBe("11");
 });
