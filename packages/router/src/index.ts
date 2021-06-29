@@ -29,7 +29,6 @@ declare module "sfa" {
 
 Startup.prototype.useRouter = function <T extends Startup>(): T {
   return this.use(async (ctx, next) => {
-    ctx.res.setHeader("sfa-router", "https://github.com/sfajs/router");
     if (ctx.routerDir == undefined) {
       setConfig(ctx, Constant.defaultRouterDir, Constant.defaultStrict);
     }
@@ -67,7 +66,6 @@ function useRouterParser<T extends Startup>(
 }
 
 function setConfig(ctx: HttpContext, dir: string, strict: boolean) {
-  ctx.res.setHeader("sfa-router", "https://github.com/sfajs/router");
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (ctx as any).routerDir = dir;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
