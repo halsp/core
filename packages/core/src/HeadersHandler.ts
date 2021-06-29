@@ -15,9 +15,12 @@ export default abstract class HeadersHandler {
     return this.#headersFinder();
   }
 
-  setHeaders(headers: Record<string, NumericalHeaderValueType>): this {
+  setHeaders(headers: NodeJS.Dict<NumericalHeaderValueType>): this {
     for (const key in headers) {
-      this.setHeader(key, headers[key]);
+      const value = headers[key];
+      if (value != undefined) {
+        this.setHeader(key, value);
+      }
     }
     return this;
   }

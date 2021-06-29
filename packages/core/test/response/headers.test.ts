@@ -1,4 +1,5 @@
 import { Response } from "../../src";
+import { HeaderValueType } from "../../src/HeadersHandler";
 
 test("response setHeader", async function () {
   const res = new Response()
@@ -6,7 +7,9 @@ test("response setHeader", async function () {
     .setHeader("h2", "2")
     .setHeader("h3", "3")
     .removeHeader("h2")
-    .removeHeader("h4");
+    .removeHeader("h4")
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    .setHeader("h5", undefined as any);
 
   expectHeaders(res.headers);
 });
@@ -19,11 +22,12 @@ test("response setHeaders", async function () {
   expectHeaders(res.headers);
 });
 
-function expectHeaders(headers: Record<string, string | string[] | undefined>) {
+function expectHeaders(headers: NodeJS.Dict<HeaderValueType>) {
   expect(headers.h1).toBe("1");
-  expect(headers.h2).toBe(undefined);
+  expect(headers.h2).toBeUndefined();
   expect(headers.h3).toBe("3");
-  expect(headers.h4).toBe(undefined);
+  expect(headers.h4).toBeUndefined();
+  expect(headers.h5).toBeUndefined();
 }
 
 test("get headers", async function () {

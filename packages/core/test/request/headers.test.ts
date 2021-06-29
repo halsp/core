@@ -1,4 +1,5 @@
 import { TestStartup, Request } from "../../src";
+import { HeaderValueType } from "../../src/HeadersHandler";
 
 test("request setHeader", async function () {
   const req = new Request()
@@ -18,7 +19,7 @@ test("request setHeaders", async function () {
   expectHeaders(req.headers);
 });
 
-function expectHeaders(headers: Record<string, string | string[] | undefined>) {
+function expectHeaders(headers: NodeJS.Dict<HeaderValueType>) {
   expect(headers.h1).toBe("1");
   expect(headers.h2).toBe("2");
   expect(headers.h3).toBe("3");

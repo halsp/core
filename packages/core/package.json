@@ -1,6 +1,6 @@
 {
   "name": "sfa",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Super flexible web app framework",
   "homepage": "https://github.com/sfajs/sfa",
   "repository": {

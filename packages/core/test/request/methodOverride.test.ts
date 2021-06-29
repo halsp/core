@@ -59,5 +59,5 @@ test(`method override request`, async function () {
     .run();
 
   expect(result.status).toBe(200);
-  expect((result.body as Record<string, unknown>).method).toBe(HttpMethod.get);
+  expect(result.body.method).toBe(HttpMethod.get);
 });
