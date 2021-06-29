@@ -165,7 +165,7 @@ In the middleware, you can get the request content through `this.ctx.req`
 The `req` object contains the following:
 
 - path: Access path, without domain name and query parameters, automatically remove the beginning `/`
-- params: Query parameters
+- query: Query parameters
 - body: Body content
 - headers: headers
 - setHeaders: Set headers
@@ -259,7 +259,7 @@ export default class extends Middleware {
 import { Middleware } from "sfa";
 export default class extends Middleware {
   async invoke() {
-    const { account, password } = this.ctx.req.params;
+    const { account, password } = this.ctx.req.query;
 
     if (/*Incorrect username or password*/) {
       this.notFoundMsg({ message: "Incorrect username or password" });

@@ -12,8 +12,6 @@ export default class Request extends HeadersHandler {
     return this.#headers;
   }
 
-  readonly params: NodeJS.Dict<string> = {};
-
   #body: unknown;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public get body(): any {
@@ -70,13 +68,18 @@ export default class Request extends HeadersHandler {
     return this;
   }
 
-  setParams(params: NodeJS.Dict<string>): Request {
-    Object.assign(this.params, params);
-    return this;
+  #query: NodeJS.Dict<string> = {};
+  get query(): NodeJS.ReadOnlyDict<string> {
+    return this.#query;
   }
-
-  setParam(key: string, value?: string): Request {
-    this.params[key] = value;
+  setQuery(key: string, value?: string): Request;
+  setQuery(query: NodeJS.Dict<string>): Request;
+  setQuery(key: string | NodeJS.Dict<string>, value?: string): Request {
+    if (typeof key == "string") {
+      this.#query[key] = value;
+    } else {
+      Object.assign(this.#query, key);
+    }
     return this;
   }
 }
