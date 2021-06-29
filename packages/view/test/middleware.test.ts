@@ -23,7 +23,7 @@ test("middleware class", async function () {
 test("middleware class default", async function () {
   class Md extends Middleware {
     async invoke(): Promise<void> {
-      await this.view();
+      await this.view("");
     }
   }
 

@@ -18,12 +18,12 @@ declare module "sfa" {
   }
 
   interface HttpContext {
-    view(tmpPath?: string, locals?: Record<string, unknown>): Promise<Response>;
+    view(tmpPath: string, locals?: Record<string, unknown>): Promise<Response>;
     state: Record<string, unknown>;
   }
 
   interface Middleware {
-    view(tmpPath?: string, locals?: Record<string, unknown>): Promise<Response>;
+    view(tmpPath: string, locals?: Record<string, unknown>): Promise<Response>;
   }
 }
 
@@ -33,14 +33,14 @@ Startup.prototype.useViews = function <T extends Startup>(
   engines: Engine[] = []
 ): T {
   Middleware.prototype.view = async function (
-    tmpPath = "",
+    tmpPath,
     locals: Record<string, unknown> = {}
   ) {
     return await render(this.ctx, dir, tmpPath, locals, options, engines);
   };
 
   HttpContext.prototype.view = async function (
-    tmpPath = "",
+    tmpPath,
     locals: Record<string, unknown> = {}
   ) {
     return await render(this, dir, tmpPath, locals, options, engines);

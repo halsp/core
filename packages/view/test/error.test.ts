@@ -5,7 +5,7 @@ test("dir is not exist", async function () {
   const res = await new TestStartup()
     .useViews("test/1views")
     .use(async (ctx) => {
-      await ctx.view();
+      await ctx.view("");
     })
     .run();
 
@@ -16,7 +16,7 @@ test("dir is not exist", async function () {
   const res = await new TestStartup()
     .useViews("test")
     .use(async (ctx) => {
-      await ctx.view();
+      await ctx.view("");
     })
     .run();
 
