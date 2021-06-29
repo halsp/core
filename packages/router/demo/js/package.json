@@ -3,7 +3,7 @@
     "build": "sfa-router-build controllers"
   },
   "devDependencies": {
-    "sfa": "^0.4.0",
-    "@sfajs/router": "../.."
+    "@sfajs/router": "../..",
+    "sfa": "^0.5.0-beta.1"
   }
 }

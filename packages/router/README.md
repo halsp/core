@@ -179,7 +179,7 @@ const res = await new TestStartup()
 |       +-- getTodoItem.ts
 ```
 
-访问地址为 `GET(POST 等) /todo/getTodoItem`，需要在 `body` 、 `header` 或 `queryParams` 传入 `todoId` 参数
+访问地址为 `GET(POST 等) /todo/getTodoItem`，需要在 `body` 、 `header` 或 `query` 传入 `todoId` 参数
 
 #### 示例建议
 
@@ -309,18 +309,18 @@ class Auth extends Middleware {
 startup.add(() => new Auth())
 ```
 
-## query
+## params
 
-`@sfajs/router` 会在 `ctx.req` 中添加 `query` 属性
+`@sfajs/router` 会在 `ctx.req` 中添加 `params` 属性
 
-在 `startup.useRouter`、`startup.useRouterParser` 之后的中间件，都可以获取 `ctx.req.query`
+在 `startup.useRouter`、`startup.useRouterParser` 之后的中间件，都可以获取 `ctx.req.params`
 
-`query` 内容是 RESTful 路径中的参数，如
+`params` 内容是 RESTful 路径中的参数，如
 
 - 访问路径：`/user/66/todo/88`
 - action 文件路径：`/user/^userId/todo/^todoId/get.ts`
 
-那么 `query` 值为
+那么 `params` 值为
 
 ```JSON
 {

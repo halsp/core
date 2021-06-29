@@ -31,7 +31,7 @@ test(`find simple next`, async function () {
     .useRouter()
     .run();
   expect(result.status).toBe(200);
-  expect((result.body as Record<string, string>).action).toBe("query");
+  expect((result.body as Record<string, string>).action).toBe("params");
 });
 
 test(`find miss next`, async function () {
@@ -43,7 +43,7 @@ test(`find miss next`, async function () {
     .run();
   expect(result.status).toBe(200);
   expect((result.body as Record<string, string>).action).toBe("miss");
-  expect((result.body as Record<string, string>).action).not.toBe("query");
+  expect((result.body as Record<string, string>).action).not.toBe("params");
 });
 
 test(`find miss next 2`, async function () {
@@ -54,7 +54,7 @@ test(`find miss next 2`, async function () {
     .useRouter()
     .run();
   expect(result.status).toBe(200);
-  expect((result.body as Record<string, string>).action).toBe("miss/query");
+  expect((result.body as Record<string, string>).action).toBe("miss/params");
 });
 
 test(`find miss next 3`, async function () {
@@ -65,7 +65,7 @@ test(`find miss next 3`, async function () {
     .useRouter()
     .run();
   expect(result.status).toBe(200);
-  expect((result.body as Record<string, string>).action).toBe("query/miss");
+  expect((result.body as Record<string, string>).action).toBe("params/miss");
 });
 
 test(`find miss next 4`, async function () {
@@ -77,7 +77,7 @@ test(`find miss next 4`, async function () {
     .run();
   expect(result.status).toBe(200);
   expect((result.body as Record<string, string>).action).toBe(
-    "query2/nextQuery"
+    "params2/nextParams"
   );
 });
 

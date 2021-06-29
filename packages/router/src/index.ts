@@ -15,7 +15,7 @@ declare module "sfa" {
   }
 
   interface Request {
-    readonly query: Record<string, string>;
+    readonly params: NodeJS.ReadOnlyDict<string>;
   }
 
   interface HttpContext {
@@ -100,7 +100,7 @@ function parseRouter(ctx: HttpContext): boolean {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (ctx as any).routerMap = mapParser.map;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (ctx.req as any).query = {};
+  (ctx.req as any).params = {};
 
   if (mapItem.path.includes("^")) {
     const reqPath = ctx.req.path;
@@ -113,7 +113,9 @@ function parseRouter(ctx: HttpContext): boolean {
 
       const key = mapPathStr.substr(1, mapPathStr.length - 1);
       const value = decodeURIComponent(reqPathStr);
-      ctx.req.query[key] = value;
+
+      const params = ctx.req.params as NodeJS.Dict<string>;
+      params[key] = value;
     }
   }
 
