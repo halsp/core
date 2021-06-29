@@ -112,7 +112,7 @@ async function getHttpReq(
     "/" +
     queryString.stringifyUrl({
       url: sfaCtx.req.path,
-      query: sfaCtx.req.params,
+      query: sfaCtx.req.query,
     });
   httpReq.method = sfaCtx.req.method;
   httpReq.complete = true;

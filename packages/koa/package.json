@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/koa",
-  "version": "0.4.2",
+  "version": "0.5.0",
   "description": "让 koa 成为 sfa 的中间件，并打通二者中间件管道",
   "homepage": "https://github.com/sfajs/koa",
   "repository": {
@@ -35,7 +35,7 @@
     "koa": "^2.13.1",
     "koa-compose": "^4.1.0",
     "query-string": "^7.0.1",
-    "sfa": "^0.4.2"
+    "sfa": "^0.5.1"
   },
   "devDependencies": {
     "@koa/router": "^10.0.0",
