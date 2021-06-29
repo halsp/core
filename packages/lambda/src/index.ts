@@ -28,7 +28,7 @@ export default class SfaCloudbase extends Startup {
       new Request()
         .setBody(getBody(event))
         .setMethod(event.httpMethod as string)
-        .setHeaders(event.headers as Record<string, string | string[]>)
+        .setHeaders(event.headers as Record<string, string>)
         .setParams(event.queryStringParameters as Record<string, string>)
         .setPath(event.path as string)
     );
@@ -48,15 +48,7 @@ export default class SfaCloudbase extends Startup {
 
     const res = this.#ctx.res;
     const body = res.body;
-    if (typeof body == "string") {
-      if (writeLength) {
-        res.setHeader("content-length", Buffer.byteLength(body));
-      }
-      if (writeType) {
-        const type = /^\s*</.test(body) ? "html" : "text";
-        res.setHeader("content-type", mime.contentType(type) as string);
-      }
-    } else if (Buffer.isBuffer(body)) {
+    if (Buffer.isBuffer(body)) {
       if (writeLength) {
         res.setHeader("content-length", body.byteLength);
       }
@@ -79,6 +71,15 @@ export default class SfaCloudbase extends Startup {
       }
     } else if (body instanceof Stream) {
       throw new Error("Cloudbase is does support streaming! ");
+    } else {
+      const strBody = String(body);
+      if (writeLength) {
+        res.setHeader("content-length", Buffer.byteLength(strBody));
+      }
+      if (writeType) {
+        const type = /^\s*</.test(strBody) ? "html" : "text";
+        res.setHeader("content-type", mime.contentType(type) as string);
+      }
     }
 
     return this.struct;
