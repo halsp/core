@@ -1,13 +1,18 @@
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
+import HeadersHandler, { HeaderValueType } from "./HeadersHandler";
 import Response from "./Response";
 import ErrorMessage from "./Response/ErrorMessage";
 
-export default abstract class ResultHandler {
+export default abstract class ResultHandler extends HeadersHandler {
+  constructor(
+    private resFinder: () => Response,
+    headersFinder?: () => NodeJS.Dict<HeaderValueType>
+  ) {
+    super(headersFinder ?? (() => resFinder().headers));
+  }
+
   private get response(): Response {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const that = this as any;
-    if (that.ctx) return that.ctx.res;
-    else return that.res;
+    return this.resFinder();
   }
 
   ok(body?: unknown): Response {

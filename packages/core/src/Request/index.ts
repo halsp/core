@@ -1,7 +1,13 @@
-import HeadersHandler from "../HeadersHandler";
+import HeadersHandler, { HeaderValueType } from "../HeadersHandler";
 import HttpMethod from "./HttpMethod";
 
 export default class Request extends HeadersHandler {
+  #headers: NodeJS.Dict<HeaderValueType> = {};
+
+  constructor() {
+    super(() => this.#headers);
+  }
+
   readonly params: NodeJS.Dict<string> = {};
 
   #body: unknown;

@@ -2,6 +2,10 @@ import HttpContext from "../HttpContext";
 import ResultHandler from "../ResultHandler";
 
 export default abstract class Middleware extends ResultHandler {
+  constructor() {
+    super(() => this.ctx.res);
+  }
+
   #index!: number;
   #mds!: readonly ((ctx: HttpContext) => Middleware)[];
 

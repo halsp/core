@@ -63,7 +63,7 @@ test(`http result created`, async function () {
   {
     const res = await new TestStartup()
       .use(async (ctx) => {
-        ctx.created("loca");
+        ctx.res.created("loca");
       })
       .run();
     expect(res.status).toBe(201);

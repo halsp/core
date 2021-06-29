@@ -1,13 +1,19 @@
 import { StatusCodes } from "http-status-codes";
-import HeadersHandler from "../HeadersHandler";
+import { HeaderValueType } from "../HeadersHandler";
+import ResultHandler from "../ResultHandler";
 
-export default class Response extends HeadersHandler {
+export default class Response extends ResultHandler {
+  #headers: NodeJS.Dict<HeaderValueType> = {};
+
   constructor(
     public status: StatusCodes = StatusCodes.NOT_FOUND,
     public body: unknown = undefined,
     headers = {}
   ) {
-    super();
+    super(
+      () => this,
+      () => this.#headers
+    );
     this.setHeaders(headers);
     this.setHeader("sfa", "https://github.com/sfajs/sfa");
   }

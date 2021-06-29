@@ -1,8 +1,15 @@
-type HeaderValueType = string | string[];
-type NumericalHeaderValueType = HeaderValueType | number | (number | string)[];
+export type HeaderValueType = string | string[];
+export type NumericalHeaderValueType =
+  | HeaderValueType
+  | number
+  | (number | string)[];
 
-export default class HeadersHandler {
-  #headers: NodeJS.Dict<HeaderValueType> = {};
+export default abstract class HeadersHandler {
+  constructor(private headersFinder: () => NodeJS.Dict<HeaderValueType>) {}
+
+  get #headers(): NodeJS.Dict<HeaderValueType> {
+    return this.headersFinder();
+  }
 
   setHeaders(headers: Record<string, NumericalHeaderValueType>): this {
     for (const key in headers) {

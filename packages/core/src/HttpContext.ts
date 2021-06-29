@@ -4,7 +4,7 @@ import ResultHandler from "./ResultHandler";
 
 export default class HttpContext extends ResultHandler {
   constructor(req: Request) {
-    super();
+    super(() => this.#res);
     this.#req = req;
   }
 
