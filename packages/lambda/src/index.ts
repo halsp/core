@@ -16,37 +16,40 @@ declare module "sfa" {
 export { ResponseStruct, Dbhelper };
 
 export default class SfaCloudbase extends Startup {
-  readonly #ctx: HttpContext;
-
-  constructor(
+  async run(
     event: Record<string, unknown>,
     context: Record<string, unknown>
-  ) {
-    super();
+  ): Promise<ResponseStruct> {
+    const ctx = this.createContext(event, context);
+    await super.invoke(ctx);
+    this.setType(ctx);
+    return this.getStruct(ctx);
+  }
 
+  private createContext(
+    event: NodeJS.Dict<unknown>,
+    context: NodeJS.Dict<unknown>
+  ): HttpContext {
     const ctx = new HttpContext(
       new Request()
-        .setBody(getBody(event))
+        .setBody(this.getBody(event))
         .setMethod(event.httpMethod as string)
         .setHeaders(event.headers as Record<string, string>)
-        .setParams(event.queryStringParameters as Record<string, string>)
+        .setQuery(event.queryStringParameters as NodeJS.Dict<string>)
         .setPath(event.path as string)
     );
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (ctx.req as any).context = context;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (ctx.req as any).event = event;
-
-    this.#ctx = ctx;
+    return ctx;
   }
 
-  async run(): Promise<ResponseStruct> {
-    await super.invoke(this.#ctx);
+  private setType(ctx: HttpContext) {
+    const writeType = !ctx.res.hasHeader("content-type");
+    const writeLength = !ctx.res.hasHeader("content-length");
 
-    const writeType = !this.#ctx.res.hasHeader("content-type");
-    const writeLength = !this.#ctx.res.hasHeader("content-length");
-
-    const res = this.#ctx.res;
+    const res = ctx.res;
     const body = res.body;
     if (Buffer.isBuffer(body)) {
       if (writeLength) {
@@ -70,8 +73,8 @@ export default class SfaCloudbase extends Startup {
         res.setHeader("content-type", mime.contentType("json") as string);
       }
     } else if (body instanceof Stream) {
-      throw new Error("Cloudbase is does support streaming! ");
-    } else {
+      throw new Error("Cloudbase don't support streaming! ");
+    } else if (body) {
       const strBody = String(body);
       if (writeLength) {
         res.setHeader("content-length", Buffer.byteLength(strBody));
@@ -81,23 +84,38 @@ export default class SfaCloudbase extends Startup {
         res.setHeader("content-type", mime.contentType(type) as string);
       }
     }
-
-    return this.struct;
   }
 
-  get struct(): ResponseStruct {
-    let body = this.#ctx.res.body;
+  private getStruct(ctx: HttpContext): ResponseStruct {
+    let body = ctx.res.body;
     const isBase64Encoded = Buffer.isBuffer(body);
     if (isBase64Encoded) {
       body = (body as Buffer).toString("base64");
     }
 
     return <ResponseStruct>{
-      headers: this.#ctx.res.headers,
-      statusCode: this.#ctx.res.status,
+      headers: ctx.res.headers,
+      statusCode: ctx.res.status,
       isBase64Encoded: isBase64Encoded,
       body: body ?? "",
     };
+  }
+
+  getBody(event: Record<string, unknown>): unknown {
+    const body = event.body;
+    const headers = event.headers as Record<string, string | string[]>;
+    if (body && typeof body == "string") {
+      if (event.isBase64Encoded) {
+        return Buffer.from(body, "base64");
+      } else if (
+        headers &&
+        headers["content-type"]?.includes("application/json")
+      ) {
+        return JSON.parse(body);
+      }
+    }
+
+    return body || {};
   }
 
   useCloudbaseApp<T extends this>(config?: ICloudBaseConfig): T {
@@ -125,21 +143,4 @@ export default class SfaCloudbase extends Startup {
     });
     return this as T;
   }
-}
-
-function getBody(event: Record<string, unknown>): unknown {
-  const body = event.body;
-  const headers = event.headers as Record<string, string | string[]>;
-  if (body && typeof body == "string") {
-    if (event.isBase64Encoded) {
-      return Buffer.from(body, "base64");
-    } else if (
-      headers &&
-      headers["content-type"]?.includes("application/json")
-    ) {
-      return JSON.parse(body);
-    }
-  }
-
-  return body || {};
 }

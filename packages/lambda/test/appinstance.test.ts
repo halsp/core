@@ -5,26 +5,26 @@ import { HttpContext } from "sfa";
 
 test("default config", async function () {
   let context!: HttpContext;
-  await new SfaCloudbase({}, {})
+  await new SfaCloudbase()
     .useCloudbaseApp()
     .use(async (ctx) => {
       context = ctx;
     })
-    .run();
+    .run({}, {});
   expect(!!context.bag<tcb.CloudBase>("CB_APP")).toBeTruthy();
   expect(!!context.bag<tcb.Database.Db>("CB_DB")).toBeTruthy();
 });
 
 test("custom config", async function () {
   let context!: HttpContext;
-  await new SfaCloudbase({}, {})
+  await new SfaCloudbase()
     .useCloudbaseApp({
       env: "test",
     })
     .use(async (ctx) => {
       context = ctx;
     })
-    .run();
+    .run({}, {});
   expect(!!context.bag<tcb.CloudBase>("CB_APP")).toBeTruthy();
   expect(!!context.bag<tcb.Database.Db>("CB_DB")).toBeTruthy();
 });

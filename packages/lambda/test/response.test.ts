@@ -1,7 +1,7 @@
 import SfaCloudbase from "../src";
 
 test("default response", async function () {
-  const res = await new SfaCloudbase({}, {}).run();
+  const res = await new SfaCloudbase().run({}, {});
 
   expect(res.isBase64Encoded).toBeFalsy();
   expect(res.headers.t).toBeUndefined();
@@ -11,14 +11,14 @@ test("default response", async function () {
 });
 
 test("base response", async function () {
-  const result = await new SfaCloudbase({}, {})
+  const result = await new SfaCloudbase()
     .use(async (ctx, next) => {
       ctx.res.body = "str body";
       ctx.res.setHeader("t", "test");
       ctx.res.status = 200;
       await next();
     })
-    .run();
+    .run({}, {});
 
   expect(result.headers.t).toBe("test");
   expect(result.body).toBe("str body");
@@ -26,19 +26,19 @@ test("base response", async function () {
 });
 
 test("error response", async function () {
-  const result = await new SfaCloudbase({}, {})
+  const result = await new SfaCloudbase()
     .use(async (ctx, next) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ctx.res.status = undefined as any;
       await next();
     })
-    .run();
+    .run({}, {});
 
   expect(result.statusCode).toBe(undefined);
 });
 
 test("set json type", async function () {
-  const res = await new SfaCloudbase({}, {})
+  const res = await new SfaCloudbase()
     .use(async (ctx, next) => {
       ctx.res.setHeader("content-type", "application/json");
       ctx.res.setHeader("content-length", "10");
@@ -47,7 +47,7 @@ test("set json type", async function () {
       });
       await next();
     })
-    .run();
+    .run({}, {});
 
   expect(res.headers["content-type"]).toBe("application/json");
   expect(res.headers["content-length"]).toBe("10");

@@ -2,31 +2,25 @@ import { Stream } from "stream";
 import SfaCloudbase from "../src";
 
 test("buffer", async function () {
-  const res = await new SfaCloudbase(
-    {
-      body: Buffer.from("test", "utf-8").toString("base64"),
-      isBase64Encoded: true,
-    },
-    {}
-  )
+  const res = await new SfaCloudbase()
     .use(async (ctx, next) => {
       ctx.ok(ctx.req.body);
       await next();
     })
-    .run();
+    .run(
+      {
+        body: Buffer.from("test", "utf-8").toString("base64"),
+        isBase64Encoded: true,
+      },
+      {}
+    );
 
   expect(res.body).toBe(Buffer.from("test", "utf-8").toString("base64"));
   expect(res.headers["content-type"]).toBe("application/octet-stream");
 });
 
 test("set buffer type", async function () {
-  const res = await new SfaCloudbase(
-    {
-      body: Buffer.from("test", "utf-8").toString("base64"),
-      isBase64Encoded: true,
-    },
-    {}
-  )
+  const res = await new SfaCloudbase()
     .use(async (ctx, next) => {
       ctx
         .ok(ctx.req.body)
@@ -34,7 +28,13 @@ test("set buffer type", async function () {
         .setHeader("content-length", 100);
       await next();
     })
-    .run();
+    .run(
+      {
+        body: Buffer.from("test", "utf-8").toString("base64"),
+        isBase64Encoded: true,
+      },
+      {}
+    );
 
   expect(res.body).toBe(Buffer.from("test", "utf-8").toString("base64"));
   expect(res.headers["content-type"]).toBe("stream");
@@ -44,7 +44,7 @@ test("set buffer type", async function () {
 test("stream", async function () {
   let error: Error | undefined;
   try {
-    await new SfaCloudbase({}, {})
+    await new SfaCloudbase()
       .use(async (ctx, next) => {
         await next();
       })
@@ -52,7 +52,7 @@ test("stream", async function () {
         ctx.ok(new Stream());
         await next();
       })
-      .run();
+      .run({}, {});
   } catch (err) {
     error = err;
   }

@@ -5,12 +5,12 @@ import { HttpContext } from "sfa";
 
 test("dbhelper", async function () {
   let context!: HttpContext;
-  await new SfaCloudbase({}, {})
+  await new SfaCloudbase()
     .useCloudbaseDbhelper()
     .use(async (ctx) => {
       context = ctx;
     })
-    .run();
+    .run({}, {});
 
   expect(!!context.bag<Dbhelper>("CB_DBHELPER")).toBeTruthy();
   expect(context.bag<Dbhelper>("CB_DBHELPER") instanceof Dbhelper).toBeTruthy();
@@ -66,12 +66,12 @@ async function testPageList(
   limit: number
 ) {
   let context!: HttpContext;
-  await new SfaCloudbase(event, {})
+  await new SfaCloudbase()
     .useCloudbaseDbhelper()
     .use(async (ctx) => {
       context = ctx;
     })
-    .run();
+    .run(event, {});
   const dbhelper = context.bag<Dbhelper>("CB_DBHELPER");
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
