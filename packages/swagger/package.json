@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/swagger",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "使用 swagger 自动生成你的 sfa 文档",
   "homepage": "https://github.com/sfajs/swagger",
   "repository": {
@@ -34,7 +34,7 @@
     "@types/shelljs": "^0.8.8",
     "@types/swagger-jsdoc": "^6.0.0",
     "linq": "^3.2.3",
-    "sfa": "^0.4.0",
+    "sfa": "^0.5.1",
     "swagger-jsdoc": "^6.1.0"
   },
   "devDependencies": {

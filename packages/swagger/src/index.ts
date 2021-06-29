@@ -25,8 +25,6 @@ Startup.prototype.useSwagger = function <T extends Startup>(
     if (fixPath(ctx.req.path) != fixPath(cfg.url)) {
       return await next();
     }
-    ctx.res.setHeader("sfa-swagger", "https://github.com/sfajs/swagger");
-
     const jsonStr = JSON.stringify(swaggerJSDoc(cfg.options ?? defaultOptions));
     let body;
     if (cfg.customHtml) {
