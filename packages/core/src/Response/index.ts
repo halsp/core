@@ -7,7 +7,8 @@ export default class Response extends ResultHandler {
 
   constructor(
     public status: StatusCodes = StatusCodes.NOT_FOUND,
-    public body: unknown = undefined,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    public body: any = undefined,
     headers = {}
   ) {
     super(() => this);
