@@ -64,8 +64,4 @@ export default abstract class HeadersHandler {
       return this.#headers[existKey];
     }
   }
-
-  get headers(): NodeJS.ReadOnlyDict<HeaderValueType> {
-    return this.#headers;
-  }
 }

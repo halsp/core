@@ -10,15 +10,16 @@ export default class Response extends ResultHandler {
     public body: unknown = undefined,
     headers = {}
   ) {
-    super(
-      () => this,
-      () => this.#headers
-    );
+    super(() => this);
     this.setHeaders(headers);
     this.setHeader("sfa", "https://github.com/sfajs/sfa");
   }
 
   get isSuccess(): boolean {
     return this.status >= 200 && this.status < 300;
+  }
+
+  get headers(): NodeJS.ReadOnlyDict<HeaderValueType> {
+    return this.#headers;
   }
 }

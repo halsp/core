@@ -1,14 +1,11 @@
 import { ReasonPhrases, StatusCodes } from "http-status-codes";
-import HeadersHandler, { HeaderValueType } from "./HeadersHandler";
+import HeadersHandler from "./HeadersHandler";
 import Response from "./Response";
 import ErrorMessage from "./Response/ErrorMessage";
 
 export default abstract class ResultHandler extends HeadersHandler {
-  constructor(
-    private resFinder: () => Response,
-    headersFinder?: () => NodeJS.Dict<HeaderValueType>
-  ) {
-    super(headersFinder ?? (() => resFinder().headers));
+  constructor(private resFinder: () => Response) {
+    super(() => resFinder().headers);
   }
 
   private get response(): Response {

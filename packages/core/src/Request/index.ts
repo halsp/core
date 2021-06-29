@@ -2,10 +2,14 @@ import HeadersHandler, { HeaderValueType } from "../HeadersHandler";
 import HttpMethod from "./HttpMethod";
 
 export default class Request extends HeadersHandler {
-  #headers: NodeJS.Dict<HeaderValueType> = {};
-
   constructor() {
     super(() => this.#headers);
+  }
+
+  #headers: NodeJS.Dict<HeaderValueType> = {};
+
+  get headers(): NodeJS.ReadOnlyDict<HeaderValueType> {
+    return this.#headers;
   }
 
   readonly params: NodeJS.Dict<string> = {};
@@ -33,11 +37,11 @@ export default class Request extends HeadersHandler {
   #method = HttpMethod.any;
   public get method(): string {
     const ovrdHeaderKey = "X-HTTP-Method-Override";
-    const ovrdKey = Object.keys(this.headers).filter(
+    const ovrdKey = Object.keys(this.#headers).filter(
       (h) => h.toUpperCase() == ovrdHeaderKey.toUpperCase()
     )[0];
     if (ovrdKey) {
-      const ovrdValue = this.headers[ovrdKey];
+      const ovrdValue = this.#headers[ovrdKey];
       if (ovrdValue && typeof ovrdValue == "string") {
         return ovrdValue.toUpperCase();
       } else if (ovrdValue && Array.isArray(ovrdValue) && ovrdValue.length) {
