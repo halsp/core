@@ -5,10 +5,14 @@ export type NumericalHeaderValueType =
   | (number | string)[];
 
 export default abstract class HeadersHandler {
-  constructor(private headersFinder: () => NodeJS.Dict<HeaderValueType>) {}
+  constructor(headersFinder: () => NodeJS.Dict<HeaderValueType>) {
+    this.#headersFinder = headersFinder;
+  }
+
+  #headersFinder;
 
   get #headers(): NodeJS.Dict<HeaderValueType> {
-    return this.headersFinder();
+    return this.#headersFinder();
   }
 
   setHeaders(headers: Record<string, NumericalHeaderValueType>): this {
