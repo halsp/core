@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/alifunc",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "将 sfa 托管到阿里云函数计算",
   "homepage": "https://github.com/sfajs/alifunc",
   "repository": {
@@ -10,8 +10,7 @@
   "keywords": [
     "sfa",
     "aliyun",
-    "serverless",
-    "typescript"
+    "serverless"
   ],
   "bugs": {
     "url": "https://github.com/sfajs/alifunc/issues",
@@ -31,10 +30,10 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@sfajs/http": "^0.4.0",
+    "@sfajs/http": "^0.5.0",
     "@types/node": "^15.12.4",
     "mime-types": "^2.1.31",
-    "sfa": "^0.4.0"
+    "sfa": "^0.5.1"
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",

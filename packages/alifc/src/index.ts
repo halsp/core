@@ -35,39 +35,38 @@ declare module "sfa" {
 }
 
 export default class SfaAlifunc extends HttpBodyPraserStartup {
-  constructor(
-    private readonly aliReq: AliReq,
-    private readonly aliRes: AliRes,
-    private readonly aliContext: AliContext
-  ) {
+  constructor() {
     super((ctx) => ctx.aliReq);
   }
 
-  async run(): Promise<void> {
+  async run(
+    aliReq: AliReq,
+    aliRes: AliRes,
+    aliContext: AliContext
+  ): Promise<void> {
     const ctx = new HttpContext(
       new Request()
-        .setPath(this.aliReq.path)
-        .setHeaders(this.aliReq.headers)
-        .setParams(this.aliReq.queries)
-        .setMethod(this.aliReq.method)
+        .setPath(aliReq.path)
+        .setHeaders(aliReq.headers)
+        .setQuery(aliReq.queries)
+        .setMethod(aliReq.method)
     );
-    ctx.res.setHeader("sfa-alifunc", "https://github.com/sfajs/alifunc");
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (ctx as any).aliContext = this.aliContext;
+    (ctx as any).aliContext = aliContext;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (ctx as any).aliReq = this.aliReq;
+    (ctx as any).aliReq = aliReq;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (ctx as any).aliRes = this.aliRes;
+    (ctx as any).aliRes = aliRes;
 
     const sfaRes = await this.invoke(ctx);
 
-    this.aliRes.statusCode = sfaRes.status;
+    aliRes.statusCode = sfaRes.status;
     Object.keys(sfaRes.headers)
       .filter((key) => !!sfaRes.headers[key])
       .forEach((key) => {
-        this.aliRes.setHeader(key, sfaRes.headers[key] as string);
+        aliRes.setHeader(key, sfaRes.headers[key] as string);
       });
-    this.writeBody(sfaRes, this.aliRes);
+    this.writeBody(sfaRes, aliRes);
 
     return;
   }

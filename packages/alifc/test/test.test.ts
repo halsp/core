@@ -46,7 +46,7 @@ test("without md", async function () {
   const aliReq = newAliReq();
   const aliRes = newAliRes();
 
-  await new SfaAlifunc(aliReq, aliRes, aliContext).run();
+  await new SfaAlifunc().run(aliReq, aliRes, aliContext);
 
   expect(aliRes.statusCode).toBe(404);
   expect(aliRes._body).toBe("");
@@ -57,13 +57,13 @@ test("json body", async function () {
   const aliReq = newAliReq();
   const aliRes = newAliRes();
 
-  await new SfaAlifunc(aliReq, aliRes, aliContext)
+  await new SfaAlifunc()
     .use(async (ctx) => {
       ctx.ok({
         content: "BODY",
       });
     })
-    .run();
+    .run(aliReq, aliRes, aliContext);
 
   expect(aliRes.statusCode).toBe(200);
   expect(aliRes._body).toBe(
@@ -86,7 +86,7 @@ test("json body set type", async function () {
   };
   const strBody = JSON.stringify(body);
 
-  await new SfaAlifunc(aliReq, aliRes, aliContext)
+  await new SfaAlifunc()
     .use(async (ctx) => {
       ctx.res.setHeader("content-type", "application/json");
       ctx.res.setHeader(
@@ -95,7 +95,7 @@ test("json body set type", async function () {
       );
       ctx.ok(body);
     })
-    .run();
+    .run(aliReq, aliRes, aliContext);
 
   expect(aliRes.statusCode).toBe(200);
   expect(aliRes._body).toBe(strBody);
@@ -107,11 +107,11 @@ test("text body", async function () {
   const aliReq = newAliReq();
   const aliRes = newAliRes();
 
-  await new SfaAlifunc(aliReq, aliRes, aliContext)
+  await new SfaAlifunc()
     .use(async (ctx) => {
       ctx.ok("BODY");
     })
-    .run();
+    .run(aliReq, aliRes, aliContext);
 
   expect(aliRes.statusCode).toBe(200);
   expect(aliRes._body).toBe("BODY");
@@ -123,13 +123,13 @@ test("text body set type", async function () {
   const aliReq = newAliReq();
   const aliRes = newAliRes();
 
-  await new SfaAlifunc(aliReq, aliRes, aliContext)
+  await new SfaAlifunc()
     .use(async (ctx) => {
       ctx.res.setHeader("content-type", "text/plain");
       ctx.res.setHeader("content-Length", Buffer.byteLength("BODY").toString());
       ctx.ok("BODY");
     })
-    .run();
+    .run(aliReq, aliRes, aliContext);
 
   expect(aliRes.statusCode).toBe(200);
   expect(aliRes._body).toBe("BODY");
@@ -141,11 +141,11 @@ test("html body", async function () {
   const aliReq = newAliReq();
   const aliRes = newAliRes();
 
-  await new SfaAlifunc(aliReq, aliRes, aliContext)
+  await new SfaAlifunc()
     .use(async (ctx) => {
       ctx.ok("<div>BODY</div>");
     })
-    .run();
+    .run(aliReq, aliRes, aliContext);
 
   expect(aliRes.statusCode).toBe(200);
   expect(aliRes._body).toBe("<div>BODY</div>");
@@ -157,11 +157,11 @@ test("buffer body", async function () {
   const aliReq = newAliReq();
   const aliRes = newAliRes();
 
-  await new SfaAlifunc(aliReq, aliRes, aliContext)
+  await new SfaAlifunc()
     .use(async (ctx) => {
       ctx.ok(Buffer.from("BODY", "utf-8"));
     })
-    .run();
+    .run(aliReq, aliRes, aliContext);
 
   expect(aliRes.statusCode).toBe(200);
   expect(aliRes._body).toEqual(Buffer.from("BODY", "utf-8"));
@@ -173,7 +173,7 @@ test("buffer body set type", async function () {
   const aliReq = newAliReq();
   const aliRes = newAliRes();
 
-  await new SfaAlifunc(aliReq, aliRes, aliContext)
+  await new SfaAlifunc()
     .use(async (ctx) => {
       ctx.res.setHeader("content-type", "application/octet-stream");
       ctx.res.setHeader(
@@ -182,7 +182,7 @@ test("buffer body set type", async function () {
       );
       ctx.ok(Buffer.from("BODY", "utf-8"));
     })
-    .run();
+    .run(aliReq, aliRes, aliContext);
 
   expect(aliRes.statusCode).toBe(200);
   expect(aliRes._body).toEqual(Buffer.from("BODY", "utf-8"));
@@ -196,12 +196,12 @@ test("prase json", async function () {
 
   aliReq.headers["content-type"] = "application/json";
 
-  await new SfaAlifunc(aliReq, aliRes, aliContext)
+  await new SfaAlifunc()
     .useHttpJsonBody()
     .use(async (ctx) => {
       ctx.ok(ctx.req.body);
     })
-    .run();
+    .run(aliReq, aliRes, aliContext);
 
   expect(aliRes.statusCode).toBe(200);
   expect(aliRes._body).toBe("");
