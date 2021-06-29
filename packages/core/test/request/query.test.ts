@@ -6,7 +6,7 @@ test("request setQuery", async function () {
     .setQuery("p2", "2")
     .setQuery("p3", "3");
 
-  expectParams(req.query);
+  expectQuery(req.query);
 });
 
 test("request setQuery", async function () {
@@ -15,10 +15,10 @@ test("request setQuery", async function () {
     p2: "2",
     p3: "3",
   });
-  expectParams(req.query);
+  expectQuery(req.query);
 });
 
-function expectParams(query: NodeJS.ReadOnlyDict<string>) {
+function expectQuery(query: NodeJS.ReadOnlyDict<string>) {
   expect(query.p1).toBe("1");
   expect(query.p2).toBe("2");
   expect(query.p3).toBe("3");
