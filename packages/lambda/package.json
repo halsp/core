@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/cloudbase",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "将 sfa 托管到腾讯云 CloudBase",
   "homepage": "https://github.com/sfajs/cloudbase",
   "repository": {
@@ -34,7 +34,7 @@
     "@cloudbase/node-sdk": "^2.6.0",
     "@types/node": "^15.12.5",
     "mime-types": "^2.1.31",
-    "sfa": "^0.4.4"
+    "sfa": "^0.5.1"
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",
