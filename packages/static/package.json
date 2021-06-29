@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/static",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "sfa 静态资源中间件",
   "homepage": "https://github.com/sfajs/static",
   "repository": {
@@ -33,7 +33,7 @@
   "dependencies": {
     "@types/node": "^15.12.2",
     "mime": "^2.5.2",
-    "sfa": "^0.4.0"
+    "sfa": "^0.5.1"
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",

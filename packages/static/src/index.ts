@@ -9,10 +9,6 @@ declare module "sfa" {
     useStatic<T extends this>(cfg?: StaticConfig): T;
     useStatic<T extends this>(cfg?: SingleStaticConfig): T;
   }
-
-  interface Request {
-    readonly query: Record<string, string>;
-  }
 }
 
 Startup.prototype.useStatic = function <T extends Startup>(
@@ -23,11 +19,6 @@ Startup.prototype.useStatic = function <T extends Startup>(
       dir: "static",
     };
   }
-
-  this.use(async (ctx, next) => {
-    ctx.res.setHeader("sfa-static", "https://github.com/sfajs/static");
-    await next();
-  });
 
   if (Object.keys(cfg).includes("file")) {
     this.add(() => new SingleStaticMiddleware(cfg as SingleStaticConfig));
