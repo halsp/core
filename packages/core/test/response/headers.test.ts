@@ -1,5 +1,5 @@
 import { Response } from "../../src";
-import { HeaderValueType } from "../../src/HeadersHandler";
+import { HeadersDict } from "../../src/types";
 
 test("response setHeader", async function () {
   const res = new Response()
@@ -22,7 +22,7 @@ test("response setHeaders", async function () {
   expectHeaders(res.headers);
 });
 
-function expectHeaders(headers: NodeJS.Dict<HeaderValueType>) {
+function expectHeaders(headers: HeadersDict) {
   expect(headers.h1).toBe("1");
   expect(headers.h2).toBeUndefined();
   expect(headers.h3).toBe("3");

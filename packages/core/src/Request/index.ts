@@ -1,4 +1,6 @@
-import HeadersHandler, { HeaderValueType } from "../HeadersHandler";
+import * as SfaTypes from "../types";
+import HeadersHandler from "../HeadersHandler";
+import { HeadersDict, ReadonlyHeadersDict } from "../types";
 import HttpMethod from "./HttpMethod";
 
 export default class Request extends HeadersHandler {
@@ -6,9 +8,9 @@ export default class Request extends HeadersHandler {
     super(() => this.#headers);
   }
 
-  #headers: NodeJS.Dict<HeaderValueType> = {};
+  #headers: HeadersDict = {};
 
-  get headers(): NodeJS.ReadOnlyDict<HeaderValueType> {
+  get headers(): ReadonlyHeadersDict {
     return this.#headers;
   }
 
@@ -68,17 +70,20 @@ export default class Request extends HeadersHandler {
     return this;
   }
 
-  #query: NodeJS.Dict<string> = {};
+  #query: SfaTypes.Dict<string> = {};
   get query(): NodeJS.ReadOnlyDict<string> {
     return this.#query;
   }
-  setQuery(key: string, value?: string): Request;
-  setQuery(query: NodeJS.Dict<string>): Request;
-  setQuery(key: string | NodeJS.Dict<string>, value?: string): Request {
+  setQuery(key: string, value: string): Request;
+  setQuery(query: SfaTypes.Dict<string>): Request;
+  setQuery(key: string | SfaTypes.Dict<string>, value?: string): Request {
     if (typeof key == "string") {
-      this.#query[key] = value;
+      this.#query[key] = value ?? "";
     } else {
-      Object.assign(this.#query, key);
+      Object.keys(key).forEach((item) => {
+        const value = key[item];
+        this.setQuery(item, value);
+      });
     }
     return this;
   }

@@ -1,21 +1,22 @@
-export type HeaderValueType = string | string[];
-export type NumericalHeaderValueType =
-  | HeaderValueType
-  | number
-  | (number | string)[];
+import {
+  HeadersDict,
+  HeaderValue,
+  NumericalHeadersDict,
+  NumericalHeaderValue,
+} from "./types";
 
 export default abstract class HeadersHandler {
-  constructor(headersFinder: () => NodeJS.Dict<HeaderValueType>) {
+  constructor(headersFinder: () => HeadersDict) {
     this.#headersFinder = headersFinder;
   }
 
   #headersFinder;
 
-  get #headers(): NodeJS.Dict<HeaderValueType> {
+  get #headers(): HeadersDict {
     return this.#headersFinder();
   }
 
-  setHeaders(headers: NodeJS.Dict<NumericalHeaderValueType>): this {
+  setHeaders(headers: NumericalHeadersDict): this {
     for (const key in headers) {
       const value = headers[key];
       if (value != undefined) {
@@ -25,7 +26,7 @@ export default abstract class HeadersHandler {
     return this;
   }
 
-  setHeader(key: string, value: NumericalHeaderValueType): this {
+  setHeader(key: string, value: NumericalHeaderValue): this {
     if (value == undefined) return this;
 
     if (Array.isArray(value)) {
@@ -40,8 +41,8 @@ export default abstract class HeadersHandler {
     return this;
   }
 
-  appendHeader(key: string, value: NumericalHeaderValueType): this {
-    const prev = this.getHeader(key) as NumericalHeaderValueType;
+  appendHeader(key: string, value: NumericalHeaderValue): this {
+    const prev = this.getHeader(key) as NumericalHeaderValue;
     if (prev) {
       value = (Array.isArray(prev) ? prev : [prev]).concat(value);
     }
@@ -65,7 +66,7 @@ export default abstract class HeadersHandler {
     return this;
   }
 
-  getHeader(key: string): HeaderValueType | undefined {
+  getHeader(key: string): HeaderValue | undefined {
     const existKey = this.hasHeader(key);
     if (existKey) {
       return this.#headers[existKey];

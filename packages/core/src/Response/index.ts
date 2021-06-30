@@ -1,9 +1,9 @@
 import { StatusCodes } from "http-status-codes";
-import { HeaderValueType } from "../HeadersHandler";
 import ResultHandler from "../ResultHandler";
+import { HeadersDict, ReadonlyHeadersDict } from "../types";
 
 export default class Response extends ResultHandler {
-  #headers: NodeJS.Dict<HeaderValueType> = {};
+  #headers: HeadersDict = {};
 
   constructor(
     public status: StatusCodes = StatusCodes.NOT_FOUND,
@@ -20,7 +20,7 @@ export default class Response extends ResultHandler {
     return this.status >= 200 && this.status < 300;
   }
 
-  get headers(): NodeJS.ReadOnlyDict<HeaderValueType> {
+  get headers(): ReadonlyHeadersDict {
     return this.#headers;
   }
 }

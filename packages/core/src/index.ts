@@ -15,6 +15,8 @@ import Middleware from "./Middleware";
 import ResultHandler from "./ResultHandler";
 import HeadersHandler from "./HeadersHandler";
 
+import * as SfaTypes from "./types";
+
 export {
   Response,
   ErrorMessage,
@@ -26,5 +28,6 @@ export {
   Middleware,
   ResultHandler,
   HeadersHandler,
+  SfaTypes,
   status,
 };
