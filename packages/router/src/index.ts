@@ -1,5 +1,5 @@
 import "sfa";
-import { HttpContext, Startup, status } from "sfa";
+import { HttpContext, SfaTypes, Startup, status } from "sfa";
 import Action from "./Action";
 import MapParser from "./Map/MapParser";
 import path = require("path");
@@ -15,7 +15,7 @@ declare module "sfa" {
   }
 
   interface Request {
-    readonly params: NodeJS.ReadOnlyDict<string>;
+    readonly params: SfaTypes.ReadonlyQueryDict;
   }
 
   interface HttpContext {
@@ -112,7 +112,7 @@ function parseRouter(ctx: HttpContext): boolean {
       const key = mapPathStr.substr(1, mapPathStr.length - 1);
       const value = decodeURIComponent(reqPathStr);
 
-      const params = ctx.req.params as NodeJS.Dict<string>;
+      const params = ctx.req.params as SfaTypes.QueryDict;
       params[key] = value;
     }
   }

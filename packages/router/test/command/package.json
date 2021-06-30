@@ -4,6 +4,6 @@
   },
   "devDependencies": {
     "@sfajs/router": "../..",
-    "sfa": "^0.5.1"
+    "sfa": "^0.5.3"
   }
 }
