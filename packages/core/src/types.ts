@@ -13,3 +13,4 @@ export type ReadonlyHeadersDict = ReadonlyDict<HeaderValue>;
 export type NumericalHeadersDict = ReadonlyDict<NumericalHeaderValue>;
 
 export type QueryDict = Dict<string>;
+export type ReadonlyQueryDict = ReadonlyDict<string>;
