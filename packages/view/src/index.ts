@@ -48,7 +48,6 @@ Startup.prototype.useViews = function <T extends Startup>(
 
   this.use(async (ctx, next) => {
     ctx.state = {};
-    ctx.res.setHeader("sfa-views", "https://github.com/sfajs/views");
     await next();
   });
 
