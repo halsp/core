@@ -37,10 +37,17 @@ export default abstract class Startup {
   }
 
   private setType(res: Response): Response {
+    const body = res.body;
+
+    if (!body) {
+      res.removeHeader("content-type");
+      res.removeHeader("content-length");
+      return res;
+    }
+
     const writeType = !res.hasHeader("content-type");
     const writeLength = !res.hasHeader("content-length");
 
-    const body = res.body;
     if (Buffer.isBuffer(body)) {
       if (writeLength) {
         res.setHeader("content-length", body.byteLength);
@@ -64,7 +71,7 @@ export default abstract class Startup {
       }
     } else if (body instanceof Stream) {
       res.setHeader("Content-Type", mime.contentType("bin") as string);
-    } else if (body) {
+    } else {
       const strBody = String(body);
       if (writeLength) {
         res.setHeader("content-length", Buffer.byteLength(strBody));

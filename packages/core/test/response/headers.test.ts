@@ -1,5 +1,5 @@
 import { Response } from "../../src";
-import { HeadersDict } from "../../src/types";
+import { HeadersDict } from "../../src/utils/types";
 
 test("setHeader", async function () {
   const res = new Response()

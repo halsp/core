@@ -15,7 +15,7 @@ import Middleware from "./Middleware";
 import ResultHandler from "./ResultHandler";
 import HeadersHandler from "./HeadersHandler";
 
-import * as SfaTypes from "./types";
+import * as SfaTypes from "./utils/types";
 
 export {
   Response,

@@ -1,6 +1,6 @@
-import * as SfaTypes from "../types";
+import * as SfaTypes from "../utils/types";
 import HeadersHandler from "../HeadersHandler";
-import { HeadersDict, ReadonlyHeadersDict } from "../types";
+import { HeadersDict, ReadonlyHeadersDict } from "../utils/types";
 import HttpMethod from "./HttpMethod";
 
 export default class Request extends HeadersHandler {
