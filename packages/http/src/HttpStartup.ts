@@ -2,10 +2,9 @@ import * as net from "net";
 import * as tls from "tls";
 import HttpBodyPraserStartup from "./HttpBodyPraserStartup";
 import * as http from "http";
-import { HttpContext, Request, Response } from "sfa";
+import { HttpContext, Request, Response, SfaUtils } from "sfa";
 import * as urlParse from "url-parse";
 import { Stream } from "stream";
-import * as mime from "mime-types";
 
 export default abstract class HttpStartup extends HttpBodyPraserStartup {
   constructor() {
@@ -28,8 +27,8 @@ export default abstract class HttpStartup extends HttpBodyPraserStartup {
       new Request()
         .setPath(url.pathname)
         .setMethod(httpReq.method as string)
-        .setQuery(url.query)
-        .setHeaders(httpReq.headers)
+        .setQuery(url.query as SfaUtils.Dict<string>)
+        .setHeaders(httpReq.headers as SfaUtils.NumericalHeadersDict)
     );
 
     httpRes.statusCode = 404;
@@ -66,43 +65,13 @@ export default abstract class HttpStartup extends HttpBodyPraserStartup {
       return;
     }
 
-    const writeType =
-      !sfaRes.hasHeader("content-type") && !httpRes.hasHeader("Content-Type");
-    const writeLength =
-      !sfaRes.hasHeader("content-length") &&
-      !httpRes.hasHeader("Content-Length");
-
-    if (typeof sfaRes.body == "string") {
-      if (writeLength) {
-        httpRes.setHeader("Content-Length", Buffer.byteLength(sfaRes.body));
-      }
-      if (writeType) {
-        const type = /^\s*</.test(sfaRes.body) ? "html" : "text";
-        httpRes.setHeader("Content-Type", mime.contentType(type) as string);
-      }
-      httpRes.end(sfaRes.body);
-    } else if (Buffer.isBuffer(sfaRes.body)) {
-      if (writeLength) {
-        httpRes.setHeader("Content-Length", sfaRes.body.byteLength);
-      }
-      if (writeType) {
-        httpRes.setHeader("Content-Type", mime.contentType("bin") as string);
-      }
-      httpRes.end(sfaRes.body);
-    } else if (sfaRes.body instanceof Stream) {
-      if (writeType) {
-        httpRes.setHeader("Content-Type", mime.contentType("bin") as string);
-      }
+    if (sfaRes.body instanceof Stream) {
       sfaRes.body.pipe(httpRes);
-    } else {
+    } else if (SfaUtils.isPlainObj(sfaRes.body)) {
       const str = JSON.stringify(sfaRes.body);
-      if (writeLength) {
-        httpRes.setHeader("Content-Length", Buffer.byteLength(str));
-      }
-      if (writeType) {
-        httpRes.setHeader("Content-Type", mime.contentType("json") as string);
-      }
       httpRes.end(str);
+    } else {
+      httpRes.end(sfaRes.body);
     }
   }
 }
