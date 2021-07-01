@@ -26,7 +26,7 @@ export default abstract class Middleware extends ResultHandler {
     ctx: HttpContext,
     index: number,
     mds: readonly ((ctx: HttpContext) => Middleware)[]
-  ): Middleware {
+  ): this {
     this.#mds = mds;
     this.#ctx = ctx;
     this.#index = index;

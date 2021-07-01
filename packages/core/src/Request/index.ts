@@ -18,7 +18,7 @@ export default class Request extends HeadersHandler {
   public get body(): any {
     return this.#body;
   }
-  setBody(body: unknown): Request {
+  setBody(body: unknown): this {
     this.#body = body;
     return this;
   }
@@ -27,7 +27,7 @@ export default class Request extends HeadersHandler {
   public get path(): string {
     return this.#path;
   }
-  setPath(path: string): Request {
+  setPath(path: string): this {
     if (!!path && (path.startsWith("/") || path.startsWith("\\"))) {
       this.#path = path.substr(1, path.length - 1);
     } else {
@@ -56,7 +56,7 @@ export default class Request extends HeadersHandler {
     }
     return this.#method;
   }
-  setMethod(method: string): Request {
+  setMethod(method: string): this {
     this.#method = method?.toUpperCase();
     return this;
   }
@@ -65,15 +65,16 @@ export default class Request extends HeadersHandler {
   get query(): NodeJS.ReadOnlyDict<string> {
     return this.#query;
   }
-  setQuery(key: string, value: string): Request;
-  setQuery(query: SfaTypes.Dict<string>): Request;
-  setQuery(key: string | SfaTypes.Dict<string>, value?: string): Request {
+  setQuery(key: string, value: string): this;
+  setQuery(query: SfaTypes.Dict<string>): this;
+  setQuery(key: string | SfaTypes.Dict<string>, value?: string): this {
     if (typeof key == "string") {
       this.#query[key] = value ?? "";
     } else {
-      Object.keys(key).forEach((item) => {
-        const value = key[item];
-        this.setQuery(item, value);
+      const query = key;
+      Object.keys(query).forEach((key) => {
+        const value = query[key];
+        this.setQuery(key, value);
       });
     }
     return this;

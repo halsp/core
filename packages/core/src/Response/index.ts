@@ -23,4 +23,14 @@ export default class Response extends ResultHandler {
   get headers(): ReadonlyHeadersDict {
     return this.#headers;
   }
+
+  setBody(body: unknown): this {
+    this.body = body;
+    return this;
+  }
+
+  setStatus(status: StatusCodes): this {
+    this.status = status;
+    return this;
+  }
 }

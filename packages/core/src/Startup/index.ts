@@ -8,20 +8,20 @@ import * as mime from "mime-types";
 export default abstract class Startup {
   #mds: ((ctx: HttpContext) => Middleware)[] = [];
 
-  use<T extends this>(
+  use(
     builder: (ctx: HttpContext, next: () => Promise<void>) => Promise<void>
-  ): T {
+  ): this {
     this.#mds.push(() => new LambdaMiddleware(builder));
-    return this as T;
+    return this;
   }
 
-  add<T extends this>(md: ((ctx: HttpContext) => Middleware) | Middleware): T {
+  add(md: ((ctx: HttpContext) => Middleware) | Middleware): this {
     if (md instanceof Middleware) {
       this.#mds.push(() => md);
     } else {
       this.#mds.push(md);
     }
-    return this as T;
+    return this;
   }
 
   protected async invoke(ctx: HttpContext): Promise<Response> {
