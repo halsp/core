@@ -1,5 +1,6 @@
 import { Database } from "@cloudbase/node-sdk";
 import { HttpContext } from "sfa";
+import { SfaUtils } from "sfa";
 
 export default class Dbhelper {
   constructor(readonly ctx: HttpContext) {}
@@ -9,7 +10,7 @@ export default class Dbhelper {
     doc: string,
     field: string
   ): Promise<unknown | undefined> {
-    const fieldObj: Record<string, unknown> = {};
+    const fieldObj: SfaUtils.Dict<unknown> = {};
     fieldObj[field] = true;
 
     const res = await collection.doc(doc).field(fieldObj).get();
@@ -23,7 +24,7 @@ export default class Dbhelper {
     field: string,
     value: unknown
   ): Promise<number | undefined> {
-    const fieldObj: Record<string, unknown> = {};
+    const fieldObj: SfaUtils.Dict<unknown> = {};
     fieldObj[field] = value;
 
     const res = await collection.doc(doc).update(fieldObj);

@@ -3,13 +3,12 @@ import { HttpContext, Request, Startup } from "sfa";
 import ResponseStruct from "./ResponseStruct";
 import tcb = require("@cloudbase/node-sdk");
 import Dbhelper from "./Dbhelper";
-import * as mime from "mime-types";
-import { Stream } from "stream";
+import { SfaUtils } from "sfa";
 
 declare module "sfa" {
   interface Request {
-    readonly context: Record<string, unknown>;
-    readonly event: Record<string, unknown>;
+    readonly context: SfaUtils.Dict<unknown>;
+    readonly event: SfaUtils.Dict<unknown>;
   }
 }
 
@@ -17,25 +16,24 @@ export { ResponseStruct, Dbhelper };
 
 export default class SfaCloudbase extends Startup {
   async run(
-    event: Record<string, unknown>,
-    context: Record<string, unknown>
+    event: SfaUtils.Dict<unknown>,
+    context: SfaUtils.Dict<unknown>
   ): Promise<ResponseStruct> {
     const ctx = this.createContext(event, context);
     await super.invoke(ctx);
-    this.setType(ctx);
     return this.getStruct(ctx);
   }
 
   private createContext(
-    event: NodeJS.Dict<unknown>,
-    context: NodeJS.Dict<unknown>
+    event: SfaUtils.Dict<unknown>,
+    context: SfaUtils.Dict<unknown>
   ): HttpContext {
     const ctx = new HttpContext(
       new Request()
         .setBody(this.getBody(event))
         .setMethod(event.httpMethod as string)
-        .setHeaders(event.headers as Record<string, string>)
-        .setQuery(event.queryStringParameters as NodeJS.Dict<string>)
+        .setHeaders((event.headers ?? {}) as SfaUtils.HeadersDict)
+        .setQuery((event.queryStringParameters ?? {}) as SfaUtils.Dict<string>)
         .setPath(event.path as string)
     );
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -43,47 +41,6 @@ export default class SfaCloudbase extends Startup {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (ctx.req as any).event = event;
     return ctx;
-  }
-
-  private setType(ctx: HttpContext) {
-    const writeType = !ctx.res.hasHeader("content-type");
-    const writeLength = !ctx.res.hasHeader("content-length");
-
-    const res = ctx.res;
-    const body = res.body;
-    if (Buffer.isBuffer(body)) {
-      if (writeLength) {
-        res.setHeader("content-length", body.byteLength);
-      }
-      if (writeType) {
-        res.setHeader("content-type", mime.contentType("bin") as string);
-      }
-    } else if (
-      Object.prototype.toString.call(body).toLowerCase() == "[object object]" &&
-      (!Object.getPrototypeOf(body) ||
-        Object.getPrototypeOf(body) == Object.prototype)
-    ) {
-      if (writeLength) {
-        res.setHeader(
-          "content-length",
-          Buffer.byteLength(JSON.stringify(body))
-        );
-      }
-      if (writeType) {
-        res.setHeader("content-type", mime.contentType("json") as string);
-      }
-    } else if (body instanceof Stream) {
-      throw new Error("Cloudbase don't support streaming! ");
-    } else if (body) {
-      const strBody = String(body);
-      if (writeLength) {
-        res.setHeader("content-length", Buffer.byteLength(strBody));
-      }
-      if (writeType) {
-        const type = /^\s*</.test(strBody) ? "html" : "text";
-        res.setHeader("content-type", mime.contentType(type) as string);
-      }
-    }
   }
 
   private getStruct(ctx: HttpContext): ResponseStruct {
@@ -101,9 +58,9 @@ export default class SfaCloudbase extends Startup {
     };
   }
 
-  getBody(event: Record<string, unknown>): unknown {
+  private getBody(event: SfaUtils.Dict<unknown>): unknown {
     const body = event.body;
-    const headers = event.headers as Record<string, string | string[]>;
+    const headers = event.headers as SfaUtils.HeadersDict;
     if (body && typeof body == "string") {
       if (event.isBase64Encoded) {
         return Buffer.from(body, "base64");

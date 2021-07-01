@@ -4,7 +4,7 @@
   },
   "devDependencies": {
     "@sfajs/cloudbase": "..",
-    "sfa": "^0.5.1",
-    "typescript": "^4.3.4"
+    "sfa": "^1.0.0",
+    "typescript": "^4.3.5"
   }
 }

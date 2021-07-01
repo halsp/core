@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/cloudbase",
-  "version": "0.5.0",
+  "version": "1.0.0",
   "description": "将 sfa 托管到腾讯云 CloudBase",
   "homepage": "https://github.com/sfajs/cloudbase",
   "repository": {
@@ -33,12 +33,10 @@
   "dependencies": {
     "@cloudbase/node-sdk": "^2.6.0",
     "@types/node": "^15.12.5",
-    "mime-types": "^2.1.31",
-    "sfa": "^0.5.1"
+    "sfa": "^1.0.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",
-    "@types/mime-types": "^2.1.0",
     "@types/shelljs": "^0.8.8",
     "@typescript-eslint/eslint-plugin": "^4.28.1",
     "@typescript-eslint/parser": "^4.28.1",
@@ -49,7 +47,7 @@
     "prettier": "^2.3.2",
     "shelljs": "^0.8.4",
     "ts-jest": "^27.0.3",
-    "typescript": "^4.3.4"
+    "typescript": "^4.3.5"
   },
   "files": [
     ".github",
