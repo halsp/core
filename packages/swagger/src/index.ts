@@ -14,13 +14,11 @@ export { swaggerJSDoc, SfaSwaggerConfig };
 
 declare module "sfa" {
   interface Startup {
-    useSwagger<T extends this>(cfg?: SfaSwaggerConfig): T;
+    useSwagger(cfg?: SfaSwaggerConfig): this;
   }
 }
 
-Startup.prototype.useSwagger = function <T extends Startup>(
-  cfg: SfaSwaggerConfig = {}
-): T {
+Startup.prototype.useSwagger = function (cfg: SfaSwaggerConfig = {}): Startup {
   return this.use(async (ctx, next) => {
     if (fixPath(ctx.req.path) != fixPath(cfg.url)) {
       return await next();
