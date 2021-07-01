@@ -1,5 +1,5 @@
 import "sfa";
-import { HttpContext, SfaTypes, Startup, status } from "sfa";
+import { HttpContext, Startup, SfaUtils } from "sfa";
 import Action from "./Action";
 import MapParser from "./Map/MapParser";
 import path = require("path");
@@ -10,12 +10,12 @@ export { Action, MapItem };
 
 declare module "sfa" {
   interface Startup {
-    useRouter<T extends this>(): T;
-    useRouterParser<T extends this>(dir?: string, strict?: boolean): T;
+    useRouter(): this;
+    useRouterParser(dir?: string, strict?: boolean): this;
   }
 
   interface Request {
-    readonly params: SfaTypes.ReadonlyQueryDict;
+    readonly params: SfaUtils.ReadonlyQueryDict;
   }
 
   interface HttpContext {
@@ -27,7 +27,7 @@ declare module "sfa" {
   }
 }
 
-Startup.prototype.useRouter = function <T extends Startup>(): T {
+Startup.prototype.useRouter = function (): Startup {
   return this.use(async (ctx, next) => {
     if (ctx.routerDir == undefined) {
       setConfig(ctx, Constant.defaultRouterDir, Constant.defaultStrict);
@@ -87,7 +87,7 @@ function parseRouter(ctx: HttpContext): boolean {
       method: ctx.req.method,
       path: ctx.req.path,
     };
-    ctx.res.status = status.StatusCodes.METHOD_NOT_ALLOWED;
+    ctx.res.status = SfaUtils.StatusCodes.METHOD_NOT_ALLOWED;
     return false;
   }
   const mapItem = mapParser.mapItem;
@@ -112,7 +112,7 @@ function parseRouter(ctx: HttpContext): boolean {
       const key = mapPathStr.substr(1, mapPathStr.length - 1);
       const value = decodeURIComponent(reqPathStr);
 
-      const params = ctx.req.params as SfaTypes.QueryDict;
+      const params = ctx.req.params as SfaUtils.QueryDict;
       params[key] = value;
     }
   }

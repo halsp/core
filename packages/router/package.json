@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/router",
-  "version": "0.5.2",
+  "version": "1.0.0",
   "description": "Router middleware for sfa",
   "homepage": "https://github.com/sfajs/router",
   "repository": {
@@ -31,7 +31,7 @@
   "dependencies": {
     "@types/node": "^15.12.5",
     "linq": "^3.2.3",
-    "sfa": "^0.5.3",
+    "sfa": "^1.0.0",
     "shelljs": "^0.8.4"
   },
   "devDependencies": {
@@ -45,7 +45,7 @@
     "jest": "^27.0.6",
     "prettier": "^2.3.2",
     "ts-jest": "^27.0.3",
-    "typescript": "^4.3.4"
+    "typescript": "^4.3.5"
   },
   "bin": {
     "sfa-router-build": "bin/build.js"
