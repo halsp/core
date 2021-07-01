@@ -62,7 +62,7 @@ export default class Request extends HeadersHandler {
   }
 
   #query: SfaTypes.Dict<string> = {};
-  get query(): NodeJS.ReadOnlyDict<string> {
+  get query(): SfaTypes.ReadonlyDict<string> {
     return this.#query;
   }
   setQuery(key: string, value: string): this;
