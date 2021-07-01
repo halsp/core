@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/views",
-  "version": "0.5.2",
+  "version": "1.0.0",
   "description": "sfa 视图渲染中间件",
   "homepage": "https://github.com/sfajs/views",
   "repository": {
@@ -36,7 +36,7 @@
     "@types/node": "^15.12.5",
     "consolidate": "^0.16.0",
     "linq": "^3.2.3",
-    "sfa": "^0.5.3"
+    "sfa": "^1.0.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.23",
@@ -50,7 +50,7 @@
     "prettier": "^2.3.2",
     "pug": "^3.0.2",
     "ts-jest": "^27.0.3",
-    "typescript": "^4.3.4"
+    "typescript": "^4.3.5"
   },
   "files": [
     ".github",
