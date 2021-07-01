@@ -4,6 +4,7 @@ import LambdaMiddleware from "../Middleware/LambdaMiddleware";
 import Middleware from "../Middleware";
 import { Stream } from "stream";
 import * as mime from "mime-types";
+import isPlainObj from "../utils/isPlainObj";
 
 export default abstract class Startup {
   #mds: ((ctx: HttpContext) => Middleware)[] = [];
@@ -55,11 +56,9 @@ export default abstract class Startup {
       if (writeType) {
         res.setHeader("content-type", mime.contentType("bin") as string);
       }
-    } else if (
-      Object.prototype.toString.call(body).toLowerCase() == "[object object]" &&
-      (!Object.getPrototypeOf(body) ||
-        Object.getPrototypeOf(body) == Object.prototype)
-    ) {
+    } else if (body instanceof Stream) {
+      res.setHeader("Content-Type", mime.contentType("bin") as string);
+    } else if (isPlainObj(body)) {
       if (writeLength) {
         res.setHeader(
           "content-length",
@@ -69,8 +68,6 @@ export default abstract class Startup {
       if (writeType) {
         res.setHeader("content-type", mime.contentType("json") as string);
       }
-    } else if (body instanceof Stream) {
-      res.setHeader("Content-Type", mime.contentType("bin") as string);
     } else {
       const strBody = String(body);
       if (writeLength) {
