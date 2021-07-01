@@ -51,10 +51,9 @@ test(`method override request`, async function () {
     new Request().setMethod(HttpMethod.patch.toUpperCase())
   )
     .use(async (ctx) => {
-      ctx.res.status = 200;
-      ctx.res.body = {
+      ctx.ok({
         method: HttpMethod.get,
-      };
+      });
     })
     .run();
 

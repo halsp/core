@@ -1,6 +1,10 @@
 import { StatusCodes } from "http-status-codes";
 import ResultHandler from "../ResultHandler";
-import { HeadersDict, ReadonlyHeadersDict } from "../types";
+import {
+  HeadersDict,
+  NumericalHeadersDict,
+  ReadonlyHeadersDict,
+} from "../types";
 
 export default class Response extends ResultHandler {
   #headers: HeadersDict = {};
@@ -9,10 +13,10 @@ export default class Response extends ResultHandler {
     public status: StatusCodes = StatusCodes.NOT_FOUND,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public body: any = undefined,
-    headers = {}
+    headers?: NumericalHeadersDict
   ) {
     super(() => this);
-    this.setHeaders(headers);
+    if (headers) this.setHeaders(headers);
     this.setHeader("sfa", "https://github.com/sfajs/sfa");
   }
 

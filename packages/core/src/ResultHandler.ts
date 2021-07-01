@@ -11,53 +11,52 @@ export default abstract class ResultHandler extends HeadersHandler {
 
   #resFinder;
 
-  get #response(): Response {
+  get #res(): Response {
     return this.#resFinder();
   }
 
   ok(body?: unknown): this {
     if (body != undefined) {
-      this.#response.body = body;
+      this.#res.body = body;
     }
-    this.#response.status = StatusCodes.OK;
+    this.#res.status = StatusCodes.OK;
     return this;
   }
 
   created(location: string, body?: unknown): this {
     if (body != undefined) {
-      this.#response.body = body;
+      this.#res.body = body;
     }
-    this.#response.status = StatusCodes.CREATED;
-    this.#response.setHeader("location", location);
+    this.#res.setStatus(StatusCodes.CREATED).setHeader("location", location);
     return this;
   }
 
   accepted(body?: unknown): this {
     if (body != undefined) {
-      this.#response.body = body;
+      this.#res.body = body;
     }
-    this.#response.status = StatusCodes.ACCEPTED;
+    this.#res.status = StatusCodes.ACCEPTED;
     return this;
   }
 
   noContent(): this {
-    this.#response.status = StatusCodes.NO_CONTENT;
+    this.#res.status = StatusCodes.NO_CONTENT;
     return this;
   }
 
   partialContent(body?: unknown): this {
     if (body != undefined) {
-      this.#response.body = body;
+      this.#res.body = body;
     }
-    this.#response.status = StatusCodes.PARTIAL_CONTENT;
+    this.#res.status = StatusCodes.PARTIAL_CONTENT;
     return this;
   }
 
   badRequest(body?: unknown): this {
     if (body != undefined) {
-      this.#response.body = body;
+      this.#res.body = body;
     }
-    this.#response.status = StatusCodes.BAD_REQUEST;
+    this.#res.status = StatusCodes.BAD_REQUEST;
     return this;
   }
 
@@ -68,9 +67,9 @@ export default abstract class ResultHandler extends HeadersHandler {
 
   unauthorized(body?: unknown): this {
     if (body != undefined) {
-      this.#response.body = body;
+      this.#res.body = body;
     }
-    this.#response.status = StatusCodes.UNAUTHORIZED;
+    this.#res.status = StatusCodes.UNAUTHORIZED;
     return this;
   }
 
@@ -81,9 +80,9 @@ export default abstract class ResultHandler extends HeadersHandler {
 
   forbidden(body?: unknown): this {
     if (body != undefined) {
-      this.#response.body = body;
+      this.#res.body = body;
     }
-    this.#response.status = StatusCodes.FORBIDDEN;
+    this.#res.status = StatusCodes.FORBIDDEN;
     return this;
   }
 
@@ -94,9 +93,9 @@ export default abstract class ResultHandler extends HeadersHandler {
 
   notFound(body?: unknown): this {
     if (body != undefined) {
-      this.#response.body = body;
+      this.#res.body = body;
     }
-    this.#response.status = StatusCodes.NOT_FOUND;
+    this.#res.status = StatusCodes.NOT_FOUND;
     return this;
   }
 
@@ -107,9 +106,9 @@ export default abstract class ResultHandler extends HeadersHandler {
 
   errRequest(body?: unknown): this {
     if (body != undefined) {
-      this.#response.body = body;
+      this.#res.body = body;
     }
-    this.#response.status = StatusCodes.INTERNAL_SERVER_ERROR;
+    this.#res.status = StatusCodes.INTERNAL_SERVER_ERROR;
     return this;
   }
 
@@ -127,8 +126,7 @@ export default abstract class ResultHandler extends HeadersHandler {
       | StatusCodes.TEMPORARY_REDIRECT
       | StatusCodes.PERMANENT_REDIRECT = StatusCodes.MOVED_TEMPORARILY
   ): this {
-    this.#response.status = code;
-    this.#response.setHeader("location", location);
+    this.#res.setStatus(code).setHeader("location", location);
     return this;
   }
 }

@@ -1,7 +1,7 @@
 import { Response } from "../../src";
 import { HeadersDict } from "../../src/types";
 
-test("response setHeader", async function () {
+test("setHeader", async function () {
   const res = new Response()
     .setHeader("h1", "1")
     .setHeader("h2", "2")
@@ -14,8 +14,16 @@ test("response setHeader", async function () {
   expectHeaders(res.headers);
 });
 
-test("response setHeaders", async function () {
+test("setHeaders", async function () {
   const res = new Response().setHeaders({
+    h1: "1",
+    h3: "3",
+  });
+  expectHeaders(res.headers);
+});
+
+test("constructor headers", async function () {
+  const res = new Response(undefined, undefined, {
     h1: "1",
     h3: "3",
   });

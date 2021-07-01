@@ -21,9 +21,9 @@ export default class HttpContext extends ResultHandler {
   }
 
   public bag<T>(key: string): T;
-  public bag<T>(key: string, value: T): HttpContext;
-  public bag<T>(key: string, builder: () => T): HttpContext;
-  public bag<T>(key: string, value?: T | (() => T)): HttpContext | T {
+  public bag<T>(key: string, value: T): this;
+  public bag<T>(key: string, builder: () => T): this;
+  public bag<T>(key: string, value?: T | (() => T)): this | T {
     if (value == undefined) {
       const result = this.#bag[key];
       if (typeof result == "function") {

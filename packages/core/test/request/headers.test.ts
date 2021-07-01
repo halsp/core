@@ -29,8 +29,7 @@ function expectHeaders(headers: HeadersDict) {
 test("custom header", async function () {
   const result = await new TestStartup()
     .use(async (ctx) => {
-      ctx.res.status = 200;
-      ctx.res.setHeader("custom-header", "aaa");
+      ctx.res.setStatus(200).setHeader("custom-header", "aaa");
     })
     .run();
 
