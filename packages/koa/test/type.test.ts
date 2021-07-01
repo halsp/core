@@ -36,5 +36,5 @@ test("without type", async function () {
 
   expect(res.status).toBe(200);
   expect(res.body).toBe("sfa");
-  expect(res.getHeader("content-type")).toBeUndefined();
+  expect(res.getHeader("content-type")).toBe("text/plain; charset=utf-8");
 });
