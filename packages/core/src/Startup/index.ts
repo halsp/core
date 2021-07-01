@@ -2,6 +2,8 @@ import Response from "../Response";
 import HttpContext from "../HttpContext";
 import LambdaMiddleware from "../Middleware/LambdaMiddleware";
 import Middleware from "../Middleware";
+import { Stream } from "stream";
+import * as mime from "mime-types";
 
 export default abstract class Startup {
   #mds: ((ctx: HttpContext) => Middleware)[] = [];
@@ -31,6 +33,48 @@ export default abstract class Startup {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (md as any).init(ctx, 0, this.#mds).invoke();
 
-    return ctx.res;
+    return this.setType(ctx.res);
+  }
+
+  private setType(res: Response): Response {
+    const writeType = !res.hasHeader("content-type");
+    const writeLength = !res.hasHeader("content-length");
+
+    const body = res.body;
+    if (Buffer.isBuffer(body)) {
+      if (writeLength) {
+        res.setHeader("content-length", body.byteLength);
+      }
+      if (writeType) {
+        res.setHeader("content-type", mime.contentType("bin") as string);
+      }
+    } else if (
+      Object.prototype.toString.call(body).toLowerCase() == "[object object]" &&
+      (!Object.getPrototypeOf(body) ||
+        Object.getPrototypeOf(body) == Object.prototype)
+    ) {
+      if (writeLength) {
+        res.setHeader(
+          "content-length",
+          Buffer.byteLength(JSON.stringify(body))
+        );
+      }
+      if (writeType) {
+        res.setHeader("content-type", mime.contentType("json") as string);
+      }
+    } else if (body instanceof Stream) {
+      res.setHeader("Content-Type", mime.contentType("bin") as string);
+    } else if (body) {
+      const strBody = String(body);
+      if (writeLength) {
+        res.setHeader("content-length", Buffer.byteLength(strBody));
+      }
+      if (writeType) {
+        const type = /^\s*</.test(strBody) ? "html" : "text";
+        res.setHeader("content-type", mime.contentType(type) as string);
+      }
+    }
+
+    return res;
   }
 }
