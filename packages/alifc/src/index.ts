@@ -1,6 +1,5 @@
-import { HttpContext, Request, Response } from "sfa";
+import { HttpContext, Request, Response, SfaUtils } from "sfa";
 import "sfa";
-import * as mime from "mime-types";
 import * as http from "http";
 import { HttpBodyPraserStartup } from "@sfajs/http";
 
@@ -77,44 +76,10 @@ export default class SfaAlifunc extends HttpBodyPraserStartup {
       return;
     }
 
-    const writeType =
-      !sfaRes.hasHeader("content-type") &&
-      !aliRes.hasHeader("Content-Type") &&
-      !aliRes.hasHeader("content-type");
-    const writeLength =
-      !sfaRes.hasHeader("content-length") &&
-      !aliRes.hasHeader("Content-Length") &&
-      !aliRes.hasHeader("content-length");
-
-    if (typeof sfaRes.body == "string") {
-      if (writeLength) {
-        aliRes.setHeader(
-          "Content-Length",
-          Buffer.byteLength(sfaRes.body).toString()
-        );
-      }
-      if (writeType) {
-        const type = /^\s*</.test(sfaRes.body) ? "html" : "text";
-        aliRes.setHeader("Content-Type", mime.contentType(type) as string);
-      }
-      aliRes.send(sfaRes.body);
-    } else if (Buffer.isBuffer(sfaRes.body)) {
-      if (writeLength) {
-        aliRes.setHeader("Content-Length", sfaRes.body.byteLength.toString());
-      }
-      if (writeType) {
-        aliRes.setHeader("Content-Type", mime.contentType("bin") as string);
-      }
-      aliRes.send(sfaRes.body);
+    if (SfaUtils.isPlainObj(sfaRes.body)) {
+      aliRes.send(JSON.stringify(sfaRes.body));
     } else {
-      const str = JSON.stringify(sfaRes.body);
-      if (writeLength) {
-        aliRes.setHeader("Content-Length", Buffer.byteLength(str).toString());
-      }
-      if (writeType) {
-        aliRes.setHeader("Content-Type", mime.contentType("json") as string);
-      }
-      aliRes.send(str);
+      aliRes.send(sfaRes.body);
     }
   }
 }

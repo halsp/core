@@ -71,7 +71,7 @@ test("json body", async function () {
       content: "BODY",
     })
   );
-  expect(aliRes.headers["Content-Type"]).toBe(
+  expect(aliRes.headers["content-type"]).toBe(
     "application/json; charset=utf-8"
   );
 });
@@ -90,7 +90,7 @@ test("json body set type", async function () {
     .use(async (ctx) => {
       ctx.res.setHeader("content-type", "application/json");
       ctx.res.setHeader(
-        "content-Length",
+        "content-length",
         Buffer.byteLength(strBody).toString()
       );
       ctx.ok(body);
@@ -115,7 +115,7 @@ test("text body", async function () {
 
   expect(aliRes.statusCode).toBe(200);
   expect(aliRes._body).toBe("BODY");
-  expect(aliRes.headers["Content-Type"]).toBe("text/plain; charset=utf-8");
+  expect(aliRes.headers["content-type"]).toBe("text/plain; charset=utf-8");
 });
 
 test("text body set type", async function () {
@@ -126,7 +126,7 @@ test("text body set type", async function () {
   await new SfaAlifunc()
     .use(async (ctx) => {
       ctx.res.setHeader("content-type", "text/plain");
-      ctx.res.setHeader("content-Length", Buffer.byteLength("BODY").toString());
+      ctx.res.setHeader("content-length", Buffer.byteLength("BODY").toString());
       ctx.ok("BODY");
     })
     .run(aliReq, aliRes, aliContext);
@@ -149,7 +149,7 @@ test("html body", async function () {
 
   expect(aliRes.statusCode).toBe(200);
   expect(aliRes._body).toBe("<div>BODY</div>");
-  expect(aliRes.headers["Content-Type"]).toBe("text/html; charset=utf-8");
+  expect(aliRes.headers["content-type"]).toBe("text/html; charset=utf-8");
 });
 
 test("buffer body", async function () {
@@ -165,7 +165,7 @@ test("buffer body", async function () {
 
   expect(aliRes.statusCode).toBe(200);
   expect(aliRes._body).toEqual(Buffer.from("BODY", "utf-8"));
-  expect(aliRes.headers["Content-Type"]).toBe("application/octet-stream");
+  expect(aliRes.headers["content-type"]).toBe("application/octet-stream");
 });
 
 test("buffer body set type", async function () {
@@ -177,7 +177,7 @@ test("buffer body set type", async function () {
     .use(async (ctx) => {
       ctx.res.setHeader("content-type", "application/octet-stream");
       ctx.res.setHeader(
-        "content-Length",
+        "content-length",
         Buffer.from("BODY", "utf-8").length.toString()
       );
       ctx.ok(Buffer.from("BODY", "utf-8"));
