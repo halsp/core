@@ -1,4 +1,4 @@
-import { Request, SfaTypes } from "../../src";
+import { Request, SfaUtils } from "../../src";
 
 test("request setQuery", async function () {
   const req = new Request()
@@ -22,7 +22,7 @@ test("request setQuery", async function () {
   expectQuery(req.query);
 });
 
-function expectQuery(query: SfaTypes.ReadonlyDict<string>) {
+function expectQuery(query: SfaUtils.ReadonlyDict<string>) {
   expect(query.p1).toBe("1");
   expect(query.p2).toBe("2");
   expect(query.p3).toBe("3");

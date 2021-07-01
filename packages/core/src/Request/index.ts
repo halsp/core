@@ -1,6 +1,5 @@
-import * as SfaTypes from "../utils/types";
 import HeadersHandler from "../HeadersHandler";
-import { HeadersDict, ReadonlyHeadersDict } from "../utils/types";
+import { Dict, HeadersDict, ReadonlyDict, ReadonlyHeadersDict } from "../utils";
 import HttpMethod from "./HttpMethod";
 
 export default class Request extends HeadersHandler {
@@ -61,13 +60,13 @@ export default class Request extends HeadersHandler {
     return this;
   }
 
-  #query: SfaTypes.Dict<string> = {};
-  get query(): SfaTypes.ReadonlyDict<string> {
+  #query: Dict<string> = {};
+  get query(): ReadonlyDict<string> {
     return this.#query;
   }
   setQuery(key: string, value: string): this;
-  setQuery(query: SfaTypes.Dict<string>): this;
-  setQuery(key: string | SfaTypes.Dict<string>, value?: string): this {
+  setQuery(query: Dict<string>): this;
+  setQuery(key: string | Dict<string>, value?: string): this {
     if (typeof key == "string") {
       this.#query[key] = value ?? "";
     } else {

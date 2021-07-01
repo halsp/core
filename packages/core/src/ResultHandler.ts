@@ -1,4 +1,4 @@
-import { ReasonPhrases, StatusCodes } from "http-status-codes";
+import { ReasonPhrases, StatusCodes } from "./utils";
 import HeadersHandler from "./HeadersHandler";
 import Response from "./Response";
 import ErrorMessage from "./Response/ErrorMessage";

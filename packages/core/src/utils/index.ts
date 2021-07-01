@@ -1,3 +1,11 @@
+import {
+  StatusCodes,
+  getStatusCode,
+  ReasonPhrases,
+  getReasonPhrase,
+} from "http-status-codes";
+import isPlainObj from "./isPlainObj";
+
 export type Dict<T> = {
   [key: string]: T;
 };
@@ -14,3 +22,11 @@ export type NumericalHeadersDict = ReadonlyDict<NumericalHeaderValue>;
 
 export type QueryDict = Dict<string>;
 export type ReadonlyQueryDict = ReadonlyDict<string>;
+
+export {
+  StatusCodes,
+  getStatusCode,
+  ReasonPhrases,
+  getReasonPhrase,
+  isPlainObj,
+};

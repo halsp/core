@@ -1,5 +1,3 @@
-import * as status from "http-status-codes";
-
 import Response from "./Response";
 import ErrorMessage from "./Response/ErrorMessage";
 
@@ -15,7 +13,7 @@ import Middleware from "./Middleware";
 import ResultHandler from "./ResultHandler";
 import HeadersHandler from "./HeadersHandler";
 
-import * as SfaTypes from "./utils/types";
+import * as SfaUtils from "./utils";
 
 export {
   Response,
@@ -28,6 +26,5 @@ export {
   Middleware,
   ResultHandler,
   HeadersHandler,
-  SfaTypes,
-  status,
+  SfaUtils,
 };

@@ -1,5 +1,5 @@
 import { TestStartup, Request } from "../../src";
-import { HeadersDict } from "../../src/utils/types";
+import { HeadersDict } from "../../src/utils";
 
 test("request setHeader", async function () {
   const req = new Request()

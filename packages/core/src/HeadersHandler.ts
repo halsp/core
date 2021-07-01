@@ -3,7 +3,7 @@ import {
   HeaderValue,
   NumericalHeadersDict,
   NumericalHeaderValue,
-} from "./utils/types";
+} from "./utils";
 
 export default abstract class HeadersHandler {
   constructor(headersFinder: () => HeadersDict) {

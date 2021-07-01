@@ -4,7 +4,7 @@ import {
   HeadersDict,
   NumericalHeadersDict,
   ReadonlyHeadersDict,
-} from "../utils/types";
+} from "../utils";
 
 export default class Response extends ResultHandler {
   #headers: HeadersDict = {};
