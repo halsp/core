@@ -1,8 +1,9 @@
 import { Middleware } from "../../src/index";
 import { TestStartup } from "../../src";
+import { Dict } from "../../src/utils";
 
 test("middleware success", async function () {
-  const stepResult: Record<string, number> = {
+  const stepResult: Dict<number> = {
     step: 0,
   };
 
@@ -19,7 +20,7 @@ test("middleware success", async function () {
 });
 
 class Mdw1 extends Middleware {
-  constructor(private stepResult: Record<string, number>) {
+  constructor(private stepResult: Dict<number>) {
     super();
   }
 
@@ -30,7 +31,7 @@ class Mdw1 extends Middleware {
 }
 
 class Mdw2 extends Middleware {
-  constructor(private stepResult: Record<string, number>) {
+  constructor(private stepResult: Dict<number>) {
     super();
   }
 
@@ -41,7 +42,7 @@ class Mdw2 extends Middleware {
 }
 
 class Mdw3 extends Middleware {
-  constructor(private stepResult: Record<string, number>) {
+  constructor(private stepResult: Dict<number>) {
     super();
   }
 
@@ -52,7 +53,7 @@ class Mdw3 extends Middleware {
 }
 
 class Mdw4 extends Middleware {
-  constructor(private stepResult: Record<string, number>) {
+  constructor(private stepResult: Dict<number>) {
     super();
   }
 
