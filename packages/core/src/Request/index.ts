@@ -9,7 +9,6 @@ export default class Request extends HeadersHandler {
   }
 
   #headers: HeadersDict = {};
-
   get headers(): ReadonlyHeadersDict {
     return this.#headers;
   }
@@ -19,38 +18,15 @@ export default class Request extends HeadersHandler {
   public get body(): any {
     return this.#body;
   }
+  setBody(body: unknown): Request {
+    this.#body = body;
+    return this;
+  }
 
   #path = "";
   public get path(): string {
     return this.#path;
   }
-
-  public get overrideMethod(): string | undefined {
-    if (
-      this.#method &&
-      this.#method.toUpperCase() != this.method.toUpperCase()
-    ) {
-      return this.#method;
-    }
-  }
-
-  #method = HttpMethod.any;
-  public get method(): string {
-    const ovrdHeaderKey = "X-HTTP-Method-Override";
-    const ovrdKey = Object.keys(this.#headers).filter(
-      (h) => h.toUpperCase() == ovrdHeaderKey.toUpperCase()
-    )[0];
-    if (ovrdKey) {
-      const ovrdValue = this.#headers[ovrdKey];
-      if (ovrdValue && typeof ovrdValue == "string") {
-        return ovrdValue.toUpperCase();
-      } else if (ovrdValue && Array.isArray(ovrdValue) && ovrdValue.length) {
-        return ovrdValue[0].toUpperCase();
-      }
-    }
-    return this.#method;
-  }
-
   setPath(path: string): Request {
     if (!!path && (path.startsWith("/") || path.startsWith("\\"))) {
       this.#path = path.substr(1, path.length - 1);
@@ -60,13 +36,28 @@ export default class Request extends HeadersHandler {
     return this;
   }
 
+  #method = HttpMethod.any;
+  public get overrideMethod(): string | undefined {
+    if (
+      this.#method &&
+      this.#method.toUpperCase() != this.method.toUpperCase()
+    ) {
+      return this.#method;
+    }
+  }
+  public get method(): string {
+    const ovrdHeader = this.getHeader("X-HTTP-Method-Override");
+    if (ovrdHeader) {
+      if (typeof ovrdHeader == "string") {
+        return ovrdHeader.toUpperCase();
+      } else {
+        return ovrdHeader[0].toUpperCase();
+      }
+    }
+    return this.#method;
+  }
   setMethod(method: string): Request {
     this.#method = method?.toUpperCase();
-    return this;
-  }
-
-  setBody(body: unknown): Request {
-    this.#body = body;
     return this;
   }
 
