@@ -1,5 +1,5 @@
 import "sfa";
-import { Startup, Response, HttpContext } from "sfa";
+import { Startup, SfaResponse, HttpContext } from "sfa";
 import * as Koa from "koa";
 import * as http from "http";
 import * as net from "net";
@@ -51,7 +51,7 @@ Startup.prototype.useKoa = function <T extends Startup>(
 
 async function koaResToSfaRes(
   koaCtx: Koa.ParameterizedContext,
-  sfaRes: Response
+  sfaRes: SfaResponse
 ) {
   Object.keys(sfaRes.headers).forEach((key) => {
     sfaRes.removeHeader(key);
@@ -68,7 +68,7 @@ async function koaResToSfaRes(
 }
 
 async function sfaResToKoaRes(
-  sfaRes: Response,
+  sfaRes: SfaResponse,
   koaCtx: Koa.ParameterizedContext
 ) {
   koaCtx.body = sfaRes.body ?? null;

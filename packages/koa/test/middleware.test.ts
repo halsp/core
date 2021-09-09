@@ -1,11 +1,11 @@
 import "../src";
-import { TestStartup, Request, Response } from "sfa";
+import { TestStartup, SfaRequest, SfaResponse } from "sfa";
 import * as Koa from "koa";
 import * as cors from "koa-cors";
 import * as Router from "@koa/router";
 
 test("koa-cors", async function () {
-  const res = await new TestStartup(new Request().setMethod("POST"))
+  const res = await new TestStartup(new SfaRequest().setMethod("POST"))
     .useKoa(
       new Koa().use(
         cors({
@@ -37,8 +37,10 @@ test("@koa/router", async function () {
       ctx.set("account", "hi@hal.wang");
     });
 
-  async function request(method: string, path: string): Promise<Response> {
-    return await new TestStartup(new Request().setMethod(method).setPath(path))
+  async function request(method: string, path: string): Promise<SfaResponse> {
+    return await new TestStartup(
+      new SfaRequest().setMethod(method).setPath(path)
+    )
       .use(async (ctx, next) => {
         await next();
       })

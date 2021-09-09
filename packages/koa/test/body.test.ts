@@ -1,5 +1,5 @@
 import "../src";
-import { TestStartup, Request } from "sfa";
+import { TestStartup } from "sfa";
 import * as Koa from "koa";
 
 test("default", async function () {

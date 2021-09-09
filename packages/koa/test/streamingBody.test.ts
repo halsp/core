@@ -1,14 +1,14 @@
 import "../src";
-import { TestStartup, Request, Response } from "sfa";
+import { TestStartup, SfaRequest, SfaResponse } from "sfa";
 import * as Koa from "koa";
 import * as http from "http";
 import request = require("supertest");
 
 test("streamingBody", async function () {
-  let res: Response | undefined;
+  let res: SfaResponse | undefined;
   const server = http.createServer(async (httpRes, httpReq) => {
     res = await new TestStartup(
-      new Request().setHeader("h1", 1).setHeader("h2", "2")
+      new SfaRequest().setHeader("h1", 1).setHeader("h2", "2")
     )
       .useKoa(
         new Koa().use(async (ctx, next) => {
