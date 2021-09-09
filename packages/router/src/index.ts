@@ -1,10 +1,11 @@
 import "sfa";
-import { HttpContext, Startup, SfaUtils } from "sfa";
+import { HttpContext, QueryDict, ReadonlyQueryDict, Startup } from "sfa";
 import Action from "./Action";
 import MapParser from "./Map/MapParser";
 import path = require("path");
 import Constant from "./Constant";
 import MapItem from "./Map/MapItem";
+import { StatusCodes } from "@sfajs/header";
 
 export { Action, MapItem };
 
@@ -14,8 +15,8 @@ declare module "sfa" {
     useRouterParser(dir?: string, strict?: boolean): this;
   }
 
-  interface Request {
-    readonly params: SfaUtils.ReadonlyQueryDict;
+  interface SfaRequest {
+    readonly params: ReadonlyQueryDict;
   }
 
   interface HttpContext {
@@ -87,7 +88,7 @@ function parseRouter(ctx: HttpContext): boolean {
       method: ctx.req.method,
       path: ctx.req.path,
     };
-    ctx.res.status = SfaUtils.StatusCodes.METHOD_NOT_ALLOWED;
+    ctx.res.status = StatusCodes.METHOD_NOT_ALLOWED;
     return false;
   }
   const mapItem = mapParser.mapItem;
@@ -112,7 +113,7 @@ function parseRouter(ctx: HttpContext): boolean {
       const key = mapPathStr.substr(1, mapPathStr.length - 1);
       const value = decodeURIComponent(reqPathStr);
 
-      const params = ctx.req.params as SfaUtils.QueryDict;
+      const params = ctx.req.params as QueryDict;
       params[key] = value;
     }
   }

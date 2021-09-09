@@ -1,9 +1,9 @@
-import { TestStartup, Request } from "sfa";
+import { TestStartup, SfaRequest } from "sfa";
 import "../src";
 
 test("useRouterParser", async function () {
   const res = await new TestStartup(
-    new Request().setPath("/simple/adminAuth").setMethod("POST")
+    new SfaRequest().setPath("/simple/adminAuth").setMethod("POST")
   )
     .useRouterParser("test/controllers", false)
     .use(async (ctx) => {
@@ -22,7 +22,7 @@ test("useRouterParser", async function () {
 
 test("useRouterParser once more", async function () {
   const res = await new TestStartup(
-    new Request().setPath("/simple/adminAuth").setMethod("POST")
+    new SfaRequest().setPath("/simple/adminAuth").setMethod("POST")
   )
     .useRouterParser("test/controllers", false)
     .useRouterParser("test/controllers", false)
@@ -42,7 +42,7 @@ test("useRouterParser once more", async function () {
 
 test("router parser error", async function () {
   const res = await new TestStartup(
-    new Request().setPath("/simple/adminAuth").setMethod("POST")
+    new SfaRequest().setPath("/simple/adminAuth").setMethod("POST")
   )
     .useRouterParser("notexist")
     .useRouterParser("notexist")
@@ -54,7 +54,7 @@ test("router parser error", async function () {
 
 test("router parser default", async function () {
   const res = await new TestStartup(
-    new Request().setPath("/simple/adminAuth").setMethod("POST")
+    new SfaRequest().setPath("/simple/adminAuth").setMethod("POST")
   )
     .useRouterParser()
     .useRouter()
@@ -66,7 +66,7 @@ test("router parser default", async function () {
 test("router parser default", async function () {
   try {
     await new TestStartup(
-      new Request().setPath("/simple/adminAuth").setMethod("POST")
+      new SfaRequest().setPath("/simple/adminAuth").setMethod("POST")
     )
       .use(async (ctx, next) => {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any

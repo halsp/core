@@ -1,10 +1,10 @@
-import { TestStartup, Request } from "sfa";
+import { TestStartup, SfaRequest } from "sfa";
 import "./UseTest";
 import "../src";
 
 test("startup test", async function () {
   const result = await new TestStartup(
-    new Request().setPath("/simple/RoUtEr").setMethod("POST")
+    new SfaRequest().setPath("/simple/RoUtEr").setMethod("POST")
   )
     .useTest()
     .useRouter()
@@ -14,7 +14,7 @@ test("startup test", async function () {
 
 test("startup not exist", async function () {
   const result = await new TestStartup(
-    new Request().setPath("/simple/router1").setMethod("POST")
+    new SfaRequest().setPath("/simple/router1").setMethod("POST")
   )
     .useTest()
     .useRouter()
@@ -24,7 +24,7 @@ test("startup not exist", async function () {
 
 test("shallow startup test", async function () {
   const result = await new TestStartup(
-    new Request().setPath("/router").setMethod("POST")
+    new SfaRequest().setPath("/router").setMethod("POST")
   )
     .useTest()
     .useRouter()
@@ -34,7 +34,7 @@ test("shallow startup test", async function () {
 
 test("deep startup test", async function () {
   const result = await new TestStartup(
-    new Request().setPath("/simple/deepActions/RoUtEr").setMethod("POST")
+    new SfaRequest().setPath("/simple/deepActions/RoUtEr").setMethod("POST")
   )
     .useTest()
     .useRouter()
@@ -44,7 +44,7 @@ test("deep startup test", async function () {
 
 test("strict test", async function () {
   let result = await new TestStartup(
-    new Request().setPath("/simple/Router").setMethod("POST")
+    new SfaRequest().setPath("/simple/Router").setMethod("POST")
   )
     .useTest({ strict: false })
     .useRouter()
@@ -52,7 +52,7 @@ test("strict test", async function () {
   expect(result.status).toBe(200);
 
   result = await new TestStartup(
-    new Request().setPath("/simple/Router").setMethod("POST")
+    new SfaRequest().setPath("/simple/Router").setMethod("POST")
   )
     .useTest({ strict: true })
     .useRouter()
@@ -60,7 +60,7 @@ test("strict test", async function () {
   expect(result.status).toBe(404);
 
   result = await new TestStartup(
-    new Request().setPath("/restful").setMethod("PUT")
+    new SfaRequest().setPath("/restful").setMethod("PUT")
   )
     .useTest({ strict: false })
     .useRouter()
@@ -68,7 +68,7 @@ test("strict test", async function () {
   expect(result.status).toBe(200);
 
   result = await new TestStartup(
-    new Request().setPath("/restful").setMethod("PUT")
+    new SfaRequest().setPath("/restful").setMethod("PUT")
   )
     .useTest({ strict: true })
     .useRouter()
@@ -78,7 +78,7 @@ test("strict test", async function () {
 
 test("null body test", async function () {
   const result = await new TestStartup(
-    new Request().setPath("/nullbody").setMethod("PUT")
+    new SfaRequest().setPath("/nullbody").setMethod("PUT")
   )
     .useTest()
     .useRouter()

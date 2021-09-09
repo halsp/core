@@ -1,4 +1,5 @@
-import { HttpContext, Request, SfaUtils } from "sfa";
+import { StatusCodes } from "@sfajs/header";
+import { HttpContext, SfaRequest } from "sfa";
 import { Action } from "../src/index";
 
 class Login extends Action {
@@ -21,23 +22,23 @@ class Login extends Action {
 test("action test", async function () {
   const loginAction = new Login();
   const ctx = new HttpContext(
-    new Request().setBody({
+    new SfaRequest().setBody({
       account: "abc",
       password: "123456",
     })
   );
-  ctx.res.status = SfaUtils.StatusCodes.OK;
+  ctx.res.status = StatusCodes.OK;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (loginAction as any).init(ctx, 0);
 
   await loginAction.invoke();
-  expect(loginAction.ctx.res.status).toBe(SfaUtils.StatusCodes.OK);
+  expect(loginAction.ctx.res.status).toBe(StatusCodes.OK);
 
   loginAction.ctx.req.body.password = "12345";
   await loginAction.invoke();
-  expect(loginAction.ctx.res.status).toBe(SfaUtils.StatusCodes.BAD_REQUEST);
+  expect(loginAction.ctx.res.status).toBe(StatusCodes.BAD_REQUEST);
 
   loginAction.ctx.req.body.account = "12";
   await loginAction.invoke();
-  expect(loginAction.ctx.res.status).toBe(SfaUtils.StatusCodes.NOT_FOUND);
+  expect(loginAction.ctx.res.status).toBe(StatusCodes.NOT_FOUND);
 });

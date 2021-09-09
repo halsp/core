@@ -1,4 +1,4 @@
-import { HttpMethod } from "sfa";
+import { HttpMethod } from "@sfajs/header";
 
 export default class PathParser {
   private readonly relativePath: string;

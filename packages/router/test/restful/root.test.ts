@@ -1,10 +1,11 @@
-import { HttpMethod, TestStartup, Request } from "sfa";
+import { TestStartup, SfaRequest } from "sfa";
 import "../UseTest";
 import "../../src";
+import { HttpMethod } from "@sfajs/header";
 
 test("restful root get", async function () {
   const result = await new TestStartup(
-    new Request().setPath("/").setMethod(HttpMethod.get.toUpperCase())
+    new SfaRequest().setPath("/").setMethod(HttpMethod.get.toUpperCase())
   )
     .useTest()
     .useRouter()

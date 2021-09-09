@@ -1,7 +1,7 @@
 import MapCreater from "../src/Map/MapCreater";
 import * as fs from "fs";
 import Constant from "../src/Constant";
-import { TestStartup, Request } from "sfa";
+import { TestStartup, SfaRequest } from "sfa";
 import "./UseTest";
 import "../src";
 
@@ -19,7 +19,7 @@ test("map creater write default", async function () {
     expect(fs.existsSync(Constant.mapFileName)).toBeTruthy();
 
     const res = await new TestStartup(
-      new Request().setPath("/simple/router").setMethod("POST")
+      new SfaRequest().setPath("/simple/router").setMethod("POST")
     )
       .useTest()
       .useRouter()

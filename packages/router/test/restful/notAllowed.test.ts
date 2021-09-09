@@ -1,10 +1,10 @@
 import "../UseTest";
 import "../../src";
-import { TestStartup, Request } from "sfa";
+import { TestStartup, SfaRequest } from "sfa";
 
 test(`method not allowed`, async function () {
   const result = await new TestStartup(
-    new Request().setPath("/restful/1").setMethod("NO")
+    new SfaRequest().setPath("/restful/1").setMethod("NO")
   )
     .useTest()
     .useRouter()

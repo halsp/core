@@ -1,13 +1,14 @@
 import "../UseTest";
 import "../../src";
-import { HttpMethod, TestStartup, Request } from "sfa";
+import { TestStartup, SfaRequest } from "sfa";
+import { HttpMethod } from "@sfajs/header";
 
 const methods = ["test", "aaa", "NO"];
 
 methods.forEach((method) => {
   test(`${method} -> any restful test`, async function () {
     const result = await new TestStartup(
-      new Request().setPath("/restful").setMethod(method)
+      new SfaRequest().setPath("/restful").setMethod(method)
     )
       .useTest()
       .useRouter()
