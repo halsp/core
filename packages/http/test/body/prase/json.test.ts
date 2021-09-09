@@ -50,7 +50,7 @@ test("parse json error default", async function () {
       try {
         await next();
       } catch (err) {
-        ctx.badRequestMsg({ message: err.message });
+        ctx.badRequestMsg({ message: (err as Error).message });
       }
     })
     .useHttpJsonBody()

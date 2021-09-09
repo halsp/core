@@ -2,9 +2,10 @@ import * as net from "net";
 import * as tls from "tls";
 import HttpBodyPraserStartup from "./HttpBodyPraserStartup";
 import * as http from "http";
-import { HttpContext, Request, Response, SfaUtils } from "sfa";
+import { HttpContext, SfaRequest, SfaResponse } from "sfa";
 import * as urlParse from "url-parse";
 import { Stream } from "stream";
+import { Dict, NumericalHeadersDict } from "@sfajs/header";
 
 export default abstract class HttpStartup extends HttpBodyPraserStartup {
   constructor() {
@@ -24,11 +25,11 @@ export default abstract class HttpStartup extends HttpBodyPraserStartup {
   ): Promise<void> => {
     const url = urlParse(httpReq.url as string, true);
     const ctx = new HttpContext(
-      new Request()
+      new SfaRequest()
         .setPath(url.pathname)
         .setMethod(httpReq.method as string)
-        .setQuery(url.query as SfaUtils.Dict<string>)
-        .setHeaders(httpReq.headers as SfaUtils.NumericalHeadersDict)
+        .setQuery(url.query as Dict<string>)
+        .setHeaders(httpReq.headers as NumericalHeadersDict)
     );
 
     httpRes.statusCode = 404;
@@ -46,7 +47,7 @@ export default abstract class HttpStartup extends HttpBodyPraserStartup {
     }
   };
 
-  private writeHead(sfaRes: Response, httpRes: http.ServerResponse) {
+  private writeHead(sfaRes: SfaResponse, httpRes: http.ServerResponse) {
     if (httpRes.headersSent) return;
     Object.keys(sfaRes.headers)
       .filter((key) => !!sfaRes.headers[key])
@@ -55,7 +56,7 @@ export default abstract class HttpStartup extends HttpBodyPraserStartup {
       });
   }
 
-  private writeBody(sfaRes: Response, httpRes: http.ServerResponse) {
+  private writeBody(sfaRes: SfaResponse, httpRes: http.ServerResponse) {
     if (!sfaRes.body) {
       if (!httpRes.headersSent) {
         httpRes.removeHeader("Content-Type");
@@ -67,7 +68,7 @@ export default abstract class HttpStartup extends HttpBodyPraserStartup {
 
     if (sfaRes.body instanceof Stream) {
       sfaRes.body.pipe(httpRes);
-    } else if (SfaUtils.isPlainObj(sfaRes.body)) {
+    } else if (this.isPlainObj(sfaRes.body)) {
       const str = JSON.stringify(sfaRes.body);
       httpRes.end(str);
     } else {

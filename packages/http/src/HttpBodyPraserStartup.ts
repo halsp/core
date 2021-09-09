@@ -1,9 +1,10 @@
-import { HttpContext, Startup, SfaUtils } from "sfa";
+import { HttpContext, Startup } from "sfa";
 import * as typeis from "type-is";
 import * as cobody from "co-body";
 import * as qs from "qs";
 import * as forms from "formidable";
 import * as http from "http";
+import { StatusCodes } from "@sfajs/header";
 
 export type MultipartBody =
   | { fields: forms.Fields; files: forms.Files }
@@ -122,7 +123,7 @@ export default abstract class HttpBodyPraserStartup extends Startup {
         this.sourceReqBuilder(ctx),
         async (err, fields: forms.Fields, files: forms.Files) => {
           if (err) {
-            ctx.res.status = SfaUtils.StatusCodes.BAD_REQUEST;
+            ctx.res.status = StatusCodes.BAD_REQUEST;
             if (onError) await onError(ctx, err);
             resolve(undefined);
           } else {
@@ -150,9 +151,9 @@ export default abstract class HttpBodyPraserStartup extends Startup {
       try {
         body = await bodyBuilder(ctx);
       } catch (err) {
-        ctx.res.status = SfaUtils.StatusCodes.BAD_REQUEST;
+        ctx.res.status = StatusCodes.BAD_REQUEST;
         if (onError) {
-          await onError(ctx, err);
+          await onError(ctx, err as Error);
         } else {
           throw err;
         }
