@@ -1,8 +1,8 @@
 import "../src";
-import { TestStartup, Request } from "sfa";
+import { TestStartup, SfaRequest } from "sfa";
 
 test("default html", async function () {
-  const res = await new TestStartup(new Request().setMethod("GET"))
+  const res = await new TestStartup(new SfaRequest().setMethod("GET"))
     .useSwagger()
     .run();
 
@@ -12,7 +12,7 @@ test("default html", async function () {
 
 test("not exist", async function () {
   const res = await new TestStartup(
-    new Request().setPath("not-exist").setMethod("GET")
+    new SfaRequest().setPath("not-exist").setMethod("GET")
   )
     .useSwagger()
     .run();
@@ -21,7 +21,7 @@ test("not exist", async function () {
 });
 
 test("custom html", async function () {
-  const res = await new TestStartup(new Request().setMethod("GET"))
+  const res = await new TestStartup(new SfaRequest().setMethod("GET"))
     .useSwagger({
       customHtml: () => "html",
     })
@@ -33,7 +33,7 @@ test("custom html", async function () {
 
 test("custom html with promise", async function () {
   {
-    const res = await new TestStartup(new Request().setMethod("GET"))
+    const res = await new TestStartup(new SfaRequest().setMethod("GET"))
       .useSwagger({
         customHtml: () =>
           new Promise((resolve) => {
@@ -47,7 +47,7 @@ test("custom html with promise", async function () {
   }
 
   {
-    const res = await new TestStartup(new Request().setMethod("GET"))
+    const res = await new TestStartup(new SfaRequest().setMethod("GET"))
       .useSwagger({
         customHtml: async () => "html",
       })
@@ -59,7 +59,7 @@ test("custom html with promise", async function () {
 });
 
 test("error options", async function () {
-  const res = await new TestStartup(new Request().setMethod("GET"))
+  const res = await new TestStartup(new SfaRequest().setMethod("GET"))
     .use(async (ctx, next) => {
       try {
         await next();
