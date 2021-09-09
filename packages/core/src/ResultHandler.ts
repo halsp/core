@@ -1,9 +1,8 @@
-import { ReasonPhrases, StatusCodes } from "./utils";
-import HeadersHandler from "./HeadersHandler";
 import Response from "./Response";
 import ErrorMessage from "./Response/ErrorMessage";
+import SfaHeader, { ReasonPhrases, StatusCodes } from "@sfajs/header";
 
-export default abstract class ResultHandler extends HeadersHandler {
+export default abstract class ResultHandler extends SfaHeader {
   constructor(resFinder: () => Response) {
     super(() => resFinder().headers);
     this.#resFinder = resFinder;

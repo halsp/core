@@ -1,7 +1,11 @@
-import HeadersHandler from "./HeadersHandler";
-import { Dict, HeadersDict, ReadonlyDict, ReadonlyHeadersDict } from "./utils";
+import SfaHeader, {
+  Dict,
+  HeadersDict,
+  ReadonlyDict,
+  ReadonlyHeadersDict,
+} from "@sfajs/header";
 
-export default class SfaRequest extends HeadersHandler {
+export default class SfaRequest extends SfaHeader {
   constructor() {
     super(() => this.#headers);
   }

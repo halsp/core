@@ -23,6 +23,7 @@ test("method override lower case", async function () {
   const req = new SfaRequest()
     .setMethod("PATCH")
     .setHeader("X-HTTP-Method-Override".toLowerCase(), "POST");
+  expect(req.headers["X-HTTP-Method-Override".toLowerCase()]).toBe("POST");
   expect(req.method).toBe("POST");
   expect(req.method).not.toBe("PATCH");
   expect(req.overrideMethod).toBe("PATCH");

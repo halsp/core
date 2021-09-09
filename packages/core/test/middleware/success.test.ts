@@ -1,6 +1,6 @@
 import { Middleware } from "../../src/index";
 import { TestStartup } from "../../src";
-import { Dict } from "../../src/utils";
+import { Dict } from "@sfajs/header";
 
 test("middleware success", async function () {
   const stepResult: Dict<number> = {

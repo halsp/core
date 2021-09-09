@@ -10,7 +10,6 @@ import SfaRequest from "./SfaRequest";
 import Middleware from "./Middleware";
 
 import ResultHandler from "./ResultHandler";
-import HeadersHandler from "./HeadersHandler";
 
 import * as SfaUtils from "./utils";
 
@@ -23,6 +22,5 @@ export {
   HttpContext,
   Middleware,
   ResultHandler,
-  HeadersHandler,
   SfaUtils,
 };

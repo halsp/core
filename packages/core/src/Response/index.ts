@@ -1,10 +1,10 @@
-import { StatusCodes } from "http-status-codes";
-import ResultHandler from "../ResultHandler";
 import {
   HeadersDict,
   NumericalHeadersDict,
   ReadonlyHeadersDict,
-} from "../utils";
+  StatusCodes,
+} from "@sfajs/header";
+import ResultHandler from "../ResultHandler";
 
 export default class Response extends ResultHandler {
   #headers: HeadersDict = {};
