@@ -1,11 +1,11 @@
-import SfaResponse from "../SfaResponse";
-import HttpContext from "../HttpContext";
-import LambdaMiddleware from "../Middleware/LambdaMiddleware";
-import Middleware from "../Middleware";
+import SfaResponse from "./SfaResponse";
+import HttpContext from "./HttpContext";
+import LambdaMiddleware from "./Middleware/LambdaMiddleware";
+import Middleware from "./Middleware";
 import { Stream } from "stream";
 import * as mime from "mime-types";
-import isPlainObj from "../utils/isPlainObj";
-import SfaRequest from "../SfaRequest";
+import isPlainObj from "./utils/isPlainObj";
+import SfaRequest from "./SfaRequest";
 
 export default abstract class Startup {
   #mds: ((ctx: HttpContext) => Middleware)[] = [];
