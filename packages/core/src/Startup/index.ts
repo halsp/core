@@ -5,6 +5,7 @@ import Middleware from "../Middleware";
 import { Stream } from "stream";
 import * as mime from "mime-types";
 import isPlainObj from "../utils/isPlainObj";
+import SfaRequest from "../SfaRequest";
 
 export default abstract class Startup {
   #mds: ((ctx: HttpContext) => Middleware)[] = [];
@@ -80,5 +81,19 @@ export default abstract class Startup {
     }
 
     return res;
+  }
+}
+
+export class TestStartup extends Startup {
+  #req?: SfaRequest;
+  constructor(req?: SfaRequest) {
+    super();
+    this.#req = req;
+  }
+
+  async run(req?: SfaRequest): Promise<SfaResponse> {
+    return await super.invoke(
+      new HttpContext(req ?? this.#req ?? new SfaRequest())
+    );
   }
 }

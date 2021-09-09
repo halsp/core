@@ -1,8 +1,7 @@
 import SfaResponse from "./SfaResponse";
 import HttpErrorMessage from "./HttpErrorMessage";
 
-import Startup from "./Startup";
-import TestStartup from "./Startup/TestStartup";
+import Startup, { TestStartup } from "./Startup";
 import HttpContext from "./HttpContext";
 
 import SfaRequest from "./SfaRequest";
