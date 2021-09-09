@@ -1,7 +1,6 @@
-import Middleware from ".";
-import HttpContext from "../HttpContext";
+import { Middleware, HttpContext } from ".";
 
-class LambdaMiddleware extends Middleware {
+export default class LambdaMiddleware extends Middleware {
   constructor(
     private readonly builder: (
       ctx: HttpContext,
@@ -15,5 +14,3 @@ class LambdaMiddleware extends Middleware {
     await this.builder(this.ctx, this.next.bind(this));
   }
 }
-
-export default LambdaMiddleware;
