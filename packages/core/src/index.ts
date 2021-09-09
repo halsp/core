@@ -1,13 +1,10 @@
 import SfaResponse from "./SfaResponse";
 import HttpErrorMessage from "./HttpErrorMessage";
-
-import Startup, { TestStartup } from "./Startup";
+import Startup from "./Startup";
+import TestStartup from "./TestStartup";
 import HttpContext from "./HttpContext";
-
 import SfaRequest from "./SfaRequest";
-
 import Middleware from "./Middleware";
-
 import ResultHandler from "./ResultHandler";
 
 import * as SfaUtils from "./utils";
