@@ -1,5 +1,5 @@
 import SfaResponse from "./SfaResponse";
-import ErrorMessage from "./Response/ErrorMessage";
+import HttpErrorMessage from "./HttpErrorMessage";
 import SfaHeader, { ReasonPhrases, StatusCodes } from "@sfajs/header";
 
 export default abstract class ResultHandler extends SfaHeader {
@@ -59,7 +59,7 @@ export default abstract class ResultHandler extends SfaHeader {
     return this;
   }
 
-  badRequestMsg(msg?: ErrorMessage & NodeJS.Dict<unknown>): this {
+  badRequestMsg(msg?: HttpErrorMessage & NodeJS.Dict<unknown>): this {
     if (!msg) msg = { message: ReasonPhrases.BAD_REQUEST };
     return this.badRequest(msg);
   }
@@ -72,7 +72,7 @@ export default abstract class ResultHandler extends SfaHeader {
     return this;
   }
 
-  unauthorizedMsg(msg?: ErrorMessage & NodeJS.Dict<unknown>): this {
+  unauthorizedMsg(msg?: HttpErrorMessage & NodeJS.Dict<unknown>): this {
     if (!msg) msg = { message: ReasonPhrases.UNAUTHORIZED };
     return this.unauthorized(msg);
   }
@@ -85,7 +85,7 @@ export default abstract class ResultHandler extends SfaHeader {
     return this;
   }
 
-  forbiddenMsg(msg?: ErrorMessage & NodeJS.Dict<unknown>): this {
+  forbiddenMsg(msg?: HttpErrorMessage & NodeJS.Dict<unknown>): this {
     if (!msg) msg = { message: ReasonPhrases.FORBIDDEN };
     return this.forbidden(msg);
   }
@@ -98,7 +98,7 @@ export default abstract class ResultHandler extends SfaHeader {
     return this;
   }
 
-  notFoundMsg(msg?: ErrorMessage & NodeJS.Dict<unknown>): this {
+  notFoundMsg(msg?: HttpErrorMessage & NodeJS.Dict<unknown>): this {
     if (!msg) msg = { message: ReasonPhrases.NOT_FOUND };
     return this.notFound(msg);
   }
@@ -111,7 +111,7 @@ export default abstract class ResultHandler extends SfaHeader {
     return this;
   }
 
-  errRequestMsg(msg?: ErrorMessage & NodeJS.Dict<unknown>): this {
+  errRequestMsg(msg?: HttpErrorMessage & NodeJS.Dict<unknown>): this {
     if (!msg) msg = { message: ReasonPhrases.INTERNAL_SERVER_ERROR };
     return this.errRequest(msg);
   }

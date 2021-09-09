@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { StatusCodes } from "http-status-codes";
-import { ErrorMessage } from "../../src";
+import { HttpErrorMessage } from "../../src";
 import { TestStartup } from "../../src";
 
 test("response error message", async function () {
@@ -8,7 +8,7 @@ test("response error message", async function () {
     .use(async (ctx) => {
       ctx.res
         .setStatus(StatusCodes.BAD_REQUEST)
-        .setBody(<ErrorMessage>{ message: "error msg" });
+        .setBody(<HttpErrorMessage>{ message: "error msg" });
     })
     .run();
 

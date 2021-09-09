@@ -272,7 +272,7 @@ export default class extends Middleware {
 
 Most built-in result functions pass in optional `body` parameters
 
-When an error occurs, `ErrorMessage` can be returned uniformly, and the built-in functions whose name ends with `Msg` accepts the `ErrorMessage` parameter
+When an error occurs, `HttpErrorMessage` can be returned uniformly, and the built-in functions whose name ends with `Msg` accepts the `HttpErrorMessage` parameter
 
 ## Sfa environment
 

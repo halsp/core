@@ -1,5 +1,5 @@
 import SfaResponse from "./SfaResponse";
-import ErrorMessage from "./Response/ErrorMessage";
+import HttpErrorMessage from "./HttpErrorMessage";
 
 import Startup from "./Startup";
 import TestStartup from "./Startup/TestStartup";
@@ -15,7 +15,7 @@ import * as SfaUtils from "./utils";
 
 export {
   SfaResponse,
-  ErrorMessage,
+  HttpErrorMessage,
   Startup,
   TestStartup,
   SfaRequest,

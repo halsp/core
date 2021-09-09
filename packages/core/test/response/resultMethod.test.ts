@@ -1,4 +1,4 @@
-import ErrorMessage from "../../src/Response/ErrorMessage";
+import HttpErrorMessage from "../../src/HttpErrorMessage";
 import HttpContext from "../../src/HttpContext";
 import { Middleware, TestStartup } from "../../src";
 import SfaRequest from "../../src/SfaRequest";
@@ -141,7 +141,7 @@ for (let i = 0; i < msgMethods.length; i++) {
     test(errorMsgTest, async function () {
       const result = md.ctx.res;
       expect(result.status).toBe(methodItem.code);
-      expect((result.body as ErrorMessage).message).toBe(errorMsgTest);
+      expect((result.body as HttpErrorMessage).message).toBe(errorMsgTest);
     });
   }
 
@@ -151,7 +151,7 @@ for (let i = 0; i < msgMethods.length; i++) {
     test(errorMsgTest, async function () {
       const result = md.ctx.res;
       expect(result.status).toBe(methodItem.code);
-      expect((result.body as ErrorMessage).message).toBe(
+      expect((result.body as HttpErrorMessage).message).toBe(
         getReasonPhrase(methodItem.code)
       );
     });
