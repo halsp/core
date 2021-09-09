@@ -1,5 +1,5 @@
 import "sfa";
-import { Startup, HttpContext, Middleware, Response } from "sfa";
+import { Startup, HttpContext, Middleware, SfaResponse } from "sfa";
 import * as consolidate from "consolidate";
 import * as path from "path";
 import * as fs from "fs";
@@ -18,12 +18,18 @@ declare module "sfa" {
   }
 
   interface HttpContext {
-    view(tmpPath: string, locals?: Record<string, unknown>): Promise<Response>;
+    view(
+      tmpPath: string,
+      locals?: Record<string, unknown>
+    ): Promise<SfaResponse>;
     state: Record<string, unknown>;
   }
 
   interface Middleware {
-    view(tmpPath: string, locals?: Record<string, unknown>): Promise<Response>;
+    view(
+      tmpPath: string,
+      locals?: Record<string, unknown>
+    ): Promise<SfaResponse>;
   }
 }
 
@@ -61,7 +67,7 @@ async function render(
   locals: Record<string, unknown>,
   options: Record<string, unknown>,
   engines: Engine[]
-): Promise<Response> {
+): Promise<SfaResponse> {
   tmpPath = path.join(dir ?? "", tmpPath ?? "");
   options = Object.assign(options ?? {}, ctx.state ?? {}, locals ?? {});
   const file = getFile(tmpPath, engines ?? []);
