@@ -5,6 +5,9 @@ import SfaHeader, {
   ReadonlyHeadersDict,
 } from "@sfajs/header";
 
+export type QueryDict = Dict<string>;
+export type ReadonlyQueryDict = ReadonlyDict<string>;
+
 export default class SfaRequest extends SfaHeader {
   constructor() {
     super(() => this.#headers);

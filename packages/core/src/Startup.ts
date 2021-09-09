@@ -3,7 +3,6 @@ import HttpContext from "./HttpContext";
 import Middleware from "./Middleware";
 import { Stream } from "stream";
 import * as mime from "mime-types";
-import isPlainObj from "./utils/isPlainObj";
 import LambdaMiddleware from "./LambdaMiddleware";
 
 export default abstract class Startup {
@@ -58,7 +57,7 @@ export default abstract class Startup {
       }
     } else if (body instanceof Stream) {
       res.setHeader("Content-Type", mime.contentType("bin") as string);
-    } else if (isPlainObj(body)) {
+    } else if (this.isPlainObj(body)) {
       if (writeLength) {
         res.setHeader(
           "content-length",
@@ -80,5 +79,18 @@ export default abstract class Startup {
     }
 
     return res;
+  }
+
+  isPlainObj(obj: unknown): boolean {
+    if (
+      Object.prototype.toString.call(obj).toLowerCase() != "[object object]"
+    ) {
+      return false;
+    }
+
+    return (
+      !Object.getPrototypeOf(obj) ||
+      Object.getPrototypeOf(obj) == Object.prototype
+    );
   }
 }

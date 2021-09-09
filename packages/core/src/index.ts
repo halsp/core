@@ -3,11 +3,9 @@ import HttpErrorMessage from "./HttpErrorMessage";
 import Startup from "./Startup";
 import TestStartup from "./TestStartup";
 import HttpContext from "./HttpContext";
-import SfaRequest from "./SfaRequest";
+import SfaRequest, { QueryDict, ReadonlyQueryDict } from "./SfaRequest";
 import Middleware from "./Middleware";
 import ResultHandler from "./ResultHandler";
-
-import * as SfaUtils from "./utils";
 
 export {
   SfaResponse,
@@ -15,8 +13,9 @@ export {
   Startup,
   TestStartup,
   SfaRequest,
+  QueryDict,
+  ReadonlyQueryDict,
   HttpContext,
   Middleware,
   ResultHandler,
-  SfaUtils,
 };
