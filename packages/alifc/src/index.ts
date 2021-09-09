@@ -1,4 +1,4 @@
-import { HttpContext, Request, Response, SfaUtils } from "sfa";
+import { HttpContext, SfaRequest, SfaResponse } from "sfa";
 import "sfa";
 import * as http from "http";
 import { HttpBodyPraserStartup } from "@sfajs/http";
@@ -44,7 +44,7 @@ export default class SfaAlifunc extends HttpBodyPraserStartup {
     aliContext: AliContext
   ): Promise<void> {
     const ctx = new HttpContext(
-      new Request()
+      new SfaRequest()
         .setPath(aliReq.path)
         .setHeaders(aliReq.headers)
         .setQuery(aliReq.queries)
@@ -70,13 +70,13 @@ export default class SfaAlifunc extends HttpBodyPraserStartup {
     return;
   }
 
-  private writeBody(sfaRes: Response, aliRes: AliRes) {
+  private writeBody(sfaRes: SfaResponse, aliRes: AliRes) {
     if (!sfaRes.body) {
       aliRes.send("");
       return;
     }
 
-    if (SfaUtils.isPlainObj(sfaRes.body)) {
+    if (this.isPlainObj(sfaRes.body)) {
       aliRes.send(JSON.stringify(sfaRes.body));
     } else {
       aliRes.send(sfaRes.body);
