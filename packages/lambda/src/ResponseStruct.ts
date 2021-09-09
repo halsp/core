@@ -1,8 +1,8 @@
-import { SfaUtils } from "sfa";
+import { HeadersDict } from "@sfajs/header";
 
 export default interface ResponseStruct {
   isBase64Encoded: boolean;
   statusCode: number;
-  headers: SfaUtils.HeadersDict;
+  headers: HeadersDict;
   body: unknown;
 }

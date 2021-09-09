@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/cloudbase",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "将 sfa 托管到腾讯云 CloudBase",
   "homepage": "https://github.com/sfajs/cloudbase",
   "repository": {
@@ -31,23 +31,24 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@cloudbase/node-sdk": "^2.6.0",
-    "@types/node": "^15.12.5",
-    "sfa": "^1.0.0"
+    "@cloudbase/node-sdk": "^2.7.1",
+    "@sfajs/header": "^1.0.1",
+    "@types/node": "^16.9.0",
+    "sfa": "^1.1.1"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.23",
-    "@types/shelljs": "^0.8.8",
-    "@typescript-eslint/eslint-plugin": "^4.28.1",
-    "@typescript-eslint/parser": "^4.28.1",
-    "eslint": "^7.29.0",
+    "@types/jest": "^27.0.1",
+    "@types/shelljs": "^0.8.9",
+    "@typescript-eslint/eslint-plugin": "^4.31.0",
+    "@typescript-eslint/parser": "^4.31.0",
+    "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^3.4.0",
-    "jest": "^27.0.6",
-    "prettier": "^2.3.2",
+    "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^27.1.1",
+    "prettier": "^2.4.0",
     "shelljs": "^0.8.4",
-    "ts-jest": "^27.0.3",
-    "typescript": "^4.3.5"
+    "ts-jest": "^27.0.5",
+    "typescript": "^4.4.2"
   },
   "files": [
     ".github",

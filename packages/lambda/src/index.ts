@@ -1,14 +1,14 @@
 import { ICloudBaseConfig } from "@cloudbase/node-sdk";
-import { HttpContext, Request, Startup } from "sfa";
+import { HttpContext, SfaRequest, Startup } from "sfa";
 import ResponseStruct from "./ResponseStruct";
 import tcb = require("@cloudbase/node-sdk");
 import Dbhelper from "./Dbhelper";
-import { SfaUtils } from "sfa";
+import { Dict, HeadersDict } from "@sfajs/header";
 
 declare module "sfa" {
-  interface Request {
-    readonly context: SfaUtils.Dict<unknown>;
-    readonly event: SfaUtils.Dict<unknown>;
+  interface SfaRequest {
+    readonly context: Dict<unknown>;
+    readonly event: Dict<unknown>;
   }
 }
 
@@ -16,8 +16,8 @@ export { ResponseStruct, Dbhelper };
 
 export default class SfaCloudbase extends Startup {
   async run(
-    event: SfaUtils.Dict<unknown>,
-    context: SfaUtils.Dict<unknown>
+    event: Dict<unknown>,
+    context: Dict<unknown>
   ): Promise<ResponseStruct> {
     const ctx = this.createContext(event, context);
     await super.invoke(ctx);
@@ -25,15 +25,15 @@ export default class SfaCloudbase extends Startup {
   }
 
   private createContext(
-    event: SfaUtils.Dict<unknown>,
-    context: SfaUtils.Dict<unknown>
+    event: Dict<unknown>,
+    context: Dict<unknown>
   ): HttpContext {
     const ctx = new HttpContext(
-      new Request()
+      new SfaRequest()
         .setBody(this.getBody(event))
         .setMethod(event.httpMethod as string)
-        .setHeaders((event.headers ?? {}) as SfaUtils.HeadersDict)
-        .setQuery((event.queryStringParameters ?? {}) as SfaUtils.Dict<string>)
+        .setHeaders((event.headers ?? {}) as HeadersDict)
+        .setQuery((event.queryStringParameters ?? {}) as Dict<string>)
         .setPath(event.path as string)
     );
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -58,9 +58,9 @@ export default class SfaCloudbase extends Startup {
     };
   }
 
-  private getBody(event: SfaUtils.Dict<unknown>): unknown {
+  private getBody(event: Dict<unknown>): unknown {
     const body = event.body;
-    const headers = event.headers as SfaUtils.HeadersDict;
+    const headers = event.headers as HeadersDict;
     if (body && typeof body == "string") {
       if (event.isBase64Encoded) {
         return Buffer.from(body, "base64");

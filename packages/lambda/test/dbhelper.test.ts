@@ -1,7 +1,8 @@
 import "../src";
 import Dbhelper from "../src/Dbhelper";
 import SfaCloudbase from "../src";
-import { HttpContext, SfaUtils } from "sfa";
+import { HttpContext } from "sfa";
+import { Dict } from "@sfajs/header";
 
 test("dbhelper", async function () {
   let context!: HttpContext;
@@ -60,11 +61,7 @@ test("dbhelper getPageList", async function () {
   await testPageList({}, 1, 20);
 });
 
-async function testPageList(
-  event: SfaUtils.Dict<unknown>,
-  page: number,
-  limit: number
-) {
+async function testPageList(event: Dict<unknown>, page: number, limit: number) {
   let context!: HttpContext;
   await new SfaCloudbase()
     .useCloudbaseDbhelper()
