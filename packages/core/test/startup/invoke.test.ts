@@ -29,7 +29,7 @@ test("throw error", async function () {
   try {
     await startup.run();
   } catch (err) {
-    expect(err.message).toBe("msg");
+    expect((err as Error).message).toBe("msg");
     return;
   }
   expect(true).toBe(false);

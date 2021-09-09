@@ -6,7 +6,6 @@ import TestStartup from "./Startup/TestStartup";
 import HttpContext from "./HttpContext";
 
 import Request from "./Request";
-import HttpMethod from "./Request/HttpMethod";
 
 import Middleware from "./Middleware";
 
@@ -22,7 +21,6 @@ export {
   TestStartup,
   Request,
   HttpContext,
-  HttpMethod,
   Middleware,
   ResultHandler,
   HeadersHandler,

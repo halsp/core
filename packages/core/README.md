@@ -1,7 +1,5 @@
 # Sfa
 
-**Super flexible web app framework**
-
 sfa provides configurable basic functions. You can add middleware to support different environments, including but not limited to cloud functions, http(s), etc.
 
 ## Installation

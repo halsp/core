@@ -1,6 +1,5 @@
 import HeadersHandler from "../HeadersHandler";
 import { Dict, HeadersDict, ReadonlyDict, ReadonlyHeadersDict } from "../utils";
-import HttpMethod from "./HttpMethod";
 
 export default class Request extends HeadersHandler {
   constructor() {
@@ -35,7 +34,7 @@ export default class Request extends HeadersHandler {
     return this;
   }
 
-  #method = HttpMethod.any;
+  #method = "ANY";
   public get overrideMethod(): string | undefined {
     if (
       this.#method &&
