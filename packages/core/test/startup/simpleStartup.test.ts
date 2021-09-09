@@ -1,4 +1,4 @@
-import { HttpContext, Request, TestStartup } from "../../src";
+import { HttpContext, SfaRequest, TestStartup } from "../../src";
 
 test("simple startup", async function () {
   let context!: HttpContext;
@@ -14,7 +14,7 @@ test("simple startup", async function () {
 });
 
 test("without md", async function () {
-  const res = await new TestStartup().run(new Request());
+  const res = await new TestStartup().run(new SfaRequest());
 
   expect(res).not.toBeUndefined();
 });

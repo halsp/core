@@ -1,8 +1,8 @@
-import { TestStartup, Request } from "../../src";
+import { TestStartup, SfaRequest } from "../../src";
 import { HeadersDict } from "../../src/utils";
 
 test("request setHeader", async function () {
-  const req = new Request()
+  const req = new SfaRequest()
     .setHeader("h1", "1")
     .setHeader("h2", "2")
     .setHeader("h3", "3");
@@ -11,7 +11,7 @@ test("request setHeader", async function () {
 });
 
 test("request setHeaders", async function () {
-  const req = new Request().setHeaders({
+  const req = new SfaRequest().setHeaders({
     h1: "1",
     h2: "2",
     h3: "3",

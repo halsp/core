@@ -123,7 +123,7 @@ The data in the pipeline is in the `HttpContext` object, and each middleware can
 The `HttpContext` object contains the following:
 
 - res property: `Response` object
-- req property: `Request` object
+- req property: `SfaRequest` object
 - bag function: Used to pass more data in a pipe
 
 ### Response
@@ -156,7 +156,7 @@ For example, if a `Action` requires `PATCH` request, but wechat miniapp does not
 }
 ```
 
-### Request
+### SfaRequest
 
 In the middleware, you can get the request content through `this.ctx.req`
 

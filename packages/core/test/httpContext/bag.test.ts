@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { HttpContext, Request } from "../../src";
+import { HttpContext, SfaRequest } from "../../src";
 
 test("bag", async function () {
-  const context = new HttpContext(new Request());
+  const context = new HttpContext(new SfaRequest());
   context.bag("BAG1", "BAG1");
   context.bag("BAG2", { bag2: "BAG2" });
   context.bag("BAG3", () => "BAG3");

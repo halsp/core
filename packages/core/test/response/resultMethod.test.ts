@@ -1,7 +1,7 @@
 import ErrorMessage from "../../src/Response/ErrorMessage";
 import HttpContext from "../../src/HttpContext";
 import { Middleware, TestStartup } from "../../src";
-import Request from "../../src/Request";
+import SfaRequest from "../../src/SfaRequest";
 import { getReasonPhrase } from "http-status-codes";
 
 const normalMethod = [
@@ -131,7 +131,7 @@ for (let i = 0; i < msgMethods.length; i++) {
     constructor(private existMsg: boolean) {
       super();
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (this as any).init(new HttpContext(new Request()), 0);
+      (this as any).init(new HttpContext(new SfaRequest()), 0);
     }
   }
 
@@ -175,7 +175,7 @@ class RedirectMd extends Middleware {
     super();
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (this as any).init(new HttpContext(new Request()), 0);
+    (this as any).init(new HttpContext(new SfaRequest()), 0);
   }
 
   async invoke(): Promise<void> {

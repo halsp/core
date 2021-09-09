@@ -1,14 +1,14 @@
-import Request from "../../src/Request";
+import SfaRequest from "../../src/SfaRequest";
 
 test("str body", async function () {
-  const req = new Request().setBody("test body");
+  const req = new SfaRequest().setBody("test body");
 
   expect(typeof req.body).toBe("string");
   expect(req.body).toBe("test body");
 });
 
 test("obj body", async function () {
-  const req = new Request().setBody({
+  const req = new SfaRequest().setBody({
     b1: 1,
     b2: "2",
   });

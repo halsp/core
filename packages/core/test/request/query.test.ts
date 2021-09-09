@@ -1,7 +1,7 @@
-import { Request, SfaUtils } from "../../src";
+import { SfaRequest, SfaUtils } from "../../src";
 
 test("request setQuery", async function () {
-  const req = new Request()
+  const req = new SfaRequest()
     .setQuery("p1", "1")
     .setQuery("p2", "2")
     .setQuery("p3", "3")
@@ -12,7 +12,7 @@ test("request setQuery", async function () {
 });
 
 test("request setQuery", async function () {
-  const req = new Request().setQuery({
+  const req = new SfaRequest().setQuery({
     p1: "1",
     p2: "2",
     p3: "3",

@@ -5,7 +5,7 @@ import Startup from "./Startup";
 import TestStartup from "./Startup/TestStartup";
 import HttpContext from "./HttpContext";
 
-import Request from "./Request";
+import SfaRequest from "./SfaRequest";
 
 import Middleware from "./Middleware";
 
@@ -19,7 +19,7 @@ export {
   ErrorMessage,
   Startup,
   TestStartup,
-  Request,
+  SfaRequest,
   HttpContext,
   Middleware,
   ResultHandler,
