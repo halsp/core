@@ -1,9 +1,9 @@
-import { TestStartup, Request } from "sfa";
+import { TestStartup, SfaRequest } from "sfa";
 import "../src";
 
 test("not found", async function () {
   const result = await new TestStartup(
-    new Request().setMethod("get").setPath("not-exist")
+    new SfaRequest().setMethod("get").setPath("not-exist")
   )
     .useStatic({
       dir: "test/static",
@@ -16,7 +16,7 @@ test("not found", async function () {
 test("404 page", async function () {
   {
     const result = await new TestStartup(
-      new Request().setMethod("get").setPath("not-exist")
+      new SfaRequest().setMethod("get").setPath("not-exist")
     )
       .use(async (ctx, next) => {
         await next();
@@ -34,7 +34,7 @@ test("404 page", async function () {
   }
   {
     const result = await new TestStartup(
-      new Request().setMethod("get").setPath("not-exist")
+      new SfaRequest().setMethod("get").setPath("not-exist")
     )
       .useStatic({
         dir: "test/static",
@@ -49,7 +49,7 @@ test("404 page", async function () {
 
 test("404 page not found", async function () {
   const result = await new TestStartup(
-    new Request().setMethod("get").setPath("not-exist")
+    new SfaRequest().setMethod("get").setPath("not-exist")
   )
     .useStatic({
       dir: "test/static",

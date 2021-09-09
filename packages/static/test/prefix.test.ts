@@ -1,9 +1,9 @@
-import { TestStartup, Request } from "sfa";
+import { TestStartup, SfaRequest } from "sfa";
 import "../src";
 
 test("prefix", async function () {
   const result = await new TestStartup(
-    new Request().setMethod("get").setPath("static/index.un")
+    new SfaRequest().setMethod("get").setPath("static/index.un")
   )
     .useStatic({
       dir: "test/static",
@@ -17,7 +17,7 @@ test("prefix", async function () {
 
 test("prefix with /", async function () {
   const result = await new TestStartup(
-    new Request().setMethod("get").setPath("/static/index.un/")
+    new SfaRequest().setMethod("get").setPath("/static/index.un/")
   )
     .useStatic({
       dir: "test/static",
@@ -31,7 +31,7 @@ test("prefix with /", async function () {
 
 test("prefix not found", async function () {
   const result = await new TestStartup(
-    new Request().setMethod("get").setPath("/static/index.un/")
+    new SfaRequest().setMethod("get").setPath("/static/index.un/")
   )
     .useStatic({
       dir: "test/static",

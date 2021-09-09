@@ -1,10 +1,10 @@
-import { TestStartup, Request } from "sfa";
+import { TestStartup, SfaRequest } from "sfa";
 import "../src";
 
 test("match", async function () {
   {
     const result = await new TestStartup(
-      new Request().setMethod("get").setPath("ind")
+      new SfaRequest().setMethod("get").setPath("ind")
     )
       .use(async (ctx, next) => {
         await next();
@@ -21,7 +21,7 @@ test("match", async function () {
   }
   {
     const result = await new TestStartup(
-      new Request().setMethod("get").setPath("/ind/")
+      new SfaRequest().setMethod("get").setPath("/ind/")
     )
       .useStatic({
         file: "test/static/index.html",
@@ -34,7 +34,7 @@ test("match", async function () {
   }
   {
     const result = await new TestStartup(
-      new Request().setMethod("get").setPath("ind")
+      new SfaRequest().setMethod("get").setPath("ind")
     )
       .useStatic({
         file: "test/static/index.html",
@@ -49,7 +49,7 @@ test("match", async function () {
 
 test("not found path", async function () {
   const result = await new TestStartup(
-    new Request().setMethod("get").setPath("ind1")
+    new SfaRequest().setMethod("get").setPath("ind1")
   )
     .use(async (ctx, next) => {
       await next();
@@ -66,7 +66,7 @@ test("not found path", async function () {
 
 test("not found file", async function () {
   const result = await new TestStartup(
-    new Request().setMethod("get").setPath("ind")
+    new SfaRequest().setMethod("get").setPath("ind")
   )
     .useStatic({
       file: "test/static/index1.html",
@@ -79,7 +79,7 @@ test("not found file", async function () {
 
 test("found dir instead of file", async function () {
   const result = await new TestStartup(
-    new Request().setMethod("get").setPath("sta")
+    new SfaRequest().setMethod("get").setPath("sta")
   )
     .useStatic({
       file: "test/static",
@@ -93,7 +93,7 @@ test("found dir instead of file", async function () {
 test("empty req path", async function () {
   {
     const result = await new TestStartup(
-      new Request().setMethod("get").setPath("")
+      new SfaRequest().setMethod("get").setPath("")
     )
       .useStatic({
         file: "test/static/index.html",
@@ -105,7 +105,7 @@ test("empty req path", async function () {
 
   {
     const result = await new TestStartup(
-      new Request().setMethod("get").setPath("/")
+      new SfaRequest().setMethod("get").setPath("/")
     )
       .useStatic({
         file: "test/static/index.html",
@@ -117,7 +117,7 @@ test("empty req path", async function () {
 
   {
     const result = await new TestStartup(
-      new Request().setMethod("get").setPath("ind")
+      new SfaRequest().setMethod("get").setPath("ind")
     )
       .useStatic({
         file: "test/static/index.html",

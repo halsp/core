@@ -1,4 +1,5 @@
-import { HttpMethod, Middleware } from "sfa";
+import { HttpMethod } from "@sfajs/header";
+import { Middleware } from "sfa";
 import { SingleStaticConfig, StaticConfig } from "./StaticConfig";
 
 export abstract class BaseMiddleware extends Middleware {
