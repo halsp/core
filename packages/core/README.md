@@ -122,11 +122,11 @@ The data in the pipeline is in the `HttpContext` object, and each middleware can
 
 The `HttpContext` object contains the following:
 
-- res property: `Response` object
+- res property: `SfaResponse` object
 - req property: `SfaRequest` object
 - bag function: Used to pass more data in a pipe
 
-### Response
+### SfaResponse
 
 Return data (It will be parsed in a specific environment)
 

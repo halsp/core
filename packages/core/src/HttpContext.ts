@@ -1,5 +1,5 @@
 import SfaRequest from "./SfaRequest";
-import Response from "./Response";
+import SfaResponse from "./SfaResponse";
 import ResultHandler from "./ResultHandler";
 
 export default class HttpContext extends ResultHandler {
@@ -10,8 +10,8 @@ export default class HttpContext extends ResultHandler {
 
   readonly #bag: { [k: string]: unknown } = {};
 
-  #res: Response = new Response();
-  public get res(): Response {
+  #res: SfaResponse = new SfaResponse();
+  public get res(): SfaResponse {
     return this.#res;
   }
 

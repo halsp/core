@@ -1,4 +1,4 @@
-import Response from "../Response";
+import SfaResponse from "../SfaResponse";
 import HttpContext from "../HttpContext";
 import LambdaMiddleware from "../Middleware/LambdaMiddleware";
 import Middleware from "../Middleware";
@@ -25,7 +25,7 @@ export default abstract class Startup {
     return this;
   }
 
-  protected async invoke(ctx: HttpContext): Promise<Response> {
+  protected async invoke(ctx: HttpContext): Promise<SfaResponse> {
     if (!this.#mds.length) {
       return ctx.res;
     }
@@ -37,7 +37,7 @@ export default abstract class Startup {
     return this.setType(ctx.res);
   }
 
-  private setType(res: Response): Response {
+  private setType(res: SfaResponse): SfaResponse {
     const body = res.body;
 
     if (!body) {

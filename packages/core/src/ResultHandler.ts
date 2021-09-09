@@ -1,16 +1,16 @@
-import Response from "./Response";
+import SfaResponse from "./SfaResponse";
 import ErrorMessage from "./Response/ErrorMessage";
 import SfaHeader, { ReasonPhrases, StatusCodes } from "@sfajs/header";
 
 export default abstract class ResultHandler extends SfaHeader {
-  constructor(resFinder: () => Response) {
+  constructor(resFinder: () => SfaResponse) {
     super(() => resFinder().headers);
     this.#resFinder = resFinder;
   }
 
   #resFinder;
 
-  get #res(): Response {
+  get #res(): SfaResponse {
     return this.#resFinder();
   }
 

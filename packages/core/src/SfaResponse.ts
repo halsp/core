@@ -4,9 +4,9 @@ import {
   ReadonlyHeadersDict,
   StatusCodes,
 } from "@sfajs/header";
-import ResultHandler from "../ResultHandler";
+import ResultHandler from "./ResultHandler";
 
-export default class Response extends ResultHandler {
+export default class SfaResponse extends ResultHandler {
   #headers: HeadersDict = {};
 
   constructor(
