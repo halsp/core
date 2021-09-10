@@ -4,7 +4,6 @@ import path = require("path");
 import Constant from "../Constant";
 import MapCreater from "./MapCreater";
 import MapItem from "./MapItem";
-import PathParser from "./PathParser";
 import { HttpContext } from "sfa";
 import { HttpMethod } from "@sfajs/header";
 
@@ -41,35 +40,33 @@ export default class MapParser {
 
   private getMapItem(): MapItem | undefined {
     let mapItem;
-    if (!this.strict) {
-      const matchedPaths = linq
-        .from(this.#map)
-        .where((item) => this.isSimplePathMatched(item.path))
-        .toArray();
-      mapItem = this.getMostLikeMapItem(matchedPaths);
-      if (mapItem) return mapItem;
-    }
-
     const matchedPaths = linq
       .from(this.#map)
-      .where((item) => !!new PathParser(item.path).httpMethod)
-      .where((item) => this.isMethodPathMatched(item.path, true))
+      .where((m) => !!m.methods.length)
+      .where((m) => this.isPathMatched(m, true))
       .toArray();
+    if (!this.strict) {
+      linq
+        .from(this.#map)
+        .where((m) => !m.methods.length)
+        .where((m) => this.isPathMatched(m, false))
+        .forEach((m) => matchedPaths.push(m));
+    }
     mapItem = this.getMostLikeMapItem(matchedPaths);
     if (mapItem) return mapItem;
 
     const anyMethodPaths = linq
       .from(this.#map)
-      .where((item) => new PathParser(item.path).httpMethod == HttpMethod.any)
-      .where((item) => this.isMethodPathMatched(item.path, false))
+      .where((m) => m.methods.includes(HttpMethod.any))
+      .where((m) => this.isPathMatched(m, false))
       .toArray();
     mapItem = this.getMostLikeMapItem(anyMethodPaths);
     if (mapItem) return mapItem;
 
     const otherMethodPathCount = linq
       .from(this.#map)
-      .where((item) => !!new PathParser(item.path).httpMethod)
-      .where((item) => this.isMethodPathMatched(item.path, false))
+      .where((m) => !!m.methods.length)
+      .where((m) => this.isPathMatched(m, false))
       .count();
 
     if (otherMethodPathCount) {
@@ -79,34 +76,24 @@ export default class MapParser {
     }
   }
 
-  private isSimplePathMatched(mapPath: string): boolean {
-    mapPath = this.removeExtension(mapPath);
+  private isPathMatched(mapItem: MapItem, methodIncluded: boolean): boolean {
     const reqUrlStrs = this.ctx.req.path.toLowerCase().split("/");
-    const mapPathStrs = mapPath.toLowerCase().split("/");
+    const mapPathStrs = mapItem.reqPath.toLowerCase().split("/");
     if (reqUrlStrs.length != mapPathStrs.length) return false;
 
-    return this.isPathMatched(mapPathStrs, reqUrlStrs);
-  }
-
-  private isMethodPathMatched(
-    mapPath: string,
-    methodIncluded: boolean
-  ): boolean {
-    mapPath = this.removeExtension(mapPath);
-    const reqUrlStrs = this.ctx.req.path
-      ? this.ctx.req.path.toLowerCase().split("/")
-      : [];
-    const mapPathStrs = mapPath.toLowerCase().split("/");
-    if (reqUrlStrs.length != mapPathStrs.length - 1) return false;
-    if (!this.ctx.req.method) return false;
-
-    if (methodIncluded) {
-      reqUrlStrs.push(String(this.ctx.req.method).toLowerCase());
-    } else {
-      mapPathStrs.splice(mapPathStrs.length - 1, 1);
+    if (methodIncluded && !mapItem.methods.includes(HttpMethod.any)) {
+      const matchedMethod = HttpMethod.matched(this.ctx.req.method);
+      if (!matchedMethod || !mapItem.methods.includes(matchedMethod)) {
+        return false;
+      }
     }
 
-    return this.isPathMatched(mapPathStrs, reqUrlStrs);
+    for (let i = 0; i < mapPathStrs.length; i++) {
+      if (mapPathStrs[i] != reqUrlStrs[i] && !mapPathStrs[i].startsWith("^")) {
+        return false;
+      }
+    }
+    return true;
   }
 
   private getMostLikeMapItem(mapItems: MapItem[]): MapItem | undefined {
@@ -117,7 +104,7 @@ export default class MapParser {
     mapItems.forEach((mapItem) => {
       pathsParts.push({
         mapItem: mapItem,
-        parts: mapItem.path.toLowerCase().split("/"),
+        parts: mapItem.reqPath.toLowerCase().split("/"),
       });
     });
 
@@ -128,51 +115,53 @@ export default class MapParser {
         .toArray()
     );
     for (let i = 0; i < minPartsCount; i++) {
-      const notLikeItems = linq
-        .from(pathsParts)
-        .select((pp) => ({ part: pp.parts[i], mapItem: pp.mapItem }))
-        .where((p) => p.part.includes("^"))
-        .toArray();
-      if (notLikeItems.length > 0 && notLikeItems.length < pathsParts.length) {
-        notLikeItems.forEach((mlp) => {
-          const ppToRemove = linq
-            .from(pathsParts)
-            .where((p) => p.mapItem.path == mlp.mapItem.path)
-            .firstOrDefault();
-          if (ppToRemove) {
-            pathsParts.splice(pathsParts.indexOf(ppToRemove), 1);
-          }
-        });
+      if (
+        linq.from(pathsParts).any((p) => p.parts[i].includes("^")) &&
+        linq.from(pathsParts).any((p) => !p.parts[i].includes("^"))
+      ) {
+        linq
+          .from(pathsParts)
+          .where((p) => p.parts[i].includes("^"))
+          .forEach((p) => pathsParts.splice(pathsParts.indexOf(p), 1));
       }
 
       if (pathsParts.length == 1) return pathsParts[0].mapItem;
     }
 
+    if (
+      linq
+        .from(pathsParts)
+        .count((pp) => pp.mapItem.methods.includes(HttpMethod.any)) &&
+      linq
+        .from(pathsParts)
+        .any((pp) => !pp.mapItem.methods.includes(HttpMethod.any))
+    ) {
+      linq
+        .from(pathsParts)
+        .where((pp) => pp.mapItem.methods.includes(HttpMethod.any))
+        .forEach((pp) => {
+          pathsParts.splice(pathsParts.indexOf(pp), 1);
+        });
+    }
+
     const mostLikePathParts = linq
       .from(pathsParts)
       .orderBy((pp) => pp.parts.length)
-      .first();
+      .firstOrDefault();
     if (!mostLikePathParts) return;
     return mostLikePathParts.mapItem;
-  }
-
-  private removeExtension(name: string): string {
-    return name.replace(/\.[^\.]+$/, "");
-  }
-
-  private isPathMatched(mapPathStrs: string[], reqUrlStrs: string[]): boolean {
-    for (let i = 0; i < mapPathStrs.length; i++) {
-      if (mapPathStrs[i] != reqUrlStrs[i] && !mapPathStrs[i].startsWith("^")) {
-        return false;
-      }
-    }
-    return true;
   }
 
   private getMap(): MapItem[] {
     const mapPath = path.join(process.cwd(), Constant.mapFileName);
     if (existsSync(mapPath)) {
-      return JSON.parse(readFileSync(mapPath, "utf-8"));
+      const result: MapItem[] = [];
+      JSON.parse(readFileSync(mapPath, "utf-8")).forEach((m: MapItem) => {
+        const mapItem = result.push(new MapItem(m.path));
+        Object.assign(mapItem, m);
+        return mapItem;
+      });
+      return result;
     } else {
       return new MapCreater(this.dir).map;
     }

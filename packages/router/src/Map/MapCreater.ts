@@ -57,15 +57,12 @@ export default class MapCreater {
       .orderBy((item) => item)
       .toArray();
     for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const filePath = path.join(this.dirPath, file);
-
+      const filePath = path.join(this.dirPath, files[i]);
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const action = new (require(filePath).default)() as Action;
-      result.push({
-        roles: action.roles || [],
-        path: file.replace(/\\/g, "/"),
-      });
+      const mapItem = new MapItem(files[i].replace(/\\/g, "/"));
+      Object.assign(mapItem, action.metadata);
+      result.push(mapItem);
     }
 
     const folders = linq

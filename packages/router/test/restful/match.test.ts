@@ -103,5 +103,5 @@ test(`mostLikePathParts`, async function () {
     .useRouter()
     .run();
   expect(result.status).toBe(204);
-  expect(context.actionPath).toBe("restful/mostLike/^id1/act/post.ts");
+  expect(context.routerMapItem.path).toBe("restful/mostLike/^id1/act.post.ts");
 });

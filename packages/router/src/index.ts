@@ -20,8 +20,7 @@ declare module "sfa" {
   }
 
   interface HttpContext {
-    readonly actionPath: string;
-    readonly actionRoles: string[];
+    readonly routerMapItem: MapItem;
     readonly routerMap: MapItem[];
     readonly routerDir: string;
     readonly routerStrict: boolean;
@@ -33,12 +32,16 @@ Startup.prototype.useRouter = function (): Startup {
     if (ctx.routerDir == undefined) {
       setConfig(ctx, Constant.defaultRouterDir, Constant.defaultStrict);
     }
-    if (!ctx.actionPath) {
+    if (!ctx.routerMapItem) {
       if (!parseRouter(ctx)) return;
     }
     await next();
   }).add((ctx) => {
-    const filePath = path.join(process.cwd(), ctx.routerDir, ctx.actionPath);
+    const filePath = path.join(
+      process.cwd(),
+      ctx.routerDir,
+      ctx.routerMapItem.path
+    );
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const actionClass = require(filePath).default;
     return new actionClass() as Action;
@@ -49,22 +52,14 @@ Startup.prototype.useRouterParser = function <T extends Startup>(
   dir = Constant.defaultRouterDir,
   strict = Constant.defaultStrict
 ): T {
-  return useRouterParser(this, dir, strict) as T;
-};
-
-function useRouterParser<T extends Startup>(
-  startup: T,
-  dir: string,
-  strict: boolean
-): T {
-  return startup.use(async (ctx, next) => {
+  return this.use(async (ctx, next) => {
     setConfig(ctx, dir, strict);
-    if (!ctx.actionPath) {
+    if (!ctx.routerMapItem) {
       if (!parseRouter(ctx)) return;
     }
     await next();
-  });
-}
+  }) as T;
+};
 
 function setConfig(ctx: HttpContext, dir: string, strict: boolean) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -93,9 +88,7 @@ function parseRouter(ctx: HttpContext): boolean {
   }
   const mapItem = mapParser.mapItem;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (ctx as any).actionPath = mapItem.path;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (ctx as any).actionRoles = mapItem.roles;
+  (ctx as any).routerMapItem = mapItem;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (ctx as any).routerMap = mapParser.map;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -2,7 +2,8 @@ import { Action } from "../../../src";
 
 export default class extends Action {
   constructor() {
-    super(["login"]);
+    super();
+    this.metadata.roles = ["login"];
   }
 
   async invoke(): Promise<void> {

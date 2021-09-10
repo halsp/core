@@ -1,9 +1,9 @@
-import { Action } from "../../../../../src";
+import { Action } from "../../../src";
 
 export default class extends Action {
   async invoke(): Promise<void> {
     this.ok({
-      method: "PATCH",
+      method: this.ctx.req.method,
     });
   }
 }

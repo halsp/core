@@ -11,7 +11,7 @@ test(`action name error`, async function () {
     .useRouter()
     .run();
 
-  expect(result.status).toBe(404);
+  expect(result.status).toBe(405);
 });
 
 test(`without method`, async function () {
@@ -19,6 +19,23 @@ test(`without method`, async function () {
     new SfaRequest().setPath("/restful").setMethod("")
   )
     .useTest()
+    .useRouter()
+    .run();
+
+  expect(result.status).toBe(200);
+  expect(result.body).toEqual({
+    method: "ANY",
+  });
+});
+
+test(`without method strict`, async function () {
+  const result = await new TestStartup(
+    new SfaRequest().setPath("/restful").setMethod("")
+  )
+    .useTest({
+      strict: true,
+    })
+    .useRouterParser()
     .useRouter()
     .run();
 

@@ -8,15 +8,16 @@ test("useRouterParser", async function () {
     .useRouterParser("test/controllers", false)
     .use(async (ctx) => {
       ctx.res.body = {
-        path: ctx.actionPath,
-        roles: ctx.actionRoles,
+        mapItem: ctx.routerMapItem,
       };
     })
     .run();
 
   expect(res.body).toEqual({
-    path: "simple/AdminAuth.ts",
-    roles: ["admin"],
+    mapItem: {
+      path: "simple/AdminAuth.ts",
+      roles: ["admin"],
+    },
   });
 });
 
@@ -28,15 +29,16 @@ test("useRouterParser once more", async function () {
     .useRouterParser("test/controllers", false)
     .use(async (ctx) => {
       ctx.res.body = {
-        path: ctx.actionPath,
-        roles: ctx.actionRoles,
+        mapItem: ctx.routerMapItem,
       };
     })
     .run();
 
   expect(res.body).toEqual({
-    path: "simple/AdminAuth.ts",
-    roles: ["admin"],
+    mapItem: {
+      path: "simple/AdminAuth.ts",
+      roles: ["admin"],
+    },
   });
 });
 
