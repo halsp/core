@@ -1,7 +1,6 @@
 import { TestStartup, SfaRequest } from "sfa";
 import "./UseTest";
 import "../src";
-import { nextTick } from "process";
 
 test("startup test", async function () {
   const result = await new TestStartup(

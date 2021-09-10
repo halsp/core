@@ -12,7 +12,7 @@ export { Action, MapItem };
 declare module "sfa" {
   interface Startup {
     useRouter(): this;
-    useRouterParser(dir?: string): this;
+    useRouterParser(dir?: string, prefix?: string): this;
   }
 
   interface SfaRequest {
@@ -23,13 +23,14 @@ declare module "sfa" {
     readonly routerMapItem: MapItem;
     readonly routerMap: MapItem[];
     readonly routerDir: string;
+    readonly routerPrefix: string;
   }
 }
 
 Startup.prototype.useRouter = function (): Startup {
   return this.use(async (ctx, next) => {
     if (ctx.routerDir == undefined) {
-      setConfig(ctx, Constant.defaultRouterDir);
+      setConfig(ctx, Constant.defaultRouterDir, "");
     }
     if (!ctx.routerMapItem) {
       if (!parseRouter(ctx)) return;
@@ -48,10 +49,11 @@ Startup.prototype.useRouter = function (): Startup {
 };
 
 Startup.prototype.useRouterParser = function <T extends Startup>(
-  dir = Constant.defaultRouterDir
+  dir = Constant.defaultRouterDir,
+  prefix = ""
 ): T {
   return this.use(async (ctx, next) => {
-    setConfig(ctx, dir);
+    setConfig(ctx, dir, prefix);
     if (!ctx.routerMapItem) {
       if (!parseRouter(ctx)) return;
     }
@@ -59,9 +61,11 @@ Startup.prototype.useRouterParser = function <T extends Startup>(
   }) as T;
 };
 
-function setConfig(ctx: HttpContext, dir: string) {
+function setConfig(ctx: HttpContext, dir: string, prefix: string) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (ctx as any).routerDir = dir;
+  (ctx as any).routerDir = dir.replace(/^\//, "").replace(/\/$/, "");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (ctx as any).routerPrefix = prefix.replace(/^\//, "").replace(/\/$/, "");
 }
 
 function parseRouter(ctx: HttpContext): boolean {

@@ -60,7 +60,13 @@ export default class MapParser {
   }
 
   private isPathMatched(mapItem: MapItem, methodIncluded: boolean): boolean {
-    const reqUrlStrs = this.ctx.req.path.toLowerCase().split("/");
+    let reqPath = this.ctx.req.path;
+    if (this.ctx.routerPrefix && reqPath.startsWith(this.ctx.routerPrefix)) {
+      reqPath = reqPath
+        .substring(this.ctx.routerPrefix.length, reqPath.length)
+        .replace(/^\//, "");
+    }
+    const reqUrlStrs = reqPath.toLowerCase().split("/");
     const mapPathStrs = mapItem.reqPath.toLowerCase().split("/");
     if (reqUrlStrs.length != mapPathStrs.length) return false;
 
