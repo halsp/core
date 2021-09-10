@@ -3,8 +3,8 @@
 sfa 路由中间件
 
 - 支持 RESTful 规范
-- 根据文件系统映射访问路径，彻底解耦无关联的功能
-- 支持身份权限认证
+- 根据文件系统映射访问路径，彻底解耦无关联功能
+- 轻量化，高可扩展性
 
 ## 安装
 
@@ -33,7 +33,7 @@ const res = await new TestStartup()
 在 package.json 文件的 scripts 节点下添加
 
 ```JSON
-"build": "sfa-router-build"
+"build": "sfa-router-build controllers"
 ```
 
 ```JSON
@@ -42,8 +42,8 @@ const res = await new TestStartup()
     "build": "sfa-router-build controllers" // controllers 为路由文件夹路径
   },
   "dependencies": {
-    "sfa": "^0.3.2",
-    "@sfajs/router": "^0.3.1"
+    "sfa": "^1.0.0",
+    "@sfajs/router": "^1.0.0"
   }
 }
 ```
@@ -89,16 +89,16 @@ const res = await new OtherStartup().useRouter().run();
 `startup.useRouterParser` 接收两个参数：
 
 - dir: 路由文件夹，`@sfajs/router` 能够将路由文件夹下的所有 `Action` 映射为 `http` 访问路径。所有 API Action 统一放在这个文件夹中，在该目录中，建立各 `Action` 文件或文件夹。`Action` 文件是 API 的最小执行单元，详情后面 [Action](##Action) 部分有介绍
-- strict: 严格模式，默认值为 true，建议为 true。如果值为 true，文件命名必须与 httpMethod 相同，如果 `strict` 为 `false` ，则 RESTFul 规范的 API 可能会以非 RESTFul 方式调用。如文件系统为`controllers/user/login/get.ts`，访问本应是 `GET user/login`，但 `POST user/login/get` 也能调用。因此如果使用 RESTFul 或限制 method，建议设置 `strict` 为 `true`。
+- prefix: 路由前缀
 
 `startup.useRouterParser` 会在管道 `ctx` 中加入
 
-- actionPath: `action` 实际相对路径
-- actionRoles: `action` 的 `roles` 属性值，用于权限验证
+- routerMapItem: `action` 路径信息
+- routerMap: 全部路由信息
 
 一般情况你无需主动调用路由解析，因为 `startup.useRouter` 也会解析路由并在管道加入以上两个字段
 
-但当你要使用 `action` 的实际路径，或默认权限验证无法满足需求时，你就需要在 `startup.useRouterParser` 之后实现需求
+但当你要使用 `action` 的路由信息如路径、restful 路径参数、其他元数据 `metadata` ，你就需要在 `startup.useRouterParser` 之后实现需求
 
 ```TS
 import { TestStartup } from "sfa";
@@ -108,8 +108,7 @@ const res = await new TestStartup()
   .useRouterParser()
   .use(async (ctx) => {
     ctx.ok({
-      actionPath: ctx.actionPath,
-      actionRoles: ctx.actionRoles,
+      routerMapItem: ctx.routerMapItem,
     });
   })
   .useRouter()
@@ -122,7 +121,7 @@ const res = await new TestStartup()
 
 路由查询参数命名以 `^` 开头（文件系统中命名不允许出现字符 `:`），如果存在多个查询参数则后面的会覆盖前面的，如 `GET user/^id/todo/^id`，则 `id` 值为 `todoId`。正确命名应如 `user/^userId/todo/^todoId`。
 
-如果限制 `httpMethod`, `action` 应以 `post.ts`、`get.ts`、`delete.ts`、`patch.ts`、`put.ts` （或其他自定义 method，扩展名为.js 效果相同 ）命名，否则任意 `httpMethod` 都可以访问。
+如果限制 `httpMethod`, `action` 应以 `.post.ts`、`.get.ts`、`.get.delete.ts` 等结尾（或其他自定义 method，扩展名为.js 效果相同 ），否则任意 `httpMethod` 都可以访问，与 `.any.ts` 效果相同
 
 #### 例 1
 
@@ -135,7 +134,14 @@ const res = await new TestStartup()
 ```
 +-- controllers
 |   +-- todo
-|       +-- get.ts
+|       +-- _.get.ts
+```
+
+或
+
+```
++-- controllers
+|   +-- todo.get.ts
 ```
 
 访问地址为 `GET /todo`，
@@ -164,7 +170,15 @@ const res = await new TestStartup()
 +-- controllers
 |   +-- todo
 |       +-- ^id
-|           +-- get.ts
+|           +-- _.get.ts
+```
+
+或
+
+```
++-- controllers
+|   +-- todo
+|       +-- ^id.get.ts
 ```
 
 访问地址为 `GET /todo/66`
@@ -207,22 +221,25 @@ const res = await new TestStartup()
 
 根据各业务，创建文件夹或 `.ts/.js` 文件，名称自定，但名称和路径会映射为访问路径，每个文件对应一个 `action`
 
-action 的名称和路径会映射为访问路径，每个文件对应一个 `action`
+命名格式为 `<actionName>.<httpMethod>.ts` ，其中 `httpMethod` 可以多个，如 `user.get.ts`、`user.delete.put.ts`。
 
-建议对 action 文件的命名为 get.ts/post.ts/patch.ts 等 httpMethod（否则 strict 为 true 的情况将忽略其他命名）
+`actionName` 为下划线 `_` 即取上个文件夹名称，如 `/user/_.get.post.ts` 与 `/user.get.post.ts` 相同
+
+如果命名没有 `httpMethod` 部分，则任意方法都能访问，与 `ANY` 作用相同，如 `user.ts` 等同于 `user.any.ts`
 
 ```
 +-- controllers
 |   +-- type1
-|       +-- post.ts
-|       +-- get.ts
+|       +-- _.post.ts
+|       +-- user.get.ts
 |       +-- ...
 |   +-- type2
-|       +-- patch.ts
-|       +-- delete.ts
+|       +-- _.patch.ts
+|       +-- user.delete.ts
 |       +-- ^id
-|           +-- put.ts
+|           +-- _.put.ts
 |           +-- ...
+|   +-- type3.get.post.ts
 ```
 
 #### 创建 action 类
@@ -240,85 +257,20 @@ export default class extends Action {
 }
 ```
 
-## 权限
+### metadata
 
-默认的权限可以精确到控制每个 `Action`，你需要在中间件 `startup.useRouterParser` 之后加入权限中间件
-
-### Action 权限参数
-
-`Action` 构造函数有一个可选参数，传入字符串数组，值为允许的权限角色。
-
-如判断调用需要登录信息：
-
-```ts
-["login"];
-```
-
-如判断调用者是管理员：
-
-```ts
-["admin"];
-```
-
-```ts
-import { Action } from "@sfajs/router";
-export default class extends Action {
-  constructor() {
-    super(["login"]);
-  }
-
-  async invoke(): Promise<void> {
-    const { account } = this.ctx.req.headers; // 在auth中已经验证 account 的正确性，因此可认为调用者身份无误。
-
-    const todoList = []; // 可放心从数据库读取用户数据，因为 account 已验证登录
-    this.ok(todoList);
-  }
-}
-```
-
-下例用 ts 创建中间件类 `Auth`，继承于 `Middleware`，使用请求头部的账号信息验证调用者信息：
-
-```TS
-// 中间件，用于权限验证
-class Auth extends Middleware {
-  async invoke(): Promise<void> {
-    if (!this.ctx.actionRoles || !this.ctx.actionRoles.length) {
-      await this.next(); // 无需验证，执行下一个中间件
-      return;
-    }
-
-    if (this.ctx.actionRoles.includes("login") && !this.loginAuth()) {
-      this.forbidden("账号或密码错误"); // 终止中间件的执行
-      return;
-    }
-
-    await this.next(); // 验证通过，执行下一个中间件
-  }
-
-  loginAuth() {
-    // 实际情况应该需要查表等复杂操作
-    const { account, password } = this.ctx.req.headers;
-    return account == "abc" && password == "123456";
-  }
-}
-```
-
-注册中间件
-
-```JS
-startup.add(() => new Auth())
-```
+`Action` 有 `metadata` 字段，该字段内容将在编译阶段添加至路由信息
 
 ## params
 
 `@sfajs/router` 会在 `ctx.req` 中添加 `params` 属性
 
-在 `startup.useRouter`、`startup.useRouterParser` 之后的中间件，都可以获取 `ctx.req.params`
+在 `startup.useRouter` 或 `startup.useRouterParser` 之后的中间件，都可以获取 `ctx.req.params`
 
 `params` 内容是 RESTful 路径中的参数，如
 
 - 访问路径：`/user/66/todo/88`
-- action 文件路径：`/user/^userId/todo/^todoId/get.ts`
+- action 文件路径：`/user/^userId/todo/^todoId.get.ts`
 
 那么 `params` 值为
 
