@@ -12,7 +12,7 @@ export { Action, MapItem };
 declare module "sfa" {
   interface Startup {
     useRouter(): this;
-    useRouterParser(dir?: string, strict?: boolean): this;
+    useRouterParser(dir?: string): this;
   }
 
   interface SfaRequest {
@@ -23,14 +23,13 @@ declare module "sfa" {
     readonly routerMapItem: MapItem;
     readonly routerMap: MapItem[];
     readonly routerDir: string;
-    readonly routerStrict: boolean;
   }
 }
 
 Startup.prototype.useRouter = function (): Startup {
   return this.use(async (ctx, next) => {
     if (ctx.routerDir == undefined) {
-      setConfig(ctx, Constant.defaultRouterDir, Constant.defaultStrict);
+      setConfig(ctx, Constant.defaultRouterDir);
     }
     if (!ctx.routerMapItem) {
       if (!parseRouter(ctx)) return;
@@ -49,11 +48,10 @@ Startup.prototype.useRouter = function (): Startup {
 };
 
 Startup.prototype.useRouterParser = function <T extends Startup>(
-  dir = Constant.defaultRouterDir,
-  strict = Constant.defaultStrict
+  dir = Constant.defaultRouterDir
 ): T {
   return this.use(async (ctx, next) => {
-    setConfig(ctx, dir, strict);
+    setConfig(ctx, dir);
     if (!ctx.routerMapItem) {
       if (!parseRouter(ctx)) return;
     }
@@ -61,15 +59,13 @@ Startup.prototype.useRouterParser = function <T extends Startup>(
   }) as T;
 };
 
-function setConfig(ctx: HttpContext, dir: string, strict: boolean) {
+function setConfig(ctx: HttpContext, dir: string) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (ctx as any).routerDir = dir;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (ctx as any).routerStrict = strict;
 }
 
 function parseRouter(ctx: HttpContext): boolean {
-  const mapParser = new MapParser(ctx, ctx.routerDir, ctx.routerStrict);
+  const mapParser = new MapParser(ctx, ctx.routerDir);
   if (mapParser.notFound) {
     ctx.notFoundMsg({
       message: `Can't find the path：${ctx.req.path}`,

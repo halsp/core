@@ -21,11 +21,7 @@ export default class MapParser {
   public notFound = false;
   public methodNotAllowed = false;
 
-  constructor(
-    private readonly ctx: HttpContext,
-    private readonly dir: string,
-    private readonly strict: boolean
-  ) {
+  constructor(private readonly ctx: HttpContext, private readonly dir: string) {
     if (!existsSync(dir) || !lstatSync(dir).isDirectory()) {
       this.notFound = true;
       return;
@@ -39,36 +35,23 @@ export default class MapParser {
   }
 
   private getMapItem(): MapItem | undefined {
-    let mapItem;
     const matchedPaths = linq
       .from(this.#map)
       .where((m) => !!m.methods.length)
       .where((m) => this.isPathMatched(m, true))
       .toArray();
-    if (!this.strict) {
-      linq
-        .from(this.#map)
-        .where((m) => !m.methods.length)
-        .where((m) => this.isPathMatched(m, false))
-        .forEach((m) => matchedPaths.push(m));
-    }
-    mapItem = this.getMostLikeMapItem(matchedPaths);
-    if (mapItem) return mapItem;
-
-    const anyMethodPaths = linq
+    linq
       .from(this.#map)
-      .where((m) => m.methods.includes(HttpMethod.any))
+      .where((m) => !m.methods.length || m.methods.includes(HttpMethod.any))
       .where((m) => this.isPathMatched(m, false))
-      .toArray();
-    mapItem = this.getMostLikeMapItem(anyMethodPaths);
+      .forEach((m) => matchedPaths.push(m));
+    const mapItem = this.getMostLikeMapItem(matchedPaths);
     if (mapItem) return mapItem;
 
     const otherMethodPathCount = linq
       .from(this.#map)
-      .where((m) => !!m.methods.length)
       .where((m) => this.isPathMatched(m, false))
       .count();
-
     if (otherMethodPathCount) {
       this.methodNotAllowed = true;
     } else {

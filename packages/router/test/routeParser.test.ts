@@ -5,7 +5,7 @@ test("useRouterParser", async function () {
   const res = await new TestStartup(
     new SfaRequest().setPath("/simple/adminAuth").setMethod("POST")
   )
-    .useRouterParser("test/controllers", false)
+    .useRouterParser("test/controllers")
     .use(async (ctx) => {
       ctx.res.body = {
         mapItem: ctx.routerMapItem,
@@ -25,8 +25,8 @@ test("useRouterParser once more", async function () {
   const res = await new TestStartup(
     new SfaRequest().setPath("/simple/adminAuth").setMethod("POST")
   )
-    .useRouterParser("test/controllers", false)
-    .useRouterParser("test/controllers", false)
+    .useRouterParser("test/controllers")
+    .useRouterParser("test/controllers")
     .use(async (ctx) => {
       ctx.res.body = {
         mapItem: ctx.routerMapItem,
