@@ -1,6 +1,7 @@
 import { TestStartup, SfaRequest } from "sfa";
 import "./UseTest";
 import "../src";
+import { nextTick } from "process";
 
 test("startup test", async function () {
   const result = await new TestStartup(
@@ -51,4 +52,21 @@ test("null body test", async function () {
     .run();
 
   expect(result.status).toBe(404);
+});
+
+test("useRouterParser", async function () {
+  const result = await new TestStartup(
+    new SfaRequest().setPath("/simple/router").setMethod("POST")
+  )
+    .useTest()
+    .useRouterParser("test/controllers")
+    .use(async (ctx, next) => {
+      ctx.setHeader("map-path", ctx.routerMapItem.path);
+      await next();
+    })
+    .useRouter()
+    .run();
+
+  expect(result.status).toBe(200);
+  expect(result.getHeader("map-path")).toBe("simple/Router.ts");
 });

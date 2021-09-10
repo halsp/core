@@ -127,12 +127,10 @@ export default class MapParser {
         });
     }
 
-    const mostLikePathParts = linq
+    return linq
       .from(pathsParts)
       .orderBy((pp) => pp.parts.length)
-      .firstOrDefault();
-    if (!mostLikePathParts) return;
-    return mostLikePathParts.mapItem;
+      .first().mapItem;
   }
 
   private getMap(): MapItem[] {
