@@ -12,10 +12,8 @@ sfa.Startup.prototype.useTest = function <T extends sfa.Startup>(
   config?: { dir?: string; prefix?: string }
 ): T {
   this.use(async (ctx, next) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (ctx as any).routerDir = config?.dir ?? "test/controllers";
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (ctx as any).routerPrefix = config?.prefix ?? "";
+    ctx.bag("ROUTER_DIR", config?.dir ?? "test/controllers");
+    ctx.bag("ROUTER_PREFIX", config?.prefix ?? "");
     await next();
   });
   return this as T;

@@ -18,11 +18,21 @@ export default class MapParser {
     return this.#map;
   }
 
+  private get routerDir(): string {
+    return this.ctx.bag<string>("ROUTER_DIR");
+  }
+  private get routerPrefix(): string {
+    return this.ctx.bag<string>("ROUTER_PREFIX");
+  }
+
   public notFound = false;
   public methodNotAllowed = false;
 
-  constructor(private readonly ctx: HttpContext, private readonly dir: string) {
-    if (!existsSync(dir) || !lstatSync(dir).isDirectory()) {
+  constructor(private readonly ctx: HttpContext) {
+    if (
+      !existsSync(this.routerDir) ||
+      !lstatSync(this.routerDir).isDirectory()
+    ) {
       this.notFound = true;
       return;
     }
@@ -61,9 +71,9 @@ export default class MapParser {
 
   private isPathMatched(mapItem: MapItem, methodIncluded: boolean): boolean {
     let reqPath = this.ctx.req.path;
-    if (this.ctx.routerPrefix && reqPath.startsWith(this.ctx.routerPrefix)) {
+    if (this.routerPrefix && reqPath.startsWith(this.routerPrefix)) {
       reqPath = reqPath
-        .substring(this.ctx.routerPrefix.length, reqPath.length)
+        .substring(this.routerPrefix.length, reqPath.length)
         .replace(/^\//, "");
     }
     const reqUrlStrs = reqPath.toLowerCase().split("/");
@@ -150,7 +160,7 @@ export default class MapParser {
       });
       return result;
     } else {
-      return new MapCreater(this.dir).map;
+      return new MapCreater(this.routerDir).map;
     }
   }
 }

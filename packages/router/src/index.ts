@@ -22,14 +22,12 @@ declare module "sfa" {
   interface HttpContext {
     readonly routerMapItem: MapItem;
     readonly routerMap: MapItem[];
-    readonly routerDir: string;
-    readonly routerPrefix: string;
   }
 }
 
 Startup.prototype.useRouter = function (): Startup {
   return this.use(async (ctx, next) => {
-    if (ctx.routerDir == undefined) {
+    if (ctx.bag<string>("ROUTER_DIR") == undefined) {
       setConfig(ctx, Constant.defaultRouterDir, "");
     }
     if (!ctx.routerMapItem) {
@@ -39,7 +37,7 @@ Startup.prototype.useRouter = function (): Startup {
   }).add((ctx) => {
     const filePath = path.join(
       process.cwd(),
-      ctx.routerDir,
+      ctx.bag<string>("ROUTER_DIR"),
       ctx.routerMapItem.path
     );
     // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -62,14 +60,12 @@ Startup.prototype.useRouterParser = function <T extends Startup>(
 };
 
 function setConfig(ctx: HttpContext, dir: string, prefix: string) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (ctx as any).routerDir = dir.replace(/^\//, "").replace(/\/$/, "");
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (ctx as any).routerPrefix = prefix.replace(/^\//, "").replace(/\/$/, "");
+  ctx.bag("ROUTER_DIR", dir.replace(/^\//, "").replace(/\/$/, ""));
+  ctx.bag("ROUTER_PREFIX", prefix.replace(/^\//, "").replace(/\/$/, ""));
 }
 
 function parseRouter(ctx: HttpContext): boolean {
-  const mapParser = new MapParser(ctx, ctx.routerDir);
+  const mapParser = new MapParser(ctx);
   if (mapParser.notFound) {
     ctx.notFoundMsg({
       message: `Can't find the path：${ctx.req.path}`,
