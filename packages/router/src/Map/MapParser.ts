@@ -39,12 +39,10 @@ export default class MapParser {
   }
 
   private get routerDir(): string {
-    return (this.routerCfg?.dir ?? Constant.defaultRouterDir)
-      .replace(/^\//, "")
-      .replace(/\/$/, "");
+    return this.routerCfg.dir as string;
   }
   private get routerPrefix(): string {
-    return (this.routerCfg?.prefix ?? "").replace(/^\//, "").replace(/\/$/, "");
+    return this.routerCfg.prefix as string;
   }
 
   public notFound = false;

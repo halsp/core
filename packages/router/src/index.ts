@@ -32,25 +32,26 @@ declare module "sfa" {
 Startup.prototype.useRouter = function <T extends Startup>(
   cfg?: RouterConfig
 ): T {
-  if (!cfg) cfg = {};
-  cfg.dir =
-    cfg.dir?.replace(/^\//, "").replace(/\/$/, "") ?? Constant.defaultRouterDir;
-  cfg.prefix = cfg.prefix?.replace(/^\//, "").replace(/\/$/, "") ?? "";
+  const config = cfg ?? {};
+  config.dir =
+    config.dir?.replace(/^\//, "").replace(/\/$/, "") ??
+    Constant.defaultRouterDir;
+  config.prefix = config.prefix?.replace(/^\//, "").replace(/\/$/, "") ?? "";
 
   this.use(async (ctx, next) => {
-    if (parseRouter(ctx, cfg as RouterConfig)) {
+    if (parseRouter(ctx, config)) {
       await next();
     }
   });
 
-  if (cfg?.onParserAdded) {
-    cfg?.onParserAdded(this);
+  if (config.onParserAdded) {
+    config.onParserAdded(this);
   }
 
   this.add((ctx) => {
     const filePath = path.join(
       process.cwd(),
-      cfg?.dir as string,
+      config.dir as string,
       ctx.routerMapItem.path
     );
     // eslint-disable-next-line @typescript-eslint/no-var-requires
