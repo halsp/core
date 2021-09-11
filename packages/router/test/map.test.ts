@@ -6,14 +6,14 @@ import "./UseTest";
 import "../src";
 
 test("map creater", async function () {
-  const result = new MapCreater("test/controllers");
+  const result = new MapCreater("test/actions");
   result.write("./test.json");
   expect(fs.existsSync("./test.json")).toBeTruthy();
   fs.unlinkSync("./test.json");
 });
 
 test("map creater write default", async function () {
-  const result = new MapCreater("test/controllers");
+  const result = new MapCreater("test/actions");
   result.write();
   try {
     expect(fs.existsSync(Constant.mapFileName)).toBeTruthy();
@@ -31,7 +31,7 @@ test("map creater write default", async function () {
 });
 
 test("the router dir is not exist", async function () {
-  expect(() => new MapCreater("test/controllers1")).toThrow(
+  expect(() => new MapCreater("test/actions1")).toThrow(
     "the router dir is not exist"
   );
 });

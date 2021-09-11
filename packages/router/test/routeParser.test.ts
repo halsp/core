@@ -1,11 +1,12 @@
 import { TestStartup, SfaRequest } from "sfa";
 import "../src";
+import { MapItem } from "../src";
 
 test("useRouterParser", async function () {
   const res = await new TestStartup(
     new SfaRequest().setPath("/simple/adminAuth").setMethod("POST")
   )
-    .useRouterParser("test/controllers")
+    .useRouterParser("test/actions")
     .use(async (ctx) => {
       ctx.res.body = {
         mapItem: ctx.routerMapItem,
@@ -13,11 +14,10 @@ test("useRouterParser", async function () {
     })
     .run();
 
+  const mapItem = new MapItem("simple/AdminAuth.ts");
+  mapItem.roles = ["admin"];
   expect(res.body).toEqual({
-    mapItem: {
-      path: "simple/AdminAuth.ts",
-      roles: ["admin"],
-    },
+    mapItem: mapItem,
   });
 });
 
@@ -25,8 +25,8 @@ test("useRouterParser once more", async function () {
   const res = await new TestStartup(
     new SfaRequest().setPath("/simple/adminAuth").setMethod("POST")
   )
-    .useRouterParser("test/controllers")
-    .useRouterParser("test/controllers")
+    .useRouterParser("test/actions")
+    .useRouterParser("test/actions")
     .use(async (ctx) => {
       ctx.res.body = {
         mapItem: ctx.routerMapItem,

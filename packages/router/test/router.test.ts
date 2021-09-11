@@ -58,7 +58,7 @@ test("useRouterParser", async function () {
     new SfaRequest().setPath("/simple/router").setMethod("POST")
   )
     .useTest()
-    .useRouterParser("test/controllers")
+    .useRouterParser("test/actions")
     .use(async (ctx, next) => {
       ctx.setHeader("map-path", ctx.routerMapItem.path);
       await next();

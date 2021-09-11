@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "sfa-router-build controllers"
+    "build": "sfa-router-build"
   },
   "devDependencies": {
     "@sfajs/router": "../..",

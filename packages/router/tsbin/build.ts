@@ -50,13 +50,7 @@ if (fs.existsSync(tsconfigPath)) {
   }
 }
 
-const dir = process.argv[2];
-if (!dir || typeof dir != "string") {
-  throw new Error(
-    "You need to specify a router dir, like 'sfa-router-build controllers'"
-  );
-}
-const routerDir = path.join(outDir, process.argv[2]);
+const routerDir = path.join(outDir, process.argv[2] || "actions");
 if (!fs.existsSync(routerDir) || !fs.statSync(routerDir).isDirectory()) {
   throw new Error("The router dir is not exist");
 }

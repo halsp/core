@@ -33,13 +33,15 @@ const res = await new TestStartup()
 在 package.json 文件的 scripts 节点下添加
 
 ```JSON
-"build": "sfa-router-build controllers"
+"build": "sfa-router-build" // 等价于 sfa-router-build actions
 ```
+
+`sfa-router-build` 命令有个可选参数，默认值为 `actions`，是 action 所在目录
 
 ```JSON
 {
   "scripts": {
-    "build": "sfa-router-build controllers" // controllers 为路由文件夹路径
+    "build": "sfa-router-build" // actions 为路由文件夹路径
   },
   "dependencies": {
     "sfa": "^1.0.0",
@@ -48,7 +50,7 @@ const res = await new TestStartup()
 }
 ```
 
-根目录添加路由文件夹 `controllers` （可以为项目下任意位置任意命名，后面有介绍）
+根目录添加路由文件夹 `actions`（也可以为项目下任意位置任意命名，后面有介绍）
 
 构建时运行
 
@@ -132,7 +134,7 @@ const res = await new TestStartup()
 目录结构如下：
 
 ```
-+-- controllers
++-- actions
 |   +-- todo
 |       +-- _.get.ts
 ```
@@ -140,7 +142,7 @@ const res = await new TestStartup()
 或
 
 ```
-+-- controllers
++-- actions
 |   +-- todo.get.ts
 ```
 
@@ -151,7 +153,7 @@ const res = await new TestStartup()
 目录结构如下：
 
 ```
-+-- controllers
++-- actions
 |   +-- todo
 |       +-- getTodoList.ts
 ```
@@ -167,7 +169,7 @@ const res = await new TestStartup()
 目录结构如下：
 
 ```
-+-- controllers
++-- actions
 |   +-- todo
 |       +-- ^id
 |           +-- _.get.ts
@@ -176,7 +178,7 @@ const res = await new TestStartup()
 或
 
 ```
-+-- controllers
++-- actions
 |   +-- todo
 |       +-- ^id.get.ts
 ```
@@ -188,7 +190,7 @@ const res = await new TestStartup()
 目录结构如下：
 
 ```
-+-- controllers
++-- actions
 |   +-- todo
 |       +-- getTodoItem.ts
 ```
@@ -215,7 +217,7 @@ const res = await new TestStartup()
 
 在项目下任意位置创建一个任意命名的文件夹（如果不存在）
 
-建议在与 `index.ts` / `index.js` 同级目录下， 创建名为 `controllers` 的文件夹
+建议在与 `index.ts` / `index.js` 同级目录下， 创建名为 `actions` 的文件夹
 
 #### 创建 action 文件
 
@@ -228,7 +230,7 @@ const res = await new TestStartup()
 如果命名没有 `httpMethod` 部分，则任意方法都能访问，与 `ANY` 作用相同，如 `user.ts` 等同于 `user.any.ts`
 
 ```
-+-- controllers
++-- actions
 |   +-- type1
 |       +-- _.post.ts
 |       +-- user.get.ts
@@ -294,4 +296,4 @@ export default class extends Action {
 }
 ```
 
-如 `outDir` 值为 `dist`，构建命令为 `sfa-router-build controllers`，那么 `dist/controllers` 应该是生产用的路由文件夹
+如 `outDir` 值为 `dist`，构建命令为 `sfa-router-build actions`，那么 `dist/actions` 应该是生产用的路由文件夹
