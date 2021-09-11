@@ -3,8 +3,11 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as shell from "shelljs";
+import * as linq from "linq";
 import MapCreater from "../dist/Map/MapCreater";
 import Constant from "../dist/Constant";
+
+type StaticItem = string | { source: string; target: string };
 
 let outDir = "";
 const tsconfigPath = path.join(process.cwd(), "tsconfig.json");
@@ -27,22 +30,33 @@ if (fs.existsSync(tsconfigPath)) {
   }
 
   if (outDir) {
-    (cfg?.static ?? []).forEach(
-      (staticItem: { source: string; target: string }) => {
-        let source: string;
-        let target: string;
-        if (typeof staticItem == "string") {
-          source = staticItem;
-          target = staticItem;
+    const staticItems: StaticItem[] = cfg?.static ?? [];
+    if (
+      !linq.from(staticItems).any((si) => {
+        if (typeof si == "string") {
+          return si == "src/views";
         } else {
-          source = staticItem.source;
-          target = staticItem.target;
+          return si.source == "src/views";
         }
-        const sourcePath = path.join(process.cwd(), source);
-        const targetPath = path.join(process.cwd(), outDir, target);
-        copyFile(sourcePath, targetPath);
+      })
+    ) {
+      staticItems.push("src/views");
+    }
+
+    staticItems.forEach((staticItem) => {
+      let source: string;
+      let target: string;
+      if (typeof staticItem == "string") {
+        source = staticItem;
+        target = staticItem;
+      } else {
+        source = staticItem.source;
+        target = staticItem.target;
       }
-    );
+      const sourcePath = path.join(process.cwd(), source);
+      const targetPath = path.join(process.cwd(), outDir, target);
+      copyFile(sourcePath, targetPath);
+    });
     copyFile(
       path.join(process.cwd(), "package.json"),
       path.join(process.cwd(), outDir, "package.json")
