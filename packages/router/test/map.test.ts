@@ -2,8 +2,8 @@ import MapCreater from "../src/Map/MapCreater";
 import * as fs from "fs";
 import Constant from "../src/Constant";
 import { TestStartup, SfaRequest } from "sfa";
-import "./UseTest";
 import "../src";
+import { routerCfg } from "./global";
 
 test("map creater", async function () {
   const result = new MapCreater("test/actions");
@@ -21,8 +21,7 @@ test("map creater write default", async function () {
     const res = await new TestStartup(
       new SfaRequest().setPath("/simple/router").setMethod("POST")
     )
-      .useTest()
-      .useRouter()
+      .useRouter(routerCfg)
       .run();
     expect(res.status).toBe(200);
   } finally {

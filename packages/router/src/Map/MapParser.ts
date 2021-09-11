@@ -6,29 +6,13 @@ import MapCreater from "./MapCreater";
 import MapItem from "./MapItem";
 import { HttpContext } from "sfa";
 import { HttpMethod } from "@sfajs/header";
+import { RouterConfig } from "..";
 
 export default class MapParser {
-  #mapItem!: MapItem;
-  public get mapItem(): MapItem {
-    return this.#mapItem;
-  }
-
-  #map!: MapItem[];
-  public get map(): MapItem[] {
-    return this.#map;
-  }
-
-  private get routerDir(): string {
-    return this.ctx.bag<string>("ROUTER_DIR");
-  }
-  private get routerPrefix(): string {
-    return this.ctx.bag<string>("ROUTER_PREFIX");
-  }
-
-  public notFound = false;
-  public methodNotAllowed = false;
-
-  constructor(private readonly ctx: HttpContext) {
+  constructor(
+    private readonly ctx: HttpContext,
+    private readonly routerCfg: RouterConfig
+  ) {
     if (
       !existsSync(this.routerDir) ||
       !lstatSync(this.routerDir).isDirectory()
@@ -43,6 +27,28 @@ export default class MapParser {
       this.#mapItem = mapItem;
     }
   }
+
+  #mapItem!: MapItem;
+  public get mapItem(): MapItem {
+    return this.#mapItem;
+  }
+
+  #map!: MapItem[];
+  public get map(): MapItem[] {
+    return this.#map;
+  }
+
+  private get routerDir(): string {
+    return (this.routerCfg?.dir ?? Constant.defaultRouterDir)
+      .replace(/^\//, "")
+      .replace(/\/$/, "");
+  }
+  private get routerPrefix(): string {
+    return (this.routerCfg?.prefix ?? "").replace(/^\//, "").replace(/\/$/, "");
+  }
+
+  public notFound = false;
+  public methodNotAllowed = false;
 
   private getMapItem(): MapItem | undefined {
     const matchedPaths = linq

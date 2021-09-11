@@ -3,7 +3,7 @@ node_modules
 package-lock.json
 yarn.lock
 
-sfa-router.map
+sfa-mva.map
 test.md
 bin
 coverage

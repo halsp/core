@@ -3,16 +3,20 @@ import { HttpContext, QueryDict, ReadonlyQueryDict, Startup } from "sfa";
 import Action from "./Action";
 import MapParser from "./Map/MapParser";
 import path = require("path");
-import Constant from "./Constant";
 import MapItem from "./Map/MapItem";
 import { StatusCodes } from "@sfajs/header";
+import * as linq from "linq";
+import "@sfajs/views";
+import RouterConfig from "./RouterConfig";
+import MvaConfig from "./MvaConfig";
+import Constant from "./Constant";
 
-export { Action, MapItem };
+export { Action, MapItem, RouterConfig, MvaConfig };
 
 declare module "sfa" {
   interface Startup {
-    useRouter(): this;
-    useRouterParser(dir?: string, prefix?: string): this;
+    useRouter<T extends this>(cfg?: RouterConfig): T;
+    useMva<T extends this>(cfg?: MvaConfig): T;
   }
 
   interface SfaRequest {
@@ -25,47 +29,40 @@ declare module "sfa" {
   }
 }
 
-Startup.prototype.useRouter = function (): Startup {
-  return this.use(async (ctx, next) => {
-    if (ctx.bag<string>("ROUTER_DIR") == undefined) {
-      setConfig(ctx, Constant.defaultRouterDir, "");
+Startup.prototype.useRouter = function <T extends Startup>(
+  cfg?: RouterConfig
+): T {
+  if (!cfg) cfg = {};
+  cfg.dir =
+    cfg.dir?.replace(/^\//, "").replace(/\/$/, "") ?? Constant.defaultRouterDir;
+  cfg.prefix = cfg.prefix?.replace(/^\//, "").replace(/\/$/, "") ?? "";
+
+  this.use(async (ctx, next) => {
+    if (parseRouter(ctx, cfg as RouterConfig)) {
+      await next();
     }
-    if (!ctx.routerMapItem) {
-      if (!parseRouter(ctx)) return;
-    }
-    await next();
-  }).add((ctx) => {
+  });
+
+  if (cfg?.onParserAdded) {
+    cfg?.onParserAdded(this);
+  }
+
+  this.add((ctx) => {
     const filePath = path.join(
       process.cwd(),
-      ctx.bag<string>("ROUTER_DIR"),
+      cfg?.dir as string,
       ctx.routerMapItem.path
     );
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const actionClass = require(filePath).default;
     return new actionClass() as Action;
   });
+
+  return this as T;
 };
 
-Startup.prototype.useRouterParser = function <T extends Startup>(
-  dir = Constant.defaultRouterDir,
-  prefix = ""
-): T {
-  return this.use(async (ctx, next) => {
-    setConfig(ctx, dir, prefix);
-    if (!ctx.routerMapItem) {
-      if (!parseRouter(ctx)) return;
-    }
-    await next();
-  }) as T;
-};
-
-function setConfig(ctx: HttpContext, dir: string, prefix: string) {
-  ctx.bag("ROUTER_DIR", dir.replace(/^\//, "").replace(/\/$/, ""));
-  ctx.bag("ROUTER_PREFIX", prefix.replace(/^\//, "").replace(/\/$/, ""));
-}
-
-function parseRouter(ctx: HttpContext): boolean {
-  const mapParser = new MapParser(ctx);
+function parseRouter(ctx: HttpContext, cfg: RouterConfig): boolean {
+  const mapParser = new MapParser(ctx, cfg);
   if (mapParser.notFound) {
     ctx.notFoundMsg({
       message: `Can't find the path：${ctx.req.path}`,
@@ -108,3 +105,46 @@ function parseRouter(ctx: HttpContext): boolean {
 
   return true;
 }
+
+Startup.prototype.useMva = function <T extends Startup>(
+  cfg = <MvaConfig>{}
+): T {
+  this.use(async (ctx, next) => {
+    await next();
+
+    const body = ctx.res.body;
+    const replaceCode = linq
+      .from(cfg.codes ?? [])
+      .where((code) => {
+        if (typeof code == "number") {
+          return code == ctx.res.status;
+        } else {
+          return code.code == ctx.res.status;
+        }
+      })
+      .select((item) => {
+        if (typeof item == "number") {
+          return { path: item.toString(), replace: item };
+        } else {
+          return {
+            path: item.code.toString(),
+            replace: item.replace ?? item.code,
+          };
+        }
+      })
+      .firstOrDefault();
+    if (replaceCode) {
+      await ctx.view(replaceCode.path, body);
+      ctx.res.status = replaceCode.replace;
+      return;
+    }
+
+    if (ctx.res.isSuccess && ctx.routerMapItem != undefined) {
+      await ctx.view(ctx.routerMapItem.reqPath, body);
+    }
+  });
+  this.useViews(cfg.viewsDir, cfg.viewsOptions, cfg.viewsEngines);
+  this.useRouter(cfg.routerConfig);
+
+  return this as T;
+};

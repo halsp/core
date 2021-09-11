@@ -1,14 +1,13 @@
-import "../UseTest";
 import "../../src";
 import { TestStartup, SfaRequest, HttpContext } from "sfa";
 import { HttpMethod } from "@sfajs/header";
+import { routerCfg } from "../global";
 
 test(`find next`, async function () {
   const result = await new TestStartup(
     new SfaRequest().setPath("/restful/method").setMethod(HttpMethod.post)
   )
-    .useTest()
-    .useRouter()
+    .useRouter(routerCfg)
     .run();
   expect(result.status).toBe(200);
 });
@@ -19,8 +18,7 @@ test(`find simple`, async function () {
       .setPath("/restful/method/simple")
       .setMethod(HttpMethod.post)
   )
-    .useTest()
-    .useRouter()
+    .useRouter(routerCfg)
     .run();
   expect(result.status).toBe(200);
   expect(result.body.action).toBe("simple");
@@ -30,8 +28,7 @@ test(`find simple next`, async function () {
   const result = await new TestStartup(
     new SfaRequest().setPath("/restful/method/any").setMethod(HttpMethod.post)
   )
-    .useTest()
-    .useRouter()
+    .useRouter(routerCfg)
     .run();
   expect(result.status).toBe(200);
   expect(result.body.action).toBe("params");
@@ -41,8 +38,7 @@ test(`find miss next`, async function () {
   const result = await new TestStartup(
     new SfaRequest().setPath("/restful/method/miss").setMethod(HttpMethod.post)
   )
-    .useTest()
-    .useRouter()
+    .useRouter(routerCfg)
     .run();
   expect(result.status).toBe(200);
   expect(result.body.action).toBe("miss");
@@ -55,8 +51,7 @@ test(`find miss next 2`, async function () {
       .setPath("/restful/method/miss/any")
       .setMethod(HttpMethod.post)
   )
-    .useTest()
-    .useRouter()
+    .useRouter(routerCfg)
     .run();
   expect(result.status).toBe(200);
   expect(result.body.action).toBe("miss/params");
@@ -68,8 +63,7 @@ test(`find miss next 3`, async function () {
       .setPath("/restful/method/any/miss")
       .setMethod(HttpMethod.post)
   )
-    .useTest()
-    .useRouter()
+    .useRouter(routerCfg)
     .run();
   expect(result.status).toBe(200);
   expect(result.body.action).toBe("params/miss");
@@ -81,8 +75,7 @@ test(`find miss next 4`, async function () {
       .setPath("/restful/method/any/any")
       .setMethod(HttpMethod.post)
   )
-    .useTest()
-    .useRouter()
+    .useRouter(routerCfg)
     .run();
   expect(result.status).toBe(200);
   expect(result.body.action).toBe("params2/nextParams");
@@ -99,8 +92,7 @@ test(`mostLikePathParts`, async function () {
       context = ctx;
       await next();
     })
-    .useTest()
-    .useRouter()
+    .useRouter(routerCfg)
     .run();
   expect(result.status).toBe(204);
   expect(context.routerMapItem.path).toBe("restful/mostLike/^id1/act.post.ts");

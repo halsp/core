@@ -1,14 +1,13 @@
 import { TestStartup, SfaRequest } from "sfa";
-import "../UseTest";
 import "../../src";
 import { HttpMethod } from "@sfajs/header";
+import { routerCfg } from "../global";
 
 test("restful root get", async function () {
   const result = await new TestStartup(
     new SfaRequest().setPath("/").setMethod(HttpMethod.get.toUpperCase())
   )
-    .useTest()
-    .useRouter()
+    .useRouter(routerCfg)
     .run();
   expect(result.status).toBe(200);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

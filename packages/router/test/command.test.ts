@@ -4,7 +4,7 @@ import { TestStartup } from "sfa";
 import * as shell from "shelljs";
 import "../src";
 
-test("sfa build command", async function () {
+test.skip("sfa build command", async function () {
   shell.cd("./test/command");
 
   try {
@@ -45,7 +45,7 @@ function expectFile(outDir: string) {
   expect(fs.existsSync(`${outDir}/README.md`)).toBe(false);
 }
 
-test("run", async function () {
+test.skip("run", async function () {
   shell.cd("./test/command");
 
   try {

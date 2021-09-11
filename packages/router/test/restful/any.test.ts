@@ -1,7 +1,7 @@
-import "../UseTest";
 import "../../src";
 import { TestStartup, SfaRequest } from "sfa";
 import { HttpMethod } from "@sfajs/header";
+import { routerCfg } from "../global";
 
 const methods = ["test", "aaa", "NO"];
 
@@ -10,8 +10,7 @@ methods.forEach((method) => {
     const result = await new TestStartup(
       new SfaRequest().setPath("/restful").setMethod(method)
     )
-      .useTest()
-      .useRouter()
+      .useRouter(routerCfg)
       .run();
 
     expect(result.status).toBe(200);

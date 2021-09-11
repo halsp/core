@@ -1,23 +1,27 @@
 import { TestStartup, SfaRequest } from "sfa";
-import "./UseTest";
 import "../src";
+import { routerCfg } from "./global";
 
 test("prefix", async function () {
+  const cfg = routerCfg;
+  cfg.prefix = "api2";
+
   const result = await new TestStartup(
     new SfaRequest().setPath("/api2/simple/router").setMethod("POST")
   )
-    .useTest({ prefix: "api2" })
-    .useRouter()
+    .useRouter(cfg)
     .run();
   expect(result.status).toBe(200);
 });
 
 test("error prefix", async function () {
+  const cfg = routerCfg;
+  cfg.prefix = "error";
+
   const result = await new TestStartup(
     new SfaRequest().setPath("/api2/simple/router").setMethod("POST")
   )
-    .useTest({ prefix: "error" })
-    .useRouter()
+    .useRouter(cfg)
     .run();
   expect(result.status).toBe(404);
 });

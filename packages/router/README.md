@@ -33,15 +33,15 @@ const res = await new TestStartup()
 在 package.json 文件的 scripts 节点下添加
 
 ```JSON
-"build": "sfa-router-build" // 等价于 sfa-router-build actions
+"build": "sfa-mva" // 等价于 sfa-mva actions
 ```
 
-`sfa-router-build` 命令有个可选参数，默认值为 `actions`，是 action 所在目录
+`sfa-mva` 命令有个可选参数，默认值为 `actions`，是 action 所在目录
 
 ```JSON
 {
   "scripts": {
-    "build": "sfa-router-build" // actions 为路由文件夹路径
+    "build": "sfa-mva" // actions 为路由文件夹路径
   },
   "dependencies": {
     "sfa": "^1.0.0",
@@ -60,9 +60,9 @@ npm run build
 
 ### 构建结果
 
-- js 项目，将生成 `sfa-router.map` 文件，你可能需要将该文件添加至 `.gitignore` 中
+- js 项目，将生成 `sfa-mva.map` 文件，你可能需要将该文件添加至 `.gitignore` 中
 
-- ts 项目，将按 `tsconfig.json` 中的 `compilerOptions/target` 生成目标文件，同时也会在目标文件夹下生成 `sfa-router.map` 文件
+- ts 项目，将按 `tsconfig.json` 中的 `compilerOptions/target` 生成目标文件，同时也会在目标文件夹下生成 `sfa-mva.map` 文件
 
 ## 路由（useRouter）
 
@@ -285,7 +285,7 @@ export default class extends Action {
 
 ## 关于 TS
 
-如果你在 `tsconfig.json` 中设置了输出文件夹 `compilerOptions/outDir`，那么 `sfa-router-build` 命令参数中的路由文件夹是 `outDir` 下的相对路径
+如果你在 `tsconfig.json` 中设置了输出文件夹 `compilerOptions/outDir`，那么 `sfa-mva` 命令参数中的路由文件夹是 `outDir` 下的相对路径
 
 ```JSON
 // tsconfig.json
@@ -296,4 +296,4 @@ export default class extends Action {
 }
 ```
 
-如 `outDir` 值为 `dist`，构建命令为 `sfa-router-build actions`，那么 `dist/actions` 应该是生产用的路由文件夹
+如 `outDir` 值为 `dist`，构建命令为 `sfa-mva actions`，那么 `dist/actions` 应该是生产用的路由文件夹

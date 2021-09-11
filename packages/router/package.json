@@ -1,18 +1,19 @@
 {
-  "name": "@sfajs/router",
-  "version": "1.1.1",
-  "description": "Router middleware for sfa",
-  "homepage": "https://github.com/sfajs/router",
+  "name": "@sfajs/mva",
+  "version": "0.0.1",
+  "description": "sfa MVA 框架",
+  "homepage": "https://github.com/sfajs/mva",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sfajs/router"
+    "url": "https://github.com/sfajs/mva"
   },
   "keywords": [
     "sfa",
-    "restful"
+    "restful",
+    "mva"
   ],
   "bugs": {
-    "url": "https://github.com/sfajs/router/issues",
+    "url": "https://github.com/sfajs/mva/issues",
     "email": "support@hal.wang"
   },
   "main": "dist/index.js",
@@ -30,6 +31,7 @@
   "license": "MIT",
   "dependencies": {
     "@sfajs/header": "^1.0.1",
+    "@sfajs/views": "^1.0.1",
     "@types/node": "^16.9.0",
     "linq": "^3.2.4",
     "sfa": "^1.1.1",
@@ -40,6 +42,7 @@
     "@types/shelljs": "^0.8.9",
     "@typescript-eslint/eslint-plugin": "^4.31.0",
     "@typescript-eslint/parser": "^4.31.0",
+    "ejs": "^3.1.6",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",
@@ -49,7 +52,7 @@
     "typescript": "^4.4.2"
   },
   "bin": {
-    "sfa-router-build": "bin/build.js"
+    "sfa-mva": "bin/build.js"
   },
   "files": [
     ".github",

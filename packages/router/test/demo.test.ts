@@ -2,7 +2,7 @@ import * as shell from "shelljs";
 import * as fs from "fs";
 import Constant from "../src/Constant";
 
-test("js demo", async function () {
+test.skip("js demo", async function () {
   const routerMapPath = `./${Constant.mapFileName}`;
   shell.cd("./demo/js");
   try {
@@ -18,7 +18,7 @@ test("js demo", async function () {
   }
 });
 
-test("ts demo", async function () {
+test.skip("ts demo", async function () {
   const routerMapPath = `./dist/${Constant.mapFileName}`;
   shell.cd("./demo/ts");
   try {
