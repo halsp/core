@@ -3,7 +3,7 @@
     "build": "sfa-mva"
   },
   "devDependencies": {
-    "@sfajs/router": "../..",
+    "@sfajs/mva": "../..",
     "sfa": "^1.1.1"
   }
 }

@@ -1,4 +1,4 @@
-import { Action } from "@sfajs/router";
+import { Action } from "@sfajs/mva";
 
 export default class extends Action {
   async invoke(): Promise<void> {
