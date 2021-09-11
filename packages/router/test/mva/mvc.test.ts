@@ -10,6 +10,6 @@ test("default", async function () {
 
     expect(res.getHeader("content-type")).toBe("text/html");
     expect(res.status).toBe(200);
-    expect(res.body).toBe("<p>@sfajs/mvc</p>");
+    expect(res.body).toBe("<p>@sfajs/mva</p>");
   });
 });

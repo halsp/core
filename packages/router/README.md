@@ -1,14 +1,15 @@
-# @sfajs/router
+# @sfajs/mva
 
-sfa 路由中间件
+sfa MVA 框架
 
 - 支持 RESTful 规范
 - 根据文件系统映射访问路径，彻底解耦无关联功能
 - 轻量化，高可扩展性
+- 移除 controller 层，灵活性更高
 
 ## 安装
 
-npm i @sfajs/router
+npm i @sfajs/mva
 
 ## 示例
 
@@ -17,14 +18,14 @@ npm i @sfajs/router
 ## 简单使用
 
 ```TS
-startup.useRouter()
+startup.useMva()
 ```
 
 ```TS
 import { TestStartup } from "sfa";
-import "@sfajs/router";
+import "@sfajs/mva";
 const res = await new TestStartup()
-  .useRouter()
+  .useMva()
   .run();
 ```
 
@@ -45,12 +46,15 @@ const res = await new TestStartup()
   },
   "dependencies": {
     "sfa": "^1.0.0",
-    "@sfajs/router": "^1.0.0"
+    "@sfajs/mva": "^1.0.0"
   }
 }
 ```
 
-根目录添加路由文件夹 `actions`（也可以为项目下任意位置任意命名，后面有介绍）
+在根目录中（ts 项目为 src 目录）添加以下文件夹：
+
+1. 路由文件夹 `actions`，并编写 `action`，也可喂其他，但通过 `routerConfig.dir` 参数指定
+2. 视图文件夹 `views` ，并编写相应视图模板，也可为其他，但通过 `viewsDir` 参数指定
 
 构建时运行
 
@@ -66,60 +70,69 @@ npm run build
 
 ## 路由（useRouter）
 
-首先引入 `@sfajs/router`
+如果你无需视图（view）层，注册路由中间件 `startup.useRouter` 仅支持路由功能，`startup.useMva` 已包含此功能。
 
-```JS
-import "@sfajs/router";
-```
-
-然后注册路由中间件 `startup.useRouter` 以支持路由功能
-
-```JS
+```TS
+import "@sfajs/mva";
 const res = await new TestStartup().useRouter().run();
 ```
 
 或
 
-```JS
+```TS
+import "@sfajs/mva";
 const res = await new OtherStartup().useRouter().run();
 ```
 
 > `useRouter` 实际上可能会注册多个中间件
 
-## 路由解析
+## 配置参数
 
-`startup.useRouterParser` 接收两个参数：
+### useRouter
 
-- dir: 路由文件夹，`@sfajs/router` 能够将路由文件夹下的所有 `Action` 映射为 `http` 访问路径。所有 API Action 统一放在这个文件夹中，在该目录中，建立各 `Action` 文件或文件夹。`Action` 文件是 API 的最小执行单元，详情后面 [Action](##Action) 部分有介绍
+`startup.useRouter` 接收可选参数 `RouterConfig`：
+
+- dir: 路由文件夹，`@sfajs/mva` 能够将路由文件夹下的所有 `Action` 映射为 `http` 访问路径。所有 API Action 统一放在这个文件夹中，在该目录中，建立各 `Action` 文件或文件夹。`Action` 文件是 API 的最小执行单元，详情后面 [Action](##Action) 部分有介绍
 - prefix: 路由前缀
+- onParserAdded: 在路由解析中间件之后，功能真正调用之前，你可以在此回调中添加更多中间件。当你要使用 `action` 的路由信息如路径、restful 路径参数、其他元数据 `metadata` ，你就需要在 `onParserAdded` 回调中注册中间件
 
-`startup.useRouterParser` 会在管道 `ctx` 中加入
+路由解析后会在管道 `ctx` 中加入
 
 - routerMapItem: `action` 路径信息
 - routerMap: 全部路由信息
 
-一般情况你无需主动调用路由解析，因为 `startup.useRouter` 也会解析路由并在管道加入以上两个字段
-
-但当你要使用 `action` 的路由信息如路径、restful 路径参数、其他元数据 `metadata` ，你就需要在 `startup.useRouterParser` 之后实现需求
-
 ```TS
 import { TestStartup } from "sfa";
-import "@sfajs/router";
+import "@sfajs/mva";
 
 const res = await new TestStartup()
-  .useRouterParser()
-  .use(async (ctx) => {
-    ctx.ok({
-      routerMapItem: ctx.routerMapItem,
-    });
+  .useRouter({
+    onParserAdded: (startup) => {
+      startup.use(async (ctx) => {
+        ctx.ok({
+          routerMapItem: ctx.routerMapItem,
+        });
+      })
+    },
   })
   .useRouter()
   .run();
 ```
 
+### useMvc
+
+`useMvc` 接收以下参数
+
+- viewsDir: 视图文件夹，默认为 `views`
+- routerConfig: 路由文件夹，默认为 `controllers`
+- routerPrefix: `useRouter` 参数
+- viewsOptions: 参考 `@sfajs/views` options 参数
+- viewsEngines: 参考 `@sfajs/views` engines 参数
+- codes: 指定状态码对应的模板
+
 ## 路由匹配
 
-在`@sfajs/router`中，路由与文件系统匹配。
+在`@sfajs/mva`中，路由与文件系统匹配。
 
 路由查询参数命名以 `^` 开头（文件系统中命名不允许出现字符 `:`），如果存在多个查询参数则后面的会覆盖前面的，如 `GET user/^id/todo/^id`，则 `id` 值为 `todoId`。正确命名应如 `user/^userId/todo/^todoId`。
 
@@ -249,7 +262,7 @@ const res = await new TestStartup()
 在 action 文件 (`.ts/.js`) 中创建继承 `Action` 的类，并重写 `invoke` 函数
 
 ```JS
-import { Action } from "@sfajs/router";
+import { Action } from "@sfajs/mva";
 export default class extends Action {
   async invoke() {
     this.ok({
@@ -265,7 +278,7 @@ export default class extends Action {
 
 ## params
 
-`@sfajs/router` 会在 `ctx.req` 中添加 `params` 属性
+`@sfajs/mva` 会在 `ctx.req` 中添加 `params` 属性
 
 在 `startup.useRouter` 或 `startup.useRouterParser` 之后的中间件，都可以获取 `ctx.req.params`
 
@@ -297,3 +310,19 @@ export default class extends Action {
 ```
 
 如 `outDir` 值为 `dist`，构建命令为 `sfa-mva actions`，那么 `dist/actions` 应该是生产用的路由文件夹
+
+### 静态文件
+
+如果有非 ts 文件，你需要在 `tsconfig.json` 中加入 static 节点并添加相应文件
+
+```JSON
+"static": [
+  {
+    "source": "static", // 原文件夹在根目录下的相对路径
+    "target": "assets" // 目标文件夹在 outDir 下的相对路径
+  },
+  "static.txt"
+]
+```
+
+视图层的 `views` 文件夹默认已包含，无需再次添加
