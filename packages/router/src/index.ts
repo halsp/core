@@ -91,9 +91,8 @@ function parseRouter(ctx: HttpContext): boolean {
   (ctx.req as any).params = {};
 
   if (mapItem.path.includes("^")) {
-    const reqPath = ctx.req.path;
-    const mapPathStrs = mapItem.path.split("/");
-    const reqPathStrs = reqPath.split("/");
+    const mapPathStrs = mapItem.reqPath.split("/");
+    const reqPathStrs = ctx.req.path.split("/");
     for (let i = 0; i < Math.min(mapPathStrs.length, reqPathStrs.length); i++) {
       const mapPathStr = mapPathStrs[i];
       if (!mapPathStr.startsWith("^")) continue;
