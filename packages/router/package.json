@@ -31,8 +31,8 @@
   "license": "MIT",
   "dependencies": {
     "@sfajs/header": "^1.0.1",
-    "@sfajs/views": "^1.0.1",
-    "@types/node": "^16.9.0",
+    "@sfajs/views": "^1.1.2",
+    "@types/node": "^16.9.1",
     "linq": "^3.2.4",
     "sfa": "^1.1.1",
     "shelljs": "^0.8.4"
@@ -49,7 +49,7 @@
     "jest": "^27.1.1",
     "prettier": "^2.4.0",
     "ts-jest": "^27.0.5",
-    "typescript": "^4.4.2"
+    "typescript": "^4.4.3"
   },
   "bin": {
     "sfa-mva": "bin/build.js"

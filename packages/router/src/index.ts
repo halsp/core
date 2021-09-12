@@ -144,7 +144,8 @@ Startup.prototype.useMva = function <T extends Startup>(
       await ctx.view(ctx.routerMapItem.reqPath, body);
     }
   });
-  this.useViews(cfg.viewsDir, cfg.viewsOptions, cfg.viewsEngines);
+
+  this.useViews(cfg.viewsConfig);
   this.useRouter(cfg.routerConfig);
 
   return this as T;

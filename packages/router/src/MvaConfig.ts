@@ -1,10 +1,8 @@
-import { Engine } from "@sfajs/views";
 import RouterConfig from "./RouterConfig";
+import { ViewsConfig } from "@sfajs/views";
 
 export default interface MvaConfig {
   codes?: ({ code: number; path?: string; replace?: number } | number)[];
-  viewsDir?: string;
-  viewsOptions?: Record<string, unknown>;
-  viewsEngines?: Engine[];
+  viewsConfig?: ViewsConfig;
   routerConfig?: RouterConfig;
 }

@@ -34,7 +34,7 @@ const res = await new TestStartup()
 在 package.json 文件的 scripts 节点下添加
 
 ```JSON
-"build": "sfa-mva" // 等价于 sfa-mva actions
+"build": "sfa-mva" // 等价于 sfa-mva actions, actions 为路由文件夹路径
 ```
 
 `sfa-mva` 命令有个可选参数，默认值为 `actions`，是 action 所在目录
@@ -42,7 +42,7 @@ const res = await new TestStartup()
 ```JSON
 {
   "scripts": {
-    "build": "sfa-mva" // actions 为路由文件夹路径
+    "build": "sfa-mva"
   },
   "dependencies": {
     "sfa": "^1.0.0",
