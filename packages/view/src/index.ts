@@ -61,7 +61,7 @@ async function render(
   tmpPath: string,
   locals: Record<string, unknown>
 ): Promise<SfaResponse> {
-  tmpPath = path.join(cfg.dir ?? "", tmpPath ?? "");
+  tmpPath = path.join(cfg.dir ?? "views", tmpPath ?? "");
   cfg.options = Object.assign(cfg.options ?? {}, ctx.state ?? {}, locals ?? {});
   let engines = cfg.engines ?? [];
   if (!Array.isArray(engines)) {
