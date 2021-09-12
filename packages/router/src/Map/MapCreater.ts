@@ -34,7 +34,8 @@ export default class MapCreater {
   private readFilesFromFolder(folderRePath: string, result: MapItem[]) {
     const storageItems = linq
       .from(readdirSync(path.join(this.dirPath, folderRePath)))
-      .select((item) => path.join(folderRePath, item));
+      .select((item) => path.join(folderRePath, item))
+      .toArray();
 
     const files = linq
       .from(storageItems)

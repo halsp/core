@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/router-act",
-  "version": "0.0.3",
+  "version": "1.0.0",
   "description": "sfa actions 路由中间件",
   "homepage": "https://github.com/sfajs/router-act",
   "repository": {
@@ -9,7 +9,8 @@
   },
   "keywords": [
     "sfa",
-    "restful"
+    "restful",
+    "router"
   ],
   "bugs": {
     "url": "https://github.com/sfajs/router-act/issues",
