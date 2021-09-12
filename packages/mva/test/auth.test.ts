@@ -18,16 +18,11 @@ test("auth access", async function () {
         routerConfig: {
           onParserAdded: (startup) => {
             startup.add(() => new Auth());
-            startup.use(async (ctx, next) => {
-              console.log("ctx111111111111");
-              await next();
-            });
           },
         },
       })
       .run();
 
-    console.log("body", res.body);
     expect(res.status).toBe(200);
     expect(res.getHeader("content-type")).toBe("text/html");
     expect(res.body).toBe("<p>email: test1@hal.wang</p>");
