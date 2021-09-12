@@ -170,4 +170,4 @@ function getEngine(
   return engine;
 }
 
-export { consolidate, RendererInterface, Engine };
+export { consolidate, RendererInterface, Engine, ViewsConfig };
