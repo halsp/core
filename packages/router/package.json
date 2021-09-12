@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/router-act",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "sfa actions 路由中间件",
   "homepage": "https://github.com/sfajs/router-act",
   "repository": {
