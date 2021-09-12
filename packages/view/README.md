@@ -30,7 +30,7 @@ const res = await new TestStartup()
 
 ## `useViews`
 
-`useViews` 接收三个可选参数
+`useViews` 接收一个可选配置参数
 
 - dir: 视图文件夹
 - options: 通用参数，如网站名称和其他通用信息
@@ -38,11 +38,12 @@ const res = await new TestStartup()
 
 `engines` 用于文件扩展名与 [consolidate](https://github.com/tj/consolidate.js) 对应，如
 
-```JS
-startup.useViews("views", {
+```TS
+startup.useViews({
+  dir: "views",
   engines: [
-    { ext: "custom", render: "ejs" },
     { ext: "hbs", render: "handlebars" },
+    { ext: "custom", render: "ejs" },
   ],
 });
 ```
