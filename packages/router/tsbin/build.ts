@@ -3,7 +3,6 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as shell from "shelljs";
-import * as linq from "linq";
 import MapCreater from "../dist/Map/MapCreater";
 import Constant from "../dist/Constant";
 
@@ -31,18 +30,6 @@ if (fs.existsSync(tsconfigPath)) {
 
   if (outDir) {
     const staticItems: StaticItem[] = cfg?.static ?? [];
-    if (
-      !linq.from(staticItems).any((si) => {
-        if (typeof si == "string") {
-          return si == "src/views";
-        } else {
-          return si.source == "src/views";
-        }
-      })
-    ) {
-      staticItems.push("src/views");
-    }
-
     staticItems.forEach((staticItem) => {
       let source: string;
       let target: string;

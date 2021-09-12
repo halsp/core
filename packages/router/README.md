@@ -1,6 +1,6 @@
-# @sfajs/mva
+# @sfajs/router-act
 
-sfa MVA 框架
+sfa actions 路由中间件
 
 - 支持 RESTful 规范
 - 根据文件系统映射访问路径，彻底解耦无关联功能
@@ -9,7 +9,7 @@ sfa MVA 框架
 
 ## 安装
 
-npm i @sfajs/mva
+npm i @sfajs/router-act
 
 ## 示例
 
@@ -18,14 +18,14 @@ npm i @sfajs/mva
 ## 简单使用
 
 ```TS
-startup.useMva()
+startup.useRouter()
 ```
 
 ```TS
 import { TestStartup } from "sfa";
-import "@sfajs/mva";
+import "@sfajs/router-act";
 const res = await new TestStartup()
-  .useMva()
+  .useRouter()
   .run();
 ```
 
@@ -34,19 +34,19 @@ const res = await new TestStartup()
 在 package.json 文件的 scripts 节点下添加
 
 ```JSON
-"build": "sfa-mva" // 等价于 sfa-mva actions, actions 为路由文件夹路径
+"build": "sfra" // 等价于 sfa-router-act actions, actions 为路由文件夹路径
 ```
 
-`sfa-mva` 命令有个可选参数，默认值为 `actions`，是 action 所在目录
+`sfra` 命令有个可选参数，默认值为 `actions`，是 action 所在目录
 
 ```JSON
 {
   "scripts": {
-    "build": "sfa-mva"
+    "build": "sfra"
   },
   "dependencies": {
     "sfa": "^1.0.0",
-    "@sfajs/mva": "^1.0.0"
+    "@sfajs/router-act": "^1.0.0"
   }
 }
 ```
@@ -64,23 +64,23 @@ npm run build
 
 ### 构建结果
 
-- js 项目，将生成 `sfa-mva.map` 文件，你可能需要将该文件添加至 `.gitignore` 中
+- js 项目，将生成 `sfa-router-act.map` 文件，你可能需要将该文件添加至 `.gitignore` 中
 
-- ts 项目，将按 `tsconfig.json` 中的 `compilerOptions/target` 生成目标文件，同时也会在目标文件夹下生成 `sfa-mva.map` 文件
+- ts 项目，将按 `tsconfig.json` 中的 `compilerOptions/target` 生成目标文件，同时也会在目标文件夹下生成 `sfa-router-act.map` 文件
 
 ## 路由（useRouter）
 
-如果你无需视图（view）层，注册路由中间件 `startup.useRouter` 仅支持路由功能，`startup.useMva` 已包含此功能。
+如果你无需视图（view）层，注册路由中间件 `startup.useRouter` 仅支持路由功能，`startup.useRouter` 已包含此功能。
 
 ```TS
-import "@sfajs/mva";
+import "@sfajs/router-act";
 const res = await new TestStartup().useRouter().run();
 ```
 
 或
 
 ```TS
-import "@sfajs/mva";
+import "@sfajs/router-act";
 const res = await new OtherStartup().useRouter().run();
 ```
 
@@ -88,11 +88,9 @@ const res = await new OtherStartup().useRouter().run();
 
 ## 配置参数
 
-### useRouter
-
 `startup.useRouter` 接收可选参数 `RouterConfig`：
 
-- dir: 路由文件夹，`@sfajs/mva` 能够将路由文件夹下的所有 `Action` 映射为 `http` 访问路径。所有 API Action 统一放在这个文件夹中，在该目录中，建立各 `Action` 文件或文件夹。`Action` 文件是 API 的最小执行单元，详情后面 [Action](##Action) 部分有介绍
+- dir: 路由文件夹，`@sfajs/router-act` 能够将路由文件夹下的所有 `Action` 映射为 `http` 访问路径。所有 API Action 统一放在这个文件夹中，在该目录中，建立各 `Action` 文件或文件夹。`Action` 文件是 API 的最小执行单元，详情后面 [Action](##Action) 部分有介绍
 - prefix: 路由前缀
 - onParserAdded: 在路由解析中间件之后，功能真正调用之前，你可以在此回调中添加更多中间件。当你要使用 `action` 的路由信息如路径、restful 路径参数、其他元数据 `metadata` ，你就需要在 `onParserAdded` 回调中注册中间件
 
@@ -103,7 +101,7 @@ const res = await new OtherStartup().useRouter().run();
 
 ```TS
 import { TestStartup } from "sfa";
-import "@sfajs/mva";
+import "@sfajs/router-act";
 
 const res = await new TestStartup()
   .useRouter({
@@ -119,20 +117,9 @@ const res = await new TestStartup()
   .run();
 ```
 
-### useMvc
-
-`useMvc` 接收以下参数
-
-- viewsDir: 视图文件夹，默认为 `views`
-- routerConfig: 路由文件夹，默认为 `controllers`
-- routerPrefix: `useRouter` 参数
-- viewsOptions: 参考 `@sfajs/views` options 参数
-- viewsEngines: 参考 `@sfajs/views` engines 参数
-- codes: 指定状态码对应的模板
-
 ## 路由匹配
 
-在`@sfajs/mva`中，路由与文件系统匹配。
+在`@sfajs/router-act`中，路由与文件系统匹配。
 
 路由查询参数命名以 `^` 开头（文件系统中命名不允许出现字符 `:`），如果存在多个查询参数则后面的会覆盖前面的，如 `GET user/^id/todo/^id`，则 `id` 值为 `todoId`。正确命名应如 `user/^userId/todo/^todoId`。
 
@@ -262,7 +249,7 @@ const res = await new TestStartup()
 在 action 文件 (`.ts/.js`) 中创建继承 `Action` 的类，并重写 `invoke` 函数
 
 ```JS
-import { Action } from "@sfajs/mva";
+import { Action } from "@sfajs/router-act";
 export default class extends Action {
   async invoke() {
     this.ok({
@@ -278,7 +265,7 @@ export default class extends Action {
 
 ## params
 
-`@sfajs/mva` 会在 `ctx.req` 中添加 `params` 属性
+`@sfajs/router-act` 会在 `ctx.req` 中添加 `params` 属性
 
 在 `startup.useRouter` 或 `startup.useRouterParser` 之后的中间件，都可以获取 `ctx.req.params`
 
@@ -298,7 +285,7 @@ export default class extends Action {
 
 ## 关于 TS
 
-如果你在 `tsconfig.json` 中设置了输出文件夹 `compilerOptions/outDir`，那么 `sfa-mva` 命令参数中的路由文件夹是 `outDir` 下的相对路径
+如果你在 `tsconfig.json` 中设置了输出文件夹 `compilerOptions/outDir`，那么 `sfra` 命令参数中的路由文件夹是 `outDir` 下的相对路径
 
 ```JSON
 // tsconfig.json
@@ -309,7 +296,7 @@ export default class extends Action {
 }
 ```
 
-如 `outDir` 值为 `dist`，构建命令为 `sfa-mva actions`，那么 `dist/actions` 应该是生产用的路由文件夹
+如 `outDir` 值为 `dist`，构建命令为 `sfra actions`，那么 `dist/actions` 应该是生产用的路由文件夹
 
 ### 静态文件
 
