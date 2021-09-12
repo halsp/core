@@ -284,10 +284,10 @@ When an error occurs, `HttpErrorMessage` can be returned uniformly, and the buil
 
 ## Sfa middlewares
 
-- [@sfajs/router](https://github.com/sfajs/router): Routing middleware
+- [@sfajs/router-act](https://github.com/sfajs/router-act): Actions Routing middleware
 - [@sfajs/static](https://github.com/sfajs/static): Static resource middleware
 - [@sfajs/views](https://github.com/sfajs/views): View rendering middleware
-- [@sfajs/mvc](https://github.com/sfajs/mvc): MVC framework
+- [@sfajs/mva](https://github.com/sfajs/mva): MVA framework
 - [@sfajs/swagger](https://github.com/sfajs/swagger): Use swagger to automatically generate your sfa document
 - [@sfajs/koa](https://github.com/sfajs/koa): Let koa become the middleware of sfa and connect their middleware pipeline
 

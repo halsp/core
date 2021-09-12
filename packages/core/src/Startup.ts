@@ -81,7 +81,7 @@ export default abstract class Startup {
     return res;
   }
 
-  isPlainObj(obj: unknown): boolean {
+  protected isPlainObj(obj: unknown): boolean {
     if (
       Object.prototype.toString.call(obj).toLowerCase() != "[object object]"
     ) {
