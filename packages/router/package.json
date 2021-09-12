@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/router-act",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "sfa actions 路由中间件",
   "homepage": "https://github.com/sfajs/router-act",
   "repository": {
@@ -30,7 +30,6 @@
   "license": "MIT",
   "dependencies": {
     "@sfajs/header": "^1.0.1",
-    "@sfajs/views": "^1.1.2",
     "@types/node": "^16.9.1",
     "linq": "^3.2.4",
     "sfa": "^1.1.1",
@@ -41,7 +40,6 @@
     "@types/shelljs": "^0.8.9",
     "@typescript-eslint/eslint-plugin": "^4.31.0",
     "@typescript-eslint/parser": "^4.31.0",
-    "ejs": "^3.1.6",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^4.0.0",

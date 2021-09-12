@@ -51,10 +51,7 @@ const res = await new TestStartup()
 }
 ```
 
-在根目录中（ts 项目为 src 目录）添加以下文件夹：
-
-1. 路由文件夹 `actions`，并编写 `action`，也可喂其他，但通过 `routerConfig.dir` 参数指定
-2. 视图文件夹 `views` ，并编写相应视图模板，也可为其他，但通过 `viewsDir` 参数指定
+在根目录中（ts 项目为 src 目录）添加路由文件夹 `actions`，并编写 `action`，也可为其他，但需通过 `routerConfig.dir` 参数指定
 
 构建时运行
 
@@ -311,5 +308,3 @@ export default class extends Action {
   "static.txt"
 ]
 ```
-
-视图层的 `views` 文件夹默认已包含，无需再次添加
