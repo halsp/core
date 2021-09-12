@@ -2,11 +2,15 @@ import { TestStartup } from "sfa";
 import "../src";
 
 test("run multiple", async function () {
-  const startup = new TestStartup().useViews("test/views").use(async (ctx) => {
-    await ctx.view("ejs/index.ejs", {
-      name: "test ejs",
+  const startup = new TestStartup()
+    .useViews({
+      dir: "test/views",
+    })
+    .use(async (ctx) => {
+      await ctx.view("ejs/index.ejs", {
+        name: "test ejs",
+      });
     });
-  });
 
   const res1 = await startup.run();
   expect(res1.status).toBe(200);
@@ -19,7 +23,9 @@ test("run multiple", async function () {
 
 test("default index", async function () {
   const res = await new TestStartup()
-    .useViews("test/views")
+    .useViews({
+      dir: "test/views",
+    })
     .use(async (ctx) => {
       await ctx.view("ejs", {
         name: "test ejs",
@@ -33,7 +39,9 @@ test("default index", async function () {
 
 test("without ext", async function () {
   const res = await new TestStartup()
-    .useViews("test/views")
+    .useViews({
+      dir: "test/views",
+    })
     .use(async (ctx) => {
       await ctx.view("ejs/index", {
         name: "test ejs",

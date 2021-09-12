@@ -1,6 +1,21 @@
 import { Middleware, TestStartup } from "sfa";
 import "../src";
 
+test("default", async function () {
+  class Md extends Middleware {
+    async invoke(): Promise<void> {
+      await this.view("");
+    }
+  }
+
+  const res = await new TestStartup()
+    .useViews()
+    .add(() => new Md())
+    .run();
+
+  expect(res.status).toBe(404);
+});
+
 test("middleware class", async function () {
   class Md extends Middleware {
     async invoke(): Promise<void> {
@@ -11,7 +26,9 @@ test("middleware class", async function () {
   }
 
   const res = await new TestStartup()
-    .useViews("test/views")
+    .useViews({
+      dir: "test/views",
+    })
     .add(() => new Md())
     .run();
 
@@ -28,7 +45,9 @@ test("middleware class default", async function () {
   }
 
   const res = await new TestStartup()
-    .useViews("test/views")
+    .useViews({
+      dir: "test/views",
+    })
     .add(() => new Md())
     .run();
 

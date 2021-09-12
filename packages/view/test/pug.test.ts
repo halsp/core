@@ -3,7 +3,9 @@ import "../src";
 
 test("pug", async function () {
   const res = await new TestStartup()
-    .useViews("test/views")
+        .useViews({
+      dir: "test/views",
+    })
     .use(async (ctx) => {
       await ctx.view("pug/test", {
         name: "test pug",

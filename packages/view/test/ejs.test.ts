@@ -3,7 +3,9 @@ import "../src";
 
 test("ejs", async function () {
   const res = await new TestStartup()
-    .useViews("test/views")
+    .useViews({
+      dir: "test/views",
+    })
     .use(async (ctx) => {
       await ctx.view("ejs/index.ejs", {
         name: "test ejs",
@@ -18,7 +20,9 @@ test("ejs", async function () {
 
 test("ejs index", async function () {
   const res = await new TestStartup()
-    .useViews("test/views/ejs")
+    .useViews({
+      dir: "test/views/ejs",
+    })
     .use(async (ctx) => {
       await ctx.view("", {
         name: "test ejs",

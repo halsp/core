@@ -1,20 +1,17 @@
 import "sfa";
 import { Startup, HttpContext, Middleware, SfaResponse } from "sfa";
-import * as consolidate from "consolidate";
 import * as path from "path";
 import * as fs from "fs";
 import * as linq from "linq";
-
-type RendererInterface = typeof consolidate.ejs;
-type Engine = { ext: string; render: RendererInterface | string };
+import ViewsConfig, {
+  consolidate,
+  Engine,
+  RendererInterface,
+} from "./ViewsConfig";
 
 declare module "sfa" {
   interface Startup {
-    useViews<T extends this>(
-      dir?: string,
-      options?: Record<string, unknown>,
-      engines?: Engine[]
-    ): T;
+    useViews<T extends this>(cfg?: ViewsConfig): T;
   }
 
   interface HttpContext {
@@ -34,22 +31,20 @@ declare module "sfa" {
 }
 
 Startup.prototype.useViews = function <T extends Startup>(
-  dir = "views",
-  options: Record<string, unknown> = {},
-  engines: Engine[] = []
+  cfg?: ViewsConfig
 ): T {
   Middleware.prototype.view = async function (
     tmpPath,
     locals: Record<string, unknown> = {}
   ) {
-    return await render(this.ctx, dir, tmpPath, locals, options, engines);
+    return await render(this.ctx, cfg ?? {}, tmpPath, locals);
   };
 
   HttpContext.prototype.view = async function (
     tmpPath,
     locals: Record<string, unknown> = {}
   ) {
-    return await render(this, dir, tmpPath, locals, options, engines);
+    return await render(this, cfg ?? {}, tmpPath, locals);
   };
 
   this.use(async (ctx, next) => {
@@ -62,15 +57,18 @@ Startup.prototype.useViews = function <T extends Startup>(
 
 async function render(
   ctx: HttpContext,
-  dir: string,
+  cfg: ViewsConfig,
   tmpPath: string,
-  locals: Record<string, unknown>,
-  options: Record<string, unknown>,
-  engines: Engine[]
+  locals: Record<string, unknown>
 ): Promise<SfaResponse> {
-  tmpPath = path.join(dir ?? "", tmpPath ?? "");
-  options = Object.assign(options ?? {}, ctx.state ?? {}, locals ?? {});
-  const file = getFile(tmpPath, engines ?? []);
+  tmpPath = path.join(cfg.dir ?? "", tmpPath ?? "");
+  cfg.options = Object.assign(cfg.options ?? {}, ctx.state ?? {}, locals ?? {});
+  let engines = cfg.engines ?? [];
+  if (!Array.isArray(engines)) {
+    engines = [engines];
+  }
+
+  const file = getFile(tmpPath, engines);
   if (!file) return ctx.res;
 
   if (file.ext == "html") {
@@ -78,9 +76,9 @@ async function render(
     ctx.res.setHeader("content-type", "text/html");
   }
 
-  const engine = getEngine(file.ext, engines ?? []);
+  const engine = getEngine(file.ext, engines);
   if (engine) {
-    ctx.ok(await engine(file.filePath, options));
+    ctx.ok(await engine(file.filePath, cfg.options));
     ctx.res.setHeader("content-type", "text/html");
   }
   return ctx.res;
