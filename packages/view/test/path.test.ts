@@ -69,7 +69,7 @@ test("default dir", async function () {
 test("null", async function () {
   const res = await new TestStartup()
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .useViews(null as any)
+    .useViews()
     .use(async (ctx) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ctx.state = null as any;

@@ -31,20 +31,20 @@ declare module "sfa" {
 }
 
 Startup.prototype.useViews = function <T extends Startup>(
-  cfg?: ViewsConfig
+  cfg: ViewsConfig = {}
 ): T {
   Middleware.prototype.view = async function (
     tmpPath,
     locals: Record<string, unknown> = {}
   ) {
-    return await render(this.ctx, cfg ?? {}, tmpPath, locals);
+    return await render(this.ctx, cfg, tmpPath, locals);
   };
 
   HttpContext.prototype.view = async function (
     tmpPath,
     locals: Record<string, unknown> = {}
   ) {
-    return await render(this, cfg ?? {}, tmpPath, locals);
+    return await render(this, cfg, tmpPath, locals);
   };
 
   this.use(async (ctx, next) => {
