@@ -47,3 +47,21 @@ test("null body test", async function () {
 
   expect(result.status).toBe(404);
 });
+
+test("onParserAdded", async function () {
+  const cfg = routerCfg;
+  cfg.onParserAdded = (startup) => {
+    startup.use(async (ctx, next) => {
+      ctx.setHeader("parser", "added");
+      await next();
+    });
+  };
+  const result = await new TestStartup(
+    new SfaRequest().setPath("/simple/router").setMethod("POST")
+  )
+    .useRouter(cfg)
+    .run();
+
+  expect(result.status).toBe(200);
+  expect(result.getHeader("parser")).toBe("added");
+});

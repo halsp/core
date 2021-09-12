@@ -1,9 +1,9 @@
 {
   "scripts": {
-    "build": "sfa-mva"
+    "build": "sfra"
   },
   "devDependencies": {
-    "@sfajs/mva": "../..",
+    "@sfajs/router-act": "../..",
     "sfa": "^1.1.1"
   }
 }
