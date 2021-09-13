@@ -1,4 +1,4 @@
 export default class Constant {
   static readonly defaultActionsDir: string = "actions";
-  static readonly mapFileName: string = "sfa-router-act.map";
+  static readonly mapFileName: string = "sfa-router.map";
 }

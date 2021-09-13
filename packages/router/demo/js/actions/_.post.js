@@ -1,4 +1,4 @@
-const { Action } = require("@sfajs/router-act");
+const { Action } = require("@sfajs/router");
 
 exports.default = class extends Action {
   async invoke() {

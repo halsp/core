@@ -1,11 +1,11 @@
 {
-  "name": "@sfajs/router-act",
-  "version": "1.0.0",
-  "description": "sfa actions 路由中间件",
-  "homepage": "https://github.com/sfajs/router-act",
+  "name": "@sfajs/router",
+  "version": "1.2.0",
+  "description": "sfa 路由中间件",
+  "homepage": "https://github.com/sfajs/router",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sfajs/router-act"
+    "url": "https://github.com/sfajs/router"
   },
   "keywords": [
     "sfa",
@@ -13,7 +13,7 @@
     "router"
   ],
   "bugs": {
-    "url": "https://github.com/sfajs/router-act/issues",
+    "url": "https://github.com/sfajs/router/issues",
     "email": "support@hal.wang"
   },
   "main": "dist/index.js",

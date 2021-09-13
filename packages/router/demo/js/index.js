@@ -1,5 +1,5 @@
 const { TestStartup } = require("sfa");
-import "@sfajs/router-act";
+import "@sfajs/router";
 
 exports.main = async () => {
   return await new TestStartup()
