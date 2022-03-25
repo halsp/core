@@ -1,4 +1,4 @@
-import { HttpContext, Startup } from "sfa";
+import { HttpContext, Startup } from "@sfajs/core";
 import * as typeis from "type-is";
 import * as cobody from "co-body";
 import * as qs from "qs";

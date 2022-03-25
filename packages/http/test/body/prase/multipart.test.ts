@@ -14,8 +14,8 @@ test("useHttpMultipartBody", async function () {
       ctx.ok({
         fields: multipartBody.fields,
         file: {
-          name: file.name,
-          content: readFileSync(file.path, "utf-8"),
+          name: file.originalFilename,
+          content: readFileSync(file.filepath, "utf-8"),
         },
       });
     })
@@ -40,16 +40,16 @@ test("useHttpMultipartBody", async function () {
 test("on file begin", async function () {
   const server = new SfaHttp()
     .useHttpMultipartBody(undefined, (ctx, formName, file) => {
-      ctx.res.setHeader("file-name", file.name ?? "");
+      ctx.res.setHeader("file-name", file.originalFilename ?? "");
       expect(formName).toBe("file");
-      expect(file.name).toBe("LICENSE");
+      expect(file.originalFilename).toBe("LICENSE");
     })
     .use(async (ctx) => {
       const multipartBody = ctx.req.body as MultipartBody;
       if (!multipartBody) return;
       const file = multipartBody.files.file as File;
 
-      ctx.ok(file.name);
+      ctx.ok(file.originalFilename);
     })
     .listen();
   const res = await request(server)

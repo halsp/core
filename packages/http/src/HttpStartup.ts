@@ -2,7 +2,7 @@ import * as net from "net";
 import * as tls from "tls";
 import HttpBodyPraserStartup from "./HttpBodyPraserStartup";
 import * as http from "http";
-import { HttpContext, SfaRequest, SfaResponse } from "sfa";
+import { HttpContext, SfaRequest, SfaResponse } from "@sfajs/core";
 import * as urlParse from "url-parse";
 import { Stream } from "stream";
 import { Dict, NumericalHeadersDict } from "@sfajs/header";
