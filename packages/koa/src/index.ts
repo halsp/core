@@ -1,5 +1,5 @@
-import "sfa";
-import { Startup, SfaResponse, HttpContext } from "sfa";
+import "@sfajs/core";
+import { Startup, SfaResponse, HttpContext } from "@sfajs/core";
 import * as Koa from "koa";
 import * as http from "http";
 import * as net from "net";
@@ -11,7 +11,7 @@ interface SfaKoaOptions {
   streamingBody?: (sfaCtx: HttpContext) => NodeJS.ReadableStream;
 }
 
-declare module "sfa" {
+declare module "@sfajs/core" {
   interface Startup {
     useKoa<T extends this>(app: Koa, cfg?: SfaKoaOptions): T;
   }

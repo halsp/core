@@ -1,5 +1,5 @@
 import "../src";
-import { TestStartup, SfaRequest, SfaResponse } from "sfa";
+import { TestStartup, SfaRequest, SfaResponse } from "@sfajs/core";
 import * as Koa from "koa";
 import * as cors from "koa-cors";
 import * as Router from "@koa/router";

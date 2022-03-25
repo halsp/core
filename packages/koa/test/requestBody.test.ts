@@ -1,5 +1,5 @@
 import "../src";
-import { TestStartup, SfaRequest } from "sfa";
+import { TestStartup, SfaRequest } from "@sfajs/core";
 import * as Koa from "koa";
 
 test("text", async function () {

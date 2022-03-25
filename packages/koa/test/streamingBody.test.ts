@@ -1,12 +1,14 @@
 import "../src";
-import { TestStartup, SfaRequest, SfaResponse } from "sfa";
+import { TestStartup, SfaRequest, SfaResponse } from "@sfajs/core";
 import * as Koa from "koa";
+import * as request from "supertest";
+import * as path from "path";
 import * as http from "http";
-import request = require("supertest");
 
 test("streamingBody", async function () {
+  let working = false;
   let res: SfaResponse | undefined;
-  const server = http.createServer(async (httpRes, httpReq) => {
+  const server = http.createServer(async (httpReq, httpRes) => {
     res = await new TestStartup(
       new SfaRequest().setHeader("h1", 1).setHeader("h2", "2")
     )
@@ -19,27 +21,34 @@ test("streamingBody", async function () {
           await next();
         }),
         {
-          streamingBody: () => httpRes,
+          streamingBody: () => httpReq,
         }
       )
       .run();
-    httpReq.end();
-  });
-  await request(server)
-    .post("")
-    .field("name", "fileName")
-    .attach("file", "./LICENSE");
-  server.close();
-  if (!res) {
-    expect(!!res).toBeTruthy();
-    return;
-  }
+    httpRes.end();
 
-  expect(res.status).toBe(200);
-  expect(
-    (res.body as Buffer).toString("utf-8").startsWith("--------------------")
-  ).toBeTruthy();
-  expect(res.getHeader("content-type")).toBe("application/octet-stream");
-  expect(res.headers["h1"]).toBe("1");
-  expect(res.headers["h2"]).toBe("2");
+    expect(!!res).toBeTruthy();
+    if (!res) return;
+
+    expect(res.status).toBe(200);
+    expect(
+      (res.body as Buffer).toString("utf-8").startsWith("--------------------")
+    ).toBeTruthy();
+    expect(res.getHeader("content-type")).toBe("application/octet-stream");
+    expect(res.headers["h1"]).toBe("1");
+    expect(res.headers["h2"]).toBe("2");
+
+    working = true;
+  });
+
+  try {
+    await request(server)
+      .put("")
+      .field("name", "fileName")
+      .attach("file", path.join(process.cwd(), "LICENSE"));
+  } catch (err) {
+    console.log("err", err);
+  } finally {
+    expect(working).toBeTruthy();
+  }
 });

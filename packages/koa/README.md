@@ -11,7 +11,7 @@ npm i @sfajs/koa
 ## 快速开始
 
 ```TS
-import { TestStartup } from "sfa";
+import { TestStartup } from "@sfajs/core";
 import { Koa } from "@sfajs/koa";
 
 const res = await new TestStartup()
@@ -38,7 +38,7 @@ const res = await new TestStartup()
 因此你还可以这样玩：
 
 ```TS
-import { TestStartup } from "sfa";
+import { TestStartup } from "@sfajs/core";
 import { Koa } from "@sfajs/koa";
 import * as cors from "koa-cors";
 
