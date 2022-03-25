@@ -1,15 +1,15 @@
-import "sfa";
-import { Startup, HttpContext, Middleware, SfaResponse } from "sfa";
+import "@sfajs/core";
+import { Startup, HttpContext, Middleware, SfaResponse } from "@sfajs/core";
 import * as path from "path";
 import * as fs from "fs";
-import * as linq from "linq";
+import linq from "linq";
 import ViewsConfig, {
   consolidate,
   Engine,
   RendererInterface,
 } from "./ViewsConfig";
 
-declare module "sfa" {
+declare module "@sfajs/core" {
   interface Startup {
     useViews<T extends this>(cfg?: ViewsConfig): T;
   }

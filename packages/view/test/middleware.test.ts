@@ -1,4 +1,4 @@
-import { Middleware, TestStartup } from "sfa";
+import { Middleware, TestStartup } from "@sfajs/core";
 import "../src";
 
 test("default", async function () {

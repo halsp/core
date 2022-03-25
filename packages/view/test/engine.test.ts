@@ -1,4 +1,4 @@
-import { TestStartup } from "sfa";
+import { TestStartup } from "@sfajs/core";
 import "../src";
 import { consolidate } from "../src";
 

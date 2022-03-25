@@ -17,7 +17,7 @@ npm i @sfajs/views
 2. 启用中间件 `startup.useViews()`
 
 ```TS
-import { TestStartup } from "sfa";
+import { TestStartup } from "@sfajs/core";
 import "@sfajs/views";
 
 const res = await new TestStartup()
