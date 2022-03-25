@@ -1,17 +1,17 @@
-# Sfa
+# @sfajs/core
 
 sfa provides configurable basic functions. You can add middleware to support different environments, including but not limited to cloud functions, http(s), etc.
 
 ## Installation
 
 ```
-npm i sfa
+npm i @sfajs/core
 ```
 
 ## Quick Start
 
 ```TS
-import { TestStartup } from "sfa";
+import { TestStartup } from "@sfajs/core";
 const res = await new TestStartup()
   .use(async (ctx) => {
     ctx.ok("sfa");
@@ -63,7 +63,7 @@ Class middleware is more suitable for large projects and makes your code easier 
 Simple middleware is suitable for small and fast projects
 
 ```TS
-import { TestStartup } from "sfa";
+import { TestStartup } from "@sfajs/core";
 const startup = new TestStartup();
 // Simple middleware
 startup.use(async (ctx) => {
@@ -85,7 +85,7 @@ Class middleware has two types of life cycle:
 - Scoped
 
 ```TS
-import { TestStartup } from "sfa";
+import { TestStartup } from "@sfajs/core";
 
 // Singleton
 const res = await new TestStartup().add(new YourMiddleware()).run();
@@ -244,7 +244,7 @@ this.ctx.res.status=200;
 ```
 
 ```TS
-import { Middleware } from "sfa";
+import { Middleware } from "@sfajs/core";
 export default class extends Middleware {
   async invoke() {
     this.noContent();
@@ -254,7 +254,7 @@ export default class extends Middleware {
 ```
 
 ```TS
-import { Middleware } from "sfa";
+import { Middleware } from "@sfajs/core";
 export default class extends Middleware {
   async invoke() {
     const { account, password } = this.ctx.req.query;
@@ -280,15 +280,15 @@ When an error occurs, `HttpErrorMessage` can be returned uniformly, and the buil
 - [@sfajs/alifunc](https://github.com/sfajs/alifunc): 将 sfa 托管到阿里云函数计算
 - [@sfajs/http](https://github.com/sfajs/http): Host sfa to http(s) environment
 
-> 🎉 You are welcome to contribute more environments and edit this [README](https://github.com/sfajs/sfa/edit/main/README.md) to add
+> 🎉 You are welcome to contribute more environments and edit this [README](https://github.com/sfajs/core/edit/main/README.md) to add
 
 ## Sfa middlewares
 
-- [@sfajs/router-act](https://github.com/sfajs/router-act): Actions Routing middleware
+- [@sfajs/router](https://github.com/sfajs/router): Actions Routing middleware
 - [@sfajs/static](https://github.com/sfajs/static): Static resource middleware
 - [@sfajs/views](https://github.com/sfajs/views): View rendering middleware
 - [@sfajs/mva](https://github.com/sfajs/mva): MVA framework
 - [@sfajs/swagger](https://github.com/sfajs/swagger): Use swagger to automatically generate your sfa document
 - [@sfajs/koa](https://github.com/sfajs/koa): Let koa become the middleware of sfa and connect their middleware pipeline
 
-> 🎉 You are welcome to contribute more middleware and edit this [README](https://github.com/sfajs/sfa/edit/main/README.md) to add
+> 🎉 You are welcome to contribute more middleware and edit this [README](https://github.com/sfajs/core/edit/main/README.md) to add
