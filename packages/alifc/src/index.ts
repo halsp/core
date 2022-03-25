@@ -1,5 +1,5 @@
-import { HttpContext, SfaRequest, SfaResponse } from "sfa";
-import "sfa";
+import { HttpContext, SfaRequest, SfaResponse } from "@sfajs/core";
+import "@sfajs/core";
 import * as http from "http";
 import { HttpBodyPraserStartup } from "@sfajs/http";
 
@@ -25,7 +25,7 @@ export type AliReq = {
   queries: Record<string, string>;
 } & http.IncomingMessage;
 
-declare module "sfa" {
+declare module "@sfajs/core" {
   interface HttpContext {
     readonly aliContext: AliContext;
     readonly aliReq: AliReq;
