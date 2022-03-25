@@ -17,7 +17,6 @@ export default class SfaResponse extends ResultHandler {
   ) {
     super(() => this);
     if (headers) this.setHeaders(headers);
-    this.setHeader("sfa", "https://github.com/sfajs/sfa");
   }
 
   get isSuccess(): boolean {
