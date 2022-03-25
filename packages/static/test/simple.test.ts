@@ -1,4 +1,4 @@
-import { TestStartup, SfaRequest } from "sfa";
+import { TestStartup, SfaRequest } from "@sfajs/core";
 import "../src";
 
 test("index html", async function () {

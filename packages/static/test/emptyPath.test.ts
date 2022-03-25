@@ -1,4 +1,4 @@
-import { TestStartup, SfaRequest } from "sfa";
+import { TestStartup, SfaRequest } from "@sfajs/core";
 import "../src";
 
 test("null path", async function () {

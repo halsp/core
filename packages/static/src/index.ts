@@ -1,10 +1,10 @@
-import "sfa";
-import { Startup } from "sfa";
+import "@sfajs/core";
+import { Startup } from "@sfajs/core";
 import SingleStaticMiddleware from "./SingleStaticMiddleware";
 import { SingleStaticConfig, StaticConfig } from "./StaticConfig";
 import StaticMiddleware from "./StaticMiddleware";
 
-declare module "sfa" {
+declare module "@sfajs/core" {
   interface Startup {
     useStatic<T extends this>(cfg?: StaticConfig): T;
     useStatic<T extends this>(cfg?: SingleStaticConfig): T;
