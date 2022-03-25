@@ -1,6 +1,6 @@
 import { Database } from "@cloudbase/node-sdk";
 import { Dict } from "@sfajs/header";
-import { HttpContext } from "sfa";
+import { HttpContext } from "@sfajs/core";
 
 export default class Dbhelper {
   constructor(readonly ctx: HttpContext) {}

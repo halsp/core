@@ -1,7 +1,7 @@
 import "../src";
 import Dbhelper from "../src/Dbhelper";
 import SfaCloudbase from "../src";
-import { HttpContext } from "sfa";
+import { HttpContext } from "@sfajs/core";
 import { Dict } from "@sfajs/header";
 
 test("dbhelper", async function () {

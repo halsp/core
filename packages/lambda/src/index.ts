@@ -1,11 +1,11 @@
 import { ICloudBaseConfig } from "@cloudbase/node-sdk";
-import { HttpContext, SfaRequest, Startup } from "sfa";
+import { HttpContext, SfaRequest, Startup } from "@sfajs/core";
 import ResponseStruct from "./ResponseStruct";
 import tcb = require("@cloudbase/node-sdk");
 import Dbhelper from "./Dbhelper";
 import { Dict, HeadersDict } from "@sfajs/header";
 
-declare module "sfa" {
+declare module "@sfajs/core" {
   interface SfaRequest {
     readonly context: Dict<unknown>;
     readonly event: Dict<unknown>;
