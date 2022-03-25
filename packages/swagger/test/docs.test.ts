@@ -1,5 +1,5 @@
 import "../src";
-import { TestStartup, SfaRequest } from "sfa";
+import { TestStartup, SfaRequest } from "@sfajs/core";
 
 test("default html", async function () {
   const res = await new TestStartup(new SfaRequest().setMethod("GET"))

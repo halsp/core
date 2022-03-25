@@ -9,7 +9,7 @@
 使用中间件的默认配置
 
 ```TS
-import { TestStartup } from "sfa";
+import { TestStartup } from "@sfajs/core";
 import "@sfajs/swagger";
 
 const res = await new TestStartup()

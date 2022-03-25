@@ -1,5 +1,5 @@
-import "sfa";
-import { Startup } from "sfa";
+import "@sfajs/core";
+import { Startup } from "@sfajs/core";
 import swaggerJSDoc = require("swagger-jsdoc");
 
 interface SfaSwaggerConfig {
@@ -12,7 +12,7 @@ interface SfaSwaggerConfig {
 
 export { swaggerJSDoc, SfaSwaggerConfig };
 
-declare module "sfa" {
+declare module "@sfajs/core" {
   interface Startup {
     useSwagger(cfg?: SfaSwaggerConfig): this;
   }
