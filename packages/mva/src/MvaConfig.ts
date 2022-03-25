@@ -1,4 +1,4 @@
-import { RouterConfig } from "@sfajs/router-act";
+import { RouterConfig } from "@sfajs/router";
 import { ViewsConfig } from "@sfajs/views";
 
 export default interface MvaConfig {

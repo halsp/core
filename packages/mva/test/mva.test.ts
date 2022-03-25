@@ -1,4 +1,4 @@
-import { SfaRequest, TestStartup } from "sfa";
+import { SfaRequest, TestStartup } from "@sfajs/core";
 import "../src";
 import { runMva } from "./global";
 

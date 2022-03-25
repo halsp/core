@@ -1,6 +1,6 @@
 import { users } from "./mock";
 import * as linq from "linq";
-import { Middleware } from "sfa";
+import { Middleware } from "@sfajs/core";
 import "../../src";
 
 export default class Auth extends Middleware {

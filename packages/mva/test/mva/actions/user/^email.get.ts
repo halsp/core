@@ -1,4 +1,4 @@
-import { Action } from "@sfajs/router-act";
+import { Action } from "@sfajs/router";
 import * as linq from "linq";
 import { users } from "../../mock";
 

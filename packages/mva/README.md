@@ -18,14 +18,14 @@ startup.useMva()
 ```
 
 ```TS
-import { TestStartup } from "sfa";
+import { TestStartup } from "@sfajs/core";
 import "@sfajs/mva";
 const res = await new TestStartup()
   .useMva()
   .run();
 ```
 
-参考 `@sfajs/router-act` 在根目录中（ts 项目为 src 目录）添加以下文件夹：
+参考 `@sfajs/router` 在根目录中（ts 项目为 src 目录）添加以下文件夹：
 
 1. 路由文件夹 `actions`，并编写 `action`，也可为其他，但通过 `routerConfig.dir` 参数指定
 2. 视图文件夹 `views` ，并编写相应视图模板，也可为其他，但通过 `viewsConfig.dir` 参数指定

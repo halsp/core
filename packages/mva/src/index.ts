@@ -1,13 +1,13 @@
-import "sfa";
-import { Startup } from "sfa";
+import "@sfajs/core";
+import { Startup } from "@sfajs/core";
 import * as linq from "linq";
 import "@sfajs/views";
-import "@sfajs/router-act";
+import "@sfajs/router";
 import MvaConfig from "./MvaConfig";
 
 export { MvaConfig };
 
-declare module "sfa" {
+declare module "@sfajs/core" {
   interface Startup {
     useMva<T extends this>(cfg?: MvaConfig): T;
   }
