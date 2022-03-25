@@ -1,5 +1,10 @@
-import "sfa";
-import { HttpContext, QueryDict, ReadonlyQueryDict, Startup } from "sfa";
+import "@sfajs/core";
+import {
+  HttpContext,
+  QueryDict,
+  ReadonlyQueryDict,
+  Startup,
+} from "@sfajs/core";
 import Action from "./Action";
 import MapParser from "./Map/MapParser";
 import path = require("path");
@@ -10,7 +15,7 @@ import Constant from "./Constant";
 
 export { Action, MapItem, RouterConfig };
 
-declare module "sfa" {
+declare module "@sfajs/core" {
   interface Startup {
     useRouter<T extends this>(cfg?: RouterConfig): T;
   }

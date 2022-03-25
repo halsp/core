@@ -1,10 +1,10 @@
 import { existsSync, lstatSync, readFileSync } from "fs";
-import linq = require("linq");
+import linq from "linq";
 import path = require("path");
 import Constant from "../Constant";
 import MapCreater from "./MapCreater";
 import MapItem from "./MapItem";
-import { HttpContext } from "sfa";
+import { HttpContext } from "@sfajs/core";
 import { HttpMethod } from "@sfajs/header";
 import { RouterConfig } from "..";
 

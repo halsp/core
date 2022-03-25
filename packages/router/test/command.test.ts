@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import * as fs from "fs";
-import { TestStartup } from "sfa";
+import { TestStartup } from "@sfajs/core";
 import * as shell from "shelljs";
 import "../src";
 

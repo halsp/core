@@ -1,7 +1,7 @@
 import MapCreater from "../src/Map/MapCreater";
 import * as fs from "fs";
 import Constant from "../src/Constant";
-import { TestStartup, SfaRequest } from "sfa";
+import { TestStartup, SfaRequest } from "@sfajs/core";
 import "../src";
 import { routerCfg } from "./global";
 

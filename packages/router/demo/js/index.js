@@ -1,4 +1,4 @@
-const { TestStartup } = require("sfa");
+const { TestStartup } = require("@sfajs/core");
 import "@sfajs/router";
 
 exports.main = async () => {

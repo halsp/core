@@ -1,5 +1,5 @@
 import { writeFileSync, existsSync, lstatSync, readdirSync } from "fs";
-import linq = require("linq");
+import linq from "linq";
 import path = require("path");
 import Constant from "../Constant";
 import Action from "../Action";

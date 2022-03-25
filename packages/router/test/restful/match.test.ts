@@ -1,5 +1,5 @@
 import "../../src";
-import { TestStartup, SfaRequest, HttpContext } from "sfa";
+import { TestStartup, SfaRequest, HttpContext } from "@sfajs/core";
 import { HttpMethod } from "@sfajs/header";
 import { routerCfg } from "../global";
 

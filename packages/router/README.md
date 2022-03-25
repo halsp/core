@@ -22,7 +22,7 @@ startup.useRouter()
 ```
 
 ```TS
-import { TestStartup } from "sfa";
+import { TestStartup } from "@sfajs/core";
 import "@sfajs/router";
 const res = await new TestStartup()
   .useRouter()
@@ -45,7 +45,7 @@ const res = await new TestStartup()
     "build": "sfra"
   },
   "dependencies": {
-    "sfa": "^1.0.0",
+    "@sfajs/core": "^1.0.1",
     "@sfajs/router": "^1.0.1"
   }
 }
@@ -97,7 +97,7 @@ const res = await new OtherStartup().useRouter().run();
 - routerMap: 全部路由信息
 
 ```TS
-import { TestStartup } from "sfa";
+import { TestStartup } from "@sfajs/core";
 import "@sfajs/router";
 
 const res = await new TestStartup()

@@ -1,4 +1,4 @@
-import { TestStartup } from "sfa";
+import { TestStartup } from "@sfajs/core";
 import "@sfajs/router";
 
 export const main = async (): Promise<unknown> => {

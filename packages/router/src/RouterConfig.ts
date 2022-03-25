@@ -1,4 +1,4 @@
-import { Startup } from "sfa";
+import { Startup } from "@sfajs/core";
 
 export default interface RouterConfig {
   dir?: string;

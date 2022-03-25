@@ -1,5 +1,5 @@
 import "../../src";
-import { TestStartup, SfaRequest } from "sfa";
+import { TestStartup, SfaRequest } from "@sfajs/core";
 import { routerCfg } from "../global";
 
 test(`method not allowed`, async function () {

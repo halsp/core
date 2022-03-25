@@ -1,5 +1,5 @@
 import { StatusCodes } from "@sfajs/header";
-import { HttpContext, SfaRequest } from "sfa";
+import { HttpContext, SfaRequest } from "@sfajs/core";
 import { Action } from "../src/index";
 
 class Login extends Action {
