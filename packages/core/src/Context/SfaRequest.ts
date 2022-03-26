@@ -20,7 +20,6 @@ export default class SfaRequest extends SfaHeader {
   }
 
   #body: unknown;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public get body(): any {
     return this.#body;
   }

@@ -6,7 +6,6 @@ test("request setQuery", async function () {
     .setQuery("p1", "1")
     .setQuery("p2", "2")
     .setQuery("p3", "3")
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .setQuery("p4", null as any);
 
   expectQuery(req.query);
@@ -17,7 +16,6 @@ test("request setQuery", async function () {
     p1: "1",
     p2: "2",
     p3: "3",
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     p4: undefined as any,
   });
   expectQuery(req.query);

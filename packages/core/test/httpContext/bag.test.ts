@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { HttpContext, SfaRequest } from "../../src";
 
 test("bag", async function () {

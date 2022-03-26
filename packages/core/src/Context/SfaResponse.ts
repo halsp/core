@@ -11,7 +11,6 @@ export default class SfaResponse extends ResultHandler {
 
   constructor(
     public status: StatusCodes = StatusCodes.NOT_FOUND,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public body: any = undefined,
     headers?: NumericalHeadersDict
   ) {

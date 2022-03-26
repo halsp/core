@@ -41,7 +41,6 @@ async function testBody(body?: unknown) {
     const methodItem = normalMethod[i];
     const res = await new TestStartup()
       .use(async (ctx) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (ctx as any)[methodItem.method](body);
       })
       .run();
@@ -116,7 +115,6 @@ for (let i = 0; i < msgMethods.length; i++) {
 
   class Md extends Middleware {
     async invoke(): Promise<void> {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (this as any)[methodItem.method](
         this.existMsg
           ? {
@@ -127,7 +125,6 @@ for (let i = 0; i < msgMethods.length; i++) {
     }
     constructor(private existMsg: boolean) {
       super();
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (this as any).init(new HttpContext(new SfaRequest()), 0);
     }
   }
@@ -171,7 +168,6 @@ class RedirectMd extends Middleware {
   constructor(readonly code: number | undefined, readonly location: string) {
     super();
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (this as any).init(new HttpContext(new SfaRequest()), 0);
   }
 

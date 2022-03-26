@@ -30,7 +30,6 @@ export default abstract class Startup {
     }
 
     const md = this.#mds[0](ctx);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     await (md as any).init(ctx, 0, this.#mds).invoke();
 
     return this.setType(ctx.res);
