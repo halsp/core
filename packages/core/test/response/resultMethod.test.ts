@@ -1,8 +1,5 @@
-import HttpErrorMessage from "../../src/HttpErrorMessage";
-import HttpContext from "../../src/HttpContext";
-import { Middleware, TestStartup } from "../../src";
-import SfaRequest from "../../src/SfaRequest";
-import { getReasonPhrase } from "http-status-codes";
+import { Middleware, TestStartup, HttpContext, SfaRequest } from "../../src";
+import { HttpErrorMessage, getReasonPhrase } from "@sfajs/common";
 
 const normalMethod = [
   {

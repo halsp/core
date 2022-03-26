@@ -1,4 +1,4 @@
-import SfaRequest from "../../src/SfaRequest";
+import { SfaRequest } from "../../src";
 
 test("str body", async function () {
   const req = new SfaRequest().setBody("test body");

@@ -1,5 +1,4 @@
-import SfaRequest from "../../src/SfaRequest";
-import { TestStartup } from "../../src";
+import { TestStartup, SfaRequest } from "../../src";
 
 test("method override", async function () {
   const req = new SfaRequest()

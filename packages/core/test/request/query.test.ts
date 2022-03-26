@@ -1,4 +1,4 @@
-import { ReadonlyDict } from "@sfajs/header";
+import { ReadonlyDict } from "@sfajs/common";
 import { SfaRequest } from "../../src";
 
 test("request setQuery", async function () {

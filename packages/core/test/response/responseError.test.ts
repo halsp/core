@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { StatusCodes } from "http-status-codes";
-import { HttpErrorMessage } from "../../src";
 import { TestStartup } from "../../src";
+import { HttpErrorMessage, StatusCodes } from "@sfajs/common";
 
 test("response error message", async function () {
   const result = await new TestStartup()

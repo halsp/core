@@ -1,6 +1,10 @@
 import SfaResponse from "./SfaResponse";
-import HttpErrorMessage from "./HttpErrorMessage";
-import SfaHeader, { ReasonPhrases, StatusCodes } from "@sfajs/header";
+import {
+  ReasonPhrases,
+  StatusCodes,
+  HttpErrorMessage,
+  SfaHeader,
+} from "@sfajs/common";
 
 export default abstract class ResultHandler extends SfaHeader {
   constructor(resFinder: () => SfaResponse) {

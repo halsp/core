@@ -3,7 +3,7 @@ import {
   NumericalHeadersDict,
   ReadonlyHeadersDict,
   StatusCodes,
-} from "@sfajs/header";
+} from "@sfajs/common";
 import ResultHandler from "./ResultHandler";
 
 export default class SfaResponse extends ResultHandler {

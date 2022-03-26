@@ -1,9 +1,10 @@
-import SfaHeader, {
+import {
+  SfaHeader,
   Dict,
   HeadersDict,
   ReadonlyDict,
   ReadonlyHeadersDict,
-} from "@sfajs/header";
+} from "@sfajs/common";
 
 export type QueryDict = Dict<string>;
 export type ReadonlyQueryDict = ReadonlyDict<string>;

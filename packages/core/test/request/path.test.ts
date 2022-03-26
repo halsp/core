@@ -1,4 +1,4 @@
-import SfaRequest from "../../src/SfaRequest";
+import { SfaRequest } from "../../src";
 
 test("short path", async function () {
   const req = new SfaRequest().setPath("/user");

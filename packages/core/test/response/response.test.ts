@@ -1,4 +1,4 @@
-import SfaResponse from "../../src/SfaResponse";
+import { SfaResponse } from "../../src";
 
 test(`response`, async function () {
   const res = new SfaResponse(201, "", {
