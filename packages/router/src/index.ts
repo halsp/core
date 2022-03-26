@@ -11,7 +11,7 @@ import path = require("path");
 import MapItem from "./Map/MapItem";
 import { StatusCodes } from "@sfajs/common";
 import RouterConfig from "./RouterConfig";
-import Constant from "./Constant";
+import { DEFAULT_ACTION_DIR } from "./Constant";
 
 export { Action, MapItem, RouterConfig };
 
@@ -34,8 +34,7 @@ Startup.prototype.useRouter = function <T extends Startup>(
   cfg: RouterConfig = {}
 ): T {
   cfg.dir =
-    cfg.dir?.replace(/^\//, "").replace(/\/$/, "") ??
-    Constant.defaultActionsDir;
+    cfg.dir?.replace(/^\//, "").replace(/\/$/, "") ?? DEFAULT_ACTION_DIR;
   cfg.prefix = cfg.prefix?.replace(/^\//, "").replace(/\/$/, "") ?? "";
 
   this.use(async (ctx, next) => {

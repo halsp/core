@@ -27,13 +27,11 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@sfajs/common": "^1.1.1",
-    "@sfajs/core": "^1.0.2",
-    "@types/node": "^17.0.23",
     "linq": "^3.2.4",
     "shelljs": "^0.8.5"
   },
   "devDependencies": {
+    "@types/node": "^17.0.23",
     "@types/jest": "^27.4.1",
     "@types/shelljs": "^0.8.11",
     "@typescript-eslint/eslint-plugin": "^5.16.0",
@@ -45,6 +43,16 @@
     "prettier": "^2.6.1",
     "ts-jest": "^27.1.4",
     "typescript": "^4.6.3"
+  },
+  "peerDependencies": {
+    "@sfajs/common": "^1.1.1",
+    "@sfajs/core": "^1.0.2",
+    "reflect-metadata": "^0.1.13"
+  },
+  "peerDependenciesMeta": {
+    "@sfajs/common": {
+      "optional": true
+    }
   },
   "bin": {
     "sfra": "bin/build.js"

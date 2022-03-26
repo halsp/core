@@ -1,6 +1,6 @@
 import MapCreater from "../src/Map/MapCreater";
 import * as fs from "fs";
-import Constant from "../src/Constant";
+import { MAP_FILE_NAME } from "../src/Constant";
 import { TestStartup, SfaRequest } from "@sfajs/core";
 import "../src";
 import { routerCfg } from "./global";
@@ -16,7 +16,7 @@ test("map creater write default", async function () {
   const result = new MapCreater("test/actions");
   result.write();
   try {
-    expect(fs.existsSync(Constant.mapFileName)).toBeTruthy();
+    expect(fs.existsSync(MAP_FILE_NAME)).toBeTruthy();
 
     const res = await new TestStartup(
       new SfaRequest().setPath("/simple/router").setMethod("POST")
@@ -25,7 +25,7 @@ test("map creater write default", async function () {
       .run();
     expect(res.status).toBe(200);
   } finally {
-    fs.unlinkSync(Constant.mapFileName);
+    fs.unlinkSync(MAP_FILE_NAME);
   }
 });
 

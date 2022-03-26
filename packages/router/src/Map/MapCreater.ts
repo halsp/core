@@ -1,8 +1,8 @@
 import { writeFileSync, existsSync, lstatSync, readdirSync } from "fs";
 import linq from "linq";
 import path = require("path");
-import Constant from "../Constant";
 import Action from "../Action";
+import { MAP_FILE_NAME } from "../Constant";
 import MapItem from "./MapItem";
 
 export default class MapCreater {
@@ -20,7 +20,7 @@ export default class MapCreater {
     return this.readFilesFromFolder("", []);
   }
 
-  write(filePath: string = Constant.mapFileName): void {
+  write(filePath: string = MAP_FILE_NAME): void {
     writeFileSync(
       path.join(process.cwd(), filePath.toString()),
       JSON.stringify(this.map)

@@ -1,9 +1,9 @@
 import * as shell from "shelljs";
 import * as fs from "fs";
-import Constant from "../src/Constant";
+import { MAP_FILE_NAME } from "../src/Constant";
 
 test("js demo", async function () {
-  const routerMapPath = `./${Constant.mapFileName}`;
+  const routerMapPath = `./${MAP_FILE_NAME}`;
   shell.cd("./demo/js");
   try {
     if (fs.existsSync(routerMapPath)) {
@@ -19,7 +19,7 @@ test("js demo", async function () {
 });
 
 test("ts demo", async function () {
-  const routerMapPath = `./dist/${Constant.mapFileName}`;
+  const routerMapPath = `./dist/${MAP_FILE_NAME}`;
   shell.cd("./demo/ts");
   try {
     if (fs.existsSync(routerMapPath)) {

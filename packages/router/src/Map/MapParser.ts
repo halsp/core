@@ -1,7 +1,7 @@
 import { existsSync, lstatSync, readFileSync } from "fs";
 import linq from "linq";
 import path = require("path");
-import Constant from "../Constant";
+import { MAP_FILE_NAME } from "../Constant";
 import MapCreater from "./MapCreater";
 import MapItem from "./MapItem";
 import { HttpContext } from "@sfajs/core";
@@ -154,7 +154,7 @@ export default class MapParser {
   }
 
   private getMap(): MapItem[] {
-    const mapPath = path.join(process.cwd(), Constant.mapFileName);
+    const mapPath = path.join(process.cwd(), MAP_FILE_NAME);
     if (existsSync(mapPath)) {
       const result: MapItem[] = [];
       JSON.parse(readFileSync(mapPath, "utf-8")).forEach((m: MapItem) => {

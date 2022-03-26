@@ -4,7 +4,7 @@ import * as fs from "fs";
 import * as path from "path";
 import * as shell from "shelljs";
 import MapCreater from "../dist/Map/MapCreater";
-import Constant from "../dist/Constant";
+import { MAP_FILE_NAME } from "../dist/Constant";
 
 type StaticItem = string | { source: string; target: string };
 
@@ -56,7 +56,7 @@ if (!fs.existsSync(routerDir) || !fs.statSync(routerDir).isDirectory()) {
   throw new Error("The router dir is not exist");
 }
 
-new MapCreater(routerDir).write(path.join(outDir, Constant.mapFileName));
+new MapCreater(routerDir).write(path.join(outDir, MAP_FILE_NAME));
 
 function deleteFile(filePath: string, type?: string) {
   if (!fs.existsSync(filePath)) return;
