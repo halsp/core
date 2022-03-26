@@ -9,7 +9,7 @@ import Action from "./Action";
 import MapParser from "./Map/MapParser";
 import path = require("path");
 import MapItem from "./Map/MapItem";
-import { StatusCodes } from "@sfajs/header";
+import { StatusCodes } from "@sfajs/common";
 import RouterConfig from "./RouterConfig";
 import Constant from "./Constant";
 

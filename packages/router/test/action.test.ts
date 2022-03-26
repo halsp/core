@@ -1,4 +1,4 @@
-import { StatusCodes } from "@sfajs/header";
+import { StatusCodes } from "@sfajs/common";
 import { HttpContext, SfaRequest } from "@sfajs/core";
 import { Action } from "../src/index";
 

@@ -1,6 +1,6 @@
 import { TestStartup, SfaRequest } from "@sfajs/core";
 import "../../src";
-import { HttpMethod } from "@sfajs/header";
+import { HttpMethod } from "@sfajs/common";
 import { routerCfg } from "../global";
 
 test(`restful params test1`, async function () {

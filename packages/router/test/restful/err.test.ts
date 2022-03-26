@@ -1,6 +1,6 @@
 import "../../src";
 import { TestStartup, SfaRequest } from "@sfajs/core";
-import { HttpMethod } from "@sfajs/header";
+import { HttpMethod } from "@sfajs/common";
 import { routerCfg } from "../global";
 
 test(`action name error`, async function () {

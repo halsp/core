@@ -5,7 +5,7 @@ import Constant from "../Constant";
 import MapCreater from "./MapCreater";
 import MapItem from "./MapItem";
 import { HttpContext } from "@sfajs/core";
-import { HttpMethod } from "@sfajs/header";
+import { HttpMethod } from "@sfajs/common";
 import { RouterConfig } from "..";
 
 export default class MapParser {
