@@ -26,8 +26,8 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@sfajs/common": "^1.1.1",
     "@types/node": "^17.0.23",
+    "http-status-codes": "^2.2.0",
     "mime-types": "^2.1.35"
   },
   "devDependencies": {

@@ -1,13 +1,5 @@
-import {
-  SfaHeader,
-  Dict,
-  HeadersDict,
-  ReadonlyDict,
-  ReadonlyHeadersDict,
-} from "@sfajs/common";
-
-export type QueryDict = Dict<string>;
-export type ReadonlyQueryDict = ReadonlyDict<string>;
+import { Dict, HeadersDict, ReadonlyDict, ReadonlyHeadersDict } from "../types";
+import { SfaHeader } from "./SfaHeader";
 
 export default class SfaRequest extends SfaHeader {
   constructor() {

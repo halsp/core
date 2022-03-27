@@ -1,5 +1,4 @@
-import { TestStartup, Middleware } from "../../src";
-import { Dict } from "@sfajs/common";
+import { TestStartup, Middleware, Dict } from "../../src";
 
 test("middleware success", async function () {
   const stepResult: Dict<number> = {

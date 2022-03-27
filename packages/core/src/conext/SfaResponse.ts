@@ -1,9 +1,9 @@
+import { StatusCodes } from "http-status-codes";
 import {
   HeadersDict,
   NumericalHeadersDict,
   ReadonlyHeadersDict,
-  StatusCodes,
-} from "@sfajs/common";
+} from "../types";
 import ResultHandler from "./ResultHandler";
 
 export default class SfaResponse extends ResultHandler {

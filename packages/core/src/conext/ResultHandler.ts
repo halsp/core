@@ -1,10 +1,8 @@
+import { StatusCodes, getReasonPhrase } from "http-status-codes";
+import { isString } from "../shared";
+import { HttpErrorMessage } from "./HttpErrorMessage";
+import { SfaHeader } from "./SfaHeader";
 import SfaResponse from "./SfaResponse";
-import {
-  ReasonPhrases,
-  StatusCodes,
-  HttpErrorMessage,
-  SfaHeader,
-} from "@sfajs/common";
 
 export default abstract class ResultHandler extends SfaHeader {
   constructor(resFinder: () => SfaResponse) {
@@ -18,106 +16,93 @@ export default abstract class ResultHandler extends SfaHeader {
     return this.#resFinder();
   }
 
-  ok(body?: unknown): this {
+  private setResult(status: StatusCodes, body?: unknown): this {
     if (body != undefined) {
       this.#res.body = body;
     }
-    this.#res.status = StatusCodes.OK;
+    this.#res.status = status;
     return this;
+  }
+
+  private setError(
+    status: StatusCodes,
+    error?: HttpErrorMessage | string
+  ): this {
+    this.#res.status = status;
+
+    const obj = {
+      status: status,
+      message: isString(error) ? error : getReasonPhrase(status),
+    };
+    if (error && !isString(error)) {
+      this.#res.body = Object.assign(obj, error);
+    } else {
+      this.#res.body = obj;
+    }
+    return this;
+  }
+
+  ok(body?: unknown): this {
+    return this.setResult(StatusCodes.OK, body);
   }
 
   created(location: string, body?: unknown): this {
-    if (body != undefined) {
-      this.#res.body = body;
-    }
-    this.#res.setStatus(StatusCodes.CREATED).setHeader("location", location);
-    return this;
+    return this.setResult(StatusCodes.CREATED, body).setHeader(
+      "location",
+      location
+    );
   }
 
   accepted(body?: unknown): this {
-    if (body != undefined) {
-      this.#res.body = body;
-    }
-    this.#res.status = StatusCodes.ACCEPTED;
-    return this;
+    return this.setResult(StatusCodes.ACCEPTED, body);
   }
 
   noContent(): this {
-    this.#res.status = StatusCodes.NO_CONTENT;
-    return this;
+    return this.setResult(StatusCodes.NO_CONTENT);
   }
 
   partialContent(body?: unknown): this {
-    if (body != undefined) {
-      this.#res.body = body;
-    }
-    this.#res.status = StatusCodes.PARTIAL_CONTENT;
-    return this;
+    return this.setResult(StatusCodes.PARTIAL_CONTENT, body);
   }
 
   badRequest(body?: unknown): this {
-    if (body != undefined) {
-      this.#res.body = body;
-    }
-    this.#res.status = StatusCodes.BAD_REQUEST;
-    return this;
+    return this.setResult(StatusCodes.BAD_REQUEST, body);
   }
 
-  badRequestMsg(msg?: HttpErrorMessage & NodeJS.Dict<unknown>): this {
-    if (!msg) msg = { message: ReasonPhrases.BAD_REQUEST };
-    return this.badRequest(msg);
+  badRequestMsg(error?: HttpErrorMessage | string): this {
+    return this.setError(StatusCodes.BAD_REQUEST, error);
   }
 
   unauthorized(body?: unknown): this {
-    if (body != undefined) {
-      this.#res.body = body;
-    }
-    this.#res.status = StatusCodes.UNAUTHORIZED;
-    return this;
+    return this.setResult(StatusCodes.UNAUTHORIZED, body);
   }
 
-  unauthorizedMsg(msg?: HttpErrorMessage & NodeJS.Dict<unknown>): this {
-    if (!msg) msg = { message: ReasonPhrases.UNAUTHORIZED };
-    return this.unauthorized(msg);
+  unauthorizedMsg(error?: HttpErrorMessage | string): this {
+    return this.setError(StatusCodes.UNAUTHORIZED, error);
   }
 
   forbidden(body?: unknown): this {
-    if (body != undefined) {
-      this.#res.body = body;
-    }
-    this.#res.status = StatusCodes.FORBIDDEN;
-    return this;
+    return this.setResult(StatusCodes.FORBIDDEN, body);
   }
 
-  forbiddenMsg(msg?: HttpErrorMessage & NodeJS.Dict<unknown>): this {
-    if (!msg) msg = { message: ReasonPhrases.FORBIDDEN };
-    return this.forbidden(msg);
+  forbiddenMsg(error?: HttpErrorMessage | string): this {
+    return this.setError(StatusCodes.FORBIDDEN, error);
   }
 
   notFound(body?: unknown): this {
-    if (body != undefined) {
-      this.#res.body = body;
-    }
-    this.#res.status = StatusCodes.NOT_FOUND;
-    return this;
+    return this.setResult(StatusCodes.NOT_FOUND, body);
   }
 
-  notFoundMsg(msg?: HttpErrorMessage & NodeJS.Dict<unknown>): this {
-    if (!msg) msg = { message: ReasonPhrases.NOT_FOUND };
-    return this.notFound(msg);
+  notFoundMsg(error?: HttpErrorMessage | string): this {
+    return this.setError(StatusCodes.NOT_FOUND, error);
   }
 
   errRequest(body?: unknown): this {
-    if (body != undefined) {
-      this.#res.body = body;
-    }
-    this.#res.status = StatusCodes.INTERNAL_SERVER_ERROR;
-    return this;
+    return this.setResult(StatusCodes.INTERNAL_SERVER_ERROR, body);
   }
 
-  errRequestMsg(msg?: HttpErrorMessage & NodeJS.Dict<unknown>): this {
-    if (!msg) msg = { message: ReasonPhrases.INTERNAL_SERVER_ERROR };
-    return this.errRequest(msg);
+  errRequestMsg(error?: HttpErrorMessage | string): this {
+    return this.setError(StatusCodes.INTERNAL_SERVER_ERROR, error);
   }
 
   redirect(

@@ -1,5 +1,10 @@
-import { Middleware, TestStartup, HttpContext, SfaRequest } from "../../src";
-import { HttpErrorMessage, getReasonPhrase } from "@sfajs/common";
+import {
+  Middleware,
+  TestStartup,
+  HttpContext,
+  SfaRequest,
+  getReasonPhrase,
+} from "../../src";
 
 const normalMethod = [
   {
@@ -135,7 +140,7 @@ for (let i = 0; i < msgMethods.length; i++) {
     test(errorMsgTest, async function () {
       const result = md.ctx.res;
       expect(result.status).toBe(methodItem.code);
-      expect((result.body as HttpErrorMessage).message).toBe(errorMsgTest);
+      expect((result.body as any).message).toBe(errorMsgTest);
     });
   }
 
@@ -145,7 +150,7 @@ for (let i = 0; i < msgMethods.length; i++) {
     test(errorMsgTest, async function () {
       const result = md.ctx.res;
       expect(result.status).toBe(methodItem.code);
-      expect((result.body as HttpErrorMessage).message).toBe(
+      expect((result.body as any).message).toBe(
         getReasonPhrase(methodItem.code)
       );
     });

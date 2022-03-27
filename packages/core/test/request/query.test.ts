@@ -1,5 +1,4 @@
-import { ReadonlyDict } from "@sfajs/common";
-import { SfaRequest } from "../../src";
+import { ReadonlyDict, SfaRequest } from "../../src";
 
 test("request setQuery", async function () {
   const req = new SfaRequest()

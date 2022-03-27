@@ -1,12 +1,11 @@
-import { TestStartup } from "../../src";
-import { HttpErrorMessage, StatusCodes } from "@sfajs/common";
+import { StatusCodes, TestStartup } from "../../src";
 
 test("response error message", async function () {
   const result = await new TestStartup()
     .use(async (ctx) => {
       ctx.res
         .setStatus(StatusCodes.BAD_REQUEST)
-        .setBody(<HttpErrorMessage>{ message: "error msg" });
+        .setBody({ message: "error msg" });
     })
     .run();
 
