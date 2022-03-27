@@ -4,7 +4,7 @@ import { SfaResponse } from "../context/SfaResponse";
 import { Startup } from "./Startup";
 
 export class TestStartup extends Startup {
-  #req?: SfaRequest;
+  readonly #req?: SfaRequest;
   constructor(req?: SfaRequest) {
     super();
     this.#req = req;

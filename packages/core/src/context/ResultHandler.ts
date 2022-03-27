@@ -10,7 +10,7 @@ export abstract class ResultHandler extends SfaHeader {
     this.#resFinder = resFinder;
   }
 
-  #resFinder;
+  readonly #resFinder: () => SfaResponse;
 
   get #res(): SfaResponse {
     return this.#resFinder();

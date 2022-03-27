@@ -10,7 +10,7 @@ export abstract class SfaHeader {
     this.#headersFinder = headersFinder;
   }
 
-  #headersFinder: () => HeadersDict;
+  readonly #headersFinder: () => HeadersDict;
 
   get #headers(): HeadersDict {
     return this.#headersFinder();

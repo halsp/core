@@ -123,16 +123,16 @@ test("addLeadingSlash ", async function () {
 });
 
 test("normalizePath ", async function () {
-  expect(normalizePath("path/")).toBe("/path");
-  expect(normalizePath("path///")).toBe("/path");
-  expect(normalizePath("/p/path///")).toBe("/p/path");
-  expect(normalizePath("path/", false)).toBe("path");
-  expect(normalizePath("///path/")).toBe("/path");
-  expect(normalizePath("///")).toBe("/");
-  expect(normalizePath("///p///path///")).toBe("/p/path");
+  expect(normalizePath("path/")).toBe("path");
+  expect(normalizePath("path///")).toBe("path");
+  expect(normalizePath("/p/path///")).toBe("p/path");
+  expect(normalizePath("path/", true)).toBe("/path");
+  expect(normalizePath("///path/")).toBe("path");
+  expect(normalizePath("///")).toBe("");
+  expect(normalizePath("///p///path///")).toBe("p/path");
 
-  expect(normalizePath("")).toBe("/");
-  expect(normalizePath("", false)).toBe("");
-  expect(normalizePath(null)).toBe("/");
-  expect(normalizePath(undefined)).toBe("/");
+  expect(normalizePath("")).toBe("");
+  expect(normalizePath("", true)).toBe("/");
+  expect(normalizePath(null)).toBe("");
+  expect(normalizePath(undefined)).toBe("");
 });

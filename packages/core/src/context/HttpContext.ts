@@ -12,12 +12,12 @@ export class HttpContext extends ResultHandler {
 
   readonly #bag: { [k: string]: unknown } = {};
 
-  #res: SfaResponse = new SfaResponse();
+  readonly #res = new SfaResponse();
   public get res(): SfaResponse {
     return this.#res;
   }
 
-  #req: SfaRequest;
+  readonly #req: SfaRequest;
   public get req(): SfaRequest {
     return this.#req;
   }

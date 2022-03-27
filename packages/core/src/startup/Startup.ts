@@ -7,7 +7,7 @@ import { LambdaMiddleware } from "../middlewares/LambdaMiddleware";
 import { isPlainObject } from "../shared";
 
 export abstract class Startup {
-  #mds: ((ctx: HttpContext) => Middleware)[] = [];
+  readonly #mds: ((ctx: HttpContext) => Middleware)[] = [];
 
   use(
     builder: (ctx: HttpContext, next: () => Promise<void>) => Promise<void>

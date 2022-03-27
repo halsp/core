@@ -6,7 +6,7 @@ export class HttpExceptionHeader extends SfaHeader {
     super(() => this.#headers);
   }
 
-  #headers: HeadersDict = {};
+  readonly #headers: HeadersDict = {};
   public get headers(): HeadersDict {
     return this.#headers;
   }

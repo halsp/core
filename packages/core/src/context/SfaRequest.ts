@@ -1,3 +1,4 @@
+import { normalizePath } from "../shared";
 import { Dict, HeadersDict, ReadonlyDict, ReadonlyHeadersDict } from "../types";
 import { SfaHeader } from "./SfaHeader";
 
@@ -6,7 +7,7 @@ export class SfaRequest extends SfaHeader {
     super(() => this.#headers);
   }
 
-  #headers: HeadersDict = {};
+  readonly #headers: HeadersDict = {};
   get headers(): ReadonlyHeadersDict {
     return this.#headers;
   }
@@ -25,11 +26,7 @@ export class SfaRequest extends SfaHeader {
     return this.#path;
   }
   setPath(path: string): this {
-    if (!!path && (path.startsWith("/") || path.startsWith("\\"))) {
-      this.#path = path.substr(1, path.length - 1);
-    } else {
-      this.#path = path;
-    }
+    this.#path = normalizePath(path);
     return this;
   }
 

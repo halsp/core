@@ -7,7 +7,7 @@ import {
 import { ResultHandler } from "./ResultHandler";
 
 export class SfaResponse extends ResultHandler {
-  #headers: HeadersDict = {};
+  readonly #headers: HeadersDict = {};
 
   constructor(
     public status: StatusCodes = StatusCodes.NOT_FOUND,

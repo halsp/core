@@ -26,8 +26,13 @@ export const isPlainObject = (fn: any): fn is object => {
 export const addLeadingSlash = (path?: string | null): string =>
   !path ? "/" : path[0] == "/" ? path : "/" + path;
 
-export const normalizePath = (path?: string | null, leading = true) => {
-  const result = !path ? "" : path.replace(/\/+$/, "").replace(/\/+/g, "/");
+export const normalizePath = (path?: string | null, leading = false) => {
+  const result =
+    path
+      ?.replace(/\\/g, "/")
+      ?.replace(/^\/+/, "")
+      ?.replace(/\/+$/, "")
+      ?.replace(/\/+/g, "/") ?? "";
   return leading ? addLeadingSlash(result) : result;
 };
 
