@@ -22,9 +22,6 @@ export class HttpException extends Error {
       this.message = this.error;
     } else if (isObject(this.error) && isString(this.error["message"])) {
       this.message = this.error["message"];
-    } else if (this.constructor) {
-      this.message =
-        this.constructor.name.match(/[A-Z][a-z]+|[0-9]+/g)?.join(" ") ?? "";
     } else {
       this.message = getReasonPhrase(this.status);
     }
@@ -43,7 +40,10 @@ export class HttpException extends Error {
   }
 
   public export(ctx: HttpContext): this {
-    ctx.setHeaders(this.headers).res.setBody(this.toPlainObject());
+    ctx
+      .setHeaders(this.headers)
+      .res.setStatus(this.status)
+      .setBody(this.toPlainObject());
     return this;
   }
 }
