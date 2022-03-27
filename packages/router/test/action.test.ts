@@ -1,6 +1,5 @@
-import { StatusCodes } from "@sfajs/common";
-import { HttpContext, SfaRequest } from "@sfajs/core";
-import { Action } from "../src/index";
+import { StatusCodes, SfaRequest, HttpContext } from "@sfajs/core";
+import { Action } from "../src";
 
 class Login extends Action {
   async invoke(): Promise<void> {

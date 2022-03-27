@@ -1,6 +1,5 @@
 import "../../src";
-import { TestStartup, SfaRequest } from "@sfajs/core";
-import { HttpMethod } from "@sfajs/common";
+import { TestStartup, SfaRequest, HttpMethod } from "@sfajs/core";
 import { routerCfg } from "../global";
 
 test(`custom httpMethod test`, async function () {

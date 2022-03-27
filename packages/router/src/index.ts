@@ -4,12 +4,12 @@ import {
   QueryDict,
   ReadonlyQueryDict,
   Startup,
+  StatusCodes,
 } from "@sfajs/core";
 import Action from "./Action";
 import MapParser from "./Map/MapParser";
 import path = require("path");
 import MapItem from "./Map/MapItem";
-import { StatusCodes } from "@sfajs/common";
 import RouterConfig from "./RouterConfig";
 import { DEFAULT_ACTION_DIR } from "./Constant";
 

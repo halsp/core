@@ -4,8 +4,7 @@ import path = require("path");
 import { MAP_FILE_NAME } from "../Constant";
 import MapCreater from "./MapCreater";
 import MapItem from "./MapItem";
-import { HttpContext } from "@sfajs/core";
-import { HttpMethod } from "@sfajs/common";
+import { HttpContext, HttpMethod } from "@sfajs/core";
 import { RouterConfig } from "..";
 
 export default class MapParser {

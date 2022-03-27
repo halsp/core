@@ -1,6 +1,5 @@
 import "../../src";
-import { TestStartup, SfaRequest, HttpContext } from "@sfajs/core";
-import { HttpMethod } from "@sfajs/common";
+import { TestStartup, SfaRequest, HttpContext, HttpMethod } from "@sfajs/core";
 import { routerCfg } from "../global";
 
 test(`find next`, async function () {
