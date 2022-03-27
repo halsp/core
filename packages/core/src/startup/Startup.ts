@@ -1,9 +1,9 @@
 import { SfaResponse } from "../context/SfaResponse";
 import { HttpContext } from "../context/HttpContext";
-import { Middleware } from "../middlewares_/Middleware";
+import { Middleware } from "../middlewares/Middleware";
 import { Stream } from "stream";
 import * as mime from "mime-types";
-import { LambdaMiddleware } from "../middlewares_/LambdaMiddleware";
+import { LambdaMiddleware } from "../middlewares/LambdaMiddleware";
 import { isPlainObject } from "../shared";
 
 export abstract class Startup {
