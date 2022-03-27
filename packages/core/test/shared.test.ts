@@ -29,6 +29,8 @@ test("isFunction", async function () {
 
 test("isObject", async function () {
   expect(isObject({})).toBeTruthy();
+  expect(isObject([1, 2])).toBeTruthy();
+  expect(isObject(new TestStartup())).toBeTruthy();
 
   expect(isObject(() => 0)).toBeFalsy();
   expect(isObject(1)).toBeFalsy();

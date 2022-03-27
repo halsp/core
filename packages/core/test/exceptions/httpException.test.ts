@@ -28,14 +28,13 @@ import {
 } from "../../src";
 
 test("base http exception", () => {
-  const ex = new HttpException(StatusCodes.BAD_REQUEST);
+  const ex = new HttpException(StatusCodes.BAD_REQUEST).setHeaders((header) =>
+    header.setHeader("h1", "1").setHeader("h2", "2")
+  );
   expect(ex.error).toBeUndefined();
   expect(ex.message).toBe(getReasonPhrase(StatusCodes.BAD_REQUEST));
 
-  const ctx = new HttpContext(new SfaRequest());
-  ex.headers["h1"] = "1";
-  ex.headers["h2"] = "2";
-  ex.export(ctx);
+  const ctx = new HttpContext(new SfaRequest()).catchError(ex);
   expect(ctx.res.headers["h1"]).toBe("1");
   expect(ctx.res.headers["h2"]).toBe("2");
   expect(ctx.res.status).toBe(StatusCodes.BAD_REQUEST);
@@ -50,8 +49,7 @@ test("http exception string error", () => {
   expect(ex.error).toBe("err");
   expect(ex.message).toBe("err");
 
-  const ctx = new HttpContext(new SfaRequest());
-  ex.export(ctx);
+  const ctx = new HttpContext(new SfaRequest()).catchError(ex);
   expect(ctx.res.body).toEqual({
     message: "err",
     status: StatusCodes.BAD_REQUEST,
@@ -65,8 +63,7 @@ test("http exception object error", () => {
   expect(ex.error).toEqual({ a: 1 });
   expect(ex.message).toBe(getReasonPhrase(StatusCodes.BAD_REQUEST));
 
-  const ctx = new HttpContext(new SfaRequest());
-  ex.export(ctx);
+  const ctx = new HttpContext(new SfaRequest()).catchError(ex);
   expect(ctx.res.body).toEqual({
     message: getReasonPhrase(StatusCodes.BAD_REQUEST),
     status: StatusCodes.BAD_REQUEST,

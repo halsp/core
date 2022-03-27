@@ -1,7 +1,7 @@
 export const isUndefined = (obj: any): obj is undefined =>
   typeof obj === "undefined";
 
-export const isObject = (fn: any): fn is object =>
+export const isObject = (fn: any): fn is any =>
   !isNil(fn) && typeof fn === "object";
 
 export const isPlainObject = (fn: any): fn is object => {
@@ -39,5 +39,5 @@ export const isNil = (val: any): val is null | undefined =>
 export const isArrayEmpty = (array?: any[] | null): boolean =>
   !(array && array.length > 0);
 export const isSymbol = (val: any): val is symbol => typeof val === "symbol";
-export const isNilOrBlank = (val?: string | null) =>
+export const isNilOrBlank = (val?: string | null): boolean =>
   isNil(val) || val.trim().length == 0;

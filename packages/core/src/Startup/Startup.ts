@@ -4,6 +4,7 @@ import { Middleware } from "../middlewares/Middleware";
 import { Stream } from "stream";
 import * as mime from "mime-types";
 import { LambdaMiddleware } from "../middlewares/LambdaMiddleware";
+import { isPlainObject } from "../shared";
 
 export abstract class Startup {
   #mds: ((ctx: HttpContext) => Middleware)[] = [];
@@ -30,7 +31,11 @@ export abstract class Startup {
     }
 
     const md = this.#mds[0](ctx);
-    await (md as any).init(ctx, 0, this.#mds).invoke();
+    try {
+      await (md as any).init(ctx, 0, this.#mds).invoke();
+    } catch (err) {
+      ctx.catchError(err);
+    }
 
     return this.setType(ctx.res);
   }
@@ -56,7 +61,7 @@ export abstract class Startup {
       }
     } else if (body instanceof Stream) {
       res.setHeader("Content-Type", mime.contentType("bin") as string);
-    } else if (this.isPlainObj(body)) {
+    } else if (isPlainObject(body)) {
       if (writeLength) {
         res.setHeader(
           "content-length",
@@ -78,18 +83,5 @@ export abstract class Startup {
     }
 
     return res;
-  }
-
-  protected isPlainObj(obj: unknown): boolean {
-    if (
-      Object.prototype.toString.call(obj).toLowerCase() != "[object object]"
-    ) {
-      return false;
-    }
-
-    return (
-      !Object.getPrototypeOf(obj) ||
-      Object.getPrototypeOf(obj) == Object.prototype
-    );
   }
 }

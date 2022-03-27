@@ -19,7 +19,11 @@ export abstract class Middleware extends ResultHandler {
     if (this.#mds.length <= this.#index + 1) return;
     const nextMd = this.#mds[this.#index + 1](this.ctx);
     nextMd.init(this.ctx, this.#index + 1, this.#mds);
-    await nextMd.invoke();
+    try {
+      await nextMd.invoke();
+    } catch (err) {
+      this.ctx.catchError(err);
+    }
   }
 
   private init(

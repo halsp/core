@@ -1,7 +1,8 @@
 import { getReasonPhrase, StatusCodes } from "http-status-codes";
-import { HttpContext } from "../context/HttpContext";
+import { SfaHeader } from "../context/SfaHeader";
 import { isObject, isString } from "../shared";
-import { Dict, HeadersDict } from "../types";
+import { Dict } from "../types";
+import { HttpExceptionHeader } from "./HttpExceptionHeader";
 
 export class HttpException extends Error {
   constructor(
@@ -13,7 +14,14 @@ export class HttpException extends Error {
     this.initMessage();
   }
 
-  public readonly headers: HeadersDict = {};
+  #header = new HttpExceptionHeader();
+  public get header() {
+    return this.#header;
+  }
+  public setHeaders(funcs: (header: SfaHeader) => void): this {
+    funcs(this.#header);
+    return this;
+  }
 
   private initMessage() {
     if (!this.error) {
@@ -27,7 +35,7 @@ export class HttpException extends Error {
     }
   }
 
-  private toPlainObject() {
+  public toPlainObject() {
     const obj = {
       status: this.status,
       message: this.message,
@@ -37,13 +45,5 @@ export class HttpException extends Error {
     } else {
       return obj;
     }
-  }
-
-  public export(ctx: HttpContext): this {
-    ctx
-      .setHeaders(this.headers)
-      .res.setStatus(this.status)
-      .setBody(this.toPlainObject());
-    return this;
   }
 }

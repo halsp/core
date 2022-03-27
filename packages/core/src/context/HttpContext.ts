@@ -1,6 +1,8 @@
 import { SfaRequest } from "./SfaRequest";
 import { SfaResponse } from "./SfaResponse";
 import { ResultHandler } from "./ResultHandler";
+import { HttpException, InternalServerErrorException } from "../exceptions";
+import { isNil, isObject } from "../shared";
 
 export class HttpContext extends ResultHandler {
   constructor(req: SfaRequest) {
@@ -35,5 +37,22 @@ export class HttpContext extends ResultHandler {
       this.#bag[key] = value;
       return this;
     }
+  }
+
+  public catchError(err: HttpException | Error | any): this {
+    if (err instanceof HttpException) {
+      this.setHeaders(err.header.headers)
+        .res.setStatus(err.status)
+        .setBody(err.toPlainObject());
+    } else if (err instanceof Error) {
+      const msg = err.message || undefined;
+      this.catchError(new InternalServerErrorException(msg));
+    } else if (isObject(err)) {
+      this.catchError(new InternalServerErrorException(err));
+    } else {
+      const error = (!isNil(err) && String(err)) || undefined;
+      this.catchError(new InternalServerErrorException(error));
+    }
+    return this;
   }
 }
