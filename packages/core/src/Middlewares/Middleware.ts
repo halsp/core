@@ -1,5 +1,5 @@
-import HttpContext from "../Context/HttpContext";
-import ResultHandler from "../Context/ResultHandler";
+import HttpContext from "../conext/HttpContext";
+import ResultHandler from "../conext/ResultHandler";
 
 export default abstract class Middleware extends ResultHandler {
   constructor() {

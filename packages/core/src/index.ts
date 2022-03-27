@@ -1,10 +1,10 @@
-import SfaResponse from "./Context/SfaResponse";
-import Startup from "./Startup/Startup";
-import TestStartup from "./Startup/TestStartup";
-import HttpContext from "./Context/HttpContext";
-import SfaRequest, { QueryDict, ReadonlyQueryDict } from "./Context/SfaRequest";
-import Middleware from "./Middlewares/Middleware";
-import ResultHandler from "./Context/ResultHandler";
+import SfaResponse from "./conext/SfaResponse";
+import Startup from "./startup/Startup";
+import TestStartup from "./startup/TestStartup";
+import HttpContext from "./conext/HttpContext";
+import SfaRequest, { QueryDict, ReadonlyQueryDict } from "./conext/SfaRequest";
+import Middleware from "./middlewares/Middleware";
+import ResultHandler from "./conext/ResultHandler";
 
 export {
   SfaResponse,
