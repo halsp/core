@@ -1,5 +1,6 @@
 import { HttpContext } from "../context/HttpContext";
 import { ResultHandler } from "../context/ResultHandler";
+import { HttpException } from "../exceptions";
 
 export abstract class Middleware extends ResultHandler {
   constructor() {
@@ -22,7 +23,11 @@ export abstract class Middleware extends ResultHandler {
     try {
       await nextMd.invoke();
     } catch (err) {
-      this.ctx.catchError(err);
+      if (err instanceof HttpException && err.breakthrough) {
+        throw err;
+      } else {
+        this.ctx.catchError(err);
+      }
     }
   }
 

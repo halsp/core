@@ -14,6 +14,15 @@ export class HttpException extends Error {
     this.initMessage();
   }
 
+  #breakthrough = false;
+  public get breakthrough(): boolean {
+    return this.#breakthrough;
+  }
+  public setBreakthrough(breakthrough = true): this {
+    this.#breakthrough = breakthrough;
+    return this;
+  }
+
   #header = new HttpExceptionHeader();
   public get header() {
     return this.#header;

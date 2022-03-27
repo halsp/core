@@ -45,28 +45,41 @@ test("throw error", async function () {
   });
 });
 
-test("throw pipeline exception", async function () {
-  const startup = new TestStartup();
-  startup
-    .use(async (ctx, next) => {
-      ctx.res.setHeader("h1", "1");
-      await next();
-      ctx.res.setHeader("h3", "3");
-    })
-    .use(async (ctx) => {
-      ctx.res.setHeader("h2", "2");
-      throw new ForbiddenException("msg");
+function testPipeline(breakthrough?: boolean) {
+  const title = `throw pipeline exception${
+    breakthrough != false ? " with breakthrough" : ""
+  }`;
+  test(title, async function () {
+    const startup = new TestStartup();
+    startup
+      .use(async (ctx, next) => {
+        ctx.res.setHeader("h1", "1");
+        await next();
+        ctx.res.setHeader("h3", "3");
+      })
+      .use(async (ctx) => {
+        ctx.res.setHeader("h2", "2");
+        throw new ForbiddenException("msg").setBreakthrough(breakthrough);
+      });
+    const res = await startup.run();
+    expect(res.status).toBe(StatusCodes.FORBIDDEN);
+    expect(res.body).toEqual({
+      status: StatusCodes.FORBIDDEN,
+      message: "msg",
     });
-  const res = await startup.run();
-  expect(res.status).toBe(StatusCodes.FORBIDDEN);
-  expect(res.body).toEqual({
-    status: StatusCodes.FORBIDDEN,
-    message: "msg",
+    expect(res.headers["h1"]).toBe("1");
+    expect(res.headers["h2"]).toBe("2");
+    if (breakthrough != false) {
+      expect(res.headers["h3"]).toBeUndefined();
+    } else {
+      expect(res.headers["h3"]).toBe("3");
+    }
   });
-  expect(res.headers["h1"]).toBe("1");
-  expect(res.headers["h2"]).toBe("2");
-  expect(res.headers["h3"]).toBe("3");
-});
+}
+
+testPipeline(true);
+testPipeline(false);
+testPipeline(undefined);
 
 test("throw default error", async function () {
   const startup = new TestStartup();
