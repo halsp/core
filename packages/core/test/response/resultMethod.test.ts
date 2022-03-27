@@ -22,22 +22,112 @@ const normalMethod = [
   {
     method: "badRequest",
     code: 400,
+    error: true,
   },
   {
     method: "unauthorized",
     code: 401,
+    error: true,
   },
   {
     method: "forbidden",
     code: 403,
+    error: true,
   },
   {
     method: "notFound",
     code: 404,
+    error: true,
   },
   {
-    method: "errRequest",
+    method: "methodNotAllowed",
+    code: 405,
+    error: true,
+  },
+  {
+    method: "notAcceptable",
+    code: 406,
+    error: true,
+  },
+  {
+    method: "requestTimeout",
+    code: 408,
+    error: true,
+  },
+  {
+    method: "conflict",
+    code: 409,
+    error: true,
+  },
+  {
+    method: "gone",
+    code: 410,
+    error: true,
+  },
+  {
+    method: "preconditionFailed",
+    code: 412,
+    error: true,
+  },
+  {
+    method: "requestTooLong",
+    code: 413,
+    error: true,
+  },
+  {
+    method: "unsupportedMediaType",
+    code: 415,
+    error: true,
+  },
+  {
+    method: "imATeapot",
+    code: 418,
+    error: true,
+  },
+  {
+    method: "misdirected",
+    code: 421,
+    error: true,
+  },
+  {
+    method: "unprocessableEntity",
+    code: 422,
+    error: true,
+  },
+  {
+    method: "unprocessableEntity",
+    code: 422,
+    error: true,
+  },
+  {
+    method: "internalServerError",
     code: 500,
+    error: true,
+  },
+  {
+    method: "notImplemented",
+    code: 501,
+    error: true,
+  },
+  {
+    method: "badGateway",
+    code: 502,
+    error: true,
+  },
+  {
+    method: "serviceUnavailable",
+    code: 503,
+    error: true,
+  },
+  {
+    method: "gatewayTimeout",
+    code: 504,
+    error: true,
+  },
+  {
+    method: "httpVersionNotSupported",
+    code: 505,
+    error: true,
   },
 ];
 
@@ -51,12 +141,22 @@ async function testBody(body?: unknown) {
       .run();
 
     expect(res.status).toBe(methodItem.code);
-    expect(res.body).toBe(body);
+    if (methodItem.error && methodItem.method.endsWith("Msg")) {
+      expect(res.body).toEqual({
+        message: body ?? getReasonPhrase(methodItem.code),
+        status: methodItem.code,
+      });
+    } else {
+      expect(res.body).toBe(body);
+    }
   }
 }
 
-test(`test handler func`, async function () {
+test(`test handler func without body`, async function () {
   await testBody();
+});
+
+test(`test handler func with body`, async function () {
   await testBody("body");
 });
 
@@ -107,28 +207,13 @@ test(`http result noContent`, async function () {
   expect(res.body).toBe(undefined);
 });
 
-const msgMethods = [
-  {
-    method: "badRequestMsg",
-    code: 400,
-  },
-  {
-    method: "unauthorizedMsg",
-    code: 401,
-  },
-  {
-    method: "forbiddenMsg",
-    code: 403,
-  },
-  {
-    method: "notFoundMsg",
-    code: 404,
-  },
-  {
-    method: "errRequestMsg",
-    code: 500,
-  },
-];
+const msgMethods = normalMethod
+  .filter((method) => method.error == true)
+  .map((m) => {
+    const obj = Object.assign({}, m);
+    obj.method = obj.method + "Msg";
+    return obj;
+  });
 for (let i = 0; i < msgMethods.length; i++) {
   const methodItem = msgMethods[i];
   const errorMsgTest = `error message ${methodItem.method}`;

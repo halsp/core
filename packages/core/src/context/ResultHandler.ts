@@ -42,69 +42,25 @@ export abstract class ResultHandler extends SfaHeader {
     return this;
   }
 
-  ok(body?: unknown): this {
-    return this.setResult(StatusCodes.OK, body);
-  }
+  // 200
+  ok = (body?: unknown): this => this.setResult(StatusCodes.OK, body);
 
-  created(location: string, body?: unknown): this {
-    return this.setResult(StatusCodes.CREATED, body).setHeader(
-      "location",
-      location
-    );
-  }
+  // 201
+  created = (location: string, body?: unknown): this =>
+    this.setResult(StatusCodes.CREATED, body).setHeader("location", location);
 
-  accepted(body?: unknown): this {
-    return this.setResult(StatusCodes.ACCEPTED, body);
-  }
+  // 202
+  accepted = (body?: unknown): this =>
+    this.setResult(StatusCodes.ACCEPTED, body);
 
-  noContent(): this {
-    return this.setResult(StatusCodes.NO_CONTENT);
-  }
+  // 204
+  noContent = (): this => this.setResult(StatusCodes.NO_CONTENT);
 
-  partialContent(body?: unknown): this {
-    return this.setResult(StatusCodes.PARTIAL_CONTENT, body);
-  }
+  // 206
+  partialContent = (body?: unknown): this =>
+    this.setResult(StatusCodes.PARTIAL_CONTENT, body);
 
-  badRequest(body?: unknown): this {
-    return this.setResult(StatusCodes.BAD_REQUEST, body);
-  }
-
-  badRequestMsg(error?: HttpErrorMessage | string): this {
-    return this.setError(StatusCodes.BAD_REQUEST, error);
-  }
-
-  unauthorized(body?: unknown): this {
-    return this.setResult(StatusCodes.UNAUTHORIZED, body);
-  }
-
-  unauthorizedMsg(error?: HttpErrorMessage | string): this {
-    return this.setError(StatusCodes.UNAUTHORIZED, error);
-  }
-
-  forbidden(body?: unknown): this {
-    return this.setResult(StatusCodes.FORBIDDEN, body);
-  }
-
-  forbiddenMsg(error?: HttpErrorMessage | string): this {
-    return this.setError(StatusCodes.FORBIDDEN, error);
-  }
-
-  notFound(body?: unknown): this {
-    return this.setResult(StatusCodes.NOT_FOUND, body);
-  }
-
-  notFoundMsg(error?: HttpErrorMessage | string): this {
-    return this.setError(StatusCodes.NOT_FOUND, error);
-  }
-
-  errRequest(body?: unknown): this {
-    return this.setResult(StatusCodes.INTERNAL_SERVER_ERROR, body);
-  }
-
-  errRequestMsg(error?: HttpErrorMessage | string): this {
-    return this.setError(StatusCodes.INTERNAL_SERVER_ERROR, error);
-  }
-
+  // 30x
   redirect(
     location: string,
     code:
@@ -117,4 +73,129 @@ export abstract class ResultHandler extends SfaHeader {
     this.#res.setStatus(code).setHeader("location", location);
     return this;
   }
+
+  // 400
+  badRequest = (body?: unknown): this =>
+    this.setResult(StatusCodes.BAD_REQUEST, body);
+  badRequestMsg = (error?: HttpErrorMessage | string): this =>
+    this.setError(StatusCodes.BAD_REQUEST, error);
+
+  // 401
+  unauthorized = (body?: unknown): this =>
+    this.setResult(StatusCodes.UNAUTHORIZED, body);
+  unauthorizedMsg = (error?: HttpErrorMessage | string): this =>
+    this.setError(StatusCodes.UNAUTHORIZED, error);
+
+  // 403
+  forbidden = (body?: unknown): this =>
+    this.setResult(StatusCodes.FORBIDDEN, body);
+  forbiddenMsg = (error?: HttpErrorMessage | string): this =>
+    this.setError(StatusCodes.FORBIDDEN, error);
+
+  // 404
+  notFound = (body?: unknown): this =>
+    this.setResult(StatusCodes.NOT_FOUND, body);
+  notFoundMsg = (error?: HttpErrorMessage | string): this =>
+    this.setError(StatusCodes.NOT_FOUND, error);
+
+  // 405
+  methodNotAllowed = (body?: unknown): this =>
+    this.setResult(StatusCodes.METHOD_NOT_ALLOWED, body);
+  methodNotAllowedMsg = (error?: HttpErrorMessage | string): this =>
+    this.setError(StatusCodes.METHOD_NOT_ALLOWED, error);
+
+  // 406
+  notAcceptable = (body?: unknown): this =>
+    this.setResult(StatusCodes.NOT_ACCEPTABLE, body);
+  notAcceptableMsg = (error?: HttpErrorMessage | string): this =>
+    this.setError(StatusCodes.NOT_ACCEPTABLE, error);
+
+  // 408
+  requestTimeout = (body?: unknown): this =>
+    this.setResult(StatusCodes.REQUEST_TIMEOUT, body);
+  requestTimeoutMsg = (error?: HttpErrorMessage | string): this =>
+    this.setError(StatusCodes.REQUEST_TIMEOUT, error);
+
+  // 409
+  conflict = (body?: unknown): this =>
+    this.setResult(StatusCodes.CONFLICT, body);
+  conflictMsg = (error?: HttpErrorMessage | string): this =>
+    this.setError(StatusCodes.CONFLICT, error);
+
+  // 410
+  gone = (body?: unknown): this => this.setResult(StatusCodes.GONE, body);
+  goneMsg = (error?: HttpErrorMessage | string): this =>
+    this.setError(StatusCodes.GONE, error);
+
+  // 412
+  preconditionFailed = (body?: unknown): this =>
+    this.setResult(StatusCodes.PRECONDITION_FAILED, body);
+  preconditionFailedMsg = (error?: HttpErrorMessage | string): this =>
+    this.setError(StatusCodes.PRECONDITION_FAILED, error);
+
+  // 413
+  requestTooLong = (body?: unknown): this =>
+    this.setResult(StatusCodes.REQUEST_TOO_LONG, body);
+  requestTooLongMsg = (error?: HttpErrorMessage | string): this =>
+    this.setError(StatusCodes.REQUEST_TOO_LONG, error);
+
+  // 415
+  unsupportedMediaType = (body?: unknown): this =>
+    this.setResult(StatusCodes.UNSUPPORTED_MEDIA_TYPE, body);
+  unsupportedMediaTypeMsg = (error?: HttpErrorMessage | string): this =>
+    this.setError(StatusCodes.UNSUPPORTED_MEDIA_TYPE, error);
+
+  // 418
+  imATeapot = (body?: unknown): this =>
+    this.setResult(StatusCodes.IM_A_TEAPOT, body);
+  imATeapotMsg = (error?: HttpErrorMessage | string): this =>
+    this.setError(StatusCodes.IM_A_TEAPOT, error);
+
+  // 421
+  misdirected = (body?: unknown): this =>
+    this.setResult(StatusCodes.MISDIRECTED_REQUEST, body);
+  misdirectedMsg = (error?: HttpErrorMessage | string): this =>
+    this.setError(StatusCodes.MISDIRECTED_REQUEST, error);
+
+  // 422
+  unprocessableEntity = (body?: unknown): this =>
+    this.setResult(StatusCodes.UNPROCESSABLE_ENTITY, body);
+  unprocessableEntityMsg = (error?: HttpErrorMessage | string): this =>
+    this.setError(StatusCodes.UNPROCESSABLE_ENTITY, error);
+
+  // 500
+  internalServerError = (body?: unknown): this =>
+    this.setResult(StatusCodes.INTERNAL_SERVER_ERROR, body);
+  internalServerErrorMsg = (error?: HttpErrorMessage | string): this =>
+    this.setError(StatusCodes.INTERNAL_SERVER_ERROR, error);
+
+  // 501
+  notImplemented = (body?: unknown): this =>
+    this.setResult(StatusCodes.NOT_IMPLEMENTED, body);
+  notImplementedMsg = (error?: HttpErrorMessage | string): this =>
+    this.setError(StatusCodes.NOT_IMPLEMENTED, error);
+
+  // 502
+  badGateway = (body?: unknown): this =>
+    this.setResult(StatusCodes.BAD_GATEWAY, body);
+  badGatewayMsg = (error?: HttpErrorMessage | string): this =>
+    this.setError(StatusCodes.BAD_GATEWAY, error);
+
+  // 503
+  serviceUnavailable = (body?: unknown): this =>
+    this.setResult(StatusCodes.SERVICE_UNAVAILABLE, body);
+  serviceUnavailableMsg = (error?: HttpErrorMessage | string): this =>
+    this.setError(StatusCodes.SERVICE_UNAVAILABLE, error);
+
+  // 504
+  gatewayTimeout = (body?: unknown): this =>
+    this.setResult(StatusCodes.GATEWAY_TIMEOUT, body);
+  gatewayTimeoutMsg = (error?: HttpErrorMessage | string): this =>
+    this.setError(StatusCodes.GATEWAY_TIMEOUT, error);
+
+  // 505
+  httpVersionNotSupported = (body?: unknown): this =>
+    this.setResult(StatusCodes.HTTP_VERSION_NOT_SUPPORTED, body);
+  httpVersionNotSupportedMsg = (error?: HttpErrorMessage | string): this =>
+    this.setError(StatusCodes.HTTP_VERSION_NOT_SUPPORTED, error);
 }

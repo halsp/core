@@ -216,8 +216,8 @@ const val = this.ctx.bag<string>("BAG_NAME")
 `ctx` and the middleware have some built-in result functions:
 
 - ok, 200
-- accepted, 202
 - created, 201
+- accepted, 202
 - noContent, 204
 - partialContent, 206
 - redirect, 30\*
@@ -227,8 +227,40 @@ const val = this.ctx.bag<string>("BAG_NAME")
 - forbiddenMsg, 403
 - notFound, 404
 - notFoundMsg, 404
-- errRequest, 500
-- errRequestMsg, 500
+- methodNotAllowed, 405
+- methodNotAllowedMsg, 405
+- notAcceptable, 406
+- notAcceptableMsg, 406
+- requestTimeout, 408
+- requestTimeoutMsg, 40
+- conflict, 409
+- conflictMsg, 409
+- gone, 410
+- goneMsg, 410
+- preconditionFailed, 412
+- preconditionFailedMsg, 412
+- requestTooLong, 413
+- requestTooLongMsg, 413
+- unsupportedMediaType, 415
+- unsupportedMediaTypeMsg, 415
+- imATeapot, 418
+- imATeapotMsg, 418
+- misdirected, 421
+- misdirectedMsg, 421
+- unprocessableEntity, 421
+- unprocessableEntityMsg, 421
+- internalServerError, 500
+- internalServerErrorMsg, 500
+- notImplemented, 501
+- notImplementedMsg, 501
+- badGateway, 502
+- badGatewayMsg, 502
+- serviceUnavailable, 503
+- serviceUnavailableMsg, 503
+- gatewayTimeout, 504
+- gatewayTimeoutMsg, 504
+- httpVersionNotSupported, 505
+- httpVersionNotSupportedMsg, 505
 
 As in class middleware
 
