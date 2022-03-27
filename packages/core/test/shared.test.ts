@@ -2,6 +2,7 @@ import {
   addLeadingSlash,
   isArrayEmpty,
   isFunction,
+  isNil,
   isNilOrBlank,
   isNumber,
   isObject,
@@ -12,6 +13,16 @@ import {
   normalizePath,
   TestStartup,
 } from "../src";
+
+test("isNil", async function () {
+  expect(isNil(undefined)).toBeTruthy();
+  expect(isNil(null)).toBeTruthy();
+
+  expect(isNil(false)).toBeFalsy();
+  expect(isNil("")).toBeFalsy();
+  expect(isNil(0)).toBeFalsy();
+  expect(isNil({})).toBeFalsy();
+});
 
 test("isUndefined", async function () {
   expect(isUndefined(undefined)).toBeTruthy();
