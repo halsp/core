@@ -8,7 +8,7 @@ class CustomStartup extends Startup {
 
 test("custom result handler", async function () {
   const res = await new CustomStartup()
-    .use(async (ctx) => {
+    .use((ctx) => {
       ctx.ok({
         msg: "ok",
       });

@@ -10,7 +10,9 @@ export abstract class Startup {
   readonly #mds: ((ctx: HttpContext) => Middleware)[] = [];
 
   use(
-    builder: (ctx: HttpContext, next: () => Promise<void>) => Promise<void>
+    builder:
+      | ((ctx: HttpContext, next: () => Promise<void>) => Promise<void>)
+      | ((ctx: HttpContext, next: () => Promise<void>) => void)
   ): this {
     this.#mds.push(() => new LambdaMiddleware(builder));
     return this;
