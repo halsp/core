@@ -60,6 +60,21 @@ test(`test handler func`, async function () {
   await testBody("body");
 });
 
+test(`error message`, async function () {
+  {
+    const res = await new TestStartup()
+      .use(async (ctx) => {
+        ctx.res.badRequestMsg("err");
+      })
+      .run();
+    expect(res.status).toBe(400);
+    expect(res.body).toEqual({
+      message: "err",
+      status: 400,
+    });
+  }
+});
+
 test(`http result created`, async function () {
   {
     const res = await new TestStartup()

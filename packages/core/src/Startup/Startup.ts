@@ -1,11 +1,11 @@
-import SfaResponse from "../conext/SfaResponse";
-import HttpContext from "../conext/HttpContext";
-import Middleware from "../middlewares/Middleware";
+import { SfaResponse } from "../conext/SfaResponse";
+import { HttpContext } from "../conext/HttpContext";
+import { Middleware } from "../middlewares/Middleware";
 import { Stream } from "stream";
 import * as mime from "mime-types";
-import LambdaMiddleware from "../middlewares/LambdaMiddleware";
+import { LambdaMiddleware } from "../middlewares/LambdaMiddleware";
 
-export default abstract class Startup {
+export abstract class Startup {
   #mds: ((ctx: HttpContext) => Middleware)[] = [];
 
   use(

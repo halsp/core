@@ -1,7 +1,7 @@
 import { Dict, HeadersDict, ReadonlyDict, ReadonlyHeadersDict } from "../types";
 import { SfaHeader } from "./SfaHeader";
 
-export default class SfaRequest extends SfaHeader {
+export class SfaRequest extends SfaHeader {
   constructor() {
     super(() => this.#headers);
   }

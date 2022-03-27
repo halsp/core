@@ -1,8 +1,8 @@
-import SfaRequest from "./SfaRequest";
-import SfaResponse from "./SfaResponse";
-import ResultHandler from "./ResultHandler";
+import { SfaRequest } from "./SfaRequest";
+import { SfaResponse } from "./SfaResponse";
+import { ResultHandler } from "./ResultHandler";
 
-export default class HttpContext extends ResultHandler {
+export class HttpContext extends ResultHandler {
   constructor(req: SfaRequest) {
     super(() => this.#res);
     this.#req = req;

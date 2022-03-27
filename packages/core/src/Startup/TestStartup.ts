@@ -1,9 +1,9 @@
-import HttpContext from "../conext/HttpContext";
-import SfaRequest from "../conext/SfaRequest";
-import SfaResponse from "../conext/SfaResponse";
-import Startup from "./Startup";
+import { HttpContext } from "../conext/HttpContext";
+import { SfaRequest } from "../conext/SfaRequest";
+import { SfaResponse } from "../conext/SfaResponse";
+import { Startup } from "./Startup";
 
-export default class TestStartup extends Startup {
+export class TestStartup extends Startup {
   #req?: SfaRequest;
   constructor(req?: SfaRequest) {
     super();

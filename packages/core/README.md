@@ -245,7 +245,7 @@ this.ctx.res.status=200;
 
 ```TS
 import { Middleware } from "@sfajs/core";
-export default class extends Middleware {
+export class extends Middleware {
   async invoke() {
     this.noContent();
     // or this.ok('success');
@@ -255,7 +255,7 @@ export default class extends Middleware {
 
 ```TS
 import { Middleware } from "@sfajs/core";
-export default class extends Middleware {
+export class extends Middleware {
   async invoke() {
     const { account, password } = this.ctx.req.query;
 

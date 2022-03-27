@@ -1,4 +1,4 @@
-import HttpMethod from "../src/HttpMethod";
+import { HttpMethod } from "../src";
 
 test("http methods", async function () {
   expect(HttpMethod.post.toUpperCase()).toBe("POST");

@@ -4,9 +4,9 @@ import {
   NumericalHeadersDict,
   ReadonlyHeadersDict,
 } from "../types";
-import ResultHandler from "./ResultHandler";
+import { ResultHandler } from "./ResultHandler";
 
-export default class SfaResponse extends ResultHandler {
+export class SfaResponse extends ResultHandler {
   #headers: HeadersDict = {};
 
   constructor(

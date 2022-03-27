@@ -1,7 +1,7 @@
-import HttpContext from "../conext/HttpContext";
-import Middleware from "./Middleware";
+import { HttpContext } from "../conext/HttpContext";
+import { Middleware } from "./Middleware";
 
-export default class LambdaMiddleware extends Middleware {
+export class LambdaMiddleware extends Middleware {
   constructor(
     private readonly builder: (
       ctx: HttpContext,

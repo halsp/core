@@ -1,5 +1,5 @@
 import { getReasonPhrase, StatusCodes } from "http-status-codes";
-import HttpContext from "../conext/HttpContext";
+import { HttpContext } from "../conext/HttpContext";
 import { isObject, isString } from "../shared";
 import { Dict, HeadersDict } from "../types";
 

@@ -1,7 +1,7 @@
-import HttpContext from "../conext/HttpContext";
-import ResultHandler from "../conext/ResultHandler";
+import { HttpContext } from "../conext/HttpContext";
+import { ResultHandler } from "../conext/ResultHandler";
 
-export default abstract class Middleware extends ResultHandler {
+export abstract class Middleware extends ResultHandler {
   constructor() {
     super(() => this.ctx.res);
   }
