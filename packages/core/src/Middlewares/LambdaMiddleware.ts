@@ -1,4 +1,4 @@
-import { HttpContext } from "../conext/HttpContext";
+import { HttpContext } from "../context/HttpContext";
 import { Middleware } from "./Middleware";
 
 export class LambdaMiddleware extends Middleware {

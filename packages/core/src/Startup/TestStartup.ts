@@ -1,6 +1,6 @@
-import { HttpContext } from "../conext/HttpContext";
-import { SfaRequest } from "../conext/SfaRequest";
-import { SfaResponse } from "../conext/SfaResponse";
+import { HttpContext } from "../context/HttpContext";
+import { SfaRequest } from "../context/SfaRequest";
+import { SfaResponse } from "../context/SfaResponse";
 import { Startup } from "./Startup";
 
 export class TestStartup extends Startup {

@@ -1,5 +1,5 @@
-import { SfaResponse } from "../conext/SfaResponse";
-import { HttpContext } from "../conext/HttpContext";
+import { SfaResponse } from "../context/SfaResponse";
+import { HttpContext } from "../context/HttpContext";
 import { Middleware } from "../middlewares/Middleware";
 import { Stream } from "stream";
 import * as mime from "mime-types";
