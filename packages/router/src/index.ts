@@ -12,6 +12,7 @@ import path = require("path");
 import MapItem from "./Map/MapItem";
 import RouterConfig from "./RouterConfig";
 import { DEFAULT_ACTION_DIR } from "./Constant";
+import { DecoratorParamsParser } from "./decorators/DecoratorParamsParser";
 
 export { Action, MapItem, RouterConfig };
 
@@ -55,7 +56,8 @@ Startup.prototype.useRouter = function <T extends Startup>(
     );
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const actionClass = require(filePath).default;
-    return new actionClass() as Action;
+    const action = new actionClass() as Action;
+    return new DecoratorParamsParser(ctx, action).action;
   });
 
   return this as T;
@@ -105,3 +107,5 @@ function parseRouter(ctx: HttpContext, cfg: RouterConfig): boolean {
 
   return true;
 }
+
+export { Query, Param, Header, Body } from "./decorators/params";

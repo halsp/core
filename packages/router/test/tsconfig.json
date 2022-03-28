@@ -15,11 +15,9 @@
     "emitDecoratorMetadata": true,
   },
   "include": [
-    "src/**/*"
+    "actions/**/*"
   ],
   "exclude": [
-    "test",
-    "dist",
-    "bin"
+    "**.test.ts",
   ]
 }

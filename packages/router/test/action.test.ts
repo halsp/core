@@ -1,9 +1,9 @@
-import { StatusCodes, SfaRequest, HttpContext } from "@sfajs/core";
+import { StatusCodes, SfaRequest, HttpContext, Dict } from "@sfajs/core";
 import { Action } from "../src";
 
 class Login extends Action {
   async invoke(): Promise<void> {
-    const { account, password } = <Record<string, unknown>>this.ctx.req.body;
+    const { account, password } = <Dict>this.ctx.req.body;
 
     if (account != "abc") {
       this.notFound("用户不存在");
