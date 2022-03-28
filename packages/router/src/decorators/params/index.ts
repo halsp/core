@@ -1,10 +1,10 @@
 import "reflect-metadata";
-import { RouteParamTypes } from "./route-param-types";
-import { ROUTE_ARGS_METADATA } from "../constant";
+import { ParamsTypes } from "./params-types";
+import { ROUTE_ARGS_METADATA } from "../../constant";
 import { ParamsDecoratorValue } from "./params-decorator-value";
 
 const createParamDecorator =
-  (type: RouteParamTypes, data?: any): PropertyDecorator =>
+  (type: ParamsTypes, data?: any): PropertyDecorator =>
   (target: any, propertyKey: string | symbol) => {
     const args =
       (Reflect.getMetadata(
@@ -20,17 +20,17 @@ const createParamDecorator =
   };
 
 export function Query(data?: any) {
-  return createParamDecorator(RouteParamTypes.QUERY, data);
+  return createParamDecorator(ParamsTypes.QUERY, data);
 }
 
 export function Body(data?: any) {
-  return createParamDecorator(RouteParamTypes.BODY, data);
+  return createParamDecorator(ParamsTypes.BODY, data);
 }
 
 export function Param(data?: any) {
-  return createParamDecorator(RouteParamTypes.PARAM, data);
+  return createParamDecorator(ParamsTypes.PARAM, data);
 }
 
 export function Header(data?: any) {
-  return createParamDecorator(RouteParamTypes.HEADERS, data);
+  return createParamDecorator(ParamsTypes.HEADERS, data);
 }

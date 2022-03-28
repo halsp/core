@@ -12,7 +12,7 @@ import path = require("path");
 import MapItem from "./map/map-item";
 import RouterConfig from "./router-config";
 import { DEFAULT_ACTION_DIR } from "./constant";
-import { ParamsDecoratorParser } from "./decorators/params-decorator-parser";
+import { ParamsDecoratorParser } from "./decorators/params/params-decorator-parser";
 
 export { Action, MapItem, RouterConfig };
 
@@ -108,4 +108,4 @@ function parseRouter(ctx: HttpContext, cfg: RouterConfig): boolean {
   return true;
 }
 
-export { Query, Param, Header, Body } from "./decorators/params";
+export { Query, Param, Header, Body } from "./decorators";

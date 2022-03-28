@@ -1,7 +1,7 @@
-import { RouteParamTypes } from "./route-param-types";
+import { ParamsTypes } from "./params-types";
 
 export interface ParamsDecoratorValue {
   propertyKey: string;
-  type: RouteParamTypes;
+  type: ParamsTypes;
   data?: any;
 }

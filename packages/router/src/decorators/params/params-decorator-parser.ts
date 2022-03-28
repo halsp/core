@@ -1,8 +1,8 @@
 import { HttpContext } from "@sfajs/core";
-import Action from "../action";
-import { ROUTE_ARGS_METADATA } from "../constant";
+import Action from "../../action";
+import { ROUTE_ARGS_METADATA } from "../../constant";
 import { ParamsDecoratorValue } from "./params-decorator-value";
-import { RouteParamTypes } from "./route-param-types";
+import { ParamsTypes } from "./params-types";
 
 export class ParamsDecoratorParser {
   constructor(
@@ -28,16 +28,16 @@ export class ParamsDecoratorParser {
 
   private setProperty(decValue: ParamsDecoratorValue) {
     switch (decValue.type) {
-      case RouteParamTypes.QUERY:
+      case ParamsTypes.QUERY:
         this.act[decValue.propertyKey] = this.ctx.req.query;
         break;
-      case RouteParamTypes.PARAM:
+      case ParamsTypes.PARAM:
         this.act[decValue.propertyKey] = this.ctx.req.params;
         break;
-      case RouteParamTypes.HEADERS:
+      case ParamsTypes.HEADERS:
         this.act[decValue.propertyKey] = this.ctx.req.headers;
         break;
-      case RouteParamTypes.BODY:
+      case ParamsTypes.BODY:
         this.act[decValue.propertyKey] = this.ctx.req.body;
         break;
     }
