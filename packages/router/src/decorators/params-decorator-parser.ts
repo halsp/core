@@ -4,7 +4,7 @@ import { ROUTE_ARGS_METADATA } from "../constant";
 import { ParamsDecoratorValue } from "./params-decorator-value";
 import { RouteParamTypes } from "./route-param-types";
 
-export class DecoratorParamsParser {
+export class ParamsDecoratorParser {
   constructor(
     private readonly ctx: HttpContext,
     private readonly act: Action
