@@ -1,5 +1,5 @@
 import { HttpContext } from "../context";
-import { Middleware } from "./Middleware";
+import { Middleware } from "./middleware";
 
 export class LambdaMiddleware extends Middleware {
   constructor(
