@@ -1,6 +1,6 @@
 import { HttpContext } from "@sfajs/core";
-import Action from "../action_";
-import { ROUTE_ARGS_METADATA } from "../constant_";
+import Action from "../action";
+import { ROUTE_ARGS_METADATA } from "../constant";
 import { ParamsDecoratorValue } from "./params-decorator-value";
 import { RouteParamTypes } from "./route-param-types";
 

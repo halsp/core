@@ -1,4 +1,4 @@
-import MapCreater from "../src/Map/MapCreater";
+import MapCreater from "../src/map/map-creater";
 import * as fs from "fs";
 import { MAP_FILE_NAME } from "../src/Constant";
 import { TestStartup, SfaRequest } from "@sfajs/core";

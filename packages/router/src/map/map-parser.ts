@@ -1,7 +1,7 @@
 import { existsSync, lstatSync, readFileSync } from "fs";
 import linq from "linq";
 import path = require("path");
-import { MAP_FILE_NAME } from "../constant_";
+import { MAP_FILE_NAME } from "../constant";
 import MapCreater from "./map-creater";
 import MapItem from "./map-item";
 import { HttpContext, HttpMethod } from "@sfajs/core";

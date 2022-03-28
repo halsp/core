@@ -3,8 +3,8 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as shell from "shelljs";
-import MapCreater from "../dist/Map/MapCreater";
-import { MAP_FILE_NAME } from "../dist/Constant";
+import MapCreater from "../dist/map/map-creater";
+import { MAP_FILE_NAME } from "../dist/constant";
 
 type StaticItem = string | { source: string; target: string };
 

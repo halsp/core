@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { RouteParamTypes } from "./route-param-types";
-import { ROUTE_ARGS_METADATA } from "../constant_";
+import { ROUTE_ARGS_METADATA } from "../constant";
 import { ParamsDecoratorValue } from "./params-decorator-value";
 
 const createParamDecorator =
