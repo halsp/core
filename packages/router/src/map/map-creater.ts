@@ -1,9 +1,9 @@
 import { writeFileSync, existsSync, lstatSync, readdirSync } from "fs";
 import linq from "linq";
 import path = require("path");
-import Action from "../Action";
-import { MAP_FILE_NAME } from "../Constant";
-import MapItem from "./MapItem";
+import Action from "../action_";
+import { MAP_FILE_NAME } from "../constant_";
+import MapItem from "./map-item";
 
 export default class MapCreater {
   constructor(private readonly dir: string) {

@@ -6,13 +6,13 @@ import {
   Startup,
   StatusCodes,
 } from "@sfajs/core";
-import Action from "./Action";
-import MapParser from "./Map/MapParser";
+import Action from "./action_";
+import MapParser from "./map/map-parser";
 import path = require("path");
-import MapItem from "./Map/MapItem";
-import RouterConfig from "./RouterConfig";
-import { DEFAULT_ACTION_DIR } from "./Constant";
-import { DecoratorParamsParser } from "./decorators/DecoratorParamsParser";
+import MapItem from "./map/map-item";
+import RouterConfig from "./router-config";
+import { DEFAULT_ACTION_DIR } from "./constant_";
+import { DecoratorParamsParser } from "./decorators/decorator-params-parser";
 
 export { Action, MapItem, RouterConfig };
 

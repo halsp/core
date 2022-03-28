@@ -1,8 +1,8 @@
 import { HttpContext } from "@sfajs/core";
-import Action from "../Action";
-import { ROUTE_ARGS_METADATA } from "../Constant";
-import { ParamsDecoratorValue } from "./ParamsDecoratorValue";
-import { RouteParamTypes } from "./RouteParamTypes";
+import Action from "../action_";
+import { ROUTE_ARGS_METADATA } from "../constant_";
+import { ParamsDecoratorValue } from "./params-decorator-value";
+import { RouteParamTypes } from "./route-param-types";
 
 export class DecoratorParamsParser {
   constructor(

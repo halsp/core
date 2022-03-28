@@ -1,7 +1,7 @@
 import "reflect-metadata";
-import { RouteParamTypes } from "./RouteParamTypes";
-import { ROUTE_ARGS_METADATA } from "../Constant";
-import { ParamsDecoratorValue } from "./ParamsDecoratorValue";
+import { RouteParamTypes } from "./route-param-types";
+import { ROUTE_ARGS_METADATA } from "../constant_";
+import { ParamsDecoratorValue } from "./params-decorator-value";
 
 const createParamDecorator =
   (type: RouteParamTypes, data?: any): PropertyDecorator =>
