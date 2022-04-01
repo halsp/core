@@ -1,10 +1,9 @@
-import { HttpContext, Startup } from "@sfajs/core";
+import { HttpContext, Startup, StatusCodes } from "@sfajs/core";
 import * as typeis from "type-is";
 import * as cobody from "co-body";
 import * as qs from "qs";
 import * as forms from "formidable";
 import * as http from "http";
-import { StatusCodes } from "@sfajs/header";
 
 export type MultipartBody =
   | { fields: forms.Fields; files: forms.Files }

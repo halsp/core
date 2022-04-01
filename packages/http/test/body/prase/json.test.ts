@@ -41,28 +41,23 @@ test("parse json error", async function () {
   expect(res.status).toBe(400);
   expect(res.body).toEqual({
     message: "ERROR",
+    status: 400,
   });
 });
 
 test("parse json error default", async function () {
   const server = new SfaHttp()
-    .use(async (ctx, next) => {
-      try {
-        await next();
-      } catch (err) {
-        ctx.badRequestMsg({ message: (err as Error).message });
-      }
-    })
     .useHttpJsonBody()
-    .use(async (ctx) => {
+    .use((ctx) => {
       ctx.ok(ctx.req.body);
     })
     .listen();
   const res = await request(server).post("").send("+'{}").type("json");
   server.close();
 
-  expect(res.status).toBe(400);
+  expect(res.status).toBe(500);
   expect(res.body).toEqual({
     message: "invalid JSON, only supports object and array",
+    status: 500,
   });
 });

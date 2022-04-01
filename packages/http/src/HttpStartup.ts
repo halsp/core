@@ -2,10 +2,16 @@ import * as net from "net";
 import * as tls from "tls";
 import HttpBodyPraserStartup from "./HttpBodyPraserStartup";
 import * as http from "http";
-import { HttpContext, SfaRequest, SfaResponse } from "@sfajs/core";
+import {
+  HttpContext,
+  SfaRequest,
+  SfaResponse,
+  Dict,
+  NumericalHeadersDict,
+  isPlainObject,
+} from "@sfajs/core";
 import * as urlParse from "url-parse";
 import { Stream } from "stream";
-import { Dict, NumericalHeadersDict } from "@sfajs/header";
 
 export default abstract class HttpStartup extends HttpBodyPraserStartup {
   constructor() {
@@ -68,7 +74,7 @@ export default abstract class HttpStartup extends HttpBodyPraserStartup {
 
     if (sfaRes.body instanceof Stream) {
       sfaRes.body.pipe(httpRes);
-    } else if (this.isPlainObj(sfaRes.body)) {
+    } else if (isPlainObject(sfaRes.body)) {
       const str = JSON.stringify(sfaRes.body);
       httpRes.end(str);
     } else {
