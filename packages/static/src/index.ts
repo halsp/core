@@ -1,8 +1,8 @@
 import "@sfajs/core";
 import { Startup } from "@sfajs/core";
-import SingleStaticMiddleware from "./SingleStaticMiddleware";
-import { SingleStaticConfig, StaticConfig } from "./StaticConfig";
-import StaticMiddleware from "./StaticMiddleware";
+import SingleStaticMiddleware from "./single-static-middleware";
+import { SingleStaticConfig, StaticConfig } from "./static-config";
+import StaticMiddleware from "./static.middleware";
 
 declare module "@sfajs/core" {
   interface Startup {

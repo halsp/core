@@ -1,8 +1,8 @@
 import * as path from "path";
 import * as fs from "fs";
 import * as mime from "mime";
-import { StaticConfig } from "./StaticConfig";
-import { BaseMiddleware } from "./BaseMiddleware";
+import { StaticConfig } from "./static-config";
+import { BaseMiddleware } from "./base.middleware";
 
 export default class StaticMiddleware extends BaseMiddleware {
   constructor(readonly cfg: StaticConfig) {

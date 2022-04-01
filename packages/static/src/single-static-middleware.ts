@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as mime from "mime";
-import { SingleStaticConfig } from "./StaticConfig";
-import { BaseMiddleware } from "./BaseMiddleware";
+import { SingleStaticConfig } from "./static-config";
+import { BaseMiddleware } from "./base.middleware";
 
 export default class SingleStaticMiddleware extends BaseMiddleware {
   constructor(readonly cfg: SingleStaticConfig) {
