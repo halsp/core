@@ -8,7 +8,7 @@ import {
 } from "@sfajs/core";
 import ResponseStruct from "./response-struct";
 import tcb = require("@cloudbase/node-sdk");
-import Dbhelper from "./db-helper";
+import Dbhelper from "./dbhelper";
 
 declare module "@sfajs/core" {
   interface SfaRequest {
