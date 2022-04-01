@@ -8,7 +8,7 @@ export * from "./action-decorator-types";
 export * from "./action-decorator-value";
 
 const createParamDecorator =
-  (type: ActionDecoratorTypes, data?: any): PropertyDecorator =>
+  (type: ActionDecoratorTypes, property?: string): PropertyDecorator =>
   (target: any, propertyKey: string | symbol) => {
     const decs =
       (Reflect.getMetadata(
@@ -19,23 +19,23 @@ const createParamDecorator =
     decs.push(<ActionDecoratorValue>{
       propertyKey,
       type,
-      data,
+      property,
     });
     Reflect.defineMetadata(ROUTE_ARGS_METADATA, decs, target);
   };
 
-export function Query(data?: any) {
-  return createParamDecorator(ActionDecoratorTypes.Query, data);
+export function Query(property?: string) {
+  return createParamDecorator(ActionDecoratorTypes.Query, property);
 }
 
-export function Body(data?: any) {
-  return createParamDecorator(ActionDecoratorTypes.Body, data);
+export function Body(property?: string) {
+  return createParamDecorator(ActionDecoratorTypes.Body, property);
 }
 
-export function Param(data?: any) {
-  return createParamDecorator(ActionDecoratorTypes.Param, data);
+export function Param(property?: string) {
+  return createParamDecorator(ActionDecoratorTypes.Param, property);
 }
 
-export function Header(data?: any) {
-  return createParamDecorator(ActionDecoratorTypes.Header, data);
+export function Header(property?: string) {
+  return createParamDecorator(ActionDecoratorTypes.Header, property);
 }

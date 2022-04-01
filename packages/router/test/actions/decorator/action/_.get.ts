@@ -12,6 +12,10 @@ export default class extends Action {
   private readonly params!: ReadonlyDict;
   @Body()
   private readonly body!: ReadonlyDict;
+  @Body("array")
+  private readonly arrayFieldBody!: string;
+  @Query("q")
+  private readonly queryProperty!: string;
 
   async invoke(): Promise<void> {
     this.ok({
@@ -20,6 +24,8 @@ export default class extends Action {
       query2: this.query2,
       params: this.params,
       body: this.body,
+      arrayFieldBody: this.arrayFieldBody,
+      queryProperty: this.queryProperty,
     });
   }
 }

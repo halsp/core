@@ -7,18 +7,21 @@ test("action decorators test", async function () {
     new SfaRequest()
       .setPath("/decorator/action")
       .setMethod("GET")
-      .setBody({ b: 1 })
+      .setBody([0, 1])
       .setHeader("h1", 1)
-      .setQuery("q1", "q")
+      .setQuery("q", "q")
   )
     .useRouter(routerCfg)
     .run();
   expect(res.status).toBe(200);
   expect(res.body).toEqual({
     header: { h1: "1" },
-    query1: { q1: "q" },
-    query2: { q1: "q" },
+    query1: { q: "q" },
+    query2: { q: "q" },
+    queryProperty: "q",
+    queryProperty1: undefined,
     params: {},
-    body: { b: 1 },
+    body: [0, 1],
+    arrayFieldBody: undefined,
   });
 });
