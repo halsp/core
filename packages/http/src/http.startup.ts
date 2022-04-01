@@ -1,6 +1,6 @@
 import * as net from "net";
 import * as tls from "tls";
-import HttpBodyPraserStartup from "./HttpBodyPraserStartup";
+import HttpBodyPraserStartup from "./http-body-praser.startup";
 import * as http from "http";
 import {
   HttpContext,

@@ -1,5 +1,5 @@
 import * as http from "http";
-import HttpStartup from "./HttpStartup";
+import HttpStartup from "./http.startup";
 
 export default class SfaHttp extends HttpStartup {
   readonly server: http.Server;

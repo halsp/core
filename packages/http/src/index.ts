@@ -1,9 +1,11 @@
 import * as http from "http";
 import "@sfajs/core";
 
-import SfaHttp from "./SfaHttp";
-import SfaHttps from "./SfaHttps";
-import HttpBodyPraserStartup, { MultipartBody } from "./HttpBodyPraserStartup";
+import SfaHttp from "./sfa-http.startup";
+import SfaHttps from "./sfa-https.startup";
+import HttpBodyPraserStartup, {
+  MultipartBody,
+} from "./http-body-praser.startup";
 
 declare module "@sfajs/core" {
   interface HttpContext {
