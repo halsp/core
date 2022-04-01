@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/http",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Hosting sfa in http(s)",
   "homepage": "https://github.com/sfajs/http",
   "repository": {
