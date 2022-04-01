@@ -3,6 +3,7 @@ import * as fs from "fs";
 import * as mime from "mime";
 import { StaticConfig } from "./static-config";
 import { BaseMiddleware } from "./base.middleware";
+import { normalizePath } from "@sfajs/core";
 
 export class StaticMiddleware extends BaseMiddleware {
   constructor(readonly cfg: StaticConfig) {
@@ -15,11 +16,10 @@ export class StaticMiddleware extends BaseMiddleware {
       return;
     }
 
+    console.log("path", ",", this.cfg.prefix, ",", this.ctx.req.path);
     if (
       !this.cfg.prefix ||
-      (this.ctx.req.path ?? "")
-        .toUpperCase()
-        .startsWith(this.cfg.prefix.toUpperCase())
+      this.ctx.req.path.toUpperCase().startsWith(this.cfg.prefix.toUpperCase())
     ) {
       const filePath = this.filePath;
       if (filePath) {
@@ -47,12 +47,9 @@ export class StaticMiddleware extends BaseMiddleware {
   }
 
   get filePath(): string | undefined {
-    let reqPath = this.trimPath(this.ctx.req.path ?? "");
+    let reqPath = normalizePath(this.ctx.req.path);
     if (this.cfg.prefix) {
-      reqPath = reqPath.substr(
-        this.cfg.prefix.length,
-        reqPath.length - this.cfg.prefix.length
-      );
+      reqPath = reqPath.substring(this.cfg.prefix.length, reqPath.length);
     }
 
     const reqFilePath = path.join(this.cfg.dir, reqPath);

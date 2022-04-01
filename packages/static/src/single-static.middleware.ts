@@ -2,6 +2,7 @@ import * as fs from "fs";
 import * as mime from "mime";
 import { SingleStaticConfig } from "./static-config";
 import { BaseMiddleware } from "./base.middleware";
+import { normalizePath } from "@sfajs/core";
 
 export class SingleStaticMiddleware extends BaseMiddleware {
   constructor(readonly cfg: SingleStaticConfig) {
@@ -15,8 +16,8 @@ export class SingleStaticMiddleware extends BaseMiddleware {
     }
 
     if (
-      this.trimPath(this.ctx.req.path ?? "") !=
-      this.trimPath(this.cfg.reqPath ?? this.cfg.file)
+      normalizePath(this.ctx.req.path) !=
+      normalizePath(this.cfg.reqPath ?? this.cfg.file)
     ) {
       await this.next();
       return;

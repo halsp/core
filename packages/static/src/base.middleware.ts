@@ -22,7 +22,7 @@ export abstract class BaseMiddleware extends Middleware {
   }
 
   private get isPathValid(): boolean {
-    if ((this.ctx.req.path ?? "").includes("..")) {
+    if (this.ctx.req.path.includes("..")) {
       return false;
     } else {
       return true;
@@ -31,17 +31,6 @@ export abstract class BaseMiddleware extends Middleware {
 
   protected get isReqValida(): boolean {
     return this.isMethodValid && this.isPathValid;
-  }
-
-  protected trimPath(str: string): string {
-    let result = str;
-    while (result.startsWith("/") || result.startsWith("\\")) {
-      result = result.substr(1, result.length - 1);
-    }
-    while (result.endsWith("/") || result.endsWith("\\")) {
-      result = result.substr(0, result.length - 1);
-    }
-    return result;
   }
 
   protected setFile(file: string, is404 = false): void {
