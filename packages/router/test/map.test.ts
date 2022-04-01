@@ -1,6 +1,6 @@
 import MapCreater from "../src/map/map-creater";
 import * as fs from "fs";
-import { MAP_FILE_NAME } from "../src/Constant";
+import { MAP_FILE_NAME } from "../src/constant";
 import { TestStartup, SfaRequest } from "@sfajs/core";
 import "../src";
 import { routerCfg } from "./global";

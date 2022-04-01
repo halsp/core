@@ -1,6 +1,6 @@
 import * as shell from "shelljs";
 import * as fs from "fs";
-import { MAP_FILE_NAME } from "../src/Constant";
+import { MAP_FILE_NAME } from "../src/constant";
 
 test("js demo", async function () {
   const routerMapPath = `./${MAP_FILE_NAME}`;
