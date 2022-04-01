@@ -1,11 +1,13 @@
 import { ReadonlyDict } from "@sfajs/core";
-import { Action, Body, Header, Param, Query } from "../../../src";
+import { Action, Body, Header, Param, Query } from "../../../../src";
 
 export default class extends Action {
   @Header()
   private readonly header!: ReadonlyDict;
   @Query()
-  private readonly query!: ReadonlyDict;
+  private readonly query1!: ReadonlyDict;
+  @Query()
+  private readonly query2!: ReadonlyDict;
   @Param()
   private readonly params!: ReadonlyDict;
   @Body()
@@ -14,7 +16,8 @@ export default class extends Action {
   async invoke(): Promise<void> {
     this.ok({
       header: this.header,
-      query: this.query,
+      query1: this.query1,
+      query2: this.query2,
       params: this.params,
       body: this.body,
     });

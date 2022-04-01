@@ -12,7 +12,8 @@ import path = require("path");
 import MapItem from "./map/map-item";
 import RouterConfig from "./router-config";
 import { DEFAULT_ACTION_DIR } from "./constant";
-import { ParamsDecoratorParser } from "./decorators/params/params-decorator-parser";
+import { ActionDecoratorParser } from "./decorators/action";
+import { InjectDecoratorMiddleware, InjectDecoratorParser } from "./decorators";
 
 export { Action, MapItem, RouterConfig };
 
@@ -38,6 +39,7 @@ Startup.prototype.useRouter = function <T extends Startup>(
     cfg.dir?.replace(/^\//, "").replace(/\/$/, "") ?? DEFAULT_ACTION_DIR;
   cfg.prefix = cfg.prefix?.replace(/^\//, "").replace(/\/$/, "") ?? "";
 
+  this.add(new InjectDecoratorMiddleware());
   this.use(async (ctx, next) => {
     if (parseRouter(ctx, cfg)) {
       await next();
@@ -56,8 +58,10 @@ Startup.prototype.useRouter = function <T extends Startup>(
     );
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const actionClass = require(filePath).default;
-    const action = new actionClass() as Action;
-    return new ParamsDecoratorParser(ctx, action).action;
+    let action = new actionClass() as Action;
+    action = new ActionDecoratorParser(ctx, action).parse();
+    action = new InjectDecoratorParser(ctx, action).parse();
+    return action;
   });
 
   return this as T;
@@ -108,4 +112,12 @@ function parseRouter(ctx: HttpContext, cfg: RouterConfig): boolean {
   return true;
 }
 
-export { Query, Param, Header, Body } from "./decorators";
+export {
+  Query,
+  Param,
+  Header,
+  Body,
+  Inject,
+  parseInject,
+  InjectDecoratorTypes,
+} from "./decorators";

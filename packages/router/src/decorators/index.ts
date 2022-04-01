@@ -1,1 +1,2 @@
-export * from "./params";
+export * from "./action";
+export * from "./inject";
