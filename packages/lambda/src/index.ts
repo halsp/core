@@ -6,9 +6,9 @@ import {
   Dict,
   HeadersDict,
 } from "@sfajs/core";
-import ResponseStruct from "./ResponseStruct";
+import ResponseStruct from "./response-struct";
 import tcb = require("@cloudbase/node-sdk");
-import Dbhelper from "./Dbhelper";
+import Dbhelper from "./db-helper";
 
 declare module "@sfajs/core" {
   interface SfaRequest {
