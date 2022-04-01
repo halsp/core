@@ -1,4 +1,4 @@
-import { HeadersDict } from "@sfajs/header";
+import { HeadersDict } from "@sfajs/core";
 
 export default interface ResponseStruct {
   isBase64Encoded: boolean;

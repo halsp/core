@@ -1,5 +1,5 @@
-import SfaCloudbase from "@sfajs/cloudbase";
-import { Dict } from "@sfajs/header";
+import { SfaCloudbase } from "@sfajs/cloudbase";
+import { Dict } from "@sfajs/core";
 
 const startup = new SfaCloudbase().use(async (ctx) => {
   ctx.res.setHeader("demo", "@sfajs/cloudbase");

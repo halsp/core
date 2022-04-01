@@ -1,8 +1,6 @@
 import "../src";
-import Dbhelper from "../src/Dbhelper";
-import SfaCloudbase from "../src";
-import { HttpContext } from "@sfajs/core";
-import { Dict } from "@sfajs/header";
+import { SfaCloudbase, Dbhelper } from "../src";
+import { HttpContext, Dict } from "@sfajs/core";
 
 test("dbhelper", async function () {
   let context!: HttpContext;

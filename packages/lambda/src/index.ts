@@ -1,9 +1,14 @@
 import { ICloudBaseConfig } from "@cloudbase/node-sdk";
-import { HttpContext, SfaRequest, Startup } from "@sfajs/core";
+import {
+  HttpContext,
+  SfaRequest,
+  Startup,
+  Dict,
+  HeadersDict,
+} from "@sfajs/core";
 import ResponseStruct from "./ResponseStruct";
 import tcb = require("@cloudbase/node-sdk");
 import Dbhelper from "./Dbhelper";
-import { Dict, HeadersDict } from "@sfajs/header";
 
 declare module "@sfajs/core" {
   interface SfaRequest {
@@ -14,7 +19,7 @@ declare module "@sfajs/core" {
 
 export { ResponseStruct, Dbhelper };
 
-export default class SfaCloudbase extends Startup {
+export class SfaCloudbase extends Startup {
   async run(
     event: Dict<unknown>,
     context: Dict<unknown>

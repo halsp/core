@@ -1,6 +1,6 @@
 import "../src";
 import tcb = require("@cloudbase/node-sdk");
-import SfaCloudbase from "../src";
+import { SfaCloudbase } from "../src";
 import { HttpContext } from "@sfajs/core";
 
 test("default config", async function () {

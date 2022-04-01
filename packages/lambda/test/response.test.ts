@@ -1,4 +1,4 @@
-import SfaCloudbase from "../src";
+import { SfaCloudbase } from "../src";
 
 test("default response", async function () {
   const res = await new SfaCloudbase().run({}, {});
