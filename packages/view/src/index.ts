@@ -3,11 +3,12 @@ import { Startup, HttpContext, Middleware, SfaResponse } from "@sfajs/core";
 import * as path from "path";
 import * as fs from "fs";
 import linq from "linq";
-import ViewsConfig, {
+import {
+  ViewsConfig,
   consolidate,
   Engine,
   RendererInterface,
-} from "./ViewsConfig";
+} from "./views-config";
 
 declare module "@sfajs/core" {
   interface Startup {
