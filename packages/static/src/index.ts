@@ -1,8 +1,10 @@
 import "@sfajs/core";
 import { Startup } from "@sfajs/core";
-import SingleStaticMiddleware from "./single-static-middleware";
+import { SingleStaticMiddleware } from "./single-static.middleware";
 import { SingleStaticConfig, StaticConfig } from "./static-config";
-import StaticMiddleware from "./static.middleware";
+import { StaticMiddleware } from "./static.middleware";
+
+export { SingleStaticConfig, StaticConfig };
 
 declare module "@sfajs/core" {
   interface Startup {
@@ -20,7 +22,7 @@ Startup.prototype.useStatic = function <T extends Startup>(
     };
   }
 
-  if (Object.keys(cfg).includes("file")) {
+  if (cfg.hasOwnProperty("file")) {
     this.add(() => new SingleStaticMiddleware(cfg as SingleStaticConfig));
   } else {
     this.add(() => new StaticMiddleware(cfg as StaticConfig));

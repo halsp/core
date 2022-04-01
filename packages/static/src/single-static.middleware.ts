@@ -3,7 +3,7 @@ import * as mime from "mime";
 import { SingleStaticConfig } from "./static-config";
 import { BaseMiddleware } from "./base.middleware";
 
-export default class SingleStaticMiddleware extends BaseMiddleware {
+export class SingleStaticMiddleware extends BaseMiddleware {
   constructor(readonly cfg: SingleStaticConfig) {
     super();
   }

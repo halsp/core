@@ -4,7 +4,7 @@ import * as mime from "mime";
 import { StaticConfig } from "./static-config";
 import { BaseMiddleware } from "./base.middleware";
 
-export default class StaticMiddleware extends BaseMiddleware {
+export class StaticMiddleware extends BaseMiddleware {
   constructor(readonly cfg: StaticConfig) {
     super();
   }

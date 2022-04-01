@@ -1,4 +1,4 @@
-interface Config {
+interface Config extends Object {
   encoding?: BufferEncoding;
   method?: string | string[];
 }
