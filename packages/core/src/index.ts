@@ -15,6 +15,7 @@ export {
   NumericalHeadersDict,
   HeaderValue,
   NumericalHeaderValue,
+  ObjectConstructor,
   isArrayEmpty,
   isFunction,
   isNil,

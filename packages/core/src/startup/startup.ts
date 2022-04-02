@@ -2,11 +2,17 @@ import { SfaResponse, HttpContext } from "../context";
 import { Middleware, LambdaMiddleware } from "../middlewares";
 import { Stream } from "stream";
 import * as mime from "mime-types";
-import { isPlainObject } from "../utils";
+import { isPlainObject, ObjectConstructor } from "../utils";
+
+type FuncMiddleware = (ctx: HttpContext) => Middleware;
 
 export abstract class Startup {
-  readonly #mds: ((ctx: HttpContext) => Middleware)[] = [];
+  readonly #mds: FuncMiddleware[] = [];
 
+  use(
+    builder: (ctx: HttpContext, next: () => Promise<void>) => Promise<void>
+  ): this;
+  use(builder: (ctx: HttpContext, next: () => Promise<void>) => void): this;
   use(
     builder:
       | ((ctx: HttpContext, next: () => Promise<void>) => Promise<void>)
@@ -16,11 +22,17 @@ export abstract class Startup {
     return this;
   }
 
-  add(md: ((ctx: HttpContext) => Middleware) | Middleware): this {
+  add(md: FuncMiddleware): this;
+  add(md: Middleware): this;
+  add(md: typeof Middleware): this;
+  add(md: FuncMiddleware | Middleware | typeof Middleware.constructor): this {
+    console.log("md", md);
     if (md instanceof Middleware) {
       this.#mds.push(() => md);
+    } else if (md.prototype) {
+      this.#mds.push(() => new (md as ObjectConstructor<Middleware>)());
     } else {
-      this.#mds.push(md);
+      this.#mds.push(md as FuncMiddleware);
     }
     return this;
   }

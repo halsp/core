@@ -12,3 +12,7 @@ export type NumericalHeadersDict = ReadonlyDict<NumericalHeaderValue>;
 
 export type QueryDict = Dict<string>;
 export type ReadonlyQueryDict = ReadonlyDict<string>;
+
+export type ObjectConstructor<T extends object = any> = {
+  new (...args: any[]): T;
+};
