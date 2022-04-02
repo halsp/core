@@ -1,6 +1,6 @@
 import "../src";
 import { TestStartup } from "@sfajs/core";
-import * as Koa from "koa";
+import Koa from "koa";
 import TransResponse from "../src/TransResponse";
 
 test("middleware pipe", async function () {

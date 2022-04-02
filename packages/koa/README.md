@@ -40,7 +40,7 @@ const res = await new TestStartup()
 ```TS
 import { TestStartup } from "@sfajs/core";
 import { Koa } from "@sfajs/koa";
-import * as cors from "koa-cors";
+import cors from "koa-cors";
 
 const res = await new TestStartup()
   .useKoa(

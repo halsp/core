@@ -1,9 +1,9 @@
 import "../src";
 import { TestStartup, SfaRequest, SfaResponse } from "@sfajs/core";
-import * as Koa from "koa";
-import * as request from "supertest";
-import * as path from "path";
-import * as http from "http";
+import Koa from "koa";
+import request from "supertest";
+import path from "path";
+import http from "http";
 
 test("streamingBody", async function () {
   let working = false;

@@ -1,6 +1,6 @@
 import "../src";
 import { TestStartup, SfaRequest } from "@sfajs/core";
-import * as Koa from "koa";
+import Koa from "koa";
 
 test("text", async function () {
   const res = await new TestStartup(new SfaRequest().setBody("sfa"))

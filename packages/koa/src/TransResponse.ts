@@ -1,4 +1,4 @@
-import * as http from "http";
+import http from "http";
 
 export default class TransResponse extends http.ServerResponse {
   #headers: NodeJS.Dict<http.OutgoingHttpHeader> = {};

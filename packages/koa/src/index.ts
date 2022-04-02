@@ -1,11 +1,11 @@
 import "@sfajs/core";
 import { Startup, SfaResponse, HttpContext } from "@sfajs/core";
-import * as Koa from "koa";
-import * as http from "http";
-import * as net from "net";
-import * as queryString from "query-string";
+import Koa from "koa";
+import http from "http";
+import net from "net";
+import queryString from "query-string";
 import TransResponse from "./TransResponse";
-import * as compose from "koa-compose";
+import compose from "koa-compose";
 
 interface SfaKoaOptions {
   streamingBody?: (sfaCtx: HttpContext) => NodeJS.ReadableStream;

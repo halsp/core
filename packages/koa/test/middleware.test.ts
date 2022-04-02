@@ -1,8 +1,8 @@
 import "../src";
 import { TestStartup, SfaRequest, SfaResponse } from "@sfajs/core";
-import * as Koa from "koa";
-import * as cors from "koa-cors";
-import * as Router from "@koa/router";
+import Koa from "koa";
+import cors from "koa-cors";
+import Router from "@koa/router";
 
 test("koa-cors", async function () {
   const res = await new TestStartup(new SfaRequest().setMethod("POST"))

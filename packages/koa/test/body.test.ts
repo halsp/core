@@ -1,6 +1,6 @@
 import "../src";
 import { TestStartup } from "@sfajs/core";
-import * as Koa from "koa";
+import Koa from "koa";
 
 test("default", async function () {
   const res = await new TestStartup().useKoa(new Koa()).run();
