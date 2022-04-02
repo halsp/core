@@ -1,6 +1,6 @@
 import http from "http";
 
-export default class TransResponse extends http.ServerResponse {
+export class TransResponse extends http.ServerResponse {
   #headers: NodeJS.Dict<http.OutgoingHttpHeader> = {};
   #status = 404;
 

@@ -4,7 +4,7 @@ import Koa from "koa";
 import http from "http";
 import net from "net";
 import queryString from "query-string";
-import TransResponse from "./TransResponse";
+import { TransResponse } from "./trans-response";
 import compose from "koa-compose";
 
 interface SfaKoaOptions {
