@@ -69,8 +69,11 @@ const startup = new TestStartup();
 startup.use(async (ctx) => {
   ctx.ok("sfa");
 });
+
 // Class middleware
 startup.add(() => new YourMiddleware());
+// OR
+startup.add(YourMiddleware);
 
 const res = await startup.run();
 ```
@@ -101,7 +104,7 @@ const res = await new TestStartup().add((ctx) => new YourMiddleware()).run();
 When using simple middleware, you don't need to write a separate middleware class, but in the underlying implementation, it will still be converted into ordinary class middleware for execution
 
 ```JS
-startup.use(async (ctx) => {
+startup.use((ctx) => {
   ctx.ok("sfa");
 });
 ```
