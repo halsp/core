@@ -1,38 +1,42 @@
 import { SfaResponse, HttpContext } from "../context";
-import { Middleware, LambdaMiddleware } from "../middlewares";
+import {
+  Middleware,
+  LambdaMiddleware,
+  LambdaMiddlewareBuilder,
+  LambdaMiddlewareBuilderAsync,
+} from "../middlewares";
 import { Stream } from "stream";
 import * as mime from "mime-types";
-import { isPlainObject, ObjectConstructor } from "../utils";
+import { isPlainObject } from "../utils";
 
 type FuncMiddleware = (ctx: HttpContext) => Middleware;
+type MiddlewareConstructor = {
+  new (...args: any[]): Middleware;
+};
+function isMiddlewareConstructor(md: any): md is MiddlewareConstructor {
+  return !!md.prototype;
+}
 
 export abstract class Startup {
   readonly #mds: FuncMiddleware[] = [];
 
-  use(
-    builder: (ctx: HttpContext, next: () => Promise<void>) => Promise<void>
-  ): this;
-  use(builder: (ctx: HttpContext, next: () => Promise<void>) => void): this;
-  use(
-    builder:
-      | ((ctx: HttpContext, next: () => Promise<void>) => Promise<void>)
-      | ((ctx: HttpContext, next: () => Promise<void>) => void)
-  ): this {
+  use(builder: LambdaMiddlewareBuilderAsync): this;
+  use(builder: LambdaMiddlewareBuilder): this;
+  use(builder: LambdaMiddlewareBuilderAsync | LambdaMiddlewareBuilder): this {
     this.#mds.push(() => new LambdaMiddleware(builder));
     return this;
   }
 
   add(md: FuncMiddleware): this;
   add(md: Middleware): this;
-  add(md: typeof Middleware): this;
-  add(md: FuncMiddleware | Middleware | typeof Middleware.constructor): this {
-    console.log("md", md);
+  add(md: MiddlewareConstructor): this;
+  add(md: FuncMiddleware | Middleware | MiddlewareConstructor): this {
     if (md instanceof Middleware) {
       this.#mds.push(() => md);
-    } else if (md.prototype) {
-      this.#mds.push(() => new (md as ObjectConstructor<Middleware>)());
+    } else if (isMiddlewareConstructor(md)) {
+      this.#mds.push(() => new md());
     } else {
-      this.#mds.push(md as FuncMiddleware);
+      this.#mds.push(md);
     }
     return this;
   }

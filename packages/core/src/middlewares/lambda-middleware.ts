@@ -1,11 +1,20 @@
 import { HttpContext } from "../context";
 import { Middleware } from "./middleware";
 
+export type LambdaMiddlewareBuilder = (
+  ctx: HttpContext,
+  next: () => Promise<void>
+) => void;
+export type LambdaMiddlewareBuilderAsync = (
+  ctx: HttpContext,
+  next: () => Promise<void>
+) => Promise<void>;
+
 export class LambdaMiddleware extends Middleware {
   constructor(
     private readonly builder:
-      | ((ctx: HttpContext, next: () => Promise<void>) => Promise<void>)
-      | ((ctx: HttpContext, next: () => Promise<void>) => void)
+      | LambdaMiddlewareBuilderAsync
+      | LambdaMiddlewareBuilder
   ) {
     super();
   }
