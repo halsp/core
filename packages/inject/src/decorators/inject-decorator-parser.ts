@@ -1,9 +1,5 @@
 import { HttpContext, isFunction, ObjectConstructor } from "@sfajs/core";
-import {
-  DECORATOR_SCOPED_BAG,
-  MAP_BAG,
-  METADATA,
-} from "../constant";
+import { DECORATOR_SCOPED_BAG, MAP_BAG, METADATA } from "../constant";
 import { InjectDecoratorRecordItem } from "./inject-decorator-record-item";
 import { InjectTypes } from "../inject-types";
 import "reflect-metadata";
@@ -32,10 +28,10 @@ export class InjectDecoratorParser<T extends object = any> {
 
   public parse(): T {
     const properties =
-      (Reflect.getMetadata(
-        METADATA,
-        this.injectConstructor.prototype
-      ) as (string | symbol)[]) ?? [];
+      (Reflect.getMetadata(METADATA, this.injectConstructor.prototype) as (
+        | string
+        | symbol
+      )[]) ?? [];
     properties.forEach((property) => {
       this.setProperty(property);
     });
@@ -70,9 +66,8 @@ export class InjectDecoratorParser<T extends object = any> {
     ) {
       let records: InjectDecoratorRecordItem[];
       if (existMap.type == InjectTypes.Scoped) {
-        records = this.ctx.bag<InjectDecoratorRecordItem[]>(
-          DECORATOR_SCOPED_BAG
-        );
+        records =
+          this.ctx.bag<InjectDecoratorRecordItem[]>(DECORATOR_SCOPED_BAG);
       } else {
         records = InjectDecoratorParser.singletonInject;
       }
