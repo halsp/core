@@ -12,19 +12,19 @@ class TestMiddleware extends Middleware {
 
 test("hook", async function () {
   const startup = new TestStartup()
-    .hook((md) => {
+    .hook((ctx, md) => {
       if (md instanceof TestMiddleware) {
         md.count++;
       }
     })
     .add(TestMiddleware) // 1 hook
-    .hook((md) => {
+    .hook((ctx, md) => {
       if (md instanceof TestMiddleware) {
         md.count++;
       }
     })
     .add(TestMiddleware) // 2 hooks
-    .hook((md) => {
+    .hook((ctx, md) => {
       if (md instanceof TestMiddleware) {
         md.count++;
       }

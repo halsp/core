@@ -1,8 +1,11 @@
 import { HttpContext, ResultHandler } from "../context";
 import { HttpException } from "../exceptions";
 
-export type MiddlewareHook = (md: Middleware) => void;
-export type MiddlewareHookAsync = (md: Middleware) => Promise<void>;
+export type MiddlewareHook = (ctx: HttpContext, md: Middleware) => void;
+export type MiddlewareHookAsync = (
+  ctx: HttpContext,
+  md: Middleware
+) => Promise<void>;
 export type MdHook = MiddlewareHook | MiddlewareHookAsync;
 
 export type FuncMiddleware = (ctx: HttpContext) => Middleware;
@@ -53,7 +56,7 @@ export abstract class Middleware extends ResultHandler {
   #execNextHoods = async (nextMd: Middleware) => {
     const hooks = this.ctx.bag<MdHook[]>(MIDDLEWARE_HOOK_BAG);
     for (const hook of hooks ?? []) {
-      await hook(nextMd);
+      await hook(this.ctx, nextMd);
     }
   };
 }
