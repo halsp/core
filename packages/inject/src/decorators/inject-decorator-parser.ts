@@ -1,9 +1,13 @@
 import { HttpContext, isFunction, ObjectConstructor } from "@sfajs/core";
-import { INJECT_DECORATOR_SCOPED_BAG, INJECT_METADATA } from "../constant";
+import {
+  INJECT_DECORATOR_SCOPED_BAG,
+  INJECT_MAP_BAG,
+  INJECT_METADATA,
+} from "../constant";
 import { InjectDecoratorRecordItem } from "./inject-decorator-record-item";
-import { InjectDecoratorValue } from "./inject-decorator-value";
-import { InjectDecoratorTypes } from "./inject-decorator-types";
+import { InjectTypes } from "../inject-types";
 import "reflect-metadata";
+import { InjectMap } from "../inject-map";
 
 export type InjectType<T extends object = any> = T | ObjectConstructor<T>;
 
@@ -27,34 +31,45 @@ export class InjectDecoratorParser<T extends object = any> {
   private readonly injectConstructor: ObjectConstructor<T>;
 
   public parse(): T {
-    const decs =
+    const properties =
       (Reflect.getMetadata(
         INJECT_METADATA,
         this.injectConstructor.prototype
-      ) as InjectDecoratorValue[]) ?? [];
-    decs.forEach((dec) => {
-      this.setProperty(dec);
+      ) as (string | symbol)[]) ?? [];
+    properties.forEach((property) => {
+      this.setProperty(property);
     });
     return this.obj;
   }
 
-  private setProperty(dec: InjectDecoratorValue) {
-    this.obj[dec.propertyKey] = this.getPropertyValue(dec);
+  private setProperty(property: string | symbol) {
+    this.obj[property] = this.getPropertyValue(property);
   }
 
-  private getPropertyValue(dec: InjectDecoratorValue) {
+  private getPropertyValue(property: string | symbol) {
     const constr = Reflect.getMetadata(
       "design:type",
       this.obj,
-      dec.propertyKey
+      property
     ) as ObjectConstructor<T>;
 
+    const obj = this.createObjectByConstructor(constr);
+    return new InjectDecoratorParser(this.ctx, obj).parse();
+  }
+
+  private createObjectByConstructor(constr: ObjectConstructor<T>): any {
+    const injectMaps = this.ctx.bag<InjectMap[]>(INJECT_MAP_BAG) ?? [];
+    const existMap = injectMaps.filter((map) => map.anestor == constr)[0];
+    if (!existMap) {
+      return new constr();
+    }
+
     if (
-      dec.type == InjectDecoratorTypes.Scoped ||
-      dec.type == InjectDecoratorTypes.Singleton
+      existMap.type == InjectTypes.Scoped ||
+      existMap.type == InjectTypes.Singleton
     ) {
       let records: InjectDecoratorRecordItem[];
-      if (dec.type == InjectDecoratorTypes.Scoped) {
+      if (existMap.type == InjectTypes.Scoped) {
         records = this.ctx.bag<InjectDecoratorRecordItem[]>(
           INJECT_DECORATOR_SCOPED_BAG
         );
@@ -68,7 +83,7 @@ export class InjectDecoratorParser<T extends object = any> {
       if (existInject) {
         return existInject.value;
       } else {
-        const obj = this.createObject(constr);
+        const obj = this.createPropertyObject(constr);
         records.push({
           injectConstructor: this.injectConstructor,
           value: obj,
@@ -76,11 +91,11 @@ export class InjectDecoratorParser<T extends object = any> {
         return obj;
       }
     } else {
-      return this.createObject(constr);
+      return this.createPropertyObject(constr);
     }
   }
 
-  private createObject(constr: ObjectConstructor<T>): any {
+  private createPropertyObject(constr: ObjectConstructor<T>): any {
     return new InjectDecoratorParser(this.ctx, new constr()).parse();
   }
 }

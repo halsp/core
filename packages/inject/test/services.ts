@@ -10,7 +10,7 @@ export class Service1 {
 }
 
 export class Service2 {
-  @Inject()
+  @Inject
   private readonly service1!: Service1;
 
   public invoke(): string {
