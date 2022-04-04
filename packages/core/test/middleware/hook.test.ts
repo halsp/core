@@ -18,7 +18,7 @@ test("hook", async function () {
       }
     })
     .add(TestMiddleware) // 1 hook
-    .hook((ctx, md) => {
+    .hookBefore((ctx, md) => {
       if (md instanceof TestMiddleware) {
         md.count++;
       }
@@ -27,6 +27,13 @@ test("hook", async function () {
     .hook((ctx, md) => {
       if (md instanceof TestMiddleware) {
         md.count++;
+      }
+    })
+    .hookAfter((ctx, md) => {
+      // executed but without effective
+      if (md instanceof TestMiddleware) {
+        md.count++;
+        ctx.setHeader("after", "1");
       }
     })
     .add(TestMiddleware) // 3 hooks
@@ -38,4 +45,5 @@ test("hook", async function () {
   expect(result.getHeader("h2")).toBe("2");
   expect(result.getHeader("h3")).toBe("3");
   expect(result.getHeader("h4")).toBeUndefined();
+  expect(result.getHeader("after")).toBe("1");
 });

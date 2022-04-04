@@ -9,6 +9,7 @@ import {
   MdHook,
   FuncMiddleware,
   HookMiddleware,
+  HookType,
 } from "../middlewares";
 import { Stream } from "stream";
 import * as mime from "mime-types";
@@ -45,11 +46,23 @@ export abstract class Startup {
     return this;
   }
 
-  hook(mh: MiddlewareHook): this;
-  hook(mh: MiddlewareHookAsync): this;
-  hook(mh: MdHook): this {
-    this.#mds.push(() => new HookMiddleware(mh));
+  hook(mh: MiddlewareHook, type?: HookType): this;
+  hook(mh: MiddlewareHookAsync, type?: HookType): this;
+  hook(mh: MdHook, type = HookType.Before): this {
+    this.#mds.push(() => new HookMiddleware(mh, type));
     return this;
+  }
+
+  hookBefore(mh: MiddlewareHook): this;
+  hookBefore(mh: MiddlewareHookAsync): this;
+  hookBefore(mh: MdHook): this {
+    return this.hook(mh, HookType.Before);
+  }
+
+  hookAfter(mh: MiddlewareHook): this;
+  hookAfter(mh: MiddlewareHookAsync): this;
+  hookAfter(mh: MdHook): this {
+    return this.hook(mh, HookType.After);
   }
 
   protected async invoke(ctx: HttpContext): Promise<SfaResponse> {

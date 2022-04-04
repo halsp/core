@@ -1,12 +1,6 @@
 import { HttpContext, ResultHandler } from "../context";
 import { HttpException } from "../exceptions";
-
-export type MiddlewareHook = (ctx: HttpContext, md: Middleware) => void;
-export type MiddlewareHookAsync = (
-  ctx: HttpContext,
-  md: Middleware
-) => Promise<void>;
-export type MdHook = MiddlewareHook | MiddlewareHookAsync;
+import { HookItem, HookType } from "./hook-item";
 
 export type FuncMiddleware = (ctx: HttpContext) => Middleware;
 
@@ -31,8 +25,9 @@ export abstract class Middleware extends ResultHandler {
     const nextMd = this.#mds[this.#index + 1](this.ctx);
     nextMd.init(this.ctx, this.#index + 1, this.#mds);
     try {
-      await this.#execNextHoods(nextMd);
+      await this.#execHoods(nextMd, HookType.Before);
       await nextMd.invoke();
+      await this.#execHoods(nextMd, HookType.After);
     } catch (err) {
       if (err instanceof HttpException && err.breakthrough) {
         throw err;
@@ -53,10 +48,10 @@ export abstract class Middleware extends ResultHandler {
     return this;
   }
 
-  #execNextHoods = async (nextMd: Middleware) => {
-    const hooks = this.ctx.bag<MdHook[]>(MIDDLEWARE_HOOK_BAG);
-    for (const hook of hooks ?? []) {
-      await hook(this.ctx, nextMd);
+  #execHoods = async (middleware: Middleware, type: HookType) => {
+    const hooks = this.ctx.bag<HookItem[]>(MIDDLEWARE_HOOK_BAG);
+    for (const hookItem of (hooks ?? []).filter((h) => h.type == type)) {
+      await hookItem.hook(this.ctx, middleware);
     }
   };
 }
