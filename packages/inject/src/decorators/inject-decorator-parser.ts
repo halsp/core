@@ -83,7 +83,7 @@ export class InjectDecoratorParser<T extends object = any> {
       if (existInject) {
         return existInject.value;
       } else {
-        const obj = this.createPropertyObject(constr);
+        const obj = this.createPropertyObject(existMap.target);
         records.push({
           injectConstructor: this.injectConstructor,
           value: obj,
@@ -91,7 +91,7 @@ export class InjectDecoratorParser<T extends object = any> {
         return obj;
       }
     } else {
-      return this.createPropertyObject(constr);
+      return this.createPropertyObject(existMap.target);
     }
   }
 

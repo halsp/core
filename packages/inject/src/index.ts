@@ -13,12 +13,12 @@ import { InjectMap } from "./inject-map";
 declare module "@sfajs/core" {
   interface Startup {
     useInject(): this;
-    inject<TAnestor extends object, TTarget extends object>(
+    inject<TAnestor extends object, TTarget extends TAnestor>(
       anestor: ObjectConstructor<TAnestor>,
       target: ObjectConstructor<TTarget>,
       type?: InjectTypes
     ): this;
-    inject<TAnestor extends object, TTarget extends object>(
+    inject<TAnestor extends object, TTarget extends TAnestor>(
       anestor: ObjectConstructor<TAnestor>,
       target: TTarget,
       type?: InjectTypes
@@ -35,7 +35,7 @@ Startup.prototype.useInject = function (): Startup {
 
 Startup.prototype.inject = function <
   TAnestor extends object,
-  TTarget extends object
+  TTarget extends TAnestor
 >(
   anestor: ObjectConstructor<TAnestor>,
   target: ObjectConstructor<TTarget> | TTarget,
