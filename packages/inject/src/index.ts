@@ -1,13 +1,8 @@
 import "@sfajs/core";
 import { Startup, ObjectConstructor } from "@sfajs/core";
-import { INJECT_MAP_BAG } from "./constant";
+import { DECORATOR_SCOPED_BAG, MAP_BAG } from "./constant";
 
-import {
-  Inject,
-  parseInject,
-  InjectTypes,
-  InjectDecoratorMiddleware,
-} from "./decorators";
+import { Inject, parseInject, InjectTypes } from "./decorators";
 import { InjectMap } from "./inject-map";
 
 declare module "@sfajs/core" {
@@ -27,7 +22,14 @@ declare module "@sfajs/core" {
 }
 
 Startup.prototype.useInject = function (): Startup {
-  this.add(InjectDecoratorMiddleware).hook((ctx, mh) => {
+  if ((this as any).useInjected) {
+    return this;
+  }
+  (this as any).useInjected = true;
+  this.use(async (ctx, next) => {
+    ctx.bag(DECORATOR_SCOPED_BAG, []);
+    await next();
+  }).hook((ctx, mh) => {
     parseInject(ctx, mh);
   });
   return this;
@@ -42,9 +44,9 @@ Startup.prototype.inject = function <
   type: InjectTypes = InjectTypes.Transient
 ): Startup {
   this.use(async (ctx, next) => {
-    const injectMaps = ctx.bag<InjectMap[]>(INJECT_MAP_BAG) ?? [];
+    const injectMaps = ctx.bag<InjectMap[]>(MAP_BAG) ?? [];
     injectMaps.push({ anestor, target, type });
-    ctx.bag(INJECT_MAP_BAG, injectMaps);
+    ctx.bag(MAP_BAG, injectMaps);
     await next();
   });
   return this;

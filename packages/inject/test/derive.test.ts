@@ -18,12 +18,11 @@ class TestMiddleware extends Middleware {
 }
 
 test(`derive`, async function () {
-  const startup = new TestStartup()
+  const res = await new TestStartup()
     .useInject()
     .inject(Service2, Service3)
-    .add(TestMiddleware);
-
-  const res = await startup.run(new SfaRequest());
+    .add(TestMiddleware)
+    .run();
 
   expect(res.status).toBe(200);
   expect(res.body).toEqual({

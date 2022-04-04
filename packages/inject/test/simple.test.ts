@@ -13,15 +13,20 @@ class TestMiddleware extends Middleware {
 
   async invoke(): Promise<void> {
     this.ok({
-      service1: this.service1.invoke(),
-      service11: this.service11.invoke(),
-      service2: this.service2.invoke(),
+      service1: this.service1?.invoke(),
+      service11: this.service11?.invoke(),
+      service2: this.service2?.invoke(),
     });
   }
 }
 
 test(`inject decorators`, async function () {
-  const res = await new TestStartup().useInject().add(TestMiddleware).run();
+  const res = await new TestStartup()
+    .useInject()
+    .useInject()
+    .add(TestMiddleware)
+    .run();
+  console.log("res.body", res.body);
   expect(res.status).toBe(200);
   expect(res.body).toEqual({
     service1: "service1",

@@ -1,8 +1,8 @@
 import { HttpContext, isFunction, ObjectConstructor } from "@sfajs/core";
 import {
-  INJECT_DECORATOR_SCOPED_BAG,
-  INJECT_MAP_BAG,
-  INJECT_METADATA,
+  DECORATOR_SCOPED_BAG,
+  MAP_BAG,
+  METADATA,
 } from "../constant";
 import { InjectDecoratorRecordItem } from "./inject-decorator-record-item";
 import { InjectTypes } from "../inject-types";
@@ -33,7 +33,7 @@ export class InjectDecoratorParser<T extends object = any> {
   public parse(): T {
     const properties =
       (Reflect.getMetadata(
-        INJECT_METADATA,
+        METADATA,
         this.injectConstructor.prototype
       ) as (string | symbol)[]) ?? [];
     properties.forEach((property) => {
@@ -58,7 +58,7 @@ export class InjectDecoratorParser<T extends object = any> {
   }
 
   private createObjectByConstructor(constr: ObjectConstructor<T>): any {
-    const injectMaps = this.ctx.bag<InjectMap[]>(INJECT_MAP_BAG) ?? [];
+    const injectMaps = this.ctx.bag<InjectMap[]>(MAP_BAG) ?? [];
     const existMap = injectMaps.filter((map) => map.anestor == constr)[0];
     if (!existMap) {
       return new constr();
@@ -71,7 +71,7 @@ export class InjectDecoratorParser<T extends object = any> {
       let records: InjectDecoratorRecordItem[];
       if (existMap.type == InjectTypes.Scoped) {
         records = this.ctx.bag<InjectDecoratorRecordItem[]>(
-          INJECT_DECORATOR_SCOPED_BAG
+          DECORATOR_SCOPED_BAG
         );
       } else {
         records = InjectDecoratorParser.singletonInject;

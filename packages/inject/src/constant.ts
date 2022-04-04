@@ -1,4 +1,3 @@
-export const INJECT_METADATA = "__injectMetadata__";
-export const INJECT_DECORATOR_SCOPED_BAG = "__injectDecoratorScopedBag__";
-export const ROUTER_CONFIG_BAG = "__routerConfigBag__";
-export const INJECT_MAP_BAG = "__injectMapBag__";
+export const METADATA = "__@sfajs/inject_metadata__";
+export const DECORATOR_SCOPED_BAG = "__@sfajs/inject_decoratorScopedBag__";
+export const MAP_BAG = "__@sfajs/inject_mapBag__";
