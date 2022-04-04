@@ -18,7 +18,7 @@ export { Action, MapItem, RouterConfig };
 
 declare module "@sfajs/core" {
   interface Startup {
-    useRouter<T extends this>(cfg?: RouterConfig): T;
+    useRouter(cfg?: RouterConfig): this;
   }
 
   interface SfaRequest {
@@ -31,9 +31,7 @@ declare module "@sfajs/core" {
   }
 }
 
-Startup.prototype.useRouter = function <T extends Startup>(
-  cfg: RouterConfig = {}
-): T {
+Startup.prototype.useRouter = function (cfg: RouterConfig = {}): Startup {
   cfg.dir =
     cfg.dir?.replace(/^\//, "").replace(/\/$/, "") ?? DEFAULT_ACTION_DIR;
   cfg.prefix = cfg.prefix?.replace(/^\//, "").replace(/\/$/, "") ?? "";
@@ -61,7 +59,7 @@ Startup.prototype.useRouter = function <T extends Startup>(
     return action;
   });
 
-  return this as T;
+  return this;
 };
 
 function parseRouter(ctx: HttpContext, cfg: RouterConfig): boolean {
