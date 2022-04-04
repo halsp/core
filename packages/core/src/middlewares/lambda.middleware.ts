@@ -20,9 +20,6 @@ export class LambdaMiddleware extends Middleware {
   }
 
   async invoke(): Promise<void> {
-    const result = this.builder(this.ctx, this.next.bind(this));
-    if (result instanceof Promise) {
-      await result;
-    }
+    await this.builder(this.ctx, this.next.bind(this));
   }
 }

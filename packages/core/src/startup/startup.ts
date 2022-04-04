@@ -4,12 +4,16 @@ import {
   LambdaMiddleware,
   LambdaMiddlewareBuilder,
   LambdaMiddlewareBuilderAsync,
+  MiddlewareHook,
+  MiddlewareHookAsync,
+  MdHook,
+  FuncMiddleware,
+  HookMiddleware,
 } from "../middlewares";
 import { Stream } from "stream";
 import * as mime from "mime-types";
 import { isPlainObject } from "../utils";
 
-type FuncMiddleware = (ctx: HttpContext) => Middleware;
 type MiddlewareConstructor = {
   new (...args: any[]): Middleware;
 };
@@ -38,6 +42,13 @@ export abstract class Startup {
     } else {
       this.#mds.push(md);
     }
+    return this;
+  }
+
+  hook(mh: MiddlewareHook): this;
+  hook(mh: MiddlewareHookAsync): this;
+  hook(mh: MdHook): this {
+    this.#mds.push(() => new HookMiddleware(mh));
     return this;
   }
 
