@@ -18,13 +18,13 @@ test("hook", async function () {
       }
     })
     .add(TestMiddleware) // 1 hook
-    .hookBefore((ctx, md) => {
+    .hook((ctx, md) => {
       if (md instanceof TestMiddleware) {
         md.count++;
       }
     })
     .add(TestMiddleware) // 2 hooks
-    .hook((ctx, md) => {
+    .hookBefore((ctx, md) => {
       if (md instanceof TestMiddleware) {
         md.count++;
       }

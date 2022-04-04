@@ -121,10 +121,16 @@ startup.use(async (ctx, next) => {
 
 ## 中间件钩子
 
-中间件钩子可以在中间件被执行前，运行指定的代码
+中间件钩子可以在中间件被执行前或执行完成后，运行指定的代码
 
 - 钩子本质也会被转换为中间件执行
 - 钩子只会作用于其后的中间件
+
+钩子有三种添加方式：
+
+- `startup.hookBefore`：一个钩子参数，添加中间件执行之前的钩子
+- `startup.hookAfter`：一个钩子参数，添加中间件执行之后的钩子
+- `startup.hook`：两个参数，第一个参数是钩子，第二个可选参数是钩子类型，默认为 `Before`
 
 ```TS
   import { Middleware, TestStartup } from "@sfajs/core";
@@ -142,7 +148,13 @@ startup.use(async (ctx, next) => {
       }
     })
     .add(TestMiddleware) // 2 hooks
-    .hook((md) => {
+    .hookBefore((md) => {
+      if (md instanceof TestMiddleware) {
+        md.count++;
+      }
+    })
+    .hookAfter((ctx, md) => {
+      // executed but without effective
       if (md instanceof TestMiddleware) {
         md.count++;
       }
