@@ -1,5 +1,6 @@
-import { HookItem, HookType, MdHook } from "./hook-item";
-import { Middleware, MIDDLEWARE_HOOK_BAG } from "./middleware";
+import { HookItem, HookType } from "./hook-item";
+import { Middleware } from "./middleware";
+import { MdHook, MIDDLEWARE_HOOK_BAG } from "./utils";
 
 export class HookMiddleware extends Middleware {
   constructor(private readonly mh: MdHook, private readonly type: HookType) {

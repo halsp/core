@@ -1,48 +1,48 @@
 import { SfaResponse, HttpContext } from "../context";
 import {
   Middleware,
-  LambdaMiddleware,
-  LambdaMiddlewareBuilder,
-  LambdaMiddlewareBuilderAsync,
   MiddlewareHook,
   MiddlewareHookAsync,
   MdHook,
-  FuncMiddleware,
   HookMiddleware,
   HookType,
+  MiddlewareItem,
+  MiddlewareConstructor,
+  LambdaMiddleware,
 } from "../middlewares";
 import { Stream } from "stream";
 import * as mime from "mime-types";
 import { isPlainObject } from "../utils";
-
-type MiddlewareConstructor = {
-  new (...args: any[]): Middleware;
-};
-function isMiddlewareConstructor(md: any): md is MiddlewareConstructor {
-  return !!md.prototype;
-}
+import { createMiddleware } from "../middlewares/middleware-creater";
 
 export abstract class Startup {
-  readonly #mds: FuncMiddleware[] = [];
+  readonly #mds: MiddlewareItem[] = [];
 
-  use(builder: LambdaMiddlewareBuilderAsync): this;
-  use(builder: LambdaMiddlewareBuilder): this;
-  use(builder: LambdaMiddlewareBuilderAsync | LambdaMiddlewareBuilder): this {
-    this.#mds.push(() => new LambdaMiddleware(builder));
+  use(lambda: (ctx: HttpContext) => void): this;
+  use(
+    lambda: (ctx: HttpContext, next: () => Promise<void>) => Promise<void>
+  ): this;
+  use(
+    lambda:
+      | ((ctx: HttpContext) => void)
+      | ((ctx: HttpContext, next: () => Promise<void>) => Promise<void>)
+  ): this {
+    this.#mds.push(() => new LambdaMiddleware(lambda));
     return this;
   }
 
-  add(md: FuncMiddleware): this;
+  add(builder: (ctx: HttpContext) => Middleware): this;
+  add(builder: (ctx: HttpContext) => Promise<Middleware>): this;
   add(md: Middleware): this;
   add(md: MiddlewareConstructor): this;
-  add(md: FuncMiddleware | Middleware | MiddlewareConstructor): this {
-    if (md instanceof Middleware) {
-      this.#mds.push(() => md);
-    } else if (isMiddlewareConstructor(md)) {
-      this.#mds.push(() => new md());
-    } else {
-      this.#mds.push(md);
-    }
+  add(
+    md:
+      | ((ctx: HttpContext) => Middleware)
+      | ((ctx: HttpContext) => Promise<Middleware>)
+      | Middleware
+      | MiddlewareConstructor
+  ): this {
+    this.#mds.push(md);
     return this;
   }
 
@@ -70,7 +70,7 @@ export abstract class Startup {
       return ctx.res;
     }
 
-    const md = this.#mds[0](ctx);
+    const md = await createMiddleware(ctx, this.#mds[0]);
     try {
       await (md as any).init(ctx, 0, this.#mds).invoke();
     } catch (err) {

@@ -1,10 +1,8 @@
 import { HttpContext, ResultHandler } from "../context";
 import { HttpException } from "../exceptions";
-import { HookItem, HookType } from "./hook-item";
-
-export type FuncMiddleware = (ctx: HttpContext) => Middleware;
-
-export const MIDDLEWARE_HOOK_BAG = "__@sfajs/core_middlewareHooksBag__";
+import { HookType } from "./hook-item";
+import { createMiddleware } from "./middleware-creater";
+import { execHoods, MiddlewareItem } from "./utils";
 
 export abstract class Middleware extends ResultHandler {
   constructor() {
@@ -12,7 +10,7 @@ export abstract class Middleware extends ResultHandler {
   }
 
   #index!: number;
-  #mds!: readonly FuncMiddleware[];
+  #mds!: readonly MiddlewareItem[];
 
   #ctx!: HttpContext;
   public get ctx(): HttpContext {
@@ -22,12 +20,15 @@ export abstract class Middleware extends ResultHandler {
   abstract invoke(): Promise<void>;
   protected async next(): Promise<void> {
     if (this.#mds.length <= this.#index + 1) return;
-    const nextMd = this.#mds[this.#index + 1](this.ctx);
+    const nextMd = await createMiddleware(
+      this.#ctx,
+      this.#mds[this.#index + 1]
+    );
     nextMd.init(this.ctx, this.#index + 1, this.#mds);
     try {
-      await this.#execHoods(nextMd, HookType.Before);
+      await execHoods(this.ctx, nextMd, HookType.Before);
       await nextMd.invoke();
-      await this.#execHoods(nextMd, HookType.After);
+      await execHoods(this.ctx, nextMd, HookType.After);
     } catch (err) {
       if (err instanceof HttpException && err.breakthrough) {
         throw err;
@@ -40,18 +41,11 @@ export abstract class Middleware extends ResultHandler {
   private init(
     ctx: HttpContext,
     index: number,
-    mds: readonly FuncMiddleware[]
+    mds: readonly MiddlewareItem[]
   ): this {
     this.#mds = mds;
     this.#ctx = ctx;
     this.#index = index;
     return this;
   }
-
-  #execHoods = async (middleware: Middleware, type: HookType) => {
-    const hooks = this.ctx.bag<HookItem[]>(MIDDLEWARE_HOOK_BAG);
-    for (const hookItem of (hooks ?? []).filter((h) => h.type == type)) {
-      await hookItem.hook(this.ctx, middleware);
-    }
-  };
 }
