@@ -3,3 +3,4 @@ dist
 sfa-router.map
 package-lock.json
 yarn.lock
+pnpm-lock.yaml
