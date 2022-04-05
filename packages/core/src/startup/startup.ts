@@ -7,11 +7,11 @@ import {
   MiddlewareItem,
   MiddlewareConstructor,
   LambdaMiddleware,
+  createMiddleware,
 } from "../middlewares";
 import { Stream } from "stream";
 import * as mime from "mime-types";
 import { isPlainObject, ObjectConstructor } from "../utils";
-import { createMiddleware } from "../middlewares/middleware-creater";
 
 export abstract class Startup {
   readonly #mds: MiddlewareItem[] = [];

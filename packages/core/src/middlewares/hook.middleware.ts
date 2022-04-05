@@ -1,7 +1,23 @@
 import { HttpContext } from "../context";
-import { HookItem, HookType, MdHook } from "./hook-item";
-import { Middleware } from "./middleware";
-import { MiddlewareConstructor, MIDDLEWARE_HOOK_BAG } from "./utils";
+import { Middleware, MiddlewareConstructor } from "./middleware";
+
+const MIDDLEWARE_HOOK_BAG = "__@sfajs/core_middlewareHooksBag__";
+
+export type MdHook<T extends Middleware | MiddlewareConstructor = any> = (
+  ctx: HttpContext,
+  md: T
+) => void | Promise<void> | Middleware | Promise<Middleware>;
+
+export enum HookType {
+  Before,
+  After,
+  Constructor,
+}
+
+export interface HookItem {
+  hook: MdHook;
+  type: HookType;
+}
 
 export class HookMiddleware extends Middleware {
   constructor(private readonly mh: MdHook, private readonly type: HookType) {
