@@ -1,5 +1,10 @@
 import { HttpContext, isFunction, ObjectConstructor } from "@sfajs/core";
-import { DECORATOR_SCOPED_BAG, MAP_BAG, METADATA } from "./constant";
+import {
+  CLASS_METADATA,
+  DECORATOR_SCOPED_BAG,
+  MAP_BAG,
+  PROPERTY_METADATA,
+} from "./constant";
 import { InjectType } from "./inject-type";
 import "reflect-metadata";
 import { InjectMap } from "./inject-map";
@@ -12,6 +17,8 @@ type InjectDecoratorRecordItem = {
 };
 
 class InjectDecoratorParser<T extends object = any> {
+  private static readonly singletonInject: InjectDecoratorRecordItem[] = [];
+
   constructor(
     private readonly ctx: HttpContext,
     private readonly target: InjectTarget<T>
@@ -20,30 +27,22 @@ class InjectDecoratorParser<T extends object = any> {
     this.injectConstructor = isConstructor
       ? (this.target as ObjectConstructor<T>)
       : ((this.target as T).constructor as ObjectConstructor<T>);
-    this.obj = isConstructor
-      ? new (this.target as ObjectConstructor<T>)()
-      : (this.target as T);
+    this.obj = isConstructor ? this.createObject() : (this.target as T);
   }
-
-  private static readonly singletonInject: InjectDecoratorRecordItem[] = [];
 
   private readonly obj: T;
   private readonly injectConstructor: ObjectConstructor<T>;
 
   public parse(): T {
     const properties =
-      (Reflect.getMetadata(METADATA, this.injectConstructor.prototype) as (
-        | string
-        | symbol
-      )[]) ?? [];
+      (Reflect.getMetadata(
+        PROPERTY_METADATA,
+        this.injectConstructor.prototype
+      ) as (string | symbol)[]) ?? [];
     properties.forEach((property) => {
-      this.setProperty(property);
+      this.obj[property] = this.getPropertyValue(property);
     });
     return this.obj;
-  }
-
-  private setProperty(property: string | symbol) {
-    this.obj[property] = this.getPropertyValue(property);
   }
 
   private getPropertyValue(property: string | symbol) {
@@ -53,15 +52,10 @@ class InjectDecoratorParser<T extends object = any> {
       property
     ) as ObjectConstructor<T>;
 
-    const obj = this.createObjectByConstructor(constr);
-    return new InjectDecoratorParser(this.ctx, obj).parse();
-  }
-
-  private createObjectByConstructor(constr: ObjectConstructor<T>): any {
     const injectMaps = this.ctx.bag<InjectMap[]>(MAP_BAG) ?? [];
     const existMap = injectMaps.filter((map) => map.anestor == constr)[0];
     if (!existMap) {
-      return new constr();
+      return parseInject(this.ctx, constr);
     }
 
     if (
@@ -82,7 +76,7 @@ class InjectDecoratorParser<T extends object = any> {
       if (existInject) {
         return existInject.value;
       } else {
-        const obj = this.createPropertyObject(existMap.target);
+        const obj = parseInject(this.ctx, existMap.target);
         records.push({
           injectConstructor: this.injectConstructor,
           value: obj,
@@ -90,12 +84,16 @@ class InjectDecoratorParser<T extends object = any> {
         return obj;
       }
     } else {
-      return this.createPropertyObject(existMap.target);
+      return parseInject(this.ctx, existMap.target);
     }
   }
 
-  private createPropertyObject(constr: ObjectConstructor<T>): any {
-    return new InjectDecoratorParser(this.ctx, new constr()).parse();
+  private createObject(): T {
+    const target = this.target as ObjectConstructor<T>;
+    const providers: ObjectConstructor[] =
+      Reflect.getMetadata(CLASS_METADATA, target) ?? [];
+    const args = providers.map((provider) => parseInject(this.ctx, provider));
+    return new target(...args);
   }
 }
 

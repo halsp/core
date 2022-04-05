@@ -26,7 +26,6 @@ test(`inject decorators`, async function () {
     .useInject()
     .add(TestMiddleware)
     .run();
-  console.log("res.body", res.body);
   expect(res.status).toBe(200);
   expect(res.body).toEqual({
     service1: "service1",
