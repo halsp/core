@@ -4,7 +4,7 @@ import { HookItem, HookType } from "./hook-item";
 
 export type FuncMiddleware = (ctx: HttpContext) => Middleware;
 
-export const MIDDLEWARE_HOOK_BAG = "__middlewareHooks__";
+export const MIDDLEWARE_HOOK_BAG = "__@sfajs/core_middlewareHooksBag__";
 
 export abstract class Middleware extends ResultHandler {
   constructor() {
