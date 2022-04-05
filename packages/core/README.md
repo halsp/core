@@ -135,43 +135,53 @@ startup.hook((ctx, md) => {}, HookType)
 1. 钩子回调函数，有两个参数
    - 参数 1：管道 HttpContext 对象
    - 参数 2：中间件对象或中间件构造函数
-     - 如果钩子的类型为 `Constructor`，则参数为中间件构造函数
-     - 如果钩子类型为 `Before` 或 `After`，则参数为中间件对象
+     - 如果钩子类型为 `Constructor`，则参数为中间件构造函数
+     - 如果钩子类型不为 `Constructor`，则参数为中间件对象
    - 返回值：
-     - 如果钩子的类型为 `Constructor`，则需要返回中间件对象
-     - 如果钩子类型为 `Before` 或 `After`，则没有返回值
-1. 钩子类型，有三种钩子
-   - `Before`：在中间件执行之前执行
-   - `After`：在中间件执行之后执行，即 `next` 之后
-   - `Constructor`：用于构造中间件，可以动态使用中间件
+     - 如果钩子类型为 `Constructor`，则需要返回中间件对象
+     - 如果钩子类型不为 `Constructor`，则没有返回值
+1. 钩子类型，有以下几种钩子
+   - `BeforeInvoke`：在中间件执行之前执行
+   - `AfterInvoke`：在中间件执行之后执行，即 `next` 之后
+   - `BeforeNext`：在中间件 `next` 执行前执行，如果在中间件中没有调用 `next`，将不触发这种钩子
+   - `Constructor`：用于构造中间件，利用这种钩子可以动态使用中间件。但注册的中间件，必须是中间件的构造器，即 `startup.add(YourMiddleware)` 的方式
 
 ```TS
   import { Middleware, TestStartup } from "@sfajs/core";
 
   const startup = new TestStartup()
     .hook((md) => {
+      // 1 before hook
       if (md instanceof TestMiddleware) {
         md.count++;
       }
     })
-    .add(TestMiddleware) // 1 hook
+    .add(TestMiddleware)
     .hook((md) => {
+      // 2 before hook
       if (md instanceof TestMiddleware) {
         md.count++;
       }
     })
-    .add(TestMiddleware) // 2 hooks
+    .add(TestMiddleware)
     .hook((md) => {
+      // 3 before hook
       if (md instanceof TestMiddleware) {
         md.count++;
       }
     })
-    // executed but without effective
     .hook((ctx, md) => {
+      // AfterInvoke: executed but without effective
       if (md instanceof TestMiddleware) {
         md.count++;
       }
-    }, HookType.After) // 3 hooks
+    }, HookType.AfterInvoke)
+    .hook((ctx, md) => {
+      // BeforeNext: executed before next
+      if (md instanceof TestMiddleware) {
+        md.count++;
+      }
+    }, HookType.BeforeNext)
     .add(TestMiddleware)
     .use((ctx) => ctx.ok());
 ```
