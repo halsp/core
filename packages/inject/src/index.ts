@@ -4,7 +4,7 @@ import { DECORATOR_SCOPED_BAG, MAP_BAG } from "./constant";
 import { Inject } from "./decorators";
 import { InjectMap } from "./inject-map";
 import { parseInject } from "./inject-parser";
-import { InjectTypes } from "./inject-types";
+import { InjectType } from "./inject-type";
 
 declare module "@sfajs/core" {
   interface Startup {
@@ -12,12 +12,12 @@ declare module "@sfajs/core" {
     inject<TAnestor extends object, TTarget extends TAnestor>(
       anestor: ObjectConstructor<TAnestor>,
       target: ObjectConstructor<TTarget>,
-      type?: InjectTypes
+      type?: InjectType
     ): this;
     inject<TAnestor extends object, TTarget extends TAnestor>(
       anestor: ObjectConstructor<TAnestor>,
       target: TTarget,
-      type?: InjectTypes
+      type?: InjectType
     ): this;
   }
 }
@@ -42,7 +42,7 @@ Startup.prototype.inject = function <
 >(
   anestor: ObjectConstructor<TAnestor>,
   target: ObjectConstructor<TTarget> | TTarget,
-  type: InjectTypes = InjectTypes.Transient
+  type = InjectType.Transient
 ): Startup {
   this.use(async (ctx, next) => {
     const injectMaps = ctx.bag<InjectMap[]>(MAP_BAG) ?? [];
@@ -53,4 +53,4 @@ Startup.prototype.inject = function <
   return this;
 };
 
-export { Inject, parseInject, InjectTypes };
+export { Inject, parseInject, InjectType };

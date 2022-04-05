@@ -1,7 +1,7 @@
 import { Middleware, SfaRequest, TestStartup } from "@sfajs/core";
 import "../src";
 import { Service1, Service2 } from "./services";
-import { Inject, InjectTypes } from "../src";
+import { Inject, InjectType } from "../src";
 
 class TestMiddleware extends Middleware {
   @Inject
@@ -20,7 +20,7 @@ class TestMiddleware extends Middleware {
   }
 }
 
-function runTest(type: InjectTypes) {
+function runTest(type: InjectType) {
   test(`inject type ${type}`, async function () {
     const startup = new TestStartup()
       .useInject()
@@ -32,23 +32,23 @@ function runTest(type: InjectTypes) {
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual({
-      singleton1: type == InjectTypes.Transient ? 1 : 4,
-      singleton2: type == InjectTypes.Transient ? 3 : 4,
+      singleton1: type == InjectType.Transient ? 1 : 4,
+      singleton2: type == InjectType.Transient ? 3 : 4,
     });
 
     res = await startup.run(new SfaRequest());
     expect(res.status).toBe(200);
-    if (type == InjectTypes.Transient) {
+    if (type == InjectType.Transient) {
       expect(res.body).toEqual({
         singleton1: 1,
         singleton2: 3,
       });
-    } else if (type == InjectTypes.Scoped) {
+    } else if (type == InjectType.Scoped) {
       expect(res.body).toEqual({
         singleton1: 4,
         singleton2: 4,
       });
-    } else if (type == InjectTypes.Singleton) {
+    } else if (type == InjectType.Singleton) {
       expect(res.body).toEqual({
         singleton1: 8,
         singleton2: 8,
@@ -57,6 +57,6 @@ function runTest(type: InjectTypes) {
   });
 }
 
-runTest(InjectTypes.Scoped);
-runTest(InjectTypes.Singleton);
-runTest(InjectTypes.Transient);
+runTest(InjectType.Scoped);
+runTest(InjectType.Singleton);
+runTest(InjectType.Transient);

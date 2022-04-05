@@ -1,4 +1,4 @@
-export enum InjectTypes {
+export enum InjectType {
   Singleton,
   Scoped,
   Transient,

@@ -1,6 +1,6 @@
 import { HttpContext, isFunction, ObjectConstructor } from "@sfajs/core";
 import { DECORATOR_SCOPED_BAG, MAP_BAG, METADATA } from "./constant";
-import { InjectTypes } from "./inject-types";
+import { InjectType } from "./inject-type";
 import "reflect-metadata";
 import { InjectMap } from "./inject-map";
 
@@ -65,11 +65,11 @@ class InjectDecoratorParser<T extends object = any> {
     }
 
     if (
-      existMap.type == InjectTypes.Scoped ||
-      existMap.type == InjectTypes.Singleton
+      existMap.type == InjectType.Scoped ||
+      existMap.type == InjectType.Singleton
     ) {
       let records: InjectDecoratorRecordItem[];
-      if (existMap.type == InjectTypes.Scoped) {
+      if (existMap.type == InjectType.Scoped) {
         records =
           this.ctx.bag<InjectDecoratorRecordItem[]>(DECORATOR_SCOPED_BAG);
       } else {
