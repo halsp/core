@@ -1,6 +1,6 @@
 import "@sfajs/core";
 import { Startup } from "@sfajs/core";
-import { parseReq } from "./req-parser";
+import { parseReqDeco } from "./req-deco-parser";
 
 export { Query, Body, Param, Header } from "./decorators";
 
@@ -16,9 +16,9 @@ Startup.prototype.useReqParse = function (): Startup {
   }
   (this as any).useReqParsed = true;
   this.hook((ctx, mh) => {
-    parseReq(ctx, mh);
+    parseReqDeco(ctx, mh);
   });
   return this;
 };
 
-export { parseReq };
+export { parseReqDeco };

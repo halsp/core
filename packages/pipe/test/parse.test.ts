@@ -1,6 +1,6 @@
 import { ReadonlyDict, TestStartup } from "@sfajs/core";
 import "../src";
-import { Header, Query, Param, Body, parseReq } from "../src";
+import { Header, Query, Param, Body, parseReqDeco } from "../src";
 import { expectBody, getTestRequest } from "./TestMiddleware";
 
 class TestService {
@@ -35,7 +35,7 @@ class TestService {
 test(`object`, async function () {
   const res = await new TestStartup(getTestRequest())
     .use(async (ctx) => {
-      const obj = parseReq(ctx, new TestService());
+      const obj = parseReqDeco(ctx, new TestService());
       return ctx.ok(obj.invoke());
     })
     .run();
@@ -46,7 +46,7 @@ test(`object`, async function () {
 test(`constructor`, async function () {
   const res = await new TestStartup(getTestRequest())
     .use(async (ctx) => {
-      const obj = parseReq(ctx, TestService);
+      const obj = parseReqDeco(ctx, TestService);
       return ctx.ok(obj.invoke());
     })
     .run();
@@ -59,7 +59,7 @@ test(`without decorator`, async function () {
 
   const res = await new TestStartup(getTestRequest())
     .use(async (ctx) => {
-      parseReq(ctx, TestService2);
+      parseReqDeco(ctx, TestService2);
       return ctx.ok();
     })
     .run();

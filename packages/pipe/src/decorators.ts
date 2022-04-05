@@ -1,15 +1,14 @@
 import "reflect-metadata";
 import { REQ_PARAMS_METADATA } from "./constant";
-import { ReqParseType, ReqParseItem } from "./req-parse-item";
+import { ReqDecoType, ReqDecoItem } from "./req-deco-item";
 
 const createParamDecorator =
-  (type: ReqParseType, property?: string): PropertyDecorator =>
+  (type: ReqDecoType, property?: string): PropertyDecorator =>
   (target: any, propertyKey: string | symbol) => {
     const decs =
-      (Reflect.getMetadata(REQ_PARAMS_METADATA, target) as ReqParseItem[]) ??
-      [];
+      (Reflect.getMetadata(REQ_PARAMS_METADATA, target) as ReqDecoItem[]) ?? [];
 
-    decs.push(<ReqParseItem>{
+    decs.push(<ReqDecoItem>{
       propertyKey,
       type,
       property,
@@ -18,17 +17,17 @@ const createParamDecorator =
   };
 
 export function Query(property?: string) {
-  return createParamDecorator(ReqParseType.Query, property);
+  return createParamDecorator(ReqDecoType.Query, property);
 }
 
 export function Body(property?: string) {
-  return createParamDecorator(ReqParseType.Body, property);
+  return createParamDecorator(ReqDecoType.Body, property);
 }
 
 export function Param(property?: string) {
-  return createParamDecorator(ReqParseType.Param, property);
+  return createParamDecorator(ReqDecoType.Param, property);
 }
 
 export function Header(property?: string) {
-  return createParamDecorator(ReqParseType.Header, property);
+  return createParamDecorator(ReqDecoType.Header, property);
 }

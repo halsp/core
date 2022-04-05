@@ -5,11 +5,11 @@ import {
   isFunction,
 } from "@sfajs/core";
 import { REQ_PARAMS_METADATA } from "./constant";
-import { ReqParseType, ReqParseItem } from "./req-parse-item";
+import { ReqDecoType, ReqDecoItem } from "./req-deco-item";
 
 export type ReqParseTarget<T extends object = any> = T | ObjectConstructor<T>;
 
-export class ReqParser<T extends object = any> {
+export class ReqDecoParser<T extends object = any> {
   constructor(
     private readonly ctx: HttpContext,
     private readonly target: ReqParseTarget<T>
@@ -31,31 +31,31 @@ export class ReqParser<T extends object = any> {
       (Reflect.getMetadata(
         REQ_PARAMS_METADATA,
         this.objConstructor.prototype
-      ) as ReqParseItem[]) ?? [];
+      ) as ReqDecoItem[]) ?? [];
     decs.forEach((dec) => {
       this.parseAction(dec);
     });
     return this.obj;
   }
 
-  private parseAction(dec: ReqParseItem) {
+  private parseAction(dec: ReqDecoItem) {
     switch (dec.type) {
-      case ReqParseType.Query:
+      case ReqDecoType.Query:
         this.parseProperty(dec, this.ctx.req.query);
         break;
-      case ReqParseType.Param:
+      case ReqDecoType.Param:
         this.parseProperty(dec, (this.ctx.req as any).params);
         break;
-      case ReqParseType.Header:
+      case ReqDecoType.Header:
         this.parseProperty(dec, this.ctx.req.headers);
         break;
-      case ReqParseType.Body:
+      case ReqDecoType.Body:
         this.parseProperty(dec, this.ctx.req.body);
         break;
     }
   }
 
-  private parseProperty(dec: ReqParseItem, val: object) {
+  private parseProperty(dec: ReqDecoItem, val: object) {
     if (!dec.property) {
       this.obj[dec.propertyKey] = val ?? {};
     } else {
@@ -68,9 +68,9 @@ export class ReqParser<T extends object = any> {
   }
 }
 
-export function parseReq<T extends object = any>(
+export function parseReqDeco<T extends object = any>(
   ctx: HttpContext,
   target: ReqParseTarget<T>
 ): T {
-  return new ReqParser<T>(ctx, target).parse();
+  return new ReqDecoParser<T>(ctx, target).parse();
 }

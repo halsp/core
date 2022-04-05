@@ -1,12 +1,12 @@
-export enum ReqParseType {
+export enum ReqDecoType {
   Body,
   Query,
   Param,
   Header,
 }
 
-export interface ReqParseItem {
+export interface ReqDecoItem {
   propertyKey: string;
-  type: ReqParseType;
+  type: ReqDecoType;
   property?: string;
 }
