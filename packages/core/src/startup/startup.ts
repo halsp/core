@@ -1,8 +1,6 @@
 import { SfaResponse, HttpContext } from "../context";
 import {
   Middleware,
-  MiddlewareHook,
-  MiddlewareHookAsync,
   MdHook,
   HookMiddleware,
   HookType,
@@ -46,21 +44,24 @@ export abstract class Startup {
     return this;
   }
 
-  hook(mh: MiddlewareHook, type?: HookType): this;
-  hook(mh: MiddlewareHookAsync, type?: HookType): this;
+  hook(mh: (ctx: HttpContext, md: Middleware) => void, type?: HookType): this;
+  hook(
+    mh: (ctx: HttpContext, md: Middleware) => Promise<void>,
+    type?: HookType
+  ): this;
   hook(mh: MdHook, type = HookType.Before): this {
     this.#mds.push(() => new HookMiddleware(mh, type));
     return this;
   }
 
-  hookBefore(mh: MiddlewareHook): this;
-  hookBefore(mh: MiddlewareHookAsync): this;
+  hookBefore(mh: (ctx: HttpContext, md: Middleware) => void): this;
+  hookBefore(mh: (ctx: HttpContext, md: Middleware) => Promise<void>): this;
   hookBefore(mh: MdHook): this {
     return this.hook(mh, HookType.Before);
   }
 
-  hookAfter(mh: MiddlewareHook): this;
-  hookAfter(mh: MiddlewareHookAsync): this;
+  hookAfter(mh: (ctx: HttpContext, md: Middleware) => void): this;
+  hookAfter(mh: (ctx: HttpContext, md: Middleware) => Promise<void>): this;
   hookAfter(mh: MdHook): this {
     return this.hook(mh, HookType.After);
   }

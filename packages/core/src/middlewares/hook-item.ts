@@ -1,4 +1,9 @@
-import { MdHook } from "./utils";
+import { HttpContext } from "../context";
+import { Middleware } from "./middleware";
+
+export type MdHook =
+  | ((ctx: HttpContext, md: Middleware) => void)
+  | ((ctx: HttpContext, md: Middleware) => Promise<void>);
 
 export enum HookType {
   Before,

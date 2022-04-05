@@ -22,13 +22,6 @@ export type MiddlewareItem =
   | Middleware
   | MiddlewareConstructor;
 
-export type MiddlewareHook = (ctx: HttpContext, md: Middleware) => void;
-export type MiddlewareHookAsync = (
-  ctx: HttpContext,
-  md: Middleware
-) => Promise<void>;
-export type MdHook = MiddlewareHook | MiddlewareHookAsync;
-
 export async function execHoods(
   ctx: HttpContext,
   middleware: Middleware,
