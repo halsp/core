@@ -8,6 +8,7 @@ import {
   MiddlewareConstructor,
   LambdaMiddleware,
   createMiddleware,
+  HookTypeWithoutConstructor,
 } from "../middlewares";
 import { Stream } from "stream";
 import * as mime from "mime-types";
@@ -46,11 +47,11 @@ export abstract class Startup {
 
   hook<T extends Middleware = Middleware>(
     mh: (ctx: HttpContext, middleware: T) => void,
-    type?: HookType.After | HookType.Before
+    type?: HookTypeWithoutConstructor
   ): this;
   hook<T extends Middleware = Middleware>(
     mh: (ctx: HttpContext, middleware: T) => Promise<void>,
-    type?: HookType.After | HookType.Before
+    type?: HookTypeWithoutConstructor
   ): this;
   hook<T extends Middleware = Middleware>(
     mh: (ctx: HttpContext, middlewareConstructor: ObjectConstructor<T>) => T,
@@ -63,7 +64,7 @@ export abstract class Startup {
     ) => Promise<T>,
     type?: HookType.Constructor
   ): this;
-  hook(mh: MdHook, type = HookType.Before): this {
+  hook(mh: MdHook, type = HookType.BeforeInvoke): this {
     this.#mds.push(() => new HookMiddleware(mh, type));
     return this;
   }

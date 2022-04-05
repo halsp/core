@@ -4,12 +4,9 @@ import { HookType } from "../../src/middlewares";
 class TestMiddleware extends Middleware {
   static index = 1;
   async invoke(): Promise<void> {
-    const index = TestMiddleware.index;
+    this.setHeader(`h${TestMiddleware.index}`, this.count);
     TestMiddleware.index++;
-
-    this.setHeader(`h1${index}`, this.count);
     await this.next();
-    this.setHeader(`h2${index}`, this.count);
   }
   count = 0;
 }
@@ -17,50 +14,37 @@ class TestMiddleware extends Middleware {
 test("simple hook", async function () {
   const startup = new TestStartup()
     .hook((ctx, md) => {
-      // 1 before hook
       if (md instanceof TestMiddleware) {
         md.count++;
       }
     })
-    .add(TestMiddleware)
+    .add(TestMiddleware) // 1 hook
     .hook((ctx, md) => {
-      // 2 before hook
       if (md instanceof TestMiddleware) {
         md.count++;
       }
     })
-    .add(TestMiddleware)
+    .add(TestMiddleware) // 2 hooks
     .hook((ctx, md) => {
-      // 3 before hook
       if (md instanceof TestMiddleware) {
         md.count++;
       }
     })
+    // executed but without effective
     .hook((ctx, md) => {
-      // executed but without effective
       if (md instanceof TestMiddleware) {
         md.count++;
         ctx.setHeader("after", "1");
       }
-    }, HookType.AfterInvoke)
-    .hook((ctx, md) => {
-      // executed before next
-      if (md instanceof TestMiddleware) {
-        md.count++;
-      }
-    }, HookType.BeforeNext)
+    }, HookType.AfterInvoke) // 3 hooks
     .add(TestMiddleware)
     .use((ctx) => ctx.ok());
 
   const result = await startup.run();
   expect(result.status).toBe(200);
-  expect(result.getHeader("h11")).toBe("1");
-  expect(result.getHeader("h12")).toBe("2");
-  expect(result.getHeader("h13")).toBe("3");
-  expect(result.getHeader("h14")).toBeUndefined();
+  expect(result.getHeader("h1")).toBe("1");
+  expect(result.getHeader("h2")).toBe("2");
+  expect(result.getHeader("h3")).toBe("3");
+  expect(result.getHeader("h4")).toBeUndefined();
   expect(result.getHeader("after")).toBe("1");
-
-  expect(result.getHeader("h21")).toBe("1");
-  expect(result.getHeader("h22")).toBe("2");
-  expect(result.getHeader("h23")).toBe("4");
 });

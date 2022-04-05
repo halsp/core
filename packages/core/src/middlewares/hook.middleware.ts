@@ -9,10 +9,18 @@ export type MdHook<T extends Middleware | MiddlewareConstructor = any> = (
 ) => void | Promise<void> | Middleware | Promise<Middleware>;
 
 export enum HookType {
-  Before,
-  After,
+  BeforeInvoke,
+  AfterInvoke,
+  BeforeNext,
   Constructor,
 }
+
+const isHTCons = (type: HookType) =>
+  type == HookType.Constructor ? undefined : type;
+isHTCons(HookType.Constructor); // just for test
+isHTCons(HookType.BeforeNext); // just for test
+type isHTConsRT = ReturnType<typeof isHTCons>;
+export type HookTypeWithoutConstructor = isHTConsRT & HookType;
 
 export interface HookItem {
   hook: MdHook;
@@ -35,7 +43,7 @@ export class HookMiddleware extends Middleware {
 export async function execHoods(
   ctx: HttpContext,
   middleware: Middleware,
-  type: HookType.After | HookType.Before
+  type: HookTypeWithoutConstructor
 ): Promise<void>;
 export async function execHoods(
   ctx: HttpContext,

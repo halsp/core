@@ -46,13 +46,14 @@ export abstract class Middleware extends ResultHandler {
 
   abstract invoke(): Promise<void>;
   protected async next(): Promise<void> {
-    if (this.#mds.length <= this.#index + 1) return;
-    const nextMd = await this.#createNextMiddleware();
-    nextMd.init(this.ctx, this.#index + 1, this.#mds);
     try {
-      await execHoods(this.ctx, nextMd, HookType.Before);
+      await execHoods(this.ctx, this, HookType.BeforeNext);
+      if (this.#mds.length <= this.#index + 1) return;
+      const nextMd = await this.#createNextMiddleware();
+      nextMd.init(this.ctx, this.#index + 1, this.#mds);
+      await execHoods(this.ctx, nextMd, HookType.BeforeInvoke);
       await nextMd.invoke();
-      await execHoods(this.ctx, nextMd, HookType.After);
+      await execHoods(this.ctx, nextMd, HookType.AfterInvoke);
     } catch (err) {
       if (err instanceof HttpException && err.breakthrough) {
         throw err;
