@@ -1,13 +1,17 @@
 import { HttpContext, isFunction, ObjectConstructor } from "@sfajs/core";
-import { DECORATOR_SCOPED_BAG, MAP_BAG, METADATA } from "../constant";
-import { InjectDecoratorRecordItem } from "./inject-decorator-record-item";
-import { InjectTypes } from "../inject-types";
+import { DECORATOR_SCOPED_BAG, MAP_BAG, METADATA } from "./constant";
+import { InjectTypes } from "./inject-types";
 import "reflect-metadata";
-import { InjectMap } from "../inject-map";
+import { InjectMap } from "./inject-map";
 
-export type InjectTarget<T extends object = any> = T | ObjectConstructor<T>;
+type InjectTarget<T extends object = any> = T | ObjectConstructor<T>;
 
-export class InjectDecoratorParser<T extends object = any> {
+type InjectDecoratorRecordItem = {
+  injectConstructor: ObjectConstructor;
+  value: any;
+};
+
+class InjectDecoratorParser<T extends object = any> {
   constructor(
     private readonly ctx: HttpContext,
     private readonly target: InjectTarget<T>
@@ -93,4 +97,11 @@ export class InjectDecoratorParser<T extends object = any> {
   private createPropertyObject(constr: ObjectConstructor<T>): any {
     return new InjectDecoratorParser(this.ctx, new constr()).parse();
   }
+}
+
+export function parseInject<T extends object = any>(
+  ctx: HttpContext,
+  target: InjectTarget<T>
+): T {
+  return new InjectDecoratorParser<T>(ctx, target).parse();
 }

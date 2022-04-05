@@ -1,9 +1,10 @@
 import "@sfajs/core";
 import { Startup, ObjectConstructor } from "@sfajs/core";
 import { DECORATOR_SCOPED_BAG, MAP_BAG } from "./constant";
-
-import { Inject, parseInject, InjectTypes } from "./decorators";
+import { Inject } from "./decorators";
 import { InjectMap } from "./inject-map";
+import { parseInject } from "./inject-parser";
+import { InjectTypes } from "./inject-types";
 
 declare module "@sfajs/core" {
   interface Startup {
