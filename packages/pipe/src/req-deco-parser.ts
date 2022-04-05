@@ -7,9 +7,9 @@ import {
 import { REQ_PARAMS_METADATA } from "./constant";
 import { ReqDecoType, ReqDecoItem } from "./req-deco-item";
 
-export type ReqParseTarget<T extends object = any> = T | ObjectConstructor<T>;
+type ReqParseTarget<T extends object = any> = T | ObjectConstructor<T>;
 
-export class ReqDecoParser<T extends object = any> {
+class ReqDecoParser<T extends object = any> {
   constructor(
     private readonly ctx: HttpContext,
     private readonly target: ReqParseTarget<T>
