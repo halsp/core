@@ -45,19 +45,22 @@ export abstract class Startup {
   }
 
   hook<T extends Middleware = Middleware>(
-    mh: (ctx: HttpContext, md: T) => void,
+    mh: (ctx: HttpContext, middleware: T) => void,
     type?: HookType.After | HookType.Before
   ): this;
   hook<T extends Middleware = Middleware>(
-    mh: (ctx: HttpContext, md: T) => Promise<void>,
+    mh: (ctx: HttpContext, middleware: T) => Promise<void>,
     type?: HookType.After | HookType.Before
   ): this;
   hook<T extends Middleware = Middleware>(
-    mh: (ctx: HttpContext, md: ObjectConstructor<T>) => T,
+    mh: (ctx: HttpContext, middlewareConstructor: ObjectConstructor<T>) => T,
     type?: HookType.Constructor
   ): this;
   hook<T extends Middleware = Middleware>(
-    mh: (ctx: HttpContext, md: ObjectConstructor<T>) => Promise<T>,
+    mh: (
+      ctx: HttpContext,
+      middlewareConstructor: ObjectConstructor<T>
+    ) => Promise<T>,
     type?: HookType.Constructor
   ): this;
   hook(mh: MdHook, type = HookType.Before): this {

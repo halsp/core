@@ -121,16 +121,29 @@ startup.use(async (ctx, next) => {
 
 ## 中间件钩子
 
-中间件钩子可以在中间件被执行前或执行完成后，运行指定的代码
+中间件钩子可以在中间件的不同生命周期，运行指定的代码
 
-- 钩子本质也会被转换为中间件执行
+- 钩子本质也会被转换为中间件
 - 钩子只会作用于其后的中间件
 
-钩子有三种添加方式：
+```TS
+startup.hook((ctx, md) => {}, HookType)
+```
 
-- `startup.hookBefore`：一个钩子参数，添加中间件执行之前的钩子
-- `startup.hookAfter`：一个钩子参数，添加中间件执行之后的钩子
-- `startup.hook`：两个参数，第一个参数是钩子，第二个可选参数是钩子类型，默认为 `Before`
+该函数有两个参数
+
+1. 钩子回调函数，有两个参数
+   - 参数 1：管道 HttpContext 对象
+   - 参数 2：中间件对象或中间件构造函数
+     - 如果钩子的类型为 `Constructor`，则参数为中间件构造函数
+     - 如果钩子类型为 `Before` 或 `After`，则参数为中间件对象
+   - 返回值：
+     - 如果钩子的类型为 `Constructor`，则需要返回中间件对象
+     - 如果钩子类型为 `Before` 或 `After`，则没有返回值
+1. 钩子类型，有三种钩子
+   - `Before`：在中间件执行之前执行
+   - `After`：在中间件执行之后执行，即 `next` 之后
+   - `Constructor`：用于构造中间件，可以动态使用中间件
 
 ```TS
   import { Middleware, TestStartup } from "@sfajs/core";
@@ -148,18 +161,18 @@ startup.use(async (ctx, next) => {
       }
     })
     .add(TestMiddleware) // 2 hooks
-    .hookBefore((md) => {
+    .hook((md) => {
       if (md instanceof TestMiddleware) {
         md.count++;
       }
     })
-    .hookAfter((ctx, md) => {
-      // executed but without effective
+    // executed but without effective
+    .hook((ctx, md) => {
       if (md instanceof TestMiddleware) {
         md.count++;
       }
-    })
-    .add(TestMiddleware) // 3 hooks
+    }, HookType.After) // 3 hooks
+    .add(TestMiddleware)
     .use((ctx) => ctx.ok());
 ```
 
