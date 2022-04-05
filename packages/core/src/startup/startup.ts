@@ -10,7 +10,7 @@ import {
 } from "../middlewares";
 import { Stream } from "stream";
 import * as mime from "mime-types";
-import { isPlainObject } from "../utils";
+import { isPlainObject, ObjectConstructor } from "../utils";
 import { createMiddleware } from "../middlewares/middleware-creater";
 
 export abstract class Startup {
@@ -44,26 +44,25 @@ export abstract class Startup {
     return this;
   }
 
-  hook(mh: (ctx: HttpContext, md: Middleware) => void, type?: HookType): this;
-  hook(
-    mh: (ctx: HttpContext, md: Middleware) => Promise<void>,
-    type?: HookType
+  hook<T extends Middleware = Middleware>(
+    mh: (ctx: HttpContext, md: T) => void,
+    type?: HookType.After | HookType.Before
+  ): this;
+  hook<T extends Middleware = Middleware>(
+    mh: (ctx: HttpContext, md: T) => Promise<void>,
+    type?: HookType.After | HookType.Before
+  ): this;
+  hook<T extends Middleware = Middleware>(
+    mh: (ctx: HttpContext, md: ObjectConstructor<T>) => T,
+    type?: HookType.Constructor
+  ): this;
+  hook<T extends Middleware = Middleware>(
+    mh: (ctx: HttpContext, md: ObjectConstructor<T>) => Promise<T>,
+    type?: HookType.Constructor
   ): this;
   hook(mh: MdHook, type = HookType.Before): this {
     this.#mds.push(() => new HookMiddleware(mh, type));
     return this;
-  }
-
-  hookBefore(mh: (ctx: HttpContext, md: Middleware) => void): this;
-  hookBefore(mh: (ctx: HttpContext, md: Middleware) => Promise<void>): this;
-  hookBefore(mh: MdHook): this {
-    return this.hook(mh, HookType.Before);
-  }
-
-  hookAfter(mh: (ctx: HttpContext, md: Middleware) => void): this;
-  hookAfter(mh: (ctx: HttpContext, md: Middleware) => Promise<void>): this;
-  hookAfter(mh: MdHook): this {
-    return this.hook(mh, HookType.After);
   }
 
   protected async invoke(ctx: HttpContext): Promise<SfaResponse> {

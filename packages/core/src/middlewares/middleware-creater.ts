@@ -1,4 +1,6 @@
 import { HttpContext } from "../context";
+import { HookType } from "./hook-item";
+import { execHoods } from "./hook.middleware";
 import { Middleware } from "./middleware";
 import { isMiddlewareConstructor, MiddlewareItem } from "./utils";
 
@@ -14,7 +16,7 @@ export class MiddlewareCreater extends Object {
     if (this.middleware instanceof Middleware) {
       return this.middleware;
     } else if (isMiddlewareConstructor(this.middleware)) {
-      return new this.middleware();
+      return await execHoods(this.ctx, this.middleware, HookType.Constructor);
     } else {
       return await this.middleware(this.ctx);
     }

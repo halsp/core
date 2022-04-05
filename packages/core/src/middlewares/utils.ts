@@ -5,8 +5,6 @@ import { Middleware } from "./middleware";
 
 export const MIDDLEWARE_HOOK_BAG = "__@sfajs/core_middlewareHooksBag__";
 
-export type FuncMiddleware = (ctx: HttpContext) => Middleware;
-
 export type MiddlewareConstructor = {
   new (...args: any[]): Middleware;
 };
@@ -21,14 +19,3 @@ export type MiddlewareItem =
   | ((ctx: HttpContext) => Promise<Middleware>)
   | Middleware
   | MiddlewareConstructor;
-
-export async function execHoods(
-  ctx: HttpContext,
-  middleware: Middleware,
-  type: HookType
-): Promise<Middleware | void> {
-  const hooks = ctx.bag<HookItem[]>(MIDDLEWARE_HOOK_BAG);
-  for (const hookItem of (hooks ?? []).filter((h) => h.type == type)) {
-    await hookItem.hook(ctx, middleware);
-  }
-}

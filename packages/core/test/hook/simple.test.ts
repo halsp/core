@@ -1,4 +1,5 @@
 import { Middleware, TestStartup } from "../../src";
+import { HookType } from "../../src/middlewares";
 
 class TestMiddleware extends Middleware {
   static index = 1;
@@ -10,7 +11,7 @@ class TestMiddleware extends Middleware {
   count = 0;
 }
 
-test("hook", async function () {
+test("simple hook", async function () {
   const startup = new TestStartup()
     .hook((ctx, md) => {
       if (md instanceof TestMiddleware) {
@@ -24,19 +25,19 @@ test("hook", async function () {
       }
     })
     .add(TestMiddleware) // 2 hooks
-    .hookBefore((ctx, md) => {
+    .hook((ctx, md) => {
       if (md instanceof TestMiddleware) {
         md.count++;
       }
     })
-    .hookAfter((ctx, md) => {
-      // executed but without effective
+    // executed but without effective
+    .hook((ctx, md) => {
       if (md instanceof TestMiddleware) {
         md.count++;
         ctx.setHeader("after", "1");
       }
-    })
-    .add(TestMiddleware) // 3 hooks
+    }, HookType.After) // 3 hooks
+    .add(TestMiddleware)
     .use((ctx) => ctx.ok());
 
   const result = await startup.run();

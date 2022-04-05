@@ -1,8 +1,9 @@
 import { HttpContext, ResultHandler } from "../context";
 import { HttpException } from "../exceptions";
 import { HookType } from "./hook-item";
+import { execHoods } from "./hook.middleware";
 import { createMiddleware } from "./middleware-creater";
-import { execHoods, MiddlewareItem } from "./utils";
+import { MiddlewareItem } from "./utils";
 
 export abstract class Middleware extends ResultHandler {
   constructor() {

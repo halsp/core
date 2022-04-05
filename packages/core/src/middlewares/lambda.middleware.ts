@@ -4,7 +4,7 @@ import { Middleware } from "./middleware";
 export class LambdaMiddleware extends Middleware {
   constructor(
     private readonly builder:
-      | ((ctx: HttpContext, next: () => Promise<void>) => void)
+      | ((ctx: HttpContext) => void)
       | ((ctx: HttpContext, next: () => Promise<void>) => Promise<void>)
   ) {
     super();
