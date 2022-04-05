@@ -1,6 +1,6 @@
 import { HttpContext } from "@sfajs/core";
 import { METADATA } from "../constant";
-import { InjectDecoratorParser, InjectType } from "./inject-decorator-parser";
+import { InjectDecoratorParser, InjectTarget } from "./inject-decorator-parser";
 
 export function Inject(target: any, propertyKey: string | symbol) {
   const args =
@@ -11,7 +11,7 @@ export function Inject(target: any, propertyKey: string | symbol) {
 
 export function parseInject<T extends object = any>(
   ctx: HttpContext,
-  target: InjectType<T>
+  target: InjectTarget<T>
 ): T {
   return new InjectDecoratorParser<T>(ctx, target).parse();
 }

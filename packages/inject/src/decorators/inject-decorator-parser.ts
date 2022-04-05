@@ -5,12 +5,12 @@ import { InjectTypes } from "../inject-types";
 import "reflect-metadata";
 import { InjectMap } from "../inject-map";
 
-export type InjectType<T extends object = any> = T | ObjectConstructor<T>;
+export type InjectTarget<T extends object = any> = T | ObjectConstructor<T>;
 
 export class InjectDecoratorParser<T extends object = any> {
   constructor(
     private readonly ctx: HttpContext,
-    private readonly target: InjectType<T>
+    private readonly target: InjectTarget<T>
   ) {
     const isConstructor = isFunction(this.target);
     this.injectConstructor = isConstructor
