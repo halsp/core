@@ -16,20 +16,36 @@ const createParamDecorator =
     Reflect.defineMetadata(REQ_PARAMS_METADATA, decs, target);
   };
 
-export function Query(property?: string) {
-  return createParamDecorator(ReqDecoType.Query, property);
+function create(type: ReqDecoType, ...args: any[]): PropertyDecorator | void {
+  if (args[1]) {
+    createParamDecorator(type)(args[0], args[1]);
+  } else {
+    return createParamDecorator(type, args[0]);
+  }
 }
 
-export function Body(property?: string) {
-  return createParamDecorator(ReqDecoType.Body, property);
+export function Query(target: any, propertyKey: string | symbol): void;
+export function Query(property: string): PropertyDecorator;
+export function Query(arg1: any, arg2?: any): PropertyDecorator | void {
+  return create(ReqDecoType.Query, arg1, arg2);
 }
 
-export function Param(property?: string) {
-  return createParamDecorator(ReqDecoType.Param, property);
+export function Body(target: any, propertyKey: string | symbol): void;
+export function Body(property: string): PropertyDecorator;
+export function Body(arg1: any, arg2?: any): PropertyDecorator | void {
+  return create(ReqDecoType.Body, arg1, arg2);
 }
 
-export function Header(property?: string) {
-  return createParamDecorator(ReqDecoType.Header, property);
+export function Param(target: any, propertyKey: string | symbol): void;
+export function Param(property: string): PropertyDecorator;
+export function Param(arg1: any, arg2?: any): PropertyDecorator | void {
+  return create(ReqDecoType.Param, arg1, arg2);
+}
+
+export function Header(target: any, propertyKey: string | symbol): void;
+export function Header(property: string): PropertyDecorator;
+export function Header(arg1: any, arg2?: any): PropertyDecorator | void {
+  return create(ReqDecoType.Header, arg1, arg2);
 }
 
 export function ReqParse(target: any, propertyKey: string | symbol): void {

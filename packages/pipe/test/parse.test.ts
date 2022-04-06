@@ -4,15 +4,15 @@ import { Header, Query, Param, Body, parseReqDeco } from "../src";
 import { expectBody, getTestRequest } from "./TestMiddleware";
 
 class TestService {
-  @Header()
+  @Header
   private readonly header!: ReadonlyDict;
-  @Query()
+  @Query
   private readonly query1!: ReadonlyDict;
-  @Query()
+  @Query
   private readonly query2!: ReadonlyDict;
-  @Param()
+  @Param
   private readonly params!: ReadonlyDict;
-  @Body()
+  @Body
   private readonly body!: ReadonlyDict;
   @Body("array")
   private readonly arrayFieldBody!: string;

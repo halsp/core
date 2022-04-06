@@ -2,15 +2,15 @@ import { Middleware, ReadonlyDict, SfaRequest } from "@sfajs/core";
 import { Header, Query, Param, Body } from "../src";
 
 export class TestMiddleware extends Middleware {
-  @Header()
+  @Header
   private readonly header!: ReadonlyDict;
-  @Query()
+  @Query
   private readonly query1!: ReadonlyDict;
-  @Query()
+  @Query
   private readonly query2!: ReadonlyDict;
-  @Param()
+  @Param
   private readonly params!: ReadonlyDict;
-  @Body()
+  @Body
   private readonly body!: ReadonlyDict;
   @Body("array")
   private readonly arrayFieldBody!: string;

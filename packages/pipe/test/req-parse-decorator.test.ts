@@ -9,7 +9,7 @@ class TestService extends Object {
 }
 
 class TestMiddleware extends Middleware {
-  @Header()
+  @Header
   private readonly header!: ReadonlyDict;
   @ReqParse
   private readonly service1!: TestService;
