@@ -4,7 +4,7 @@ import {
   ObjectConstructor,
   isFunction,
 } from "@sfajs/core";
-import { REQ_PARAMS_METADATA } from "./constant";
+import { REQ_DECO_METADATA, REQ_PARAMS_METADATA } from "./constant";
 import { ReqDecoType, ReqDecoItem } from "./req-deco-item";
 
 type ReqParseTarget<T extends object = any> = T | ObjectConstructor<T>;
@@ -27,14 +27,30 @@ class ReqDecoParser<T extends object = any> {
   private readonly objConstructor: ObjectConstructor<T>;
 
   public parse(): T {
-    const decs =
+    const paramDecs =
       (Reflect.getMetadata(
         REQ_PARAMS_METADATA,
         this.objConstructor.prototype
       ) as ReqDecoItem[]) ?? [];
-    decs.forEach((dec) => {
+    paramDecs.forEach((dec) => {
       this.parseAction(dec);
     });
+
+    const reqDecs =
+      (Reflect.getMetadata(
+        REQ_DECO_METADATA,
+        this.objConstructor.prototype
+      ) as (string | symbol)[]) ?? [];
+    reqDecs.forEach((dec) => {
+      let propertyValue = this.obj[dec];
+      if (!propertyValue) {
+        propertyValue = Reflect.getMetadata("design:type", this.obj, dec);
+      }
+      if (propertyValue) {
+        this.obj[dec] = parseReqDeco(this.ctx, propertyValue);
+      }
+    });
+
     return this.obj;
   }
 
