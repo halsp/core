@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/req-deco",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "通过装饰器便捷使用接口参数",
   "homepage": "https://github.com/sfajs/req-deco",
   "repository": {
