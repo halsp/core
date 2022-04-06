@@ -3,6 +3,7 @@ export enum ReqDecoType {
   Query,
   Param,
   Header,
+  Ctx,
 }
 
 export interface ReqDecoItem {

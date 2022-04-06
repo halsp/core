@@ -48,6 +48,10 @@ export function Header(arg1: any, arg2?: any): PropertyDecorator | void {
   return create(ReqDecoType.Header, arg1, arg2);
 }
 
+export function Ctx(target: any, propertyKey: string | symbol): void {
+  create(ReqDecoType.Ctx, target, propertyKey);
+}
+
 export function ReqParse(target: any, propertyKey: string | symbol): void {
   const args =
     (Reflect.getMetadata(REQ_DECO_METADATA, target) as (string | symbol)[]) ??

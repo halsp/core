@@ -33,7 +33,7 @@ class ReqDecoParser<T extends object = any> {
         this.objConstructor.prototype
       ) as ReqDecoItem[]) ?? [];
     paramDecs.forEach((dec) => {
-      this.parseAction(dec);
+      this.parseItem(dec);
     });
 
     const reqDecs =
@@ -54,7 +54,7 @@ class ReqDecoParser<T extends object = any> {
     return this.obj;
   }
 
-  private parseAction(dec: ReqDecoItem) {
+  private parseItem(dec: ReqDecoItem) {
     switch (dec.type) {
       case ReqDecoType.Query:
         this.parseProperty(dec, this.ctx.req.query);
@@ -67,6 +67,9 @@ class ReqDecoParser<T extends object = any> {
         break;
       case ReqDecoType.Body:
         this.parseProperty(dec, this.ctx.req.body);
+        break;
+      case ReqDecoType.Ctx:
+        this.parseProperty(dec, this.ctx);
         break;
     }
   }
