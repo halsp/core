@@ -54,14 +54,17 @@ export abstract class Startup {
     type?: HookTypeWithoutConstructor
   ): this;
   hook<T extends Middleware = Middleware>(
-    mh: (ctx: HttpContext, middlewareConstructor: ObjectConstructor<T>) => T,
+    mh: (
+      ctx: HttpContext,
+      middlewareConstructor: ObjectConstructor<T>
+    ) => T | undefined,
     type?: HookType.Constructor
   ): this;
   hook<T extends Middleware = Middleware>(
     mh: (
       ctx: HttpContext,
       middlewareConstructor: ObjectConstructor<T>
-    ) => Promise<T>,
+    ) => Promise<T | undefined>,
     type?: HookType.Constructor
   ): this;
   hook(mh: MdHook, type = HookType.BeforeInvoke): this {

@@ -6,7 +6,12 @@ const MIDDLEWARE_HOOK_BAG = "__@sfajs/core_middlewareHooksBag__";
 export type MdHook<T extends Middleware | MiddlewareConstructor = any> = (
   ctx: HttpContext,
   md: T
-) => void | Promise<void> | Middleware | Promise<Middleware>;
+) =>
+  | void
+  | Promise<void>
+  | Middleware
+  | undefined
+  | Promise<Middleware | undefined>;
 
 export enum HookType {
   BeforeInvoke,
@@ -58,13 +63,14 @@ export async function execHoods(
   const hooks = ctx.bag<HookItem[]>(MIDDLEWARE_HOOK_BAG) ?? [];
   let md: Middleware | undefined;
   for (const hookItem of hooks.filter((h) => h.type == type)) {
-    if (middleware instanceof Middleware) {
+    if (type != HookType.Constructor) {
       await hookItem.hook(ctx, middleware);
-    } else {
+    } else if (!(middleware instanceof Middleware)) {
       md = (await hookItem.hook(ctx, middleware)) as Middleware;
+      if (md) break;
     }
   }
-  if (middleware instanceof Middleware) {
+  if (middleware instanceof Middleware || type != HookType.Constructor) {
     return;
   } else {
     if (!md) md = new middleware();
