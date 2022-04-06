@@ -10,13 +10,13 @@
 ## 快速开始
 
 ```TS
-import "@sfajs/req-parse";
+import "@sfajs/req-deco";
 startup.useReqParse();
 ```
 
 ```TS
-import "@sfajs/req-parse";
-import { Header, Query, Param, Body, Ctx } from "@sfajs/req-parse";
+import "@sfajs/req-deco";
+import { Header, Query, Param, Body, Ctx } from "@sfajs/req-deco";
 import { Middleware, ReadonlyDict, TestStartup, HttpContext } from "@sfajs/core";
 
 class TestMiddleware extends Middleware {
@@ -98,11 +98,11 @@ const res = await new TestStartup()
 
 ## 在其他类中
 
-在其他任意类中，你也可以手动使用 `@sfajs/req-parse`
+在其他任意类中，你也可以手动使用 `@sfajs/req-deco`
 
 ```TS
 import { HttpContext } from "@sfajs/core";
-import { parseReqDeco, Header, Query, Ctx } from "@sfajs/req-parse";
+import { parseReqDeco, Header, Query, Ctx } from "@sfajs/req-deco";
 
 class TestClass {
   @Ctx
@@ -126,7 +126,7 @@ const obj = parseReqDeco(new TestClass());
 
 例如不能使用单例类或单例中间件，否则可能会在高并发下出现不可预知的问题
 
-在这样的中间件中不能使用 `@sfajs/req-parse`，因为中间件是单例的：
+在这样的中间件中不能使用 `@sfajs/req-deco`，因为中间件是单例的：
 
 ```TS
 startup.use(new YourMiddleware())
