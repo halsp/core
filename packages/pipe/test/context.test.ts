@@ -1,7 +1,6 @@
 import { HttpContext, TestStartup } from "@sfajs/core";
 import "../src";
-import { parseReqDeco } from "../src";
-import { Ctx } from "../src/decorators";
+import { parseReqDeco, Ctx } from "../src";
 import { expectBody, getTestRequest } from "./TestMiddleware";
 
 class TestService {
