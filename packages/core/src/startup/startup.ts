@@ -17,13 +17,13 @@ import { isPlainObject, ObjectConstructor } from "../utils";
 export abstract class Startup {
   readonly #mds: MiddlewareItem[] = [];
 
-  use(lambda: (ctx: HttpContext) => void): this;
+  use(lambda: (ctx: HttpContext, next: () => Promise<void>) => void): this;
   use(
     lambda: (ctx: HttpContext, next: () => Promise<void>) => Promise<void>
   ): this;
   use(
     lambda:
-      | ((ctx: HttpContext) => void)
+      | ((ctx: HttpContext, next: () => Promise<void>) => void)
       | ((ctx: HttpContext, next: () => Promise<void>) => Promise<void>)
   ): this {
     this.#mds.push(() => new LambdaMiddleware(lambda));
