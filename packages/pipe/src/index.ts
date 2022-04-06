@@ -2,7 +2,7 @@ import "@sfajs/core";
 import { Startup } from "@sfajs/core";
 import { parseReqDeco } from "./req-deco-parser";
 
-export { Query, Body, Param, Header, ReqParse } from "./decorators";
+export { Query, Body, Param, Header, Ctx, ReqParse } from "./decorators";
 
 declare module "@sfajs/core" {
   interface Startup {
