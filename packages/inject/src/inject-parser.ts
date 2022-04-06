@@ -97,6 +97,10 @@ class InjectDecoratorParser<T extends object = any> {
   }
 }
 
+export function isInjectClass<T extends object>(target: ObjectConstructor<T>) {
+  return !!Reflect.getMetadata(CLASS_METADATA, target);
+}
+
 export function parseInject<T extends object = any>(
   ctx: HttpContext,
   target: InjectTarget<T>

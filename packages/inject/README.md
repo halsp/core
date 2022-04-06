@@ -2,9 +2,14 @@
 
 借助 `@sfajs/inject` 你可以实现 `sfa` 的 依赖注入 / 控制反转
 
-你需要使用装饰器以使用此功能
+你需要开启装饰器功能以使用此功能
 
-在任意类的字段使用 `@Inject` 装饰器后，该类的实例对象将可以作为 `服务` 使用，你可以在中间件中使用此服务，也可以在其他服务中使用此服务
+装饰器有两种方式：
+
+1. 在类字段上使用装饰器 `@Inject`，`@sfajs/inject` 将在特定时机注入对应服务
+2. 在类上使用装饰器 `@Inject`，并在类构造函数中声明服务，`@sfajs/inject` 会在初始化类时注入对应服务
+
+使用 `@Inject` 的类的实例对象将可以作为 `服务` 使用，你可以在中间件中使用此服务，也可以在其他服务中使用此服务
 
 ## 快速开始
 
@@ -121,3 +126,80 @@ class TestMiddleware extends Middleware{
   private readonly service3!: TestService3;
 }
 ```
+
+## 类装饰器
+
+你也可以用 @Inject 装饰一个类，这样你就可以在类构造函数中取到服务
+
+```TS
+import "@sfajs/inject";
+import { Inject } from "@sfajs/inject";
+import { Middleware } from "@sfajs/core";
+
+class OtherService(){}
+
+@Inject
+class TestService{
+  constructor(readonly otherService: OtherService){}
+}
+
+@Inject
+class TestMiddleware extends Middleware {
+  constructor(private readonly testService: TestService){
+    super();
+  }
+
+  async invoke(): Promise<void> {
+    this.ok({
+      service: this.testService.constructor.name,
+    });
+  }
+}
+
+const res = await new TestStartup().useInject().add(TestMiddleware).run();
+```
+
+需要注意的是，添加的中间件必须是中间件的构造器
+
+```TS
+setup.add(YourMiddleware)
+```
+
+因此下面添加中间件的方式，将不能使用类装饰器
+
+```TS
+setup.add(async (ctx, next)=>{})
+setup.add(new YourMiddleware())
+setup.add(()=> new YourMiddleware())
+setup.add(async ()=> await Factory.creatMiddleware())
+```
+
+## 手动注入服务
+
+有些服务可能没有写在其他服务中，也没有写在中间件中，就无法自动注入服务，需要手动注入服务
+
+`@sfajs/inject` 也支持手动注入服务，有两种方式注入
+
+1. 你可以先创建对象再注入服务
+
+```TS
+import { parseInject } from '@sfajs/inject'
+
+const service = new Service();
+parseInject(ctx, service);
+
+// OR
+const service = parseInject(ctx, new Service());
+```
+
+但是这种方式无法实例化 `服务写在构造函数中` 的类，仅可注入实例对象字段的服务
+
+2. 也可以利用控制反转注入服务
+
+```TS
+import { parseInject } from '@sfajs/inject'
+
+const service = parseInject(ctx, Service);
+```
+
+这种方式可以同时实例化属性服务或构造器服务

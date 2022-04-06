@@ -1,9 +1,10 @@
 import "@sfajs/core";
 import { Startup, ObjectConstructor } from "@sfajs/core";
+import { HookType } from "@sfajs/core/dist/middlewares";
 import { DECORATOR_SCOPED_BAG, MAP_BAG } from "./constant";
 import { Inject } from "./decorators";
 import { InjectMap } from "./inject-map";
-import { parseInject } from "./inject-parser";
+import { isInjectClass, parseInject } from "./inject-parser";
 import { InjectType } from "./inject-type";
 
 declare module "@sfajs/core" {
@@ -30,9 +31,15 @@ Startup.prototype.useInject = function (): Startup {
   this.use(async (ctx, next) => {
     ctx.bag(DECORATOR_SCOPED_BAG, []);
     await next();
-  }).hook((ctx, mh) => {
-    parseInject(ctx, mh);
-  });
+  })
+    .hook((ctx, mh) => {
+      parseInject(ctx, mh);
+    })
+    .hook((ctx, mh) => {
+      if (isInjectClass(mh)) {
+        return parseInject(ctx, mh);
+      }
+    }, HookType.Constructor);
   return this;
 };
 
