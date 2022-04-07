@@ -32,12 +32,16 @@ export abstract class Startup {
 
   add(builder: (ctx: HttpContext) => Middleware): this;
   add(builder: (ctx: HttpContext) => Promise<Middleware>): this;
+  add(builder: (ctx: HttpContext) => MiddlewareConstructor): this;
+  add(builder: (ctx: HttpContext) => Promise<MiddlewareConstructor>): this;
   add(md: Middleware): this;
   add(md: MiddlewareConstructor): this;
   add(
     md:
       | ((ctx: HttpContext) => Middleware)
       | ((ctx: HttpContext) => Promise<Middleware>)
+      | ((ctx: HttpContext) => MiddlewareConstructor)
+      | ((ctx: HttpContext) => Promise<MiddlewareConstructor>)
       | Middleware
       | MiddlewareConstructor
   ): this {

@@ -15,6 +15,8 @@ export type MiddlewareItem =
   | LambdaMiddleware
   | ((ctx: HttpContext) => Middleware)
   | ((ctx: HttpContext) => Promise<Middleware>)
+  | ((ctx: HttpContext) => MiddlewareConstructor)
+  | ((ctx: HttpContext) => Promise<MiddlewareConstructor>)
   | Middleware
   | MiddlewareConstructor;
 
@@ -27,7 +29,7 @@ export async function createMiddleware(
   } else if (isMiddlewareConstructor(middleware)) {
     return await execHoods(ctx, middleware, HookType.Constructor);
   } else {
-    return await middleware(ctx);
+    return createMiddleware(ctx, await middleware(ctx));
   }
 }
 

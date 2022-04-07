@@ -71,7 +71,11 @@ startup.use(async (ctx) => {
 });
 
 // 类中间件
-startup.add(() => new YourMiddleware());
+startup.add(asycn (ctx) => new YourMiddleware());
+// OR
+startup.add(asycn (ctx) => YourMiddleware);
+// OR
+startup.add(new YourMiddleware());
 // OR
 startup.add(YourMiddleware);
 
@@ -84,17 +88,22 @@ const res = await startup.run();
 
 类中间件有两种生命周期：
 
-- Singleton
+- Singleton 一般不建议使用，并发情况会有问题
 - Scoped
 
 ```TS
-import { TestStartup } from "@sfajs/core";
+import { TestStartup, Middleware } from "@sfajs/core";
+
+class TestMiddleware extends Middleware {}
 
 // Singleton
-const res = await new TestStartup().add(new YourMiddleware()).run();
+startup.add(new TestMiddleware()).run();
 
 // Scoped
-const res = await new TestStartup().add((ctx) => new YourMiddleware()).run();
+startup.use(async (ctx, next)=> {});
+startup.add(TestMiddleware).run();
+startup.add(async (ctx) => TestMiddleware).run();
+startup.add(async (ctx) => new TestMiddleware()).run();
 ```
 
 > 应当注意在单例模式中，如果项目存在并发情况，使用管道中的内容如 `this.ctx`，可能会出错，因为管道内容可能会被刷新，你无法保证处理的是预期管道。
