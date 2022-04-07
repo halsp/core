@@ -3,7 +3,7 @@ import { writeFileSync, existsSync, lstatSync, readdirSync } from "fs";
 import linq from "linq";
 import path = require("path");
 import Action from "../action";
-import { MAP_FILE_NAME } from "../constant";
+import { MAP_FILE_NAME, METADATA } from "../constant";
 import MapItem from "./map-item";
 
 export default class MapCreater {
@@ -59,9 +59,10 @@ export default class MapCreater {
     for (let i = 0; i < files.length; i++) {
       const filePath = path.join(this.dirPath, files[i]);
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const action = new (require(filePath).default)() as Action;
+      const action = require(filePath).default;
+      const metadata = Reflect.getMetadata(METADATA, action);
       const mapItem = new MapItem(files[i].replace(/\\/g, "/"));
-      Object.assign(mapItem, action.metadata);
+      Object.assign(mapItem, metadata ?? {});
       result.push(mapItem);
     }
 

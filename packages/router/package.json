@@ -29,6 +29,7 @@
   "dependencies": {
     "@sfajs/core": "^1.2.6",
     "linq": "^3.2.4",
+    "reflect-metadata": "^0.1.13",
     "shelljs": "^0.8.5"
   },
   "devDependencies": {

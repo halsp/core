@@ -1,11 +1,9 @@
-import { Action } from "../../../src";
+import { Action, RouterMeta } from "../../../src";
 
+@RouterMeta({
+  roles: ["admin"],
+})
 export default class extends Action {
-  constructor() {
-    super();
-    this.metadata.roles = ["admin"];
-  }
-
   async invoke(): Promise<void> {
     const { account, password } = this.ctx.req.headers;
 
