@@ -48,20 +48,33 @@ test("null body test", async function () {
   expect(result.status).toBe(404);
 });
 
-test("onParserAdded", async function () {
-  const cfg = routerCfg;
-  cfg.onParserAdded = (startup) => {
-    startup.use(async (ctx, next) => {
-      ctx.setHeader("parser", "added");
-      await next();
-    });
-  };
+test("useRouterParser", async function () {
   const result = await new TestStartup(
     new SfaRequest().setPath("/simple/router").setMethod("POST")
   )
-    .useRouter(cfg)
+    .useRouterParser(routerCfg)
+    .use(async (ctx, next) => {
+      ctx.setHeader("parser", "added");
+      await next();
+    })
+    .useRouter()
     .run();
 
   expect(result.status).toBe(200);
   expect(result.getHeader("parser")).toBe("added");
 });
+
+function testDefaultUseRouterParser(isNull: boolean) {
+  test("useRouterParser default", async function () {
+    const result = await new TestStartup(
+      new SfaRequest().setPath("/simple/router").setMethod("POST")
+    )
+      .useRouterParser(isNull ? (null as any) : undefined)
+      .useRouter()
+      .run();
+
+    expect(result.status).toBe(404);
+  });
+}
+testDefaultUseRouterParser(true);
+testDefaultUseRouterParser(false);

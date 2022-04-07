@@ -1,4 +1,4 @@
-import { SfaRequest, Startup, TestStartup } from "@sfajs/core";
+import { SfaRequest, TestStartup } from "@sfajs/core";
 import "../src";
 import { routerCfg } from "./global";
 
@@ -6,21 +6,14 @@ test("metadata", async () => {
   const result = await new TestStartup(
     new SfaRequest().setPath("/metadata").setMethod("GET")
   )
-    .useRouter(
-      Object.assign(
-        {
-          onParserAdded: (startup: Startup) => {
-            startup.use((ctx) => {
-              ctx.ok({
-                custom: ctx.routerMapItem.custom,
-                admin: ctx.routerMapItem.admin,
-              });
-            });
-          },
-        },
-        routerCfg
-      )
-    )
+    .useRouterParser(routerCfg)
+    .use((ctx) => {
+      ctx.ok({
+        custom: ctx.routerMapItem.custom,
+        admin: ctx.routerMapItem.admin,
+      });
+    })
+    .useRouter()
     .run();
   expect(result.body).toEqual({
     custom: "11",
@@ -36,21 +29,14 @@ function testReplace(replace: boolean) {
         .setPath("/metadata/" + (replace ? "replace" : "notreplace"))
         .setMethod("POST")
     )
-      .useRouter(
-        Object.assign(
-          {
-            onParserAdded: (startup: Startup) => {
-              startup.use((ctx) => {
-                ctx.ok({
-                  custom1: ctx.routerMapItem.custom1,
-                  custom2: ctx.routerMapItem.custom2,
-                });
-              });
-            },
-          },
-          routerCfg
-        )
-      )
+      .useRouterParser(routerCfg)
+      .use((ctx) => {
+        ctx.ok({
+          custom1: ctx.routerMapItem.custom1,
+          custom2: ctx.routerMapItem.custom2,
+        });
+      })
+      .useRouter()
       .run();
     expect(result.body).toEqual({
       custom1: "1",

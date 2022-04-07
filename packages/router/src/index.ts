@@ -1,6 +1,7 @@
 import "@sfajs/core";
 import {
   HttpContext,
+  ObjectConstructor,
   QueryDict,
   ReadonlyQueryDict,
   Startup,
@@ -19,6 +20,7 @@ export { RouterMeta, defineRouterMetadata } from "./decorators";
 
 declare module "@sfajs/core" {
   interface Startup {
+    useRouterParser(cfg?: RouterConfig): this;
     useRouter(cfg?: RouterConfig): this;
   }
 
@@ -29,37 +31,50 @@ declare module "@sfajs/core" {
   interface HttpContext {
     readonly routerMapItem: MapItem;
     readonly routerMap: MapItem[];
+    readonly routerConfig: RouterConfig;
   }
 }
 
+Startup.prototype.useRouterParser = function <T extends Startup>(
+  cfg: RouterConfig = {}
+): T {
+  initRouter(this, cfg);
+  return this as T;
+};
+
 Startup.prototype.useRouter = function (cfg: RouterConfig = {}): Startup {
-  cfg.dir =
-    cfg.dir?.replace(/^\//, "").replace(/\/$/, "") ?? DEFAULT_ACTION_DIR;
-  cfg.prefix = cfg.prefix?.replace(/^\//, "").replace(/\/$/, "") ?? "";
-
-  this.use(async (ctx, next) => {
-    if (parseRouter(ctx, cfg)) {
-      await next();
-    }
-  });
-
-  if (cfg.onParserAdded) {
-    cfg.onParserAdded(this);
-  }
+  initRouter(this, cfg);
 
   this.add((ctx) => {
     const filePath = path.join(
       process.cwd(),
-      cfg.dir as string,
+      ctx.routerConfig.dir as string,
       ctx.routerMapItem.path
     );
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const actionClass = require(filePath).default;
-    return new actionClass() as Action;
+    return require(filePath).default as ObjectConstructor<Action>;
   });
 
   return this;
 };
+
+function initRouter(startup: Startup, cfg: RouterConfig) {
+  if (!cfg) cfg = {};
+  cfg.dir =
+    cfg.dir?.replace(/^\//, "").replace(/\/$/, "") ?? DEFAULT_ACTION_DIR;
+  cfg.prefix = cfg.prefix?.replace(/^\//, "").replace(/\/$/, "") ?? "";
+
+  startup.use(async (ctx, next) => {
+    if (ctx.routerConfig) {
+      await next();
+      return;
+    }
+
+    if (parseRouter(ctx, cfg)) {
+      await next();
+    }
+  });
+}
 
 function parseRouter(ctx: HttpContext, cfg: RouterConfig): boolean {
   const mapParser = new MapParser(ctx, cfg);
@@ -80,11 +95,10 @@ function parseRouter(ctx: HttpContext, cfg: RouterConfig): boolean {
     return false;
   }
   const mapItem = mapParser.mapItem;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+  (ctx as any).routerConfig = cfg;
   (ctx as any).routerMapItem = mapItem;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (ctx as any).routerMap = mapParser.map;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (ctx.req as any).params = {};
 
   if (mapItem.path.includes("^")) {
@@ -95,7 +109,7 @@ function parseRouter(ctx: HttpContext, cfg: RouterConfig): boolean {
       if (!mapPathStr.startsWith("^")) continue;
       const reqPathStr = reqPathStrs[i];
 
-      const key = mapPathStr.substr(1, mapPathStr.length - 1);
+      const key = mapPathStr.substring(1, mapPathStr.length);
       const value = decodeURIComponent(reqPathStr);
 
       const params = ctx.req.params as QueryDict;
