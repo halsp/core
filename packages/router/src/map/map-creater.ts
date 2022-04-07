@@ -1,3 +1,4 @@
+import { isFunction } from "@sfajs/core";
 import { writeFileSync, existsSync, lstatSync, readdirSync } from "fs";
 import linq from "linq";
 import path = require("path");
@@ -47,13 +48,11 @@ export default class MapCreater {
           return false;
         }
 
-        try {
-          // eslint-disable-next-line @typescript-eslint/no-var-requires
-          const action = new (require(filePath).default)() as Action;
-          return !!action && action instanceof Action;
-        } catch (err) {
-          return false;
-        }
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const module = require(filePath);
+        if (!module || !module.default) return false;
+        if (!isFunction(module.default)) return false;
+        return module.default.prototype instanceof Action;
       })
       .orderBy((item) => item)
       .toArray();
