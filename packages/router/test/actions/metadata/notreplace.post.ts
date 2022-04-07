@@ -1,9 +1,9 @@
 import { Dict } from "@sfajs/core";
-import { Action, defineRouterMetadata } from "../../../src";
+import { Action, defineActionMetadata } from "../../../src";
 
 function CustomMetadata(metadata: Dict) {
   return function (target: any) {
-    defineRouterMetadata(target, metadata);
+    defineActionMetadata(target, metadata);
   };
 }
 

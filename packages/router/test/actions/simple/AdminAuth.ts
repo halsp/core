@@ -1,6 +1,6 @@
-import { Action, RouterMeta } from "../../../src";
+import { Action, ActionMetadata } from "../../../src";
 
-@RouterMeta({
+@ActionMetadata({
   roles: ["admin"],
 })
 export default class extends Action {

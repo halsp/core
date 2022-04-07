@@ -3,7 +3,7 @@ import "reflect-metadata";
 import Action from "../action";
 import { METADATA } from "../constant";
 
-export function defineRouterMetadata(
+export function defineActionMetadata(
   target: ObjectConstructor<Action>,
   metadata: Dict,
   replace = false
@@ -15,8 +15,8 @@ export function defineRouterMetadata(
   Reflect.defineMetadata(METADATA, metadata, target);
 }
 
-export function RouterMeta(metadata: Record<string, any>): ClassDecorator {
+export function ActionMetadata(metadata: Record<string, any>): ClassDecorator {
   return function (target: any) {
-    defineRouterMetadata(target, metadata);
+    defineActionMetadata(target, metadata);
   };
 }

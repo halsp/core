@@ -110,12 +110,12 @@ const res = await new TestStartup()
 
 ## 路由元数据
 
-你可以通过装饰器 `@RouterMeta({})` 装饰 Action，给 Action 添加元数据，添加的元数据可以在解析路由后获取
+你可以通过装饰器 `@ActionMetadata({})` 装饰 Action，给 Action 添加元数据，添加的元数据可以在解析路由后获取
 
 ```TS
 import { Action } from "@sfajs/core"
 
-@RouterMeta({
+@ActionMetadata({
   role: "admin"
 })
 export default class extends Action{}
@@ -135,18 +135,18 @@ const res = await new TestStartup()
   .run();
 ```
 
-也可以利用 `defineRouterMetadata` 创建自定义装饰器，更便捷的添加元数据
+也可以利用 `defineActionMetadata` 创建自定义装饰器，更便捷的添加元数据
 
 ```TS
-import { defineRouterMetadata } from "@sfajs/router";
+import { defineActionMetadata } from "@sfajs/router";
 
 function Admin(target: any) {
-  defineRouterMetadata(target, {
+  defineActionMetadata(target, {
     role: 'admin',
   });
 }
 function Root(target: any) {
-  defineRouterMetadata(target, {
+  defineActionMetadata(target, {
     role: 'root',
   });
 }

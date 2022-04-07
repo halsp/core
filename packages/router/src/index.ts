@@ -16,7 +16,7 @@ import { DEFAULT_ACTION_DIR } from "./constant";
 
 export { Action, MapItem, RouterConfig };
 
-export { RouterMeta, defineRouterMetadata } from "./decorators";
+export { ActionMetadata, defineActionMetadata } from "./decorators";
 
 declare module "@sfajs/core" {
   interface Startup {
