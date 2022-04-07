@@ -57,13 +57,15 @@ Startup.prototype.useRouter = function (cfg: RouterConfig = {}): Startup {
 };
 
 function initRouter(startup: Startup, cfg: RouterConfig) {
-  if (!(startup as any).routerConfig) {
-    if (!cfg) cfg = {};
-    cfg.dir =
-      cfg.dir?.replace(/^\//, "").replace(/\/$/, "") ?? DEFAULT_ACTION_DIR;
-    cfg.prefix = cfg.prefix?.replace(/^\//, "").replace(/\/$/, "") ?? "";
-    (startup as any).routerConfig = cfg;
+  if ((startup as any).routerConfig) {
+    return;
   }
+
+  if (!cfg) cfg = {};
+  cfg.dir =
+    cfg.dir?.replace(/^\//, "").replace(/\/$/, "") ?? DEFAULT_ACTION_DIR;
+  cfg.prefix = cfg.prefix?.replace(/^\//, "").replace(/\/$/, "") ?? "";
+  (startup as any).routerConfig = cfg;
 
   startup.use(async (ctx, next) => {
     if (parseRouter(startup, ctx)) {
