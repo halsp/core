@@ -104,7 +104,7 @@ const res = await new TestStartup()
   .run();
 ```
 
-在 `useRouterParser` 后面添加的中间件， 管道 `ctx` 对象中会添加 `routerMapItem` 字段
+在 `useRouterParser` 后面添加的中间件， 管道 `ctx` 对象中会添加 `actionMetadata` 字段
 
 `useRouterParser` 也接收参数 `RouterConfig`，并且 `useRouter` 接收的参数将被忽略
 
@@ -128,7 +128,7 @@ import { TestStartup } from "@sfajs/core"
 const res = await new TestStartup()
   .useRouterParser()
   .use(async (ctx, next)=>{
-    const role = ctx.routerMapItem.role; // admin
+    const role = ctx.actionMetadata.role; // admin
     await next();
   })
   .useRouter()

@@ -29,7 +29,7 @@ declare module "@sfajs/core" {
   }
 
   interface HttpContext {
-    readonly routerMapItem: MapItem;
+    readonly actionMetadata: MapItem;
   }
 }
 
@@ -47,7 +47,7 @@ Startup.prototype.useRouter = function (cfg: RouterConfig = {}): Startup {
     const filePath = path.join(
       process.cwd(),
       (this as any).routerConfig.dir,
-      ctx.routerMapItem.path
+      ctx.actionMetadata.path
     );
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     return require(filePath).default as ObjectConstructor<Action>;
@@ -93,7 +93,7 @@ function parseRouter(startup: Startup, ctx: HttpContext): boolean {
   }
   const mapItem = mapParser.mapItem;
 
-  (ctx as any).routerMapItem = mapItem;
+  (ctx as any).actionMetadata = mapItem;
   (ctx.req as any).params = {};
 
   if (mapItem.path.includes("^")) {

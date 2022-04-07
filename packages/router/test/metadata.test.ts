@@ -9,8 +9,8 @@ test("metadata", async () => {
     .useRouterParser(routerCfg)
     .use((ctx) => {
       ctx.ok({
-        custom: ctx.routerMapItem.custom,
-        admin: ctx.routerMapItem.admin,
+        custom: ctx.actionMetadata.custom,
+        admin: ctx.actionMetadata.admin,
       });
     })
     .useRouter()
@@ -32,8 +32,8 @@ function testReplace(replace: boolean) {
       .useRouterParser(routerCfg)
       .use((ctx) => {
         ctx.ok({
-          custom1: ctx.routerMapItem.custom1,
-          custom2: ctx.routerMapItem.custom2,
+          custom1: ctx.actionMetadata.custom1,
+          custom2: ctx.actionMetadata.custom2,
         });
       })
       .useRouter()

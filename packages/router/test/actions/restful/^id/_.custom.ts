@@ -4,7 +4,7 @@ export default class extends Action {
   async invoke(): Promise<void> {
     this.ok({
       method: "CUSTOM",
-      mapItem: this.ctx.routerMapItem,
+      mapItem: this.ctx.actionMetadata,
     });
   }
 }
