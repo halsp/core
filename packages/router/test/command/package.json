@@ -4,6 +4,6 @@
   },
   "devDependencies": {
     "@sfajs/router": "../..",
-    "@sfajs/core": "^1.0.1"
+    "@sfajs/core": "^1.2.7"
   }
 }
