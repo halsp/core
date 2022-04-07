@@ -27,7 +27,6 @@ test("action test", async function () {
     })
   );
   ctx.res.status = StatusCodes.OK;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (loginAction as any).init(ctx, 0);
 
   await loginAction.invoke();

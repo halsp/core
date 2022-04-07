@@ -13,9 +13,7 @@ methods.forEach((method) => {
       .run();
 
     expect(result.status).toBe(200);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect(!!result.body.method).toBe(true);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     expect(result.body.method).toBe(HttpMethod.any);
   });
 });

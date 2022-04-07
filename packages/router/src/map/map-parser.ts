@@ -33,9 +33,6 @@ export default class MapParser {
   }
 
   #map!: MapItem[];
-  public get map(): MapItem[] {
-    return this.#map;
-  }
 
   private get routerDir(): string {
     return this.routerCfg.dir as string;

@@ -30,8 +30,6 @@ declare module "@sfajs/core" {
 
   interface HttpContext {
     readonly routerMapItem: MapItem;
-    readonly routerMap: MapItem[];
-    readonly routerConfig: RouterConfig;
   }
 }
 
@@ -48,7 +46,7 @@ Startup.prototype.useRouter = function (cfg: RouterConfig = {}): Startup {
   this.add((ctx) => {
     const filePath = path.join(
       process.cwd(),
-      ctx.routerConfig.dir as string,
+      (this as any).routerConfig.dir,
       ctx.routerMapItem.path
     );
     // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -59,24 +57,23 @@ Startup.prototype.useRouter = function (cfg: RouterConfig = {}): Startup {
 };
 
 function initRouter(startup: Startup, cfg: RouterConfig) {
-  if (!cfg) cfg = {};
-  cfg.dir =
-    cfg.dir?.replace(/^\//, "").replace(/\/$/, "") ?? DEFAULT_ACTION_DIR;
-  cfg.prefix = cfg.prefix?.replace(/^\//, "").replace(/\/$/, "") ?? "";
+  if (!(startup as any).routerConfig) {
+    if (!cfg) cfg = {};
+    cfg.dir =
+      cfg.dir?.replace(/^\//, "").replace(/\/$/, "") ?? DEFAULT_ACTION_DIR;
+    cfg.prefix = cfg.prefix?.replace(/^\//, "").replace(/\/$/, "") ?? "";
+    (startup as any).routerConfig = cfg;
+  }
 
   startup.use(async (ctx, next) => {
-    if (ctx.routerConfig) {
-      await next();
-      return;
-    }
-
-    if (parseRouter(ctx, cfg)) {
+    if (parseRouter(startup, ctx)) {
       await next();
     }
   });
 }
 
-function parseRouter(ctx: HttpContext, cfg: RouterConfig): boolean {
+function parseRouter(startup: Startup, ctx: HttpContext): boolean {
+  const cfg: RouterConfig = (startup as any).routerConfig;
   const mapParser = new MapParser(ctx, cfg);
   if (mapParser.notFound) {
     ctx.notFoundMsg({
@@ -96,9 +93,7 @@ function parseRouter(ctx: HttpContext, cfg: RouterConfig): boolean {
   }
   const mapItem = mapParser.mapItem;
 
-  (ctx as any).routerConfig = cfg;
   (ctx as any).routerMapItem = mapItem;
-  (ctx as any).routerMap = mapParser.map;
   (ctx.req as any).params = {};
 
   if (mapItem.path.includes("^")) {
