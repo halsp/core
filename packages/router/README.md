@@ -89,29 +89,79 @@ const res = await new OtherStartup().useRouter().run();
 
 - dir: 路由文件夹，`@sfajs/router` 能够将路由文件夹下的所有 `Action` 映射为 `http` 访问路径。所有 API Action 统一放在这个文件夹中，在该目录中，建立各 `Action` 文件或文件夹。`Action` 文件是 API 的最小执行单元，详情后面 [Action](##Action) 部分有介绍
 - prefix: 路由前缀
-- onParserAdded: 在路由解析中间件之后，功能真正调用之前，你可以在此回调中添加更多中间件。当你要使用 `action` 的路由信息如路径、restful 路径参数、其他元数据 `metadata` ，你就需要在 `onParserAdded` 回调中注册中间件
 
-路由解析后会在管道 `ctx` 中加入
+## 使用路由信息
 
-- routerMapItem: `action` 路径信息
-- routerMap: 全部路由信息
+如果你想使用匹配的路由信息，如 action 文件位置、action 构造函数的元数据、restful 路径参数已经其他元数据
+
+需要配合使用 `useRouterParser` 和 `useRouter`
 
 ```TS
-import { TestStartup } from "@sfajs/core";
+const res = await new TestStartup()
+  .useRouterParser()
+  // add your middleware
+  .useRouter()
+  .run();
+```
+
+在 `useRouterParser` 后面添加的中间件， 管道 `ctx` 对象中会添加 `routerMapItem` 字段
+
+`useRouterParser` 也接收参数 `RouterConfig`，并且 `useRouter` 接收的参数将被忽略
+
+## 路由元数据
+
+你可以通过装饰器 `@RouterMeta({})` 装饰 Action，给 Action 添加元数据，添加的元数据可以在解析路由后获取
+
+```TS
+import { Action } from "@sfajs/core"
+
+@RouterMeta({
+  role: "admin"
+})
+export default class extends Action{}
+```
+
+```TS
 import "@sfajs/router";
+import { TestStartup } from "@sfajs/core"
 
 const res = await new TestStartup()
-  .useRouter({
-    onParserAdded: (startup) => {
-      startup.use(async (ctx) => {
-        ctx.ok({
-          routerMapItem: ctx.routerMapItem,
-        });
-      })
-    },
+  .useRouterParser()
+  .use(async (ctx, next)=>{
+    const role = ctx.routerMapItem.role; // admin
+    await next();
   })
   .useRouter()
   .run();
+```
+
+也可以利用 `defineRouterMetadata` 创建自定义装饰器，更便捷的添加元数据
+
+```TS
+import { defineRouterMetadata } from "@sfajs/router";
+
+function Admin(target: any) {
+  defineRouterMetadata(target, {
+    role: 'admin',
+  });
+}
+function Root(target: any) {
+  defineRouterMetadata(target, {
+    role: 'root',
+  });
+}
+```
+
+```TS
+import { Action } from "@sfajs/core"
+@Admin
+export default class extends Action{}
+```
+
+```TS
+import { Action } from "@sfajs/core"
+@Root
+export default class extends Action{}
 ```
 
 ## 路由匹配
