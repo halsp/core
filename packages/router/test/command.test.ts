@@ -7,30 +7,25 @@ import "../src";
 test("sfa build command", async function () {
   shell.cd("./test/command");
 
+  const tsconfigStr = fs.readFileSync("./tsconfig-back.json", "utf-8");
+  const tsconfig = JSON.parse(tsconfigStr);
+  tsconfig.compilerOptions.outDir = "../functions/v1";
+  fs.writeFileSync("./tsconfig.json", JSON.stringify(tsconfig));
+
   try {
-    const tsconfigPath = "./tsconfig.json";
-    const tsconfigStr = fs.readFileSync(tsconfigPath, "utf-8");
-    const tsconfig = JSON.parse(tsconfigStr);
-    tsconfig.compilerOptions.outDir = "../functions/v1";
-    fs.writeFileSync(tsconfigPath, JSON.stringify(tsconfig));
+    {
+      const execResult = shell.exec(`npm run build`);
+      expect(execResult.code).toBe(0);
+      expectFile(tsconfig.compilerOptions.outDir);
+    }
 
-    try {
-      {
-        const execResult = shell.exec(`npm run build`);
-        expect(execResult.code).toBe(0);
-        expectFile(tsconfig.compilerOptions.outDir);
-      }
+    tsconfig.compilerOptions.outDir = "./dist";
+    fs.writeFileSync("./tsconfig.json", JSON.stringify(tsconfig));
 
-      tsconfig.compilerOptions.outDir = "./dist";
-      fs.writeFileSync("./tsconfig.json", JSON.stringify(tsconfig));
-
-      {
-        const execResult = shell.exec(`npm run build`);
-        expect(execResult.code).toBe(0);
-        expectFile(tsconfig.compilerOptions.outDir);
-      }
-    } finally {
-      fs.writeFileSync("./tsconfig.json", tsconfigStr);
+    {
+      const execResult = shell.exec(`npm run build`);
+      expect(execResult.code).toBe(0);
+      expectFile(tsconfig.compilerOptions.outDir);
     }
   } finally {
     shell.cd("../..");

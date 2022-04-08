@@ -3,3 +3,5 @@ dist
 package-lock.json
 sfa-router.map
 pnpm-lock.yaml
+.cache-sfra
+tsconfig.json

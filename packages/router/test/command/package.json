@@ -2,7 +2,7 @@
   "scripts": {
     "build": "sfra"
   },
-  "devDependencies": {
+  "dependencies": {
     "@sfajs/router": "../..",
     "@sfajs/core": "^1.2.7"
   }

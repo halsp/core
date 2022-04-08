@@ -2,3 +2,4 @@ node_modules
 sfa-router.map
 package-lock.json
 pnpm-lock.yaml
+.cache-sfra
