@@ -26,7 +26,7 @@ class TestMiddleware extends Middleware {
 }
 
 test("ReqParse Decorator", async function () {
-  const res = await new TestStartup().useReqParse().add(TestMiddleware).run();
+  const res = await new TestStartup().useReqDeco().add(TestMiddleware).run();
   expect(res.body).toEqual({
     header: {},
     service1: TestService.name,

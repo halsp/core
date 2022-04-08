@@ -11,7 +11,7 @@
 
 ```TS
 import "@sfajs/req-deco";
-startup.useReqParse();
+startup.useReqDeco();
 ```
 
 ```TS
@@ -51,14 +51,14 @@ class TestMiddleware extends Middleware {
 }
 
 const res = await new TestStartup()
-    .useReqParse()
+    .useReqDeco()
     .add(TestMiddleware)
     .run();
 ```
 
-上述代码中的 `useReqParse` 会启用该功能
+上述代码中的 `useReqDeco` 会启用该功能
 
-需要注意的是，该功能只会在 `useReqParse` 之后的中间件中生效，因此你需要把 `useReqParse` 放在靠前的位置，根据实际项目决定
+需要注意的是，该功能只会在 `useReqDeco` 之后的中间件中生效，因此你需要把 `useReqDeco` 放在靠前的位置，根据实际项目决定
 
 ## 嵌套使用 `ReqParse`
 
@@ -89,7 +89,7 @@ class TestMiddleware extends Middleware {
 }
 
 const res = await new TestStartup()
-    .useReqParse()
+    .useReqDeco()
     .add(TestMiddleware)
     .run();
 ```

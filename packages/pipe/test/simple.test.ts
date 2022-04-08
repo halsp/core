@@ -4,9 +4,7 @@ import { expectBody, getTestRequest, TestMiddleware } from "./TestMiddleware";
 
 function runTest(isConstructor: boolean) {
   test("simple test", async function () {
-    const startup = new TestStartup(getTestRequest())
-      .useReqParse()
-      .useReqParse();
+    const startup = new TestStartup(getTestRequest()).useReqDeco().useReqDeco();
     if (isConstructor) {
       startup.add(TestMiddleware);
     } else {

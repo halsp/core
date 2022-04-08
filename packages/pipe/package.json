@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/req-deco",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "通过装饰器便捷使用接口参数",
   "homepage": "https://github.com/sfajs/req-deco",
   "repository": {
@@ -26,7 +26,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@sfajs/core": "^1.2.6",
+    "@sfajs/core": "^1.2.8",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {

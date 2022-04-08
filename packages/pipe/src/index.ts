@@ -1,20 +1,21 @@
 import "@sfajs/core";
 import { Startup } from "@sfajs/core";
+import { IS_REQ_DECO_USED } from "./constant";
 import { parseReqDeco } from "./req-deco-parser";
 
 export { Query, Body, Param, Header, Ctx, ReqParse } from "./decorators";
 
 declare module "@sfajs/core" {
   interface Startup {
-    useReqParse(): this;
+    useReqDeco(): this;
   }
 }
 
-Startup.prototype.useReqParse = function (): Startup {
-  if ((this as any).useReqParsed) {
+Startup.prototype.useReqDeco = function (): Startup {
+  if (this[IS_REQ_DECO_USED]) {
     return this;
   }
-  (this as any).useReqParsed = true;
+  this[IS_REQ_DECO_USED] = true;
   this.hook((ctx, mh) => {
     parseReqDeco(ctx, mh);
   });
