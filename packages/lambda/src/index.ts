@@ -1,4 +1,3 @@
-import { ICloudBaseConfig } from "@cloudbase/node-sdk";
 import {
   HttpContext,
   SfaRequest,
@@ -6,33 +5,25 @@ import {
   Dict,
   HeadersDict,
 } from "@sfajs/core";
-import ResponseStruct from "./response-struct";
-import tcb = require("@cloudbase/node-sdk");
-import Dbhelper from "./dbhelper";
+import { ResponseStruct } from "./response-struct";
 
 declare module "@sfajs/core" {
   interface SfaRequest {
-    readonly context: Dict<unknown>;
-    readonly event: Dict<unknown>;
+    readonly context: Dict;
+    readonly event: Dict;
   }
 }
 
-export { ResponseStruct, Dbhelper };
+export { ResponseStruct };
 
 export class SfaCloudbase extends Startup {
-  async run(
-    event: Dict<unknown>,
-    context: Dict<unknown>
-  ): Promise<ResponseStruct> {
+  async run(event: Dict, context: Dict): Promise<ResponseStruct> {
     const ctx = this.createContext(event, context);
     await super.invoke(ctx);
     return this.getStruct(ctx);
   }
 
-  private createContext(
-    event: Dict<unknown>,
-    context: Dict<unknown>
-  ): HttpContext {
+  private createContext(event: Dict, context: Dict): HttpContext {
     const ctx = new HttpContext(
       new SfaRequest()
         .setBody(this.getBody(event))
@@ -41,9 +32,7 @@ export class SfaCloudbase extends Startup {
         .setQuery((event.queryStringParameters ?? {}) as Dict<string>)
         .setPath(event.path as string)
     );
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (ctx.req as any).context = context;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (ctx.req as any).event = event;
     return ctx;
   }
@@ -63,7 +52,7 @@ export class SfaCloudbase extends Startup {
     };
   }
 
-  private getBody(event: Dict<unknown>): unknown {
+  private getBody(event: Dict): any {
     const body = event.body;
     const headers = event.headers as HeadersDict;
     if (body && typeof body == "string") {
@@ -78,31 +67,5 @@ export class SfaCloudbase extends Startup {
     }
 
     return body || {};
-  }
-
-  useCloudbaseApp<T extends this>(config?: ICloudBaseConfig): T {
-    this.use(async (ctx, next) => {
-      const tcbConfig: ICloudBaseConfig = config || {
-        env: process.env.SCF_NAMESPACE,
-      };
-
-      const app = tcb.init(tcbConfig);
-      const db = app.database();
-
-      ctx.bag("CB_APP", app);
-      ctx.bag("CB_DB", db);
-
-      await next();
-    });
-    return this as T;
-  }
-
-  useCloudbaseDbhelper<T extends this>(): T {
-    this.use(async (ctx, next) => {
-      const dbhelper = new Dbhelper(ctx);
-      ctx.bag("CB_DBHELPER", dbhelper);
-      await next();
-    });
-    return this as T;
   }
 }
