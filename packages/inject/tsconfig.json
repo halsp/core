@@ -6,13 +6,17 @@
     "module": "commonjs",
     "declaration": true,
     "outDir": "./dist",
-    "target": "es6",
+    "target": "es2017",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "noImplicitAny": false,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "types": [
+      "node",
+      "jest"
+    ]
   },
   "include": [
     "src/**/*"
