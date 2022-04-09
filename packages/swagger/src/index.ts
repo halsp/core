@@ -1,6 +1,6 @@
 import "@sfajs/core";
 import { Startup } from "@sfajs/core";
-import swaggerJSDoc = require("swagger-jsdoc");
+import swaggerJSDoc from "swagger-jsdoc";
 
 interface SfaSwaggerConfig {
   url?: string;

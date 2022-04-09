@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/swagger",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "使用 swagger 自动生成你的 sfa 文档",
   "homepage": "https://github.com/sfajs/swagger",
   "repository": {
@@ -24,28 +24,24 @@
     "tests": "sh scripts/tests.sh",
     "lint": "eslint src test --ext .ts"
   },
-  "jest": {
-    "testEnvironment": "node"
-  },
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@types/node": "^17.0.23",
-    "@types/shelljs": "^0.8.11",
+    "@sfajs/core": "^1.2.8",
     "@types/swagger-jsdoc": "^6.0.1",
-    "linq": "^3.2.4",
-    "@sfajs/core": "^1.0.1",
-    "swagger-jsdoc": "^6.1.0"
+    "swagger-jsdoc": "^6.2.0"
   },
   "devDependencies": {
+    "@types/node": "^17.0.23",
+    "@types/shelljs": "^0.8.11",
     "@types/jest": "^27.4.1",
-    "@typescript-eslint/eslint-plugin": "^5.16.0",
-    "@typescript-eslint/parser": "^5.16.0",
-    "eslint": "^8.11.0",
+    "@typescript-eslint/eslint-plugin": "^5.18.0",
+    "@typescript-eslint/parser": "^5.18.0",
+    "eslint": "^8.13.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.5.1",
-    "prettier": "^2.6.1",
+    "prettier": "^2.6.2",
     "ts-jest": "^27.1.4",
     "typescript": "^4.6.3"
   },

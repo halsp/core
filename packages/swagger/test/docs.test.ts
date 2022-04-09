@@ -58,21 +58,20 @@ test("custom html with promise", async function () {
   }
 });
 
-test("error options", async function () {
-  const res = await new TestStartup(new SfaRequest().setMethod("GET"))
-    .use(async (ctx, next) => {
-      try {
-        await next();
-      } catch (err) {
-        ctx.badRequest();
-      }
-    })
-    .useSwagger({
-      customHtml: async () => "html",
-      options: {},
-    })
-    .run();
+async function runErrorOptions(err: boolean) {
+  test(`error options ${err}`, async function () {
+    const res = await new TestStartup(new SfaRequest().setMethod("GET"))
+      .useSwagger({
+        customHtml: async () => "html",
+        options: err ? {} : undefined,
+      })
+      .run();
+    if (!err) {
+      expect(res.body).toBe("html");
+    }
+    expect(res.status).toBe(err ? 500 : 200);
+  });
+}
 
-  expect(res.status).toBe(400);
-  expect(res.body).toBeUndefined();
-});
+runErrorOptions(true);
+runErrorOptions(false);
