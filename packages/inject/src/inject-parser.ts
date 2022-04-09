@@ -71,14 +71,14 @@ class InjectDecoratorParser<T extends object = any> {
       }
 
       const existInject = records.filter(
-        (item) => item.injectConstructor == this.injectConstructor
+        (item) => item.injectConstructor == constr
       )[0];
       if (existInject) {
         return existInject.value;
       } else {
         const obj = parseInject(this.ctx, existMap.target);
         records.push({
-          injectConstructor: this.injectConstructor,
+          injectConstructor: constr,
           value: obj,
         });
         return obj;
