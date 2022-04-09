@@ -2,7 +2,6 @@ import "@sfajs/core";
 import { Startup, HttpContext, Middleware, SfaResponse } from "@sfajs/core";
 import * as path from "path";
 import * as fs from "fs";
-import linq from "linq";
 import {
   ViewsConfig,
   consolidate,
@@ -156,11 +155,7 @@ function getEngine(
   ext: string,
   engines: Engine[]
 ): RendererInterface | undefined {
-  let engine = linq
-    .from(engines)
-    .where((e) => e.ext == ext)
-    .select((e) => e.render)
-    .firstOrDefault();
+  let engine = engines.filter((e) => e.ext == ext).map((e) => e.render)[0];
   if (engine != undefined && typeof engine == "string") {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     engine = (consolidate as any)[engine] as RendererInterface;
