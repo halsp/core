@@ -1,9 +1,9 @@
 import { Dict } from "@sfajs/core";
-import { Action, defineActionMetadata } from "../../../src";
+import { Action, setActionMetadata } from "../../../src";
 
 function CustomMetadata(metadata: Dict) {
   return function (target: any) {
-    defineActionMetadata(target, metadata);
+    setActionMetadata(target, metadata);
   };
 }
 

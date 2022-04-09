@@ -1,14 +1,14 @@
-import { Dict } from "@sfajs/core";
-import { Action, defineActionMetadata } from "../../../src";
+import { Dict, ObjectConstructor } from "@sfajs/core";
+import { Action, getActionMetadata, setActionMetadata } from "../../../src";
 
 function CustomMetadata(metadata: Dict) {
   return function (target: any) {
-    defineActionMetadata(target, metadata);
+    setActionMetadata(target, metadata);
   };
 }
 
 function Admin(target: any) {
-  defineActionMetadata(target, {
+  setActionMetadata(target, {
     admin: true,
   });
 }
@@ -19,6 +19,10 @@ function Admin(target: any) {
 @Admin
 export default class extends Action {
   async invoke(): Promise<void> {
-    //
+    this.ok({
+      get: getActionMetadata(this.constructor as ObjectConstructor<Action>),
+      custom: this.ctx.actionMetadata.custom,
+      admin: this.ctx.actionMetadata.admin,
+    });
   }
 }

@@ -7,15 +7,13 @@ test("metadata", async () => {
     new SfaRequest().setPath("/metadata").setMethod("GET")
   )
     .useRouterParser(routerCfg)
-    .use((ctx) => {
-      ctx.ok({
-        custom: ctx.actionMetadata.custom,
-        admin: ctx.actionMetadata.admin,
-      });
-    })
     .useRouter()
     .run();
   expect(result.body).toEqual({
+    get: {
+      custom: "11",
+      admin: true,
+    },
     custom: "11",
     admin: true,
   });

@@ -136,18 +136,18 @@ const res = await new TestStartup()
   .run();
 ```
 
-也可以利用 `defineActionMetadata` 创建自定义装饰器，更便捷的添加元数据
+也可以利用 `setActionMetadata` 创建自定义装饰器，更便捷的添加元数据
 
 ```TS
-import { defineActionMetadata } from "@sfajs/router";
+import { setActionMetadata } from "@sfajs/router";
 
 function Admin(target: any) {
-  defineActionMetadata(target, {
+  setActionMetadata(target, {
     role: 'admin',
   });
 }
 function Root(target: any) {
-  defineActionMetadata(target, {
+  setActionMetadata(target, {
     role: 'root',
   });
 }
