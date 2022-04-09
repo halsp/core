@@ -1,22 +1,26 @@
 import { users } from "./mock";
-import * as linq from "linq";
 import { Middleware } from "@sfajs/core";
 import "../../src";
+import "@sfajs/router";
 
-export default class Auth extends Middleware {
+export class AuthMiddleware extends Middleware {
   async invoke(): Promise<void> {
-    if (!this.ctx.routerMapItem.roles || !this.ctx.routerMapItem.roles.length) {
+    if (
+      !this.ctx.actionMetadata ||
+      !this.ctx.actionMetadata.roles ||
+      !this.ctx.actionMetadata.roles.length
+    ) {
       return await this.next();
     }
 
-    if (this.ctx.routerMapItem.roles.includes("pl")) {
+    if (this.ctx.actionMetadata.roles.includes("pl")) {
       if (!(await this.paramsLoginAuth())) {
         this.forbiddenMsg({ message: "error email or password" });
         return;
       }
     }
 
-    if (this.ctx.routerMapItem.roles.includes("hl")) {
+    if (this.ctx.actionMetadata.roles.includes("hl")) {
       if (!(await this.headerLoginAuth())) {
         this.forbiddenMsg({ message: "error email or password" });
         return;
@@ -40,8 +44,6 @@ export default class Auth extends Middleware {
   }
 
   private async loginAuth(email: string, password: string): Promise<boolean> {
-    return linq
-      .from(users)
-      .any((u) => u.email == email && u.password == password);
+    return users.some((u) => u.email == email && u.password == password);
   }
 }

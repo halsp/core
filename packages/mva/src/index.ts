@@ -1,6 +1,5 @@
 import "@sfajs/core";
 import { Startup } from "@sfajs/core";
-import * as linq from "linq";
 import "@sfajs/views";
 import "@sfajs/router";
 import MvaConfig from "./MvaConfig";
@@ -20,16 +19,15 @@ Startup.prototype.useMva = function <T extends Startup>(
     await next();
 
     const body = ctx.res.body;
-    const replaceCode = linq
-      .from(cfg.codes ?? [])
-      .where((code) => {
+    const replaceCode = (cfg.codes ?? [])
+      .filter((code) => {
         if (typeof code == "number") {
           return code == ctx.res.status;
         } else {
           return code.code == ctx.res.status;
         }
       })
-      .select((item) => {
+      .map((item) => {
         if (typeof item == "number") {
           return { path: item.toString(), replace: item };
         } else {
@@ -38,20 +36,23 @@ Startup.prototype.useMva = function <T extends Startup>(
             replace: item.replace ?? item.code,
           };
         }
-      })
-      .firstOrDefault();
+      })[0];
     if (replaceCode) {
       await ctx.view(replaceCode.path, body);
       ctx.res.status = replaceCode.replace;
       return;
     }
 
-    if (ctx.res.isSuccess && ctx.routerMapItem != undefined) {
-      await ctx.view(ctx.routerMapItem.reqPath, body);
+    if (ctx.res.isSuccess && ctx.actionMetadata != undefined) {
+      await ctx.view(ctx.actionMetadata.reqPath, body);
     }
   });
   this.useViews(cfg.viewsConfig);
-  this.useRouter(cfg.routerConfig);
+  this.useRouterParser(cfg.routerConfig);
+  if (cfg.onParserAdded) {
+    cfg.onParserAdded(this);
+  }
+  this.useRouter();
 
   return this as T;
 };

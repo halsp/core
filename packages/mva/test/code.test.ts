@@ -1,6 +1,6 @@
 import { SfaRequest, TestStartup } from "@sfajs/core";
 import "../src";
-import Auth from "./mva/Auth";
+import { AuthMiddleware } from "./mva/auth.middleware";
 import { runMva } from "./global";
 
 test("403", async function () {
@@ -12,12 +12,8 @@ test("403", async function () {
         .setHeader("password", "test2password")
     )
       .useMva({
+        onParserAdded: (startup) => startup.add(AuthMiddleware),
         codes: [{ code: 403 }],
-        routerConfig: {
-          onParserAdded: (startup) => {
-            startup.add(() => new Auth());
-          },
-        },
       })
       .run();
 
@@ -70,6 +66,7 @@ test("404", async function () {
     expect(res.body).toEqual({
       message: "Can't find the path：not-exist",
       path: "not-exist",
+      status: 404,
     });
   });
 });

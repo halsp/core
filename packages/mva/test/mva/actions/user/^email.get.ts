@@ -1,20 +1,12 @@
-import { Action } from "@sfajs/router";
-import * as linq from "linq";
+import { Action, ActionMetadata } from "@sfajs/router";
 import { users } from "../../mock";
 
+@ActionMetadata({
+  roles: ["pl"],
+})
 export default class extends Action {
-  constructor() {
-    super();
-    this.metadata.roles = ["pl"];
-  }
-
   async invoke(): Promise<void> {
     const email = this.ctx.req.params.email;
-    this.ok(
-      linq
-        .from(users)
-        .where((u) => u.email == email)
-        .first()
-    );
+    this.ok(users.filter((u) => u.email == email)[0]);
   }
 }

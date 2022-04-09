@@ -1,6 +1,6 @@
 import { SfaRequest, TestStartup } from "@sfajs/core";
 import "../src";
-import Auth from "./mva/Auth";
+import { AuthMiddleware } from "./mva/auth.middleware";
 import { runMva } from "./global";
 
 test("auth access", async function () {
@@ -15,11 +15,7 @@ test("auth access", async function () {
         await next();
       })
       .useMva({
-        routerConfig: {
-          onParserAdded: (startup) => {
-            startup.add(() => new Auth());
-          },
-        },
+        onParserAdded: (startup) => startup.add(AuthMiddleware),
       })
       .run();
 
@@ -38,15 +34,14 @@ test("auth failed", async function () {
         .setHeader("password", "test2password")
     )
       .useMva({
-        routerConfig: {
-          onParserAdded: (startup) => {
-            startup.add(() => new Auth());
-          },
-        },
+        onParserAdded: (startup) => startup.add(AuthMiddleware),
       })
       .run();
 
+    expect(res.body).toEqual({
+      message: "error email or password",
+      status: 403,
+    });
     expect(res.status).toBe(403);
-    expect(res.body).toEqual({ message: "error email or password" });
   });
 });

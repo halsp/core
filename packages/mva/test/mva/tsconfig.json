@@ -8,17 +8,10 @@
     "outDir": "./dist",
     "target": "es2017",
     "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
   },
-  "include": [
-    "src/**/*"
-  ],
   "exclude": [
-    "test",
-    "dist",
-    "bin"
+    "views"
   ]
 }
