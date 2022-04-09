@@ -4,10 +4,13 @@ import Action from "../action";
 import { METADATA } from "../constant";
 
 export function setActionMetadata(
-  target: ObjectConstructor<Action>,
+  target: ObjectConstructor<Action> | Action,
   metadata: Dict,
   replace = false
 ) {
+  if (target instanceof Action) {
+    target = target.constructor as ObjectConstructor<Action>;
+  }
   const exist = Reflect.getMetadata(METADATA, target);
   if (!!exist && !replace) {
     metadata = Object.assign({}, exist, metadata);
@@ -15,7 +18,11 @@ export function setActionMetadata(
   Reflect.defineMetadata(METADATA, metadata, target);
 }
 
-export function getActionMetadata(target: ObjectConstructor<Action>) {
+export function getActionMetadata(target: ObjectConstructor<Action> | Action) {
+  if (target instanceof Action) {
+    target = target.constructor as ObjectConstructor<Action>;
+  }
+
   return Reflect.getMetadata(METADATA, target);
 }
 

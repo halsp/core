@@ -165,6 +165,20 @@ import { Action } from "@sfajs/core"
 export default class extends Action{}
 ```
 
+也可以使用 `getActionMetadata` 获取元数据
+
+```TS
+import { Action } from "@sfajs/core"
+import { getActionMetadata } from "@sfajs/router";
+
+@Root
+export default class extends Action{
+  async invoke(){
+    const metadata = getActionMetadata(this);
+  }
+}
+```
+
 ## 路由匹配
 
 在`@sfajs/router`中，路由与文件系统匹配。

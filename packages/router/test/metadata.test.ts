@@ -46,3 +46,25 @@ function testReplace(replace: boolean) {
 
 testReplace(true);
 testReplace(false);
+
+test("object metadata", async () => {
+  const result = await new TestStartup(
+    new SfaRequest().setPath("/metadata/object").setMethod("GET")
+  )
+    .useRouterParser(routerCfg)
+    .useRouter()
+    .run();
+  expect(result.body).toEqual({
+    object: {
+      m1: "1",
+      m2: "2",
+      m3: "3",
+    },
+    constructor: {
+      m1: "1",
+      m2: "2",
+      m3: "3",
+    },
+  });
+  expect(result.status).toBe(200);
+});
