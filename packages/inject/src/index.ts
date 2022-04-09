@@ -1,5 +1,5 @@
 import "@sfajs/core";
-import { Startup, ObjectConstructor } from "@sfajs/core";
+import { Startup, ObjectConstructor, isFunction } from "@sfajs/core";
 import { HookType } from "@sfajs/core/dist/middlewares";
 import { DECORATOR_SCOPED_BAG, IS_INJECT_USED, MAP_BAG } from "./constant";
 import { Inject } from "./decorators";
@@ -18,6 +18,10 @@ declare module "@sfajs/core" {
     inject<TAnestor extends object, TTarget extends TAnestor>(
       anestor: ObjectConstructor<TAnestor>,
       target: TTarget,
+      type?: InjectType
+    ): this;
+    inject<TAnestor extends object>(
+      target: ObjectConstructor<TAnestor>,
       type?: InjectType
     ): this;
   }
@@ -46,14 +50,32 @@ Startup.prototype.useInject = function (): Startup {
 Startup.prototype.inject = function <
   TAnestor extends object,
   TTarget extends TAnestor
->(
-  anestor: ObjectConstructor<TAnestor>,
-  target: ObjectConstructor<TTarget> | TTarget,
-  type = InjectType.Transient
-): Startup {
+>(...args: any[]): Startup {
+  let anestor: ObjectConstructor<TAnestor>;
+  let target: ObjectConstructor<TTarget> | TTarget;
+  let type: InjectType | undefined;
+  if (args[1] == undefined) {
+    anestor = args[0];
+    target = args[0];
+  } else {
+    if (isFunction(args[1])) {
+      anestor = args[0];
+      target = args[1];
+      type = args[2];
+    } else {
+      anestor = args[0];
+      target = args[0];
+      type = args[1];
+    }
+  }
+
   this.use(async (ctx, next) => {
     const injectMaps = ctx.bag<InjectMap[]>(MAP_BAG) ?? [];
-    injectMaps.push({ anestor, target, type });
+    injectMaps.push({
+      anestor,
+      target,
+      type: type ?? InjectType.Transient,
+    });
     ctx.bag(MAP_BAG, injectMaps);
     await next();
   });
