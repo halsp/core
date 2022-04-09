@@ -1,4 +1,9 @@
-import { HttpContext, SfaRequest, SfaResponse } from "@sfajs/core";
+import {
+  HttpContext,
+  SfaRequest,
+  SfaResponse,
+  isPlainObject,
+} from "@sfajs/core";
 import "@sfajs/core";
 import * as http from "http";
 import { HttpBodyPraserStartup } from "@sfajs/http";
@@ -33,7 +38,7 @@ declare module "@sfajs/core" {
   }
 }
 
-export default class SfaAlifunc extends HttpBodyPraserStartup {
+export class SfaAlifunc extends HttpBodyPraserStartup {
   constructor() {
     super((ctx) => ctx.aliReq);
   }
@@ -76,7 +81,7 @@ export default class SfaAlifunc extends HttpBodyPraserStartup {
       return;
     }
 
-    if (this.isPlainObj(sfaRes.body)) {
+    if (isPlainObject(sfaRes.body)) {
       aliRes.send(JSON.stringify(sfaRes.body));
     } else {
       aliRes.send(sfaRes.body);

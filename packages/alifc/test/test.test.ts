@@ -1,4 +1,4 @@
-import SfaAlifunc, { AliReq, AliRes, AliContext } from "../src";
+import { SfaAlifunc, AliReq, AliRes, AliContext } from "../src";
 import * as http from "http";
 import { Socket } from "net";
 
@@ -58,7 +58,7 @@ test("json body", async function () {
   const aliRes = newAliRes();
 
   await new SfaAlifunc()
-    .use(async (ctx) => {
+    .use((ctx) => {
       ctx.ok({
         content: "BODY",
       });
@@ -87,7 +87,7 @@ test("json body set type", async function () {
   const strBody = JSON.stringify(body);
 
   await new SfaAlifunc()
-    .use(async (ctx) => {
+    .use((ctx) => {
       ctx.res.setHeader("content-type", "application/json");
       ctx.res.setHeader(
         "content-length",
@@ -108,7 +108,7 @@ test("text body", async function () {
   const aliRes = newAliRes();
 
   await new SfaAlifunc()
-    .use(async (ctx) => {
+    .use((ctx) => {
       ctx.ok("BODY");
     })
     .run(aliReq, aliRes, aliContext);
@@ -124,7 +124,7 @@ test("text body set type", async function () {
   const aliRes = newAliRes();
 
   await new SfaAlifunc()
-    .use(async (ctx) => {
+    .use((ctx) => {
       ctx.res.setHeader("content-type", "text/plain");
       ctx.res.setHeader("content-length", Buffer.byteLength("BODY").toString());
       ctx.ok("BODY");
@@ -142,7 +142,7 @@ test("html body", async function () {
   const aliRes = newAliRes();
 
   await new SfaAlifunc()
-    .use(async (ctx) => {
+    .use((ctx) => {
       ctx.ok("<div>BODY</div>");
     })
     .run(aliReq, aliRes, aliContext);
@@ -158,7 +158,7 @@ test("buffer body", async function () {
   const aliRes = newAliRes();
 
   await new SfaAlifunc()
-    .use(async (ctx) => {
+    .use((ctx) => {
       ctx.ok(Buffer.from("BODY", "utf-8"));
     })
     .run(aliReq, aliRes, aliContext);
@@ -174,7 +174,7 @@ test("buffer body set type", async function () {
   const aliRes = newAliRes();
 
   await new SfaAlifunc()
-    .use(async (ctx) => {
+    .use((ctx) => {
       ctx.res.setHeader("content-type", "application/octet-stream");
       ctx.res.setHeader(
         "content-length",
@@ -198,7 +198,7 @@ test("prase json", async function () {
 
   await new SfaAlifunc()
     .useHttpJsonBody()
-    .use(async (ctx) => {
+    .use((ctx) => {
       ctx.ok(ctx.req.body);
     })
     .run(aliReq, aliRes, aliContext);

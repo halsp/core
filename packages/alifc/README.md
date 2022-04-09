@@ -13,7 +13,7 @@ npm i @sfajs/alifunc
 ## 开始使用
 
 ```JS
-import SfaAlifunc from "@sfajs/alifunc";
+import { SfaAlifunc } from "@sfajs/alifunc";
 
 const handler = async function (req, resp, context) {
   await new SfaAlifunc(req, resp, context)
@@ -28,7 +28,7 @@ module.exports.handler = handler;
 如果添加 `@sfajs/router`
 
 ```JS
-import SfaAlifunc from "@sfajs/alifunc";
+import { SfaAlifunc } from "@sfajs/alifunc";
 import "@sfajs/router";
 
 const handler = async function (req, resp, context) {
