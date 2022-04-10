@@ -24,8 +24,8 @@ function runTest(type: InjectType) {
   test(`inject type ${type}`, async function () {
     const startup = new TestStartup()
       .useInject()
-      .inject(Service1, Service1, type)
-      .inject(Service2, Service2)
+      .inject(Service1, type)
+      .inject(Service2)
       .add(TestMiddleware);
 
     let res = await startup.run(new SfaRequest());

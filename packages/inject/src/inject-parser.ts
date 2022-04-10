@@ -26,8 +26,8 @@ class InjectDecoratorParser<T extends object = any> {
     const isConstructor = isFunction(this.target);
     this.injectConstructor = isConstructor
       ? (this.target as ObjectConstructor<T>)
-      : ((this.target as T).constructor as ObjectConstructor<T>);
-    this.obj = isConstructor ? this.createObject() : (this.target as T);
+      : (this.target.constructor as ObjectConstructor<T>);
+    this.obj = isConstructor ? this.createTargetObject() : this.target;
   }
 
   private readonly obj: T;
@@ -51,11 +51,15 @@ class InjectDecoratorParser<T extends object = any> {
       this.obj,
       property
     ) as ObjectConstructor<T>;
+    return parseInject(this.ctx, constr);
+  }
 
+  private createTargetObject() {
+    const target = this.target as ObjectConstructor<T>;
     const injectMaps = this.ctx.bag<InjectMap[]>(MAP_BAG) ?? [];
-    const existMap = injectMaps.filter((map) => map.anestor == constr)[0];
+    const existMap = injectMaps.filter((map) => map.anestor == target)[0];
     if (!existMap) {
-      return parseInject(this.ctx, constr);
+      return createObject(this.ctx, target);
     }
 
     if (
@@ -71,30 +75,32 @@ class InjectDecoratorParser<T extends object = any> {
       }
 
       const existInject = records.filter(
-        (item) => item.injectConstructor == constr
+        (item) => item.injectConstructor == target
       )[0];
       if (existInject) {
         return existInject.value;
       } else {
-        const obj = parseInject(this.ctx, existMap.target);
+        const obj = createObject(this.ctx, existMap.target);
         records.push({
-          injectConstructor: constr,
+          injectConstructor: target,
           value: obj,
         });
         return obj;
       }
     } else {
-      return parseInject(this.ctx, existMap.target);
+      return createObject(this.ctx, existMap.target);
     }
   }
+}
 
-  private createObject(): T {
-    const target = this.target as ObjectConstructor<T>;
-    const providers: ObjectConstructor[] =
-      Reflect.getMetadata(CLASS_METADATA, target) ?? [];
-    const args = providers.map((provider) => parseInject(this.ctx, provider));
-    return new target(...args);
-  }
+export function createObject<T extends object>(
+  ctx: HttpContext,
+  target: ObjectConstructor<T>
+): T {
+  const providers: ObjectConstructor[] =
+    Reflect.getMetadata(CLASS_METADATA, target) ?? [];
+  const args = providers.map((provider) => parseInject(ctx, provider));
+  return new target(...args);
 }
 
 export function isInjectClass<T extends object>(target: ObjectConstructor<T>) {

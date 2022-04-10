@@ -33,9 +33,9 @@ class TestMiddleware extends Middleware {
     this.service1.count++;
     this.service3.count++;
     this.ok({
-      service1: this.service1.invoke(),
-      service2: this.service2.invoke(),
-      service3: this.service1.invoke(),
+      service1: this.service1.invoke(), // add 1
+      service2: this.service2.invoke(), // add 1
+      service3: this.service1.invoke(), // add 1
       count: this.service1.count,
     });
   }
@@ -44,8 +44,8 @@ class TestMiddleware extends Middleware {
 test(`class`, async function () {
   const res = await new TestStartup()
     .useInject()
-    .inject(Service1, Service1, InjectType.Singleton)
-    .inject(Service2, Service2, InjectType.Singleton)
+    .inject(Service1, InjectType.Singleton)
+    .inject(Service2, InjectType.Singleton)
     .add(TestMiddleware)
     .run();
 
@@ -53,7 +53,7 @@ test(`class`, async function () {
     service1: "service1",
     service2: "service2.service1",
     service3: "service1",
-    count: 4,
+    count: 5,
   });
   expect(res.status).toBe(200);
 });

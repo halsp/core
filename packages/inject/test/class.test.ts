@@ -1,5 +1,5 @@
 import { Middleware, TestStartup } from "@sfajs/core";
-import { Inject } from "../src";
+import { Inject, InjectType, parseInject } from "../src";
 
 export class Service1 extends Object {
   public invoke(): string {
@@ -19,6 +19,7 @@ export class Service2 extends Object {
   public invoke(): string {
     return "service2." + this.service1.invoke();
   }
+  public count = 0;
 }
 
 class TestMiddleware extends Middleware {
@@ -38,5 +39,22 @@ test(`class`, async function () {
   expect(res.body).toEqual({
     service: "service2.service1",
   });
+  expect(res.status).toBe(200);
+});
+
+test(`class singleton`, async function () {
+  const res = await new TestStartup()
+    .useInject()
+    .inject(Service2, InjectType.Singleton)
+    .use((ctx) => {
+      const service1 = parseInject(ctx, Service2);
+      service1.count += 1;
+      const service2 = parseInject(ctx, Service2);
+      service2.count += 2;
+      ctx.ok(service2.count);
+    })
+    .run();
+
+  expect(res.body).toBe(3);
   expect(res.status).toBe(200);
 });
