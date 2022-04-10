@@ -27,8 +27,8 @@ function runTest(type?: InjectType) {
       .add(TestMiddleware)
       .run();
     expect(res.body).toEqual({
-      service1: type == InjectType.Singleton ? 3 : 1,
-      service2: type == InjectType.Singleton ? 3 : 2,
+      service1: type == InjectType.Singleton || type == undefined ? 3 : 1,
+      service2: type == InjectType.Singleton || type == undefined ? 3 : 2,
     });
     expect(res.status).toBe(200);
   });

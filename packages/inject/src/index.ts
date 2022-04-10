@@ -32,7 +32,8 @@ Startup.prototype.useInject = function (): Startup {
     return this;
   }
   this[IS_INJECT_USED] = true;
-  this.use(async (ctx, next) => {
+
+  return this.use(async (ctx, next) => {
     ctx.bag(DECORATOR_SCOPED_BAG, []);
     await next();
   })
@@ -44,7 +45,6 @@ Startup.prototype.useInject = function (): Startup {
         return parseInject(ctx, mh);
       }
     }, HookType.Constructor);
-  return this;
 };
 
 Startup.prototype.inject = function <
@@ -74,7 +74,7 @@ Startup.prototype.inject = function <
     injectMaps.push({
       anestor,
       target,
-      type: type ?? InjectType.Transient,
+      type: type ?? InjectType.Scoped,
     });
     ctx.bag(MAP_BAG, injectMaps);
     await next();
