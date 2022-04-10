@@ -18,3 +18,15 @@ test("without md", async function () {
 
   expect(res).not.toBeUndefined();
 });
+
+test("requst/response ctx", async function () {
+  const res = await new TestStartup()
+    .use((ctx) => {
+      expect(ctx).toBe(ctx.res.ctx);
+      expect(ctx).toBe(ctx.req.ctx);
+      ctx.ok();
+    })
+    .run();
+
+  expect(res.status).toBe(200);
+});

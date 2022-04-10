@@ -5,12 +5,15 @@ import {
   ReadonlyHeadersDict,
   normalizePath,
 } from "../utils";
+import { HttpContext } from "./http-context";
 import { SfaHeader } from "./sfa-header";
 
 export class SfaRequest extends SfaHeader {
   constructor() {
     super(() => this.#headers);
   }
+
+  public readonly ctx!: HttpContext;
 
   readonly #headers: HeadersDict = {};
   get headers(): ReadonlyHeadersDict {

@@ -7,7 +7,10 @@ import { isNil, isObject, Dict } from "../utils";
 export class HttpContext extends ResultHandler {
   constructor(req: SfaRequest) {
     super(() => this.#res);
+
     this.#req = req;
+    (this.#req as any).ctx = this;
+    (this.#res as any).ctx = this;
   }
 
   readonly #bag: Dict = {};

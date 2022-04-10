@@ -4,11 +4,10 @@ import {
   NumericalHeadersDict,
   ReadonlyHeadersDict,
 } from "../utils";
+import { HttpContext } from "./http-context";
 import { ResultHandler } from "./result-handler";
 
 export class SfaResponse extends ResultHandler {
-  readonly #headers: HeadersDict = {};
-
   constructor(
     public status: StatusCodes = StatusCodes.NOT_FOUND,
     public body: any = undefined,
@@ -17,6 +16,10 @@ export class SfaResponse extends ResultHandler {
     super(() => this);
     if (headers) this.setHeaders(headers);
   }
+
+  public readonly ctx!: HttpContext;
+
+  readonly #headers: HeadersDict = {};
 
   get isSuccess(): boolean {
     return this.status >= 200 && this.status < 300;
