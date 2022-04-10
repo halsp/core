@@ -12,12 +12,12 @@ import MapParser from "./map/map-parser";
 import path = require("path");
 import MapItem from "./map/map-item";
 import RouterConfig from "./router-config";
-import { DEFAULT_ACTION_DIR } from "./constant";
+import { DEFAULT_ACTION_DIR, STARTUP_ROUTER_CONFIG } from "./constant";
 
 export { Action, MapItem, RouterConfig };
 
 export {
-  ActionMetadata,
+  SetActionMetadata,
   setActionMetadata,
   getActionMetadata,
 } from "./decorators";
@@ -50,7 +50,7 @@ Startup.prototype.useRouter = function (cfg: RouterConfig = {}): Startup {
   this.add((ctx) => {
     const filePath = path.join(
       process.cwd(),
-      (this as any).routerConfig.dir,
+      this[STARTUP_ROUTER_CONFIG].dir,
       ctx.actionMetadata.path
     );
     // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -61,7 +61,7 @@ Startup.prototype.useRouter = function (cfg: RouterConfig = {}): Startup {
 };
 
 function initRouter(startup: Startup, cfg: RouterConfig) {
-  if ((startup as any).routerConfig) {
+  if (startup[STARTUP_ROUTER_CONFIG]) {
     return;
   }
 
@@ -69,7 +69,7 @@ function initRouter(startup: Startup, cfg: RouterConfig) {
   cfg.dir =
     cfg.dir?.replace(/^\//, "").replace(/\/$/, "") ?? DEFAULT_ACTION_DIR;
   cfg.prefix = cfg.prefix?.replace(/^\//, "").replace(/\/$/, "") ?? "";
-  (startup as any).routerConfig = cfg;
+  startup[STARTUP_ROUTER_CONFIG] = cfg;
 
   startup.use(async (ctx, next) => {
     if (parseRouter(startup, ctx)) {
@@ -79,7 +79,7 @@ function initRouter(startup: Startup, cfg: RouterConfig) {
 }
 
 function parseRouter(startup: Startup, ctx: HttpContext): boolean {
-  const cfg: RouterConfig = (startup as any).routerConfig;
+  const cfg: RouterConfig = startup[STARTUP_ROUTER_CONFIG];
   const mapParser = new MapParser(ctx, cfg);
   if (mapParser.notFound) {
     ctx.notFoundMsg({

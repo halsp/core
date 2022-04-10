@@ -2,9 +2,9 @@ import { SfaRequest, TestStartup } from "@sfajs/core";
 import "../src";
 import { routerCfg } from "./global";
 
-test("metadata", async () => {
+test("custom metadata", async () => {
   const result = await new TestStartup(
-    new SfaRequest().setPath("/metadata").setMethod("GET")
+    new SfaRequest().setPath("/metadata/custom").setMethod("GET")
   )
     .useRouterParser(routerCfg)
     .useRouter()
@@ -20,51 +20,25 @@ test("metadata", async () => {
   expect(result.status).toBe(200);
 });
 
-function testReplace(replace: boolean) {
-  test("notreplace metadata", async () => {
-    const result = await new TestStartup(
-      new SfaRequest()
-        .setPath("/metadata/" + (replace ? "replace" : "notreplace"))
-        .setMethod("POST")
-    )
-      .useRouterParser(routerCfg)
-      .use((ctx) => {
-        ctx.ok({
-          custom1: ctx.actionMetadata.custom1,
-          custom2: ctx.actionMetadata.custom2,
-        });
-      })
-      .useRouter()
-      .run();
-    expect(result.body).toEqual({
-      custom1: "1",
-      custom2: replace ? undefined : "2",
-    });
-    expect(result.status).toBe(200);
-  });
-}
-
-testReplace(true);
-testReplace(false);
-
-test("object metadata", async () => {
+test("set metadata", async () => {
   const result = await new TestStartup(
-    new SfaRequest().setPath("/metadata/object").setMethod("GET")
+    new SfaRequest().setPath("/metadata/set-metadata").setMethod("GET")
   )
     .useRouterParser(routerCfg)
     .useRouter()
     .run();
   expect(result.body).toEqual({
     object: {
-      m1: "1",
-      m2: "2",
-      m3: "3",
+      m1: 1,
+      m2: 2,
+      m3: 3,
     },
     constructor: {
-      m1: "1",
-      m2: "2",
-      m3: "3",
+      m1: 1,
+      m2: 2,
+      m3: 3,
     },
+    m1: 1,
   });
   expect(result.status).toBe(200);
 });

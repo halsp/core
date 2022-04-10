@@ -111,14 +111,12 @@ const res = await new TestStartup()
 
 ## 路由元数据
 
-你可以通过装饰器 `@ActionMetadata({})` 装饰 Action，给 Action 添加元数据，添加的元数据可以在解析路由后获取
+你可以通过装饰器 `@SetActionMetadata(key,value)` 装饰 Action，给 Action 添加元数据，添加的元数据可以在解析路由后获取
 
 ```TS
 import { Action } from "@sfajs/core"
 
-@ActionMetadata({
-  role: "admin"
-})
+@SetActionMetadata("roles", ["admin"])
 export default class extends Action{}
 ```
 

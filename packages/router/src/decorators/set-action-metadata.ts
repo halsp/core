@@ -1,0 +1,17 @@
+import Action from "../action";
+import { ObjectConstructor } from "@sfajs/core";
+import { METADATA } from "../constant";
+
+export function setActionMetadata<T>(
+  target: ObjectConstructor<Action> | Action,
+  metadataKey: string,
+  metadataValue: T
+) {
+  if (target instanceof Action) {
+    target = target.constructor as ObjectConstructor<Action>;
+  }
+
+  const metadata = Reflect.getMetadata(METADATA, target) ?? {};
+  metadata[metadataKey] = metadataValue;
+  Reflect.defineMetadata(METADATA, metadata, target);
+}
