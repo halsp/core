@@ -3,21 +3,43 @@ import "../../src";
 import { routerCfg } from "../global";
 
 test(`restful params test1`, async function () {
-  const result = await new TestStartup(
+  const res = await new TestStartup(
     new SfaRequest().setPath("/restful/45").setMethod(HttpMethod.get)
   )
     .useRouter(routerCfg)
     .run();
-  expect(result.status).toBe(200);
-  expect(result.body.id).toBe("45");
+  expect(res.body).toEqual({
+    id: "45",
+    method: "GET",
+  });
+  expect(res.status).toBe(200);
 });
 
 test(`restful params test2`, async function () {
-  const result = await new TestStartup(
+  const res = await new TestStartup(
     new SfaRequest().setPath("/restful/11/animals").setMethod(HttpMethod.get)
   )
     .useRouter(routerCfg)
     .run();
-  expect(result.status).toBe(200);
-  expect(result.body.id).toBe("11");
+
+  expect(res.body).toEqual({
+    id: "11",
+    method: "GET",
+  });
+  expect(res.status).toBe(200);
+});
+
+test(`get params one object`, async function () {
+  const res = await new TestStartup(
+    new SfaRequest().setPath("/restful/45").setMethod(HttpMethod.get)
+  )
+    .useRouterParser(routerCfg)
+    .use(async (ctx, next) => {
+      expect(ctx.req.params).toBe(ctx.req.params);
+      await next();
+    })
+    .useRouter(routerCfg)
+    .run();
+  console.log("body", res.body);
+  expect(res.status).toBe(200);
 });

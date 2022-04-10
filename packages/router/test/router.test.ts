@@ -17,6 +17,11 @@ test("startup not exist", async function () {
   )
     .useRouter(routerCfg)
     .run();
+  expect(result.body).toEqual({
+    message: "Can't find the path：simple/router1",
+    path: "simple/router1",
+    status: 404,
+  });
   expect(result.status).toBe(404);
 });
 
