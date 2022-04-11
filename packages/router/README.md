@@ -91,24 +91,6 @@ const res = await new OtherStartup().useRouter().run();
 - dir: 路由文件夹，`@sfajs/router` 能够将路由文件夹下的所有 `Action` 映射为 `http` 访问路径。所有 API Action 统一放在这个文件夹中，在该目录中，建立各 `Action` 文件或文件夹。`Action` 文件是 API 的最小执行单元，详情后面 [Action](##Action) 部分有介绍
 - prefix: 路由前缀
 
-## 使用路由信息
-
-如果你想使用匹配的路由信息，如 action 文件位置、action 构造函数的元数据、restful 路径参数已经其他元数据
-
-需要配合使用 `useRouterParser` 和 `useRouter`
-
-```TS
-const res = await new TestStartup()
-  .useRouterParser()
-  // add your middleware
-  .useRouter()
-  .run();
-```
-
-在 `useRouterParser` 后面添加的中间件， 管道 `ctx` 对象中会添加 `actionMetadata` 字段
-
-`useRouterParser` 也接收参数 `RouterConfig`，并且 `useRouter` 接收的参数将被忽略
-
 ## 路由元数据
 
 你可以通过装饰器 `@SetActionMetadata(key,value)` 装饰 Action，给 Action 添加元数据，添加的元数据可以在解析路由后获取
@@ -125,7 +107,6 @@ import "@sfajs/router";
 import { TestStartup } from "@sfajs/core"
 
 const res = await new TestStartup()
-  .useRouterParser()
   .use(async (ctx, next)=>{
     const role = ctx.actionMetadata.role; // admin
     await next();
@@ -327,7 +308,7 @@ export default class extends Action {
 
 `@sfajs/router` 会在 `ctx.req` 中添加 `params` 属性
 
-在 `startup.useRouter` 或 `startup.useRouterParser` 之后的中间件，都可以获取 `ctx.req.params`
+在 `startup.useRouter` 之前或之后的中间件，都可以获取 `ctx.req.params`
 
 `params` 内容是 RESTful 路径中的参数，如
 
