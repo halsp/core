@@ -54,9 +54,13 @@ startup.useViews({
 
 默认为 `views`, 所有视图将在视图文件夹中查找
 
-## ctx.view && md.view
+## `.view`
 
-可以使用 `ctx.view()` 渲染视图，在中间件类中，也可以使用 `this.view()` 渲染视图
+你可以在三个地方使用 `view()` 函数渲染视图
+
+- ctx.view(): 管道 HttpContext 对象
+- md.view(): 中间件中可以使用 `this.view()` 渲染视图
+- res.view(): SfaResponse 对象
 
 `view` 函数接收两个参数
 

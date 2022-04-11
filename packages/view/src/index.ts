@@ -1,5 +1,5 @@
 import "@sfajs/core";
-import { Startup, HttpContext, SfaResponse, ResultHandler } from "@sfajs/core";
+import { Startup, HttpContext, ResultHandler } from "@sfajs/core";
 import * as path from "path";
 import * as fs from "fs";
 import {
@@ -8,6 +8,7 @@ import {
   Engine,
   RendererInterface,
 } from "./views-config";
+import { RENDERED } from "./constant";
 
 declare module "@sfajs/core" {
   interface Startup {
@@ -19,10 +20,7 @@ declare module "@sfajs/core" {
   }
 
   interface ResultHandler {
-    view(
-      tmpPath: string,
-      locals?: Record<string, unknown>
-    ): Promise<SfaResponse>;
+    view(tmpPath: string, locals?: Record<string, unknown>): Promise<this>;
   }
 }
 
@@ -39,7 +37,12 @@ Startup.prototype.useViews = function <T extends Startup>(
     } else {
       ctx = this as HttpContext;
     }
-    return await render(ctx, cfg, tmpPath, locals);
+
+    if (ctx[RENDERED]) return this;
+    ctx[RENDERED] = true;
+
+    await render(ctx, cfg, tmpPath, locals);
+    return this;
   };
 
   this.use(async (ctx, next) => {
@@ -55,7 +58,7 @@ async function render(
   cfg: ViewsConfig,
   tmpPath: string,
   locals: Record<string, unknown>
-): Promise<SfaResponse> {
+): Promise<void> {
   tmpPath = path.join(cfg.dir ?? "views", tmpPath ?? "");
   cfg.options = Object.assign(cfg.options ?? {}, ctx.state ?? {}, locals ?? {});
   let engines = cfg.engines ?? [];
@@ -64,7 +67,7 @@ async function render(
   }
 
   const file = getFile(tmpPath, engines);
-  if (!file) return ctx.res;
+  if (!file) return;
 
   if (file.ext == "html") {
     ctx.ok(fs.readFileSync(file.filePath, "utf-8"));
@@ -76,7 +79,7 @@ async function render(
     ctx.ok(await engine(file.filePath, cfg.options));
     ctx.res.setHeader("content-type", "text/html");
   }
-  return ctx.res;
+  return;
 }
 
 function getFile(
