@@ -60,7 +60,7 @@ export abstract class Middleware extends ResultHandler {
     } catch (err) {
       if (err instanceof HttpException && err.breakthrough) {
         throw err;
-      } else if (err) {
+      } else {
         const hookResult = await execHooks(
           this.ctx,
           err as Error,
