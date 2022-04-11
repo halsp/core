@@ -1,5 +1,5 @@
 import "@sfajs/core";
-import { Startup, HttpContext, Middleware, SfaResponse } from "@sfajs/core";
+import { Startup, HttpContext, SfaResponse, ResultHandler } from "@sfajs/core";
 import * as path from "path";
 import * as fs from "fs";
 import {
@@ -15,14 +15,10 @@ declare module "@sfajs/core" {
   }
 
   interface HttpContext {
-    view(
-      tmpPath: string,
-      locals?: Record<string, unknown>
-    ): Promise<SfaResponse>;
     state: Record<string, unknown>;
   }
 
-  interface Middleware {
+  interface ResultHandler {
     view(
       tmpPath: string,
       locals?: Record<string, unknown>
@@ -33,18 +29,17 @@ declare module "@sfajs/core" {
 Startup.prototype.useViews = function <T extends Startup>(
   cfg: ViewsConfig = {}
 ): T {
-  Middleware.prototype.view = async function (
+  ResultHandler.prototype.view = async function (
     tmpPath,
     locals: Record<string, unknown> = {}
   ) {
-    return await render(this.ctx, cfg, tmpPath, locals);
-  };
-
-  HttpContext.prototype.view = async function (
-    tmpPath,
-    locals: Record<string, unknown> = {}
-  ) {
-    return await render(this, cfg, tmpPath, locals);
+    let ctx: HttpContext;
+    if (this["ctx"]) {
+      ctx = this["ctx"];
+    } else {
+      ctx = this as HttpContext;
+    }
+    return await render(ctx, cfg, tmpPath, locals);
   };
 
   this.use(async (ctx, next) => {
