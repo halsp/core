@@ -152,12 +152,15 @@ export default class MapParser {
   private getMap(): MapItem[] {
     const mapPath = path.join(process.cwd(), MAP_FILE_NAME);
     if (existsSync(mapPath)) {
-      const result: MapItem[] = [];
-      JSON.parse(readFileSync(mapPath, "utf-8")).forEach((m: MapItem) => {
-        const mapItem = result.push(new MapItem(m.path));
-        Object.assign(mapItem, m);
-        return mapItem;
-      });
+      const result: MapItem[] = JSON.parse(readFileSync(mapPath, "utf-8")).map(
+        (m: MapItem) => {
+          const mapItem = new MapItem(m.path);
+          Object.keys(m).forEach((key) => {
+            mapItem[key] = m[key];
+          });
+          return mapItem;
+        }
+      );
       return result;
     } else {
       return new MapCreater(this.routerDir).map;
