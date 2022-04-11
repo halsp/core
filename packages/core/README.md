@@ -400,5 +400,7 @@ API 返回错误时，可统一返回 `ErrorMessage`，命名以 `Msg` 结尾的
 - [@sfajs/mva](https://github.com/sfajs/mva): MVC 框架
 - [@sfajs/swagger](https://github.com/sfajs/swagger): 使用 swagger 自动生成你的 sfa 文档
 - [@sfajs/koa](https://github.com/sfajs/koa): 让 koa 成为 sfa 的中间件，并打通二者中间件管道
+- [@sfajs/inject](https://github.com/sfajs/inject): 用装饰器实现 Sfa 的依赖注入 / 控制反转
+- [@sfajs/req-deco](https://github.com/sfajs/req-deco): 用通过装饰器便捷使用接口参数
 
 > 🎉 更多中间件欢迎贡献并编辑此 [README](https://github.com/sfajs/core/edit/main/README.md) 以添加
