@@ -3,21 +3,25 @@ import { Middleware, MiddlewareConstructor } from "./middleware";
 
 const MIDDLEWARE_HOOK_BAG = "__@sfajs/core_middlewareHooksBag__";
 
-export type MdHook<T extends Middleware | MiddlewareConstructor = any> = (
-  ctx: HttpContext,
-  md: T
-) =>
-  | void
-  | Promise<void>
-  | Middleware
-  | undefined
-  | Promise<Middleware | undefined>;
+export type MdHook<T extends Middleware | MiddlewareConstructor | Error = any> =
+  (
+    ctx: HttpContext,
+    md: T
+  ) =>
+    | void
+    | Promise<void>
+    | Middleware
+    | undefined
+    | Promise<Middleware | undefined>
+    | boolean
+    | Promise<boolean>;
 
 export enum HookType {
   BeforeInvoke,
   AfterInvoke,
   BeforeNext,
   Constructor,
+  Exception,
 }
 
 const isHTCons = (type: HookType) =>
@@ -45,35 +49,63 @@ export class HookMiddleware extends Middleware {
   }
 }
 
-export async function execHoods(
+export async function execHooks(
   ctx: HttpContext,
-  middleware: Middleware,
-  type: HookTypeWithoutConstructor
-): Promise<void>;
-export async function execHoods(
+  exception: Error,
+  type: HookType.Exception
+): Promise<boolean>;
+export async function execHooks(
   ctx: HttpContext,
   middleware: MiddlewareConstructor,
   type: HookType.Constructor
 ): Promise<Middleware>;
-export async function execHoods(
+export async function execHooks(
   ctx: HttpContext,
-  middleware: Middleware | MiddlewareConstructor,
+  middleware: Middleware,
+  type: HookTypeWithoutConstructor
+): Promise<void>;
+export async function execHooks(
+  ctx: HttpContext,
+  middleware: Middleware | MiddlewareConstructor | Error,
   type: HookType
-): Promise<Middleware | void> {
+): Promise<Middleware | void | boolean> {
+  if (type == HookType.Constructor) {
+    return await execConstructorHooks(ctx, middleware as MiddlewareConstructor);
+  } else if (type == HookType.Exception) {
+    return await execExceptionHooks(ctx, middleware as Error);
+  }
+
   const hooks = ctx.bag<HookItem[]>(MIDDLEWARE_HOOK_BAG) ?? [];
-  let md: Middleware | undefined;
   for (const hookItem of hooks.filter((h) => h.type == type)) {
-    if (type != HookType.Constructor) {
-      await hookItem.hook(ctx, middleware);
-    } else if (!(middleware instanceof Middleware)) {
-      md = (await hookItem.hook(ctx, middleware)) as Middleware;
-      if (md) break;
+    await hookItem.hook(ctx, middleware);
+  }
+}
+
+async function execExceptionHooks(
+  ctx: HttpContext,
+  exception: Error
+): Promise<boolean> {
+  const hooks = ctx.bag<HookItem[]>(MIDDLEWARE_HOOK_BAG) ?? [];
+  let result = false;
+  for (const hookItem of hooks.filter((h) => h.type == HookType.Exception)) {
+    result = (await hookItem.hook(ctx, exception)) as boolean;
+    if (result) break;
+  }
+  return result;
+}
+
+async function execConstructorHooks(
+  ctx: HttpContext,
+  middleware: MiddlewareConstructor
+): Promise<Middleware | undefined> {
+  const hooks = ctx.bag<HookItem[]>(MIDDLEWARE_HOOK_BAG) ?? [];
+  let result: Middleware | undefined;
+  for (const hookItem of hooks.filter((h) => h.type == HookType.Constructor)) {
+    if (!(middleware instanceof Middleware)) {
+      result = (await hookItem.hook(ctx, middleware)) as Middleware;
+      if (result) break;
     }
   }
-  if (middleware instanceof Middleware || type != HookType.Constructor) {
-    return;
-  } else {
-    if (!md) md = new middleware();
-    return md;
-  }
+  if (!result) result = new middleware();
+  return result;
 }

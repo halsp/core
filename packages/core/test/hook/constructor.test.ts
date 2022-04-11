@@ -1,5 +1,4 @@
-import { Middleware, TestStartup } from "../../src";
-import { HookType } from "../../src/middlewares";
+import { Middleware, TestStartup, HookType } from "../../src";
 
 class TestMiddleware1 extends Middleware {
   constructor(private readonly num: number) {

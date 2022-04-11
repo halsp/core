@@ -1,5 +1,4 @@
-import { Middleware, TestStartup } from "../../src";
-import { HookType } from "../../src/middlewares";
+import { Middleware, TestStartup, HookType } from "../../src";
 
 class TestMiddleware extends Middleware {
   static index = 1;

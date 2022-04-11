@@ -1,6 +1,6 @@
 import { HttpContext, ResultHandler } from "../context";
 import { HttpException } from "../exceptions";
-import { execHoods, HookType } from "./hook.middleware";
+import { execHooks, HookType } from "./hook.middleware";
 import { LambdaMiddleware } from "./lambda.middleware";
 
 function isMiddlewareConstructor(md: any): md is MiddlewareConstructor {
@@ -27,7 +27,7 @@ export async function createMiddleware(
   if (middleware instanceof Middleware) {
     return middleware;
   } else if (isMiddlewareConstructor(middleware)) {
-    return await execHoods(ctx, middleware, HookType.Constructor);
+    return await execHooks(ctx, middleware, HookType.Constructor);
   } else {
     return createMiddleware(ctx, await middleware(ctx));
   }
@@ -48,19 +48,27 @@ export abstract class Middleware extends ResultHandler {
 
   abstract invoke(): Promise<void>;
   protected async next(): Promise<void> {
+    let nextMd: Middleware | undefined = undefined;
     try {
-      await execHoods(this.ctx, this, HookType.BeforeNext);
+      await execHooks(this.ctx, this, HookType.BeforeNext);
       if (this.#mds.length <= this.#index + 1) return;
-      const nextMd = await this.#createNextMiddleware();
+      nextMd = await this.#createNextMiddleware();
       nextMd.init(this.ctx, this.#index + 1, this.#mds);
-      await execHoods(this.ctx, nextMd, HookType.BeforeInvoke);
+      await execHooks(this.ctx, nextMd, HookType.BeforeInvoke);
       await nextMd.invoke();
-      await execHoods(this.ctx, nextMd, HookType.AfterInvoke);
+      await execHooks(this.ctx, nextMd, HookType.AfterInvoke);
     } catch (err) {
       if (err instanceof HttpException && err.breakthrough) {
         throw err;
-      } else {
-        this.ctx.catchError(err);
+      } else if (err) {
+        const hookResult = await execHooks(
+          this.ctx,
+          err as Error,
+          HookType.Exception
+        );
+        if (!hookResult) {
+          this.ctx.catchError(err);
+        }
       }
     }
   }

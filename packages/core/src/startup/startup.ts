@@ -13,6 +13,7 @@ import {
 import { Stream } from "stream";
 import * as mime from "mime-types";
 import { isPlainObject, ObjectConstructor } from "../utils";
+import { HttpException } from "../exceptions";
 
 export abstract class Startup {
   readonly #mds: MiddlewareItem[] = [];
@@ -50,26 +51,34 @@ export abstract class Startup {
   }
 
   hook<T extends Middleware = Middleware>(
-    mh: (ctx: HttpContext, middleware: T) => void,
-    type?: HookTypeWithoutConstructor
-  ): this;
-  hook<T extends Middleware = Middleware>(
-    mh: (ctx: HttpContext, middleware: T) => Promise<void>,
-    type?: HookTypeWithoutConstructor
-  ): this;
-  hook<T extends Middleware = Middleware>(
     mh: (
       ctx: HttpContext,
       middlewareConstructor: ObjectConstructor<T>
     ) => T | undefined,
-    type?: HookType.Constructor
+    type: HookType.Constructor
   ): this;
   hook<T extends Middleware = Middleware>(
     mh: (
       ctx: HttpContext,
       middlewareConstructor: ObjectConstructor<T>
     ) => Promise<T | undefined>,
-    type?: HookType.Constructor
+    type: HookType.Constructor
+  ): this;
+  hook<T extends Error = HttpException>(
+    mh: (ctx: HttpContext, exception: T) => boolean,
+    type: HookType.Exception
+  ): this;
+  hook<T extends Error = HttpException>(
+    mh: (ctx: HttpContext, exception: T) => Promise<boolean>,
+    type: HookType.Exception
+  ): this;
+  hook<T extends Middleware = Middleware>(
+    mh: (ctx: HttpContext, middleware: T) => void,
+    type?: HookTypeWithoutConstructor
+  ): this;
+  hook<T extends Middleware = Middleware>(
+    mh: (ctx: HttpContext, middleware: T) => Promise<void>,
+    type?: HookTypeWithoutConstructor
   ): this;
   hook(mh: MdHook, type = HookType.BeforeInvoke): this {
     this.#mds.push(() => new HookMiddleware(mh, type));
@@ -82,8 +91,9 @@ export abstract class Startup {
       return ctx.res;
     }
 
+    let md: Middleware | undefined = undefined;
     try {
-      const md = await createMiddleware(ctx, this.#mds[0]);
+      md = await createMiddleware(ctx, this.#mds[0]);
       await (md as any).init(ctx, 0, this.#mds).invoke();
     } catch (err) {
       ctx.catchError(err);
