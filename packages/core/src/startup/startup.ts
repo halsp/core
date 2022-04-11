@@ -81,8 +81,8 @@ export abstract class Startup {
       return ctx.res;
     }
 
-    const md = await createMiddleware(ctx, this.#mds[0]);
     try {
+      const md = await createMiddleware(ctx, this.#mds[0]);
       await (md as any).init(ctx, 0, this.#mds).invoke();
     } catch (err) {
       ctx.catchError(err);
