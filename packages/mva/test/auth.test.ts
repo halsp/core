@@ -14,14 +14,13 @@ test("auth access", async function () {
       .use(async (ctx, next) => {
         await next();
       })
-      .useMva({
-        onParserAdded: (startup) => startup.add(AuthMiddleware),
-      })
+      .add(AuthMiddleware)
+      .useMva()
       .run();
 
     expect(res.status).toBe(200);
-    expect(res.getHeader("content-type")).toBe("text/html");
     expect(res.body).toBe("<p>email: test1@hal.wang</p>");
+    expect(res.getHeader("content-type")).toBe("text/html");
   });
 });
 
@@ -33,9 +32,8 @@ test("auth failed", async function () {
         .setMethod("GET")
         .setHeader("password", "test2password")
     )
-      .useMva({
-        onParserAdded: (startup) => startup.add(AuthMiddleware),
-      })
+      .add(AuthMiddleware)
+      .useMva()
       .run();
 
     expect(res.body).toEqual({

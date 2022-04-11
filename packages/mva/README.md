@@ -37,7 +37,6 @@ const res = await new TestStartup()
 - viewsConfig: `useViews` 参数
 - routerConfig: `useRouter` 参数
 - codes: 指定状态码对应的模板
-- onParserAdded: 解析路由后的回调，可以在这里添加需要使用路由信息的的中间件
 
 ## 关于 TS
 
