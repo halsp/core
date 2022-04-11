@@ -77,6 +77,7 @@ export abstract class Startup {
   }
 
   protected async invoke(ctx: HttpContext): Promise<SfaResponse> {
+    (ctx as any).startup = this;
     if (!this.#mds.length) {
       return ctx.res;
     }

@@ -3,6 +3,7 @@ import { SfaResponse } from "./sfa-response";
 import { ResultHandler } from "./result-handler";
 import { HttpException, InternalServerErrorException } from "../exceptions";
 import { isNil, isObject, Dict } from "../utils";
+import { Startup } from "../startup";
 
 export class HttpContext extends ResultHandler {
   constructor(req: SfaRequest) {
@@ -12,6 +13,8 @@ export class HttpContext extends ResultHandler {
     (this.#req as any).ctx = this;
     (this.#res as any).ctx = this;
   }
+
+  readonly startup!: Startup;
 
   readonly #bag: Dict = {};
 

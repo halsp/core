@@ -20,13 +20,13 @@ test("without md", async function () {
 });
 
 test("requst/response ctx", async function () {
-  const res = await new TestStartup()
-    .use((ctx) => {
-      expect(ctx).toBe(ctx.res.ctx);
-      expect(ctx).toBe(ctx.req.ctx);
-      ctx.ok();
-    })
-    .run();
+  const startup = new TestStartup().use((ctx) => {
+    expect(ctx).toBe(ctx.res.ctx);
+    expect(ctx).toBe(ctx.req.ctx);
+    expect(ctx.startup).toBe(startup);
+    ctx.ok();
+  });
+  const res = await startup.run();
 
   expect(res.status).toBe(200);
 });
