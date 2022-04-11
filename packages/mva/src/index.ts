@@ -11,13 +11,20 @@ export { MvaConfig };
 declare module "@sfajs/core" {
   interface Startup {
     useMva(cfg?: MvaConfig): this;
+    useErrorPage(...codes: CodeType[]): this;
     useErrorPage(codes: CodeType[]): this;
   }
 }
 
-Startup.prototype.useErrorPage = function (codes: CodeType[]): Startup {
+Startup.prototype.useErrorPage = function (...codes: any[]): Startup {
   if (this[ERROR_CODES]) return this;
   if (this[USED]) return this;
+
+  if (codes.length == 1 && Array.isArray(codes[0])) {
+    codes = codes[0];
+  }
+  codes = codes as CodeType[];
+
   this[ERROR_CODES] = codes;
 
   return this.hook(async (ctx, ex) => {
@@ -48,7 +55,7 @@ Startup.prototype.useMva = function (cfg = <MvaConfig>{}): Startup {
   return this.use(async (ctx, next) => {
     await next();
 
-    if (ctx.res.isSuccess && ctx.actionMetadata != undefined) {
+    if (ctx.res.isSuccess) {
       await ctx.view(ctx.actionMetadata.reqPath, ctx.res.body);
     }
   })

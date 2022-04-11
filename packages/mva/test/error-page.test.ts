@@ -67,7 +67,7 @@ test("replace", async function () {
     const res = await new TestStartup(
       new SfaRequest().setPath("not-exist").setMethod("GET")
     )
-      .useErrorPage([{ code: 404, replace: 204 }])
+      .useErrorPage({ code: 404, replace: 204 })
       .useMva()
       .run();
 
@@ -100,18 +100,26 @@ test("string error", async function () {
   });
 });
 
-test("without error code", async function () {
-  await runMva(async () => {
-    const res = await new TestStartup(
-      new SfaRequest().setPath("not-exist").setMethod("GET")
-    )
-      .useErrorPage([])
-      .useMva()
-      .run();
+function runEmptyCode(isArray: boolean) {
+  test(`without error code ${isArray}`, async function () {
+    await runMva(async () => {
+      const startup = new TestStartup(
+        new SfaRequest().setPath("not-exist").setMethod("GET")
+      );
+      if (isArray) {
+        startup.useErrorPage([]);
+      } else {
+        startup.useErrorPage();
+      }
+      const res = await startup.useMva().run();
 
-    expect404(res, false);
+      expect404(res, false);
+    });
   });
-});
+}
+
+runEmptyCode(true);
+runEmptyCode(false);
 
 test(`useMva before useErrorPage`, async function () {
   await runMva(async () => {
@@ -119,7 +127,7 @@ test(`useMva before useErrorPage`, async function () {
       new SfaRequest().setPath("not-exist").setMethod("GET")
     )
       .useMva()
-      .useErrorPage([404])
+      .useErrorPage(404)
       .run();
 
     expect404(res, false);
