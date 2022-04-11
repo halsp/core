@@ -17,9 +17,7 @@ import RouterConfig from "./router-config";
 import {
   CTX_CACHE_METADATA,
   DEFAULT_ACTION_DIR,
-  HTTP_CONTEXT_STARTUP,
   REQUEST_CACHE_PARAMS,
-  REQUEST_HTTP_CONTEXT,
   STARTUP_ROUTER_CONFIG,
 } from "./constant";
 
@@ -33,7 +31,6 @@ export {
 
 declare module "@sfajs/core" {
   interface Startup {
-    useRouterParser(cfg?: RouterConfig): this;
     useRouter(cfg?: RouterConfig): this;
   }
 
@@ -55,7 +52,7 @@ Object.defineProperty(HttpContext.prototype, "actionMetadata", {
       return ctx[CTX_CACHE_METADATA];
     }
 
-    const cfg: RouterConfig = ctx[HTTP_CONTEXT_STARTUP][STARTUP_ROUTER_CONFIG];
+    const cfg: RouterConfig = this[STARTUP_ROUTER_CONFIG];
     const mapParser = new MapParser(ctx, cfg);
     if (mapParser.notFound) {
       throw new NotFoundException({
@@ -86,7 +83,7 @@ Object.defineProperty(SfaRequest.prototype, "params", {
     }
 
     const params: QueryDict = {};
-    const actionMetadata: MapItem = req[REQUEST_HTTP_CONTEXT].actionMetadata;
+    const actionMetadata: MapItem = req.ctx.actionMetadata;
     if (actionMetadata.path.includes("^")) {
       const mapPathStrs = actionMetadata.reqPath.split("/");
       const reqPathStrs = req.path.split("/");
@@ -110,15 +107,17 @@ Object.defineProperty(SfaRequest.prototype, "params", {
   },
 });
 
-Startup.prototype.useRouterParser = function <T extends Startup>(
-  cfg: RouterConfig = {}
-): T {
-  initRouter(this, cfg);
-  return this as T;
-};
-
 Startup.prototype.useRouter = function (cfg: RouterConfig = {}): Startup {
-  initRouter(this, cfg);
+  if (!!this[STARTUP_ROUTER_CONFIG]) {
+    return this;
+  }
+
+  if (!cfg) cfg = {};
+  cfg.dir =
+    cfg.dir?.replace(/^\//, "").replace(/\/$/, "") ?? DEFAULT_ACTION_DIR;
+  cfg.prefix = cfg.prefix?.replace(/^\//, "").replace(/\/$/, "") ?? "";
+  this[STARTUP_ROUTER_CONFIG] = cfg;
+  HttpContext.prototype[STARTUP_ROUTER_CONFIG] = cfg;
 
   this.add((ctx) => {
     const filePath = path.join(
@@ -132,21 +131,3 @@ Startup.prototype.useRouter = function (cfg: RouterConfig = {}): Startup {
 
   return this;
 };
-
-function initRouter(startup: Startup, cfg: RouterConfig) {
-  if (startup[STARTUP_ROUTER_CONFIG]) {
-    return;
-  }
-
-  if (!cfg) cfg = {};
-  cfg.dir =
-    cfg.dir?.replace(/^\//, "").replace(/\/$/, "") ?? DEFAULT_ACTION_DIR;
-  cfg.prefix = cfg.prefix?.replace(/^\//, "").replace(/\/$/, "") ?? "";
-  startup[STARTUP_ROUTER_CONFIG] = cfg;
-
-  startup.use(async (ctx, next) => {
-    ctx.req[REQUEST_HTTP_CONTEXT] = ctx;
-    ctx[HTTP_CONTEXT_STARTUP] = startup;
-    await next();
-  });
-}

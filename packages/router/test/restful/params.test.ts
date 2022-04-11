@@ -33,7 +33,6 @@ test(`get params one object`, async function () {
   const res = await new TestStartup(
     new SfaRequest().setPath("/restful/45").setMethod(HttpMethod.get)
   )
-    .useRouterParser(routerCfg)
     .use(async (ctx, next) => {
       expect(ctx.req.params).toBe(ctx.req.params);
       await next();

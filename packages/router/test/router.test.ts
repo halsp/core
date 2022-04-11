@@ -7,6 +7,7 @@ test("startup test", async function () {
     new SfaRequest().setPath("/simple/RoUtEr").setMethod("POST")
   )
     .useRouter(routerCfg)
+    .useRouter(routerCfg)
     .run();
   expect(result.status).toBe(200);
 });
@@ -17,12 +18,12 @@ test("startup not exist", async function () {
   )
     .useRouter(routerCfg)
     .run();
+  expect(result.status).toBe(404);
   expect(result.body).toEqual({
     message: "Can't find the path：simple/router1",
     path: "simple/router1",
     status: 404,
   });
-  expect(result.status).toBe(404);
 });
 
 test("shallow startup test", async function () {
@@ -53,33 +54,12 @@ test("null body test", async function () {
   expect(result.status).toBe(404);
 });
 
-test("useRouterParser", async function () {
+test("null config", async function () {
   const result = await new TestStartup(
-    new SfaRequest().setPath("/simple/router").setMethod("POST")
+    new SfaRequest().setPath("").setMethod("GET")
   )
-    .useRouterParser(routerCfg)
-    .use(async (ctx, next) => {
-      ctx.setHeader("parser", "added");
-      await next();
-    })
-    .useRouter()
+    .useRouter(null as any)
     .run();
 
-  expect(result.status).toBe(200);
-  expect(result.getHeader("parser")).toBe("added");
+  expect(result.status).toBe(404);
 });
-
-function testDefaultUseRouterParser(isNull: boolean) {
-  test("useRouterParser default", async function () {
-    const result = await new TestStartup(
-      new SfaRequest().setPath("/simple/router").setMethod("POST")
-    )
-      .useRouterParser(isNull ? (null as any) : undefined)
-      .useRouter()
-      .run();
-
-    expect(result.status).toBe(404);
-  });
-}
-testDefaultUseRouterParser(true);
-testDefaultUseRouterParser(false);

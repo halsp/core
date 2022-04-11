@@ -27,7 +27,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@sfajs/core": "^1.2.8",
+    "@sfajs/core": "^1.2.10",
     "linq": "^3.2.4",
     "reflect-metadata": "^0.1.13",
     "shelljs": "^0.8.5"
@@ -38,7 +38,7 @@
     "@types/shelljs": "^0.8.11",
     "@typescript-eslint/eslint-plugin": "^5.18.0",
     "@typescript-eslint/parser": "^5.18.0",
-    "eslint": "^8.12.0",
+    "eslint": "^8.13.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.5.1",

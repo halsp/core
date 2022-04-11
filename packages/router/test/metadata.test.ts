@@ -6,8 +6,7 @@ test("custom metadata", async () => {
   const result = await new TestStartup(
     new SfaRequest().setPath("/metadata/custom").setMethod("GET")
   )
-    .useRouterParser(routerCfg)
-    .useRouter()
+    .useRouter(routerCfg)
     .run();
   expect(result.body).toEqual({
     get: {
@@ -24,8 +23,7 @@ test("set metadata", async () => {
   const result = await new TestStartup(
     new SfaRequest().setPath("/metadata/set-metadata").setMethod("GET")
   )
-    .useRouterParser(routerCfg)
-    .useRouter()
+    .useRouter(routerCfg)
     .run();
   expect(result.body).toEqual({
     object: {
