@@ -52,7 +52,7 @@ Object.defineProperty(HttpContext.prototype, "actionMetadata", {
       return ctx[CTX_CACHE_METADATA];
     }
 
-    const cfg: RouterConfig = this[STARTUP_ROUTER_CONFIG];
+    const cfg: RouterConfig = this.startup[STARTUP_ROUTER_CONFIG];
     const mapParser = new MapParser(ctx, cfg);
     if (mapParser.notFound) {
       throw new NotFoundException({
@@ -117,7 +117,6 @@ Startup.prototype.useRouter = function (cfg: RouterConfig = {}): Startup {
     cfg.dir?.replace(/^\//, "").replace(/\/$/, "") ?? DEFAULT_ACTION_DIR;
   cfg.prefix = cfg.prefix?.replace(/^\//, "").replace(/\/$/, "") ?? "";
   this[STARTUP_ROUTER_CONFIG] = cfg;
-  HttpContext.prototype[STARTUP_ROUTER_CONFIG] = cfg;
 
   this.add((ctx) => {
     const filePath = path.join(
