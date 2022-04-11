@@ -29,7 +29,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@sfajs/core": "^1.2.8",
+    "@sfajs/core": "^1.2.12",
     "@types/consolidate": "^0.14.1",
     "consolidate": "^0.16.0"
   },
