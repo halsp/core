@@ -12,7 +12,7 @@ import {
 } from "../middlewares";
 import { Stream } from "stream";
 import * as mime from "mime-types";
-import { isPlainObject, ObjectConstructor } from "../utils";
+import { isString, ObjectConstructor } from "../utils";
 import { HttpException } from "../exceptions";
 
 export abstract class Startup {
@@ -122,8 +122,18 @@ export abstract class Startup {
         res.setHeader("content-type", mime.contentType("bin") as string);
       }
     } else if (body instanceof Stream) {
-      res.setHeader("Content-Type", mime.contentType("bin") as string);
-    } else if (isPlainObject(body)) {
+      if (writeType) {
+        res.setHeader("Content-Type", mime.contentType("bin") as string);
+      }
+    } else if (isString(body)) {
+      if (writeLength) {
+        res.setHeader("content-length", Buffer.byteLength(body));
+      }
+      if (writeType) {
+        const type = /^\s*</.test(body) ? "html" : "text";
+        res.setHeader("content-type", mime.contentType(type) as string);
+      }
+    } else {
       if (writeLength) {
         res.setHeader(
           "content-length",
@@ -132,15 +142,6 @@ export abstract class Startup {
       }
       if (writeType) {
         res.setHeader("content-type", mime.contentType("json") as string);
-      }
-    } else {
-      const strBody = String(body);
-      if (writeLength) {
-        res.setHeader("content-length", Buffer.byteLength(strBody));
-      }
-      if (writeType) {
-        const type = /^\s*</.test(strBody) ? "html" : "text";
-        res.setHeader("content-type", mime.contentType(type) as string);
       }
     }
 
