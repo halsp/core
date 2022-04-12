@@ -99,10 +99,10 @@ export abstract class Startup {
       ctx.catchError(err);
     }
 
-    return this.setType(ctx.res);
+    return this.#setType(ctx.res);
   }
 
-  private setType(res: SfaResponse): SfaResponse {
+  #setType(res: SfaResponse): SfaResponse {
     const body = res.body;
 
     if (!body) {

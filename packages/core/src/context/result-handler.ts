@@ -16,7 +16,7 @@ export abstract class ResultHandler extends SfaHeader {
     return this.#resFinder();
   }
 
-  private setResult(status: StatusCodes, body?: unknown): this {
+  #setResult(status: StatusCodes, body?: unknown): this {
     if (body != undefined) {
       this.#res.body = body;
     }
@@ -24,10 +24,7 @@ export abstract class ResultHandler extends SfaHeader {
     return this;
   }
 
-  private setError(
-    status: StatusCodes,
-    error?: HttpErrorMessage | string
-  ): this {
+  #setError(status: StatusCodes, error?: HttpErrorMessage | string): this {
     this.#res.status = status;
 
     const obj = {
@@ -43,22 +40,22 @@ export abstract class ResultHandler extends SfaHeader {
   }
 
   // 200
-  ok = (body?: unknown): this => this.setResult(StatusCodes.OK, body);
+  ok = (body?: unknown): this => this.#setResult(StatusCodes.OK, body);
 
   // 201
   created = (location: string, body?: unknown): this =>
-    this.setResult(StatusCodes.CREATED, body).setHeader("location", location);
+    this.#setResult(StatusCodes.CREATED, body).setHeader("location", location);
 
   // 202
   accepted = (body?: unknown): this =>
-    this.setResult(StatusCodes.ACCEPTED, body);
+    this.#setResult(StatusCodes.ACCEPTED, body);
 
   // 204
-  noContent = (): this => this.setResult(StatusCodes.NO_CONTENT);
+  noContent = (): this => this.#setResult(StatusCodes.NO_CONTENT);
 
   // 206
   partialContent = (body?: unknown): this =>
-    this.setResult(StatusCodes.PARTIAL_CONTENT, body);
+    this.#setResult(StatusCodes.PARTIAL_CONTENT, body);
 
   // 30x
   redirect(
@@ -76,126 +73,126 @@ export abstract class ResultHandler extends SfaHeader {
 
   // 400
   badRequest = (body?: unknown): this =>
-    this.setResult(StatusCodes.BAD_REQUEST, body);
+    this.#setResult(StatusCodes.BAD_REQUEST, body);
   badRequestMsg = (error?: HttpErrorMessage | string): this =>
-    this.setError(StatusCodes.BAD_REQUEST, error);
+    this.#setError(StatusCodes.BAD_REQUEST, error);
 
   // 401
   unauthorized = (body?: unknown): this =>
-    this.setResult(StatusCodes.UNAUTHORIZED, body);
+    this.#setResult(StatusCodes.UNAUTHORIZED, body);
   unauthorizedMsg = (error?: HttpErrorMessage | string): this =>
-    this.setError(StatusCodes.UNAUTHORIZED, error);
+    this.#setError(StatusCodes.UNAUTHORIZED, error);
 
   // 403
   forbidden = (body?: unknown): this =>
-    this.setResult(StatusCodes.FORBIDDEN, body);
+    this.#setResult(StatusCodes.FORBIDDEN, body);
   forbiddenMsg = (error?: HttpErrorMessage | string): this =>
-    this.setError(StatusCodes.FORBIDDEN, error);
+    this.#setError(StatusCodes.FORBIDDEN, error);
 
   // 404
   notFound = (body?: unknown): this =>
-    this.setResult(StatusCodes.NOT_FOUND, body);
+    this.#setResult(StatusCodes.NOT_FOUND, body);
   notFoundMsg = (error?: HttpErrorMessage | string): this =>
-    this.setError(StatusCodes.NOT_FOUND, error);
+    this.#setError(StatusCodes.NOT_FOUND, error);
 
   // 405
   methodNotAllowed = (body?: unknown): this =>
-    this.setResult(StatusCodes.METHOD_NOT_ALLOWED, body);
+    this.#setResult(StatusCodes.METHOD_NOT_ALLOWED, body);
   methodNotAllowedMsg = (error?: HttpErrorMessage | string): this =>
-    this.setError(StatusCodes.METHOD_NOT_ALLOWED, error);
+    this.#setError(StatusCodes.METHOD_NOT_ALLOWED, error);
 
   // 406
   notAcceptable = (body?: unknown): this =>
-    this.setResult(StatusCodes.NOT_ACCEPTABLE, body);
+    this.#setResult(StatusCodes.NOT_ACCEPTABLE, body);
   notAcceptableMsg = (error?: HttpErrorMessage | string): this =>
-    this.setError(StatusCodes.NOT_ACCEPTABLE, error);
+    this.#setError(StatusCodes.NOT_ACCEPTABLE, error);
 
   // 408
   requestTimeout = (body?: unknown): this =>
-    this.setResult(StatusCodes.REQUEST_TIMEOUT, body);
+    this.#setResult(StatusCodes.REQUEST_TIMEOUT, body);
   requestTimeoutMsg = (error?: HttpErrorMessage | string): this =>
-    this.setError(StatusCodes.REQUEST_TIMEOUT, error);
+    this.#setError(StatusCodes.REQUEST_TIMEOUT, error);
 
   // 409
   conflict = (body?: unknown): this =>
-    this.setResult(StatusCodes.CONFLICT, body);
+    this.#setResult(StatusCodes.CONFLICT, body);
   conflictMsg = (error?: HttpErrorMessage | string): this =>
-    this.setError(StatusCodes.CONFLICT, error);
+    this.#setError(StatusCodes.CONFLICT, error);
 
   // 410
-  gone = (body?: unknown): this => this.setResult(StatusCodes.GONE, body);
+  gone = (body?: unknown): this => this.#setResult(StatusCodes.GONE, body);
   goneMsg = (error?: HttpErrorMessage | string): this =>
-    this.setError(StatusCodes.GONE, error);
+    this.#setError(StatusCodes.GONE, error);
 
   // 412
   preconditionFailed = (body?: unknown): this =>
-    this.setResult(StatusCodes.PRECONDITION_FAILED, body);
+    this.#setResult(StatusCodes.PRECONDITION_FAILED, body);
   preconditionFailedMsg = (error?: HttpErrorMessage | string): this =>
-    this.setError(StatusCodes.PRECONDITION_FAILED, error);
+    this.#setError(StatusCodes.PRECONDITION_FAILED, error);
 
   // 413
   requestTooLong = (body?: unknown): this =>
-    this.setResult(StatusCodes.REQUEST_TOO_LONG, body);
+    this.#setResult(StatusCodes.REQUEST_TOO_LONG, body);
   requestTooLongMsg = (error?: HttpErrorMessage | string): this =>
-    this.setError(StatusCodes.REQUEST_TOO_LONG, error);
+    this.#setError(StatusCodes.REQUEST_TOO_LONG, error);
 
   // 415
   unsupportedMediaType = (body?: unknown): this =>
-    this.setResult(StatusCodes.UNSUPPORTED_MEDIA_TYPE, body);
+    this.#setResult(StatusCodes.UNSUPPORTED_MEDIA_TYPE, body);
   unsupportedMediaTypeMsg = (error?: HttpErrorMessage | string): this =>
-    this.setError(StatusCodes.UNSUPPORTED_MEDIA_TYPE, error);
+    this.#setError(StatusCodes.UNSUPPORTED_MEDIA_TYPE, error);
 
   // 418
   imATeapot = (body?: unknown): this =>
-    this.setResult(StatusCodes.IM_A_TEAPOT, body);
+    this.#setResult(StatusCodes.IM_A_TEAPOT, body);
   imATeapotMsg = (error?: HttpErrorMessage | string): this =>
-    this.setError(StatusCodes.IM_A_TEAPOT, error);
+    this.#setError(StatusCodes.IM_A_TEAPOT, error);
 
   // 421
   misdirected = (body?: unknown): this =>
-    this.setResult(StatusCodes.MISDIRECTED_REQUEST, body);
+    this.#setResult(StatusCodes.MISDIRECTED_REQUEST, body);
   misdirectedMsg = (error?: HttpErrorMessage | string): this =>
-    this.setError(StatusCodes.MISDIRECTED_REQUEST, error);
+    this.#setError(StatusCodes.MISDIRECTED_REQUEST, error);
 
   // 422
   unprocessableEntity = (body?: unknown): this =>
-    this.setResult(StatusCodes.UNPROCESSABLE_ENTITY, body);
+    this.#setResult(StatusCodes.UNPROCESSABLE_ENTITY, body);
   unprocessableEntityMsg = (error?: HttpErrorMessage | string): this =>
-    this.setError(StatusCodes.UNPROCESSABLE_ENTITY, error);
+    this.#setError(StatusCodes.UNPROCESSABLE_ENTITY, error);
 
   // 500
   internalServerError = (body?: unknown): this =>
-    this.setResult(StatusCodes.INTERNAL_SERVER_ERROR, body);
+    this.#setResult(StatusCodes.INTERNAL_SERVER_ERROR, body);
   internalServerErrorMsg = (error?: HttpErrorMessage | string): this =>
-    this.setError(StatusCodes.INTERNAL_SERVER_ERROR, error);
+    this.#setError(StatusCodes.INTERNAL_SERVER_ERROR, error);
 
   // 501
   notImplemented = (body?: unknown): this =>
-    this.setResult(StatusCodes.NOT_IMPLEMENTED, body);
+    this.#setResult(StatusCodes.NOT_IMPLEMENTED, body);
   notImplementedMsg = (error?: HttpErrorMessage | string): this =>
-    this.setError(StatusCodes.NOT_IMPLEMENTED, error);
+    this.#setError(StatusCodes.NOT_IMPLEMENTED, error);
 
   // 502
   badGateway = (body?: unknown): this =>
-    this.setResult(StatusCodes.BAD_GATEWAY, body);
+    this.#setResult(StatusCodes.BAD_GATEWAY, body);
   badGatewayMsg = (error?: HttpErrorMessage | string): this =>
-    this.setError(StatusCodes.BAD_GATEWAY, error);
+    this.#setError(StatusCodes.BAD_GATEWAY, error);
 
   // 503
   serviceUnavailable = (body?: unknown): this =>
-    this.setResult(StatusCodes.SERVICE_UNAVAILABLE, body);
+    this.#setResult(StatusCodes.SERVICE_UNAVAILABLE, body);
   serviceUnavailableMsg = (error?: HttpErrorMessage | string): this =>
-    this.setError(StatusCodes.SERVICE_UNAVAILABLE, error);
+    this.#setError(StatusCodes.SERVICE_UNAVAILABLE, error);
 
   // 504
   gatewayTimeout = (body?: unknown): this =>
-    this.setResult(StatusCodes.GATEWAY_TIMEOUT, body);
+    this.#setResult(StatusCodes.GATEWAY_TIMEOUT, body);
   gatewayTimeoutMsg = (error?: HttpErrorMessage | string): this =>
-    this.setError(StatusCodes.GATEWAY_TIMEOUT, error);
+    this.#setError(StatusCodes.GATEWAY_TIMEOUT, error);
 
   // 505
   httpVersionNotSupported = (body?: unknown): this =>
-    this.setResult(StatusCodes.HTTP_VERSION_NOT_SUPPORTED, body);
+    this.#setResult(StatusCodes.HTTP_VERSION_NOT_SUPPORTED, body);
   httpVersionNotSupportedMsg = (error?: HttpErrorMessage | string): this =>
-    this.setError(StatusCodes.HTTP_VERSION_NOT_SUPPORTED, error);
+    this.#setError(StatusCodes.HTTP_VERSION_NOT_SUPPORTED, error);
 }

@@ -11,7 +11,7 @@ export class HttpException extends Error {
   ) {
     super();
     this.name = this.constructor.name;
-    this.initMessage();
+    this.#initMessage();
   }
 
   #breakthrough = false;
@@ -32,7 +32,7 @@ export class HttpException extends Error {
     return this;
   }
 
-  private initMessage() {
+  #initMessage() {
     if (!this.error) {
       this.message = getReasonPhrase(this.status);
     } else if (isString(this.error)) {

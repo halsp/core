@@ -37,13 +37,18 @@ export interface HookItem {
 }
 
 export class HookMiddleware extends Middleware {
-  constructor(private readonly mh: MdHook, private readonly type: HookType) {
+  constructor(mh: MdHook, type: HookType) {
     super();
+    this.#mh = mh;
+    this.#type = type;
   }
+
+  #mh: MdHook;
+  #type: HookType;
 
   async invoke(): Promise<void> {
     const hooks = this.ctx.bag<HookItem[]>(MIDDLEWARE_HOOK_BAG) ?? [];
-    hooks.push({ hook: this.mh, type: this.type });
+    hooks.push({ hook: this.#mh, type: this.#type });
     this.ctx.bag(MIDDLEWARE_HOOK_BAG, hooks);
     await this.next();
   }
