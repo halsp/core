@@ -1,5 +1,5 @@
 import { SfaHttp } from "../../../src";
-import request from "supertest";
+import * as request from "supertest";
 
 test("useHttpTextBody", async function () {
   const server = new SfaHttp()
