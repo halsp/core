@@ -1,5 +1,5 @@
 import { SfaHttp } from "../../src";
-import request = require("supertest");
+import request from "supertest";
 import { createReadStream } from "fs";
 
 test("stream body", async function () {

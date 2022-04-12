@@ -1,7 +1,7 @@
 import { SfaHttp } from "../../src";
-import request = require("supertest");
+import request from "supertest";
 
-test("text body explicit type", async function () {
+test("json body explicit type", async function () {
   const server = new SfaHttp()
     .use(async (ctx) => {
       ctx.res.setHeader("content-type", "application/json");

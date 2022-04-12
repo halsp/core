@@ -1,5 +1,5 @@
 import { SfaHttp } from "../../src";
-import request = require("supertest");
+import request from "supertest";
 
 test("empty body", async function () {
   const server = new SfaHttp()

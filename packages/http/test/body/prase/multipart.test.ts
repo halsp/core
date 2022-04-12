@@ -1,5 +1,5 @@
 import { MultipartBody, SfaHttp } from "../../../src";
-import request = require("supertest");
+import request from "supertest";
 import { File } from "formidable";
 import { readFileSync } from "fs";
 
