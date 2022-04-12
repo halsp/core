@@ -74,7 +74,7 @@ export default abstract class HttpStartup extends HttpBodyPraserStartup {
 
     if (sfaRes.body instanceof Stream) {
       sfaRes.body.pipe(httpRes);
-    } else if (isPlainObject(sfaRes.body)) {
+    } else if (isPlainObject(sfaRes.body) || Array.isArray(sfaRes.body)) {
       const str = JSON.stringify(sfaRes.body);
       httpRes.end(str);
     } else {
