@@ -8,7 +8,7 @@ import {
   SfaResponse,
   Dict,
   NumericalHeadersDict,
-  isPlainObject,
+  isString,
 } from "@sfajs/core";
 import * as urlParse from "url-parse";
 import { Stream } from "stream";
@@ -48,12 +48,12 @@ export default abstract class HttpStartup extends HttpBodyPraserStartup {
 
     if (!httpRes.writableEnded) {
       httpRes.statusCode = sfaRes.status;
-      this.writeHead(sfaRes, httpRes);
-      this.writeBody(sfaRes, httpRes);
+      this.#writeHead(sfaRes, httpRes);
+      this.#writeBody(sfaRes, httpRes);
     }
   };
 
-  private writeHead(sfaRes: SfaResponse, httpRes: http.ServerResponse) {
+  #writeHead(sfaRes: SfaResponse, httpRes: http.ServerResponse) {
     if (httpRes.headersSent) return;
     Object.keys(sfaRes.headers)
       .filter((key) => !!sfaRes.headers[key])
@@ -62,7 +62,7 @@ export default abstract class HttpStartup extends HttpBodyPraserStartup {
       });
   }
 
-  private writeBody(sfaRes: SfaResponse, httpRes: http.ServerResponse) {
+  #writeBody(sfaRes: SfaResponse, httpRes: http.ServerResponse) {
     if (!sfaRes.body) {
       if (!httpRes.headersSent) {
         httpRes.removeHeader("Content-Type");
@@ -74,11 +74,12 @@ export default abstract class HttpStartup extends HttpBodyPraserStartup {
 
     if (sfaRes.body instanceof Stream) {
       sfaRes.body.pipe(httpRes);
-    } else if (isPlainObject(sfaRes.body) || Array.isArray(sfaRes.body)) {
-      const str = JSON.stringify(sfaRes.body);
-      httpRes.end(str);
-    } else {
+    } else if (Buffer.isBuffer(sfaRes.body)) {
       httpRes.end(sfaRes.body);
+    } else if (isString(sfaRes.body)) {
+      httpRes.end(sfaRes.body);
+    } else {
+      httpRes.end(JSON.stringify(sfaRes.body));
     }
   }
 }
