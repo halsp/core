@@ -96,3 +96,13 @@ test(`mostLikePathParts`, async function () {
   expect(result.status).toBe(204);
   expect(context.actionMetadata.path).toBe("restful/mostLike/^id1/act.post.ts");
 });
+
+test(`find sortest`, async function () {
+  const result = await new TestStartup(
+    new SfaRequest().setPath("/restful/sortest/sort").setMethod(HttpMethod.get)
+  )
+    .useRouter(routerCfg)
+    .run();
+  expect(result.status).toBe(200);
+  expect(result.body).toBe("outer");
+});

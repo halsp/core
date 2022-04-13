@@ -127,15 +127,8 @@ export default class MapParser {
         });
     }
 
-    return pathsParts.sort((a, b) => {
-      if (a.parts.length < b.parts.length) {
-        return 1;
-      } else if (a.parts.length > b.parts.length) {
-        return -1;
-      } else {
-        return 0;
-      }
-    })[0].mapItem;
+    return pathsParts.sort((a, b) => a.parts.length - b.parts.length)[0]
+      .mapItem;
   }
 
   private getMap(): MapItem[] {
