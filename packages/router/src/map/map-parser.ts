@@ -1,5 +1,4 @@
 import { existsSync, lstatSync, readFileSync } from "fs";
-import linq from "linq";
 import path = require("path");
 import { MAP_FILE_NAME } from "../constant";
 import MapCreater from "./map-creater";
@@ -45,23 +44,19 @@ export default class MapParser {
   public methodNotAllowed = false;
 
   private getMapItem(): MapItem | undefined {
-    const matchedPaths = linq
-      .from(this.#map)
-      .where((m) => !!m.methods.length)
-      .where((m) => this.isPathMatched(m, true))
-      .toArray();
-    linq
-      .from(this.#map)
-      .where((m) => !m.methods.length || m.methods.includes(HttpMethod.any))
-      .where((m) => this.isPathMatched(m, false))
+    const matchedPaths = this.#map
+      .filter((m) => !!m.methods.length)
+      .filter((m) => this.isPathMatched(m, true));
+    this.#map
+      .filter((m) => !m.methods.length || m.methods.includes(HttpMethod.any))
+      .filter((m) => this.isPathMatched(m, false))
       .forEach((m) => matchedPaths.push(m));
     const mapItem = this.getMostLikeMapItem(matchedPaths);
     if (mapItem) return mapItem;
 
-    const otherMethodPathCount = linq
-      .from(this.#map)
-      .where((m) => this.isPathMatched(m, false))
-      .count();
+    const otherMethodPathCount = this.#map.filter((m) =>
+      this.isPathMatched(m, false)
+    ).length;
     if (otherMethodPathCount) {
       this.methodNotAllowed = true;
     } else {
@@ -107,20 +102,14 @@ export default class MapParser {
       });
     });
 
-    const minPartsCount = Math.min(
-      ...linq
-        .from(pathsParts)
-        .select((pp) => pp.parts.length)
-        .toArray()
-    );
+    const minPartsCount = Math.min(...pathsParts.map((pp) => pp.parts.length));
     for (let i = 0; i < minPartsCount; i++) {
       if (
-        linq.from(pathsParts).any((p) => p.parts[i].includes("^")) &&
-        linq.from(pathsParts).any((p) => !p.parts[i].includes("^"))
+        pathsParts.some((p) => p.parts[i].includes("^")) &&
+        pathsParts.some((p) => !p.parts[i].includes("^"))
       ) {
-        linq
-          .from(pathsParts)
-          .where((p) => p.parts[i].includes("^"))
+        pathsParts
+          .filter((p) => p.parts[i].includes("^"))
           .forEach((p) => pathsParts.splice(pathsParts.indexOf(p), 1));
       }
 
@@ -128,25 +117,25 @@ export default class MapParser {
     }
 
     if (
-      linq
-        .from(pathsParts)
-        .count((pp) => pp.mapItem.methods.includes(HttpMethod.any)) &&
-      linq
-        .from(pathsParts)
-        .any((pp) => !pp.mapItem.methods.includes(HttpMethod.any))
+      pathsParts.some((pp) => pp.mapItem.methods.includes(HttpMethod.any)) &&
+      pathsParts.some((pp) => !pp.mapItem.methods.includes(HttpMethod.any))
     ) {
-      linq
-        .from(pathsParts)
-        .where((pp) => pp.mapItem.methods.includes(HttpMethod.any))
+      pathsParts
+        .filter((pp) => pp.mapItem.methods.includes(HttpMethod.any))
         .forEach((pp) => {
           pathsParts.splice(pathsParts.indexOf(pp), 1);
         });
     }
 
-    return linq
-      .from(pathsParts)
-      .orderBy((pp) => pp.parts.length)
-      .first().mapItem;
+    return pathsParts.sort((a, b) => {
+      if (a.parts.length < b.parts.length) {
+        return 1;
+      } else if (a.parts.length > b.parts.length) {
+        return -1;
+      } else {
+        return 0;
+      }
+    })[0].mapItem;
   }
 
   private getMap(): MapItem[] {

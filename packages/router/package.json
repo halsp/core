@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/router",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "sfa 路由中间件",
   "homepage": "https://github.com/sfajs/router",
   "repository": {
@@ -27,8 +27,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@sfajs/core": "^1.2.12",
-    "linq": "^3.2.4",
+    "@sfajs/core": "^1.2.14",
     "reflect-metadata": "^0.1.13",
     "shelljs": "^0.8.5"
   },
@@ -36,8 +35,8 @@
     "@types/jest": "^27.4.1",
     "@types/node": "^17.0.23",
     "@types/shelljs": "^0.8.11",
-    "@typescript-eslint/eslint-plugin": "^5.18.0",
-    "@typescript-eslint/parser": "^5.18.0",
+    "@typescript-eslint/eslint-plugin": "^5.19.0",
+    "@typescript-eslint/parser": "^5.19.0",
     "eslint": "^8.13.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",

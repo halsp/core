@@ -1,6 +1,5 @@
 import { isFunction } from "@sfajs/core";
 import { writeFileSync, existsSync, lstatSync, readdirSync } from "fs";
-import linq from "linq";
 import path = require("path");
 import Action from "../action";
 import { MAP_FILE_NAME, ACTION_METADATA } from "../constant";
@@ -33,14 +32,12 @@ export default class MapCreater {
   }
 
   private readFilesFromFolder(folderRePath: string, result: MapItem[]) {
-    const storageItems = linq
-      .from(readdirSync(path.join(this.dirPath, folderRePath)))
-      .select((item) => path.join(folderRePath, item))
-      .toArray();
+    const storageItems = readdirSync(path.join(this.dirPath, folderRePath)).map(
+      (item) => path.join(folderRePath, item)
+    );
 
-    const files = linq
-      .from(storageItems)
-      .where((storageItem) => {
+    const files = storageItems
+      .filter((storageItem) => {
         const filePath = path.join(this.dirPath, storageItem);
         const stat = lstatSync(filePath);
         if (!stat.isFile()) return false;
@@ -54,8 +51,7 @@ export default class MapCreater {
         if (!isFunction(module.default)) return false;
         return module.default.prototype instanceof Action;
       })
-      .orderBy((item) => item)
-      .toArray();
+      .sort();
     for (let i = 0; i < files.length; i++) {
       const filePath = path.join(this.dirPath, files[i]);
       // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -66,14 +62,12 @@ export default class MapCreater {
       result.push(mapItem);
     }
 
-    const folders = linq
-      .from(storageItems)
-      .where((storageItem) => {
+    const folders = storageItems
+      .filter((storageItem) => {
         const stat = lstatSync(path.join(this.dirPath, storageItem));
         return stat.isDirectory();
       })
-      .orderBy((item) => item)
-      .toArray();
+      .sort();
     for (let i = 0; i < folders.length; i++) {
       this.readFilesFromFolder(folders[i], result);
     }
