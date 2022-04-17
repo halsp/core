@@ -1,4 +1,9 @@
-import { HttpContext, isFunction, ObjectConstructor } from "@sfajs/core";
+import {
+  HttpContext,
+  isFunction,
+  isObject,
+  ObjectConstructor,
+} from "@sfajs/core";
 import {
   CLASS_METADATA,
   DECORATOR_SCOPED_BAG,
@@ -95,12 +100,16 @@ class InjectDecoratorParser<T extends object = any> {
 
 export function createObject<T extends object>(
   ctx: HttpContext,
-  target: ObjectConstructor<T>
+  target: ObjectConstructor<T> | T
 ): T {
+  if (isObject(target)) {
+    return target as T;
+  }
+
   const providers: ObjectConstructor[] =
     Reflect.getMetadata(CLASS_METADATA, target) ?? [];
   const args = providers.map((provider) => parseInject(ctx, provider));
-  return new target(...args);
+  return new (target as ObjectConstructor<T>)(...args);
 }
 
 export function isInjectClass<T extends object>(target: ObjectConstructor<T>) {

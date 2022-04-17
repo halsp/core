@@ -1,5 +1,5 @@
 import "@sfajs/core";
-import { Startup, ObjectConstructor, isFunction } from "@sfajs/core";
+import { Startup, ObjectConstructor, isFunction, isObject } from "@sfajs/core";
 import { HookType } from "@sfajs/core/dist/middlewares";
 import { DECORATOR_SCOPED_BAG, IS_INJECT_USED, MAP_BAG } from "./constant";
 import { Inject } from "./decorators";
@@ -17,8 +17,7 @@ declare module "@sfajs/core" {
     ): this;
     inject<TAnestor extends object, TTarget extends TAnestor>(
       anestor: ObjectConstructor<TAnestor>,
-      target: TTarget,
-      type?: InjectType
+      target: TTarget
     ): this;
     inject<TAnestor extends object>(
       target: ObjectConstructor<TAnestor>,
@@ -58,7 +57,7 @@ Startup.prototype.inject = function <
     anestor = args[0];
     target = args[0];
   } else {
-    if (isFunction(args[1])) {
+    if (isFunction(args[1]) || isObject(args[1])) {
       anestor = args[0];
       target = args[1];
       type = args[2];
