@@ -15,7 +15,7 @@ export function JwtToken(target: any, propertyKey: string | symbol): void {
   createPropertyDecorator(target, propertyKey, JWT_STR);
 }
 
-export function JwtJson(target: any, propertyKey: string | symbol): void {
+export function JwtObject(target: any, propertyKey: string | symbol): void {
   createPropertyDecorator(target, propertyKey, JWT_JSON);
 }
 

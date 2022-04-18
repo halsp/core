@@ -1,10 +1,10 @@
 import { Middleware, TestStartup } from "@sfajs/core";
 import * as jwt from "jsonwebtoken";
-import { JwtJson, JwtPayload, JwtToken } from "../src";
+import { JwtObject, JwtPayload, JwtToken } from "../src";
 import { createSfaReqeust } from "./utils";
 
 class TestMiddleware extends Middleware {
-  @JwtJson
+  @JwtObject
   private readonly jwt!: jwt.Jwt;
   @JwtPayload
   private readonly payload!: any;

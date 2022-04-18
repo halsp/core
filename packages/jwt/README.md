@@ -126,7 +126,7 @@ class TestMiddleware extends Middleware{
 }
 ```
 
-#### @JwtJson
+#### @JwtObject
 
 解析 `jwt token` 字符串并转为 json 对象
 
@@ -135,7 +135,7 @@ import { Middleware } from "@sfajs/core";
 import * as jwt from "jsonwebtoken";
 
 class TestMiddleware extends Middleware{
-  @JwtJson
+  @JwtObject
   private readonly jwt!: jwt.Jwt;
 }
 ```
