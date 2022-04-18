@@ -1,6 +1,5 @@
 import { HttpContext, ObjectConstructor, isFunction } from "@sfajs/core";
-import { JWT_JSON, JWT_PAYLOAD, JWT_STR } from "./constant";
-import * as jwt from "jsonwebtoken";
+import { JWT_JSON, JWT_PARSE_METADATA, JWT_PAYLOAD, JWT_STR } from "./constant";
 import { JwtService } from "./jwt.service";
 
 type JwtParseTarget<T extends object = any> = T | ObjectConstructor<T>;
@@ -39,6 +38,21 @@ class JwtDecoParser<T extends object = any> {
         json: true,
       })
     );
+
+    const parseDecs =
+      (Reflect.getMetadata(
+        JWT_PARSE_METADATA,
+        this.objConstructor.prototype
+      ) as (string | symbol)[]) ?? [];
+    parseDecs.forEach((dec) => {
+      let propertyValue = this.obj[dec];
+      if (!propertyValue) {
+        propertyValue = Reflect.getMetadata("design:type", this.obj, dec);
+      }
+      if (propertyValue) {
+        this.obj[dec] = parseJwtDeco(this.ctx, propertyValue);
+      }
+    });
 
     return this.obj;
   }
