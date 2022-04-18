@@ -1,5 +1,5 @@
 import "@sfajs/core";
-import { Startup, ObjectConstructor, isFunction, isObject } from "@sfajs/core";
+import { Startup, ObjectConstructor, HttpContext } from "@sfajs/core";
 import { HookType } from "@sfajs/core/dist/middlewares";
 import { DECORATOR_SCOPED_BAG, IS_INJECT_USED, MAP_BAG } from "./constant";
 import { Inject } from "./decorators";
@@ -12,15 +12,20 @@ declare module "@sfajs/core" {
     useInject(): this;
     inject<TAnestor extends object, TTarget extends TAnestor>(
       anestor: ObjectConstructor<TAnestor>,
-      target: ObjectConstructor<TTarget>,
-      type?: InjectType
-    ): this;
-    inject<TAnestor extends object, TTarget extends TAnestor>(
-      anestor: ObjectConstructor<TAnestor>,
       target: TTarget
     ): this;
     inject<TAnestor extends object>(
       target: ObjectConstructor<TAnestor>,
+      type?: InjectType
+    ): this;
+    inject<TAnestor extends object, TTarget extends TAnestor>(
+      anestor: ObjectConstructor<TAnestor>,
+      target: (ctx: HttpContext) => TTarget,
+      type?: InjectType.Scoped | InjectType.Transient
+    ): this;
+    inject<TAnestor extends object, TTarget extends TAnestor>(
+      anestor: ObjectConstructor<TAnestor>,
+      target: ObjectConstructor<TTarget>,
       type?: InjectType
     ): this;
   }
@@ -51,20 +56,23 @@ Startup.prototype.inject = function <
   TTarget extends TAnestor
 >(...args: any[]): Startup {
   let anestor: ObjectConstructor<TAnestor>;
-  let target: ObjectConstructor<TTarget> | TTarget;
+  let target:
+    | ObjectConstructor<TTarget>
+    | TTarget
+    | ((ctx: HttpContext) => TTarget);
   let type: InjectType | undefined;
   if (args[1] == undefined) {
     anestor = args[0];
     target = args[0];
   } else {
-    if (isFunction(args[1]) || isObject(args[1])) {
-      anestor = args[0];
-      target = args[1];
-      type = args[2];
-    } else {
+    if (typeof args[1] == typeof InjectType.Singleton) {
       anestor = args[0];
       target = args[0];
       type = args[1];
+    } else {
+      anestor = args[0];
+      target = args[1];
+      type = args[2];
     }
   }
 

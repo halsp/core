@@ -1,9 +1,4 @@
-import {
-  HttpContext,
-  isFunction,
-  isObject,
-  ObjectConstructor,
-} from "@sfajs/core";
+import { HttpContext, isObject, ObjectConstructor } from "@sfajs/core";
 import {
   CLASS_METADATA,
   DECORATOR_SCOPED_BAG,
@@ -21,6 +16,15 @@ type InjectDecoratorRecordItem = {
   value: any;
 };
 
+function isClass<T extends object = any>(
+  input: any
+): input is ObjectConstructor<T> {
+  return (
+    typeof input == "function" &&
+    /^class\s/.test(Function.prototype.toString.call(input))
+  );
+}
+
 class InjectDecoratorParser<T extends object = any> {
   private static readonly singletonInject: InjectDecoratorRecordItem[] = [];
 
@@ -28,7 +32,7 @@ class InjectDecoratorParser<T extends object = any> {
     private readonly ctx: HttpContext,
     private readonly target: InjectTarget<T>
   ) {
-    const isConstructor = isFunction(this.target);
+    const isConstructor = !isObject(this.target);
     this.injectConstructor = isConstructor
       ? (this.target as ObjectConstructor<T>)
       : (this.target.constructor as ObjectConstructor<T>);
@@ -100,16 +104,20 @@ class InjectDecoratorParser<T extends object = any> {
 
 export function createObject<T extends object>(
   ctx: HttpContext,
-  target: ObjectConstructor<T> | T
+  target: ObjectConstructor<T> | T | ((ctx: HttpContext) => T)
 ): T {
-  if (isObject(target)) {
+  if (typeof target == "object") {
     return target as T;
+  } else if (isClass<T>(target)) {
+    const providers: ObjectConstructor[] =
+      Reflect.getMetadata(CLASS_METADATA, target) ?? [];
+    const args = providers.map((provider) =>
+      isClass(provider) ? parseInject(ctx, provider) : undefined
+    );
+    return new (target as ObjectConstructor<T>)(...args);
+  } else {
+    return target(ctx);
   }
-
-  const providers: ObjectConstructor[] =
-    Reflect.getMetadata(CLASS_METADATA, target) ?? [];
-  const args = providers.map((provider) => parseInject(ctx, provider));
-  return new (target as ObjectConstructor<T>)(...args);
 }
 
 export function isInjectClass<T extends object>(target: ObjectConstructor<T>) {
