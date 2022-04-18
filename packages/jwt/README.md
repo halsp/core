@@ -168,3 +168,39 @@ const obj1 = parseJwtDeco(ctx, new TestClass());
 // OR
 const obj2 = parseJwtDeco(ctx, TestClass);
 ```
+
+### 嵌套使用 `@JwtParse`
+
+用 `@JwtParse` 装饰的字段，如果没有初始化，将会被自动初始化
+
+该字段的值是一个对象，该对象中的字段也可以使用 `JwtPayload`, `JwtToken`, `JwtObject` 装饰并被自动赋值，当然也可以用`@JwtParse` 来嵌套初始化
+
+建议在 `@sfajs/inject` 的 `useInject` 后使用 `useJwt`，从而可以使用依赖注入实例化对象，用以支持更复杂的情形
+
+```TS
+class TestClass1 {
+  @JwtPayload
+  private readonly payload!: any;
+}
+
+class TestClass2 {
+  @JwtToken
+  private readonly token!: string;
+  @JwtParse
+  class: TestClass1;
+}
+
+class TestMiddleware extends Middleware {
+  @JwtObject
+  private readonly jwt!: any;
+  @JwtParse
+  class1 = new TestClass1();
+  @JwtParse
+  class2: TestClass1;
+}
+
+const res = await new TestStartup()
+    .useJwt()
+    .add(TestMiddleware)
+    .run();
+```

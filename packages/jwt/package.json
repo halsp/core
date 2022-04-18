@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/jwt",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "基于 jsonwebtoken 的 JWT 中间件",
   "homepage": "https://github.com/sfajs/jwt",
   "repository": {
