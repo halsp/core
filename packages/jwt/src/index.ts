@@ -6,7 +6,7 @@ import { JwtOptions } from "./jwt-options";
 import { JwtService } from "./jwt.service";
 import * as jwt from "jsonwebtoken";
 
-export { JwtJson, JwtPayload, JwtStr } from "./decorators";
+export { JwtJson, JwtPayload, JwtToken } from "./decorators";
 export {
   JwtOptions,
   JwtVerifyOptions,

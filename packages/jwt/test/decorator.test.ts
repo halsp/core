@@ -1,6 +1,6 @@
 import { Middleware, TestStartup } from "@sfajs/core";
 import * as jwt from "jsonwebtoken";
-import { JwtJson, JwtPayload, JwtStr } from "../src";
+import { JwtJson, JwtPayload, JwtToken } from "../src";
 import { createSfaReqeust } from "./utils";
 
 class TestMiddleware extends Middleware {
@@ -8,9 +8,9 @@ class TestMiddleware extends Middleware {
   private readonly jwt!: jwt.Jwt;
   @JwtPayload
   private readonly payload!: any;
-  @JwtStr
+  @JwtToken
   private readonly str1!: any;
-  @JwtStr
+  @JwtToken
   private readonly str2!: any;
 
   async invoke(): Promise<void> {

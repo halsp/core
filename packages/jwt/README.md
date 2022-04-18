@@ -104,8 +104,6 @@ class YourMiddleware extends Middleware{
 }
 ```
 
-###
-
 ## 装饰器
 
 你可以在使用装饰器来快捷使用和解析 `jwt token`
@@ -114,7 +112,7 @@ class YourMiddleware extends Middleware{
 
 在中间件中的装饰器会被自动解析
 
-#### @JwtStr
+#### @JwtToken
 
 `jwt token` 字符串
 
@@ -123,7 +121,7 @@ import { Middleware } from "@sfajs/core";
 import * as jwt from "jsonwebtoken";
 
 class TestMiddleware extends Middleware{
-  @JwtStr
+  @JwtToken
   private readonly token!: string;
 }
 ```

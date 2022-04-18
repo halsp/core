@@ -11,7 +11,7 @@ function createPropertyDecorator(
   Reflect.defineMetadata(key, args, target);
 }
 
-export function JwtStr(target: any, propertyKey: string | symbol): void {
+export function JwtToken(target: any, propertyKey: string | symbol): void {
   createPropertyDecorator(target, propertyKey, JWT_STR);
 }
 

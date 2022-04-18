@@ -1,9 +1,9 @@
 import { TestStartup } from "@sfajs/core";
-import { JwtStr, parseJwtDeco } from "../src";
+import { JwtToken, parseJwtDeco } from "../src";
 import { createSfaReqeust } from "./utils";
 
 class TestClass {
-  @JwtStr
+  @JwtToken
   readonly jwt!: string;
 }
 
