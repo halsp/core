@@ -177,6 +177,8 @@ class TestMiddleware extends Middleware{
 
 你也可以用 @Inject 装饰一个类，这样你就可以在类构造函数中取到服务
 
+构造函数中也可以使用键值注入参数
+
 ```TS
 import "@sfajs/inject";
 import { Inject } from "@sfajs/inject";
@@ -186,23 +188,37 @@ class OtherService(){}
 
 @Inject
 class TestService{
-  constructor(readonly otherService: OtherService){}
+  constructor(
+    readonly otherService: OtherService,
+    @Inject("KEY1") private readonly params1: number
+  ){}
 }
 
 @Inject
 class TestMiddleware extends Middleware {
-  constructor(private readonly testService: TestService){
+  constructor(
+    private readonly testService: TestService, // TestService object
+    @Inject("KEY1") private readonly params1: number, // 2333
+    @Inject("KEY2") private readonly params2: any // true
+  ){
     super();
   }
 
   async invoke(): Promise<void> {
     this.ok({
       service: this.testService.constructor.name,
+      params1: this.params1,
+      params2: this.params2
     });
   }
 }
 
-const res = await new TestStartup().useInject().add(TestMiddleware).run();
+const res = await new TestStartup()
+  .useInject()
+  .inject("KEY1", 2333)
+  .inject("KEY2", true)
+  .add(TestMiddleware)
+  .run();
 ```
 
 需要注意的是，添加的中间件必须是中间件的构造器
