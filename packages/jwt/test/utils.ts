@@ -2,7 +2,7 @@ import { SfaRequest } from "@sfajs/core";
 import { JwtOptions } from "../src";
 import { JwtService } from "../src/jwt.service";
 
-export function createjwtService(options?: JwtOptions): JwtService {
+export function createJwtService(options?: JwtOptions): JwtService {
   return new JwtService(options);
 }
 
@@ -11,7 +11,7 @@ export async function createSfaReqeust(
   payload: any = {},
   prefix = "Bearer "
 ): Promise<SfaRequest> {
-  const jwtService = createjwtService(options);
+  const jwtService = createJwtService(options);
   const token = await jwtService.sign(payload);
   return new SfaRequest().setHeader("Authorization", prefix + token);
 }

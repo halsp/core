@@ -66,12 +66,12 @@ JwtService 提供了一些 jwt 接口
 
 你可以通过以下方式创建和使用 `JwtService`
 
-### createjwtService
+### createJwtService
 
 ```TS
-const jwtService = createjwtService(ctx);
+const jwtService = createJwtService(ctx);
 // OR
-const jwtService = createjwtService(options);
+const jwtService = createJwtService(options);
 ```
 
 ### 依赖注入
@@ -85,7 +85,7 @@ import "@sfajs/inject"
 startup
   .useJwt()
   .useInject()
-  .inject(JwtService, (ctx) => createjwtService(ctx)); // Scoped
+  .inject(JwtService, (ctx) => createJwtService(ctx)); // Scoped
 ```
 
 ```TS

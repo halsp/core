@@ -1,7 +1,7 @@
-import { createjwtService } from "./utils";
+import { createJwtService } from "./utils";
 
 test(`sign`, async function () {
-  const jwtService = createjwtService({ secret: "secret" });
+  const jwtService = createJwtService({ secret: "secret" });
   const token = await jwtService.sign(
     {},
     {
@@ -20,7 +20,7 @@ test(`sign`, async function () {
 });
 
 test(`secretOrKeyProvider`, async function () {
-  const jwtService = createjwtService({
+  const jwtService = createJwtService({
     secretOrKeyProvider: () => "secret",
   });
   const token = await jwtService.sign(
@@ -43,7 +43,7 @@ test(`secretOrKeyProvider`, async function () {
 test(`sign error`, async () => {
   let error = false;
   try {
-    const jwtService = createjwtService({
+    const jwtService = createJwtService({
       secret: "secret",
     });
     await jwtService.sign([1, 2]);

@@ -1,5 +1,5 @@
 import { JwtSecretRequestType } from "../src";
-import { createjwtService } from "./utils";
+import { createJwtService } from "./utils";
 
 const publicKey = `-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsW9qavZzbbcyTbVVQBX7
@@ -39,7 +39,7 @@ C+FNbeux5oFpmYzhpvNFn59A9zjFYWSGTlbDdgJIVxOxWqNxIww=
 -----END RSA PRIVATE KEY-----`;
 
 test(`key`, async () => {
-  const jwtService = createjwtService();
+  const jwtService = createJwtService();
   const token = await jwtService.sign(
     {},
     { privateKey: privateKey, algorithm: "RS256" }
@@ -51,7 +51,7 @@ test(`key`, async () => {
 });
 
 test(`options key`, async () => {
-  const jwtService = createjwtService({
+  const jwtService = createJwtService({
     privateKey: privateKey,
     publicKey: publicKey,
   });
@@ -61,7 +61,7 @@ test(`options key`, async () => {
 });
 
 test(`secretOrKeyProvider`, async function () {
-  const jwtService = createjwtService({
+  const jwtService = createJwtService({
     secretOrKeyProvider: (type: JwtSecretRequestType) =>
       type == JwtSecretRequestType.SIGN ? privateKey : publicKey,
   });
