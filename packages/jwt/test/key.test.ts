@@ -1,3 +1,4 @@
+import { JwtSecretRequestType } from "../src";
 import { createjwtService } from "./utils";
 
 const publicKey = `-----BEGIN PUBLIC KEY-----
@@ -53,6 +54,16 @@ test(`options key`, async () => {
   const jwtService = createjwtService({
     privateKey: privateKey,
     publicKey: publicKey,
+  });
+  const token = await jwtService.sign({}, { algorithm: "RS256" });
+  const jwt = await jwtService.verify(token);
+  expect(Object.keys(jwt)).toEqual(["iat"]);
+});
+
+test(`secretOrKeyProvider`, async function () {
+  const jwtService = createjwtService({
+    secretOrKeyProvider: (type: JwtSecretRequestType) =>
+      type == JwtSecretRequestType.SIGN ? privateKey : publicKey,
   });
   const token = await jwtService.sign({}, { algorithm: "RS256" });
   const jwt = await jwtService.verify(token);

@@ -7,7 +7,12 @@ import { JwtService } from "./jwt.service";
 import * as jwt from "jsonwebtoken";
 
 export { JwtJson, JwtPayload, JwtStr } from "./decorators";
-export { JwtOptions, JwtVerifyOptions, JwtSignOptions } from "./jwt-options";
+export {
+  JwtOptions,
+  JwtVerifyOptions,
+  JwtSignOptions,
+  JwtSecretRequestType,
+} from "./jwt-options";
 export { parseJwtDeco } from "./jwt-deco-parse";
 
 declare module "@sfajs/core" {
