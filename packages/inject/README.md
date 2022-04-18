@@ -186,10 +186,10 @@ setup.add(async ()=> await Factory.creatMiddleware())
 import { parseInject } from '@sfajs/inject'
 
 const service = new Service();
-parseInject(ctx, service);
+await parseInject(ctx, service);
 
 // OR
-const service = parseInject(ctx, new Service());
+const service = await parseInject(ctx, new Service());
 ```
 
 但是这种方式无法实例化 `服务写在构造函数中` 的类，仅可注入实例对象字段的服务
@@ -199,7 +199,7 @@ const service = parseInject(ctx, new Service());
 ```TS
 import { parseInject } from '@sfajs/inject'
 
-const service = parseInject(ctx, Service);
+const service = await parseInject(ctx, Service);
 ```
 
 这种方式可以同时实例化属性服务或构造器服务

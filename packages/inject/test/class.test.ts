@@ -46,10 +46,10 @@ test(`class singleton`, async function () {
   const res = await new TestStartup()
     .useInject()
     .inject(Service2, InjectType.Singleton)
-    .use((ctx) => {
-      const service1 = parseInject(ctx, Service2);
+    .use(async (ctx) => {
+      const service1 = await parseInject(ctx, Service2);
       service1.count += 1;
-      const service2 = parseInject(ctx, Service2);
+      const service2 = await parseInject(ctx, Service2);
       service2.count += 2;
       ctx.ok(service2.count);
     })

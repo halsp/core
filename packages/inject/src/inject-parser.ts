@@ -31,44 +31,41 @@ class InjectDecoratorParser<T extends object = any> {
   constructor(
     private readonly ctx: HttpContext,
     private readonly target: InjectTarget<T>
-  ) {
+  ) {}
+
+  public async parse(): Promise<T> {
     const isConstructor = !isObject(this.target);
-    this.injectConstructor = isConstructor
+    const obj = isConstructor ? await this.createTargetObject() : this.target;
+    const injectConstructor = isConstructor
       ? (this.target as ObjectConstructor<T>)
       : (this.target.constructor as ObjectConstructor<T>);
-    this.obj = isConstructor ? this.createTargetObject() : this.target;
-  }
 
-  private readonly obj: T;
-  private readonly injectConstructor: ObjectConstructor<T>;
-
-  public parse(): T {
     const properties =
-      (Reflect.getMetadata(
-        PROPERTY_METADATA,
-        this.injectConstructor.prototype
-      ) as (string | symbol)[]) ?? [];
-    properties.forEach((property) => {
-      this.obj[property] = this.getPropertyValue(property);
-    });
-    return this.obj;
+      (Reflect.getMetadata(PROPERTY_METADATA, injectConstructor.prototype) as (
+        | string
+        | symbol
+      )[]) ?? [];
+    for (const property of properties) {
+      obj[property] = await this.getPropertyValue(obj, property);
+    }
+    return obj;
   }
 
-  private getPropertyValue(property: string | symbol) {
+  private async getPropertyValue(obj: any, property: string | symbol) {
     const constr = Reflect.getMetadata(
       "design:type",
-      this.obj,
+      obj,
       property
     ) as ObjectConstructor<T>;
-    return parseInject(this.ctx, constr);
+    return await parseInject(this.ctx, constr);
   }
 
-  private createTargetObject() {
+  private async createTargetObject() {
     const target = this.target as ObjectConstructor<T>;
     const injectMaps = this.ctx.bag<InjectMap[]>(MAP_BAG) ?? [];
     const existMap = injectMaps.filter((map) => map.anestor == target)[0];
     if (!existMap) {
-      return createObject(this.ctx, target);
+      return await createObject(this.ctx, target);
     }
 
     if (
@@ -89,7 +86,7 @@ class InjectDecoratorParser<T extends object = any> {
       if (existInject) {
         return existInject.value;
       } else {
-        const obj = createObject(this.ctx, existMap.target);
+        const obj = await createObject(this.ctx, existMap.target);
         records.push({
           injectConstructor: target,
           value: obj,
@@ -97,26 +94,31 @@ class InjectDecoratorParser<T extends object = any> {
         return obj;
       }
     } else {
-      return createObject(this.ctx, existMap.target);
+      return await createObject(this.ctx, existMap.target);
     }
   }
 }
 
-export function createObject<T extends object>(
+async function createObject<T extends object>(
   ctx: HttpContext,
-  target: ObjectConstructor<T> | T | ((ctx: HttpContext) => T)
-): T {
+  target: ObjectConstructor<T> | T | ((ctx: HttpContext) => T | Promise<T>)
+): Promise<T> {
   if (typeof target == "object") {
     return target as T;
   } else if (isClass<T>(target)) {
     const providers: ObjectConstructor[] =
       Reflect.getMetadata(CLASS_METADATA, target) ?? [];
-    const args = providers.map((provider) =>
-      isClass(provider) ? parseInject(ctx, provider) : undefined
-    );
+    const args: any[] = [];
+    for (const provider of providers) {
+      if (isClass(provider)) {
+        args.push(await parseInject(ctx, provider));
+      } else {
+        args.push(undefined);
+      }
+    }
     return new (target as ObjectConstructor<T>)(...args);
   } else {
-    return target(ctx);
+    return await target(ctx);
   }
 }
 
@@ -124,9 +126,9 @@ export function isInjectClass<T extends object>(target: ObjectConstructor<T>) {
   return !!Reflect.getMetadata(CLASS_METADATA, target);
 }
 
-export function parseInject<T extends object = any>(
+export async function parseInject<T extends object = any>(
   ctx: HttpContext,
   target: InjectTarget<T>
-): T {
-  return new InjectDecoratorParser<T>(ctx, target).parse();
+): Promise<T> {
+  return await new InjectDecoratorParser<T>(ctx, target).parse();
 }

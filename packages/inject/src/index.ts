@@ -20,8 +20,8 @@ declare module "@sfajs/core" {
     ): this;
     inject<TAnestor extends object, TTarget extends TAnestor>(
       anestor: ObjectConstructor<TAnestor>,
-      target: (ctx: HttpContext) => TTarget,
-      type?: InjectType.Scoped | InjectType.Transient
+      target: (ctx: HttpContext) => TTarget | Promise<TTarget>,
+      type?: InjectType
     ): this;
     inject<TAnestor extends object, TTarget extends TAnestor>(
       anestor: ObjectConstructor<TAnestor>,
@@ -41,12 +41,12 @@ Startup.prototype.useInject = function (): Startup {
     ctx.bag(DECORATOR_SCOPED_BAG, []);
     await next();
   })
-    .hook((ctx, mh) => {
-      parseInject(ctx, mh);
+    .hook(async (ctx, mh) => {
+      await parseInject(ctx, mh);
     })
-    .hook((ctx, mh) => {
+    .hook(async (ctx, mh) => {
       if (isInjectClass(mh)) {
-        return parseInject(ctx, mh);
+        return await parseInject(ctx, mh);
       }
     }, HookType.Constructor);
 };
