@@ -60,11 +60,13 @@ const res = await new TestStartup()
 
 需要注意的是，该功能只会在 `useReqDeco` 之后的中间件中生效，因此你需要把 `useReqDeco` 放在靠前的位置，根据实际项目决定
 
-## 嵌套使用 `ReqParse`
+## 嵌套使用 `@ReqParse`
 
 用 `@ReqParse` 装饰的字段，如果没有初始化，将会被自动初始化
 
-该字段的值是一个对象，其字段也可以使用 `Query`, `Header` 等装饰并被自动赋值，当然也可以用 `@ReqParse` 来嵌套初始化
+该字段的值是一个对象，该对象中的字段也可以使用 `Query`, `Header` 等装饰并被自动赋值，当然也可以用 `@ReqParse` 来嵌套初始化
+
+建议在 `@sfajs/inject` 的 `useInject` 后使用 `useReqDeco`，从而可以使用依赖注入实例化对象，用以支持更复杂的情形
 
 ```TS
 class TestClass1 {
@@ -93,8 +95,6 @@ const res = await new TestStartup()
     .add(TestMiddleware)
     .run();
 ```
-
-## 其他服务
 
 ## 在其他类中
 
