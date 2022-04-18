@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { REQ_DECO_METADATA, REQ_PARAMS_METADATA } from "./constant";
+import { REQ_PARSE_METADATA, REQ_PARAMS_METADATA } from "./constant";
 import { ReqDecoType, ReqDecoItem } from "./req-deco-item";
 
 const createParamDecorator =
@@ -54,8 +54,8 @@ export function Ctx(target: any, propertyKey: string | symbol): void {
 
 export function ReqParse(target: any, propertyKey: string | symbol): void {
   const args =
-    (Reflect.getMetadata(REQ_DECO_METADATA, target) as (string | symbol)[]) ??
+    (Reflect.getMetadata(REQ_PARSE_METADATA, target) as (string | symbol)[]) ??
     [];
   args.push(propertyKey);
-  Reflect.defineMetadata(REQ_DECO_METADATA, args, target);
+  Reflect.defineMetadata(REQ_PARSE_METADATA, args, target);
 }
