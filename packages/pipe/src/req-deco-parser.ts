@@ -36,12 +36,12 @@ class ReqDecoParser<T extends object = any> {
       this.parseItem(dec);
     });
 
-    const reqDecs =
+    const parseDecs =
       (Reflect.getMetadata(
         REQ_PARSE_METADATA,
         this.objConstructor.prototype
       ) as (string | symbol)[]) ?? [];
-    reqDecs.forEach((dec) => {
+    parseDecs.forEach((dec) => {
       let propertyValue = this.obj[dec];
       if (!propertyValue) {
         propertyValue = Reflect.getMetadata("design:type", this.obj, dec);
