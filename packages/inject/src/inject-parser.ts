@@ -41,49 +41,56 @@ class InjectDecoratorParser<T extends object = any> {
     private readonly target: InjectTarget<T>
   ) {}
 
+  private injectConstructor!: ObjectConstructor<T>;
+  private obj!: any;
+
   public async parse(): Promise<T> {
     const isConstructor = !isObject(this.target);
-    const obj = isConstructor ? await this.createTargetObject() : this.target;
-    const injectConstructor = isConstructor
+    this.injectConstructor = isConstructor
       ? (this.target as ObjectConstructor<T>)
       : (this.target.constructor as ObjectConstructor<T>);
+    this.obj = isConstructor ? await this.createTargetObject() : this.target;
 
     const injectProps =
-      (Reflect.getMetadata(PROPERTY_METADATA, injectConstructor.prototype) as (
-        | string
-        | symbol
-      )[]) ?? [];
+      (Reflect.getMetadata(
+        PROPERTY_METADATA,
+        this.injectConstructor.prototype
+      ) as (string | symbol)[]) ?? [];
     for (const prop of injectProps) {
-      obj[prop] = await this.getPropertyValue(obj, prop);
+      this.obj[prop] = await this.getPropertyValue(prop);
     }
 
     const keyProps =
       (Reflect.getMetadata(
         KEY_METADATA,
-        injectConstructor.prototype
+        this.injectConstructor.prototype
       ) as InjectKey[]) ?? [];
-    for (const prop of keyProps) {
-      obj[prop.property] = await this.getKeyPropValue(obj, prop);
+    for (const prop of keyProps.filter(
+      (item) => item.parameterIndex == undefined
+    )) {
+      this.obj[prop.property] = await this.getKeyPropValue(prop);
     }
-    return obj;
+    return this.obj;
   }
 
-  private async getKeyPropValue(obj: any, prop: InjectKey) {
+  private async getKeyPropValue(prop: InjectKey) {
     const injectMaps = this.ctx.bag<InjectMap[]>(MAP_BAG) ?? [];
     const existMap = injectMaps.filter(
       (map) => isString(map.anestor) && map.anestor == prop.key
     )[0];
-    if (!existMap) {
-      return await this.getPropertyValue(obj, prop.property);
-    } else {
+    if (!existMap && prop.property) {
+      return await this.getPropertyValue(prop.property);
+    } else if (existMap) {
       return await this.getObjectFromExistMap(existMap, prop.key);
+    } else {
+      return undefined;
     }
   }
 
-  private async getPropertyValue(obj: any, property: string | symbol) {
+  private async getPropertyValue(property: string | symbol) {
     const constr = Reflect.getMetadata(
       "design:type",
-      obj,
+      this.obj,
       property
     ) as ObjectConstructor<T>;
     if (isClass(constr)) {
@@ -100,7 +107,7 @@ class InjectDecoratorParser<T extends object = any> {
       (map) => isFunction(map.anestor) && map.anestor == target
     )[0];
     if (!existMap) {
-      return await createObject(this.ctx, target);
+      return await this.createObject(target);
     }
 
     return await this.getObjectFromExistMap(existMap, target);
@@ -128,7 +135,7 @@ class InjectDecoratorParser<T extends object = any> {
       if (existInject) {
         return existInject.value;
       } else {
-        const obj = await createObject(this.ctx, existMap.target);
+        const obj = await this.createObject(existMap.target);
         records.push({
           injectKey: injectKey,
           value: obj,
@@ -136,31 +143,40 @@ class InjectDecoratorParser<T extends object = any> {
         return obj;
       }
     } else {
-      return await createObject(this.ctx, existMap.target);
+      return await this.createObject(existMap.target);
     }
   }
-}
 
-async function createObject<T extends object>(
-  ctx: HttpContext,
-  target: ObjectConstructor<T> | T | ((ctx: HttpContext) => T | Promise<T>)
-): Promise<T> {
-  if (isClass<T>(target)) {
-    const providers: ObjectConstructor[] =
-      Reflect.getMetadata(CLASS_METADATA, target) ?? [];
-    const args: any[] = [];
-    for (const provider of providers) {
-      if (isClass(provider)) {
-        args.push(await parseInject(ctx, provider));
-      } else {
-        args.push(undefined);
+  async createObject<T extends object>(
+    target: ObjectConstructor<T> | T | ((ctx: HttpContext) => T | Promise<T>)
+  ): Promise<T> {
+    if (isClass<T>(target)) {
+      const providers: ObjectConstructor[] =
+        Reflect.getMetadata(CLASS_METADATA, target) ?? [];
+      const args: any[] = [];
+
+      const keyProps =
+        (Reflect.getMetadata(KEY_METADATA, target) as InjectKey[]) ?? [];
+      for (const provider of providers) {
+        const existParamInject = keyProps.filter(
+          (prop) =>
+            prop.parameterIndex != undefined &&
+            prop.parameterIndex == providers.indexOf(provider)
+        )[0];
+        if (!!existParamInject) {
+          args.push(await this.getKeyPropValue(existParamInject));
+        } else if (isClass(provider)) {
+          args.push(await parseInject(this.ctx, provider));
+        } else {
+          args.push(undefined);
+        }
       }
+      return new (target as ObjectConstructor<T>)(...args);
+    } else if (isFunction(target) && typeof target != "object") {
+      return await target(this.ctx);
+    } else {
+      return target as T;
     }
-    return new (target as ObjectConstructor<T>)(...args);
-  } else if (isFunction(target) && typeof target != "object") {
-    return await target(ctx);
-  } else {
-    return target as T;
   }
 }
 

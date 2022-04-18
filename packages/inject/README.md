@@ -77,12 +77,52 @@ import "@sfajs/inject";
 
 startup.inject(IService, Service);
 // OR
-startup.inject(IService, new Service()); // Singleton
+startup.inject(IService, new Service()); // Singleton only
 // OR
 startup.inject(IService, async (ctx) => await createService(ctx));
 ```
 
 需要注意的是， `inject` 作用于其后的中间件，因此你需要在靠前的位置注册服务
+
+## 键值注入
+
+可以指定 key 注入服务
+
+```TS
+import "@sfajs/inject";
+
+startup.inject("SERVICE_KEY", Service);
+// OR
+startup.inject("SERVICE_KEY", new Service()); // Singleton only
+// OR
+startup.inject("SERVICE_KEY", async (ctx) => await createService(ctx));
+```
+
+```TS
+class TestMiddleware extends Middleware {
+  @Inject("SERVICE_KEY")
+  private readonly testService!: TestService;
+}
+```
+
+甚至可以注入常量值
+
+```TS
+startup.inject("KEY1", true);
+startup.inject("KEY2", "str");
+startup.inject("KEY3", 2333);
+```
+
+```TS
+class TestMiddleware extends Middleware {
+  @Inject("KEY1")
+  private readonly key1!: boolean; // true
+  @Inject("KEY2")
+  private readonly key2!: any; // "str"
+  @Inject("KEY3")
+  private readonly key3!: number; // 2333
+}
+```
 
 ## 作用域
 
