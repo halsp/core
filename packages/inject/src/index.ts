@@ -7,9 +7,24 @@ import { InjectMap } from "./inject-map";
 import { isInjectClass, parseInject } from "./inject-parser";
 import { InjectType } from "./inject-type";
 
+type KeyTargetType = object | number | bigint | string | boolean | symbol;
+
 declare module "@sfajs/core" {
   interface Startup {
     useInject(): this;
+
+    inject<T extends KeyTargetType>(key: string, target: T): this;
+    inject<T extends KeyTargetType>(
+      key: string,
+      target: (ctx: HttpContext) => T | Promise<T>,
+      type?: InjectType
+    ): this;
+    inject<TTarget extends object>(
+      key: string,
+      target: ObjectConstructor<TTarget>,
+      type?: InjectType
+    ): this;
+
     inject<TAnestor extends object, TTarget extends TAnestor>(
       anestor: ObjectConstructor<TAnestor>,
       target: TTarget
@@ -51,17 +66,15 @@ Startup.prototype.useInject = function (): Startup {
     }, HookType.Constructor);
 };
 
-Startup.prototype.inject = function <
-  TAnestor extends object,
-  TTarget extends TAnestor
->(...args: any[]): Startup {
-  let anestor: ObjectConstructor<TAnestor>;
-  let target:
-    | ObjectConstructor<TTarget>
-    | TTarget
-    | ((ctx: HttpContext) => TTarget);
+Startup.prototype.inject = function (...args: any[]): Startup {
+  let anestor: ObjectConstructor | string;
+  let target: ObjectConstructor | any | ((ctx: HttpContext) => any);
   let type: InjectType | undefined;
-  if (args[1] == undefined) {
+  if (typeof args[0] == "string") {
+    anestor = args[0];
+    target = args[1];
+    type = args[2];
+  } else if (args[1] == undefined) {
     anestor = args[0];
     target = args[0];
   } else {

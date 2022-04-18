@@ -1,18 +1,26 @@
-import { HttpContext, isObject, ObjectConstructor } from "@sfajs/core";
+import {
+  HttpContext,
+  isFunction,
+  isObject,
+  isString,
+  ObjectConstructor,
+} from "@sfajs/core";
 import {
   CLASS_METADATA,
   DECORATOR_SCOPED_BAG,
+  KEY_METADATA,
   MAP_BAG,
   PROPERTY_METADATA,
 } from "./constant";
 import { InjectType } from "./inject-type";
 import "reflect-metadata";
 import { InjectMap } from "./inject-map";
+import { InjectKey } from "./inject-key";
 
 type InjectTarget<T extends object = any> = T | ObjectConstructor<T>;
 
 type InjectDecoratorRecordItem = {
-  injectConstructor: ObjectConstructor;
+  injectKey: ObjectConstructor | string;
   value: any;
 };
 
@@ -40,15 +48,36 @@ class InjectDecoratorParser<T extends object = any> {
       ? (this.target as ObjectConstructor<T>)
       : (this.target.constructor as ObjectConstructor<T>);
 
-    const properties =
+    const injectProps =
       (Reflect.getMetadata(PROPERTY_METADATA, injectConstructor.prototype) as (
         | string
         | symbol
       )[]) ?? [];
-    for (const property of properties) {
-      obj[property] = await this.getPropertyValue(obj, property);
+    for (const prop of injectProps) {
+      obj[prop] = await this.getPropertyValue(obj, prop);
+    }
+
+    const keyProps =
+      (Reflect.getMetadata(
+        KEY_METADATA,
+        injectConstructor.prototype
+      ) as InjectKey[]) ?? [];
+    for (const prop of keyProps) {
+      obj[prop.property] = await this.getKeyPropValue(obj, prop);
     }
     return obj;
+  }
+
+  private async getKeyPropValue(obj: any, prop: InjectKey) {
+    const injectMaps = this.ctx.bag<InjectMap[]>(MAP_BAG) ?? [];
+    const existMap = injectMaps.filter(
+      (map) => isString(map.anestor) && map.anestor == prop.key
+    )[0];
+    if (!existMap) {
+      return await this.getPropertyValue(obj, prop.property);
+    } else {
+      return await this.getObjectFromExistMap(existMap, prop.key);
+    }
   }
 
   private async getPropertyValue(obj: any, property: string | symbol) {
@@ -57,17 +86,30 @@ class InjectDecoratorParser<T extends object = any> {
       obj,
       property
     ) as ObjectConstructor<T>;
-    return await parseInject(this.ctx, constr);
+    if (isClass(constr)) {
+      return await parseInject(this.ctx, constr);
+    } else {
+      return undefined;
+    }
   }
 
   private async createTargetObject() {
     const target = this.target as ObjectConstructor<T>;
     const injectMaps = this.ctx.bag<InjectMap[]>(MAP_BAG) ?? [];
-    const existMap = injectMaps.filter((map) => map.anestor == target)[0];
+    const existMap = injectMaps.filter(
+      (map) => isFunction(map.anestor) && map.anestor == target
+    )[0];
     if (!existMap) {
       return await createObject(this.ctx, target);
     }
 
+    return await this.getObjectFromExistMap(existMap, target);
+  }
+
+  private async getObjectFromExistMap(
+    existMap: InjectMap,
+    injectKey: ObjectConstructor | string
+  ) {
     if (
       existMap.type == InjectType.Scoped ||
       existMap.type == InjectType.Singleton
@@ -81,14 +123,14 @@ class InjectDecoratorParser<T extends object = any> {
       }
 
       const existInject = records.filter(
-        (item) => item.injectConstructor == target
+        (item) => item.injectKey == injectKey
       )[0];
       if (existInject) {
         return existInject.value;
       } else {
         const obj = await createObject(this.ctx, existMap.target);
         records.push({
-          injectConstructor: target,
+          injectKey: injectKey,
           value: obj,
         });
         return obj;
@@ -103,9 +145,7 @@ async function createObject<T extends object>(
   ctx: HttpContext,
   target: ObjectConstructor<T> | T | ((ctx: HttpContext) => T | Promise<T>)
 ): Promise<T> {
-  if (typeof target == "object") {
-    return target as T;
-  } else if (isClass<T>(target)) {
+  if (isClass<T>(target)) {
     const providers: ObjectConstructor[] =
       Reflect.getMetadata(CLASS_METADATA, target) ?? [];
     const args: any[] = [];
@@ -117,8 +157,10 @@ async function createObject<T extends object>(
       }
     }
     return new (target as ObjectConstructor<T>)(...args);
-  } else {
+  } else if (isFunction(target) && typeof target != "object") {
     return await target(ctx);
+  } else {
+    return target as T;
   }
 }
 
