@@ -66,14 +66,20 @@ class TestMiddleware extends Middleware {
 }
 ```
 
-`testService` 字段值为 `new TestService()`，如果 `TestService` 类没有无参的构造函数，可能会出错
+`testService` 字段值将自动被实例化
+
+`TestService` 类构造函数的参数，也可以自动初始化
 
 你也可以指定注册的服务，以实现控制反转
 
 ```TS
 import "@sfajs/inject";
+
 startup.inject(IService, Service);
-startup.inject(IService, new Service());
+// OR
+startup.inject(IService, new Service()); // Singleton
+// OR
+startup.inject(IService, async (ctx) => await createService(ctx));
 ```
 
 需要注意的是， `inject` 作用于其后的中间件，因此你需要在靠前的位置注册服务
