@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/inject",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "Sfa 依赖注入中间件",
   "homepage": "https://github.com/sfajs/inject",
   "repository": {
@@ -26,7 +26,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@sfajs/core": "^1.2.15",
+    "@sfajs/core": "^1.2.17",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {

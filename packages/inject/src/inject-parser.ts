@@ -3,6 +3,7 @@ import {
   isFunction,
   isObject,
   isString,
+  isClass,
   ObjectConstructor,
 } from "@sfajs/core";
 import {
@@ -26,15 +27,6 @@ type InjectDecoratorRecordItem = {
     | ((ctx: HttpContext) => any | Promise<any>);
   value: any;
 };
-
-function isClass<T extends object = any>(
-  input: any
-): input is ObjectConstructor<T> {
-  return (
-    typeof input == "function" &&
-    /^class\s/.test(Function.prototype.toString.call(input))
-  );
-}
 
 class InjectDecoratorParser<T extends object = any> {
   private static readonly singletonInject: InjectDecoratorRecordItem[] = [];
