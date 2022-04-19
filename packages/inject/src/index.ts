@@ -2,7 +2,7 @@ import "@sfajs/core";
 import { Startup, ObjectConstructor, HttpContext } from "@sfajs/core";
 import { HookType } from "@sfajs/core/dist/middlewares";
 import { DECORATOR_SCOPED_BAG, IS_INJECT_USED, MAP_BAG } from "./constant";
-import { Inject } from "./decorators";
+import { Inject, CreateInject } from "./decorators";
 import { InjectMap } from "./inject-map";
 import { isInjectClass, parseInject } from "./inject-parser";
 import { InjectType } from "./inject-type";
@@ -57,13 +57,13 @@ Startup.prototype.useInject = function (): Startup {
     await next();
   })
     .hook(async (ctx, mh) => {
-      await parseInject(ctx, mh);
-    })
-    .hook(async (ctx, mh) => {
       if (isInjectClass(mh)) {
         return await parseInject(ctx, mh);
       }
-    }, HookType.Constructor);
+    }, HookType.Constructor)
+    .hook(async (ctx, mh) => {
+      await parseInject(ctx, mh);
+    });
 };
 
 Startup.prototype.inject = function (...args: any[]): Startup {
@@ -102,4 +102,4 @@ Startup.prototype.inject = function (...args: any[]): Startup {
   return this;
 };
 
-export { Inject, parseInject, InjectType };
+export { Inject, CreateInject, parseInject, InjectType };
