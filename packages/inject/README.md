@@ -134,11 +134,11 @@ class TestMiddleware extends Middleware {
 
 ```TS
 import "@sfajs/inject";
-import { InjectTypes } "@sfajs/inject";
+import { InjectType } "@sfajs/inject";
 
-startup.inject(IService, Service, InjectTypes.Singleton);
-startup.inject(IService, Service, InjectTypes.Scoped);
-startup.inject(IService, Service, InjectTypes.Transient);
+startup.inject(IService, Service, InjectType.Singleton);
+startup.inject(IService, Service, InjectType.Scoped);
+startup.inject(IService, Service, InjectType.Transient);
 ```
 
 ## 服务的嵌套
@@ -265,3 +265,117 @@ const service = await parseInject(ctx, Service);
 ```
 
 这种方式可以同时实例化属性服务或构造器服务
+
+## 自定义注入
+
+可以利用 `CreateInject` 创建自定义注入
+
+`CreateInject` 接收两个参数
+
+- handler: 回调函数，支持异步，返回值将作为装饰的字段值
+- type: 可选，生命周期，`InjectType` 类型，与前面介绍的 **作用域** 的概念相同。这里是用于控制 `handler` 回调函数的生命周期
+  - Singleton: `handler` 回调只会执行一次，因此装饰的不同字段值始终相同，回调函数没有 `HttpContext` 参数
+  - Scoped: `handler` 回调每次网络请求只会执行一次，装饰的不同字段值在单次网络访问期间相同，回调函数有参数 `HttpContext`
+  - Scoped: `handler` 回调在每个装饰的字段都会执行一次，回调函数有参数 `HttpContext`
+
+### 例 1
+
+实现获取请求 `Host` 和获取统一用户 ID
+
+定义
+
+```TS
+import { CreateInject } from "@sfajs/inject";
+
+const Host = CreateInject((ctx) => ctx.req.getHeader("Host"));
+const UserID = CreateInject((ctx) => ctx.req.query["uid"]);
+```
+
+中间件
+
+```TS
+import { Middleware } from "@sfajs/core";
+
+class TestMiddleware extends Middleware {
+  @Host
+  readonly host!: string;
+  @UserID
+  readonly userId!: string;
+
+  async invoke(): Promise<void> {
+    this.ok({
+      host: this.host,
+      userId: this.userId,
+    });
+  }
+}
+```
+
+OR
+
+```TS
+@Inject
+class TestMiddleware extends Middleware {
+  constructor(@Host readonly host: string, @UserID readonly userId: string){
+    super();
+  }
+
+  async invoke(): Promise<void> {
+    this.ok({
+      host: this.host,
+      userId: this.userId,
+    });
+  }
+}
+```
+
+### 例 2
+
+嵌套服务
+
+定义
+
+```TS
+import { CreateInject,parseInject } from "@sfajs/inject";
+
+class TestService1{}
+class TestService2{
+  @Inject
+  service1: TestService1;
+}
+class TestService3{
+  @Inject
+  service1: TestService1;
+  @Inject
+  service2: TestService2;
+}
+
+const Service3 = CreateInject((ctx) => new TestService3());
+```
+
+中间件
+
+```TS
+import { Middleware } from "@sfajs/core";
+
+class TestMiddleware extends Middleware {
+  @Service3
+  readonly service1!: Service3;
+  @Service3
+  readonly service2!: any;
+}
+```
+
+OR
+
+```TS
+@Inject
+class TestMiddleware extends Middleware {
+  constructor(
+    @Service3 readonly service1: Service3,
+    @Service3 readonly service2: any
+  ){
+    super();
+  }
+}
+```
