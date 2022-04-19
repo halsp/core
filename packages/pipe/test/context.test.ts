@@ -1,13 +1,13 @@
 import { HttpContext, TestStartup } from "@sfajs/core";
 import { parseInject } from "@sfajs/inject";
 import "../src";
-import { Ctx } from "../src";
+import { Context } from "../src";
 import { expectBody, getTestRequest } from "./TestMiddleware";
 
 class TestService {
-  @Ctx
+  @Context
   private readonly ctx1!: HttpContext;
-  @Ctx
+  @Context
   private readonly ctx2!: HttpContext;
 
   invoke() {
