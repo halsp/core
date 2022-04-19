@@ -1,5 +1,5 @@
 import { HttpContext, ObjectConstructor } from "@sfajs/core";
-import { InjectType } from "./inject-type";
+import { InjectType } from "../inject-type";
 
 export interface InjectMap<T extends object = any, U extends T = any> {
   readonly anestor:

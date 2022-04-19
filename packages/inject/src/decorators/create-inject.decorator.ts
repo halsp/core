@@ -1,6 +1,6 @@
 import { HttpContext } from "@sfajs/core";
 import { CUSTOM_METADATA } from "../constant";
-import { InjectCustom } from "../inject-custom";
+import { InjectCustom } from "../interfaces";
 import { InjectType } from "../inject-type";
 
 export function CreateInject<T = any>(

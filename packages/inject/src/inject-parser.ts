@@ -15,9 +15,7 @@ import {
 } from "./constant";
 import { InjectType } from "./inject-type";
 import "reflect-metadata";
-import { InjectMap } from "./inject-map";
-import { InjectKey } from "./inject-key";
-import { InjectCustom } from "./inject-custom";
+import { InjectMap, InjectCustom, InjectKey } from "./interfaces";
 
 type InjectTarget<T extends object = any> = T | ObjectConstructor<T>;
 

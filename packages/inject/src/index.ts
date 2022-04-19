@@ -3,8 +3,7 @@ import { Startup, ObjectConstructor, HttpContext } from "@sfajs/core";
 import { HookType } from "@sfajs/core/dist/middlewares";
 import { DECORATOR_SCOPED_BAG, IS_INJECT_USED, MAP_BAG } from "./constant";
 import { Inject, CreateInject } from "./decorators";
-import { KeyTargetType } from "./inject-key";
-import { InjectMap } from "./inject-map";
+import { KeyTargetType, InjectMap } from "./interfaces";
 import { isInjectClass, parseInject } from "./inject-parser";
 import { InjectType } from "./inject-type";
 

@@ -1,6 +1,6 @@
 import { ObjectConstructor } from "@sfajs/core";
 import { PROPERTY_METADATA, CLASS_METADATA, KEY_METADATA } from "../constant";
-import { InjectKey } from "../inject-key";
+import { InjectKey } from "../interfaces";
 
 export function Inject(key: string): PropertyDecorator & ParameterDecorator;
 export function Inject(target: any): void;
