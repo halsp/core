@@ -139,7 +139,10 @@ class InjectDecoratorParser<T extends object = any> {
     if (record) {
       result = record.value;
     } else {
-      result = await prop.handler(this.ctx);
+      result =
+        prop.type == InjectType.Singleton
+          ? await prop.handler()
+          : await prop.handler(this.ctx);
       records.push({
         injectKey: prop.handler,
         value: result,
@@ -263,15 +266,7 @@ class InjectDecoratorParser<T extends object = any> {
       (prop) => prop.parameterIndex != undefined && prop.parameterIndex == index
     )[0];
     if (!!existCustomInject) {
-      const result = await existCustomInject.handler(this.ctx);
-      if (
-        result &&
-        ((isObject(result) && !Array.isArray(result)) || isClass(result))
-      ) {
-        return await parseInject(this.ctx, result);
-      } else {
-        return result;
-      }
+      return this.getCustomPropValue(existCustomInject);
     }
 
     // key inject
@@ -281,15 +276,7 @@ class InjectDecoratorParser<T extends object = any> {
       (prop) => prop.parameterIndex != undefined && prop.parameterIndex == index
     )[0];
     if (!!existParamInject) {
-      const result = await this.getKeyPropValue(existParamInject);
-      if (
-        result &&
-        ((isObject(result) && !Array.isArray(result)) || isClass(result))
-      ) {
-        return await parseInject(this.ctx, result);
-      } else {
-        return result;
-      }
+      return this.getKeyPropValue(existParamInject);
     }
 
     // ordinary inject

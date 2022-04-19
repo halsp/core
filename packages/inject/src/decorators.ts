@@ -48,7 +48,15 @@ export function Inject(
 }
 
 export function CreateInject<T = any>(
+  handler: () => T | Promise<T>,
+  type: InjectType.Singleton
+): PropertyDecorator & ParameterDecorator;
+export function CreateInject<T = any>(
   handler: (ctx: HttpContext) => T | Promise<T>,
+  type?: InjectType.Scoped | InjectType.Transient
+): PropertyDecorator & ParameterDecorator;
+export function CreateInject<T = any>(
+  handler: (ctx: any) => T | Promise<T>,
   type?: InjectType
 ): PropertyDecorator & ParameterDecorator {
   return function (
