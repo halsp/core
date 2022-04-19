@@ -13,6 +13,7 @@ import {
   normalizePath,
   TestStartup,
 } from "../src";
+import { isClass, isFiniteNumber } from "../src/utils";
 
 test("isNil", async function () {
   expect(isNil(undefined)).toBeTruthy();
@@ -97,11 +98,29 @@ test("isNumber", async function () {
   expect(isNumber(0o1)).toBeTruthy();
   expect(isNumber(0b1)).toBeTruthy();
   expect(isNumber(NaN)).toBeTruthy();
+  expect(isNumber(Infinity)).toBeTruthy();
 
   expect(isNumber(null)).toBeFalsy();
   expect(isNumber(undefined)).toBeFalsy();
   expect(isNumber(true)).toBeFalsy();
   expect(isNumber("0")).toBeFalsy();
+});
+
+test("isFiniteNumber", async function () {
+  expect(isFiniteNumber(0)).toBeTruthy();
+  expect(isFiniteNumber(0.1)).toBeTruthy();
+  expect(isFiniteNumber(3.14)).toBeTruthy();
+  expect(isFiniteNumber(1e-10)).toBeTruthy();
+  expect(isFiniteNumber(0xff)).toBeTruthy();
+  expect(isFiniteNumber(0o1)).toBeTruthy();
+  expect(isFiniteNumber(0b1)).toBeTruthy();
+
+  expect(isFiniteNumber(NaN)).toBeFalsy();
+  expect(isFiniteNumber(Infinity)).toBeFalsy();
+  expect(isFiniteNumber(null)).toBeFalsy();
+  expect(isFiniteNumber(undefined)).toBeFalsy();
+  expect(isFiniteNumber(true)).toBeFalsy();
+  expect(isFiniteNumber("0")).toBeFalsy();
 });
 
 test("isArrayEmpty", async function () {
@@ -146,4 +165,23 @@ test("normalizePath ", async function () {
   expect(normalizePath("", true)).toBe("/");
   expect(normalizePath(null)).toBe("");
   expect(normalizePath(undefined)).toBe("");
+});
+
+test("isClass", async function () {
+  expect(isClass(TestStartup)).toBeTruthy();
+
+  expect(isClass({})).toBeFalsy();
+  expect(isClass(Object.create(null))).toBeFalsy();
+  expect(isClass(Object.create({ b: 1 }))).toBeFalsy();
+  expect(isClass(null)).toBeFalsy();
+  expect(isClass(undefined)).toBeFalsy();
+  expect(isClass(2)).toBeFalsy();
+  expect(isClass([0, 1])).toBeFalsy();
+  expect(isClass(() => 0)).toBeFalsy();
+  expect(
+    isClass(function () {
+      return 0;
+    })
+  ).toBeFalsy();
+  expect(isClass(new TestStartup())).toBeFalsy();
 });

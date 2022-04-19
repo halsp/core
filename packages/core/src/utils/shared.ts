@@ -1,3 +1,5 @@
+import { ObjectConstructor } from "./types";
+
 export const isUndefined = (obj: any): obj is undefined =>
   typeof obj === "undefined";
 
@@ -39,6 +41,9 @@ export const normalizePath = (path?: string | null, leading = false) => {
 export const isFunction = (val: any): boolean => typeof val === "function";
 export const isString = (val: any): val is string => typeof val === "string";
 export const isNumber = (val: any): val is number => typeof val === "number";
+export function isFiniteNumber(val: any): val is number {
+  return isNumber(val) && isFinite(val);
+}
 export const isNil = (val: any): val is null | undefined =>
   isUndefined(val) || val === null;
 export const isArrayEmpty = (array?: any[] | null): boolean =>
@@ -46,3 +51,14 @@ export const isArrayEmpty = (array?: any[] | null): boolean =>
 export const isSymbol = (val: any): val is symbol => typeof val === "symbol";
 export const isNilOrBlank = (val?: string | null): boolean =>
   isNil(val) || val.trim().length == 0;
+
+export function isClass<T extends object = any>(
+  val: any
+): val is ObjectConstructor<T> {
+  if (!val) return false;
+
+  return (
+    typeof val == "function" &&
+    /^class\s/.test(Function.prototype.toString.call(val))
+  );
+}
