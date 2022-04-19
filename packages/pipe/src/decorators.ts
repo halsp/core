@@ -1,61 +1,30 @@
 import "reflect-metadata";
-import { REQ_PARSE_METADATA, REQ_PARAMS_METADATA } from "./constant";
-import { ReqDecoType, ReqDecoItem } from "./req-deco-item";
+import { CreateInject } from "@sfajs/inject";
+import { Dict, HttpContext } from "@sfajs/core";
 
-const createParamDecorator =
-  (type: ReqDecoType, property?: string): PropertyDecorator =>
-  (target: any, propertyKey: string | symbol) => {
-    const decs =
-      (Reflect.getMetadata(REQ_PARAMS_METADATA, target) as ReqDecoItem[]) ?? [];
-
-    decs.push(<ReqDecoItem>{
-      propertyKey,
-      type,
-      property,
-    });
-    Reflect.defineMetadata(REQ_PARAMS_METADATA, decs, target);
-  };
-
-function create(type: ReqDecoType, ...args: any[]): PropertyDecorator | void {
-  if (args[1]) {
-    createParamDecorator(type)(args[0], args[1]);
-  } else {
-    return createParamDecorator(type, args[0]);
-  }
+function getReqInject(handler: (ctx: HttpContext) => Dict, property?: string) {
+  return CreateInject((ctx) => {
+    const dict = handler(ctx);
+    if (!property) {
+      return dict;
+    }
+    if (!dict) {
+      return undefined;
+    }
+    return dict[property];
+  });
 }
 
-export function Query(target: any, propertyKey: string | symbol): void;
-export function Query(property: string): PropertyDecorator;
-export function Query(arg1: any, arg2?: any): PropertyDecorator | void {
-  return create(ReqDecoType.Query, arg1, arg2);
-}
+export const Query = (property?: string) =>
+  getReqInject((ctx) => ctx.req.query, property);
+export const Body = (property?: string) =>
+  getReqInject((ctx) => ctx.req.body, property);
+export const Param = (property?: string) =>
+  getReqInject(
+    (ctx) => (ctx.req as any).params ?? (ctx.req as any).param,
+    property
+  );
+export const Header = (property?: string) =>
+  getReqInject((ctx) => ctx.req.headers, property);
 
-export function Body(target: any, propertyKey: string | symbol): void;
-export function Body(property: string): PropertyDecorator;
-export function Body(arg1: any, arg2?: any): PropertyDecorator | void {
-  return create(ReqDecoType.Body, arg1, arg2);
-}
-
-export function Param(target: any, propertyKey: string | symbol): void;
-export function Param(property: string): PropertyDecorator;
-export function Param(arg1: any, arg2?: any): PropertyDecorator | void {
-  return create(ReqDecoType.Param, arg1, arg2);
-}
-
-export function Header(target: any, propertyKey: string | symbol): void;
-export function Header(property: string): PropertyDecorator;
-export function Header(arg1: any, arg2?: any): PropertyDecorator | void {
-  return create(ReqDecoType.Header, arg1, arg2);
-}
-
-export function Ctx(target: any, propertyKey: string | symbol): void {
-  create(ReqDecoType.Ctx, target, propertyKey);
-}
-
-export function ReqParse(target: any, propertyKey: string | symbol): void {
-  const args =
-    (Reflect.getMetadata(REQ_PARSE_METADATA, target) as (string | symbol)[]) ??
-    [];
-  args.push(propertyKey);
-  Reflect.defineMetadata(REQ_PARSE_METADATA, args, target);
-}
+export const Ctx = CreateInject((ctx) => ctx);

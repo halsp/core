@@ -1,6 +1,8 @@
 import { Middleware, ReadonlyDict, TestStartup } from "@sfajs/core";
+import "@sfajs/inject";
+import { Inject } from "@sfajs/inject";
 import "../src";
-import { Header, ReqParse } from "../src";
+import { Header } from "../src";
 
 class TestService extends Object {
   invoke() {
@@ -9,11 +11,11 @@ class TestService extends Object {
 }
 
 class TestMiddleware extends Middleware {
-  @Header
+  @Header()
   private readonly header!: ReadonlyDict;
-  @ReqParse
+  @Inject
   private readonly service1!: TestService;
-  @ReqParse
+  @Inject
   private readonly service2!: TestService;
 
   async invoke(): Promise<void> {
@@ -26,7 +28,7 @@ class TestMiddleware extends Middleware {
 }
 
 test("ReqParse Decorator", async function () {
-  const res = await new TestStartup().useReqDeco().add(TestMiddleware).run();
+  const res = await new TestStartup().useInject().add(TestMiddleware).run();
   expect(res.body).toEqual({
     header: {},
     service1: TestService.name,

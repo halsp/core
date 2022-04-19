@@ -26,15 +26,16 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@sfajs/core": "^1.2.15",
+    "@sfajs/core": "^1.2.18",
+    "@sfajs/inject": "^1.0.0",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@types/jest": "^27.4.1",
     "@types/mime-types": "^2.1.1",
-    "@types/node": "^17.0.24",
-    "@typescript-eslint/eslint-plugin": "^5.19.0",
-    "@typescript-eslint/parser": "^5.19.0",
+    "@types/node": "^17.0.25",
+    "@typescript-eslint/eslint-plugin": "^5.20.0",
+    "@typescript-eslint/parser": "^5.20.0",
     "eslint": "^8.13.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",

@@ -1,10 +1,11 @@
 import { TestStartup } from "@sfajs/core";
+import "@sfajs/inject";
 import "../src";
 import { expectBody, getTestRequest, TestMiddleware } from "./TestMiddleware";
 
 function runTest(isConstructor: boolean) {
   test("simple test", async function () {
-    const startup = new TestStartup(getTestRequest()).useReqDeco().useReqDeco();
+    const startup = new TestStartup(getTestRequest()).useInject();
     if (isConstructor) {
       startup.add(TestMiddleware);
     } else {

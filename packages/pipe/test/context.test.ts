@@ -1,6 +1,7 @@
 import { HttpContext, TestStartup } from "@sfajs/core";
+import { parseInject } from "@sfajs/inject";
 import "../src";
-import { parseReqDeco, Ctx } from "../src";
+import { Ctx } from "../src";
 import { expectBody, getTestRequest } from "./TestMiddleware";
 
 class TestService {
@@ -19,8 +20,9 @@ class TestService {
 
 test(`http context`, async function () {
   const res = await new TestStartup(getTestRequest())
+    .useInject()
     .use(async (ctx) => {
-      const obj = parseReqDeco(ctx, new TestService());
+      const obj = await parseInject(ctx, new TestService());
       return ctx.ok(obj.invoke());
     })
     .run();
