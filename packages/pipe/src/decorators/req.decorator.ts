@@ -65,5 +65,3 @@ export function Header(
 export function Header(...args: any[]): any {
   return getReqInject((ctx) => ctx.req.headers, args);
 }
-
-export const Context = Inject((ctx) => ctx);
