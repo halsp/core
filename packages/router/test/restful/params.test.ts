@@ -9,7 +9,8 @@ test(`restful params test1`, async function () {
     .useRouter(routerCfg)
     .run();
   expect(res.body).toEqual({
-    id: "45",
+    id1: "45",
+    id2: "45",
     method: "GET",
   });
   expect(res.status).toBe(200);

@@ -106,6 +106,14 @@ Object.defineProperty(SfaRequest.prototype, "params", {
     return params;
   },
 });
+Object.defineProperty(SfaRequest.prototype, "param", {
+  configurable: false,
+  enumerable: false,
+  get: function () {
+    const req = this as SfaRequest;
+    return req.params;
+  },
+});
 
 Startup.prototype.useRouter = function (cfg: RouterConfig = {}): Startup {
   if (!!this[STARTUP_ROUTER_CONFIG]) {
