@@ -3,11 +3,11 @@ import { Body, Param } from "../src";
 
 test("null body", async function () {
   class TestMiddleware extends Middleware {
-    @Body()
+    @Body
     readonly body!: any;
     @Body("field")
     readonly field!: any;
-    @Param()
+    @Param
     readonly param!: any;
 
     invoke(): void {

@@ -27,7 +27,7 @@
   "license": "MIT",
   "dependencies": {
     "@sfajs/core": "^1.2.18",
-    "@sfajs/inject": "^1.0.0",
+    "@sfajs/inject": "^1.0.1",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
