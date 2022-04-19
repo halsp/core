@@ -1,6 +1,8 @@
 import {
   addLeadingSlash,
   isArrayEmpty,
+  isClass,
+  isFiniteNumber,
   isFunction,
   isNil,
   isNilOrBlank,
@@ -13,7 +15,6 @@ import {
   normalizePath,
   TestStartup,
 } from "../src";
-import { isClass, isFiniteNumber } from "../src/utils";
 
 test("isNil", async function () {
   expect(isNil(undefined)).toBeTruthy();
