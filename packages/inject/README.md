@@ -268,9 +268,9 @@ const service = await parseInject(ctx, Service);
 
 ## 自定义注入
 
-可以利用 `CreateInject` 创建自定义注入
+可以利用 `CustomInject` 创建自定义注入
 
-`CreateInject` 接收两个参数
+`CustomInject` 接收两个参数
 
 - handler: 回调函数，支持异步，返回值将作为装饰的字段值
 - type: 可选，生命周期，`InjectType` 类型，与前面介绍的 **作用域** 的概念相同。这里是用于控制 `handler` 回调函数的生命周期
@@ -285,10 +285,10 @@ const service = await parseInject(ctx, Service);
 定义
 
 ```TS
-import { CreateInject } from "@sfajs/inject";
+import { CustomInject } from "@sfajs/inject";
 
-const Host = CreateInject((ctx) => ctx.req.getHeader("Host"));
-const UserID = CreateInject((ctx) => ctx.req.query["uid"]);
+const Host = CustomInject((ctx) => ctx.req.getHeader("Host"));
+const UserID = CustomInject((ctx) => ctx.req.query["uid"]);
 ```
 
 中间件
@@ -336,7 +336,7 @@ class TestMiddleware extends Middleware {
 定义
 
 ```TS
-import { CreateInject,parseInject } from "@sfajs/inject";
+import { CustomInject,parseInject } from "@sfajs/inject";
 
 class TestService1{}
 class TestService2{
@@ -350,7 +350,7 @@ class TestService3{
   service2: TestService2;
 }
 
-const Service3 = CreateInject((ctx) => new TestService3());
+const Service3 = CustomInject((ctx) => new TestService3());
 ```
 
 中间件

@@ -1,8 +1,8 @@
 import { Middleware, SfaRequest, TestStartup } from "@sfajs/core";
 import "../../src";
-import { CreateInject } from "../../src";
+import { CustomInject } from "../../src";
 
-const Headers = CreateInject(null as any);
+const Headers = CustomInject(null as any);
 
 class TestMiddleware extends Middleware {
   @Headers
