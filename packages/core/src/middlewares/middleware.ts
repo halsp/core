@@ -46,7 +46,7 @@ export abstract class Middleware extends ResultHandler {
     return this.#ctx;
   }
 
-  abstract invoke(): Promise<void>;
+  abstract invoke(): void | Promise<void>;
   protected async next(): Promise<void> {
     let nextMd: Middleware | undefined = undefined;
     try {
