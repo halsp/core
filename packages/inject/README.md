@@ -268,15 +268,23 @@ const service = await parseInject(ctx, Service);
 
 ## 自定义注入
 
-可以利用 `CustomInject` 创建自定义注入
+可以利用 `Inject` 和 `createInject` 创建自定义注入
 
-`CustomInject` 接收两个参数
+`Inject` 传入以下参数将返回装饰器：
 
 - handler: 回调函数，支持异步，返回值将作为装饰的字段值
 - type: 可选，生命周期，`InjectType` 类型，与前面介绍的 **作用域** 的概念相同。这里是用于控制 `handler` 回调函数的生命周期
   - Singleton: `handler` 回调只会执行一次，因此装饰的不同字段值始终相同，回调函数没有 `HttpContext` 参数
   - Scoped: `handler` 回调每次网络请求只会执行一次，装饰的不同字段值在单次网络访问期间相同，回调函数有参数 `HttpContext`
   - Scoped: `handler` 回调在每个装饰的字段都会执行一次，回调函数有参数 `HttpContext`
+
+`createInject` 无返回值，用于创建更复杂的自定义注入装饰器， 接收以下参数
+
+- handle: 同上
+- target: 装饰的类或类的原型，从装饰器参数取得
+- propertyKey: 装饰的属性名，从属性装饰器参数取得
+- parameterIndex: 装饰的参数索引，从参数装饰器参数取得
+- type: `InjectType` 类型，作用同上面 `Inject` 的 `type` 参数
 
 ### 例 1
 
@@ -285,10 +293,15 @@ const service = await parseInject(ctx, Service);
 定义
 
 ```TS
-import { CustomInject } from "@sfajs/inject";
+import { Inject } from "@sfajs/inject";
 
-const Host = CustomInject((ctx) => ctx.req.getHeader("Host"));
-const UserID = CustomInject((ctx) => ctx.req.query["uid"]);
+const Host = Inject((ctx) => ctx.req.getHeader("Host"));
+const UserID = Inject((ctx) => ctx.req.query["uid"]);
+
+// OR
+function UserID(target:any, propertyKey: string|symbol){
+  return createInject((ctx) => ctx.req.query["uid"], target, propertyKey);
+}
 ```
 
 中间件
@@ -336,7 +349,7 @@ class TestMiddleware extends Middleware {
 定义
 
 ```TS
-import { CustomInject,parseInject } from "@sfajs/inject";
+import { Inject,parseInject } from "@sfajs/inject";
 
 class TestService1{}
 class TestService2{
@@ -350,7 +363,7 @@ class TestService3{
   service2: TestService2;
 }
 
-const Service3 = CustomInject((ctx) => new TestService3());
+const Service3 = Inject((ctx) => new TestService3());
 ```
 
 中间件
