@@ -17,7 +17,7 @@ import { InjectType } from "./inject-type";
 import "reflect-metadata";
 import { InjectMap } from "./inject-map";
 import { InjectKey } from "./inject-key";
-import { CustomInjectItem } from "./custom-inject-item";
+import { InjectCustom } from "./inject-custom";
 
 type InjectTarget<T extends object = any> = T | ObjectConstructor<T>;
 
@@ -60,7 +60,7 @@ class InjectDecoratorParser<T extends object = any> {
       (Reflect.getMetadata(
         CUSTOM_METADATA,
         this.injectConstructor.prototype
-      ) as CustomInjectItem[]) ?? [];
+      ) as InjectCustom[]) ?? [];
     for (const prop of customProps.filter(
       (item) => item.parameterIndex == undefined
     )) {
@@ -115,17 +115,10 @@ class InjectDecoratorParser<T extends object = any> {
       }
     }
 
-    if (
-      result &&
-      ((isObject(result) && !Array.isArray(result)) || isClass(result))
-    ) {
-      return await parseInject(this.ctx, result);
-    } else {
-      return result;
-    }
+    return this.parsePropValue(result);
   }
 
-  private async getCustomPropValue(prop: CustomInjectItem) {
+  private async getCustomPropValue(prop: InjectCustom) {
     if (!prop.handler) {
       return undefined;
     }
@@ -149,13 +142,17 @@ class InjectDecoratorParser<T extends object = any> {
       });
     }
 
+    return this.parsePropValue(result);
+  }
+
+  private async parsePropValue(value: any) {
     if (
-      result &&
-      ((isObject(result) && !Array.isArray(result)) || isClass(result))
+      value &&
+      ((isObject(value) && !Array.isArray(value)) || isClass(value))
     ) {
-      return await parseInject(this.ctx, result);
+      return await parseInject(this.ctx, value);
     } else {
-      return result;
+      return value;
     }
   }
 
@@ -260,8 +257,7 @@ class InjectDecoratorParser<T extends object = any> {
   ) {
     // custom inject
     const customProps =
-      (Reflect.getMetadata(CUSTOM_METADATA, target) as CustomInjectItem[]) ??
-      [];
+      (Reflect.getMetadata(CUSTOM_METADATA, target) as InjectCustom[]) ?? [];
     const existCustomInject = customProps.filter(
       (prop) => prop.parameterIndex != undefined && prop.parameterIndex == index
     )[0];

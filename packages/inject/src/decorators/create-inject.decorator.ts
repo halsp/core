@@ -1,6 +1,6 @@
 import { HttpContext } from "@sfajs/core";
 import { CUSTOM_METADATA } from "../constant";
-import { CustomInjectItem } from "../custom-inject-item";
+import { InjectCustom } from "../inject-custom";
 import { InjectType } from "../inject-type";
 
 export function CreateInject<T = any>(
@@ -21,8 +21,7 @@ export function CreateInject<T = any>(
     parameterIndex?: number
   ) {
     const args =
-      (Reflect.getMetadata(CUSTOM_METADATA, target) as CustomInjectItem[]) ??
-      [];
+      (Reflect.getMetadata(CUSTOM_METADATA, target) as InjectCustom[]) ?? [];
     args.push({
       property: propertyKey,
       parameterIndex: parameterIndex,
