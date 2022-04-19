@@ -1,17 +1,17 @@
 import { Middleware, SfaRequest, TestStartup } from "@sfajs/core";
 import "../../src";
-import { CustomInject, InjectType } from "../../src";
+import { Inject, InjectType } from "../../src";
 
 function runTest(type: InjectType) {
   let count = 0;
 
-  const CuInject =
+  const CustomInject =
     type == InjectType.Singleton
-      ? CustomInject(() => {
+      ? Inject(() => {
           count++;
           return count;
         }, type)
-      : CustomInject((ctx) => {
+      : Inject((ctx) => {
           if (!ctx.res.body) {
             ctx.res.body = 0;
           }
@@ -20,9 +20,9 @@ function runTest(type: InjectType) {
         }, type);
 
   class TestMiddleware extends Middleware {
-    @CuInject
+    @CustomInject
     private readonly count1!: any;
-    @CuInject
+    @CustomInject
     private readonly count2!: any;
 
     async invoke(): Promise<void> {

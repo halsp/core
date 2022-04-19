@@ -109,10 +109,6 @@ class InjectDecoratorParser<T extends object = any> {
   }
 
   private async getCustomPropValue(prop: InjectCustom) {
-    if (!prop.handler) {
-      return undefined;
-    }
-
     const { record, records } = this.getExistInjectRecord(
       prop.type ?? InjectType.Scoped,
       prop.handler

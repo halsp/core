@@ -1,10 +1,10 @@
 import { Middleware, ReadonlyDict, SfaRequest, TestStartup } from "@sfajs/core";
 import "../../src";
-import { CustomInject, Inject } from "../../src";
+import { Inject } from "../../src";
 
-const Headers = CustomInject((ctx) => ctx.req.headers);
-const Body = CustomInject((ctx) => ctx.req.body);
-const Host = CustomInject((ctx) => ctx.req.getHeader("host"));
+const Headers = Inject((ctx) => ctx.req.headers);
+const Body = Inject((ctx) => ctx.req.body);
+const Host = Inject((ctx) => ctx.req.getHeader("host"));
 
 @Inject
 class TestMiddleware extends Middleware {
