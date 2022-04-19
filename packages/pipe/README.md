@@ -1,11 +1,10 @@
 # @sfajs/req-deco
 
-通过装饰器便捷使用接口参数
+基于 `@sfajs/inject` 通过装饰器便捷使用接口参数
 
-你需要使用装饰器以使用此功能
+你需要使用装饰器并引入 `@sfajs/inject` 以使用此功能
 
-用 `Query`, `Header`, `Param`, `Body`, `Ctx` 装饰字段，该字段在特定生命周期会被自动赋值
-用 `ReqParse` 装饰字段，该字段的值为实例对象，该对象中被装饰的字段同样会被自动赋值
+用 `Query`, `Header`, `Param`, `Body`, `Context` 装饰字段，该字段在特定生命周期会被自动赋值
 
 ## 快速开始
 
@@ -16,11 +15,11 @@ startup.useReqDeco();
 
 ```TS
 import "@sfajs/req-deco";
-import { Header, Query, Param, Body, Ctx } from "@sfajs/req-deco";
+import { Header, Query, Param, Body, Context } from "@sfajs/req-deco";
 import { Middleware, ReadonlyDict, TestStartup, HttpContext } from "@sfajs/core";
 
 class TestMiddleware extends Middleware {
-  @Ctx
+  @Context
   private readonly ctx1!: HttpContext;
   @Header
   private readonly header!: ReadonlyDict;
@@ -60,52 +59,17 @@ const res = await new TestStartup()
 
 需要注意的是，该功能只会在 `useReqDeco` 之后的中间件中生效，因此你需要把 `useReqDeco` 放在靠前的位置，根据实际项目决定
 
-## 嵌套使用 `@ReqParse`
-
-用 `@ReqParse` 装饰的字段，如果没有初始化，将会被自动初始化
-
-该字段的值是一个对象，该对象中的字段也可以使用 `Query`, `Header` 等装饰并被自动赋值，当然也可以用 `@ReqParse` 来嵌套初始化
-
-建议在 `@sfajs/inject` 的 `useInject` 后使用 `useReqDeco`，从而可以使用依赖注入实例化对象，用以支持更复杂的情形
-
-```TS
-class TestClass1 {
-  @Header
-  private readonly header!: any;
-}
-
-class TestClass2 {
-  @Query("query1")
-  private readonly query1!: string;
-  @ReqParse
-  class: TestClass1;
-}
-
-class TestMiddleware extends Middleware {
-  @Query("query1")
-  private readonly query1!: string;
-  @ReqParse
-  class1 = new TestClass1();
-  @ReqParse
-  class2: TestClass1;
-}
-
-const res = await new TestStartup()
-    .useReqDeco()
-    .add(TestMiddleware)
-    .run();
-```
-
 ## 在其他类中
 
-在其他任意类中，你也可以手动使用 `@sfajs/req-deco`
+在其他任意类中，你也可以利用控制反转实现实例化
 
 ```TS
+import { parseInject } from "@sfajs/inject";
 import { HttpContext } from "@sfajs/core";
-import { parseReqDeco, Header, Query, Ctx } from "@sfajs/req-deco";
+import { Header, Query, Context } from "@sfajs/req-deco";
 
 class TestClass {
-  @Ctx
+  @Context
   private readonly ctx!: HttpContext;
   @Header
   private readonly header!: any;
@@ -113,9 +77,9 @@ class TestClass {
   private readonly query!: any;
 }
 
-const obj = parseReqDeco(TestClass); // 需要无参构造函数
+const obj = parseInject(TestClass); // 利用控制反转创建对象
 // OR
-const obj = parseReqDeco(new TestClass());
+const obj = parseInject(new TestClass());
 ```
 
 ## 避免在单例类中使用
