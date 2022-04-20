@@ -5,4 +5,4 @@ export {
   ParseBoolPipe,
   ParseFloatPipe,
   ParseIntPipe,
-} from "./pipe";
+} from "./pipes";

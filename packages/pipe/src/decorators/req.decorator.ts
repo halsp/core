@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { createInject, Inject, parseInject } from "@sfajs/inject";
 import { Dict, HttpContext, isClass } from "@sfajs/core";
-import { LambdaPipe, ReqPipe } from "../pipe";
+import { LambdaPipe, ReqPipe } from "../pipes";
 
 async function runPipes(ctx: HttpContext, val: any, pipes: ReqPipe[]) {
   for (let pipe of pipes) {
