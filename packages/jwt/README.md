@@ -1,6 +1,6 @@
 # @sfajs/jwt
 
-基于 [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken) 的 JWT 中间件
+基于 [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken) 和 [@sfajs/inject](https://github.com/sfajs/inject) 的 JWT 中间件
 
 ## 快速开始
 
@@ -62,31 +62,13 @@ RSA 和 ECDSA 加密的 PEM 公钥
 
 ## JwtService
 
-JwtService 提供了一些 jwt 接口
+JwtService 提供了一些 jwt 方法
 
-你可以通过以下方式创建和使用 `JwtService`
+在调用 `useJwt` 时就已经使用 `@sfajs/inject` 注入了 `JwtService`
 
-### createJwtService
+### 引用
 
-```TS
-const jwtService = createJwtService(ctx);
-// OR
-const jwtService = createJwtService(options);
-```
-
-### 依赖注入
-
-配合 `@sfajs/inject` 能够利用依赖注入更便捷的使用
-
-```TS
-import "@sfajs/jwt"
-import "@sfajs/inject"
-
-startup
-  .useJwt()
-  .useInject()
-  .inject(JwtService, (ctx) => createJwtService(ctx)); // Scoped
-```
+你可以通过 `依赖注入/控制反转` 的方式使用 `JwtService`
 
 ```TS
 class YourMiddleware extends Middleware{
@@ -103,6 +85,45 @@ class YourMiddleware extends Middleware{
   constructor(private readonly jwtService:JwtService){}
 }
 ```
+
+OR
+
+```TS
+const jwtService = await parseInject(ctx, JwtService);
+```
+
+### 提供方法
+
+#### sign
+
+生成 jwt token
+
+接收两个参数
+
+- payload: jwt payload
+- options: jwt 配置，可选参数。优先使用这个配置，没有的配置项再使用 `useJwt` 传入的配置
+
+#### verify
+
+验证 jwt token
+
+如果验证失败会抛出异常，请使用 `try{}catch{}` 或 `Promise.catch`
+
+接收两个参数
+
+- token: jwt token
+- options: jwt 配置，可选参数。优先使用这个配置，没有的配置项再使用 `useJwt` 传入的配置
+
+#### decode
+
+解析 jwt token
+
+如果解析失败返回 null，解析成功返回结果取决于传入参数，具体查看 ts 智能提示
+
+接收两个参数
+
+- token: jwt token
+- options: jwt 配置，可选参数。优先使用这个配置，没有的配置项再使用 `useJwt` 传入的配置
 
 ## 装饰器
 
@@ -152,55 +173,4 @@ class TestMiddleware extends Middleware{
   @JwtPayload
   private readonly payload!: any;
 }
-```
-
-### 在其他类中
-
-可以使用 `parseJwtDeco(ctx, obj)` 解析任意一个对象
-
-```TS
-class TestClass{
-  @JwtPayload
-  private readonly payload!: any;
-}
-
-const obj1 = parseJwtDeco(ctx, new TestClass());
-// OR
-const obj2 = parseJwtDeco(ctx, TestClass);
-```
-
-### 嵌套使用 `@JwtParse`
-
-用 `@JwtParse` 装饰的字段，如果没有初始化，将会被自动初始化
-
-该字段的值是一个对象，该对象中的字段也可以使用 `JwtPayload`, `JwtToken`, `JwtObject` 装饰并被自动赋值，当然也可以用`@JwtParse` 来嵌套初始化
-
-建议在 `@sfajs/inject` 的 `useInject` 后使用 `useJwt`，从而可以使用依赖注入实例化对象，用以支持更复杂的情形
-
-```TS
-class TestClass1 {
-  @JwtPayload
-  private readonly payload!: any;
-}
-
-class TestClass2 {
-  @JwtToken
-  private readonly token!: string;
-  @JwtParse
-  class: TestClass1;
-}
-
-class TestMiddleware extends Middleware {
-  @JwtObject
-  private readonly jwt!: any;
-  @JwtParse
-  class1 = new TestClass1();
-  @JwtParse
-  class2: TestClass1;
-}
-
-const res = await new TestStartup()
-    .useJwt()
-    .add(TestMiddleware)
-    .run();
 ```
