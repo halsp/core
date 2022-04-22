@@ -21,11 +21,11 @@ export class JwtService {
     payload: string | Buffer | object,
     options?: JwtSignOptions
   ): Promise<string> {
-    const signOptions = this.mergeJwtOptions(
+    const signOptions = this.#mergeJwtOptions(
       { ...options },
       "signOptions"
     ) as jwt.SignOptions;
-    const secret = this.getSecretKey(
+    const secret = this.#getSecretKey(
       payload,
       options,
       "privateKey",
@@ -45,9 +45,12 @@ export class JwtService {
   ): Promise<jwt.Jwt>;
   verify(token: string, options?: JwtVerifyOptions): Promise<jwt.JwtPayload>;
   verify(token: string, options?: JwtVerifyOptions) {
-    token = this.fixToken(token);
-    const verifyOptions = this.mergeJwtOptions({ ...options }, "verifyOptions");
-    const secret = this.getSecretKey(
+    token = this.#fixToken(token);
+    const verifyOptions = this.#mergeJwtOptions(
+      { ...options },
+      "verifyOptions"
+    );
+    const secret = this.#getSecretKey(
       token,
       options,
       "publicKey",
@@ -74,11 +77,11 @@ export class JwtService {
     options?: jwt.DecodeOptions & { json: false }
   ): any | null;
   decode(token: string, options?: jwt.DecodeOptions): any {
-    token = this.fixToken(token);
+    token = this.#fixToken(token);
     return jwt.decode(token, options);
   }
 
-  private mergeJwtOptions(
+  #mergeJwtOptions(
     options: JwtVerifyOptions | JwtSignOptions,
     key: "verifyOptions" | "signOptions"
   ): jwt.VerifyOptions | jwt.SignOptions {
@@ -94,7 +97,7 @@ export class JwtService {
     };
   }
 
-  private getSecretKey(
+  #getSecretKey(
     token: string | object | Buffer,
     options: JwtVerifyOptions | JwtSignOptions | undefined,
     key: "publicKey" | "privateKey",
@@ -116,7 +119,7 @@ export class JwtService {
     );
   }
 
-  private fixToken(token: string) {
+  #fixToken(token: string) {
     const prefix = this.#options.prefix ?? "Bearer";
     if (token.startsWith(prefix)) {
       token = token.substring(prefix.length, token.length).trim();
