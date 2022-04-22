@@ -9,12 +9,7 @@
 ## 快速开始
 
 ```TS
-import "@sfajs/req-deco";
-startup.useReqDeco();
-```
-
-```TS
-import "@sfajs/req-deco";
+import "@sfajs/inject";
 import { Header, Query, Param, Body, Context } from "@sfajs/req-deco";
 import { Middleware, ReadonlyDict, TestStartup, HttpContext } from "@sfajs/core";
 
@@ -50,14 +45,14 @@ class TestMiddleware extends Middleware {
 }
 
 const res = await new TestStartup()
-    .useReqDeco()
+    .useInject()
     .add(TestMiddleware)
     .run();
 ```
 
-上述代码中的 `useReqDeco` 会启用该功能
+上述代码中的 `useInject` 会启用依赖注入，`@sfajs/req-deco` 利用依赖注入实现功能
 
-需要注意的是，该功能只会在 `useReqDeco` 之后的中间件中生效，因此你需要把 `useReqDeco` 放在靠前的位置，根据实际项目决定
+需要注意的是，该功能只会在 `useInject` 之后的中间件中生效，因此你需要把 `useInject` 放在靠前的位置，根据实际项目决定
 
 ## 在其他类中
 
@@ -99,4 +94,66 @@ startup.use(new YourMiddleware())
 ```TS
 const md = new YourMiddleware();
 startup.use((ctx) => md);
+```
+
+## 管道 pipe
+
+利用管道可以实现参数校验、参数转换等
+
+此处管道不同于管道上下文 `HttpContext`
+
+### 用法
+
+`Header`,`Query` 等装饰器参数可以接收管道对象或类
+
+如果传入的是管道的类，可以利用控制反转自动实例化管道
+
+传入类
+
+```TS
+import { Query, ParseIntPipe } from "@sfajs/req-deco"
+
+@Query("field", ParseIntPipe)
+queryField: number;
+```
+
+或传入对象
+
+```TS
+@Query("field", new ParseIntPipe())
+queryField: number;
+```
+
+或转换整个 query
+
+```TS
+@Query(ParseIntPipe)
+query: any;
+```
+
+### 内置管道
+
+目前内置的管道有
+
+- ParseIntPipe
+- ParseFloatPipe
+- ParseBoolPipe
+
+### 自定义管道
+
+更多需求可以自定义管道
+
+创建一个类，实现 `PipeTransform` 接口，如
+
+```TS
+import { Context, PipeTransform } from "@sfajs/req-deco"
+
+class ToStringPipe implements PipeTransform<any, string> {
+  @Context
+  readonly ctx: HttpContext;
+
+  transform(value: any) {
+    return "" + value;
+  }
+}
 ```
