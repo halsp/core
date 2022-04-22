@@ -7,18 +7,15 @@ import {
 import * as jwt from "jsonwebtoken";
 import { HttpContext } from "@sfajs/core";
 import { OPTIONS_BAG } from "./constant";
+import { Inject } from "@sfajs/inject";
 
 export class JwtService {
-  constructor(options?: JwtOptions);
-  constructor(ctx: HttpContext);
-  constructor(options: JwtOptions | HttpContext | undefined) {
-    if (options instanceof HttpContext) {
-      options = options.bag<JwtOptions>(OPTIONS_BAG);
-    }
-    this.#options = options ?? {};
-  }
+  @Inject((ctx) => ctx)
+  private readonly ctx!: HttpContext;
 
-  #options: JwtOptions;
+  get #options() {
+    return this.ctx.bag<JwtOptions>(OPTIONS_BAG);
+  }
 
   sign(
     payload: string | Buffer | object,

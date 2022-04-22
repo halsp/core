@@ -1,19 +1,19 @@
 import "@sfajs/core";
+import "@sfajs/inject";
 import { HttpContext, Startup } from "@sfajs/core";
 import { OPTIONS_BAG, STARTUP_OPTIONS } from "./constant";
-import { parseJwtDeco } from "./jwt-deco-parse";
 import { JwtOptions } from "./jwt-options";
 import { JwtService } from "./jwt.service";
+import { parseInject } from "@sfajs/inject";
 import * as jwt from "jsonwebtoken";
 
-export { JwtObject, JwtPayload, JwtToken, JwtParse } from "./decorators";
+export { JwtObject, JwtPayload, JwtToken } from "./decorators";
 export {
   JwtOptions,
   JwtVerifyOptions,
   JwtSignOptions,
   JwtSecretRequestType,
 } from "./jwt-options";
-export { parseJwtDeco } from "./jwt-deco-parse";
 
 declare module "@sfajs/core" {
   interface Startup {
@@ -44,10 +44,12 @@ Startup.prototype.useJwt = function (options: JwtOptions): Startup {
   }
   this[STARTUP_OPTIONS] = options;
 
-  return this.use(async (ctx, next) => {
-    ctx.bag(OPTIONS_BAG, options);
-    await next();
-  })
+  return this.useInject()
+    .inject(JwtService)
+    .use(async (ctx, next) => {
+      ctx.bag(OPTIONS_BAG, options);
+      await next();
+    })
     .use(async (ctx, next) => {
       const opt = ctx.bag<JwtOptions>(OPTIONS_BAG);
       if (opt.auth) {
@@ -59,7 +61,7 @@ Startup.prototype.useJwt = function (options: JwtOptions): Startup {
           }
         }
       } else {
-        const jwtService = new JwtService(ctx);
+        const jwtService = await parseInject(ctx, JwtService);
         try {
           await jwtService.verify(ctx.jwtToken);
           await next();
@@ -68,8 +70,5 @@ Startup.prototype.useJwt = function (options: JwtOptions): Startup {
           ctx.unauthorizedMsg(error.message);
         }
       }
-    })
-    .hook((ctx, mh) => {
-      parseJwtDeco(ctx, mh);
     });
 };

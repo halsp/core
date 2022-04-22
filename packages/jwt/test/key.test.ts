@@ -1,5 +1,5 @@
 import { JwtSecretRequestType } from "../src";
-import { createJwtService } from "./utils";
+import { runJwtServiceTest } from "./utils";
 
 const publicKey = `-----BEGIN PUBLIC KEY-----
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsW9qavZzbbcyTbVVQBX7
@@ -39,33 +39,42 @@ C+FNbeux5oFpmYzhpvNFn59A9zjFYWSGTlbDdgJIVxOxWqNxIww=
 -----END RSA PRIVATE KEY-----`;
 
 test(`key`, async () => {
-  const jwtService = createJwtService();
-  const token = await jwtService.sign(
-    {},
-    { privateKey: privateKey, algorithm: "RS256" }
-  );
-  const jwt = await jwtService.verify(token, {
-    publicKey: publicKey,
+  await runJwtServiceTest(async (jwtService) => {
+    const token = await jwtService.sign(
+      {},
+      { privateKey: privateKey, algorithm: "RS256" }
+    );
+    const jwt = await jwtService.verify(token, {
+      publicKey: publicKey,
+    });
+    expect(Object.keys(jwt)).toEqual(["iat"]);
   });
-  expect(Object.keys(jwt)).toEqual(["iat"]);
 });
 
 test(`options key`, async () => {
-  const jwtService = createJwtService({
-    privateKey: privateKey,
-    publicKey: publicKey,
-  });
-  const token = await jwtService.sign({}, { algorithm: "RS256" });
-  const jwt = await jwtService.verify(token);
-  expect(Object.keys(jwt)).toEqual(["iat"]);
+  await runJwtServiceTest(
+    async (jwtService) => {
+      const token = await jwtService.sign({}, { algorithm: "RS256" });
+      const jwt = await jwtService.verify(token);
+      expect(Object.keys(jwt)).toEqual(["iat"]);
+    },
+    {
+      privateKey: privateKey,
+      publicKey: publicKey,
+    }
+  );
 });
 
-test(`secretOrKeyProvider`, async function () {
-  const jwtService = createJwtService({
-    secretOrKeyProvider: (type: JwtSecretRequestType) =>
-      type == JwtSecretRequestType.SIGN ? privateKey : publicKey,
-  });
-  const token = await jwtService.sign({}, { algorithm: "RS256" });
-  const jwt = await jwtService.verify(token);
-  expect(Object.keys(jwt)).toEqual(["iat"]);
+test(`secretOrKeyProvider`, async () => {
+  await runJwtServiceTest(
+    async (jwtService) => {
+      const token = await jwtService.sign({}, { algorithm: "RS256" });
+      const jwt = await jwtService.verify(token);
+      expect(Object.keys(jwt)).toEqual(["iat"]);
+    },
+    {
+      secretOrKeyProvider: (type: JwtSecretRequestType) =>
+        type == JwtSecretRequestType.SIGN ? privateKey : publicKey,
+    }
+  );
 });

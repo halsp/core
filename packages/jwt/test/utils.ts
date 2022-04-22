@@ -1,17 +1,36 @@
-import { SfaRequest } from "@sfajs/core";
+import { SfaRequest, TestStartup } from "@sfajs/core";
+import { parseInject } from "@sfajs/inject";
 import { JwtOptions } from "../src";
+import "../src";
+import "@sfajs/inject";
 import { JwtService } from "../src/jwt.service";
-
-export function createJwtService(options?: JwtOptions): JwtService {
-  return new JwtService(options);
-}
+import { OPTIONS_BAG } from "../src/constant";
 
 export async function createSfaReqeust(
   options: JwtOptions,
   payload: any = {},
   prefix = "Bearer "
 ): Promise<SfaRequest> {
-  const jwtService = createJwtService(options);
-  const token = await jwtService.sign(payload);
+  let token = "";
+  await runJwtServiceTest(async (jwtService) => {
+    token = await jwtService.sign(payload);
+  }, options);
   return new SfaRequest().setHeader("Authorization", prefix + token);
+}
+
+export async function runJwtServiceTest(
+  test: (jwtService: JwtService) => Promise<void>,
+  options?: JwtOptions
+) {
+  await new TestStartup()
+    .useInject()
+    .use(async (ctx, next) => {
+      ctx.bag(OPTIONS_BAG, options);
+      await next();
+    })
+    .use(async (ctx) => {
+      const jwtService = await parseInject(ctx, JwtService);
+      await test(jwtService);
+    })
+    .run();
 }
