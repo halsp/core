@@ -1,5 +1,5 @@
 import { SfaHttp } from "../src";
-import * as request from "supertest";
+import request from "supertest";
 
 test("end ahead", async function () {
   const server = new SfaHttp()
