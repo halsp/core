@@ -6,6 +6,7 @@ import {
   isFunction,
   isNil,
   isNilOrBlank,
+  isNull,
   isNumber,
   isObject,
   isPlainObject,
@@ -29,7 +30,17 @@ test("isNil", async function () {
 test("isUndefined", async function () {
   expect(isUndefined(undefined)).toBeTruthy();
 
+  expect(isUndefined(null)).toBeFalsy();
   expect(isUndefined({})).toBeFalsy();
+  expect(isUndefined(0)).toBeFalsy();
+});
+
+test("isNull", async function () {
+  expect(isNull(null)).toBeTruthy();
+
+  expect(isNull(undefined)).toBeFalsy();
+  expect(isNull({})).toBeFalsy();
+  expect(isNull(0)).toBeFalsy();
 });
 
 test("isFunction", async function () {

@@ -1,10 +1,16 @@
 import { ObjectConstructor } from "./types";
 
 export const isUndefined = (obj: any): obj is undefined =>
-  typeof obj === "undefined";
+  typeof obj == "undefined";
+
+export const isNull = (obj: any): obj is null =>
+  typeof obj != "undefined" && obj == null;
+
+export const isNil = (val: any): val is null | undefined =>
+  isUndefined(val) || isNull(val);
 
 export const isObject = (fn: any): fn is any =>
-  !isNil(fn) && typeof fn === "object";
+  !isNil(fn) && typeof fn == "object";
 
 export const isPlainObject = (fn: any): fn is object => {
   if (!isObject(fn)) {
@@ -18,9 +24,9 @@ export const isPlainObject = (fn: any): fn is object => {
     Object.prototype.hasOwnProperty.call(proto, "constructor") &&
     proto.constructor;
   return (
-    typeof ctor === "function" &&
+    typeof ctor == "function" &&
     ctor instanceof ctor &&
-    Function.prototype.toString.call(ctor) ===
+    Function.prototype.toString.call(ctor) ==
       Function.prototype.toString.call(Object)
   );
 };
@@ -44,8 +50,6 @@ export const isNumber = (val: any): val is number => typeof val === "number";
 export function isFiniteNumber(val: any): val is number {
   return isNumber(val) && isFinite(val);
 }
-export const isNil = (val: any): val is null | undefined =>
-  isUndefined(val) || val === null;
 export const isArrayEmpty = (array?: any[] | null): boolean =>
   !(array && array.length > 0);
 export const isSymbol = (val: any): val is symbol => typeof val === "symbol";
