@@ -3,6 +3,7 @@ export {
   PipeTransform,
   ReqPipe,
   ParseBoolPipe,
+  ParseBoolPipeOptions,
   ParseFloatPipe,
   ParseIntPipe,
   DefaultValuePipe,
