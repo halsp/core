@@ -135,9 +135,11 @@ query: any;
 
 目前内置的管道有
 
-- ParseIntPipe
-- ParseFloatPipe
-- ParseBoolPipe
+- DefaultValuePipe: 参数为 `null`,`undefined`,`NaN` 等，赋值默认值
+- TrimPipe: 去除字符串前后空白符，可单独限定 `start` 或 `end`
+- ParseIntPipe: 字符串转整型
+- ParseFloatPipe: 字符串转浮点数
+- ParseBoolPipe: 字符串转布尔，可自定义对应值
 
 ### 自定义管道
 
