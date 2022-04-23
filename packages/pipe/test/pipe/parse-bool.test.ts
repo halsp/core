@@ -1,21 +1,25 @@
 import { ParseBoolPipe } from "../../src";
-import { runPipeTest } from "./utils";
+import { runFieldPipeTest, runSuccessPipeTest } from "./utils";
 
-function testParseBool(source: any, target?: any) {
-  runPipeTest([ParseBoolPipe], source, target);
+function runSuccessTest(source: any, target: any) {
+  runSuccessPipeTest([ParseBoolPipe], source, target);
 }
 
-testParseBool(1, true);
-testParseBool(0, false);
-testParseBool(-1);
-testParseBool(2);
+function runFieldTest(source: any) {
+  runFieldPipeTest([ParseBoolPipe], source);
+}
 
-testParseBool("1", true);
-testParseBool("0", false);
-testParseBool("2");
-testParseBool("a");
+runSuccessTest(1, true);
+runSuccessTest(0, false);
+runFieldTest(-1);
+runFieldTest(2);
 
-testParseBool(true, true);
-testParseBool(false, false);
+runSuccessTest("1", true);
+runSuccessTest("0", false);
+runFieldTest("2");
+runFieldTest("a");
 
-testParseBool(null);
+runSuccessTest(true, true);
+runSuccessTest(false, false);
+
+runFieldTest(null);

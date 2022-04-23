@@ -1,7 +1,3 @@
-import { runPipeTest } from "./utils";
+import { runSuccessPipeTest } from "./utils";
 
-function testParseBool(source: any, target?: any) {
-  runPipeTest([(val) => Number(val)], source, target);
-}
-
-testParseBool("123", 123);
+runSuccessPipeTest([(val) => Number(val)], "123", 123);

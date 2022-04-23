@@ -1,12 +1,16 @@
 import { ParseIntPipe } from "../../src";
-import { runPipeTest } from "./utils";
+import { runFieldPipeTest, runSuccessPipeTest } from "./utils";
 
-function testParseInt(source: any, target?: any) {
-  runPipeTest([ParseIntPipe], source, target);
+function runSuccessTest(source: any, target: any) {
+  runSuccessPipeTest([ParseIntPipe], source, target);
 }
 
-testParseInt("123", 123);
-testParseInt("0", 0);
-testParseInt("-345", -345);
-testParseInt("");
-testParseInt("a");
+function runFieldTest(source: any) {
+  runFieldPipeTest([ParseIntPipe], source);
+}
+
+runSuccessTest("123", 123);
+runSuccessTest("0", 0);
+runSuccessTest("-345", -345);
+runFieldTest("");
+runFieldTest("a");

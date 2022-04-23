@@ -5,4 +5,8 @@ export {
   ParseBoolPipe,
   ParseFloatPipe,
   ParseIntPipe,
+  DefaultValuePipe,
+  DefaultValuePipeOptions,
+  TrimPipe,
+  TrimPipeOptions,
 } from "./pipes";

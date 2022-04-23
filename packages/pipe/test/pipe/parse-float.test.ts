@@ -1,12 +1,16 @@
 import { ParseFloatPipe } from "../../src";
-import { runPipeTest } from "./utils";
+import { runFieldPipeTest, runSuccessPipeTest } from "./utils";
 
-function testParseFloat(source: any, target?: any) {
-  runPipeTest([ParseFloatPipe], source, target);
+function runSuccessTest(source: any, target: any) {
+  runSuccessPipeTest([ParseFloatPipe], source, target);
 }
 
-testParseFloat("123", 123);
-testParseFloat("0", 0);
-testParseFloat("-345", -345);
-testParseFloat("");
-testParseFloat("a");
+function runFieldTest(source: any) {
+  runFieldPipeTest([ParseFloatPipe], source);
+}
+
+runSuccessTest("123", 123);
+runSuccessTest("0", 0);
+runSuccessTest("-345", -345);
+runFieldTest("");
+runFieldTest("a");
