@@ -117,14 +117,3 @@ test("prase file error", async function () {
   expect(res.status).toBe(400);
   expect(res.headers["prase-err"]).toBe("unknown transfer-encoding");
 });
-
-test("useHttpMultipartBody", async function () {
-  const server = new SfaHttp().use((ctx) => ctx.ok()).listen();
-  const res = await request(server)
-    .post("")
-    .field("name", "fileName")
-    .attach("file", "./LICENSE");
-  server.close();
-
-  expect(res.status).toBe(200);
-});
