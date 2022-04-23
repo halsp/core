@@ -8,7 +8,9 @@
     "outDir": "./dist",
     "target": "esnext",
     "strict": true,
-    "skipLibCheck": true
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noImplicitAny": false
   },
   "include": [
     "src/**/*"

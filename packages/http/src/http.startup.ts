@@ -10,7 +10,7 @@ import {
   NumericalHeadersDict,
   isString,
 } from "@sfajs/core";
-import * as urlParse from "url-parse";
+import urlParse from "url-parse";
 import { Stream } from "stream";
 
 export default abstract class HttpStartup extends HttpBodyPraserStartup {
@@ -20,7 +20,6 @@ export default abstract class HttpStartup extends HttpBodyPraserStartup {
 
   abstract readonly server: net.Server | tls.Server;
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   public get listen() {
     return this.server.listen.bind(this.server);
   }
@@ -39,9 +38,7 @@ export default abstract class HttpStartup extends HttpBodyPraserStartup {
     );
 
     httpRes.statusCode = 404;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (ctx as any).httpRes = httpRes;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (ctx as any).httpReq = httpReq;
 
     const sfaRes = await this.invoke(ctx);
