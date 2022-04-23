@@ -7,7 +7,10 @@
     "declaration": true,
     "outDir": "./dist",
     "target": "esnext",
-    "strict": true
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noImplicitAny": false
   },
   "include": [
     "src/**/*"

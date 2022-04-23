@@ -1,6 +1,6 @@
 import * as net from "net";
 import * as tls from "tls";
-import HttpBodyPraserStartup from "./http-body-praser.startup";
+import { HttpBodyPraserStartup } from "./http-body-praser.startup";
 import * as http from "http";
 import {
   HttpContext,
@@ -13,7 +13,7 @@ import {
 import urlParse from "url-parse";
 import { Stream } from "stream";
 
-export default abstract class HttpStartup extends HttpBodyPraserStartup {
+export abstract class HttpStartup extends HttpBodyPraserStartup {
   constructor() {
     super((ctx) => ctx.httpReq);
   }

@@ -1,15 +1,13 @@
 import { HttpContext, Startup, StatusCodes } from "@sfajs/core";
 import typeis from "type-is";
 import cobody from "co-body";
-import qs from "qs";
-import forms from "formidable";
+import { IParseOptions } from "qs";
+import { Fields, Files, Options, File, IncomingForm } from "formidable";
 import http from "http";
 
-export type MultipartBody =
-  | { fields: forms.Fields; files: forms.Files }
-  | undefined;
+export type MultipartBody = { fields: Fields; files: Files } | undefined;
 
-export default abstract class HttpBodyPraserStartup extends Startup {
+export abstract class HttpBodyPraserStartup extends Startup {
   constructor(
     private readonly sourceReqBuilder: (
       ctx: HttpContext
@@ -64,7 +62,7 @@ export default abstract class HttpBodyPraserStartup extends Startup {
   }
 
   public useHttpUrlencodedBody<T extends this>(
-    queryString?: qs.IParseOptions,
+    queryString?: IParseOptions,
     limit = "56kb",
     encoding: BufferEncoding = "utf-8",
     returnRawBody = false,
@@ -85,12 +83,8 @@ export default abstract class HttpBodyPraserStartup extends Startup {
   }
 
   public useHttpMultipartBody<T extends this>(
-    opts?: Partial<forms.Options | undefined>,
-    onFileBegin?: (
-      ctx: HttpContext,
-      formName: string,
-      file: forms.File
-    ) => void,
+    opts?: Partial<Options | undefined>,
+    onFileBegin?: (ctx: HttpContext, formName: string, file: File) => void,
     onError?: (ctx: HttpContext, err: Error) => Promise<void>
   ): T {
     this.useBodyPraser(
@@ -103,16 +97,12 @@ export default abstract class HttpBodyPraserStartup extends Startup {
 
   private parseMultipart(
     ctx: HttpContext,
-    opts?: Partial<forms.Options | undefined>,
-    onFileBegin?: (
-      ctx: HttpContext,
-      formName: string,
-      file: forms.File
-    ) => void,
+    opts?: Partial<Options | undefined>,
+    onFileBegin?: (ctx: HttpContext, formName: string, file: File) => void,
     onError?: (ctx: HttpContext, err: Error) => Promise<void>
   ): Promise<MultipartBody> {
     return new Promise<MultipartBody>((resolve) => {
-      const form = new forms.IncomingForm(opts);
+      const form = new IncomingForm(opts);
       if (onFileBegin) {
         form.on("fileBegin", (formName, file) => {
           onFileBegin(ctx, formName, file);
@@ -120,7 +110,7 @@ export default abstract class HttpBodyPraserStartup extends Startup {
       }
       form.parse(
         this.sourceReqBuilder(ctx),
-        async (err, fields: forms.Fields, files: forms.Files) => {
+        async (err, fields: Fields, files: Files) => {
           if (err) {
             ctx.res.status = StatusCodes.BAD_REQUEST;
             if (onError) await onError(ctx, err);

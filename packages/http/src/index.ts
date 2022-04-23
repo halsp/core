@@ -1,9 +1,10 @@
 import * as http from "http";
 import "@sfajs/core";
 
-import SfaHttp from "./sfa-http.startup";
-import SfaHttps from "./sfa-https.startup";
-import HttpBodyPraserStartup, {
+export { SfaHttp } from "./sfa-http.startup";
+export { SfaHttps } from "./sfa-https.startup";
+export {
+  HttpBodyPraserStartup,
   MultipartBody,
 } from "./http-body-praser.startup";
 
@@ -13,5 +14,3 @@ declare module "@sfajs/core" {
     readonly httpRes: http.ServerResponse;
   }
 }
-
-export { SfaHttp, SfaHttps, HttpBodyPraserStartup, MultipartBody };
