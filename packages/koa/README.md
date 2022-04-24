@@ -1,6 +1,6 @@
 # @sfajs/koa
 
-让 koa 成为 sfa 的中间件，并打通二者中间件管道
+让 koa 成为 sfa 的中间件，或 sfa 成为 koa 的中间件，并打通二者中间件管道
 
 ## 安装
 
@@ -10,20 +10,56 @@ npm i @sfajs/koa
 
 ## 快速开始
 
+### 将 koa 作为 sfa 的中间件
+
 ```TS
 import { TestStartup } from "@sfajs/core";
+import "@sfajs/koa";
 import { Koa } from "@sfajs/koa";
 
 const res = await new TestStartup()
+  .use(async (ctx, next) => {
+    console.log("step 1");
+    await next();
+    console.log("step 5");
+  })
   .useKoa(
-    new Koa().use(async (ctx) => {
-      ctx.body = "Sfa loves Koa";
+    new Koa().use(async (ctx, next) => {
+      console.log("step 2");
+      await next();
+      console.log("step 4");
     })
   )
-  .use(async (ctx)=>{
-    console.log(ctx.res.body); // "Sfa loves Koa"
+  .use((ctx) => {
+    console.log("step 3");
   })
   .run();
+```
+
+### 将 sfa 作为 koa 的中间件
+
+```TS
+import { Koa } from "@sfajs/koa";
+
+const koa = new Koa()
+  .use(async (ctx, next) => {
+    console.log("step 1")
+    await next();
+    console.log("step 5")
+  })
+  .use(
+    koaSfa((startup) => {
+      startup.use(async (ctx, next) => {
+        console.log("step 2")
+        await next();
+        console.log("step 4")
+      });
+    })
+  )
+  .use((ctx) => {
+    console.log("step 3")
+  });
+const server = koa.listen(2333);
 ```
 
 ## 中间件管道
