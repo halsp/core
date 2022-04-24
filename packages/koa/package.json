@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/koa",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "让 koa 成为 sfa 的中间件，并打通二者中间件管道",
   "homepage": "https://github.com/sfajs/koa",
   "repository": {
@@ -27,22 +27,23 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@sfajs/core": "^1.2.8",
+    "@sfajs/core": "^1.2.19",
     "koa": "^2.13.4",
     "koa-compose": "^4.1.0",
     "query-string": "^7.1.1"
   },
   "devDependencies": {
     "@koa/router": "^10.1.1",
+    "@sfajs/http": "^1.0.8",
     "@types/jest": "^27.4.1",
     "@types/koa": "^2.13.4",
     "@types/koa-cors": "0.0.2",
     "@types/koa__router": "^8.0.11",
-    "@types/node": "^17.0.23",
+    "@types/node": "^17.0.25",
     "@types/supertest": "^2.0.12",
-    "@typescript-eslint/eslint-plugin": "^5.18.0",
-    "@typescript-eslint/parser": "^5.18.0",
-    "eslint": "^8.13.0",
+    "@typescript-eslint/eslint-plugin": "^5.20.0",
+    "@typescript-eslint/parser": "^5.20.0",
+    "eslint": "^8.14.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^27.5.1",
