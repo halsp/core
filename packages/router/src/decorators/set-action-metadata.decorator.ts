@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { setActionMetadata } from "./set-action-metadata";
+import { setActionMetadata } from "../action/set-action-metadata";
 
 export function SetActionMetadata<T = any>(
   metadataKey: string,

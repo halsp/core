@@ -9,7 +9,7 @@ import {
   SfaRequest,
   Startup,
 } from "@sfajs/core";
-import Action from "./action";
+import { Action } from "./action";
 import MapParser from "./map/map-parser";
 import path = require("path");
 import MapItem from "./map/map-item";
@@ -22,12 +22,8 @@ import {
 } from "./constant";
 
 export { Action, MapItem, RouterConfig };
-
-export {
-  SetActionMetadata,
-  setActionMetadata,
-  getActionMetadata,
-} from "./decorators";
+export { SetActionMetadata } from "./decorators";
+export { setActionMetadata, getActionMetadata } from "./action";
 
 declare module "@sfajs/core" {
   interface Startup {

@@ -1,7 +1,7 @@
 import { isFunction } from "@sfajs/core";
 import { writeFileSync, existsSync, lstatSync, readdirSync } from "fs";
 import path = require("path");
-import Action from "../action";
+import { Action } from "../action";
 import { MAP_FILE_NAME, ACTION_METADATA } from "../constant";
 import MapItem from "./map-item";
 

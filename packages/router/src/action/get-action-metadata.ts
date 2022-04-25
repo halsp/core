@@ -1,4 +1,4 @@
-import Action from "../action";
+import { Action } from "../action";
 import { Dict, ObjectConstructor } from "@sfajs/core";
 import { ACTION_METADATA } from "../constant";
 
