@@ -6,7 +6,8 @@ const MIDDLEWARE_HOOK_BAG = "__@sfajs/core_middlewareHooksBag__";
 export type MdHook<T extends Middleware | MiddlewareConstructor | Error = any> =
   (
     ctx: HttpContext,
-    md: T
+    md: T,
+    error?: Error
   ) =>
     | void
     | Promise<void | boolean>
@@ -65,8 +66,9 @@ export class HookMiddleware extends Middleware {
 
 export async function execHooks(
   ctx: HttpContext,
-  exception: Error,
-  type: HookType.Exception
+  middleware: Middleware,
+  type: HookType.Exception,
+  exception: Error
 ): Promise<boolean>;
 export async function execHooks(
   ctx: HttpContext,
@@ -85,13 +87,18 @@ export async function execHooks(
 ): Promise<void>;
 export async function execHooks(
   ctx: HttpContext,
-  middleware: Middleware | MiddlewareConstructor | Error,
-  type: HookType
+  middleware: Middleware | MiddlewareConstructor,
+  type: HookType,
+  error?: Error
 ): Promise<Middleware | void | boolean> {
   if (type == HookType.Constructor) {
     return await execConstructorHooks(ctx, middleware as MiddlewareConstructor);
   } else if (type == HookType.Exception) {
-    return await execExceptionHooks(ctx, middleware as Error);
+    return await execExceptionHooks(
+      ctx,
+      middleware as Middleware,
+      error as Error
+    );
   }
 
   const hooks = ctx.bag<HookItem[]>(MIDDLEWARE_HOOK_BAG) ?? [];
@@ -105,12 +112,13 @@ export async function execHooks(
 
 async function execExceptionHooks(
   ctx: HttpContext,
-  exception: Error
+  middleware: Middleware,
+  error: Error
 ): Promise<boolean> {
   const hooks = ctx.bag<HookItem[]>(MIDDLEWARE_HOOK_BAG) ?? [];
   let result = false;
   for (const hookItem of hooks.filter((h) => h.type == HookType.Exception)) {
-    result = (await hookItem.hook(ctx, exception)) as boolean;
+    result = (await hookItem.hook(ctx, middleware, error)) as boolean;
     if (result) break;
   }
   return result;

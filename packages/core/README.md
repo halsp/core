@@ -141,12 +141,13 @@ startup.hook((ctx, md) => {}, HookType)
 
 该函数有两个参数
 
-1. 钩子回调函数，有两个参数
+1. 钩子回调函数，有两个或三个参数
    - 参数 1：管道 HttpContext 对象
    - 参数 2：中间件对象或中间件构造函数
      - 如果钩子类型为 `Constructor`，则参数为中间件构造函数
      - 如果钩子类型为 `Exception`，则参数为 `HttpException` 对象或其派生对象
      - 如果钩子类型为 `BeforeInvoke` 或 `AfterInvoke` 或 `BeforeNext`，则参数为中间件对象
+   - 参数 3: 如果钩子类型为 `Exception`，则此参数为 Error 对象，否则无此参数
    - 返回值：
      - 如果钩子类型为 `Constructor`，则需要返回中间件对象
      - 如果钩子类型为 `Exception`，则返回值为 bool 类型

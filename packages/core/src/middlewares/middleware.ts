@@ -67,8 +67,9 @@ export abstract class Middleware extends ResultHandler {
       } else {
         const hookResult = await execHooks(
           this.ctx,
-          err as Error,
-          HookType.Exception
+          nextMd ?? this,
+          HookType.Exception,
+          err as Error
         );
         if (!hookResult) {
           this.ctx.catchError(err);
