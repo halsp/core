@@ -154,9 +154,9 @@ startup.hook((ctx, md) => {}, HookType)
        - 返回 false 说明在钩子函数中未处理异常，会继续执行下一个异常钩子
      - 如果钩子类型为 `BeforeInvoke` 或 `AfterInvoke` 或 `BeforeNext`，则没有返回值
 1. 钩子类型，有以下几种钩子
-   - `BeforeInvoke`：在中间件执行之前执行，默认参数
+   - `BeforeInvoke`：在中间件执行之前执行，默认参数。若返回 `false` 则终止后续同类型钩子执行，并且不执行当前中间件
    - `AfterInvoke`：在中间件执行之后执行，即 `next` 之后
-   - `BeforeNext`：在中间件 `next` 执行前执行，如果在中间件中没有调用 `next`，将不触发这种钩子
+   - `BeforeNext`：在中间件 `next` 执行前执行，如果在中间件中没有调用 `next`，将不触发这种钩子，若返回 `false` 则终止后续同类型钩子执行，并且不执行下一个中间件
    - `Constructor`：用于构造中间件，利用这种钩子可以动态使用中间件。但注册的中间件，必须是中间件的构造器，即 `startup.add(YourMiddleware)` 的方式
    - `Exception`：中间件抛出异常时会执行这类钩子
 
