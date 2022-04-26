@@ -24,23 +24,23 @@ class TestMiddleware2 extends Middleware {
 
 test("constructor hook", async function () {
   const res = await new TestStartup()
-    .hook<TestMiddleware1>((ctx, md) => {
+    .hook<TestMiddleware1>(HookType.Constructor, (ctx, md) => {
       if (md == TestMiddleware1) {
         return new md(1);
       }
-    }, HookType.Constructor)
-    .hook<TestMiddleware1>((ctx, md) => {
+    })
+    .hook<TestMiddleware1>(HookType.Constructor, (ctx, md) => {
       // usless
       if (md == TestMiddleware1) {
         ctx.setHeader("h3", 3);
         return new md(3);
       }
-    }, HookType.Constructor)
-    .hook<TestMiddleware2>((ctx, md) => {
+    })
+    .hook<TestMiddleware2>(HookType.Constructor, (ctx, md) => {
       if (md == TestMiddleware2) {
         return new md(2);
       }
-    }, HookType.Constructor)
+    })
     .add(TestMiddleware1)
     .add(TestMiddleware2)
     .use((ctx) => ctx.ok())

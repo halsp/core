@@ -108,7 +108,7 @@ export abstract class Startup {
 
     if (typeof arg1 == "function") {
       mh = arg1;
-      type = (arg2 as HookType) ?? HookType.BeforeInvoke;
+      type = HookType.BeforeInvoke;
     } else {
       type = arg1;
       mh = arg2 as MdHook;
