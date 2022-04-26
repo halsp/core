@@ -23,13 +23,13 @@ function runSimpleTest(handle: boolean, afterNext: boolean) {
   test(`exception hook ${handle} ${afterNext}`, async () => {
     let errorMiddleware!: Middleware;
     const res = await new TestStartup()
-      .hook((ctx, middleware, exception) => {
+      .hook(HookType.Exception, (ctx, middleware, exception) => {
         errorMiddleware = middleware;
         ctx.ok({
           message: exception.message,
         });
         return handle;
-      }, HookType.Exception)
+      })
       .add(TestMiddleware)
       .use((ctx) => {
         ctx.setHeader("h", 1);
@@ -68,18 +68,18 @@ function runBeforeNextTest(handle: boolean) {
   test(`exception hook ${handle}`, async () => {
     let errorMiddleware!: Middleware;
     const res = await new TestStartup()
-      .hook((ctx, middleware) => {
+      .hook(HookType.BeforeNext, (ctx, middleware) => {
         if (middleware instanceof TestMiddleware) {
           throw new BadRequestException();
         }
-      }, HookType.BeforeNext)
-      .hook((ctx, middleware, exception) => {
+      })
+      .hook(HookType.Exception, (ctx, middleware, exception) => {
         errorMiddleware = middleware;
         ctx.ok({
           message: exception.message,
         });
         return handle;
-      }, HookType.Exception)
+      })
       .add(TestMiddleware)
       .use((ctx) => {
         ctx.setHeader("h", 1);

@@ -30,12 +30,12 @@ test("simple hook", async () => {
       }
     })
     // executed but without effective
-    .hook((ctx, md) => {
+    .hook(HookType.AfterInvoke, (ctx, md) => {
       if (md instanceof TestMiddleware) {
         md.count++;
         ctx.setHeader("after", "1");
       }
-    }, HookType.AfterInvoke) // 3 hooks
+    }) // 3 hooks
     .add(TestMiddleware)
     .use((ctx) => ctx.ok());
 
@@ -63,26 +63,26 @@ function runReturnFalse(type: HookType.BeforeInvoke | HookType.BeforeNext) {
     }
 
     const startup = new TestStartup()
-      .hook((ctx, md) => {
+      .hook(type, (ctx, md) => {
         if (md instanceof TestMiddleware) {
           md.count++;
           return true;
         }
-      }, type)
+      })
       .add(TestMiddleware)
-      .hook((ctx, md) => {
+      .hook(type, (ctx, md) => {
         if (md instanceof TestMiddleware) {
           md.count++;
           return false;
         }
-      }, type)
+      })
       .add(TestMiddleware)
-      .hook((ctx, md) => {
+      .hook(type, (ctx, md) => {
         if (md instanceof TestMiddleware) {
           md.count++;
           return false;
         }
-      }, type)
+      })
       .add(TestMiddleware)
       .use((ctx) => ctx.ok());
 

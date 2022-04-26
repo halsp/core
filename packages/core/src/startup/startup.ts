@@ -50,49 +50,49 @@ export abstract class Startup {
   }
 
   hook<T extends Middleware = Middleware>(
+    type: HookType.Constructor,
     mh: (
       ctx: HttpContext,
       middlewareConstructor: ObjectConstructor<T>
-    ) => T | undefined,
-    type: HookType.Constructor
+    ) => T | undefined
   ): this;
   hook<T extends Middleware = Middleware>(
+    type: HookType.Constructor,
     mh: (
       ctx: HttpContext,
       middlewareConstructor: ObjectConstructor<T>
-    ) => Promise<T | undefined>,
-    type: HookType.Constructor
+    ) => Promise<T | undefined>
   ): this;
 
   hook<T extends Error = HttpException>(
-    mh: (ctx: HttpContext, middleware: Middleware, exception: T) => boolean,
-    type: HookType.Exception
+    type: HookType.Exception,
+    mh: (ctx: HttpContext, middleware: Middleware, exception: T) => boolean
   ): this;
   hook<T extends Error = HttpException>(
+    type: HookType.Exception,
     mh: (
       ctx: HttpContext,
       middleware: Middleware,
       exception: T
-    ) => Promise<boolean>,
-    type: HookType.Exception
+    ) => Promise<boolean>
   ): this;
 
   hook<T extends Middleware = Middleware>(
-    mh: (ctx: HttpContext, middleware: T) => boolean | void,
-    type: HookType.BeforeInvoke | HookType.BeforeNext
+    type: HookType.BeforeInvoke | HookType.BeforeNext,
+    mh: (ctx: HttpContext, middleware: T) => boolean | void
   ): this;
   hook<T extends Middleware = Middleware>(
-    mh: (ctx: HttpContext, middleware: T) => Promise<boolean | void>,
-    type: HookType.BeforeInvoke | HookType.BeforeNext
+    type: HookType.BeforeInvoke | HookType.BeforeNext,
+    mh: (ctx: HttpContext, middleware: T) => Promise<boolean | void>
   ): this;
 
   hook<T extends Middleware = Middleware>(
-    mh: (ctx: HttpContext, middleware: T) => void,
-    type: HookType.AfterInvoke
+    type: HookType.AfterInvoke,
+    mh: (ctx: HttpContext, middleware: T) => void
   ): this;
   hook<T extends Middleware = Middleware>(
-    mh: (ctx: HttpContext, middleware: T) => Promise<void>,
-    type: HookType.AfterInvoke
+    type: HookType.AfterInvoke,
+    mh: (ctx: HttpContext, middleware: T) => Promise<void>
   ): this;
 
   hook<T extends Middleware = Middleware>(
@@ -102,7 +102,17 @@ export abstract class Startup {
     mh: (ctx: HttpContext, middleware: T) => Promise<void>
   ): this;
 
-  hook(mh: MdHook, type = HookType.BeforeInvoke): this {
+  hook(arg1: MdHook | HookType, arg2?: MdHook | HookType): this {
+    let mh: MdHook;
+    let type: HookType;
+
+    if (typeof arg1 == "function") {
+      mh = arg1;
+      type = (arg2 as HookType) ?? HookType.BeforeInvoke;
+    } else {
+      type = arg1;
+      mh = arg2 as MdHook;
+    }
     this.#mds.push(() => new HookMiddleware(mh, type));
     return this;
   }

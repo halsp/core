@@ -35,19 +35,19 @@ test("simple hook", async function () {
         md.count++;
       }
     })
-    .hook((ctx, md) => {
+    .hook(HookType.AfterInvoke, (ctx, md) => {
       // executed but without effective
       if (md instanceof TestMiddleware) {
         md.count++;
         ctx.setHeader("after", "1");
       }
-    }, HookType.AfterInvoke)
-    .hook((ctx, md) => {
+    })
+    .hook(HookType.BeforeNext, (ctx, md) => {
       // executed before next
       if (md instanceof TestMiddleware) {
         md.count++;
       }
-    }, HookType.BeforeNext)
+    })
     .add(TestMiddleware)
     .use((ctx) => ctx.ok());
 
