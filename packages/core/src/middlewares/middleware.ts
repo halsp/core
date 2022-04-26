@@ -50,11 +50,15 @@ export abstract class Middleware extends ResultHandler {
   protected async next(): Promise<void> {
     let nextMd: Middleware | undefined = undefined;
     try {
-      await execHooks(this.ctx, this, HookType.BeforeNext);
+      if (false == (await execHooks(this.ctx, this, HookType.BeforeNext))) {
+        return;
+      }
       if (this.#mds.length <= this.#index + 1) return;
       nextMd = await this.#createNextMiddleware();
       nextMd.init(this.ctx, this.#index + 1, this.#mds);
-      await execHooks(this.ctx, nextMd, HookType.BeforeInvoke);
+      if (false == (await execHooks(this.ctx, nextMd, HookType.BeforeInvoke))) {
+        return;
+      }
       await nextMd.invoke();
       await execHooks(this.ctx, nextMd, HookType.AfterInvoke);
     } catch (err) {

@@ -9,7 +9,7 @@ export type MdHook<T extends Middleware | MiddlewareConstructor | Error = any> =
     md: T
   ) =>
     | void
-    | Promise<void>
+    | Promise<void | boolean>
     | Middleware
     | undefined
     | Promise<Middleware | undefined>
@@ -30,6 +30,15 @@ isHTCons(HookType.Constructor); // just for test
 isHTCons(HookType.BeforeNext); // just for test
 type isHTConsRT = ReturnType<typeof isHTCons>;
 export type HookTypeWithoutConstructor = isHTConsRT & HookType;
+
+const isHTBefore = (type: HookType) =>
+  type == HookType.BeforeInvoke || type == HookType.BeforeNext
+    ? type
+    : undefined;
+isHTBefore(HookType.Constructor); // just for test
+isHTBefore(HookType.BeforeInvoke); // just for test
+type isHTBeforeRT = ReturnType<typeof isHTBefore>;
+export type HookTypeBefore = isHTBeforeRT & HookType;
 
 export interface HookItem {
   hook: MdHook;
@@ -67,6 +76,11 @@ export async function execHooks(
 export async function execHooks(
   ctx: HttpContext,
   middleware: Middleware,
+  type: HookTypeBefore
+): Promise<boolean | void>;
+export async function execHooks(
+  ctx: HttpContext,
+  middleware: Middleware,
   type: HookTypeWithoutConstructor
 ): Promise<void>;
 export async function execHooks(
@@ -82,7 +96,10 @@ export async function execHooks(
 
   const hooks = ctx.bag<HookItem[]>(MIDDLEWARE_HOOK_BAG) ?? [];
   for (const hookItem of hooks.filter((h) => h.type == type)) {
-    await hookItem.hook(ctx, middleware);
+    const hookResult = await hookItem.hook(ctx, middleware);
+    if (typeof hookResult == "boolean" && !hookResult) {
+      return false;
+    }
   }
 }
 

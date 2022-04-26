@@ -9,7 +9,6 @@ test("middleware pipeline", async function () {
 
   // startup.ctx.mds[2].md = startup.ctx.mds[2].builder();
   const result = await startup.run();
-  console.log("result.body", result.body);
   expect(result.status).toBe(200);
   expect(result.body).toBe("OK");
   expect(result.getHeader("mdw1")).toBe("mdw1");
