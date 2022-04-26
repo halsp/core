@@ -69,9 +69,4 @@ export {
 
 export { Startup, TestStartup } from "./startup";
 
-export {
-  Middleware,
-  HookType,
-  HookTypeBefore,
-  HookTypeWithoutConstructor,
-} from "./middlewares";
+export { Middleware, HookType } from "./middlewares";

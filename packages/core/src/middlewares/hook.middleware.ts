@@ -25,22 +25,6 @@ export enum HookType {
   Exception,
 }
 
-const isHTCons = (type: HookType) =>
-  type == HookType.Constructor ? undefined : type;
-isHTCons(HookType.Constructor); // just for test
-isHTCons(HookType.BeforeNext); // just for test
-type isHTConsRT = ReturnType<typeof isHTCons>;
-export type HookTypeWithoutConstructor = isHTConsRT & HookType;
-
-const isHTBefore = (type: HookType) =>
-  type == HookType.BeforeInvoke || type == HookType.BeforeNext
-    ? type
-    : undefined;
-isHTBefore(HookType.Constructor); // just for test
-isHTBefore(HookType.BeforeInvoke); // just for test
-type isHTBeforeRT = ReturnType<typeof isHTBefore>;
-export type HookTypeBefore = isHTBeforeRT & HookType;
-
 export interface HookItem {
   hook: MdHook;
   type: HookType;
@@ -78,12 +62,12 @@ export async function execHooks(
 export async function execHooks(
   ctx: HttpContext,
   middleware: Middleware,
-  type: HookTypeBefore
+  type: HookType.BeforeInvoke | HookType.BeforeNext
 ): Promise<boolean | void>;
 export async function execHooks(
   ctx: HttpContext,
   middleware: Middleware,
-  type: HookTypeWithoutConstructor
+  type: HookType.AfterInvoke
 ): Promise<void>;
 export async function execHooks(
   ctx: HttpContext,

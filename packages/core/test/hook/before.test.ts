@@ -1,4 +1,4 @@
-import { Middleware, TestStartup, HookType, HookTypeBefore } from "../../src";
+import { Middleware, TestStartup, HookType } from "../../src";
 
 test("simple hook", async () => {
   class TestMiddleware extends Middleware {
@@ -48,7 +48,7 @@ test("simple hook", async () => {
   expect(result.getHeader("after")).toBe("1");
 });
 
-function runReturnFalse(type: HookTypeBefore) {
+function runReturnFalse(type: HookType.BeforeInvoke | HookType.BeforeNext) {
   test(`before hook return false ${type}`, async () => {
     class TestMiddleware extends Middleware {
       static index = 1;
