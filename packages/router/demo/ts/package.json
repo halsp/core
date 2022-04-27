@@ -1,9 +1,0 @@
-{
-  "scripts": {
-    "build": "sfra"
-  },
-  "devDependencies": {
-    "@sfajs/router": "../..",
-    "@sfajs/core": "*"
-  }
-}
