@@ -32,12 +32,14 @@ import {
   isResourceFilter,
   ResourceFilter,
 } from "./filters";
+import { parseInject } from "@sfajs/inject";
 
 export { Action, MapItem, RouterConfig };
-export { SetActionMetadata } from "./decorators";
+export { SetActionMetadata, UseFilters } from "./decorators";
 export { setActionMetadata, getActionMetadata } from "./action";
 export {
   Filter,
+  FilterItem,
   ActionFilter,
   AuthorizationFilter,
   ExceptionFilter,
@@ -146,7 +148,8 @@ Startup.prototype.useRouter = function (cfg: RouterConfig = {}): Startup {
 
     const filters = getFilters<ExceptionFilter>(md, isExceptionFilter);
     for (const filter of filters) {
-      const execResult = await filter.onException(ctx, err);
+      const obj = await parseInject(ctx, filter);
+      const execResult = await obj.onException(ctx, err);
       if (typeof execResult == "boolean" && execResult) {
         return true;
       }
@@ -162,7 +165,8 @@ Startup.prototype.useRouter = function (cfg: RouterConfig = {}): Startup {
           isAuthorizationFilter
         );
         for (const filter of filters) {
-          const execResult = await filter.onAuthorization(ctx);
+          const obj = await parseInject(ctx, filter);
+          const execResult = await obj.onAuthorization(ctx);
           if (typeof execResult == "boolean" && !execResult) {
             return false;
           }
@@ -172,7 +176,8 @@ Startup.prototype.useRouter = function (cfg: RouterConfig = {}): Startup {
       {
         const filters = getFilters<ResourceFilter>(md, isResourceFilter);
         for (const filter of filters) {
-          const execResult = await filter.onResourceExecuting(ctx);
+          const obj = await parseInject(ctx, filter);
+          const execResult = await obj.onResourceExecuting(ctx);
           if (typeof execResult == "boolean" && !execResult) {
             return false;
           }
@@ -182,7 +187,8 @@ Startup.prototype.useRouter = function (cfg: RouterConfig = {}): Startup {
       {
         const filters = getFilters<ActionFilter>(md, isActionFilter);
         for (const filter of filters) {
-          const execResult = await filter.onActionExecuting(ctx);
+          const obj = await parseInject(ctx, filter);
+          const execResult = await obj.onActionExecuting(ctx);
           if (typeof execResult == "boolean" && !execResult) {
             return false;
           }
@@ -197,14 +203,16 @@ Startup.prototype.useRouter = function (cfg: RouterConfig = {}): Startup {
       {
         const filters = getFilters<ActionFilter>(md, isActionFilter);
         for (const filter of filters) {
-          await filter.onActionExecuted(ctx);
+          const obj = await parseInject(ctx, filter);
+          await obj.onActionExecuted(ctx);
         }
       }
 
       {
         const filters = getFilters<ResourceFilter>(md, isResourceFilter);
         for (const filter of filters) {
-          await filter.onResourceExecuted(ctx);
+          const obj = await parseInject(ctx, filter);
+          await obj.onResourceExecuted(ctx);
         }
       }
     })
