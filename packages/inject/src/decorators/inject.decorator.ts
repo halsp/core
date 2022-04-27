@@ -77,5 +77,3 @@ function injectCustom<T>(
     createInject(handler, target, propertyKey, parameterIndex, type);
   };
 }
-
-export { createInject };

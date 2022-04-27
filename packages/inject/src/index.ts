@@ -53,11 +53,11 @@ Startup.prototype.useInject = function (): Startup {
     ctx.bag(DECORATOR_SCOPED_BAG, []);
     await next();
   })
-    .hook(async (ctx, mh) => {
+    .hook(HookType.Constructor, async (ctx, mh) => {
       if (isInjectClass(mh)) {
         return await parseInject(ctx, mh);
       }
-    }, HookType.Constructor)
+    })
     .hook(async (ctx, mh) => {
       await parseInject(ctx, mh);
     });
