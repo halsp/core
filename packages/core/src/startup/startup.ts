@@ -5,9 +5,9 @@ import {
   HookMiddleware,
   HookType,
   MiddlewareItem,
+  invokeMiddlewares,
   MiddlewareConstructor,
   LambdaMiddleware,
-  createMiddleware,
 } from "../middlewares";
 import { Stream } from "stream";
 import * as mime from "mime-types";
@@ -123,10 +123,8 @@ export abstract class Startup {
       return ctx.res;
     }
 
-    let md: Middleware | undefined = undefined;
     try {
-      md = await createMiddleware(ctx, this.#mds[0]);
-      await (md as any).init(ctx, 0, this.#mds).invoke();
+      await invokeMiddlewares(ctx, this.#mds);
     } catch (err) {
       ctx.catchError(err);
     }

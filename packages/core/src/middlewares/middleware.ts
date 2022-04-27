@@ -94,3 +94,11 @@ export abstract class Middleware extends ResultHandler {
     return this;
   }
 }
+
+export async function invokeMiddlewares(
+  ctx: HttpContext,
+  mds: MiddlewareItem[]
+) {
+  const md = await createMiddleware(ctx, mds[0]);
+  await (md as any).init(ctx, 0, mds).invoke();
+}
