@@ -1,6 +1,10 @@
 import { isClass, ObjectConstructor } from "@sfajs/core";
 import { Action } from "../action";
-import { FILTERS_METADATA, GLOBAL_FILTERS_BAG } from "../constant";
+import {
+  FILTERS_METADATA,
+  FILTERS_ORDER_BAG,
+  GLOBAL_FILTERS_BAG,
+} from "../constant";
 import { ActionFilter } from "./action.filter";
 import { AuthorizationFilter } from "./authorization.filter";
 import { ExceptionFilter } from "./exception.filter";
@@ -54,10 +58,35 @@ export function isResourceFilter(
 export function getFilters<T extends Filter = Filter>(
   action: Action,
   select: (filter: Filter) => boolean
-): (T | ObjectConstructor<T>)[] {
-  const useFilters: Filter[] =
+): FilterItem<T>[] {
+  const useFilters: FilterItem<T>[] =
     Reflect.getMetadata(FILTERS_METADATA, action.constructor) ?? [];
-  const globalFilters = action.ctx.bag<FilterItem[]>(GLOBAL_FILTERS_BAG) ?? [];
-  const filters = [...globalFilters, ...useFilters];
-  return filters.filter((item) => select(item)) as T[];
+  const globalFilters =
+    action.ctx.bag<FilterItem<T>[]>(GLOBAL_FILTERS_BAG) ?? [];
+  const orders = action.ctx.bag<OrderRecord<T>[]>(FILTERS_ORDER_BAG) ?? [];
+  const filters: FilterItem<T>[] = [...globalFilters, ...useFilters];
+  return filters
+    .filter((item) => select(item))
+    .sort((f1, f2) => {
+      const cls1 = isClass(f1) ? f1 : (f1.constructor as ObjectConstructor<T>);
+      const cls2 = isClass(f2) ? f2 : (f2.constructor as ObjectConstructor<T>);
+
+      const order1 = orders.filter((item) => item.filter == cls1)[0]?.order;
+      const order2 = orders.filter((item) => item.filter == cls2)[0]?.order;
+
+      if (order1 == undefined && order2 == undefined) {
+        return 0;
+      } else if (order1 == undefined && order2 != undefined) {
+        return 1;
+      } else if (order1 != undefined && order2 == undefined) {
+        return -1;
+      } else {
+        return order1 - order2;
+      }
+    });
+}
+
+export interface OrderRecord<T extends Filter = Filter> {
+  filter: ObjectConstructor<T>;
+  order: number;
 }

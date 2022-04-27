@@ -2,6 +2,7 @@ import "@sfajs/core";
 import {
   HookType,
   HttpContext,
+  isClass,
   MethodNotAllowedException,
   NotFoundException,
   ObjectConstructor,
@@ -18,6 +19,7 @@ import RouterConfig from "./router-config";
 import {
   CTX_CACHE_METADATA,
   DEFAULT_ACTION_DIR,
+  FILTERS_ORDER_BAG,
   GLOBAL_FILTERS_BAG,
   REQUEST_CACHE_PARAMS,
   STARTUP_ROUTER_CONFIG,
@@ -26,12 +28,14 @@ import {
   ActionFilter,
   AuthorizationFilter,
   ExceptionFilter,
+  Filter,
   FilterItem,
   getFilters,
   isActionFilter,
   isAuthorizationFilter,
   isExceptionFilter,
   isResourceFilter,
+  OrderRecord,
   ResourceFilter,
 } from "./filters";
 import { parseInject } from "@sfajs/inject";
@@ -51,7 +55,14 @@ export {
 declare module "@sfajs/core" {
   interface Startup {
     useRouter(cfg?: RouterConfig): this;
-    useGlobalFilter(filter: FilterItem): this;
+    useGlobalFilter<T extends Filter = Filter>(
+      filter: FilterItem<T>,
+      order?: number
+    ): this;
+    useFilterOrder<T extends Filter = Filter>(
+      filter: ObjectConstructor<T>,
+      order: number
+    ): this;
   }
 
   interface SfaRequest {
@@ -135,9 +146,35 @@ Object.defineProperty(SfaRequest.prototype, "param", {
   },
 });
 
-Startup.prototype.useGlobalFilter = function (filter: FilterItem): Startup {
+Startup.prototype.useFilterOrder = function <T extends Filter = Filter>(
+  filter: ObjectConstructor<T>,
+  order: number
+): Startup {
   return this.use(async (ctx, next) => {
-    const filters = ctx.bag<FilterItem[]>(GLOBAL_FILTERS_BAG) ?? [];
+    const existOrders = ctx.bag<OrderRecord<T>[]>(FILTERS_ORDER_BAG) ?? [];
+    const orders = existOrders.filter((item) => item.filter != filter);
+    orders.push({
+      filter,
+      order,
+    });
+    ctx.bag(FILTERS_ORDER_BAG, orders);
+    await next();
+  });
+};
+
+Startup.prototype.useGlobalFilter = function <T extends Filter = Filter>(
+  filter: FilterItem<T>,
+  order?: number
+): Startup {
+  if (order != undefined) {
+    const cls = isClass(filter)
+      ? filter
+      : (filter.constructor as ObjectConstructor<T>);
+    this.useFilterOrder(cls, order);
+  }
+
+  return this.use(async (ctx, next) => {
+    const filters = ctx.bag<FilterItem<T>[]>(GLOBAL_FILTERS_BAG) ?? [];
     filters.push(filter);
     ctx.bag(GLOBAL_FILTERS_BAG, filters);
     await next();

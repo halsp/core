@@ -23,7 +23,6 @@ function runTest(executing: boolean) {
         executing,
       })
     )
-      .useInject()
       .useGlobalFilter(TestActionFilter)
       .useGlobalFilter(TestActionFilter)
       .useRouter(routerCfg)
