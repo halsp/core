@@ -12,6 +12,15 @@ test("startup test", async function () {
   expect(result.status).toBe(200);
 });
 
+test("default", async function () {
+  const result = await new TestStartup(
+    new SfaRequest().setPath("").setMethod("GET")
+  )
+    .useRouter(routerCfg)
+    .run();
+  expect(result.status).toBe(200);
+});
+
 test("startup not exist", async function () {
   const result = await new TestStartup(
     new SfaRequest().setPath("/simple/router1").setMethod("POST")

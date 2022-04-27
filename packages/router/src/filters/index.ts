@@ -1,6 +1,6 @@
 import { isClass, ObjectConstructor } from "@sfajs/core";
 import { Action } from "../action";
-import { FILTERS_METADATA } from "../constant";
+import { FILTERS_METADATA, GLOBAL_FILTERS_BAG } from "../constant";
 import { ActionFilter } from "./action.filter";
 import { AuthorizationFilter } from "./authorization.filter";
 import { ExceptionFilter } from "./exception.filter";
@@ -55,7 +55,9 @@ export function getFilters<T extends Filter = Filter>(
   action: Action,
   select: (filter: Filter) => boolean
 ): (T | ObjectConstructor<T>)[] {
-  const filters: Filter[] =
+  const useFilters: Filter[] =
     Reflect.getMetadata(FILTERS_METADATA, action.constructor) ?? [];
+  const globalFilters = action.ctx.bag<FilterItem[]>(GLOBAL_FILTERS_BAG) ?? [];
+  const filters = [...globalFilters, ...useFilters];
   return filters.filter((item) => select(item)) as T[];
 }

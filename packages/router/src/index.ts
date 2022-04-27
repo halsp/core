@@ -18,6 +18,7 @@ import RouterConfig from "./router-config";
 import {
   CTX_CACHE_METADATA,
   DEFAULT_ACTION_DIR,
+  GLOBAL_FILTERS_BAG,
   REQUEST_CACHE_PARAMS,
   STARTUP_ROUTER_CONFIG,
 } from "./constant";
@@ -25,6 +26,7 @@ import {
   ActionFilter,
   AuthorizationFilter,
   ExceptionFilter,
+  FilterItem,
   getFilters,
   isActionFilter,
   isAuthorizationFilter,
@@ -49,6 +51,7 @@ export {
 declare module "@sfajs/core" {
   interface Startup {
     useRouter(cfg?: RouterConfig): this;
+    useGlobalFilter(filter: FilterItem): this;
   }
 
   interface SfaRequest {
@@ -132,6 +135,15 @@ Object.defineProperty(SfaRequest.prototype, "param", {
   },
 });
 
+Startup.prototype.useGlobalFilter = function (filter: FilterItem): Startup {
+  return this.use(async (ctx, next) => {
+    const filters = ctx.bag<FilterItem[]>(GLOBAL_FILTERS_BAG) ?? [];
+    filters.push(filter);
+    ctx.bag(GLOBAL_FILTERS_BAG, filters);
+    await next();
+  });
+};
+
 Startup.prototype.useRouter = function (cfg: RouterConfig = {}): Startup {
   if (!!this[STARTUP_ROUTER_CONFIG]) {
     return this;
@@ -143,7 +155,7 @@ Startup.prototype.useRouter = function (cfg: RouterConfig = {}): Startup {
   cfg.prefix = cfg.prefix?.replace(/^\//, "").replace(/\/$/, "") ?? "";
   this[STARTUP_ROUTER_CONFIG] = cfg;
 
-  this.hook(HookType.Exception, async (ctx, md, err) => {
+  return this.hook(HookType.Exception, async (ctx, md, err) => {
     if (!(md instanceof Action)) return false;
 
     const filters = getFilters<ExceptionFilter>(md, isExceptionFilter);
@@ -225,6 +237,4 @@ Startup.prototype.useRouter = function (cfg: RouterConfig = {}): Startup {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       return require(filePath).default as ObjectConstructor<Action>;
     });
-
-  return this;
 };
