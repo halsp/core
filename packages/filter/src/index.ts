@@ -25,7 +25,7 @@ export {
   ExceptionFilter,
   ResourceFilter,
 } from "./filters";
-export { UseFilters } from "./use-filters";
+export { UseFilters } from "./use-filters.decorator";
 
 declare module "@sfajs/core" {
   interface Startup {
@@ -84,19 +84,20 @@ Startup.prototype.useFilter = function (): Startup {
   }
   this[USE_FILTER] = true;
 
-  return this.hook(HookType.Exception, async (ctx, md, err) => {
-    if (!(md instanceof Action)) return false;
+  return this.useInject()
+    .hook(HookType.Exception, async (ctx, md, err) => {
+      if (!(md instanceof Action)) return false;
 
-    const filters = getFilters<ExceptionFilter>(md, "asc", isExceptionFilter);
-    for (const filter of filters) {
-      const obj = await parseInject(ctx, filter);
-      const execResult = await obj.onException(ctx, err);
-      if (typeof execResult == "boolean" && execResult) {
-        return true;
+      const filters = getFilters<ExceptionFilter>(md, "asc", isExceptionFilter);
+      for (const filter of filters) {
+        const obj = await parseInject(ctx, filter);
+        const execResult = await obj.onException(ctx, err);
+        if (typeof execResult == "boolean" && execResult) {
+          return true;
+        }
       }
-    }
-    return false;
-  })
+      return false;
+    })
     .hook(HookType.BeforeInvoke, async (ctx, md) => {
       if (!(md instanceof Action)) return;
 
