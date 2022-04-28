@@ -1,8 +1,6 @@
 import "@sfajs/core";
 import {
-  HookType,
   HttpContext,
-  isClass,
   MethodNotAllowedException,
   NotFoundException,
   ObjectConstructor,
@@ -19,50 +17,17 @@ import RouterConfig from "./router-config";
 import {
   CTX_CACHE_METADATA,
   DEFAULT_ACTION_DIR,
-  FILTERS_ORDER_BAG,
-  GLOBAL_FILTERS_BAG,
   REQUEST_CACHE_PARAMS,
   STARTUP_ROUTER_CONFIG,
 } from "./constant";
-import {
-  ActionFilter,
-  AuthorizationFilter,
-  ExceptionFilter,
-  Filter,
-  FilterItem,
-  getFilters,
-  isActionFilter,
-  isAuthorizationFilter,
-  isExceptionFilter,
-  isResourceFilter,
-  OrderRecord,
-  ResourceFilter,
-} from "./filters";
-import { parseInject } from "@sfajs/inject";
 
 export { Action, MapItem, RouterConfig };
-export { SetActionMetadata, UseFilters } from "./decorators";
+export { SetActionMetadata } from "./decorators";
 export { setActionMetadata, getActionMetadata } from "./action";
-export {
-  Filter,
-  FilterItem,
-  ActionFilter,
-  AuthorizationFilter,
-  ExceptionFilter,
-  ResourceFilter,
-} from "./filters";
 
 declare module "@sfajs/core" {
   interface Startup {
     useRouter(cfg?: RouterConfig): this;
-    useGlobalFilter<T extends Filter = Filter>(
-      filter: FilterItem<T>,
-      order?: number
-    ): this;
-    useFilterOrder<T extends Filter = Filter>(
-      filter: ObjectConstructor<T>,
-      order: number
-    ): this;
   }
 
   interface SfaRequest {
@@ -146,41 +111,6 @@ Object.defineProperty(SfaRequest.prototype, "param", {
   },
 });
 
-Startup.prototype.useFilterOrder = function <T extends Filter = Filter>(
-  filter: ObjectConstructor<T>,
-  order: number
-): Startup {
-  return this.use(async (ctx, next) => {
-    const existOrders = ctx.bag<OrderRecord<T>[]>(FILTERS_ORDER_BAG) ?? [];
-    const orders = existOrders.filter((item) => item.filter != filter);
-    orders.push({
-      filter,
-      order,
-    });
-    ctx.bag(FILTERS_ORDER_BAG, orders);
-    await next();
-  });
-};
-
-Startup.prototype.useGlobalFilter = function <T extends Filter = Filter>(
-  filter: FilterItem<T>,
-  order?: number
-): Startup {
-  if (order != undefined) {
-    const cls = isClass(filter)
-      ? filter
-      : (filter.constructor as ObjectConstructor<T>);
-    this.useFilterOrder(cls, order);
-  }
-
-  return this.use(async (ctx, next) => {
-    const filters = ctx.bag<FilterItem<T>[]>(GLOBAL_FILTERS_BAG) ?? [];
-    filters.push(filter);
-    ctx.bag(GLOBAL_FILTERS_BAG, filters);
-    await next();
-  });
-};
-
 Startup.prototype.useRouter = function (cfg: RouterConfig = {}): Startup {
   if (!!this[STARTUP_ROUTER_CONFIG]) {
     return this;
@@ -192,86 +122,13 @@ Startup.prototype.useRouter = function (cfg: RouterConfig = {}): Startup {
   cfg.prefix = cfg.prefix?.replace(/^\//, "").replace(/\/$/, "") ?? "";
   this[STARTUP_ROUTER_CONFIG] = cfg;
 
-  return this.hook(HookType.Exception, async (ctx, md, err) => {
-    if (!(md instanceof Action)) return false;
-
-    const filters = getFilters<ExceptionFilter>(md, isExceptionFilter);
-    for (const filter of filters) {
-      const obj = await parseInject(ctx, filter);
-      const execResult = await obj.onException(ctx, err);
-      if (typeof execResult == "boolean" && execResult) {
-        return true;
-      }
-    }
-    return false;
-  })
-    .hook(HookType.BeforeInvoke, async (ctx, md) => {
-      if (!(md instanceof Action)) return;
-
-      {
-        const filters = getFilters<AuthorizationFilter>(
-          md,
-          isAuthorizationFilter
-        );
-        for (const filter of filters) {
-          const obj = await parseInject(ctx, filter);
-          const execResult = await obj.onAuthorization(ctx);
-          if (typeof execResult == "boolean" && !execResult) {
-            return false;
-          }
-        }
-      }
-
-      {
-        const filters = getFilters<ResourceFilter>(md, isResourceFilter);
-        for (const filter of filters) {
-          const obj = await parseInject(ctx, filter);
-          const execResult = await obj.onResourceExecuting(ctx);
-          if (typeof execResult == "boolean" && !execResult) {
-            return false;
-          }
-        }
-      }
-
-      {
-        const filters = getFilters<ActionFilter>(md, isActionFilter);
-        for (const filter of filters) {
-          const obj = await parseInject(ctx, filter);
-          const execResult = await obj.onActionExecuting(ctx);
-          if (typeof execResult == "boolean" && !execResult) {
-            return false;
-          }
-        }
-      }
-
-      return true;
-    })
-    .hook(HookType.AfterInvoke, async (ctx, md) => {
-      if (!(md instanceof Action)) return;
-
-      {
-        const filters = getFilters<ActionFilter>(md, isActionFilter);
-        for (const filter of filters) {
-          const obj = await parseInject(ctx, filter);
-          await obj.onActionExecuted(ctx);
-        }
-      }
-
-      {
-        const filters = getFilters<ResourceFilter>(md, isResourceFilter);
-        for (const filter of filters) {
-          const obj = await parseInject(ctx, filter);
-          await obj.onResourceExecuted(ctx);
-        }
-      }
-    })
-    .add((ctx) => {
-      const filePath = path.join(
-        process.cwd(),
-        this[STARTUP_ROUTER_CONFIG].dir,
-        ctx.actionMetadata.path
-      );
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      return require(filePath).default as ObjectConstructor<Action>;
-    });
+  return this.add((ctx) => {
+    const filePath = path.join(
+      process.cwd(),
+      this[STARTUP_ROUTER_CONFIG].dir,
+      ctx.actionMetadata.path
+    );
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    return require(filePath).default as ObjectConstructor<Action>;
+  });
 };
