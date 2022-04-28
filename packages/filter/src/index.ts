@@ -2,6 +2,7 @@ import {
   ActionFilter,
   AuthorizationFilter,
   ExceptionFilter,
+  execCustomFilters,
   Filter,
   FilterItem,
   getFilters,
@@ -16,6 +17,7 @@ import { HookType, isClass, ObjectConstructor, Startup } from "@sfajs/core";
 import { FILTERS_ORDER_BAG, GLOBAL_FILTERS_BAG, USE_FILTER } from "./constant";
 import { Action } from "@sfajs/router";
 import { parseInject } from "@sfajs/inject";
+import { CustomFilterOrder } from "./custom-filter.decorator";
 
 export {
   Filter,
@@ -101,6 +103,17 @@ Startup.prototype.useFilter = function (): Startup {
     .hook(HookType.BeforeInvoke, async (ctx, md) => {
       if (!(md instanceof Action)) return;
 
+      // custom before authorization
+      {
+        const execResult = await execCustomFilters(
+          md,
+          CustomFilterOrder.BeforeAction,
+          true
+        );
+        if (!execResult) return;
+      }
+
+      // authorization
       {
         const filters = getFilters<AuthorizationFilter>(
           md,
@@ -116,6 +129,17 @@ Startup.prototype.useFilter = function (): Startup {
         }
       }
 
+      // custom before resource
+      {
+        const execResult = await execCustomFilters(
+          md,
+          CustomFilterOrder.BeforeResource,
+          true
+        );
+        if (!execResult) return;
+      }
+
+      // resource
       {
         const filters = getFilters<ResourceFilter>(md, "asc", isResourceFilter);
         for (const filter of filters) {
@@ -127,6 +151,17 @@ Startup.prototype.useFilter = function (): Startup {
         }
       }
 
+      // custom before action
+      {
+        const execResult = await execCustomFilters(
+          md,
+          CustomFilterOrder.BeforeAction,
+          true
+        );
+        if (!execResult) return;
+      }
+
+      // action
       {
         const filters = getFilters<ActionFilter>(md, "asc", isActionFilter);
         for (const filter of filters) {
@@ -138,11 +173,25 @@ Startup.prototype.useFilter = function (): Startup {
         }
       }
 
+      // custom after action
+      {
+        const execResult = await execCustomFilters(
+          md,
+          CustomFilterOrder.AfterAction,
+          true
+        );
+        if (!execResult) return;
+      }
+
       return true;
     })
     .hook(HookType.AfterInvoke, async (ctx, md) => {
       if (!(md instanceof Action)) return;
 
+      // custom after action
+      await execCustomFilters(md, CustomFilterOrder.AfterAction, false);
+
+      // action
       {
         const filters = getFilters<ActionFilter>(md, "desc", isActionFilter);
         for (const filter of filters) {
@@ -151,6 +200,10 @@ Startup.prototype.useFilter = function (): Startup {
         }
       }
 
+      // custom after action
+      await execCustomFilters(md, CustomFilterOrder.BeforeAction, false);
+
+      // resource
       {
         const filters = getFilters<ResourceFilter>(
           md,
@@ -162,5 +215,11 @@ Startup.prototype.useFilter = function (): Startup {
           await obj.onResourceExecuted(ctx);
         }
       }
+
+      // custom before resource
+      await execCustomFilters(md, CustomFilterOrder.BeforeResource, false);
+
+      // custom before authorization
+      await execCustomFilters(md, CustomFilterOrder.BeforeAuthorization, false);
     });
 };

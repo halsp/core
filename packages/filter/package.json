@@ -1,7 +1,7 @@
 {
   "name": "@sfajs/filter",
   "version": "0.1.0",
-  "description": "基于 `@sfajs/router` 的请求过滤器",
+  "description": "基于 @sfajs/router 的请求过滤器",
   "homepage": "https://github.com/sfajs/filter",
   "repository": {
     "type": "git",

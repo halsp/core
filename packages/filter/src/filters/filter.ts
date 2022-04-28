@@ -1,10 +1,16 @@
 import { isClass, ObjectConstructor } from "@sfajs/core";
+import { parseInject } from "@sfajs/inject";
 import { Action } from "@sfajs/router";
 import {
+  CUSTOM_FILTER_METADATA,
   FILTERS_METADATA,
   FILTERS_ORDER_BAG,
   GLOBAL_FILTERS_BAG,
 } from "../constant";
+import {
+  CustomFilterOption,
+  CustomFilterOrder,
+} from "../custom-filter.decorator";
 import { ActionFilter } from "./action.filter";
 import { AuthorizationFilter } from "./authorization.filter";
 import { ExceptionFilter } from "./exception.filter";
@@ -51,6 +57,65 @@ export function isResourceFilter(
   filter: FilterItem
 ): filter is ResourceFilter | ObjectConstructor<ResourceFilter> {
   return testFunc(filter, "onResourceExecuted", "onResourceExecuting");
+}
+
+function getCustomOptions<T extends Filter = Filter>(filter: T) {
+  const cons = isClass(filter)
+    ? filter
+    : (filter.constructor as ObjectConstructor<T>);
+  return Reflect.getMetadata(
+    CUSTOM_FILTER_METADATA,
+    cons
+  ) as CustomFilterOption;
+}
+
+function isCustomFilter<T extends Filter = Filter>(
+  filter: FilterItem,
+  order: CustomFilterOrder,
+  executing: boolean
+): filter is T | ObjectConstructor<T> {
+  const options = getCustomOptions(filter);
+  if (!options) return false;
+  if (options.order != order) return false;
+  if (executing && !options.executing) return false;
+  if (!executing && !options.executed) return false;
+
+  const testFuncs: string[] = [];
+  if (options.executed) testFuncs.push(options.executed);
+  if (options.executing) testFuncs.push(options.executing);
+  return testFunc(filter, ...testFuncs);
+}
+
+export async function execCustomFilters(
+  action: Action,
+  order: CustomFilterOrder,
+  executing: true
+): Promise<boolean>;
+export async function execCustomFilters(
+  action: Action,
+  order: CustomFilterOrder,
+  executing: false
+): Promise<undefined>;
+export async function execCustomFilters(
+  action: Action,
+  order: CustomFilterOrder,
+  executing: boolean
+): Promise<boolean | undefined> {
+  const filters = getFilters<Filter>(action, "asc", (filter) =>
+    isCustomFilter(filter, order, executing)
+  );
+  for (const filter of filters) {
+    const options = getCustomOptions(filter);
+    const obj = await parseInject(action.ctx, filter);
+    const func = executing ? options.executing : options.executed;
+    const execResult = await obj[func as string](action.ctx);
+    if (executing && typeof execResult == "boolean" && !execResult) {
+      return false;
+    }
+  }
+  if (executing) {
+    return true;
+  }
 }
 
 export function getFilters<T extends Filter = Filter>(
