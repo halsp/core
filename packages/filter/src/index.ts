@@ -1,22 +1,13 @@
 import {
-  ActionFilter,
-  AuthorizationFilter,
-  ExceptionFilter,
   execCustomFilters,
+  execBuildinFilters,
   Filter,
   FilterItem,
-  getFilters,
-  isActionFilter,
-  isAuthorizationFilter,
-  isExceptionFilter,
-  isResourceFilter,
   OrderRecord,
-  ResourceFilter,
 } from "./filters";
 import { HookType, isClass, ObjectConstructor, Startup } from "@sfajs/core";
 import { FILTERS_ORDER_BAG, GLOBAL_FILTERS_BAG, USE_FILTER } from "./constant";
 import { Action } from "@sfajs/router";
-import { parseInject } from "@sfajs/inject";
 import { CustomFilterOrder } from "./custom-filter.decorator";
 
 export {
@@ -90,97 +81,59 @@ Startup.prototype.useFilter = function (): Startup {
     .hook(HookType.Exception, async (ctx, md, err) => {
       if (!(md instanceof Action)) return false;
 
-      const filters = getFilters<ExceptionFilter>(md, "asc", isExceptionFilter);
-      for (const filter of filters) {
-        const obj = await parseInject(ctx, filter);
-        const execResult = await obj.onException(ctx, err);
-        if (typeof execResult == "boolean" && execResult) {
-          return true;
-        }
-      }
-      return false;
+      return await execBuildinFilters(md, true, "onException", err);
     })
     .hook(HookType.BeforeInvoke, async (ctx, md) => {
       if (!(md instanceof Action)) return;
 
+      async function execCustom(order: CustomFilterOrder) {
+        return await execCustomFilters(md, order, true);
+      }
+
+      async function execBuildin(funcName: string) {
+        return await execBuildinFilters(md, true, funcName);
+      }
+
       // custom before authorization
       {
-        const execResult = await execCustomFilters(
-          md,
-          CustomFilterOrder.BeforeAction,
-          true
-        );
-        if (!execResult) return;
+        const execResult = await execCustom(CustomFilterOrder.BeforeAction);
+        if (!execResult) return false;
       }
 
       // authorization
       {
-        const filters = getFilters<AuthorizationFilter>(
-          md,
-          "asc",
-          isAuthorizationFilter
-        );
-        for (const filter of filters) {
-          const obj = await parseInject(ctx, filter);
-          const execResult = await obj.onAuthorization(ctx);
-          if (typeof execResult == "boolean" && !execResult) {
-            return false;
-          }
-        }
+        const execResult = await execBuildin("onAuthorization");
+        if (!execResult) return false;
       }
 
       // custom before resource
       {
-        const execResult = await execCustomFilters(
-          md,
-          CustomFilterOrder.BeforeResource,
-          true
-        );
-        if (!execResult) return;
+        const execResult = await execCustom(CustomFilterOrder.BeforeResource);
+        if (!execResult) return false;
       }
 
       // resource
       {
-        const filters = getFilters<ResourceFilter>(md, "asc", isResourceFilter);
-        for (const filter of filters) {
-          const obj = await parseInject(ctx, filter);
-          const execResult = await obj.onResourceExecuting(ctx);
-          if (typeof execResult == "boolean" && !execResult) {
-            return false;
-          }
-        }
+        const execResult = await execBuildin("onResourceExecuting");
+        if (!execResult) return false;
       }
 
       // custom before action
       {
-        const execResult = await execCustomFilters(
-          md,
-          CustomFilterOrder.BeforeAction,
-          true
-        );
-        if (!execResult) return;
+        const execResult = await execCustom(CustomFilterOrder.BeforeAction);
+        if (!execResult) return false;
       }
 
       // action
       {
-        const filters = getFilters<ActionFilter>(md, "asc", isActionFilter);
-        for (const filter of filters) {
-          const obj = await parseInject(ctx, filter);
-          const execResult = await obj.onActionExecuting(ctx);
-          if (typeof execResult == "boolean" && !execResult) {
-            return false;
-          }
-        }
+        const execResult = await execBuildin("onActionExecuting");
+        if (!execResult) return false;
       }
 
       // custom after action
       {
-        const execResult = await execCustomFilters(
-          md,
-          CustomFilterOrder.AfterAction,
-          true
-        );
-        if (!execResult) return;
+        const execResult = await execCustom(CustomFilterOrder.AfterAction);
+        if (!execResult) return false;
       }
 
       return true;
@@ -188,38 +141,29 @@ Startup.prototype.useFilter = function (): Startup {
     .hook(HookType.AfterInvoke, async (ctx, md) => {
       if (!(md instanceof Action)) return;
 
+      async function execCustom(order: CustomFilterOrder) {
+        return await execCustomFilters(md, order, false);
+      }
+      async function execBuildin(funcName: string) {
+        return await execBuildinFilters(md, false, funcName);
+      }
+
       // custom after action
-      await execCustomFilters(md, CustomFilterOrder.AfterAction, false);
+      await execCustom(CustomFilterOrder.AfterAction);
 
       // action
-      {
-        const filters = getFilters<ActionFilter>(md, "desc", isActionFilter);
-        for (const filter of filters) {
-          const obj = await parseInject(ctx, filter);
-          await obj.onActionExecuted(ctx);
-        }
-      }
+      await execBuildin("onActionExecuted");
 
       // custom after action
-      await execCustomFilters(md, CustomFilterOrder.BeforeAction, false);
+      await execCustom(CustomFilterOrder.BeforeAction);
 
       // resource
-      {
-        const filters = getFilters<ResourceFilter>(
-          md,
-          "desc",
-          isResourceFilter
-        );
-        for (const filter of filters) {
-          const obj = await parseInject(ctx, filter);
-          await obj.onResourceExecuted(ctx);
-        }
-      }
+      await execBuildin("onResourceExecuted");
 
       // custom before resource
-      await execCustomFilters(md, CustomFilterOrder.BeforeResource, false);
+      await execCustom(CustomFilterOrder.BeforeResource);
 
       // custom before authorization
-      await execCustomFilters(md, CustomFilterOrder.BeforeAuthorization, false);
+      await execCustom(CustomFilterOrder.BeforeAuthorization);
     });
 };
