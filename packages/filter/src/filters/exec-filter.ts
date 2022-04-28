@@ -2,81 +2,67 @@ import { isClass, ObjectConstructor } from "@sfajs/core";
 import { parseInject } from "@sfajs/inject";
 import { Action } from "@sfajs/router";
 import {
+  CUSTOM_FILTER_EXECUTED_METADATA,
+  CUSTOM_FILTER_EXECUTING_METADATA,
   CUSTOM_FILTER_METADATA,
   FILTERS_METADATA,
   FILTERS_ORDER_BAG,
   GLOBAL_FILTERS_BAG,
 } from "../constant";
-import {
-  CustomFilterOption,
-  CustomFilterOrder,
-} from "../custom-filter.decorator";
+import { CustomFilterType } from "../custom-filter.decorator";
 import { Filter, FilterItem, OrderRecord } from "./filter";
 
-function testFunc(filter: FilterItem, ...fns: string[]): boolean {
-  for (const fn of fns) {
-    let func: any;
-    if (isClass(filter)) {
-      func = filter.prototype[fn];
-    } else {
-      func = filter[fn];
-    }
-    const existFunc = !!func && typeof func == "function";
-    if (!existFunc) return false;
-  }
-  return true;
-}
-
-function getCustomOptions<T extends Filter = Filter>(filter: T) {
+function getCustomOptions<T extends Filter = Filter>(
+  filter: T
+): {
+  type: CustomFilterType;
+  executing?: string;
+  executed?: string;
+} {
   const cons = isClass(filter)
     ? filter
     : (filter.constructor as ObjectConstructor<T>);
-  return Reflect.getMetadata(
-    CUSTOM_FILTER_METADATA,
-    cons
-  ) as CustomFilterOption;
-}
-
-function isCustomFilter<T extends Filter = Filter>(
-  filter: FilterItem,
-  order: CustomFilterOrder,
-  executing: boolean
-): filter is T | ObjectConstructor<T> {
-  const options = getCustomOptions(filter);
-  if (!options) return false;
-  if (options.order != order) return false;
-  if (executing && !options.executing) return false;
-  if (!executing && !options.executed) return false;
-
-  const testFuncs: string[] = [];
-  if (options.executed) testFuncs.push(options.executed);
-  if (options.executing) testFuncs.push(options.executing);
-  return testFunc(filter, ...testFuncs);
+  return {
+    type: Reflect.getMetadata(CUSTOM_FILTER_METADATA, cons),
+    executing: Reflect.getMetadata(
+      CUSTOM_FILTER_EXECUTING_METADATA,
+      cons.prototype
+    ),
+    executed: Reflect.getMetadata(
+      CUSTOM_FILTER_EXECUTED_METADATA,
+      cons.prototype
+    ),
+  };
 }
 
 export async function execCustomFilters(
   action: Action,
-  order: CustomFilterOrder,
+  type: CustomFilterType,
   isExecuting: true
 ): Promise<boolean>;
 export async function execCustomFilters(
   action: Action,
-  order: CustomFilterOrder,
+  type: CustomFilterType,
   isExecuting: false
 ): Promise<void>;
 export async function execCustomFilters(
   action: Action,
-  order: CustomFilterOrder,
+  type: CustomFilterType,
   isExecuting: boolean
 ): Promise<boolean | void> {
-  const filters = getFilters<Filter>(action, isExecuting, (filter) =>
-    isCustomFilter(filter, order, isExecuting)
-  );
+  const filters = getFilters<Filter>(action, isExecuting, (filter) => {
+    const options = getCustomOptions(filter);
+    if (options.type == undefined) return false;
+    if (options.type != type) return false;
+    if (isExecuting && !options.executing) return false;
+    if (!isExecuting && !options.executed) return false;
+    return true;
+  });
   for (const filter of filters) {
     const options = getCustomOptions(filter);
     const obj = await parseInject(action.ctx, filter);
-    const func = isExecuting ? options.executing : options.executed;
-    const execResult = await obj[func as string](action.ctx);
+    const funcName = isExecuting ? options.executing : options.executed;
+    const execResult = await obj[funcName as string](action.ctx);
     if (isExecuting && typeof execResult == "boolean" && !execResult) {
       return false;
     }
@@ -104,9 +90,18 @@ export async function execBuildinFilters(
   funcName: string,
   ...params: any[]
 ): Promise<boolean | void> {
-  const filters = getFilters(action, isExecuting, (filter) =>
-    testFunc(filter, funcName)
-  );
+  const filters = getFilters(action, isExecuting, (filter) => {
+    const options = getCustomOptions(filter);
+    if (options.type != undefined) return false; // remove custom
+
+    let func: any;
+    if (isClass(filter)) {
+      func = filter.prototype[funcName];
+    } else {
+      func = filter[funcName];
+    }
+    return !!func && typeof func == "function";
+  });
   for (const filter of filters) {
     const obj = await parseInject(action.ctx, filter);
     const execResult = await obj[funcName](action.ctx, ...params);
@@ -129,9 +124,8 @@ function getFilters<T extends Filter = Filter>(
   const globalFilters =
     action.ctx.bag<FilterItem<T>[]>(GLOBAL_FILTERS_BAG) ?? [];
   const orders = action.ctx.bag<OrderRecord<T>[]>(FILTERS_ORDER_BAG) ?? [];
-  const filters: FilterItem<T>[] = isExecuting
-    ? [...globalFilters, ...useFilters]
-    : [...useFilters, ...globalFilters];
+  const filters: FilterItem<T>[] = [...globalFilters, ...useFilters];
+  if (!isExecuting) filters.reverse();
   return filters
     .filter((item) => select(item))
     .sort((f1, f2) => {

@@ -8,7 +8,7 @@ import {
 import { HookType, isClass, ObjectConstructor, Startup } from "@sfajs/core";
 import { FILTERS_ORDER_BAG, GLOBAL_FILTERS_BAG, USE_FILTER } from "./constant";
 import { Action } from "@sfajs/router";
-import { CustomFilterOrder } from "./custom-filter.decorator";
+import { CustomFilterType } from "./custom-filter.decorator";
 
 export {
   Filter,
@@ -19,6 +19,12 @@ export {
   ResourceFilter,
 } from "./filters";
 export { UseFilters } from "./use-filters.decorator";
+export {
+  CustomFilter,
+  CustomFilterType,
+  CustomFilterExecuted,
+  CustomFilterExecuting,
+} from "./custom-filter.decorator";
 
 declare module "@sfajs/core" {
   interface Startup {
@@ -86,8 +92,8 @@ Startup.prototype.useFilter = function (): Startup {
     .hook(HookType.BeforeInvoke, async (ctx, md) => {
       if (!(md instanceof Action)) return;
 
-      async function execCustom(order: CustomFilterOrder) {
-        return await execCustomFilters(md, order, true);
+      async function execCustom(type: CustomFilterType) {
+        return await execCustomFilters(md, type, true);
       }
 
       async function execBuildin(funcName: string) {
@@ -96,7 +102,9 @@ Startup.prototype.useFilter = function (): Startup {
 
       // custom before authorization
       {
-        const execResult = await execCustom(CustomFilterOrder.BeforeAction);
+        const execResult = await execCustom(
+          CustomFilterType.BeforeAuthorization
+        );
         if (!execResult) return false;
       }
 
@@ -108,7 +116,7 @@ Startup.prototype.useFilter = function (): Startup {
 
       // custom before resource
       {
-        const execResult = await execCustom(CustomFilterOrder.BeforeResource);
+        const execResult = await execCustom(CustomFilterType.BeforeResource);
         if (!execResult) return false;
       }
 
@@ -120,7 +128,7 @@ Startup.prototype.useFilter = function (): Startup {
 
       // custom before action
       {
-        const execResult = await execCustom(CustomFilterOrder.BeforeAction);
+        const execResult = await execCustom(CustomFilterType.BeforeAction);
         if (!execResult) return false;
       }
 
@@ -132,7 +140,7 @@ Startup.prototype.useFilter = function (): Startup {
 
       // custom after action
       {
-        const execResult = await execCustom(CustomFilterOrder.AfterAction);
+        const execResult = await execCustom(CustomFilterType.Last);
         if (!execResult) return false;
       }
 
@@ -141,29 +149,29 @@ Startup.prototype.useFilter = function (): Startup {
     .hook(HookType.AfterInvoke, async (ctx, md) => {
       if (!(md instanceof Action)) return;
 
-      async function execCustom(order: CustomFilterOrder) {
-        return await execCustomFilters(md, order, false);
+      async function execCustom(type: CustomFilterType) {
+        return await execCustomFilters(md, type, false);
       }
       async function execBuildin(funcName: string) {
         return await execBuildinFilters(md, false, funcName);
       }
 
       // custom after action
-      await execCustom(CustomFilterOrder.AfterAction);
+      await execCustom(CustomFilterType.Last);
 
       // action
       await execBuildin("onActionExecuted");
 
       // custom after action
-      await execCustom(CustomFilterOrder.BeforeAction);
+      await execCustom(CustomFilterType.BeforeAction);
 
       // resource
       await execBuildin("onResourceExecuted");
 
       // custom before resource
-      await execCustom(CustomFilterOrder.BeforeResource);
+      await execCustom(CustomFilterType.BeforeResource);
 
       // custom before authorization
-      await execCustom(CustomFilterOrder.BeforeAuthorization);
+      await execCustom(CustomFilterType.BeforeAuthorization);
     });
 };
