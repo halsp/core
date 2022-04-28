@@ -87,7 +87,7 @@ Startup.prototype.useFilter = function (): Startup {
   return this.hook(HookType.Exception, async (ctx, md, err) => {
     if (!(md instanceof Action)) return false;
 
-    const filters = getFilters<ExceptionFilter>(md, isExceptionFilter);
+    const filters = getFilters<ExceptionFilter>(md, "asc", isExceptionFilter);
     for (const filter of filters) {
       const obj = await parseInject(ctx, filter);
       const execResult = await obj.onException(ctx, err);
@@ -103,6 +103,7 @@ Startup.prototype.useFilter = function (): Startup {
       {
         const filters = getFilters<AuthorizationFilter>(
           md,
+          "asc",
           isAuthorizationFilter
         );
         for (const filter of filters) {
@@ -115,7 +116,7 @@ Startup.prototype.useFilter = function (): Startup {
       }
 
       {
-        const filters = getFilters<ResourceFilter>(md, isResourceFilter);
+        const filters = getFilters<ResourceFilter>(md, "asc", isResourceFilter);
         for (const filter of filters) {
           const obj = await parseInject(ctx, filter);
           const execResult = await obj.onResourceExecuting(ctx);
@@ -126,7 +127,7 @@ Startup.prototype.useFilter = function (): Startup {
       }
 
       {
-        const filters = getFilters<ActionFilter>(md, isActionFilter);
+        const filters = getFilters<ActionFilter>(md, "asc", isActionFilter);
         for (const filter of filters) {
           const obj = await parseInject(ctx, filter);
           const execResult = await obj.onActionExecuting(ctx);
@@ -142,7 +143,7 @@ Startup.prototype.useFilter = function (): Startup {
       if (!(md instanceof Action)) return;
 
       {
-        const filters = getFilters<ActionFilter>(md, isActionFilter);
+        const filters = getFilters<ActionFilter>(md, "desc", isActionFilter);
         for (const filter of filters) {
           const obj = await parseInject(ctx, filter);
           await obj.onActionExecuted(ctx);
@@ -150,7 +151,11 @@ Startup.prototype.useFilter = function (): Startup {
       }
 
       {
-        const filters = getFilters<ResourceFilter>(md, isResourceFilter);
+        const filters = getFilters<ResourceFilter>(
+          md,
+          "desc",
+          isResourceFilter
+        );
         for (const filter of filters) {
           const obj = await parseInject(ctx, filter);
           await obj.onResourceExecuted(ctx);

@@ -55,6 +55,7 @@ export function isResourceFilter(
 
 export function getFilters<T extends Filter = Filter>(
   action: Action,
+  orderBy: "asc" | "desc",
   select: (filter: Filter) => boolean
 ): FilterItem<T>[] {
   const useFilters: FilterItem<T>[] =
@@ -62,7 +63,10 @@ export function getFilters<T extends Filter = Filter>(
   const globalFilters =
     action.ctx.bag<FilterItem<T>[]>(GLOBAL_FILTERS_BAG) ?? [];
   const orders = action.ctx.bag<OrderRecord<T>[]>(FILTERS_ORDER_BAG) ?? [];
-  const filters: FilterItem<T>[] = [...globalFilters, ...useFilters];
+  const filters: FilterItem<T>[] =
+    orderBy == "asc"
+      ? [...globalFilters, ...useFilters]
+      : [...useFilters, ...globalFilters];
   return filters
     .filter((item) => select(item))
     .sort((f1, f2) => {
@@ -72,15 +76,20 @@ export function getFilters<T extends Filter = Filter>(
       const order1 = orders.filter((item) => item.filter == cls1)[0]?.order;
       const order2 = orders.filter((item) => item.filter == cls2)[0]?.order;
 
+      let result: number;
       if (order1 == undefined && order2 == undefined) {
-        return 0;
+        result = 0;
       } else if (order1 == undefined && order2 != undefined) {
-        return 1;
+        result = 1;
       } else if (order1 != undefined && order2 == undefined) {
-        return -1;
+        result = -1;
       } else {
-        return order1 - order2;
+        result = order1 - order2;
       }
+      if (orderBy == "desc") {
+        result = -result;
+      }
+      return result;
     });
 }
 

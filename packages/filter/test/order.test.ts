@@ -5,74 +5,80 @@ import "@sfajs/inject";
 import { Action } from "@sfajs/router";
 
 export class TestActionFilter1 implements ActionFilter {
-  onActionExecuted(_): void | Promise<void> {
-    //
+  onActionExecuted(ctx: HttpContext): void | Promise<void> {
+    ctx.res.body++;
+    ctx.res.setHeader(`order12`, ctx.res.body);
   }
   onActionExecuting(
     ctx: HttpContext
   ): boolean | void | Promise<void> | Promise<boolean> {
     ctx.res.body++;
-    ctx.res.setHeader(`order1`, ctx.res.body);
+    ctx.res.setHeader(`order11`, ctx.res.body);
   }
 }
 
 export class TestActionFilter2 implements ActionFilter {
-  onActionExecuted(_): void | Promise<void> {
-    //
+  onActionExecuted(ctx: HttpContext): void | Promise<void> {
+    ctx.res.body++;
+    ctx.res.setHeader(`order22`, ctx.res.body);
   }
   onActionExecuting(
     ctx: HttpContext
   ): boolean | void | Promise<void> | Promise<boolean> {
     ctx.res.body++;
-    ctx.res.setHeader(`order2`, ctx.res.body);
+    ctx.res.setHeader(`order21`, ctx.res.body);
   }
 }
 
 export class TestActionFilter3 implements ActionFilter {
-  onActionExecuted(_): void | Promise<void> {
-    //
+  onActionExecuted(ctx: HttpContext): void | Promise<void> {
+    ctx.res.body++;
+    ctx.res.setHeader(`order32`, ctx.res.body);
   }
   onActionExecuting(
     ctx: HttpContext
   ): boolean | void | Promise<void> | Promise<boolean> {
     ctx.res.body++;
-    ctx.res.setHeader(`order3`, ctx.res.body);
+    ctx.res.setHeader(`order31`, ctx.res.body);
   }
 }
 
 class TestActionFilter4 implements ActionFilter {
-  onActionExecuted(_): void | Promise<void> {
-    //
+  onActionExecuted(ctx: HttpContext): void | Promise<void> {
+    ctx.res.body++;
+    ctx.res.setHeader(`order42`, ctx.res.body);
   }
   onActionExecuting(
     ctx: HttpContext
   ): boolean | void | Promise<void> | Promise<boolean> {
     ctx.res.body++;
-    ctx.res.setHeader(`order4`, ctx.res.body);
+    ctx.res.setHeader(`order41`, ctx.res.body);
   }
 }
 
 class TestActionFilter5 implements ActionFilter {
-  onActionExecuted(_): void | Promise<void> {
-    //
+  onActionExecuted(ctx: HttpContext): void | Promise<void> {
+    ctx.res.body++;
+    ctx.res.setHeader(`order52`, ctx.res.body);
   }
   onActionExecuting(
     ctx: HttpContext
   ): boolean | void | Promise<void> | Promise<boolean> {
     ctx.res.body++;
-    ctx.res.setHeader(`order5`, ctx.res.body);
+    ctx.res.setHeader(`order51`, ctx.res.body);
   }
 }
 
 class TestActionFilter6 implements ActionFilter {
-  onActionExecuted(_): void | Promise<void> {
-    //
+  onActionExecuted(ctx: HttpContext): void | Promise<void> {
+    ctx.res.body++;
+    ctx.res.setHeader(`order62`, ctx.res.body);
   }
   onActionExecuting(
     ctx: HttpContext
   ): boolean | void | Promise<void> | Promise<boolean> {
     ctx.res.body++;
-    ctx.res.setHeader(`order6`, ctx.res.body);
+    ctx.res.setHeader(`order61`, ctx.res.body);
   }
 }
 
@@ -99,11 +105,16 @@ test(`filter order`, async () => {
     .add(TestAction)
     .run();
 
-  expect(res.getHeader(`order4`)).toBe("1");
-  expect(res.getHeader(`order1`)).toBe("2");
-  expect(res.getHeader(`order5`)).toBe("3");
-  expect(res.getHeader(`order2`)).toBe("4");
+  const orders = [4, 1, 5, 2, 6, 3];
+  (() => {
+    for (let i = 0; i < orders.length; i++) {
+      const index = orders[i];
+      expect(res.getHeader(`order${index}1`)).toBe((i + 1).toString());
+    }
 
-  expect(res.getHeader(`order6`)).toBe("5");
-  expect(res.getHeader(`order3`)).toBe("6");
+    for (let i = orders.length; i < orders.length * 2; i++) {
+      const index = orders[orders.length * 2 - i - 1];
+      expect(res.getHeader(`order${index}2`)).toBe((i + 1).toString());
+    }
+  })();
 });
