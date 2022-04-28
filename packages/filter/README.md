@@ -9,6 +9,43 @@
 - ResourceFilter: Action 运行前和运行后执行，一般用于资源缓存
 - ExceptionFilter: Action 运行抛出异常时执行，一般用于自定义异常处理
 
+## 引入过滤器
+
+以下三者调用任意一个都可以
+
+- useFilter
+- useGlobalFilter
+- useFilterOrder
+
+如
+
+```TS
+import "@sfajs/filter"
+
+startup.useFilter()
+// OR
+startup.useGlobalFilter(YourFilter, 1)
+```
+
+需要在 `startup.useRouter` 之前引入
+
+如果使用过滤器依赖注入，需要在 `startup.useInject` 引入
+
+```TS
+import "@sfajs/filter"
+import "@sfajs/router"
+import "@sfajs/inject"
+
+startup
+  // .use(...)
+  .useInject()
+  // .use(...)
+  .useFilter()
+  // .use(...)
+  .useRouter()
+```
+
+
 ## 在 Action 上使用过滤器
 
 可以单独为某个 Action 使用过滤器
@@ -44,7 +81,7 @@ startup.useGlobalFilter(filter)
 
 `ExceptionFilter` 过滤器是抛出异常立即执行
 
-其他过滤器默认按以下顺序执行
+其他过滤器按以下顺序执行
 
 1. AuthorizationFilter
 2. ResourceFilter.onResourceExecuting
@@ -52,6 +89,14 @@ startup.useGlobalFilter(filter)
 4. Action Middleware
 5. ActionFilter.onActionExecuted
 6. ResourceFilter.onResourceExecuted
+
+### 同类型执行顺序
+
+同类型过滤器的执行顺序默认按以下顺序执行
+
+- 全局优先于局部装饰器
+- 全局之间按引入顺序执行
+- 局部之间按引入顺序执行
 
 ### 指定执行顺序
 
