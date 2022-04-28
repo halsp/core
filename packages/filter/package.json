@@ -1,15 +1,14 @@
 {
   "name": "@sfajs/filter",
   "version": "1.0.3",
-  "description": "Sfa 依赖注入中间件",
+  "description": "基于 `@sfajs/router` 的请求过滤器",
   "homepage": "https://github.com/sfajs/filter",
   "repository": {
     "type": "git",
     "url": "https://github.com/sfajs/filter"
   },
   "keywords": [
-    "sfa",
-    "serverless"
+    "sfa"
   ],
   "bugs": {
     "url": "https://github.com/sfajs/filter/issues",
