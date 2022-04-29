@@ -18,6 +18,17 @@ export {
 declare module "@sfajs/core" {
   interface Startup {
     useJwt(options: JwtOptions): this;
+    useJwtVerify(
+      skip?: (ctx: HttpContext) => boolean | Promise<boolean>,
+      onError?: (
+        ctx: HttpContext,
+        err: jwt.VerifyErrors
+      ) => void | Promise<void>
+    ): this;
+    useJwtExtraAuth(
+      access: (ctx: HttpContext) => boolean | Promise<boolean>,
+      onError?: (ctx: HttpContext) => void | Promise<void>
+    ): this;
   }
   interface HttpContext {
     get jwtToken(): string;
@@ -38,6 +49,50 @@ Object.defineProperty(HttpContext.prototype, "jwtToken", {
   },
 });
 
+Startup.prototype.useJwtVerify = function (
+  skip?: (ctx: HttpContext) => boolean | Promise<boolean>,
+  onError?: (ctx: HttpContext, err: jwt.VerifyErrors) => void | Promise<void>
+): Startup {
+  return this.use(async (ctx, next) => {
+    if (skip && (await skip(ctx))) {
+      await next();
+      return;
+    }
+
+    const jwtService = await parseInject(ctx, JwtService);
+    try {
+      await jwtService.verify(ctx.jwtToken);
+      await next();
+    } catch (err) {
+      const error = err as jwt.VerifyErrors;
+      if (onError) {
+        await onError(ctx, error);
+      } else {
+        ctx.unauthorizedMsg(error.message);
+      }
+    }
+  });
+};
+
+Startup.prototype.useJwtExtraAuth = function (
+  access: (ctx: HttpContext) => boolean | Promise<boolean>,
+  onError?: (ctx: HttpContext) => void | Promise<void>
+): Startup {
+  return this.use(async (ctx, next) => {
+    if (await access(ctx)) {
+      await next();
+    } else {
+      if (onError) {
+        await onError(ctx);
+      } else {
+        if (ctx.res.status == 404) {
+          ctx.unauthorizedMsg("JWT validation failed");
+        }
+      }
+    }
+  });
+};
+
 Startup.prototype.useJwt = function (options: JwtOptions): Startup {
   if (this[STARTUP_OPTIONS]) {
     return this;
@@ -49,26 +104,5 @@ Startup.prototype.useJwt = function (options: JwtOptions): Startup {
     .use(async (ctx, next) => {
       ctx.bag(OPTIONS_BAG, options);
       await next();
-    })
-    .use(async (ctx, next) => {
-      const opt = ctx.bag<JwtOptions>(OPTIONS_BAG);
-      if (opt.auth) {
-        if (await opt.auth(ctx)) {
-          await next();
-        } else {
-          if (ctx.res.status == 404) {
-            ctx.unauthorizedMsg("JWT validation failed");
-          }
-        }
-      } else {
-        const jwtService = await parseInject(ctx, JwtService);
-        try {
-          await jwtService.verify(ctx.jwtToken);
-          await next();
-        } catch (err) {
-          const error = err as jwt.VerifyErrors;
-          ctx.unauthorizedMsg(error.message);
-        }
-      }
     });
 };

@@ -65,6 +65,7 @@ test("getToken option", async function () {
       secret: "secret",
       getToken: () => "test",
     })
+    .useJwtVerify()
     .add(TestMiddleware)
     .run();
   expect(res.status).toBe(401);

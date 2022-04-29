@@ -11,8 +11,8 @@ function runTest(auth: boolean) {
     )
       .useJwt({
         secret: "secret",
-        auth: async () => auth,
       })
+      .useJwtExtraAuth(() => auth)
       .use((ctx) => ctx.ok())
       .run();
     expect(res.status).toBe(auth ? 200 : 401);
@@ -30,10 +30,10 @@ test(`auth failed with custom status`, async function () {
   )
     .useJwt({
       secret: "secret",
-      auth: async (ctx) => {
-        ctx.forbiddenMsg();
-        return false;
-      },
+    })
+    .useJwtExtraAuth(async (ctx) => {
+      ctx.forbiddenMsg();
+      return false;
     })
     .use((ctx) => ctx.ok())
     .run();

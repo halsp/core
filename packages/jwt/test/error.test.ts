@@ -12,6 +12,7 @@ function testErrorSecret(isError: boolean) {
       .useJwt({
         secret: "secret",
       })
+      .useJwtVerify()
       .use((ctx) => {
         ctx.ok();
       })
