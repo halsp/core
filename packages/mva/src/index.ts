@@ -1,12 +1,14 @@
 import "@sfajs/core";
-import { HttpContext, HttpException, Startup } from "@sfajs/core";
+import { HttpContext, HttpException, Startup, HookType } from "@sfajs/core";
 import "@sfajs/views";
 import "@sfajs/router";
 import MvaConfig, { CodeType } from "./mva-config";
 import { ERROR_CODES, USED } from "./constant";
-import { HookType } from "@sfajs/core/dist/middlewares";
+import { execNamedFilters } from "@sfajs/filter";
+import { Action } from "@sfajs/router";
 
 export { MvaConfig };
+export { ResultFilter } from "./result.filter";
 
 declare module "@sfajs/core" {
   interface Startup {
@@ -27,7 +29,7 @@ Startup.prototype.useErrorPage = function (...codes: any[]): Startup {
 
   this[ERROR_CODES] = codes;
 
-  return this.hook(async (ctx, ex) => {
+  return this.hook(HookType.Exception, async (ctx, ex) => {
     if (!(ex instanceof HttpException)) {
       return false;
     }
@@ -40,7 +42,7 @@ Startup.prototype.useErrorPage = function (...codes: any[]): Startup {
     await ctx.view(replaceCode.path, ctx.res.body);
     ctx.res.status = replaceCode.replace;
     return true;
-  }, HookType.Exception).use(async (ctx, next) => {
+  }).use(async (ctx, next) => {
     await next();
 
     const codes: CodeType[] = this[ERROR_CODES];
@@ -52,13 +54,34 @@ Startup.prototype.useMva = function (cfg = <MvaConfig>{}): Startup {
   if (this[USED]) return this;
   this[USED] = true;
 
-  return this.use(async (ctx, next) => {
-    await next();
-
-    if (ctx.res.isSuccess) {
-      await ctx.view(ctx.actionMetadata.reqPath, ctx.res.body);
+  return this.hook((ctx, md) => {
+    if (md instanceof Action) {
+      ctx.actionMetadata.actionInstance = md;
     }
   })
+    .use(async (ctx, next) => {
+      await next();
+
+      if (ctx.res.isSuccess) {
+        const action = ctx.actionMetadata.actionInstance as Action;
+        if (action) {
+          const execResult = await execNamedFilters(
+            action,
+            true,
+            "onResultExecuting"
+          );
+          if (!execResult) {
+            return;
+          }
+        }
+
+        await ctx.view(ctx.actionMetadata.reqPath, ctx.res.body);
+
+        if (action) {
+          await execNamedFilters(action, false, "onResultExecuted");
+        }
+      }
+    })
     .useViews(cfg.viewsConfig)
     .useRouter(cfg.routerConfig);
 };
