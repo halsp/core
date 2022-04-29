@@ -1,8 +1,8 @@
 import { Middleware, SfaRequest, TestStartup } from "@sfajs/core";
-import { Body, ReqPipe } from "../../src";
+import { Body, Pipe } from "../../src";
 
 function runPipeTest(
-  pipes: ReqPipe[],
+  pipes: Pipe[],
   source: any,
   success: boolean,
   target?: any
@@ -36,10 +36,10 @@ function runPipeTest(
   });
 }
 
-export function runSuccessPipeTest(pipes: ReqPipe[], source: any, target: any) {
+export function runSuccessPipeTest(pipes: Pipe[], source: any, target: any) {
   runPipeTest(pipes, source, true, target);
 }
 
-export function runFieldPipeTest(pipes: ReqPipe[], source: any, target?: any) {
+export function runFieldPipeTest(pipes: Pipe[], source: any, target?: any) {
   runPipeTest(pipes, source, false, target);
 }

@@ -1,9 +1,9 @@
 import "reflect-metadata";
 import { createInject, Inject, parseInject } from "@sfajs/inject";
 import { Dict, HttpContext, isClass } from "@sfajs/core";
-import { LambdaPipe, ReqPipe } from "../pipes";
+import { LambdaPipe, Pipe } from "../pipes";
 
-async function runPipes(ctx: HttpContext, val: any, pipes: ReqPipe[]) {
+async function runPipes(ctx: HttpContext, val: any, pipes: Pipe[]) {
   for (let pipe of pipes) {
     if (isClass(pipe)) {
       pipe = await parseInject(ctx, pipe);
@@ -43,11 +43,9 @@ function getReqInject(handler: (ctx: HttpContext) => Dict, args: any[]) {
 
 export function Query(
   property: string,
-  ...pipes: ReqPipe[]
+  ...pipes: Pipe[]
 ): PropertyDecorator & ParameterDecorator;
-export function Query(
-  ...pipes: ReqPipe[]
-): PropertyDecorator & ParameterDecorator;
+export function Query(...pipes: Pipe[]): PropertyDecorator & ParameterDecorator;
 export function Query(target: any, propertyKey: string | symbol): void;
 export function Query(
   target: any,
@@ -60,11 +58,9 @@ export function Query(...args: any[]): any {
 
 export function Body(
   property: string,
-  ...pipes: ReqPipe[]
+  ...pipes: Pipe[]
 ): PropertyDecorator & ParameterDecorator;
-export function Body(
-  ...pipes: ReqPipe[]
-): PropertyDecorator & ParameterDecorator;
+export function Body(...pipes: Pipe[]): PropertyDecorator & ParameterDecorator;
 export function Body(target: any, propertyKey: string | symbol): void;
 export function Body(
   target: any,
@@ -77,11 +73,9 @@ export function Body(...args: any[]): any {
 
 export function Param(
   property: string,
-  ...pipes: ReqPipe[]
+  ...pipes: Pipe[]
 ): PropertyDecorator & ParameterDecorator;
-export function Param(
-  ...pipes: ReqPipe[]
-): PropertyDecorator & ParameterDecorator;
+export function Param(...pipes: Pipe[]): PropertyDecorator & ParameterDecorator;
 export function Param(target: any, propertyKey: string | symbol): void;
 export function Param(
   target: any,
@@ -97,10 +91,10 @@ export function Param(...args: any[]): any {
 
 export function Header(
   property: string,
-  ...pipes: ReqPipe[]
+  ...pipes: Pipe[]
 ): PropertyDecorator & ParameterDecorator;
 export function Header(
-  ...pipes: ReqPipe[]
+  ...pipes: Pipe[]
 ): PropertyDecorator & ParameterDecorator;
 export function Header(target: any, propertyKey: string | symbol): void;
 export function Header(

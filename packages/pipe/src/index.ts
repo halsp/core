@@ -1,7 +1,7 @@
 export { Query, Body, Param, Header, Context } from "./decorators";
 export {
   PipeTransform,
-  ReqPipe,
+  Pipe,
   ParseBoolPipe,
   ParseBoolPipeOptions,
   ParseFloatPipe,
