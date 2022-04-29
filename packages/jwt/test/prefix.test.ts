@@ -16,6 +16,7 @@ test("prefix", async function () {
       secret: "secret",
       prefix: "custom",
     })
+    .useJwtVerify()
     .use((ctx) => ctx.ok(ctx.jwtToken))
     .run();
   expect(result.status).toBe(200);

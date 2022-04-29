@@ -55,18 +55,23 @@ test("decorator", async function () {
   expect(res.status).toBe(200);
 });
 
-test("getToken option", async function () {
-  const res = await new TestStartup(
-    await createSfaReqeust({
-      secret: "secret",
-    })
-  )
-    .useJwt({
-      secret: "secret",
-      getToken: () => "test",
-    })
-    .useJwtVerify()
-    .add(TestMiddleware)
-    .run();
-  expect(res.status).toBe(401);
-});
+function testGetToken(skip: boolean) {
+  test("getToken option", async function () {
+    const res = await new TestStartup(
+      await createSfaReqeust({
+        secret: "secret",
+      })
+    )
+      .useJwt({
+        secret: "secret",
+        getToken: () => "test",
+      })
+      .useJwtVerify(() => skip)
+      .add(TestMiddleware)
+      .run();
+    expect(res.status).toBe(skip ? 200 : 401);
+  });
+}
+
+testGetToken(true);
+testGetToken(false);
