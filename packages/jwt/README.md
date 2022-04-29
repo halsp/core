@@ -15,6 +15,7 @@ import { TestStartup } from "@sfajs/core";
 
 const res = await new TestStartup()
   .useJwt(options)
+  .useJwtVerify()
   .run()
 ```
 
@@ -50,15 +51,42 @@ RSA 和 ECDSA 加密的 PEM 公钥
 
 设置 `getToken` 后可以从其他位置获取 `jwt token`
 
-### auth
+## 内置验证 jwt
 
-`auth` 是一个回调函数，函数返回 `Promise<bool>`
+`startup.useJwtVerify()` 可以添加对 jwt token 的验证
 
-用于自定义验证 `jwt token` 的合法性。除此之外，你也可以自定义中间件来实现更加复杂的验证逻辑
+```TS
+startup
+  .useJwt()
+  .useJwtVerify()
+```
 
-如果回调函数返回值为 true，则表明验证通过，会继续执行下一个中间件
+该函数接收两个参数
 
-如果回调函数返回值为 false，则表明验证失败。如果你没有设置状态码（默认为 404），则 http 请求将返回 401
+- skip: 回调函数，返回 `Promise<bool>`
+  - 如果值为 true，则不校验此次请求
+  - 如果值为 false，则校验此次请求的 `jwt token` 是否正确
+- onError: 可选参数，回调函数，验证 jwt 失败时会调用
+  - 如果不传此参数将使用默认逻辑返回 401
+  - 回调函数有两个参数：HttpContext 和错误信息
+
+## 额外验证
+
+如果只验证 token 并不满足需求，可以使用 `startup.useJwtExtraAuth` 添加额外的验证
+
+```TS
+startup
+  .useJwt()
+  .useJwtVerify()
+  .useJwtExtraAuth((ctx)=>bool)
+```
+
+该函数接收一个回调函数，返回 `Promise<bool>`
+
+- 如果返回值为 true，说明验证通过，会继续执行下一个中间件
+- 如果返回值为 false，说明验证失败，将终止后续中间件执行
+
+如果回调函数返回 false，并且没有设置状态码（即 `404`），也没有设置 `body`(`undefined`)，状态码会被自动设置为 `401`
 
 ## JwtService
 
