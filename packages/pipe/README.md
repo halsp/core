@@ -1,4 +1,4 @@
-# @sfajs/req-deco
+# @sfajs/pipe
 
 基于 `@sfajs/inject` 通过装饰器便捷使用接口参数
 
@@ -10,7 +10,7 @@
 
 ```TS
 import "@sfajs/inject";
-import { Header, Query, Param, Body, Context } from "@sfajs/req-deco";
+import { Header, Query, Param, Body, Context } from "@sfajs/pipe";
 import { Middleware, ReadonlyDict, TestStartup, HttpContext } from "@sfajs/core";
 
 class TestMiddleware extends Middleware {
@@ -50,7 +50,7 @@ const res = await new TestStartup()
     .run();
 ```
 
-上述代码中的 `useInject` 会启用依赖注入，`@sfajs/req-deco` 利用依赖注入实现功能
+上述代码中的 `useInject` 会启用依赖注入，`@sfajs/pipe` 利用依赖注入实现功能
 
 需要注意的是，该功能只会在 `useInject` 之后的中间件中生效，因此你需要把 `useInject` 放在靠前的位置，根据实际项目决定
 
@@ -61,7 +61,7 @@ const res = await new TestStartup()
 ```TS
 import { parseInject } from "@sfajs/inject";
 import { HttpContext } from "@sfajs/core";
-import { Header, Query, Context } from "@sfajs/req-deco";
+import { Header, Query, Context } from "@sfajs/pipe";
 
 class TestClass {
   @Context
@@ -85,7 +85,7 @@ const obj = parseInject(new TestClass());
 
 例如不能使用单例类或单例中间件，否则可能会在高并发下出现不可预知的问题
 
-在这样的中间件中不能使用 `@sfajs/req-deco`，因为中间件是单例的：
+在这样的中间件中不能使用 `@sfajs/pipe`，因为中间件是单例的：
 
 ```TS
 startup.use(new YourMiddleware())
@@ -111,7 +111,7 @@ startup.use((ctx) => md);
 传入类
 
 ```TS
-import { Query, ParseIntPipe } from "@sfajs/req-deco"
+import { Query, ParseIntPipe } from "@sfajs/pipe"
 
 @Query("field", ParseIntPipe)
 queryField: number;
@@ -148,7 +148,7 @@ query: any;
 创建一个类，实现 `PipeTransform` 接口，如
 
 ```TS
-import { Context, PipeTransform } from "@sfajs/req-deco"
+import { Context, PipeTransform } from "@sfajs/pipe"
 
 class ToStringPipe implements PipeTransform<any, string> {
   @Context
