@@ -62,24 +62,24 @@ Startup.prototype.useMva = function (cfg = <MvaConfig>{}): Startup {
     .use(async (ctx, next) => {
       await next();
 
-      if (ctx.res.isSuccess) {
-        const action = ctx.actionMetadata.actionInstance as Action;
-        if (action) {
-          const execResult = await execNamedFilters(
-            action,
-            true,
-            "onResultExecuting"
-          );
-          if (!execResult) {
-            return;
-          }
-        }
+      if (!ctx.res.isSuccess) return;
 
-        await ctx.view(ctx.actionMetadata.reqPath, ctx.res.body);
-
-        if (action) {
-          await execNamedFilters(action, false, "onResultExecuted");
+      const action = ctx.actionMetadata.actionInstance as Action;
+      if (action) {
+        const execResult = await execNamedFilters(
+          action,
+          true,
+          "onResultExecuting"
+        );
+        if (!execResult) {
+          return;
         }
+      }
+
+      await ctx.view(ctx.actionMetadata.reqPath, ctx.res.body);
+
+      if (action) {
+        await execNamedFilters(action, false, "onResultExecuted");
       }
     })
     .useViews(cfg.viewsConfig)
