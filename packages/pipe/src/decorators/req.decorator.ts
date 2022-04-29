@@ -1,9 +1,9 @@
 import "reflect-metadata";
 import { createInject, Inject, parseInject } from "@sfajs/inject";
 import { Dict, HttpContext, isClass } from "@sfajs/core";
-import { LambdaPipe, Pipe } from "../pipes";
+import { LambdaPipe, PipeItem } from "../pipes";
 
-async function runPipes(ctx: HttpContext, val: any, pipes: Pipe[]) {
+async function runPipes(ctx: HttpContext, val: any, pipes: PipeItem[]) {
   for (let pipe of pipes) {
     if (isClass(pipe)) {
       pipe = await parseInject(ctx, pipe);
@@ -43,9 +43,11 @@ function getReqInject(handler: (ctx: HttpContext) => Dict, args: any[]) {
 
 export function Query(
   property: string,
-  ...pipes: Pipe[]
+  ...pipes: PipeItem[]
 ): PropertyDecorator & ParameterDecorator;
-export function Query(...pipes: Pipe[]): PropertyDecorator & ParameterDecorator;
+export function Query(
+  ...pipes: PipeItem[]
+): PropertyDecorator & ParameterDecorator;
 export function Query(target: any, propertyKey: string | symbol): void;
 export function Query(
   target: any,
@@ -58,9 +60,11 @@ export function Query(...args: any[]): any {
 
 export function Body(
   property: string,
-  ...pipes: Pipe[]
+  ...pipes: PipeItem[]
 ): PropertyDecorator & ParameterDecorator;
-export function Body(...pipes: Pipe[]): PropertyDecorator & ParameterDecorator;
+export function Body(
+  ...pipes: PipeItem[]
+): PropertyDecorator & ParameterDecorator;
 export function Body(target: any, propertyKey: string | symbol): void;
 export function Body(
   target: any,
@@ -73,9 +77,11 @@ export function Body(...args: any[]): any {
 
 export function Param(
   property: string,
-  ...pipes: Pipe[]
+  ...pipes: PipeItem[]
 ): PropertyDecorator & ParameterDecorator;
-export function Param(...pipes: Pipe[]): PropertyDecorator & ParameterDecorator;
+export function Param(
+  ...pipes: PipeItem[]
+): PropertyDecorator & ParameterDecorator;
 export function Param(target: any, propertyKey: string | symbol): void;
 export function Param(
   target: any,
@@ -91,10 +97,10 @@ export function Param(...args: any[]): any {
 
 export function Header(
   property: string,
-  ...pipes: Pipe[]
+  ...pipes: PipeItem[]
 ): PropertyDecorator & ParameterDecorator;
 export function Header(
-  ...pipes: Pipe[]
+  ...pipes: PipeItem[]
 ): PropertyDecorator & ParameterDecorator;
 export function Header(target: any, propertyKey: string | symbol): void;
 export function Header(
