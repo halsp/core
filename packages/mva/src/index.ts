@@ -29,7 +29,7 @@ Startup.prototype.useErrorPage = function (...codes: any[]): Startup {
 
   this[ERROR_CODES] = codes;
 
-  return this.hook(HookType.Exception, async (ctx, ex) => {
+  return this.hook(HookType.Exception, async (ctx, md, ex) => {
     if (!(ex instanceof HttpException)) {
       return false;
     }
