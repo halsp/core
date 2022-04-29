@@ -1,6 +1,6 @@
 import {
   execCustomFilters,
-  execBuildinFilters,
+  execNamedFilters,
   Filter,
   FilterItem,
   OrderRecord,
@@ -17,6 +17,7 @@ export {
   AuthorizationFilter,
   ExceptionFilter,
   ResourceFilter,
+  execNamedFilters,
 } from "./filters";
 export { UseFilters } from "./use-filters.decorator";
 export {
@@ -87,7 +88,7 @@ Startup.prototype.useFilter = function (): Startup {
     .hook(HookType.Exception, async (ctx, md, err) => {
       if (!(md instanceof Action)) return false;
 
-      return await execBuildinFilters(md, true, "onException", err);
+      return await execNamedFilters(md, true, "onException", err);
     })
     .hook(HookType.BeforeInvoke, async (ctx, md) => {
       if (!(md instanceof Action)) return;
@@ -97,7 +98,7 @@ Startup.prototype.useFilter = function (): Startup {
       }
 
       async function execBuildin(funcName: string) {
-        return await execBuildinFilters(md, true, funcName);
+        return await execNamedFilters(md, true, funcName);
       }
 
       // custom before authorization
@@ -153,7 +154,7 @@ Startup.prototype.useFilter = function (): Startup {
         return await execCustomFilters(md, type, false);
       }
       async function execBuildin(funcName: string) {
-        return await execBuildinFilters(md, false, funcName);
+        return await execNamedFilters(md, false, funcName);
       }
 
       // custom after action

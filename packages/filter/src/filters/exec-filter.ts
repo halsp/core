@@ -72,19 +72,19 @@ export async function execCustomFilters(
   }
 }
 
-export async function execBuildinFilters(
+export async function execNamedFilters(
   action: Action,
   isExecuting: true,
   funcName: string,
   ...params: any[]
 ): Promise<boolean>;
-export async function execBuildinFilters(
+export async function execNamedFilters(
   action: Action,
   isExecuting: false,
   funcName: string,
   ...params: any[]
 ): Promise<void>;
-export async function execBuildinFilters(
+export async function execNamedFilters(
   action: Action,
   isExecuting: boolean,
   funcName: string,
@@ -102,6 +102,7 @@ export async function execBuildinFilters(
     }
     return !!func && typeof func == "function";
   });
+
   for (const filter of filters) {
     const obj = await parseInject(action.ctx, filter);
     const execResult = await obj[funcName](action.ctx, ...params);
@@ -117,7 +118,7 @@ export async function execBuildinFilters(
 function getFilters<T extends Filter = Filter>(
   action: Action,
   isExecuting: boolean,
-  select: (filter: Filter) => boolean
+  select: (filter: FilterItem<T>) => boolean
 ): FilterItem<T>[] {
   const useFilters: FilterItem<T>[] =
     Reflect.getMetadata(FILTERS_METADATA, action.constructor) ?? [];
