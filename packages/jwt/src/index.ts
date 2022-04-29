@@ -26,8 +26,7 @@ declare module "@sfajs/core" {
       ) => void | Promise<void>
     ): this;
     useJwtExtraAuth(
-      access: (ctx: HttpContext) => boolean | Promise<boolean>,
-      onError?: (ctx: HttpContext) => void | Promise<void>
+      access: (ctx: HttpContext) => boolean | Promise<boolean>
     ): this;
   }
   interface HttpContext {
@@ -75,19 +74,14 @@ Startup.prototype.useJwtVerify = function (
 };
 
 Startup.prototype.useJwtExtraAuth = function (
-  access: (ctx: HttpContext) => boolean | Promise<boolean>,
-  onError?: (ctx: HttpContext) => void | Promise<void>
+  access: (ctx: HttpContext) => boolean | Promise<boolean>
 ): Startup {
   return this.use(async (ctx, next) => {
     if (await access(ctx)) {
       await next();
     } else {
-      if (onError) {
-        await onError(ctx);
-      } else {
-        if (ctx.res.status == 404) {
-          ctx.unauthorizedMsg("JWT validation failed");
-        }
+      if (ctx.res.status == 404 && ctx.res.body == undefined) {
+        ctx.unauthorizedMsg("JWT validation failed");
       }
     }
   });
