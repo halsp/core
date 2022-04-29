@@ -38,6 +38,64 @@ const res = await new TestStartup()
 - routerConfig: `useRouter` 参数
 - codes: 指定状态码对应的模板
 
+## 过滤器
+
+基于 `@sfajs/filter`，提供了 `ResultFilter` 过滤器
+
+在渲染视图之前会执行 `onResultExecuting`，如果函数返回 false 将终止剩余 `ResultFilter` 过滤器执行，并取消渲染视图
+
+在渲染视图之后执行 `onResultExecuted`，可用于统一返回视图结果
+
+### 创建过滤器
+
+新建一个类并实现 `ResultFilter` 接口
+
+```TS
+import { ResultFilter } from "@sfajs/mva";
+
+class TestFilter implements ResultFilter {
+  onResultExecuted(ctx: HttpContext): void | Promise<void> {
+    ctx.res.setHeader("result2", 2);
+  }
+  onResultExecuting(
+    ctx: HttpContext
+  ): boolean | void | Promise<void> | Promise<boolean> {
+    ctx.res.setHeader("result1", 1);
+  }
+}
+```
+
+### 使用过滤器
+
+与 `@sfajs/filter` 用法相同，可以单个 Action 使用，也可以全局使用
+
+#### 局部使用
+
+先在 startup 引入过滤器
+
+```TS
+startup.useFilter();
+```
+
+再在 `Action` 上使用 `@UserFilters` 装饰器
+
+```TS
+@UseFilters(TestFilter)
+export default class extends Action {
+  async invoke(): Promise<void> {
+    this.ok("OK");
+  }
+}
+```
+
+#### 全局过滤器
+
+每个 Action 都将使用全局过滤器
+
+```TS
+startup.useGlobalFilter(TestFilter)
+```
+
 ## 关于 TS
 
 你需要在 `tsconfig.json` 中的 `static` 中添加 `src/views`，让 `sfra` 编译命令能够将模板文件复制到编译目录
