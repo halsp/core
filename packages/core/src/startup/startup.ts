@@ -17,10 +17,10 @@ import { HttpException } from "../exceptions";
 export abstract class Startup {
   readonly #mds: MiddlewareItem[] = [];
 
-  use(lambda: (ctx: HttpContext, next: () => Promise<void>) => void): this;
   use(
     lambda: (ctx: HttpContext, next: () => Promise<void>) => Promise<void>
   ): this;
+  use(lambda: (ctx: HttpContext, next: () => Promise<void>) => void): this;
   use(
     lambda:
       | ((ctx: HttpContext, next: () => Promise<void>) => void)
