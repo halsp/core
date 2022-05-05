@@ -1,18 +1,18 @@
 {
   "name": "@sfajs/core",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "description": "Lightweight and flexible web app framework",
-  "homepage": "https://github.com/sfajs/core",
+  "homepage": "https://github.com/sfajs/sfa",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sfajs/core"
+    "url": "https://github.com/sfajs/sfa"
   },
   "keywords": [
     "sfa",
     "serverless"
   ],
   "bugs": {
-    "url": "https://github.com/sfajs/core/issues",
+    "url": "https://github.com/sfajs/sfa/issues",
     "email": "support@hal.wang"
   },
   "main": "dist/index.js",
