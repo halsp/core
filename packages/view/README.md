@@ -1,84 +1,53 @@
-# @sfajs/views
+<p align="center">
+  <a href="https://sfajs.com/" target="blank"><img src="https://sfajs.com/images/logo.png" alt="sfajs Logo" width="200"/></a>
+</p>
 
-sfa 视图渲染中间件
+<p align="center">sfajs - 面向云的现代渐进式轻量 <a href="http://nodejs.org" target="_blank">Node.js</a> 框架</p>
+<p align="center">
+    <a href="https://github.com/sfajs/views/blob/main/LICENSE" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="GitHub license" /></a>
+    <a href=""><img src="https://img.shields.io/npm/v/@sfajs/views.svg" alt="npm version"></a>
+    <a href=""><img src="https://badgen.net/npm/dt/@sfajs/views" alt="npm downloads"></a>
+    <a href="#"><img src="https://github.com/sfajs/views/actions/workflows/test.yml/badge.svg?branch=2.x" alt="Build Status"></a>
+    <a href="https://codecov.io/gh/sfajs/views/branch/main"><img src="https://img.shields.io/codecov/c/github/sfajs/views/main.svg" alt="Test Coverage"></a>
+    <a href="https://github.com/sfajs/views/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
+    <a href="https://gitpod.io/#https://github.com/sfajs/views"><img src="https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod" alt="Gitpod Ready-to-Code"></a>
+    <a href="https://paypal.me/ihalwang" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
+</p>
 
-- 支持多种视图模板，参考 [consolidate](https://github.com/tj/consolidate.js)
+## 介绍
+
+`@sfajs/views` 是 `sfajs` 的视图渲染插件
+
+- 基于 `consolidate`， 支持多种视图模板，参考 [consolidate](https://github.com/tj/consolidate.js)
 
 ## 安装
 
 ```
-npm i @sfajs/views
+npm install @sfajs/views
 ```
 
-## 快速开始
+## 开始使用
 
-1. 添加视图文件夹和文件 `views/index.ejs` 并编写内容
+请访问 <https://sfajs.com>
 
-2. 启用中间件 `startup.useViews()`
+## 贡献
 
-```TS
-import { TestStartup } from "@sfajs/core";
-import "@sfajs/views";
+`sfajs` 和 `@sfajs/views` 是免费且开源的项目，我们欢迎任何人为其开发和进步贡献力量。
 
-const res = await new TestStartup()
-  .useViews()
-  .use(async (ctx) => {
-    ctx.view("index.ejs");
-  })
-  .run();
-```
+- 在使用过程中出现任何问题，可以通过 [issues](https://github.com/sfajs/views/issues) 来反馈
+- Bug 的修复可以提交 Pull Request
+- 如果是增加新的功能特性，请先创建一个 issue 并做简单描述以及大致的实现方法，提议被采纳后，就可以创建一个实现新特性的 Pull Request
+- 欢迎对说明文档做出改善，帮助更多的人使用 sfajs，文档项目：<https://github.com/sfajs/sfajs.com>
+- 如果你有任何其他方面的问题或合作，欢迎发送邮件至 support@hal.wang
 
-## `useViews`
+**提醒：和项目相关的问题最好在 issues 中反馈，这样方便其他有类似问题的人可以快速查找解决方法，并且也避免了我们重复回答一些问题。**
 
-`useViews` 接收一个可选配置参数
+### 贡献列表
 
-- dir: 视图文件夹
-- options: 通用参数，如网站名称和其他通用信息
-- engines: 视图渲染引擎列表
+<a href="https://github.com/sfajs/views/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=sfajs/views" />
+</a>
 
-`engines` 用于文件扩展名与 [consolidate](https://github.com/tj/consolidate.js) 对应，如
+## License
 
-```TS
-startup.useViews({
-  dir: "views",
-  engines: [
-    { ext: "hbs", render: "handlebars" },
-    { ext: "custom", render: "ejs" },
-  ],
-});
-```
-
-如果扩展名与渲染引擎名称相同，可省略配置
-
-### 视图文件夹
-
-默认为 `views`, 所有视图将在视图文件夹中查找
-
-## `.view`
-
-你可以在三个地方使用 `view()` 函数渲染视图
-
-- ctx.view(): 管道 HttpContext 对象
-- md.view(): 中间件中可以使用 `this.view()` 渲染视图
-- res.view(): SfaResponse 对象
-
-`view` 函数接收两个参数
-
-- tmpPath: 视图文件夹中的相对路径
-- locals: 渲染参数
-
-其中 `tmpPath` 可省略模板文件扩展名，也可省略 `index` 命名的文件
-
-值为 `user/todo/index.ejs`, `user/todo/index`, `user/todo` 效果相同
-
-## ctx.state
-
-`ctx.state` 作为访问级别的模板参数
-
-比如你需要在权限验证之后，将登录信息放入 `ctx.state`
-
-在你使用 `view` 渲染模板时，`@sfajs/views` 做了以下类似操作：
-
-```JS
-const args = Object.assign({}, options, ctx.state, locals);
-```
+@sfajs/views is MIT licensed.
