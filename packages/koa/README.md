@@ -1,136 +1,51 @@
-# @sfajs/koa
+<p align="center">
+  <a href="https://sfajs.com/" target="blank"><img src="https://sfajs.com/images/logo.png" alt="sfajs Logo" width="200"/></a>
+</p>
+
+<p align="center">sfajs - 面向云的现代渐进式轻量 <a href="http://nodejs.org" target="_blank">Node.js</a> 框架</p>
+<p align="center">
+    <a href="https://github.com/sfajs/koa/blob/main/LICENSE" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="GitHub license" /></a>
+    <a href=""><img src="https://img.shields.io/npm/v/@sfajs/koa.svg" alt="npm version"></a>
+    <a href=""><img src="https://badgen.net/npm/dt/@sfajs/koa" alt="npm downloads"></a>
+    <a href="#"><img src="https://github.com/sfajs/koa/actions/workflows/test.yml/badge.svg?branch=2.x" alt="Build Status"></a>
+    <a href="https://codecov.io/gh/sfajs/koa/branch/main"><img src="https://img.shields.io/codecov/c/github/sfajs/koa/main.svg" alt="Test Coverage"></a>
+    <a href="https://github.com/sfajs/koa/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
+    <a href="https://gitpod.io/#https://github.com/sfajs/koa"><img src="https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod" alt="Gitpod Ready-to-Code"></a>
+    <a href="https://paypal.me/ihalwang" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
+</p>
+
+## 介绍
 
 让 koa 成为 sfa 的中间件，或 sfa 成为 koa 的中间件，并打通二者中间件管道
 
 ## 安装
 
 ```
-npm i @sfajs/koa
+npm install @sfajs/koa
 ```
 
-## 快速开始
+## 开始使用
 
-### 将 koa 作为 sfa 的中间件
+请访问 <https://sfajs.com>
 
-```TS
-import { TestStartup } from "@sfajs/core";
-import "@sfajs/koa";
-import { Koa } from "@sfajs/koa";
+## 贡献
 
-const res = await new TestStartup()
-  .use(async (ctx, next) => {
-    console.log("step 1");
-    await next();
-    console.log("step 5");
-  })
-  .useKoa(
-    new Koa().use(async (ctx, next) => {
-      console.log("step 2");
-      await next();
-      console.log("step 4");
-    })
-  )
-  .use((ctx) => {
-    console.log("step 3");
-  })
-  .run();
-```
+`sfajs` 和 `@sfajs/koa` 是免费且开源的项目，我们欢迎任何人为其开发和进步贡献力量。
 
-### 将 sfa 作为 koa 的中间件
+- 在使用过程中出现任何问题，可以通过 [issues](https://github.com/sfajs/koa/issues) 来反馈
+- Bug 的修复可以提交 Pull Request
+- 如果是增加新的功能特性，请先创建一个 issue 并做简单描述以及大致的实现方法，提议被采纳后，就可以创建一个实现新特性的 Pull Request
+- 欢迎对说明文档做出改善，帮助更多的人使用 sfajs，文档项目：<https://github.com/sfajs/sfajs.com>
+- 如果你有任何其他方面的问题或合作，欢迎发送邮件至 support@hal.wang
 
-```TS
-import { Koa } from "@sfajs/koa";
+**提醒：和项目相关的问题最好在 issues 中反馈，这样方便其他有类似问题的人可以快速查找解决方法，并且也避免了我们重复回答一些问题。**
 
-const koa = new Koa()
-  .use(async (ctx, next) => {
-    console.log("step 1")
-    await next();
-    console.log("step 5")
-  })
-  .use(
-    koaSfa((startup) => {
-      startup.use(async (ctx, next) => {
-        console.log("step 2")
-        await next();
-        console.log("step 4")
-      });
-    })
-  )
-  .use((ctx) => {
-    console.log("step 3")
-  });
-const server = koa.listen(2333);
-```
+### 贡献列表
 
-## 中间件管道
+<a href="https://github.com/sfajs/koa/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=sfajs/koa" />
+</a>
 
-@sfajs/koa 会打通 sfa 和 koa 的中间件管道，就像你在 sfa 中使用 koa 中间件一样
+## License
 
-管道流向：
-
-1. 在 useKoa 后仍有 sfa 中间件：sfa -> koa -> sfa -> koa -> sfa
-2. 在 useKoa 后没有 sfa 中间件，或 koa 某个中间件是管道终点：sfa -> koa -> sfa
-
-因此你还可以这样玩：
-
-```TS
-import { TestStartup } from "@sfajs/core";
-import { Koa } from "@sfajs/koa";
-import cors from "koa-cors";
-
-const res = await new TestStartup()
-  .useKoa(
-    new Koa()
-      .use(async (ctx, next) => {
-        ctx.body = "Sfa loves Koa";
-        await next();
-      })
-      .use(async (ctx) => {
-        ctx.setHeader("koa", "sfa");
-        await next();
-      })
-  )
-  .use(async (ctx, next) => {
-    console.log(ctx.res.body); // "Sfa loves Koa"
-    await next();
-  })
-  .useKoa(new Koa().use(cors()))
-  .use(async (ctx) => {
-    console.log(ctx.res.getHeader("koa")); // "sfa"
-  })
-  .run();
-```
-
-## 使用流
-
-为了兼容各运行环境，sfa 的 ctx.body 都是已解析好的数据
-
-因此如果涉及到流，你有两种做法可以让 `@sfajs/koa` 正确解析
-
-1. 先解析
-
-在 `startup.useKoa` 之前的中间件中，先解析流，将解析后的内容放入 `ctx.body`，在 koa 中间件中即可使用该数据
-
-1. 配置传入可读流
-
-useKoa 第二个参数的 streamingBody 传入一个函数，函数参数为 sfa 的 `ctx`，返回值类型为 `ReadableStream`
-
-如 http(s) 环境下
-
-```TS
-import { SfaHttp } from "@sfajs/http";
-
-new SfaHttp().useKoa(new Koa(), {
-  streamingBody: (ctx) => ctx.httpReq,
-});
-```
-
-如 阿里云函数 环境下
-
-```TS
-import SfaAlifunc from "@sfajs/alifunc";
-
-new SfaAlifunc(req, resp, context).useKoa(new Koa(), {
-  streamingBody: (ctx) => ctx.aliReq,
-});
-```
+@sfajs/koa is MIT licensed.
