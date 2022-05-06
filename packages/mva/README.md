@@ -1,6 +1,22 @@
-# @sfajs/mva
+<p align="center">
+  <a href="https://sfajs.com/" target="blank"><img src="https://sfajs.com/images/logo.png" alt="sfajs Logo" width="200"/></a>
+</p>
 
-sfa MVA 框架
+<p align="center">sfajs - 面向云的现代渐进式轻量 <a href="http://nodejs.org" target="_blank">Node.js</a> 框架</p>
+<p align="center">
+    <a href="https://github.com/sfajs/mva/blob/main/LICENSE" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="GitHub license" /></a>
+    <a href=""><img src="https://img.shields.io/npm/v/@sfajs/mva.svg" alt="npm version"></a>
+    <a href=""><img src="https://badgen.net/npm/dt/@sfajs/mva" alt="npm downloads"></a>
+    <a href="#"><img src="https://github.com/sfajs/mva/actions/workflows/test.yml/badge.svg?branch=2.x" alt="Build Status"></a>
+    <a href="https://codecov.io/gh/sfajs/mva/branch/main"><img src="https://img.shields.io/codecov/c/github/sfajs/mva/main.svg" alt="Test Coverage"></a>
+    <a href="https://github.com/sfajs/mva/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
+    <a href="https://gitpod.io/#https://github.com/sfajs/mva"><img src="https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod" alt="Gitpod Ready-to-Code"></a>
+    <a href="https://paypal.me/ihalwang" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
+</p>
+
+## 介绍
+
+`@sfajs/mva` 是 `sfajs` 的 MVA 框架
 
 - 支持 RESTful 规范
 - 根据文件系统映射访问路径，彻底解耦无关联功能
@@ -9,99 +25,32 @@ sfa MVA 框架
 
 ## 安装
 
-npm i @sfajs/mva
-
-## 简单使用
-
-```TS
-startup.useMva()
+```
+npm install @sfajs/mva
 ```
 
-```TS
-import { TestStartup } from "@sfajs/core";
-import "@sfajs/mva";
-const res = await new TestStartup()
-  .useMva()
-  .run();
-```
+## 开始使用
 
-参考 `@sfajs/router` 在根目录中（ts 项目为 src 目录）添加以下文件夹：
+请访问 <https://sfajs.com>
 
-1. 路由文件夹 `actions`，并编写 `action`，也可为其他，但通过 `routerConfig.dir` 参数指定
-2. 视图文件夹 `views` ，并编写相应视图模板，也可为其他，但通过 `viewsConfig.dir` 参数指定
+## 贡献
 
-## 配置参数
+`sfajs` 和 `@sfajs/mva` 是免费且开源的项目，我们欢迎任何人为其开发和进步贡献力量。
 
-`useMvc` 接收一个可选配置参数
+- 在使用过程中出现任何问题，可以通过 [issues](https://github.com/sfajs/mva/issues) 来反馈
+- Bug 的修复可以提交 Pull Request
+- 如果是增加新的功能特性，请先创建一个 issue 并做简单描述以及大致的实现方法，提议被采纳后，就可以创建一个实现新特性的 Pull Request
+- 欢迎对说明文档做出改善，帮助更多的人使用 sfajs，文档项目：<https://github.com/sfajs/sfajs.com>
+- 如果你有任何其他方面的问题或合作，欢迎发送邮件至 support@hal.wang
 
-- viewsConfig: `useViews` 参数
-- routerConfig: `useRouter` 参数
-- codes: 指定状态码对应的模板
+**提醒：和项目相关的问题最好在 issues 中反馈，这样方便其他有类似问题的人可以快速查找解决方法，并且也避免了我们重复回答一些问题。**
 
-## 过滤器
+### 贡献列表
 
-基于 `@sfajs/filter`，提供了 `ResultFilter` 过滤器
+<a href="https://github.com/sfajs/mva/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=sfajs/mva" />
+</a>
 
-在渲染视图之前会执行 `onResultExecuting`，如果函数返回 false 将终止剩余 `ResultFilter` 过滤器执行，并取消渲染视图
+## License
 
-在渲染视图之后执行 `onResultExecuted`，可用于统一返回视图结果
-
-### 创建过滤器
-
-新建一个类并实现 `ResultFilter` 接口
-
-```TS
-import { ResultFilter } from "@sfajs/mva";
-
-class TestFilter implements ResultFilter {
-  onResultExecuted(ctx: HttpContext): void | Promise<void> {
-    ctx.res.setHeader("result2", 2);
-  }
-  onResultExecuting(
-    ctx: HttpContext
-  ): boolean | void | Promise<void> | Promise<boolean> {
-    ctx.res.setHeader("result1", 1);
-  }
-}
-```
-
-### 使用过滤器
-
-与 `@sfajs/filter` 用法相同，可以单个 Action 使用，也可以全局使用
-
-#### 局部使用
-
-先在 startup 引入过滤器
-
-```TS
-startup.useFilter();
-```
-
-再在 `Action` 上使用 `@UserFilters` 装饰器
-
-```TS
-@UseFilters(TestFilter)
-export default class extends Action {
-  async invoke(): Promise<void> {
-    this.ok("OK");
-  }
-}
-```
-
-#### 全局过滤器
-
-每个 Action 都将使用全局过滤器
-
-```TS
-startup.useGlobalFilter(TestFilter)
-```
-
-## 关于 TS
-
-你需要在 `tsconfig.json` 中的 `static` 中添加 `src/views`，让 `sfra` 编译命令能够将模板文件复制到编译目录
-
-```JSON
-"static": [
-  "src/views" // 模板文件夹路径
-]
-```
+@sfajs/mva is MIT licensed.
