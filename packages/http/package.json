@@ -1,7 +1,7 @@
 {
   "name": "@sfajs/http",
-  "version": "1.0.8",
-  "description": "Hosting sfa in http(s)",
+  "version": "1.0.9",
+  "description": "sfajs 的 http 托管环境",
   "homepage": "https://github.com/sfajs/http",
   "repository": {
     "type": "git",
@@ -9,8 +9,8 @@
   },
   "keywords": [
     "sfa",
+    "sfajs",
     "nodejs-server",
-    "typescript",
     "http",
     "https"
   ],
