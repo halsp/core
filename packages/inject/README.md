@@ -6,7 +6,7 @@
 <p align="center">
     <a href="https://github.com/sfajs/inject/blob/main/LICENSE" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="GitHub license" /></a>
     <a href=""><img src="https://img.shields.io/npm/v/@sfajs/inject.svg" alt="npm version"></a>
-    <a href=""><img src="https://badgen.net/npm/dt/@sfajs%2Finject" alt="npm downloads"></a>
+    <a href=""><img src="https://badgen.net/npm/dt/@sfajs/inject" alt="npm downloads"></a>
     <a href="#"><img src="https://github.com/sfajs/inject/actions/workflows/test.yml/badge.svg?branch=2.x" alt="Build Status"></a>
     <a href="https://codecov.io/gh/sfajs/inject/branch/main"><img src="https://img.shields.io/codecov/c/github/sfajs/inject/main.svg" alt="Test Coverage"></a>
     <a href="https://github.com/sfajs/inject/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
