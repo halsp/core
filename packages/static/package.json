@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/static",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "sfajs 的静态资源插件",
   "homepage": "https://github.com/sfajs/static",
   "repository": {
@@ -28,7 +28,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@sfajs/core": "^1.3.6",
+    "@sfajs/core": "^1.3.7",
     "mime": "^3.0.0"
   },
   "devDependencies": {
