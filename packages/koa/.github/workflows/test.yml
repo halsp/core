@@ -20,3 +20,4 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm run tests
+    - run: npx codecov
