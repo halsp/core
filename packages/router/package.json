@@ -1,7 +1,7 @@
 {
   "name": "@sfajs/router",
-  "version": "1.6.0",
-  "description": "sfa 路由中间件",
+  "version": "1.6.1",
+  "description": "sfajs 的路由插件",
   "homepage": "https://github.com/sfajs/router",
   "repository": {
     "type": "git",
@@ -9,6 +9,7 @@
   },
   "keywords": [
     "sfa",
+    "sfajs",
     "restful",
     "router"
   ],
