@@ -1,168 +1,53 @@
-# @sfajs/filter
+<p align="center">
+  <a href="https://sfajs.com/" target="blank"><img src="https://sfajs.com/images/logo.png" alt="sfajs Logo" width="200"/></a>
+</p>
 
-基于 `@sfajs/router` 的请求过滤器
+<p align="center">sfajs - 面向云的现代渐进式轻量 <a href="http://nodejs.org" target="_blank">Node.js</a> 框架</p>
+<p align="center">
+    <a href="https://github.com/sfajs/filter/blob/main/LICENSE" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="GitHub license" /></a>
+    <a href=""><img src="https://img.shields.io/npm/v/@sfajs/filter.svg" alt="npm version"></a>
+    <a href=""><img src="https://badgen.net/npm/dt/@sfajs/filter" alt="npm downloads"></a>
+    <a href="#"><img src="https://github.com/sfajs/filter/actions/workflows/test.yml/badge.svg?branch=2.x" alt="Build Status"></a>
+    <a href="https://codecov.io/gh/sfajs/filter/branch/main"><img src="https://img.shields.io/codecov/c/github/sfajs/filter/main.svg" alt="Test Coverage"></a>
+    <a href="https://github.com/sfajs/filter/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
+    <a href="https://gitpod.io/#https://github.com/sfajs/filter"><img src="https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod" alt="Gitpod Ready-to-Code"></a>
+    <a href="https://paypal.me/ihalwang" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
+</p>
 
-`@sfajs/filter` 提供以下几种过滤器
+## 介绍
 
-- ActionFilter: Action 运行前和运行后执行，比较通用，可以改变传入内容和返回结果，可以用于统一返回
-- AuthorizationFilter: Action 运行前执行，一般用于身份认证
-- ResourceFilter: Action 运行前和运行后执行，一般用于资源缓存
-- ExceptionFilter: Action 运行抛出异常时执行，一般用于自定义异常处理
+`@sfajs/filter` 是 `sfajs` 的请求过滤器插件
 
-## 引入过滤器
+请求过滤器可用于便捷获取请求参数、参数校验、身份验证、参数转换等
 
-以下三者调用任意一个都可以
+## 安装
 
-- useFilter
-- useGlobalFilter
-- useFilterOrder
-
-如
-
-```TS
-import "@sfajs/filter"
-
-startup.useFilter()
-// OR
-startup.useGlobalFilter(YourFilter, 1)
+```
+npm install @sfajs/filter
 ```
 
-需要在 `startup.useRouter` 之前引入
+## 开始使用
 
-如果使用过滤器依赖注入，需要在 `startup.useInject` 引入
+请访问 <https://sfajs.com>
 
-```TS
-import "@sfajs/filter"
-import "@sfajs/router"
-import "@sfajs/inject"
+## 贡献
 
-startup
-  // .use(...)
-  .useInject()
-  // .use(...)
-  .useFilter()
-  // .use(...)
-  .useRouter()
-```
+`sfajs` 和 `@sfajs/filter` 是免费且开源的项目，我们欢迎任何人为其开发和进步贡献力量。
 
-## 在 Action 上使用过滤器
+- 在使用过程中出现任何问题，可以通过 [issues](https://github.com/sfajs/filter/issues) 来反馈
+- Bug 的修复可以提交 Pull Request
+- 如果是增加新的功能特性，请先创建一个 issue 并做简单描述以及大致的实现方法，提议被采纳后，就可以创建一个实现新特性的 Pull Request
+- 欢迎对说明文档做出改善，帮助更多的人使用 sfajs，文档项目：<https://github.com/sfajs/sfajs.com>
+- 如果你有任何其他方面的问题或合作，欢迎发送邮件至 support@hal.wang
 
-可以单独为某个 Action 使用过滤器
+**提醒：和项目相关的问题最好在 issues 中反馈，这样方便其他有类似问题的人可以快速查找解决方法，并且也避免了我们重复回答一些问题。**
 
-用装饰器的方式添加过滤器
+### 贡献列表
 
-```TS
-@UseFilters(...filters)
-export default class extends Action{
-  invoke(){}
-}
-```
+<a href="https://github.com/sfajs/filter/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=sfajs/filter" />
+</a>
 
-## 全局过滤器
+## License
 
-用以下函数添加过滤器
-
-```TS
-startup.useGlobalFilter(filter)
-```
-
-注意此函数应在 `useRouter` 之前调用
-
-可以调用多次，每次都会添加一个全局过滤器
-
-## 依赖注入
-
-过滤器支持 `@sfajs/inject` 依赖注入
-
-使用过滤器时，建议传入类而不是对象，可以让框架自动初始化过滤器
-
-## 执行顺序
-
-`ExceptionFilter` 过滤器是抛出异常立即执行
-
-其他过滤器按以下顺序执行
-
-1. AuthorizationFilter
-2. ResourceFilter.onResourceExecuting
-3. ActionFilter.onActionExecuting
-4. Action Middleware
-5. ActionFilter.onActionExecuted
-6. ResourceFilter.onResourceExecuted
-
-### 同类型执行顺序
-
-同类型过滤器的执行顺序默认按以下顺序执行
-
-- 全局优先于局部装饰器
-- 全局之间按引入顺序执行
-- 局部之间按引入顺序执行
-
-### 指定执行顺序
-
-可以指定同类型过滤器的执行顺序
-
-```TS
-startup.useFilterOrder(FilterConstructor, order)
-```
-
-如果是全局过滤器，也可以传入 `useGlobalFilter` 第二个顺序参数
-
-```TS
-startup.useGlobalFilter(Filter, order)
-```
-
-### 创建过滤器
-
-创建一个类，实现对应过滤器接口，如 `ActionFilter` 过滤器
-
-```TS
-class TestActionFilter implements ActionFilter {
-  onActionExecuted(ctx: HttpContext): void | Promise<void> {
-    ctx.res.setHeader("action2", 2);
-  }
-  onActionExecuting(
-    ctx: HttpContext
-  ): boolean | void | Promise<void> | Promise<boolean> {
-    ctx.res.setHeader("action1", 1);
-    return true;
-  }
-}
-```
-
-## 创建自定义类型过滤器
-
-自定义类型包含以下几种：
-
-- BeforeAuthorization
-- BeforeResource
-- BeforeAction
-- Last
-
-分别处于不同顺序执行，不同类型的过滤器执行顺序是固定的
-
-同类型的可通过声明顺序或 `useFilterOrder` 决定执行顺序
-
-创建一个自定义过滤器需要做以下操作
-
-- 创建一个类，实现 `Filter` 接口
-- 用 `@CustomFilter(CustomFilterType)` 装饰该类
-- 用 `@CustomFilterExecuting` 装饰 `Action` 执行之前的方法
-- 用 `@CustomFilterExecuted` 装饰 `Action` 执行之后的方法
-- `CustomFilterExecuting` 和 `CustomFilterExecuted` 可以只有其中一个方法
-
-```TS
-@CustomFilter(CustomFilterType.BeforeAction)
-export class CustomBeforeActionFilter implements Filter {
-  @CustomFilterExecuted
-  onExecuted(ctx: HttpContext): void | Promise<void> {
-    //
-  }
-
-  @CustomFilterExecuting
-  onExecuting(
-    ctx: HttpContext
-  ): boolean | void | Promise<void> | Promise<boolean> {
-    //
-  }
-}
-```
+@sfajs/filter is MIT licensed.
