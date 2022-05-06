@@ -1,6 +1,22 @@
-# @sfajs/static
+<p align="center">
+  <a href="https://sfajs.com/" target="blank"><img src="https://sfajs.com/images/logo.png" alt="sfajs Logo" width="200"/></a>
+</p>
 
-sfa 静态资源中间件
+<p align="center">sfajs - 面向云的现代渐进式轻量 <a href="http://nodejs.org" target="_blank">Node.js</a> 框架</p>
+<p align="center">
+    <a href="https://github.com/sfajs/static/blob/main/LICENSE" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="GitHub license" /></a>
+    <a href=""><img src="https://img.shields.io/npm/v/@sfajs/static.svg" alt="npm version"></a>
+    <a href=""><img src="https://badgen.net/npm/dt/@sfajs/static" alt="npm downloads"></a>
+    <a href="#"><img src="https://github.com/sfajs/static/actions/workflows/test.yml/badge.svg?branch=2.x" alt="Build Status"></a>
+    <a href="https://codecov.io/gh/sfajs/static/branch/main"><img src="https://img.shields.io/codecov/c/github/sfajs/static/main.svg" alt="Test Coverage"></a>
+    <a href="https://github.com/sfajs/static/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
+    <a href="https://gitpod.io/#https://github.com/sfajs/static"><img src="https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod" alt="Gitpod Ready-to-Code"></a>
+    <a href="https://paypal.me/ihalwang" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
+</p>
+
+## 介绍
+
+`@sfajs/inject` 是 `sfajs` 的静态资源插件
 
 - 能够返回静态资源
 - 能够匹配单个文件或整个文件夹
@@ -9,107 +25,31 @@ sfa 静态资源中间件
 ## 安装
 
 ```
-npm i @sfajs/static
+npm install @sfajs/static
 ```
 
-## 快速开始
+## 开始使用
 
-使用 `startup.useStatic()`
+请访问 <https://sfajs.com>
 
-```JS
-require("@sfajs/static");
-const res = await new TestStartup().useStatic().run();
-```
+## 贡献
 
-或
+`sfajs` 和 `@sfajs/static` 是免费且开源的项目，我们欢迎任何人为其开发和进步贡献力量。
 
-```JS
-require("@sfajs/static");
-const res = await new OtherStartup().useStatic().run();
-```
+- 在使用过程中出现任何问题，可以通过 [issues](https://github.com/sfajs/static/issues) 来反馈
+- Bug 的修复可以提交 Pull Request
+- 如果是增加新的功能特性，请先创建一个 issue 并做简单描述以及大致的实现方法，提议被采纳后，就可以创建一个实现新特性的 Pull Request
+- 欢迎对说明文档做出改善，帮助更多的人使用 sfajs，文档项目：<https://github.com/sfajs/sfajs.com>
+- 如果你有任何其他方面的问题或合作，欢迎发送邮件至 support@hal.wang
 
-`useStatic` 如果不传任何参数，将匹配 `static` 文件夹
+**提醒：和项目相关的问题最好在 issues 中反馈，这样方便其他有类似问题的人可以快速查找解决方法，并且也避免了我们重复回答一些问题。**
 
-## 匹配文件夹
+### 贡献列表
 
-`@sfajs/static` 可以匹配整个文件夹，按文件系统匹配文件，`useStatic` 接收配置参数包含以下参数
+<a href="https://github.com/sfajs/static/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=sfajs/static" />
+</a>
 
-#### dir
+## License
 
-`@sfajs/static` 会在该文件夹中按访问路径匹配文件
-
-因此你也可以选择使用多个 `dir`参数不同的 `useStatic`
-
-如果不传此参数，默认值为 `static`，即项目下的 `static` 文件夹
-
-#### prefix
-
-url 访问前缀
-
-比如你将图片放在 `static` 文件夹，但想用 `file` 前缀来访问：
-
-`GET file/1.png`, `GET file/2.txt` 等
-
-```JS
-const res = await new TestStartup()
-  .useStatic({
-    dir: "static",
-    prefix: "file",
-  })
-  .run();
-```
-
-#### encoding
-
-读取文件的格式，此参数将直接影响 `body` 的内容
-
-如在 http 中，该值可保持默认，或设置为 `binary`
-
-在云函数中，该值应设置为 base64
-
-#### file404
-
-`@sfajs/static` 如果找不到匹配的静态文件，会根据此值寻找文件：
-
-- 未设置，进入下一个中间件（如果存在）
-- 值为文件相对路径，将查找 `dir` 下的该文件
-- 值为 true，将查找 `dir` 下的 `404.html` 文件
-
-#### method
-
-允许的访问方法，可以为字符串 `GET`, `POST` 等访问方法，也可以为数组 `['GET', 'POST', '...']`
-
-不设置将与 `GET` 效果相同
-
-如果值为 `ANY` 或['ANY'] ，将允许任何访问方法
-
-## 匹配文件
-
-`@sfajs/static` 也可以指定单个文件，`useStatic` 接收配置参数包含以下参数
-
-### file
-
-指定文件的相对路径
-
-### reqPath
-
-指定访问路径，如果不设置将与 `file` 参数相同
-
-### encoding
-
-与 `匹配文件夹` 中的参数相同
-
-### method
-
-与 `匹配文件夹` 中的参数相同
-
-## bag
-
-如果成功找到文件，将在 `ctx.bag` 中注入
-
-> `STATIC_FILE`: 文件相对路径
-
-如果根据配置中的 `file404` 找到的 404 文件，将在 `ctx.bag` 中加入
-
-> `STATIC_FILE`: 文件相对路径
-> `STATIC_FILE_404`: 值为 `true`
+@sfajs/static is MIT licensed.

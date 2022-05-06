@@ -1,7 +1,7 @@
 {
   "name": "@sfajs/static",
-  "version": "1.0.4",
-  "description": "sfa 静态资源插件",
+  "version": "1.0.5",
+  "description": "sfajs 的静态资源插件",
   "homepage": "https://github.com/sfajs/static",
   "repository": {
     "type": "git",
