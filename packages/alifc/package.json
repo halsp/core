@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/alifunc",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "将 sfa 托管到阿里云函数计算",
   "homepage": "https://github.com/sfajs/alifunc",
   "repository": {
