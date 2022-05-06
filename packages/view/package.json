@@ -34,10 +34,11 @@
     "consolidate": "^0.16.0"
   },
   "devDependencies": {
-    "@types/node": "^17.0.31",
     "@types/jest": "^27.5.0",
+    "@types/node": "^17.0.31",
     "@typescript-eslint/eslint-plugin": "^5.22.0",
     "@typescript-eslint/parser": "^5.22.0",
+    "codecov": "^3.8.3",
     "ejs": "^3.1.7",
     "eslint": "^8.14.0",
     "eslint-config-prettier": "^8.5.0",
