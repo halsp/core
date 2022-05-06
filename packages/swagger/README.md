@@ -1,142 +1,55 @@
-# @sfajs/swagger
+<p align="center">
+  <a href="https://sfajs.com/" target="blank"><img src="https://sfajs.com/images/logo.png" alt="sfajs Logo" width="200"/></a>
+</p>
 
-使用 swagger 自动生成你的 sfa 文档
+<p align="center">sfajs - 面向云的现代渐进式轻量 <a href="http://nodejs.org" target="_blank">Node.js</a> 框架</p>
+<p align="center">
+    <a href="https://github.com/sfajs/swagger/blob/main/LICENSE" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="GitHub license" /></a>
+    <a href=""><img src="https://img.shields.io/npm/v/@sfajs/swagger.svg" alt="npm version"></a>
+    <a href=""><img src="https://badgen.net/npm/dt/@sfajs/swagger" alt="npm downloads"></a>
+    <a href="#"><img src="https://github.com/sfajs/swagger/actions/workflows/test.yml/badge.svg?branch=2.x" alt="Build Status"></a>
+    <a href="https://codecov.io/gh/sfajs/swagger/branch/main"><img src="https://img.shields.io/codecov/c/github/sfajs/swagger/main.svg" alt="Test Coverage"></a>
+    <a href="https://github.com/sfajs/swagger/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
+    <a href="https://gitpod.io/#https://github.com/sfajs/swagger"><img src="https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod" alt="Gitpod Ready-to-Code"></a>
+    <a href="https://paypal.me/ihalwang" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
+</p>
 
-基于 [swagger-jsdoc](https://github.com/Surnet/swagger-jsdoc) 生成页面，在浏览器中使用 [swagger-ui](https://github.com/swagger-api/swagger-ui) 渲染 UI
+## 介绍
 
-## 快速开始
+`@sfajs/swagger` 是 `sfajs` 的 swagger 文档插件
 
-使用中间件的默认配置
+基于 [swagger-jsdoc](https://github.com/Surnet/swagger-jsdoc) 生成页面
 
-```TS
-import { TestStartup } from "@sfajs/core";
-import "@sfajs/swagger";
+在浏览器中使用 [swagger-ui](https://github.com/swagger-api/swagger-ui) 渲染文档
 
-const res = await new TestStartup()
-  .useSwagger()
-  .run();
+## 安装
 
-console.log(res.body); // html
+```
+npm install @sfajs/swagger
 ```
 
-在项目下任意 `.js`/`.ts` 文件中
+## 开始使用
 
-```TS
-/**
- * @openapi
- * /:
- *   get:
- *     description: Welcome to @sfajs/swagger!
- *     responses:
- *       200:
- *         description: Returns a mysterious string.
- */
-```
+请访问 <https://sfajs.com>
 
-## 配置
+## 贡献
 
-`startup.useSwagger` 接收三个参数：
+`sfajs` 和 `@sfajs/swagger` 是免费且开源的项目，我们欢迎任何人为其开发和进步贡献力量。
 
-- swaggerJSDoc
-- url
-- customHtml
+- 在使用过程中出现任何问题，可以通过 [issues](https://github.com/sfajs/swagger/issues) 来反馈
+- Bug 的修复可以提交 Pull Request
+- 如果是增加新的功能特性，请先创建一个 issue 并做简单描述以及大致的实现方法，提议被采纳后，就可以创建一个实现新特性的 Pull Request
+- 欢迎对说明文档做出改善，帮助更多的人使用 sfajs，文档项目：<https://github.com/sfajs/sfajs.com>
+- 如果你有任何其他方面的问题或合作，欢迎发送邮件至 support@hal.wang
 
-### swaggerJSDoc
+**提醒：和项目相关的问题最好在 issues 中反馈，这样方便其他有类似问题的人可以快速查找解决方法，并且也避免了我们重复回答一些问题。**
 
-参考 [swagger-jsdoc](https://github.com/Surnet/swagger-jsdoc) 的 `options` 参数
+### 贡献列表
 
-默认值：
+<a href="https://github.com/sfajs/swagger/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=sfajs/swagger" />
+</a>
 
-```JSON
-{
-  "definition": {
-    "swagger": "2.0",
-    "info": {
-      "title": "Test",
-      "version": "1.0.0",
-    },
-  },
-  "apis": ["./*.ts", "./*.js"],
-}
-```
+## License
 
-一般你需要替换默认值
-
-### url
-
-访问 swagger 页面的路径，默认为 `/`
-
-### customHtml
-
-如果你想自定义 swagger 页面，需要传入一个函数。函数入参为 json 字符串，返回值为 html 字符串或 `Promise<string>`
-
-但你需要注意，`SwaggerUIBundle` 参数 `spec` 的值应该是传入的字符串，如：
-
-```TS
-startup.useSwagger({
-  customHtml: getHtml,
-});
-
-const getHtml = (jsonStr) => `<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>Swagger UI</title>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3.50.0/swagger-ui.min.css" />
-    <style>
-      html
-      {
-        box-sizing: border-box;
-        overflow: -moz-scrollbars-vertical;
-        overflow-y: auth;
-      }
-
-      *,
-      *:before,
-      *:after
-      {
-        box-sizing: inherit;
-      }
-
-      body
-      {
-        margin:0;
-        background: #fafafa;
-      }
-    </style>
-  </head>
-
-  <body>
-    <div id="swagger-ui"></div>
-    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3.50.0/swagger-ui-bundle.min.js" charset="UTF-8"> </script>
-    <script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@3.50.0/swagger-ui-standalone-preset.min.js" charset="UTF-8"> </script>
-    <script>
-    window.onload = function() {
-      const ui = SwaggerUIBundle({
-        spec: ${jsonStr},
-        dom_id: '#swagger-ui',
-        deepLinking: true,
-        presets: [
-          SwaggerUIBundle.presets.apis,
-          SwaggerUIStandalonePreset
-        ],
-        plugins: [
-          SwaggerUIBundle.plugins.DownloadUrl
-        ],
-        layout: "StandaloneLayout",
-        validatorUrl:null
-      });
-      window.ui = ui;
-    };
-  </script>
-  </body>
-</html>`;
-```
-
-上述 `getHtml` 为 `@sfajs/swagger` 的默认实现
-
-### 示例项目
-
-- todo
-   - github: https://github.com/hal-wang/todo
-   - swagger: https://todo-5gcg801923564f08-1253337886.ap-shanghai.app.tcloudbase.com/v2
+@sfajs/swagger is MIT licensed.
