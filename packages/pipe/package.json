@@ -1,7 +1,7 @@
 {
   "name": "@sfajs/pipe",
-  "version": "1.1.1",
-  "description": "sfa 请求参数管道，用于转换、格式化请求参数",
+  "version": "1.1.2",
+  "description": "sfajs 的管道插件",
   "homepage": "https://github.com/sfajs/pipe",
   "repository": {
     "type": "git",

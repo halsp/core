@@ -1,161 +1,53 @@
-# @sfajs/pipe
+<p align="center">
+  <a href="https://sfajs.com/" target="blank"><img src="https://sfajs.com/images/logo.png" alt="sfajs Logo" width="200"/></a>
+</p>
 
-sfa 请求参数管道，用于校验、转换、格式化请求参数
+<p align="center">sfajs - 面向云的现代渐进式轻量 <a href="http://nodejs.org" target="_blank">Node.js</a> 框架</p>
+<p align="center">
+    <a href="https://github.com/sfajs/pipe/blob/main/LICENSE" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="GitHub license" /></a>
+    <a href=""><img src="https://img.shields.io/npm/v/@sfajs/pipe.svg" alt="npm version"></a>
+    <a href=""><img src="https://badgen.net/npm/dt/@sfajs/pipe" alt="npm downloads"></a>
+    <a href="#"><img src="https://github.com/sfajs/pipe/actions/workflows/test.yml/badge.svg?branch=2.x" alt="Build Status"></a>
+    <a href="https://codecov.io/gh/sfajs/pipe/branch/main"><img src="https://img.shields.io/codecov/c/github/sfajs/pipe/main.svg" alt="Test Coverage"></a>
+    <a href="https://github.com/sfajs/pipe/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
+    <a href="https://gitpod.io/#https://github.com/sfajs/pipe"><img src="https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod" alt="Gitpod Ready-to-Code"></a>
+    <a href="https://paypal.me/ihalwang" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
+</p>
 
-你需要使用装饰器并引入 `@sfajs/inject` 以使用此功能
+## 介绍
 
-用 `Query`, `Header`, `Param`, `Body`, `Context` 装饰字段，该字段在特定生命周期会被自动赋值
+`@sfajs/pipe` 是 `sfajs` 的管道插件
 
-## 快速开始
+用于校验、转换、格式化请求参数
 
-```TS
-import "@sfajs/inject";
-import { Header, Query, Param, Body, Context } from "@sfajs/pipe";
-import { Middleware, ReadonlyDict, TestStartup, HttpContext } from "@sfajs/core";
+## 安装
 
-class TestMiddleware extends Middleware {
-  @Context
-  private readonly ctx1!: HttpContext;
-  @Header
-  private readonly header!: ReadonlyDict;
-  @Query
-  private readonly query1!: ReadonlyDict;
-  @Query
-  private readonly query2!: ReadonlyDict;
-  @Param
-  private readonly params!: ReadonlyDict;
-  @Body
-  private readonly body!: ReadonlyDict;
-  @Body("array")
-  private readonly arrayFieldBody!: string;
-  @Query("q")
-  private readonly queryProperty!: string;
-
-  async invoke(): Promise<void> {
-    this.ok({
-      header: this.header,
-      query1: this.query1,
-      query2: this.query2,
-      params: this.params,
-      body: this.body,
-      arrayFieldBody: this.arrayFieldBody,
-      queryProperty: this.queryProperty,
-    });
-  }
-}
-
-const res = await new TestStartup()
-    .useInject()
-    .add(TestMiddleware)
-    .run();
+```
+npm install @sfajs/pipe
 ```
 
-上述代码中的 `useInject` 会启用依赖注入，`@sfajs/pipe` 利用依赖注入实现功能
+## 开始使用
 
-需要注意的是，该功能只会在 `useInject` 之后的中间件中生效，因此你需要把 `useInject` 放在靠前的位置，根据实际项目决定
+请访问 <https://sfajs.com>
 
-## 在其他类中
+## 贡献
 
-在其他任意类中，你也可以利用控制反转实现实例化
+`sfajs` 和 `@sfajs/pipe` 是免费且开源的项目，我们欢迎任何人为其开发和进步贡献力量。
 
-```TS
-import { parseInject } from "@sfajs/inject";
-import { HttpContext } from "@sfajs/core";
-import { Header, Query, Context } from "@sfajs/pipe";
+- 在使用过程中出现任何问题，可以通过 [issues](https://github.com/sfajs/pipe/issues) 来反馈
+- Bug 的修复可以提交 Pull Request
+- 如果是增加新的功能特性，请先创建一个 issue 并做简单描述以及大致的实现方法，提议被采纳后，就可以创建一个实现新特性的 Pull Request
+- 欢迎对说明文档做出改善，帮助更多的人使用 sfajs，文档项目：<https://github.com/sfajs/sfajs.com>
+- 如果你有任何其他方面的问题或合作，欢迎发送邮件至 support@hal.wang
 
-class TestClass {
-  @Context
-  private readonly ctx!: HttpContext;
-  @Header
-  private readonly header!: any;
-  @Query("property")
-  private readonly query!: any;
-}
+**提醒：和项目相关的问题最好在 issues 中反馈，这样方便其他有类似问题的人可以快速查找解决方法，并且也避免了我们重复回答一些问题。**
 
-const obj = parseInject(TestClass); // 利用控制反转创建对象
-// OR
-const obj = parseInject(new TestClass());
-```
+### 贡献列表
 
-## 避免在单例类中使用
+<a href="https://github.com/sfajs/pipe/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=sfajs/pipe" />
+</a>
 
-由于每次接口请求，参数可能都会变
+## License
 
-因此使用装饰器的类，其实例对象必须仅作用于单次网络访问
-
-例如不能使用单例类或单例中间件，否则可能会在高并发下出现不可预知的问题
-
-在这样的中间件中不能使用 `@sfajs/pipe`，因为中间件是单例的：
-
-```TS
-startup.use(new YourMiddleware())
-```
-
-```TS
-const md = new YourMiddleware();
-startup.use((ctx) => md);
-```
-
-## 管道 pipe
-
-利用管道可以实现参数校验、参数转换等
-
-此处管道不同于管道上下文 `HttpContext`
-
-### 用法
-
-`Header`,`Query` 等装饰器参数可以接收管道对象或类
-
-如果传入的是管道的类，可以利用控制反转自动实例化管道
-
-传入类
-
-```TS
-import { Query, ParseIntPipe } from "@sfajs/pipe"
-
-@Query("field", ParseIntPipe)
-queryField: number;
-```
-
-或传入对象
-
-```TS
-@Query("field", new ParseIntPipe())
-queryField: number;
-```
-
-或转换整个 query
-
-```TS
-@Query(ParseIntPipe)
-query: any;
-```
-
-### 内置管道
-
-目前内置的管道有
-
-- DefaultValuePipe: 参数为 `null`,`undefined`,`NaN` 等，赋值默认值
-- TrimPipe: 去除字符串前后空白符，可单独限定 `start` 或 `end`
-- ParseIntPipe: 字符串转整型
-- ParseFloatPipe: 字符串转浮点数
-- ParseBoolPipe: 字符串转布尔，可自定义对应值
-
-### 自定义管道
-
-更多需求可以自定义管道
-
-创建一个类，实现 `PipeTransform` 接口，如
-
-```TS
-import { Context, PipeTransform } from "@sfajs/pipe"
-
-class ToStringPipe implements PipeTransform<any, string> {
-  @Context
-  readonly ctx: HttpContext;
-
-  transform(value: any) {
-    return "" + value;
-  }
-}
-```
+@sfajs/pipe is MIT licensed.
