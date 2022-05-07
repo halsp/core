@@ -1,14 +1,7 @@
-import {
-  execCustomFilters,
-  execNamedFilters,
-  Filter,
-  FilterItem,
-  OrderRecord,
-} from "./filters";
+import { execFilters, Filter, FilterItem, OrderRecord } from "./filters";
 import { HookType, isClass, ObjectConstructor, Startup } from "@sfajs/core";
 import { FILTERS_ORDER_BAG, GLOBAL_FILTERS_BAG, USE_FILTER } from "./constant";
 import { Action } from "@sfajs/router";
-import { CustomFilterType } from "./custom-filter.decorator";
 
 export {
   Filter,
@@ -17,15 +10,9 @@ export {
   AuthorizationFilter,
   ExceptionFilter,
   ResourceFilter,
-  execNamedFilters,
+  execFilters,
 } from "./filters";
 export { UseFilters } from "./use-filters.decorator";
-export {
-  CustomFilter,
-  CustomFilterType,
-  CustomFilterExecuted,
-  CustomFilterExecuting,
-} from "./custom-filter.decorator";
 
 declare module "@sfajs/core" {
   interface Startup {
@@ -88,60 +75,30 @@ Startup.prototype.useFilter = function (): Startup {
     .hook(HookType.Exception, async (ctx, md, err) => {
       if (!(md instanceof Action)) return false;
 
-      return await execNamedFilters(md, true, "onException", err);
+      return await execFilters(md, true, "onException", err);
     })
     .hook(HookType.BeforeInvoke, async (ctx, md) => {
       if (!(md instanceof Action)) return;
 
-      async function execCustom(type: CustomFilterType) {
-        return await execCustomFilters(md, type, true);
-      }
-
-      async function execBuildin(funcName: string) {
-        return await execNamedFilters(md, true, funcName);
-      }
-
-      // custom before authorization
-      {
-        const execResult = await execCustom(
-          CustomFilterType.BeforeAuthorization
-        );
-        if (!execResult) return false;
+      async function exec(funcName: string) {
+        return await execFilters(md, true, funcName);
       }
 
       // authorization
       {
-        const execResult = await execBuildin("onAuthorization");
-        if (!execResult) return false;
-      }
-
-      // custom before resource
-      {
-        const execResult = await execCustom(CustomFilterType.BeforeResource);
+        const execResult = await exec("onAuthorization");
         if (!execResult) return false;
       }
 
       // resource
       {
-        const execResult = await execBuildin("onResourceExecuting");
-        if (!execResult) return false;
-      }
-
-      // custom before action
-      {
-        const execResult = await execCustom(CustomFilterType.BeforeAction);
+        const execResult = await exec("onResourceExecuting");
         if (!execResult) return false;
       }
 
       // action
       {
-        const execResult = await execBuildin("onActionExecuting");
-        if (!execResult) return false;
-      }
-
-      // custom after action
-      {
-        const execResult = await execCustom(CustomFilterType.Last);
+        const execResult = await exec("onActionExecuting");
         if (!execResult) return false;
       }
 
@@ -150,29 +107,14 @@ Startup.prototype.useFilter = function (): Startup {
     .hook(HookType.AfterInvoke, async (ctx, md) => {
       if (!(md instanceof Action)) return;
 
-      async function execCustom(type: CustomFilterType) {
-        return await execCustomFilters(md, type, false);
+      async function exec(funcName: string) {
+        return await execFilters(md, false, funcName);
       }
-      async function execBuildin(funcName: string) {
-        return await execNamedFilters(md, false, funcName);
-      }
-
-      // custom after action
-      await execCustom(CustomFilterType.Last);
 
       // action
-      await execBuildin("onActionExecuted");
-
-      // custom after action
-      await execCustom(CustomFilterType.BeforeAction);
+      await exec("onActionExecuted");
 
       // resource
-      await execBuildin("onResourceExecuted");
-
-      // custom before resource
-      await execCustom(CustomFilterType.BeforeResource);
-
-      // custom before authorization
-      await execCustom(CustomFilterType.BeforeAuthorization);
+      await exec("onResourceExecuted");
     });
 };

@@ -1,6 +1,6 @@
 import { HttpContext, TestStartup } from "@sfajs/core";
 import { Action } from "@sfajs/router";
-import { execNamedFilters, Filter, UseFilters } from "../src";
+import { execFilters, Filter, UseFilters } from "../src";
 
 class CustomFilter implements Filter {
   execute(ctx: HttpContext) {
@@ -11,11 +11,11 @@ class CustomFilter implements Filter {
 @UseFilters(CustomFilter)
 class TestAction extends Action {
   invoke(): void | Promise<void> {
-    execNamedFilters(this, true, "execute");
+    execFilters(this, true, "execute");
   }
 }
 
-test(`execNamedFilters`, async () => {
+test(`execFilters`, async () => {
   const res = await new TestStartup()
     .use(async (ctx, next) => {
       ctx.res.body = 0;
