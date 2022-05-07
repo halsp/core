@@ -4,7 +4,7 @@ import "@sfajs/views";
 import "@sfajs/router";
 import MvaConfig, { CodeType } from "./mva-config";
 import { ERROR_CODES, USED } from "./constant";
-import { execNamedFilters } from "@sfajs/filter";
+import { execFilters } from "@sfajs/filter";
 import { Action } from "@sfajs/router";
 
 export { MvaConfig };
@@ -66,11 +66,7 @@ Startup.prototype.useMva = function (cfg = <MvaConfig>{}): Startup {
 
       const action = ctx.actionMetadata.actionInstance as Action;
       if (action) {
-        const execResult = await execNamedFilters(
-          action,
-          true,
-          "onResultExecuting"
-        );
+        const execResult = await execFilters(action, true, "onResultExecuting");
         if (!execResult) {
           return;
         }
@@ -79,7 +75,7 @@ Startup.prototype.useMva = function (cfg = <MvaConfig>{}): Startup {
       await ctx.view(ctx.actionMetadata.reqPath, ctx.res.body);
 
       if (action) {
-        await execNamedFilters(action, false, "onResultExecuted");
+        await execFilters(action, false, "onResultExecuted");
       }
     })
     .useViews(cfg.viewsConfig)
