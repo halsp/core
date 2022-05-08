@@ -1,5 +1,13 @@
-import { StatusCodes, SfaRequest, HttpContext, Dict } from "@sfajs/core";
+import {
+  StatusCodes,
+  SfaRequest,
+  HttpContext,
+  Dict,
+  TestStartup,
+  HttpMethod,
+} from "@sfajs/core";
 import { Action } from "../src";
+import { routerCfg } from "./global";
 
 class Login extends Action {
   async invoke(): Promise<void> {
@@ -18,7 +26,7 @@ class Login extends Action {
   }
 }
 
-test("action test", async function () {
+test("action test", async () => {
   const loginAction = new Login();
   const ctx = new HttpContext(
     new SfaRequest().setBody({
@@ -40,3 +48,34 @@ test("action test", async function () {
   await loginAction.invoke();
   expect(loginAction.ctx.res.status).toBe(StatusCodes.NOT_FOUND);
 });
+
+function runMultipleTest(
+  path: string,
+  method: string,
+  status: number,
+  body?: string
+) {
+  test(`multiple`, async function () {
+    const result = await new TestStartup(
+      new SfaRequest().setPath(path).setMethod(method)
+    )
+      .useRouter(routerCfg)
+      .run();
+    if (body) {
+      expect(result.body).toBe(body);
+    }
+    expect(result.status).toBe(status);
+  });
+}
+
+runMultipleTest("multiple", HttpMethod.get, 200, "multiple-default");
+runMultipleTest("multiple", HttpMethod.post, 405);
+
+runMultipleTest("multiple/test1", HttpMethod.get, 200, "multiple-test");
+runMultipleTest("multiple/test1", HttpMethod.post, 405);
+
+runMultipleTest("multiple/test2", HttpMethod.post, 200, "multiple-post");
+runMultipleTest("multiple/test2", HttpMethod.get, 405);
+
+runMultipleTest("multiple/test3/path", HttpMethod.put, 200, "multiple-path");
+runMultipleTest("multiple/test2/path", HttpMethod.get, 404);

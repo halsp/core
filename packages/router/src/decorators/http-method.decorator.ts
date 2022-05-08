@@ -3,7 +3,7 @@ import "reflect-metadata";
 import { MethodItem } from "../action/method-item";
 import { ACTION_METHOD_METADATA } from "../constant";
 
-function setHttpMethodMetadata(target: any, method: HttpMethod, url?: string) {
+function setHttpMethodMetadata(target: any, method: string, url?: string) {
   const methods: MethodItem[] =
     Reflect.getMetadata(ACTION_METHOD_METADATA, target) ?? [];
   methods.push({
@@ -14,12 +14,12 @@ function setHttpMethodMetadata(target: any, method: HttpMethod, url?: string) {
 }
 
 function createHttpMethodDecorator(
-  method: HttpMethod,
+  method: string,
   url?: string
 ): ClassDecorator;
-function createHttpMethodDecorator(method: HttpMethod, target: any): void;
+function createHttpMethodDecorator(method: string, target: any): void;
 function createHttpMethodDecorator(
-  method: HttpMethod,
+  method: string,
   data?: any
 ): ClassDecorator | undefined {
   if (typeof data == "function") {

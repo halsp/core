@@ -29,16 +29,7 @@ export default class MapCreater {
   write(filePath: string = MAP_FILE_NAME): void {
     writeFileSync(
       path.join(process.cwd(), filePath.toString()),
-      JSON.stringify(
-        this.map.map((item) => {
-          return {
-            ...item,
-            path: item.path,
-            url: item.url,
-            methods: item.methods,
-          };
-        })
-      )
+      JSON.stringify(this.map.map((item) => item.plainObject))
     );
   }
 
@@ -51,26 +42,17 @@ export default class MapCreater {
       (item) => path.join(folderRePath, item)
     );
 
-    const files = storageItems
-      .filter((storageItem) => {
-        const filePath = path.join(this.dirPath, storageItem);
-        const stat = lstatSync(filePath);
-        if (!stat.isFile()) return false;
-        if (!storageItem.endsWith(".js") && !storageItem.endsWith(".ts")) {
-          return false;
-        }
-
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const module = require(filePath);
-        if (!module || !module.default) return false;
-        if (!isFunction(module.default)) return false;
-        return module.default.prototype instanceof Action;
-      })
-      .sort();
-    for (let i = 0; i < files.length; i++) {
-      const mapItem = this.createMapItem(files[i]);
-      result.push(mapItem);
-    }
+    const files = this.getFilesModules(storageItems);
+    files.forEach((file) => {
+      file.modules.forEach((module) => {
+        const mapItem = this.createMapItem(
+          file.path,
+          module.actionName,
+          module.action
+        );
+        result.push(mapItem);
+      });
+    });
 
     const folders = storageItems
       .filter((storageItem) => {
@@ -85,10 +67,46 @@ export default class MapCreater {
     return result;
   }
 
-  private createMapItem(file: string) {
-    const absoluteFilePath = path.join(this.dirPath, file);
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const action: ObjectConstructor<Action> = require(absoluteFilePath).default;
+  private getFilesModules(files: string[]) {
+    return files
+      .map((storageItem) => {
+        const filePath = path.join(this.dirPath, storageItem);
+        const stat = lstatSync(filePath);
+        if (!stat.isFile()) return null;
+        if (!storageItem.endsWith(".js") && !storageItem.endsWith(".ts")) {
+          return null;
+        }
+
+        // eslint-disable-next-line @typescript-eslint/no-var-requires
+        const module = require(filePath);
+        const modules = Object.keys(module)
+          .map((actionName) => {
+            const action: ObjectConstructor<Action> = module[actionName];
+            if (isFunction(action) && action.prototype instanceof Action) {
+              return {
+                action,
+                actionName,
+              };
+            } else {
+              return null;
+            }
+          })
+          .filter((item) => !!item)
+          .map((item) => item as Exclude<typeof item, null>);
+        return {
+          modules,
+          path: storageItem,
+        };
+      })
+      .filter((item) => !!item)
+      .map((item) => item as Exclude<typeof item, null>);
+  }
+
+  private createMapItem(
+    file: string,
+    actionName: string,
+    action: ObjectConstructor<Action>
+  ) {
     const metadata = Reflect.getMetadata(ACTION_METADATA, action) ?? {};
 
     const decMethods: MethodItem[] = Reflect.getMetadata(
@@ -99,9 +117,9 @@ export default class MapCreater {
     if (decMethods) {
       const url = decMethods.filter((m) => !!m.url)[0]?.url;
       const methods = decMethods.map((m) => m.method);
-      mapItem = new MapItem(file, url, methods);
+      mapItem = new MapItem(file, actionName, url, methods);
     } else {
-      mapItem = new MapItem(file);
+      mapItem = new MapItem(file, actionName);
     }
 
     Object.keys(metadata).forEach((key) => {

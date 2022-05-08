@@ -140,7 +140,10 @@ Startup.prototype.useRouter = function (cfg: RouterConfig = {}): Startup {
       this[STARTUP_ROUTER_CONFIG].dir,
       ctx.actionMetadata.path
     );
+
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    return require(filePath).default as ObjectConstructor<Action>;
+    const module = require(filePath);
+    const action = module[ctx.actionMetadata.actionName];
+    return action as ObjectConstructor<Action>;
   });
 };

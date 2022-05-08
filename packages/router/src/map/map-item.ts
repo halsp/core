@@ -1,8 +1,14 @@
-import { HttpMethod, normalizePath } from "@sfajs/core";
+import { normalizePath } from "@sfajs/core";
 
 export default class MapItem {
-  constructor(path: string, url?: string, methods?: HttpMethod[]) {
+  constructor(
+    path: string,
+    actionName: string,
+    url?: string,
+    methods?: string[]
+  ) {
     this.#path = path.replace(/\\/g, "/");
+    this.#actionName = actionName;
     if (url) {
       if (url.startsWith("//")) {
         this.#url = this.#getUrlFromPath() + "/" + normalizePath(url);
@@ -13,6 +19,11 @@ export default class MapItem {
       this.#url = this.#getUrlFromPath();
     }
     this.#methods = methods ?? this.#getMethodsFromPath();
+  }
+
+  readonly #actionName: string;
+  public get actionName(): string {
+    return this.#actionName;
   }
 
   readonly #path: string;
@@ -32,9 +43,9 @@ export default class MapItem {
     return this.#url;
   }
 
-  readonly #methods: HttpMethod[];
-  public get methods(): ReadonlyArray<HttpMethod> {
-    return [...this.#methods] as ReadonlyArray<HttpMethod>;
+  readonly #methods: string[];
+  public get methods(): ReadonlyArray<string> {
+    return [...this.#methods] as ReadonlyArray<string>;
   }
 
   #getMethodsFromPath() {
@@ -46,10 +57,24 @@ export default class MapItem {
   }
 
   #getUrlFromPath() {
-    const actionName = this.fileName.replace(/\..*$/, "").replace(/^_$/, "");
+    const fileName = this.fileName.replace(/\..*$/, "").replace(/^_$/, "");
     const pPath = this.path.substr(0, this.path.length - this.fileName.length);
-    return normalizePath(pPath + actionName);
+    let url = pPath + fileName;
+    if (this.#actionName && this.#actionName != "default") {
+      url += "/" + this.#actionName;
+    }
+    return normalizePath(url);
   }
 
   [key: string]: any;
+
+  public get plainObject() {
+    return {
+      ...this,
+      path: this.path,
+      url: this.url,
+      methods: this.methods,
+      actionName: this.actionName,
+    };
+  }
 }

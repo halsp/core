@@ -136,7 +136,9 @@ export default class MapParser {
     if (existsSync(mapPath)) {
       const result: MapItem[] = JSON.parse(readFileSync(mapPath, "utf-8")).map(
         (m: MapItem) => {
-          const mapItem = new MapItem(m.path, m.url, [...m.methods]);
+          const mapItem = new MapItem(m.path, m.actionName, m.url, [
+            ...m.methods,
+          ]);
           Object.keys(m).forEach((key) => {
             if (mapItem[key] == undefined) {
               mapItem[key] = m[key];
