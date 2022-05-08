@@ -29,7 +29,7 @@ runTest(HttpMethod.any, false);
 
 test(`custom url`, async function () {
   const res = await new TestStartup(
-    new SfaRequest().setPath("/mu").setMethod("put")
+    new SfaRequest().setPath("/mu").setMethod(HttpMethod.put)
   )
     .useRouter(routerCfg)
     .run();
@@ -42,6 +42,19 @@ test(`custom`, async function () {
   HttpMethod.custom.push("CUSTOM_DEC");
   const res = await new TestStartup(
     new SfaRequest().setPath("/muc").setMethod("CUSTOM_DEC")
+  )
+    .useRouter(routerCfg)
+    .run();
+
+  expect(res.body).toBe("method");
+  expect(res.status).toBe(200);
+});
+
+test(`base path`, async function () {
+  const res = await new TestStartup(
+    new SfaRequest()
+      .setPath("decorator/method-base-path/mup")
+      .setMethod(HttpMethod.get)
   )
     .useRouter(routerCfg)
     .run();

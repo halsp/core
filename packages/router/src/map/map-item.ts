@@ -3,7 +3,15 @@ import { HttpMethod, normalizePath } from "@sfajs/core";
 export default class MapItem {
   constructor(path: string, url?: string, methods?: HttpMethod[]) {
     this.#path = path.replace(/\\/g, "/");
-    this.#url = normalizePath(url ?? this.#getUrlFromPath());
+    if (url) {
+      if (url.startsWith("//")) {
+        this.#url = this.#getUrlFromPath() + "/" + normalizePath(url);
+      } else {
+        this.#url = normalizePath(url);
+      }
+    } else {
+      this.#url = this.#getUrlFromPath();
+    }
     this.#methods = methods ?? this.#getMethodsFromPath();
   }
 
@@ -40,7 +48,7 @@ export default class MapItem {
   #getUrlFromPath() {
     const actionName = this.fileName.replace(/\..*$/, "").replace(/^_$/, "");
     const pPath = this.path.substr(0, this.path.length - this.fileName.length);
-    return (pPath + actionName).replace(/\/+$/, "");
+    return normalizePath(pPath + actionName);
   }
 
   [key: string]: any;
