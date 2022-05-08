@@ -1,9 +1,15 @@
-import { isFunction } from "@sfajs/core";
+import { isFunction, ObjectConstructor } from "@sfajs/core";
 import { writeFileSync, existsSync, lstatSync, readdirSync } from "fs";
 import path = require("path");
 import { Action } from "../action";
-import { MAP_FILE_NAME, ACTION_METADATA } from "../constant";
+import { MethodItem } from "../action/method-item";
+import {
+  MAP_FILE_NAME,
+  ACTION_METADATA,
+  ACTION_METHOD_METADATA,
+} from "../constant";
 import MapItem from "./map-item";
+import "reflect-metadata";
 
 export default class MapCreater {
   constructor(private readonly dir: string) {
@@ -23,7 +29,16 @@ export default class MapCreater {
   write(filePath: string = MAP_FILE_NAME): void {
     writeFileSync(
       path.join(process.cwd(), filePath.toString()),
-      JSON.stringify(this.map)
+      JSON.stringify(
+        this.map.map((item) => {
+          return {
+            ...item,
+            path: item.path,
+            url: item.url,
+            methods: item.methods,
+          };
+        })
+      )
     );
   }
 
@@ -53,12 +68,7 @@ export default class MapCreater {
       })
       .sort();
     for (let i = 0; i < files.length; i++) {
-      const filePath = path.join(this.dirPath, files[i]);
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const action = require(filePath).default;
-      const metadata = Reflect.getMetadata(ACTION_METADATA, action);
-      const mapItem = new MapItem(files[i].replace(/\\/g, "/"));
-      Object.assign(mapItem, metadata ?? {});
+      const mapItem = this.createMapItem(files[i]);
       result.push(mapItem);
     }
 
@@ -73,5 +83,33 @@ export default class MapCreater {
     }
 
     return result;
+  }
+
+  private createMapItem(file: string) {
+    const absoluteFilePath = path.join(this.dirPath, file);
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const action: ObjectConstructor<Action> = require(absoluteFilePath).default;
+    const metadata = Reflect.getMetadata(ACTION_METADATA, action) ?? {};
+
+    const decMethods: MethodItem[] = Reflect.getMetadata(
+      ACTION_METHOD_METADATA,
+      action
+    );
+    let mapItem: MapItem;
+    if (decMethods) {
+      const url = decMethods.filter((m) => !!m.url)[0]?.url;
+      const methods = decMethods.map((m) => m.method);
+      mapItem = new MapItem(file, url, methods);
+    } else {
+      mapItem = new MapItem(file);
+    }
+
+    Object.keys(metadata).forEach((key) => {
+      if (mapItem[key] == undefined) {
+        mapItem[key] = metadata[key];
+      }
+    });
+
+    return mapItem;
   }
 }

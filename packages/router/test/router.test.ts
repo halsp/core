@@ -35,13 +35,13 @@ test("startup not exist", async function () {
   });
 });
 
-test("shallow startup test", async function () {
-  const result = await new TestStartup(
+test("shallow startup test", async () => {
+  const res = await new TestStartup(
     new SfaRequest().setPath("/router").setMethod("POST")
   )
     .useRouter(routerCfg)
     .run();
-  expect(result.status).toBe(200);
+  expect(res.status).toBe(200);
 });
 
 test("deep startup test", async function () {

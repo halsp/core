@@ -22,7 +22,19 @@ import {
 } from "./constant";
 
 export { Action, MapItem, RouterConfig };
-export { SetActionMetadata } from "./decorators";
+export {
+  SetActionMetadata,
+  HttpCustom,
+  HttpConnect,
+  HttpDelete,
+  HttpGet,
+  HttpHead,
+  HttpOptions,
+  HttpPatch,
+  HttpPost,
+  HttpPut,
+  HttpTrace,
+} from "./decorators";
 export { setActionMetadata, getActionMetadata } from "./action";
 
 declare module "@sfajs/core" {
@@ -81,7 +93,7 @@ Object.defineProperty(SfaRequest.prototype, "params", {
     const params: QueryDict = {};
     const actionMetadata: MapItem = req.ctx.actionMetadata;
     if (actionMetadata.path.includes("^")) {
-      const mapPathStrs = actionMetadata.reqPath.split("/");
+      const mapPathStrs = actionMetadata.url.split("/");
       const reqPathStrs = req.path.split("/");
       for (
         let i = 0;

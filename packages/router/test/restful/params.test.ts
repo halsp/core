@@ -40,6 +40,5 @@ test(`get params one object`, async function () {
     })
     .useRouter(routerCfg)
     .run();
-  console.log("body", res.body);
   expect(res.status).toBe(200);
 });

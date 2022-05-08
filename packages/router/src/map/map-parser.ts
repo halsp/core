@@ -65,15 +65,15 @@ export default class MapParser {
   }
 
   private isPathMatched(mapItem: MapItem, methodIncluded: boolean): boolean {
-    let reqPath = this.ctx.req.path;
-    if (this.routerPrefix && reqPath.startsWith(this.routerPrefix)) {
-      reqPath = reqPath
-        .substring(this.routerPrefix.length, reqPath.length)
+    let reqUrl = this.ctx.req.path;
+    if (this.routerPrefix && reqUrl.startsWith(this.routerPrefix)) {
+      reqUrl = reqUrl
+        .substring(this.routerPrefix.length, reqUrl.length)
         .replace(/^\//, "");
     }
-    const reqUrlStrs = reqPath.toLowerCase().split("/");
-    const mapPathStrs = mapItem.reqPath.toLowerCase().split("/");
-    if (reqUrlStrs.length != mapPathStrs.length) return false;
+    const reqUrlStrs = reqUrl.toLowerCase().split("/");
+    const mapUrlStrs = mapItem.url.toLowerCase().split("/");
+    if (reqUrlStrs.length != mapUrlStrs.length) return false;
 
     if (methodIncluded && !mapItem.methods.includes(HttpMethod.any)) {
       const matchedMethod = HttpMethod.matched(this.ctx.req.method);
@@ -82,8 +82,8 @@ export default class MapParser {
       }
     }
 
-    for (let i = 0; i < mapPathStrs.length; i++) {
-      if (mapPathStrs[i] != reqUrlStrs[i] && !mapPathStrs[i].startsWith("^")) {
+    for (let i = 0; i < mapUrlStrs.length; i++) {
+      if (mapUrlStrs[i] != reqUrlStrs[i] && !mapUrlStrs[i].startsWith("^")) {
         return false;
       }
     }
@@ -98,7 +98,7 @@ export default class MapParser {
     mapItems.forEach((mapItem) => {
       pathsParts.push({
         mapItem: mapItem,
-        parts: mapItem.reqPath.toLowerCase().split("/"),
+        parts: mapItem.url.toLowerCase().split("/"),
       });
     });
 
@@ -136,9 +136,11 @@ export default class MapParser {
     if (existsSync(mapPath)) {
       const result: MapItem[] = JSON.parse(readFileSync(mapPath, "utf-8")).map(
         (m: MapItem) => {
-          const mapItem = new MapItem(m.path);
+          const mapItem = new MapItem(m.path, m.url, [...m.methods]);
           Object.keys(m).forEach((key) => {
-            mapItem[key] = m[key];
+            if (mapItem[key] == undefined) {
+              mapItem[key] = m[key];
+            }
           });
           return mapItem;
         }
