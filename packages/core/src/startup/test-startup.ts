@@ -3,8 +3,8 @@ import { Startup } from "./startup";
 
 export class TestStartup extends Startup {
   readonly #req?: SfaRequest;
-  constructor(req?: SfaRequest) {
-    super();
+  constructor(req?: SfaRequest, root?: string) {
+    super(root);
     this.#req = req;
   }
 

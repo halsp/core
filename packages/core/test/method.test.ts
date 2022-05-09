@@ -27,22 +27,26 @@ test("http methods matched", async function () {
 });
 
 test("custom methods", async function () {
-  HttpMethod.custom.push("CUSTOM1");
-  HttpMethod.custom.push("CUSTOM2");
+  process.env.CUSTOM_METHODS = "CUSTOM1,CUSTOM2";
 
-  expect(HttpMethod.matched("CUSTOM1")).toBe("CUSTOM1");
-  expect(HttpMethod.matched("Custom1")).toBe("CUSTOM1");
-  expect(HttpMethod.matched("custom1")).toBe("CUSTOM1");
-  expect(HttpMethod.matched("CUSTOM1")).not.toBe("CUSTOM");
+  expect(HttpMethod.matched("CUSTOM1", ["CUSTOM1", "CUSTOM2"])).toBe("CUSTOM1");
+  expect(HttpMethod.matched("Custom1", ["CUSTOM1", "CUSTOM2"])).toBe("CUSTOM1");
+  expect(HttpMethod.matched("custom1", ["CUSTOM1", "CUSTOM2"])).toBe("CUSTOM1");
 
-  expect(HttpMethod.matched("CUSTOM2")).toBe("CUSTOM2");
-  expect(HttpMethod.matched("Custom2")).toBe("CUSTOM2");
-  expect(HttpMethod.matched("custom2")).toBe("CUSTOM2");
-  expect(HttpMethod.matched("CUSTOM2")).not.toBe("CUSTOM");
+  expect(HttpMethod.matched("CUSTOM2", ["CUSTOM1", "CUSTOM2"])).toBe("CUSTOM2");
+  expect(HttpMethod.matched("Custom2", ["CUSTOM1", "CUSTOM2"])).toBe("CUSTOM2");
+  expect(HttpMethod.matched("custom2", ["CUSTOM1", "CUSTOM2"])).toBe("CUSTOM2");
 
-  expect(HttpMethod.matched("CUSTOM")).toBe(undefined);
-  expect(HttpMethod.matched("Custom")).toBe(undefined);
-  expect(HttpMethod.matched("custom")).toBe(undefined);
+  expect(HttpMethod.matched("CUSTOM", ["CUSTOM1", "CUSTOM2"])).toBeUndefined();
+  expect(HttpMethod.matched("Custom", ["CUSTOM1", "CUSTOM2"])).toBeUndefined();
+  expect(HttpMethod.matched("custom", ["CUSTOM1", "CUSTOM2"])).toBeUndefined();
+});
+
+test("custom methods null", async function () {
+  process.env.CUSTOM_METHODS = undefined;
+
+  expect(HttpMethod.matched("CUSTOM1")).toBeUndefined();
+  expect(HttpMethod.matched("CUSTOM2")).toBeUndefined();
 });
 
 test("equal", async function () {

@@ -10,9 +10,10 @@ export class HttpMethod {
   static readonly trace = "TRACE";
   static readonly connect = "CONNECT";
 
-  static readonly custom: string[] = [];
-
-  static matched(method?: string): string | undefined {
+  static matched(
+    method: string,
+    customMethods: string[] = []
+  ): string | undefined {
     if (!method) return undefined;
     switch (method.toUpperCase()) {
       case this.get:
@@ -26,8 +27,9 @@ export class HttpMethod {
       case this.connect:
       case this.any:
         return method.toUpperCase();
-      default:
-        return this.custom.filter((item) => this.equal(item, method))[0];
+      default: {
+        return customMethods.filter((item) => this.equal(item, method))[0];
+      }
     }
   }
 
