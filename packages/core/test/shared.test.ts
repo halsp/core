@@ -14,8 +14,8 @@ import {
   isSymbol,
   isUndefined,
   normalizePath,
-  TestStartup,
 } from "../src";
+import { TestStartup } from "./test-startup";
 
 test("isNil", async function () {
   expect(isNil(undefined)).toBeTruthy();

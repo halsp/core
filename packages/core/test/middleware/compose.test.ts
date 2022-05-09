@@ -1,4 +1,5 @@
-import { ComposeMiddleware, TestStartup } from "../../src";
+import { ComposeMiddleware } from "../../src";
+import { TestStartup } from "../test-startup";
 
 test("simpple middleware", async () => {
   let index = 0;

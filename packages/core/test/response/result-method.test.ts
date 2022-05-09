@@ -1,10 +1,10 @@
 import {
   Middleware,
-  TestStartup,
   HttpContext,
   SfaRequest,
   getReasonPhrase,
 } from "../../src";
+import { TestStartup } from "../test-startup";
 
 const normalMethod = [
   {

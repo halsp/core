@@ -1,4 +1,5 @@
-import { HttpContext, SfaRequest, TestStartup } from "../../src";
+import { HttpContext, SfaRequest } from "../../src";
+import { TestStartup } from "../test-startup";
 
 test("simple startup", async function () {
   let context!: HttpContext;

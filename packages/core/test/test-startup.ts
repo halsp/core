@@ -1,5 +1,4 @@
-import { HttpContext, SfaRequest, SfaResponse } from "../context";
-import { Startup } from "./startup";
+import { HttpContext, SfaRequest, SfaResponse, Startup } from "../src";
 
 export class TestStartup extends Startup {
   readonly #req?: SfaRequest;

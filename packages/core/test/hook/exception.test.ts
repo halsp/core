@@ -1,11 +1,11 @@
 import {
   NotFoundException,
-  TestStartup,
   getReasonPhrase,
   HookType,
   Middleware,
   BadRequestException,
 } from "../../src";
+import { TestStartup } from "../test-startup";
 
 function runSimpleTest(handle: boolean, afterNext: boolean) {
   class TestMiddleware extends Middleware {

@@ -1,4 +1,4 @@
-import { TestStartup } from "../../src";
+import { TestStartup } from "../test-startup";
 
 function runLoadConfig(success: boolean, type: string) {
   test(`load config ${type} ${success}`, async () => {
