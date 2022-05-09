@@ -3,8 +3,8 @@ import {
   HttpContext,
   SfaRequest,
   getReasonPhrase,
+  TestStartup,
 } from "../../src";
-import { TestStartup } from "../test-startup";
 
 const normalMethod = [
   {
@@ -152,15 +152,15 @@ async function testBody(body?: unknown) {
   }
 }
 
-test(`test handler func without body`, async function () {
+test(`test handler func without body`, async () => {
   await testBody();
 });
 
-test(`test handler func with body`, async function () {
+test(`test handler func with body`, async () => {
   await testBody("body");
 });
 
-test(`error message`, async function () {
+test(`error message`, async () => {
   {
     const res = await new TestStartup()
       .use(async (ctx) => {
@@ -175,7 +175,7 @@ test(`error message`, async function () {
   }
 });
 
-test(`http result created`, async function () {
+test(`http result created`, async () => {
   {
     const res = await new TestStartup()
       .use(async (ctx) => {
@@ -197,7 +197,7 @@ test(`http result created`, async function () {
   }
 });
 
-test(`http result noContent`, async function () {
+test(`http result noContent`, async () => {
   const res = await new TestStartup()
     .use(async (ctx) => {
       ctx.noContent();
@@ -237,7 +237,7 @@ for (let i = 0; i < msgMethods.length; i++) {
   {
     const md = new Md(true);
     md.invoke();
-    test(errorMsgTest, async function () {
+    test(errorMsgTest, async () => {
       const result = md.ctx.res;
       expect(result.status).toBe(methodItem.code);
       expect((result.body as any).message).toBe(errorMsgTest);
@@ -247,7 +247,7 @@ for (let i = 0; i < msgMethods.length; i++) {
   {
     const md = new Md(false);
     md.invoke();
-    test(errorMsgTest, async function () {
+    test(errorMsgTest, async () => {
       const result = md.ctx.res;
       expect(result.status).toBe(methodItem.code);
       expect((result.body as any).message).toBe(
@@ -261,7 +261,7 @@ const redirectCodes = [301, 302, 303, 307, 308, undefined];
 const location = "/test";
 for (let i = 0; i < redirectCodes.length; i++) {
   const code = redirectCodes[i] as 301 | 302 | 303 | 307 | 308 | undefined;
-  test(`${code} redirect`, async function () {
+  test(`${code} redirect`, async () => {
     const md = new RedirectMd(code, location);
     await md.invoke();
     expect(md.ctx.res.status).toBe(code || 302);

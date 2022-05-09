@@ -3,10 +3,10 @@ import {
   ForbiddenException,
   getReasonPhrase,
   StatusCodes,
+  TestStartup,
 } from "../../src";
-import { TestStartup } from "../test-startup";
 
-test("throw base error", async function () {
+test("throw base error", async () => {
   const startup = new TestStartup();
   startup.use(async () => {
     throw new Error("msg");
@@ -19,7 +19,7 @@ test("throw base error", async function () {
   });
 });
 
-test("throw base error with empty message", async function () {
+test("throw base error with empty message", async () => {
   const startup = new TestStartup();
   startup.use(async () => {
     throw new Error();
@@ -32,7 +32,7 @@ test("throw base error with empty message", async function () {
   });
 });
 
-test("throw error", async function () {
+test("throw error", async () => {
   const startup = new TestStartup();
   startup.use(async () => {
     throw new BadRequestException("msg");
@@ -49,7 +49,7 @@ function testPipeline(breakthrough?: boolean) {
   const title = `throw pipeline exception${
     breakthrough != false ? " with breakthrough" : ""
   }`;
-  test(title, async function () {
+  test(title, async () => {
     const startup = new TestStartup();
     startup
       .use(async (ctx, next) => {
@@ -81,7 +81,7 @@ testPipeline(true);
 testPipeline(false);
 testPipeline(undefined);
 
-test("throw default error", async function () {
+test("throw default error", async () => {
   const startup = new TestStartup();
   startup.use(async () => {
     throw {};
@@ -94,7 +94,7 @@ test("throw default error", async function () {
   });
 });
 
-test("throw string error", async function () {
+test("throw string error", async () => {
   const startup = new TestStartup();
   startup.use(async () => {
     throw "aaa";
@@ -107,7 +107,7 @@ test("throw string error", async function () {
   });
 });
 
-test("throw number error", async function () {
+test("throw number error", async () => {
   const startup = new TestStartup();
   startup.use(async () => {
     throw 123;
@@ -120,7 +120,7 @@ test("throw number error", async function () {
   });
 });
 
-test("throw object error", async function () {
+test("throw object error", async () => {
   const startup = new TestStartup();
   startup.use(async () => {
     throw { a: 1, message: "err" };
@@ -134,7 +134,7 @@ test("throw object error", async function () {
   });
 });
 
-test("throw null error", async function () {
+test("throw null error", async () => {
   const startup = new TestStartup();
   startup.use(async () => {
     throw null;
@@ -147,7 +147,7 @@ test("throw null error", async function () {
   });
 });
 
-test("throw boolean error", async function () {
+test("throw boolean error", async () => {
   const startup = new TestStartup();
   startup.use(async () => {
     throw false;

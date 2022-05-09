@@ -1,6 +1,6 @@
 import { SfaRequest } from "../../src";
 
-test("short path", async function () {
+test("short path", async () => {
   const req = new SfaRequest().setPath("/user");
   expect(req.path).toBe("user");
 
@@ -9,7 +9,7 @@ test("short path", async function () {
   expect(req2.path).toBe("user");
 });
 
-test("error path", async function () {
+test("error path", async () => {
   const req = new SfaRequest().setPath("");
   expect(req.path).toBe("");
 

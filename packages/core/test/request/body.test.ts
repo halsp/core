@@ -1,13 +1,13 @@
 import { SfaRequest } from "../../src";
 
-test("str body", async function () {
+test("str body", async () => {
   const req = new SfaRequest().setBody("test body");
 
   expect(typeof req.body).toBe("string");
   expect(req.body).toBe("test body");
 });
 
-test("obj body", async function () {
+test("obj body", async () => {
   const req = new SfaRequest().setBody({
     b1: 1,
     b2: "2",

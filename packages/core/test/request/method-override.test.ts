@@ -1,7 +1,6 @@
-import { SfaRequest } from "../../src";
-import { TestStartup } from "../test-startup";
+import { SfaRequest, TestStartup } from "../../src";
 
-test("method override", async function () {
+test("method override", async () => {
   const req = new SfaRequest()
     .setMethod("PATCH")
     .setHeader("X-HTTP-Method-Override", "POST");
@@ -10,7 +9,7 @@ test("method override", async function () {
   expect(req.overrideMethod).toBe("PATCH");
 });
 
-test("method override upper case", async function () {
+test("method override upper case", async () => {
   const req = new SfaRequest()
     .setMethod("PATCH")
     .setHeader("X-HTTP-Method-Override".toUpperCase(), "POST");
@@ -19,7 +18,7 @@ test("method override upper case", async function () {
   expect(req.overrideMethod).toBe("PATCH");
 });
 
-test("method override lower case", async function () {
+test("method override lower case", async () => {
   const req = new SfaRequest()
     .setMethod("PATCH")
     .setHeader("X-HTTP-Method-Override".toLowerCase(), "POST");
@@ -29,7 +28,7 @@ test("method override lower case", async function () {
   expect(req.overrideMethod).toBe("PATCH");
 });
 
-test("method override array", async function () {
+test("method override array", async () => {
   const req = new SfaRequest()
     .setMethod("PATCH")
     .setHeader("X-HTTP-Method-Override".toLowerCase(), ["POST"]);
@@ -38,7 +37,7 @@ test("method override array", async function () {
   expect(req.overrideMethod).toBe("PATCH");
 });
 
-test("method override without value", async function () {
+test("method override without value", async () => {
   const req = new SfaRequest()
     .setMethod("PATCH")
     .setHeader("X-HTTP-Method-Override".toLowerCase(), "");
@@ -46,7 +45,7 @@ test("method override without value", async function () {
   expect(req.overrideMethod).toBe(undefined);
 });
 
-test(`method override request`, async function () {
+test(`method override request`, async () => {
   const result = await new TestStartup(
     new SfaRequest().setMethod("PATCH".toUpperCase())
   )
@@ -61,7 +60,7 @@ test(`method override request`, async function () {
   expect(result.body.method).toBe("GET");
 });
 
-test("empty method", async function () {
+test("empty method", async () => {
   const req = new SfaRequest()
     .setMethod(null as unknown as string)
     .setHeader("X-HTTP-Method-Override".toLowerCase(), ["POST"]);

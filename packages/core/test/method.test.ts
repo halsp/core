@@ -1,6 +1,6 @@
 import { HttpMethod } from "../src";
 
-test("http methods", async function () {
+test("http methods", async () => {
   expect(HttpMethod.post.toUpperCase()).toBe("POST");
   expect(HttpMethod.get.toUpperCase()).toBe("GET");
   expect(HttpMethod.any.toUpperCase()).toBe("ANY");
@@ -12,7 +12,7 @@ test("http methods", async function () {
   expect(HttpMethod.put.toUpperCase()).toBe("PUT");
 });
 
-test("http methods matched", async function () {
+test("http methods matched", async () => {
   expect(HttpMethod.matched("")).toBe(undefined);
   expect(HttpMethod.matched("get")).toBe("GET");
   expect(HttpMethod.matched("Post")).toBe("POST");
@@ -26,7 +26,7 @@ test("http methods matched", async function () {
   expect(HttpMethod.matched("CONNECT")).toBe("CONNECT");
 });
 
-test("custom methods", async function () {
+test("custom methods", async () => {
   process.env.CUSTOM_METHODS = "CUSTOM1,CUSTOM2";
 
   expect(HttpMethod.matched("CUSTOM1", ["CUSTOM1", "CUSTOM2"])).toBe("CUSTOM1");
@@ -42,14 +42,14 @@ test("custom methods", async function () {
   expect(HttpMethod.matched("custom", ["CUSTOM1", "CUSTOM2"])).toBeUndefined();
 });
 
-test("custom methods null", async function () {
+test("custom methods null", async () => {
   process.env.CUSTOM_METHODS = undefined;
 
   expect(HttpMethod.matched("CUSTOM1")).toBeUndefined();
   expect(HttpMethod.matched("CUSTOM2")).toBeUndefined();
 });
 
-test("equal", async function () {
+test("equal", async () => {
   expect(HttpMethod.equal(undefined, undefined)).toBeTruthy();
   expect(HttpMethod.equal("", "")).toBeTruthy();
   expect(HttpMethod.equal("", undefined)).toBeTruthy();

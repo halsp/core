@@ -6,7 +6,7 @@ class CustomStartup extends Startup {
   }
 }
 
-test("custom result handler", async function () {
+test("custom result handler", async () => {
   const res = await new CustomStartup()
     .use((ctx) => {
       ctx.ok({

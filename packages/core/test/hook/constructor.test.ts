@@ -1,5 +1,4 @@
-import { Middleware, HookType } from "../../src";
-import { TestStartup } from "../test-startup";
+import { Middleware, HookType, TestStartup } from "../../src";
 
 class TestMiddleware1 extends Middleware {
   constructor(private readonly num: number) {
@@ -23,7 +22,7 @@ class TestMiddleware2 extends Middleware {
   }
 }
 
-test("constructor hook", async function () {
+test("constructor hook", async () => {
   const res = await new TestStartup()
     .hook<TestMiddleware1>(HookType.Constructor, (ctx, md) => {
       if (md == TestMiddleware1) {
@@ -53,7 +52,7 @@ test("constructor hook", async function () {
   expect(res.status).toBe(200);
 });
 
-test("constructor hook error", async function () {
+test("constructor hook error", async () => {
   const res = await new TestStartup()
     .add(TestMiddleware1)
     .use((ctx) => ctx.ok())

@@ -1,7 +1,6 @@
-import { StatusCodes } from "../../src";
-import { TestStartup } from "../test-startup";
+import { StatusCodes, TestStartup } from "../../src";
 
-test("response error message", async function () {
+test("response error message", async () => {
   const result = await new TestStartup()
     .use(async (ctx) => {
       ctx.res

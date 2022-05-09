@@ -1,12 +1,13 @@
-import { TestStartup } from "../test-startup";
+import { SfaRequest, TestStartup } from "../../src";
 
 function runLoadConfig(success: boolean, type: string) {
   test(`load config ${type} ${success}`, async () => {
-    const startup = new TestStartup(undefined, `test/config/${type}`).use(
-      (ctx) => {
-        ctx.ok(ctx.config);
-      }
-    );
+    const startup = new TestStartup(
+      new SfaRequest(),
+      `test/config/${type}`
+    ).use((ctx) => {
+      ctx.ok(ctx.config);
+    });
     const res = await startup.run();
 
     expect(res.status).toBe(200);

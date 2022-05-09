@@ -1,6 +1,6 @@
-import { TestStartup } from "../test-startup";
+import { TestStartup } from "../../src";
 
-test("simpple middleware", async function () {
+test("simpple middleware", async () => {
   const startup = new TestStartup()
     .use(async (ctx, next) => {
       ctx.res.setHeader("mdw1", "mdw1");

@@ -8,7 +8,7 @@ class CustomHeader extends SfaHeader {
   readonly headers: HeadersDict = {};
 }
 
-test("custom sfa headers", async function () {
+test("custom sfa headers", async () => {
   const header = new CustomHeader()
     .setHeader("h1", "1")
     .setHeaders({

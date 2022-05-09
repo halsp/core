@@ -14,10 +14,10 @@ import {
   isSymbol,
   isUndefined,
   normalizePath,
+  TestStartup,
 } from "../src";
-import { TestStartup } from "./test-startup";
 
-test("isNil", async function () {
+test("isNil", async () => {
   expect(isNil(undefined)).toBeTruthy();
   expect(isNil(null)).toBeTruthy();
 
@@ -27,7 +27,7 @@ test("isNil", async function () {
   expect(isNil({})).toBeFalsy();
 });
 
-test("isUndefined", async function () {
+test("isUndefined", async () => {
   expect(isUndefined(undefined)).toBeTruthy();
 
   expect(isUndefined(null)).toBeFalsy();
@@ -35,7 +35,7 @@ test("isUndefined", async function () {
   expect(isUndefined(0)).toBeFalsy();
 });
 
-test("isNull", async function () {
+test("isNull", async () => {
   expect(isNull(null)).toBeTruthy();
 
   expect(isNull(undefined)).toBeFalsy();
@@ -43,7 +43,7 @@ test("isNull", async function () {
   expect(isNull(0)).toBeFalsy();
 });
 
-test("isFunction", async function () {
+test("isFunction", async () => {
   expect(isFunction(() => 0)).toBeTruthy();
 
   expect(isFunction(undefined)).toBeFalsy();
@@ -51,7 +51,7 @@ test("isFunction", async function () {
   expect(isFunction({})).toBeFalsy();
 });
 
-test("isObject", async function () {
+test("isObject", async () => {
   expect(isObject({})).toBeTruthy();
   expect(isObject([1, 2])).toBeTruthy();
   expect(isObject(new TestStartup())).toBeTruthy();
@@ -62,7 +62,7 @@ test("isObject", async function () {
   expect(isObject(undefined)).toBeFalsy();
 });
 
-test("isPlainObject", async function () {
+test("isPlainObject", async () => {
   expect(isPlainObject({})).toBeTruthy();
   expect(isPlainObject({ a: "a" })).toBeTruthy();
   expect(isPlainObject(Object.create(null))).toBeTruthy();
@@ -82,7 +82,7 @@ test("isPlainObject", async function () {
   expect(isPlainObject(new TestStartup())).toBeFalsy();
 });
 
-test("isString", async function () {
+test("isString", async () => {
   expect(isString("a")).toBeTruthy();
 
   expect(isString({})).toBeFalsy();
@@ -92,7 +92,7 @@ test("isString", async function () {
   expect(isString(new String("a"))).toBeFalsy();
 });
 
-test("isSymbol", async function () {
+test("isSymbol", async () => {
   expect(isSymbol(Symbol("a"))).toBeTruthy();
 
   expect(isSymbol(null)).toBeFalsy();
@@ -101,7 +101,7 @@ test("isSymbol", async function () {
   expect(isSymbol("a")).toBeFalsy();
 });
 
-test("isNumber", async function () {
+test("isNumber", async () => {
   expect(isNumber(0)).toBeTruthy();
   expect(isNumber(0.1)).toBeTruthy();
   expect(isNumber(3.14)).toBeTruthy();
@@ -118,7 +118,7 @@ test("isNumber", async function () {
   expect(isNumber("0")).toBeFalsy();
 });
 
-test("isFiniteNumber", async function () {
+test("isFiniteNumber", async () => {
   expect(isFiniteNumber(0)).toBeTruthy();
   expect(isFiniteNumber(0.1)).toBeTruthy();
   expect(isFiniteNumber(3.14)).toBeTruthy();
@@ -135,7 +135,7 @@ test("isFiniteNumber", async function () {
   expect(isFiniteNumber("0")).toBeFalsy();
 });
 
-test("isArrayEmpty", async function () {
+test("isArrayEmpty", async () => {
   expect(isArrayEmpty([])).toBeTruthy();
   expect(isArrayEmpty(null)).toBeTruthy();
   expect(isArrayEmpty(undefined)).toBeTruthy();
@@ -144,7 +144,7 @@ test("isArrayEmpty", async function () {
   expect(isArrayEmpty(["0", "1"])).toBeFalsy();
 });
 
-test("isNilOrBlank", async function () {
+test("isNilOrBlank", async () => {
   expect(isNilOrBlank("")).toBeTruthy();
   expect(isNilOrBlank(" ")).toBeTruthy();
   expect(isNilOrBlank("     ")).toBeTruthy();
@@ -155,7 +155,7 @@ test("isNilOrBlank", async function () {
   expect(isNilOrBlank("a")).toBeFalsy();
 });
 
-test("addLeadingSlash ", async function () {
+test("addLeadingSlash ", async () => {
   expect(addLeadingSlash("a")).toBe("/a");
   expect(addLeadingSlash("/a")).toBe("/a");
 
@@ -164,7 +164,7 @@ test("addLeadingSlash ", async function () {
   expect(addLeadingSlash(undefined)).toBe("/");
 });
 
-test("normalizePath ", async function () {
+test("normalizePath ", async () => {
   expect(normalizePath("path/")).toBe("path");
   expect(normalizePath("path///")).toBe("path");
   expect(normalizePath("/p/path///")).toBe("p/path");
@@ -179,7 +179,7 @@ test("normalizePath ", async function () {
   expect(normalizePath(undefined)).toBe("");
 });
 
-test("isClass", async function () {
+test("isClass", async () => {
   expect(isClass(TestStartup)).toBeTruthy();
 
   expect(isClass({})).toBeFalsy();

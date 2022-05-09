@@ -4,8 +4,8 @@ import {
   HookType,
   Middleware,
   BadRequestException,
+  TestStartup,
 } from "../../src";
-import { TestStartup } from "../test-startup";
 
 function runSimpleTest(handle: boolean, afterNext: boolean) {
   class TestMiddleware extends Middleware {

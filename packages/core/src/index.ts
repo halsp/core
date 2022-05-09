@@ -68,7 +68,7 @@ export {
   SfaHeader,
 } from "./context";
 
-export { Startup } from "./startup";
+export { Startup, TestStartup } from "./startup";
 
 export { Middleware, ComposeMiddleware, HookType } from "./middlewares";
 

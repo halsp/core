@@ -1,6 +1,6 @@
 import { SfaResponse } from "../../src";
 
-test(`response`, async function () {
+test(`response`, async () => {
   const res = new SfaResponse(201, "", {
     h: 1,
   });

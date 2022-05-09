@@ -8,7 +8,7 @@ class CustomResultHandler extends ResultHandler {
   readonly res = new SfaResponse();
 }
 
-test("custom result handler", async function () {
+test("custom result handler", async () => {
   const result = new CustomResultHandler().ok({
     msg: "ok",
   });

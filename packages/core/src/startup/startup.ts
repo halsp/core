@@ -1,4 +1,4 @@
-import { SfaResponse, HttpContext } from "./context";
+import { SfaResponse, HttpContext } from "../context";
 import {
   Middleware,
   MdHook,
@@ -8,12 +8,12 @@ import {
   invokeMiddlewares,
   MiddlewareConstructor,
   LambdaMiddleware,
-} from "./middlewares";
+} from "../middlewares";
 import { Stream } from "stream";
 import * as mime from "mime-types";
-import { isString, ObjectConstructor } from "./utils";
-import { HttpException } from "./exceptions";
-import { loadConfig, SfaConfig } from "./sfa-config";
+import { isString, ObjectConstructor } from "../utils";
+import { HttpException } from "../exceptions";
+import { loadConfig, SfaConfig } from "../sfa-config";
 
 export abstract class Startup {
   constructor() {

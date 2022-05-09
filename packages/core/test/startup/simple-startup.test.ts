@@ -1,7 +1,6 @@
-import { HttpContext, SfaRequest } from "../../src";
-import { TestStartup } from "../test-startup";
+import { HttpContext, SfaRequest, TestStartup } from "../../src";
 
-test("simple startup", async function () {
+test("simple startup", async () => {
   let context!: HttpContext;
   await new TestStartup()
     .use(async (ctx) => {
@@ -14,13 +13,13 @@ test("simple startup", async function () {
   expect(context.res).not.toBeUndefined();
 });
 
-test("without md", async function () {
+test("without md", async () => {
   const res = await new TestStartup().run(new SfaRequest());
 
   expect(res).not.toBeUndefined();
 });
 
-test("requst/response ctx", async function () {
+test("requst/response ctx", async () => {
   const startup = new TestStartup().use((ctx) => {
     expect(ctx).toBe(ctx.res.ctx);
     expect(ctx).toBe(ctx.req.ctx);

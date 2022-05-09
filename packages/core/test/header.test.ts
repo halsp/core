@@ -7,7 +7,7 @@ import {
   StatusCodes,
 } from "../src";
 
-test("setHeader", async function () {
+test("setHeader", async () => {
   const req = new SfaResponse()
     .setHeader("h1", "1")
     .setHeader("h2", "2")
@@ -17,7 +17,7 @@ test("setHeader", async function () {
   expectHeaders(req.headers);
 });
 
-test("setHeaders", async function () {
+test("setHeaders", async () => {
   const req = new SfaResponse().setHeaders({
     h1: "1",
     h2: "2",
@@ -26,7 +26,7 @@ test("setHeaders", async function () {
   expectHeaders(req.headers);
 });
 
-test("removeHeader", async function () {
+test("removeHeader", async () => {
   const res = new SfaResponse()
     .setHeader("h1", "1")
     .setHeader("h2", "2")
@@ -46,7 +46,7 @@ function expectHeaders(headers: HeadersDict) {
   expect(headers.h5).toBe(undefined);
 }
 
-test("array headers", async function () {
+test("array headers", async () => {
   const res = new SfaResponse().setHeaders({
     h1: 1,
     h2: ["2.1", 2.2],
@@ -58,7 +58,7 @@ test("array headers", async function () {
   expect(res.headers.h3).toBeUndefined();
 });
 
-test("append header", async function () {
+test("append header", async () => {
   const res = new SfaResponse()
     .appendHeader("h1", 1)
     .appendHeader("h1", "2")

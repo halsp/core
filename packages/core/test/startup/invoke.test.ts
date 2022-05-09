@@ -1,7 +1,7 @@
-import { TestStartup } from "../test-startup";
+import { SfaRequest, TestStartup } from "../../src";
 
-test("invoke multiple", async function () {
-  const startup = new TestStartup()
+test("invoke multiple", async () => {
+  const startup = new TestStartup(new SfaRequest())
     .use(async (ctx, next) => {
       if (!ctx.res.body) {
         ctx.res.body = 0;
@@ -18,4 +18,13 @@ test("invoke multiple", async function () {
   expect(res.body).toBe(2);
   res = await startup.run();
   expect(res.body).toBe(2);
+});
+
+test("root", async () => {
+  const startup = new TestStartup("test").use((ctx) => {
+    ctx.ok();
+  });
+  const res = await startup.run();
+
+  expect(res.status).toBe(200);
 });

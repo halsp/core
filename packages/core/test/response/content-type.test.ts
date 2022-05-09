@@ -1,7 +1,7 @@
 import { createReadStream, ReadStream } from "fs";
-import { TestStartup } from "../test-startup";
+import { TestStartup } from "../../src";
 
-test(`buffer`, async function () {
+test(`buffer`, async () => {
   const res = await new TestStartup()
     .use(async (ctx) => {
       ctx.ok(Buffer.from("sfa"));
@@ -15,7 +15,7 @@ test(`buffer`, async function () {
   expect(res.body).toEqual(Buffer.from("sfa"));
 });
 
-test(`stream`, async function () {
+test(`stream`, async () => {
   const res = await new TestStartup()
     .use(async (ctx) => {
       ctx.ok(createReadStream("./LICENSE"));
@@ -27,7 +27,7 @@ test(`stream`, async function () {
   expect(res.body instanceof ReadStream).toBeTruthy();
 });
 
-test(`html`, async function () {
+test(`html`, async () => {
   const res = await new TestStartup()
     .use(async (ctx) => {
       ctx.ok("<div>sfa</div>");
@@ -41,7 +41,7 @@ test(`html`, async function () {
   expect(res.body).toBe("<div>sfa</div>");
 });
 
-test(`json`, async function () {
+test(`json`, async () => {
   const res = await new TestStartup()
     .use(async (ctx) => {
       ctx.ok({
@@ -63,7 +63,7 @@ test(`json`, async function () {
   });
 });
 
-test(`array`, async function () {
+test(`array`, async () => {
   const res = await new TestStartup()
     .use(async (ctx) => {
       ctx.ok([1, 2]);
@@ -77,7 +77,7 @@ test(`array`, async function () {
   expect(res.body).toEqual([1, 2]);
 });
 
-test(`string set type`, async function () {
+test(`string set type`, async () => {
   const res = await new TestStartup()
     .use(async (ctx) => {
       ctx
@@ -92,7 +92,7 @@ test(`string set type`, async function () {
   expect(res.body).toBe("sfa");
 });
 
-test(`josn set type`, async function () {
+test(`josn set type`, async () => {
   const res = await new TestStartup()
     .use(async (ctx) => {
       ctx
@@ -111,7 +111,7 @@ test(`josn set type`, async function () {
   });
 });
 
-test(`buffer set type`, async function () {
+test(`buffer set type`, async () => {
   const res = await new TestStartup()
     .use(async (ctx) => {
       ctx
@@ -126,7 +126,7 @@ test(`buffer set type`, async function () {
   expect(res.body).toEqual(Buffer.from("sfa"));
 });
 
-test(`stream set type`, async function () {
+test(`stream set type`, async () => {
   const res = await new TestStartup()
     .use(async (ctx) => {
       ctx

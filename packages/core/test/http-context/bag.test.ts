@@ -1,6 +1,6 @@
 import { HttpContext, SfaRequest } from "../../src";
 
-test("bag", async function () {
+test("bag", async () => {
   const context = new HttpContext(new SfaRequest());
   context.bag("BAG1", "BAG1");
   context.bag("BAG2", { bag2: "BAG2" });

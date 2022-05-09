@@ -1,7 +1,6 @@
-import { Middleware, Dict } from "../../src";
-import { TestStartup } from "../test-startup";
+import { Middleware, Dict, TestStartup } from "../../src";
 
-test("middleware success", async function () {
+test("middleware success", async () => {
   const stepResult: Dict<number> = {
     step: 0,
   };
