@@ -46,7 +46,6 @@ export function loadConfig(root: string = process.cwd()): SfaConfig {
   }
 
   const module = getModuleFromString(code, "sfa.config.js");
-  console.log("module", module);
   if (module.default) {
     return module.default();
   } else if (module.exports) {
