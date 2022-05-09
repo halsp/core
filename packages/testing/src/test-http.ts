@@ -12,7 +12,7 @@ export class TestHttp extends SfaHttp {
     func: (
       request: supertest.SuperTest<supertest.Test>
     ) => supertest.Test | Promise<supertest.Test>,
-    port = 80,
+    port = 2333,
     hostName?: string
   ): Promise<supertest.Response> {
     const server = await this.#listen(port, hostName);
