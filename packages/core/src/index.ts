@@ -31,8 +31,9 @@ export {
   isClass,
   normalizePath,
   addLeadingSlash,
-  HttpMethod,
 } from "./utils";
+
+export { HttpMethod } from "./http-method";
 
 export {
   HttpException,
