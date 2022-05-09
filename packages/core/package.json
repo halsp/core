@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/core",
-  "version": "1.3.7",
+  "version": "1.4.0-beta.2",
   "description": "Lightweight and flexible web app framework",
   "homepage": "https://github.com/sfajs/sfa",
   "repository": {

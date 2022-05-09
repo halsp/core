@@ -16,11 +16,11 @@ import { HttpException } from "./exceptions";
 import { loadConfig, SfaConfig } from "./sfa-config";
 
 export abstract class Startup {
-  constructor(root?: string) {
-    this.#config = loadConfig(root);
+  constructor() {
+    this.#config = loadConfig(this.constructor["CUSTOM_CONFIG_ROOT"]);
   }
 
-  readonly #config: SfaConfig;
+  #config: SfaConfig;
   get config(): SfaConfig {
     return this.#config;
   }
