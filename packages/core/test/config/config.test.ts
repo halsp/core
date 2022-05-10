@@ -1,22 +1,14 @@
-import { SfaRequest, TestStartup } from "../../src";
+import { loadConfig, SfaRequest, TestStartup } from "../../src";
 
-function runLoadConfig(success: boolean, type: string) {
-  test(`load config ${type} ${success}`, async () => {
-    const startup = new TestStartup(
-      new SfaRequest(),
-      `test/config/${type}`
-    ).use((ctx) => {
-      ctx.ok(ctx.config);
-    });
-    const res = await startup.run();
-
-    expect(res.status).toBe(200);
-    if (success) {
-      expect(res.body).toEqual({
-        customMethods: ["CUSTOM1", "CUSTOM2"],
+function runLoadConfig(exist: boolean, type: string) {
+  test(`load config ${type} ${exist}`, async () => {
+    const config = loadConfig(`test/config/${type}`);
+    if (exist) {
+      expect(config).toEqual({
+        customMethods: [`CUSTOM${type.toUpperCase()}`],
       });
     } else {
-      expect(res.body).toEqual({});
+      expect(config).toEqual({});
     }
   });
 }
@@ -24,3 +16,17 @@ function runLoadConfig(success: boolean, type: string) {
 runLoadConfig(true, "ts");
 runLoadConfig(true, "js");
 runLoadConfig(false, "err");
+
+test(`startup config`, async () => {
+  const startup = new TestStartup(new SfaRequest(), `test/config/ts`).use(
+    (ctx) => {
+      ctx.ok(ctx.config);
+    }
+  );
+  const res = await startup.run();
+
+  expect(res.status).toBe(200);
+  expect(res.body).toEqual({
+    customMethods: ["CUSTOMTS"],
+  });
+});

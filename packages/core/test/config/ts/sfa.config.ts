@@ -2,5 +2,5 @@
 const { defineConfig } = require("../src");
 
 export default defineConfig({
-  customMethods: ["CUSTOM1", "CUSTOM2"],
+  customMethods: ["CUSTOMTS"],
 });
