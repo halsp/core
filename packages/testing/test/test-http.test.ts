@@ -8,9 +8,7 @@ test("test http", async () => {
         path: ctx.req.path,
       });
     })
-    .run((request) => {
-      return request.get("/url");
-    });
+    .run((request) => request.get("/url"));
 
   expect(res.body).toEqual({
     method: "GET",
@@ -34,7 +32,7 @@ test("test http port occupy", async () => {
         .run((request2) => request2.get("/"));
       expect(res2.status).toBe(200);
 
-      return request.get("/") as any;
+      return request.get("/");
     });
 
   expect(res1.status).toBe(200);

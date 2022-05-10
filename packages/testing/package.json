@@ -9,7 +9,8 @@
   },
   "keywords": [
     "sfa",
-    "sfajs"
+    "sfajs",
+    "test"
   ],
   "bugs": {
     "url": "https://github.com/sfajs/testing/issues",
@@ -26,7 +27,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@sfajs/core": "^1.4.0-beta.1",
+    "@sfajs/core": "^1.4.0",
     "@sfajs/http": "^1.0.10",
     "@types/shelljs": "^0.8.11",
     "@types/supertest": "^2.0.12",
@@ -37,8 +38,8 @@
   "devDependencies": {
     "@types/jest": "^27.5.0",
     "@types/node": "^17.0.31",
-    "@typescript-eslint/eslint-plugin": "^5.22.0",
-    "@typescript-eslint/parser": "^5.22.0",
+    "@typescript-eslint/eslint-plugin": "^5.23.0",
+    "@typescript-eslint/parser": "^5.23.0",
     "codecov": "^3.8.3",
     "eslint": "^8.15.0",
     "eslint-config-prettier": "^8.5.0",

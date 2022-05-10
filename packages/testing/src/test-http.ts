@@ -1,5 +1,5 @@
 import { SfaHttp } from "@sfajs/http";
-import supertest from "supertest";
+import supertest, { Response, SuperTest, Test } from "supertest";
 import net from "net";
 
 export class TestHttp extends SfaHttp {
@@ -9,12 +9,10 @@ export class TestHttp extends SfaHttp {
   }
 
   async run(
-    func: (
-      request: supertest.SuperTest<supertest.Test>
-    ) => supertest.Test | Promise<supertest.Test>,
+    func: (request: SuperTest<Test>) => Response | Promise<Response>,
     port = 2333,
     hostName?: string
-  ): Promise<supertest.Response> {
+  ): Promise<Response> {
     const server = await this.#listen(port, hostName);
     try {
       return await func(supertest(server));
