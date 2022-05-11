@@ -1,7 +1,7 @@
 import { SfaHttp } from "../src";
 import request from "supertest";
 
-test("end ahead", async function () {
+test("end ahead", async () => {
   const server = new SfaHttp()
     .use(async (ctx, next) => {
       ctx.httpRes.end();
@@ -18,7 +18,7 @@ test("end ahead", async function () {
   expect(res.body).not.toBe("BODY");
 });
 
-test("writeHead", async function () {
+test("writeHead", async () => {
   const server = new SfaHttp()
     .use(async (ctx, next) => {
       ctx.httpRes.writeHead(200);

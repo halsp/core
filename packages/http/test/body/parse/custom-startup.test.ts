@@ -38,7 +38,7 @@ class TestHttpStartup extends HttpBodyPraserStartup {
   };
 }
 
-test("custom startup", async function () {
+test("custom startup", async () => {
   const server = new TestHttpStartup().listen();
   const res = await request(server).post("");
   server.close();

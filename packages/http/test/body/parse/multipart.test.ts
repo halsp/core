@@ -3,7 +3,7 @@ import request from "supertest";
 import { File } from "formidable";
 import { readFileSync } from "fs";
 
-test("useHttpMultipartBody", async function () {
+test("useHttpMultipartBody", async () => {
   const server = new SfaHttp()
     .useHttpMultipartBody()
     .use(async (ctx) => {
@@ -37,7 +37,7 @@ test("useHttpMultipartBody", async function () {
   ).toBeTruthy();
 });
 
-test("on file begin", async function () {
+test("on file begin", async () => {
   const server = new SfaHttp()
     .useHttpMultipartBody(undefined, (ctx, formName, file) => {
       ctx.res.setHeader("file-name", file.originalFilename ?? "");
@@ -63,7 +63,7 @@ test("on file begin", async function () {
   expect(res.text).toBe("LICENSE");
 });
 
-test("prase file error without callback", async function () {
+test("prase file error without callback", async () => {
   const server = new SfaHttp()
     .useHttpMultipartBody()
     .use(async (ctx) => {
@@ -90,7 +90,7 @@ test("prase file error without callback", async function () {
   expect(res.text).toEqual("");
 });
 
-test("prase file error", async function () {
+test("prase file error", async () => {
   const server = new SfaHttp()
     .useHttpMultipartBody(undefined, undefined, async (ctx, err) => {
       ctx.res.setHeader("prase-err", err.message);

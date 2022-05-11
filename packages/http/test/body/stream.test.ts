@@ -2,7 +2,7 @@ import { SfaHttp } from "../../src";
 import request from "supertest";
 import { createReadStream } from "fs";
 
-test("stream body", async function () {
+test("stream body", async () => {
   const server = new SfaHttp()
     .use(async (ctx) => {
       ctx.ok(createReadStream("./LICENSE"));
@@ -17,7 +17,7 @@ test("stream body", async function () {
   expect(buffer.toString().startsWith("MIT License")).toBeTruthy();
 });
 
-test("stream body explicit type", async function () {
+test("stream body explicit type", async () => {
   const server = new SfaHttp()
     .use(async (ctx) => {
       ctx.res.setHeader("content-type", "application/octet-stream");

@@ -1,7 +1,8 @@
 import { SfaHttp } from "../src";
 import request from "supertest";
+import { lisetnTypeFn } from "../src/http.startup";
 
-test("http", async function () {
+test("http", async () => {
   const server = new SfaHttp()
     .use(async (ctx) => {
       ctx.ok({
@@ -17,4 +18,8 @@ test("http", async function () {
     content: "BODY",
   });
   server.close();
+});
+
+test("lisetnTypeFn", async () => {
+  expect(typeof lisetnTypeFn()).toBe("function");
 });

@@ -1,7 +1,7 @@
 import { SfaHttp } from "../../src";
 import request from "supertest";
 
-test("text body", async function () {
+test("text body", async () => {
   const server = new SfaHttp()
     .use(async (ctx) => {
       ctx.ok("BODY");
@@ -15,7 +15,7 @@ test("text body", async function () {
   expect(res.text).toBe("BODY");
 });
 
-test("text body explicit type", async function () {
+test("text body explicit type", async () => {
   const server = new SfaHttp()
     .use(async (ctx) => {
       ctx.res.setHeader("content-type", "text/plain");
@@ -31,7 +31,7 @@ test("text body explicit type", async function () {
   expect(res.text).toBe("BODY");
 });
 
-test("html body", async function () {
+test("html body", async () => {
   const server = new SfaHttp()
     .use(async (ctx) => {
       ctx.ok("<div>BODY</div>");
@@ -46,7 +46,7 @@ test("html body", async function () {
 });
 
 function runTextReturn(headersSent: boolean) {
-  test(`return text headersSent: ${headersSent}`, async function () {
+  test(`return text headersSent: ${headersSent}`, async () => {
     const server = new SfaHttp()
       .use(async (ctx) => {
         if (headersSent) {

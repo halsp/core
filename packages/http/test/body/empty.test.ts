@@ -1,7 +1,7 @@
 import { SfaHttp } from "../../src";
 import request from "supertest";
 
-test("empty body", async function () {
+test("empty body", async () => {
   const server = new SfaHttp()
     .use(async (ctx) => {
       ctx.ok(undefined);

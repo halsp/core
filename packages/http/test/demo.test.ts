@@ -1,7 +1,7 @@
 import * as shell from "shelljs";
 import * as fs from "fs";
 
-test("demo", async function () {
+test("demo", async () => {
   shell.cd("./demo");
   try {
     const execResult = shell.exec(`npm run build`);

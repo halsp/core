@@ -1,7 +1,7 @@
 import { SfaHttp } from "../../../src";
 import request from "supertest";
 
-test("useHttpTextBody", async function () {
+test("useHttpTextBody", async () => {
   const server = new SfaHttp()
     .useHttpTextBody()
     .use(async (ctx) => {
@@ -19,7 +19,7 @@ test("useHttpTextBody", async function () {
   expect(res.headers["content-type"]).toBe("text/plain; charset=utf-8");
 });
 
-test("error type", async function () {
+test("error type", async () => {
   const server = new SfaHttp()
     .useHttpTextBody()
     .use(async (ctx) => {

@@ -1,7 +1,7 @@
 import { SfaHttp } from "../../src";
 import request from "supertest";
 
-test("buffer body explicit type", async function () {
+test("buffer body explicit type", async () => {
   const server = new SfaHttp()
     .use(async (ctx) => {
       ctx.res.setHeader("content-type", "application/octet-stream");
@@ -17,7 +17,7 @@ test("buffer body explicit type", async function () {
   expect(res.body).toEqual(Buffer.from("BODY", "utf-8"));
 });
 
-test("buffer body", async function () {
+test("buffer body", async () => {
   const server = new SfaHttp()
     .use(async (ctx) => {
       ctx.ok(Buffer.from("BODY", "utf-8"));

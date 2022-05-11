@@ -1,7 +1,7 @@
 import { SfaHttp } from "../../../src";
 import request from "supertest";
 
-test("useHttpJsonBody", async function () {
+test("useHttpJsonBody", async () => {
   const server = new SfaHttp()
     .useHttpJsonBody()
     .use(async (ctx) => {
@@ -20,7 +20,7 @@ test("useHttpJsonBody", async function () {
   expect(res.headers["content-type"]).toBe("application/json; charset=utf-8");
 });
 
-test("parse json error", async function () {
+test("parse json error", async () => {
   const server = new SfaHttp()
     .useHttpJsonBody(
       undefined,
@@ -45,7 +45,7 @@ test("parse json error", async function () {
   });
 });
 
-test("parse json error default", async function () {
+test("parse json error default", async () => {
   const server = new SfaHttp()
     .useHttpJsonBody()
     .use((ctx) => {

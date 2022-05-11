@@ -1,7 +1,7 @@
 import { SfaHttp } from "../../../src";
 import request from "supertest";
 
-test("useHttpUrlencodedBody", async function () {
+test("useHttpUrlencodedBody", async () => {
   const server = new SfaHttp()
     .useHttpUrlencodedBody()
     .use(async (ctx) => {
