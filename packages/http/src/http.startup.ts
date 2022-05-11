@@ -13,6 +13,11 @@ import {
 import urlParse from "url-parse";
 import { Stream } from "stream";
 
+export function lisetnTypeFn() {
+  return new net.Server().listen;
+}
+export type ListenType = ReturnType<typeof lisetnTypeFn>;
+
 export abstract class HttpStartup extends HttpBodyPraserStartup {
   constructor() {
     super((ctx) => ctx.httpReq);
@@ -20,7 +25,7 @@ export abstract class HttpStartup extends HttpBodyPraserStartup {
 
   abstract readonly server: net.Server | tls.Server;
 
-  public get listen() {
+  public get listen(): ListenType {
     return this.server.listen.bind(this.server);
   }
 

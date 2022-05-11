@@ -1,6 +1,7 @@
 import * as http from "http";
 import "@sfajs/core";
 
+export { ListenType } from "./http.startup";
 export { SfaHttp } from "./sfa-http.startup";
 export { SfaHttps } from "./sfa-https.startup";
 export {
