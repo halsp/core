@@ -19,15 +19,3 @@ test("invoke multiple", async () => {
   res = await startup.run();
   expect(res.body).toBe(2);
 });
-
-test("root", async () => {
-  const startup = new TestStartup({
-    root: "test",
-    mode: "development",
-  }).use((ctx) => {
-    ctx.ok();
-  });
-  const res = await startup.run();
-
-  expect(res.status).toBe(200);
-});

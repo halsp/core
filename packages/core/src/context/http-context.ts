@@ -15,9 +15,6 @@ export class HttpContext extends ResultHandler {
   }
 
   readonly startup!: Startup;
-  public get config() {
-    return this.startup.config;
-  }
 
   readonly #bag: Dict = {};
 

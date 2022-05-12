@@ -71,10 +71,3 @@ export {
 export { Startup, TestStartup } from "./startup";
 
 export { Middleware, ComposeMiddleware, HookType } from "./middlewares";
-
-export {
-  SfaConfig,
-  SfaConfigOptions,
-  defineConfig,
-  loadConfig,
-} from "./sfa-config";

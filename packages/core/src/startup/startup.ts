@@ -13,18 +13,8 @@ import { Stream } from "stream";
 import * as mime from "mime-types";
 import { isString, ObjectConstructor } from "../utils";
 import { HttpException } from "../exceptions";
-import { loadConfig, SfaConfig, SfaConfigOptions } from "../sfa-config";
 
 export abstract class Startup {
-  constructor(options?: SfaConfigOptions) {
-    this.#config = loadConfig(options);
-  }
-
-  #config: SfaConfig;
-  get config(): SfaConfig {
-    return this.#config;
-  }
-
   readonly #mds: MiddlewareItem[] = [];
   use(
     lambda: (ctx: HttpContext, next: () => Promise<void>) => Promise<void>
