@@ -1,28 +1,28 @@
 import { Startup } from "./startup";
 import { HttpContext, SfaRequest, SfaResponse } from "../context";
+import { SfaConfigOptions } from "../sfa-config";
 
 export class TestStartup extends Startup {
   readonly #req?: SfaRequest;
   constructor();
   constructor(req: SfaRequest);
-  constructor(root: string);
-  constructor(req: SfaRequest, root: any);
+  constructor(options: SfaConfigOptions);
+  constructor(req: SfaRequest, options: SfaConfigOptions);
   constructor(arg1?: any, arg2?: any) {
     let req: SfaRequest | undefined = undefined;
-    let root: string | undefined = undefined;
+    let options: SfaConfigOptions | undefined = undefined;
     if (arg2 != undefined) {
       req = arg1;
-      root = arg2;
+      options = arg2;
     } else if (arg1 != undefined) {
-      if (typeof arg1 == "string") {
-        root = arg1;
-      } else {
+      if (arg1 instanceof SfaRequest) {
         req = arg1;
+      } else {
+        options = arg1;
       }
     }
 
-    TestStartup["CUSTOM_CONFIG_ROOT"] = root;
-    super();
+    super(options);
     this.#req = req;
   }
 

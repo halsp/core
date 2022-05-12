@@ -13,11 +13,11 @@ import { Stream } from "stream";
 import * as mime from "mime-types";
 import { isString, ObjectConstructor } from "../utils";
 import { HttpException } from "../exceptions";
-import { loadConfig, SfaConfig } from "../sfa-config";
+import { loadConfig, SfaConfig, SfaConfigOptions } from "../sfa-config";
 
 export abstract class Startup {
-  constructor() {
-    this.#config = loadConfig(this.constructor["CUSTOM_CONFIG_ROOT"]);
+  constructor(options?: SfaConfigOptions) {
+    this.#config = loadConfig(options);
   }
 
   #config: SfaConfig;

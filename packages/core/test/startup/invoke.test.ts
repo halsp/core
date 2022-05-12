@@ -21,7 +21,10 @@ test("invoke multiple", async () => {
 });
 
 test("root", async () => {
-  const startup = new TestStartup("test").use((ctx) => {
+  const startup = new TestStartup({
+    root: "test",
+    mode: "development",
+  }).use((ctx) => {
     ctx.ok();
   });
   const res = await startup.run();
