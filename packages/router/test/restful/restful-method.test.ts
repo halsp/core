@@ -15,7 +15,7 @@ const methods = [
 ];
 
 methods.forEach((method) => {
-  test(`${method} restful test`, async function () {
+  test(`${method} restful test`, async () => {
     const result = await new TestStartup(
       new SfaRequest().setPath("/restful").setMethod(method)
     )

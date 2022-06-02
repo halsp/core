@@ -5,7 +5,7 @@ import { routerCfg } from "../global";
 const methods = ["test", "aaa", "NO"];
 
 methods.forEach((method) => {
-  test(`${method} -> any restful test`, async function () {
+  test(`${method} -> any restful test`, async () => {
     const result = await new TestStartup(
       new SfaRequest().setPath("/restful").setMethod(method)
     )

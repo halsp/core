@@ -9,3 +9,4 @@ test.md
 bin
 coverage
 test.json
+.sfa-cache

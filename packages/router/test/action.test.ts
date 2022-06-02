@@ -55,7 +55,7 @@ function runMultipleTest(
   status: number,
   body?: string
 ) {
-  test(`multiple`, async function () {
+  test(`multiple`, async () => {
     const result = await new TestStartup(
       new SfaRequest().setPath(path).setMethod(method)
     )

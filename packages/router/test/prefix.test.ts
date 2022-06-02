@@ -2,7 +2,7 @@ import { TestStartup, SfaRequest } from "@sfajs/core";
 import "../src";
 import { routerCfg } from "./global";
 
-test("prefix", async function () {
+test("prefix", async () => {
   const cfg = routerCfg;
   cfg.prefix = "api2";
 
@@ -14,7 +14,7 @@ test("prefix", async function () {
   expect(result.status).toBe(200);
 });
 
-test("error prefix", async function () {
+test("error prefix", async () => {
   const cfg = routerCfg;
   cfg.prefix = "error";
 

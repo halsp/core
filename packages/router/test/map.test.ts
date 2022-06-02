@@ -5,14 +5,14 @@ import { TestStartup, SfaRequest } from "@sfajs/core";
 import "../src";
 import { routerCfg } from "./global";
 
-test("map creater", async function () {
+test("map creater", async () => {
   const result = new MapCreater("test/actions");
   result.write("./test.json");
   expect(fs.existsSync("./test.json")).toBeTruthy();
   fs.unlinkSync("./test.json");
 });
 
-test("map creater write default", async function () {
+test("map creater write default", async () => {
   const result = new MapCreater("test/actions");
   result.write();
   try {
@@ -29,7 +29,7 @@ test("map creater write default", async function () {
   }
 });
 
-test("the router dir is not exist", async function () {
+test("the router dir is not exist", async () => {
   expect(() => new MapCreater("test/actions1")).toThrow(
     "the router dir is not exist"
   );

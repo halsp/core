@@ -1,4 +1,5 @@
 import "@sfajs/core";
+import "@sfajs/cli";
 import {
   HttpContext,
   MethodNotAllowedException,
@@ -36,6 +37,7 @@ export {
   HttpTrace,
 } from "./decorators";
 export { setActionMetadata, getActionMetadata } from "./action";
+export { routerPostBuild } from "./router-post-build";
 
 declare module "@sfajs/core" {
   interface Startup {
@@ -48,6 +50,12 @@ declare module "@sfajs/core" {
 
   interface HttpContext {
     get actionMetadata(): MapItem;
+  }
+}
+
+declare module "@sfajs/cli" {
+  interface Configuration {
+    router?: RouterConfig;
   }
 }
 

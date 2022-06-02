@@ -76,7 +76,10 @@ export default class MapParser {
     if (reqUrlStrs.length != mapUrlStrs.length) return false;
 
     if (methodIncluded && !mapItem.methods.includes(HttpMethod.any)) {
-      const matchedMethod = HttpMethod.matched(this.ctx.req.method);
+      const matchedMethod = HttpMethod.matched(
+        this.ctx.req.method,
+        this.routerCfg.customMethods
+      );
       if (!matchedMethod || !mapItem.methods.includes(matchedMethod)) {
         return false;
       }

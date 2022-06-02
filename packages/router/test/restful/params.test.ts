@@ -2,7 +2,7 @@ import { TestStartup, SfaRequest, HttpMethod } from "@sfajs/core";
 import "../../src";
 import { routerCfg } from "../global";
 
-test(`restful params test1`, async function () {
+test(`restful params test1`, async () => {
   const res = await new TestStartup(
     new SfaRequest().setPath("/restful/45").setMethod(HttpMethod.get)
   )
@@ -16,7 +16,7 @@ test(`restful params test1`, async function () {
   expect(res.status).toBe(200);
 });
 
-test(`restful params test2`, async function () {
+test(`restful params test2`, async () => {
   const res = await new TestStartup(
     new SfaRequest().setPath("/restful/11/animals").setMethod(HttpMethod.get)
   )
@@ -30,7 +30,7 @@ test(`restful params test2`, async function () {
   expect(res.status).toBe(200);
 });
 
-test(`get params one object`, async function () {
+test(`get params one object`, async () => {
   const res = await new TestStartup(
     new SfaRequest().setPath("/restful/45").setMethod(HttpMethod.get)
   )

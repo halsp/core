@@ -5,4 +5,3 @@ if [ -d "./dist" ]; then
 fi
 
 tsc
-tsc ./tsbin/*.ts --outDir ./bin --lib esnext --target esnext --module commonjs

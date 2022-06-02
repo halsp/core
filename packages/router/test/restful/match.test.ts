@@ -2,7 +2,7 @@ import "../../src";
 import { TestStartup, SfaRequest, HttpContext, HttpMethod } from "@sfajs/core";
 import { routerCfg } from "../global";
 
-test(`find next`, async function () {
+test(`find next`, async () => {
   const result = await new TestStartup(
     new SfaRequest().setPath("/restful/method").setMethod(HttpMethod.post)
   )
@@ -11,7 +11,7 @@ test(`find next`, async function () {
   expect(result.status).toBe(200);
 });
 
-test(`find simple`, async function () {
+test(`find simple`, async () => {
   const result = await new TestStartup(
     new SfaRequest()
       .setPath("/restful/method/simple")
@@ -23,7 +23,7 @@ test(`find simple`, async function () {
   expect(result.body.action).toBe("simple");
 });
 
-test(`find simple next`, async function () {
+test(`find simple next`, async () => {
   const result = await new TestStartup(
     new SfaRequest().setPath("/restful/method/any").setMethod(HttpMethod.post)
   )
@@ -33,7 +33,7 @@ test(`find simple next`, async function () {
   expect(result.body.action).toBe("params");
 });
 
-test(`find miss next`, async function () {
+test(`find miss next`, async () => {
   const result = await new TestStartup(
     new SfaRequest().setPath("/restful/method/miss").setMethod(HttpMethod.post)
   )
@@ -44,7 +44,7 @@ test(`find miss next`, async function () {
   expect(result.body.action).not.toBe("params");
 });
 
-test(`find miss next 2`, async function () {
+test(`find miss next 2`, async () => {
   const result = await new TestStartup(
     new SfaRequest()
       .setPath("/restful/method/miss/any")
@@ -56,7 +56,7 @@ test(`find miss next 2`, async function () {
   expect(result.body.action).toBe("miss/params");
 });
 
-test(`find miss next 3`, async function () {
+test(`find miss next 3`, async () => {
   const result = await new TestStartup(
     new SfaRequest()
       .setPath("/restful/method/any/miss")
@@ -68,7 +68,7 @@ test(`find miss next 3`, async function () {
   expect(result.body.action).toBe("params/miss");
 });
 
-test(`find miss next 4`, async function () {
+test(`find miss next 4`, async () => {
   const result = await new TestStartup(
     new SfaRequest()
       .setPath("/restful/method/any/any")
@@ -80,7 +80,7 @@ test(`find miss next 4`, async function () {
   expect(result.body.action).toBe("params2/nextParams");
 });
 
-test(`mostLikePathParts`, async function () {
+test(`mostLikePathParts`, async () => {
   let context!: HttpContext;
   const result = await new TestStartup(
     new SfaRequest()
@@ -97,7 +97,7 @@ test(`mostLikePathParts`, async function () {
   expect(context.actionMetadata.path).toBe("restful/mostLike/^id1/act.post.ts");
 });
 
-test(`find sortest`, async function () {
+test(`find sortest`, async () => {
   const result = await new TestStartup(
     new SfaRequest().setPath("/restful/sortest/sort").setMethod(HttpMethod.get)
   )

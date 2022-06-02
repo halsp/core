@@ -2,7 +2,7 @@ import { TestStartup, SfaRequest } from "@sfajs/core";
 import "../src";
 import { routerCfg } from "./global";
 
-test("startup test", async function () {
+test("startup test", async () => {
   const result = await new TestStartup(
     new SfaRequest().setPath("/simple/RoUtEr").setMethod("POST")
   )
@@ -12,7 +12,7 @@ test("startup test", async function () {
   expect(result.status).toBe(200);
 });
 
-test("default", async function () {
+test("default", async () => {
   const result = await new TestStartup(
     new SfaRequest().setPath("").setMethod("GET")
   )
@@ -21,7 +21,7 @@ test("default", async function () {
   expect(result.status).toBe(200);
 });
 
-test("startup not exist", async function () {
+test("startup not exist", async () => {
   const result = await new TestStartup(
     new SfaRequest().setPath("/simple/router1").setMethod("POST")
   )
@@ -44,7 +44,7 @@ test("shallow startup test", async () => {
   expect(res.status).toBe(200);
 });
 
-test("deep startup test", async function () {
+test("deep startup test", async () => {
   const result = await new TestStartup(
     new SfaRequest().setPath("/simple/deepActions/RoUtEr").setMethod("POST")
   )
@@ -53,7 +53,7 @@ test("deep startup test", async function () {
   expect(result.status).toBe(200);
 });
 
-test("null body test", async function () {
+test("null body test", async () => {
   const result = await new TestStartup(
     new SfaRequest().setPath("/nullbody").setMethod("PUT")
   )
@@ -63,7 +63,7 @@ test("null body test", async function () {
   expect(result.status).toBe(404);
 });
 
-test("null config", async function () {
+test("null config", async () => {
   const result = await new TestStartup(
     new SfaRequest().setPath("").setMethod("GET")
   )

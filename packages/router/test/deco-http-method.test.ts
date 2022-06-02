@@ -3,7 +3,7 @@ import { routerCfg } from "./global";
 import "../src";
 
 function runTest(method: string, success: boolean) {
-  test(`${method} ${success}`, async function () {
+  test(`${method} ${success}`, async () => {
     const res = await new TestStartup(
       new SfaRequest().setPath("/decorator/method").setMethod(method)
     )
@@ -27,7 +27,7 @@ runTest(HttpMethod.options, true);
 runTest(HttpMethod.put, false);
 runTest(HttpMethod.any, false);
 
-test(`custom url`, async function () {
+test(`custom url`, async () => {
   const res = await new TestStartup(
     new SfaRequest().setPath("/mu").setMethod(HttpMethod.put)
   )
@@ -38,19 +38,7 @@ test(`custom url`, async function () {
   expect(res.status).toBe(200);
 });
 
-test(`custom`, async function () {
-  HttpMethod.custom.push("CUSTOM_DEC");
-  const res = await new TestStartup(
-    new SfaRequest().setPath("/muc").setMethod("CUSTOM_DEC")
-  )
-    .useRouter(routerCfg)
-    .run();
-
-  expect(res.body).toBe("method");
-  expect(res.status).toBe(200);
-});
-
-test(`base path`, async function () {
+test(`base path`, async () => {
   const res = await new TestStartup(
     new SfaRequest()
       .setPath("decorator/method-base-path/mup")

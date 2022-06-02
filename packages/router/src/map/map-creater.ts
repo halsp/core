@@ -1,6 +1,6 @@
 import { isFunction, ObjectConstructor } from "@sfajs/core";
 import { writeFileSync, existsSync, lstatSync, readdirSync } from "fs";
-import path = require("path");
+import path from "path";
 import { Action } from "../action";
 import { MethodItem } from "../action/method-item";
 import {
