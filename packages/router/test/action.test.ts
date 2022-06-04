@@ -7,7 +7,7 @@ import {
   HttpMethod,
 } from "@sfajs/core";
 import { Action } from "../src";
-import { routerCfg } from "./global";
+import "./global";
 
 class Login extends Action {
   async invoke(): Promise<void> {
@@ -59,7 +59,7 @@ function runMultipleTest(
     const result = await new TestStartup(
       new SfaRequest().setPath(path).setMethod(method)
     )
-      .useRouter(routerCfg)
+      .useTestRouter()
       .run();
     if (body) {
       expect(result.body).toBe(body);

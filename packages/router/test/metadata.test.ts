@@ -1,12 +1,12 @@
 import { SfaRequest, TestStartup } from "@sfajs/core";
 import "../src";
-import { routerCfg } from "./global";
+import "./global";
 
 test("custom metadata", async () => {
   const result = await new TestStartup(
     new SfaRequest().setPath("/metadata/custom").setMethod("GET")
   )
-    .useRouter(routerCfg)
+    .useTestRouter()
     .run();
   expect(result.body).toEqual({
     get: {
@@ -23,7 +23,7 @@ test("set metadata", async () => {
   const result = await new TestStartup(
     new SfaRequest().setPath("/metadata/set-metadata").setMethod("GET")
   )
-    .useRouter(routerCfg)
+    .useTestRouter()
     .run();
   expect(result.body).toEqual({
     object: {

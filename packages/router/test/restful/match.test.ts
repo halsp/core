@@ -1,12 +1,12 @@
 import "../../src";
 import { TestStartup, SfaRequest, HttpContext, HttpMethod } from "@sfajs/core";
-import { routerCfg } from "../global";
+import "../global";
 
 test(`find next`, async () => {
   const result = await new TestStartup(
     new SfaRequest().setPath("/restful/method").setMethod(HttpMethod.post)
   )
-    .useRouter(routerCfg)
+    .useTestRouter()
     .run();
   expect(result.status).toBe(200);
 });
@@ -17,7 +17,7 @@ test(`find simple`, async () => {
       .setPath("/restful/method/simple")
       .setMethod(HttpMethod.post)
   )
-    .useRouter(routerCfg)
+    .useTestRouter()
     .run();
   expect(result.status).toBe(200);
   expect(result.body.action).toBe("simple");
@@ -27,7 +27,7 @@ test(`find simple next`, async () => {
   const result = await new TestStartup(
     new SfaRequest().setPath("/restful/method/any").setMethod(HttpMethod.post)
   )
-    .useRouter(routerCfg)
+    .useTestRouter()
     .run();
   expect(result.status).toBe(200);
   expect(result.body.action).toBe("params");
@@ -37,7 +37,7 @@ test(`find miss next`, async () => {
   const result = await new TestStartup(
     new SfaRequest().setPath("/restful/method/miss").setMethod(HttpMethod.post)
   )
-    .useRouter(routerCfg)
+    .useTestRouter()
     .run();
   expect(result.status).toBe(200);
   expect(result.body.action).toBe("miss");
@@ -50,7 +50,7 @@ test(`find miss next 2`, async () => {
       .setPath("/restful/method/miss/any")
       .setMethod(HttpMethod.post)
   )
-    .useRouter(routerCfg)
+    .useTestRouter()
     .run();
   expect(result.status).toBe(200);
   expect(result.body.action).toBe("miss/params");
@@ -62,7 +62,7 @@ test(`find miss next 3`, async () => {
       .setPath("/restful/method/any/miss")
       .setMethod(HttpMethod.post)
   )
-    .useRouter(routerCfg)
+    .useTestRouter()
     .run();
   expect(result.status).toBe(200);
   expect(result.body.action).toBe("params/miss");
@@ -74,7 +74,7 @@ test(`find miss next 4`, async () => {
       .setPath("/restful/method/any/any")
       .setMethod(HttpMethod.post)
   )
-    .useRouter(routerCfg)
+    .useTestRouter()
     .run();
   expect(result.status).toBe(200);
   expect(result.body.action).toBe("params2/nextParams");
@@ -91,7 +91,7 @@ test(`mostLikePathParts`, async () => {
       context = ctx;
       await next();
     })
-    .useRouter(routerCfg)
+    .useTestRouter()
     .run();
   expect(result.status).toBe(204);
   expect(context.actionMetadata.path).toBe("restful/mostLike/^id1/act.post.ts");
@@ -101,7 +101,7 @@ test(`find sortest`, async () => {
   const result = await new TestStartup(
     new SfaRequest().setPath("/restful/sortest/sort").setMethod(HttpMethod.get)
   )
-    .useRouter(routerCfg)
+    .useTestRouter()
     .run();
   expect(result.status).toBe(200);
   expect(result.body).toBe("outer");

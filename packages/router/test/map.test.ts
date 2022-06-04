@@ -3,7 +3,7 @@ import * as fs from "fs";
 import { MAP_FILE_NAME } from "../src/constant";
 import { TestStartup, SfaRequest } from "@sfajs/core";
 import "../src";
-import { routerCfg } from "./global";
+import "./global";
 
 test("map creater", async () => {
   const result = new MapCreater("test/actions");
@@ -21,7 +21,7 @@ test("map creater write default", async () => {
     const res = await new TestStartup(
       new SfaRequest().setPath("/simple/router").setMethod("POST")
     )
-      .useRouter(routerCfg)
+      .useTestRouter()
       .run();
     expect(res.status).toBe(200);
   } finally {

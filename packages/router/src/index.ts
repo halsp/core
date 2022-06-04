@@ -17,10 +17,11 @@ import MapItem from "./map/map-item";
 import RouterConfig from "./router-config";
 import {
   CTX_CACHE_METADATA,
-  DEFAULT_ACTION_DIR,
   REQUEST_CACHE_PARAMS,
   STARTUP_ROUTER_CONFIG,
+  TEST_STARTUP_ROUTER_CONFIG,
 } from "./constant";
+import * as fs from "fs";
 
 export { Action, MapItem, RouterConfig };
 export {
@@ -41,7 +42,7 @@ export { routerPostBuild } from "./router-post-build";
 
 declare module "@sfajs/core" {
   interface Startup {
-    useRouter(cfg?: RouterConfig): this;
+    useRouter(): this;
   }
 
   interface SfaRequest {
@@ -131,16 +132,13 @@ Object.defineProperty(SfaRequest.prototype, "param", {
   },
 });
 
-Startup.prototype.useRouter = function (cfg: RouterConfig = {}): Startup {
+Startup.prototype.useRouter = function (): Startup {
   if (!!this[STARTUP_ROUTER_CONFIG]) {
     return this;
   }
 
-  if (!cfg) cfg = {};
-  cfg.dir =
-    cfg.dir?.replace(/^\//, "").replace(/\/$/, "") ?? DEFAULT_ACTION_DIR;
-  cfg.prefix = cfg.prefix?.replace(/^\//, "").replace(/\/$/, "") ?? "";
-  this[STARTUP_ROUTER_CONFIG] = cfg;
+  this[STARTUP_ROUTER_CONFIG] =
+    this[TEST_STARTUP_ROUTER_CONFIG] ?? readConfig();
 
   return this.add((ctx) => {
     const filePath = path.join(
@@ -155,3 +153,11 @@ Startup.prototype.useRouter = function (cfg: RouterConfig = {}): Startup {
     return action as ObjectConstructor<Action>;
   });
 };
+
+function readConfig() {
+  const txt = fs.readFileSync(
+    path.join(process.cwd(), "sfa-router-config.json"),
+    "utf-8"
+  );
+  return JSON.parse(txt);
+}
