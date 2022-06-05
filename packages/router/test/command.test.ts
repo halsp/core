@@ -1,32 +1,44 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import * as fs from "fs";
-import { TestStartup } from "@sfajs/core";
+import { SfaRequest, TestStartup } from "@sfajs/core";
 import * as shell from "shelljs";
 import "../src";
 import { runin } from "@sfajs/testing";
 
-test("sfa build command", async () => {
+const baseTsconfig = {
+  compilerOptions: {
+    lib: ["esnext"],
+    module: "commonjs",
+    declaration: true,
+    outDir: "./dist",
+    target: "es2017",
+    strict: true,
+    esModuleInterop: true,
+    skipLibCheck: true,
+    noImplicitAny: false,
+    experimentalDecorators: true,
+    emitDecoratorMetadata: true,
+  },
+  include: ["src/**/*"],
+  static: [
+    {
+      source: "static",
+      target: "assets",
+    },
+    "static.txt",
+  ],
+};
+
+test("build with parent outDir", async () => {
   await runin("./test/command", async () => {
-    const tsconfigStr = fs.readFileSync("./tsconfig-back.json", "utf-8");
-    const tsconfig = JSON.parse(tsconfigStr);
+    const tsconfig = JSON.parse(JSON.stringify(baseTsconfig));
 
     tsconfig.compilerOptions.outDir = "../functions/v1";
     fs.writeFileSync("./tsconfig.json", JSON.stringify(tsconfig));
 
-    {
-      const execResult = shell.exec(`npm run build`);
-      expect(execResult.code).toBe(0);
-      expectFile(tsconfig.compilerOptions.outDir);
-    }
-
-    tsconfig.compilerOptions.outDir = "./dist";
-    fs.writeFileSync("./tsconfig.json", JSON.stringify(tsconfig));
-
-    {
-      const execResult = shell.exec(`npm run build`);
-      expect(execResult.code).toBe(0);
-      expectFile(tsconfig.compilerOptions.outDir);
-    }
+    const execResult = shell.exec(`npm run build`);
+    expect(execResult.code).toBe(0);
+    expectFile(tsconfig.compilerOptions.outDir);
   });
 });
 
@@ -38,9 +50,21 @@ function expectFile(outDir: string) {
   expect(fs.existsSync(`${outDir}/README.md`)).toBe(false);
 }
 
-test("run", async () => {
+test("run and build", async () => {
   await runin("./test/command", async () => {
-    const result = await new TestStartup().useRouter().run();
-    expect(result.status).toBe(404);
+    await fs.promises.writeFile("tsconfig.json", JSON.stringify(baseTsconfig));
+
+    const execResult = shell.exec(`npm run build`);
+    expect(execResult.code).toBe(0);
+
+    await runin("dist", async () => {
+      const result = await new TestStartup(new SfaRequest().setMethod("get"))
+        .useRouter()
+        .run();
+      expect(result.status).toBe(200);
+      expect(result.body).toEqual({
+        method: "GET",
+      });
+    });
   });
 });

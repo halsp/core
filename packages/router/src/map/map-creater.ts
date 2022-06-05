@@ -73,6 +73,9 @@ export default class MapCreater {
         const filePath = path.join(this.dirPath, storageItem);
         const stat = lstatSync(filePath);
         if (!stat.isFile()) return null;
+        if (storageItem.endsWith(".d.ts")) {
+          return null;
+        }
         if (!storageItem.endsWith(".js") && !storageItem.endsWith(".ts")) {
           return null;
         }

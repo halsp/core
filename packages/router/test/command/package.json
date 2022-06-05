@@ -7,6 +7,6 @@
     "@sfajs/router": "../.."
   },
   "devDependencies": {
-    "@sfajs/cli": "^0.0.1-beta.4"
+    "@sfajs/cli": "^0.0.1-beta.5"
   }
 }

@@ -4,3 +4,4 @@ package-lock.json
 sfa-router.map
 pnpm-lock.yaml
 tsconfig.json
+sfa-router-config.json

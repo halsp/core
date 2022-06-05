@@ -23,7 +23,7 @@ export const routerPostBuild: Postbuild = async (ctx) => {
   if (!fs.existsSync(routerDir) || !fs.statSync(routerDir).isDirectory()) {
     throw new Error("The router dir is not exist");
   }
-  new MapCreater(routerDir).write(path.join(cacheDir ?? "", MAP_FILE_NAME));
+  new MapCreater(routerDir).write(path.join(cacheDir, MAP_FILE_NAME));
 
   const routerConfig: RouterConfig = {
     dir: routerDirPath,
