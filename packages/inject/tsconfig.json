@@ -23,7 +23,6 @@
   ],
   "exclude": [
     "test",
-    "dist",
-    "bin"
+    "dist"
   ]
 }
