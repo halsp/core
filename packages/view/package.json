@@ -1,11 +1,11 @@
 {
-  "name": "@sfajs/views",
-  "version": "1.1.12",
+  "name": "@sfajs/view",
+  "version": "1.2.0",
   "description": "sfa 视图渲染中间件",
-  "homepage": "https://github.com/sfajs/views",
+  "homepage": "https://github.com/sfajs/view",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sfajs/views"
+    "url": "https://github.com/sfajs/view"
   },
   "keywords": [
     "sfa",
@@ -15,7 +15,7 @@
     "templates"
   ],
   "bugs": {
-    "url": "https://github.com/sfajs/views/issues",
+    "url": "https://github.com/sfajs/view/issues",
     "email": "support@hal.wang"
   },
   "main": "dist/index.js",

@@ -3,16 +3,16 @@ import { Startup, HttpContext, ResultHandler } from "@sfajs/core";
 import * as path from "path";
 import * as fs from "fs";
 import {
-  ViewsOptions,
+  ViewOptions,
   consolidate,
   Engine,
   RendererInterface,
-} from "./views-options";
+} from "./view-options";
 import { RENDERED } from "./constant";
 
 declare module "@sfajs/core" {
   interface Startup {
-    useViews<T extends this>(options?: ViewsOptions): T;
+    useViews<T extends this>(options?: ViewOptions): T;
   }
 
   interface HttpContext {
@@ -25,7 +25,7 @@ declare module "@sfajs/core" {
 }
 
 Startup.prototype.useViews = function <T extends Startup>(
-  options: ViewsOptions = {}
+  options: ViewOptions = {}
 ): T {
   ResultHandler.prototype.view = async function (
     tmpPath,
@@ -55,7 +55,7 @@ Startup.prototype.useViews = function <T extends Startup>(
 
 async function render(
   ctx: HttpContext,
-  options: ViewsOptions,
+  options: ViewOptions,
   tmpPath: string,
   locals: Record<string, unknown>
 ): Promise<void> {
@@ -168,4 +168,4 @@ function getEngine(
   return engine;
 }
 
-export { consolidate, RendererInterface, Engine, ViewsOptions };
+export { consolidate, RendererInterface, Engine, ViewOptions };
