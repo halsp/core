@@ -16,7 +16,6 @@ export class StaticMiddleware extends BaseMiddleware {
       return;
     }
 
-    console.log("path", ",", this.cfg.prefix, ",", this.ctx.req.path);
     if (
       !this.cfg.prefix ||
       this.ctx.req.path.toUpperCase().startsWith(this.cfg.prefix.toUpperCase())
