@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/views",
-  "version": "1.1.10",
+  "version": "1.1.11",
   "description": "sfa 视图渲染中间件",
   "homepage": "https://github.com/sfajs/views",
   "repository": {
