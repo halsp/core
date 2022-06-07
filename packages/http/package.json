@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/http",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "sfajs 的 http 托管环境",
   "homepage": "https://github.com/sfajs/http",
   "repository": {
@@ -29,7 +29,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@sfajs/core": "^1.4.1",
+    "@sfajs/core": "^1.4.3",
     "co-body": "^6.1.0",
     "formidable": "^2.0.1",
     "type-is": "^1.6.18",
@@ -38,25 +38,28 @@
   "devDependencies": {
     "@types/co-body": "^6.1.0",
     "@types/formidable": "^2.0.5",
-    "@types/jest": "^27.5.0",
-    "@types/node": "^17.0.32",
+    "@types/jest": "^28.1.1",
+    "@types/node": "^17.0.40",
     "@types/qs": "^6.9.7",
     "@types/shelljs": "^0.8.11",
     "@types/supertest": "^2.0.12",
     "@types/type-is": "^1.6.3",
     "@types/url-parse": "^1.4.8",
-    "@typescript-eslint/eslint-plugin": "^5.23.0",
-    "@typescript-eslint/parser": "^5.23.0",
+    "@typescript-eslint/eslint-plugin": "^5.27.1",
+    "@typescript-eslint/parser": "^5.27.1",
     "codecov": "^3.8.3",
-    "eslint": "^8.15.0",
+    "eslint": "^8.17.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "jest": "^28.1.0",
+    "jest": "^28.1.1",
     "prettier": "^2.6.2",
     "shelljs": "^0.8.5",
     "supertest": "^6.2.3",
-    "ts-jest": "^28.0.2",
-    "typescript": "^4.6.4"
+    "ts-jest": "^28.0.4",
+    "typescript": "^4.7.3"
+  },
+  "peerDependencies": {
+    "@sfajs/core": "~1"
   },
   "files": [
     "/demo/*",
