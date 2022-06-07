@@ -1,15 +1,15 @@
-interface Config extends Object {
+interface Options extends Object {
   encoding?: BufferEncoding;
   method?: string | string[];
 }
 
-export interface StaticConfig extends Config {
+export interface StaticOptions extends Options {
   dir: string;
   prefix?: string;
   file404?: string | true;
 }
 
-export interface SingleStaticConfig extends Config {
+export interface SingleStaticOptions extends Options {
   file: string;
   reqPath?: string;
 }

@@ -1,11 +1,11 @@
 import * as fs from "fs";
 import * as mime from "mime";
-import { SingleStaticConfig } from "./static-config";
+import { SingleStaticOptions } from "./static-options";
 import { BaseMiddleware } from "./base.middleware";
 import { normalizePath } from "@sfajs/core";
 
 export class SingleStaticMiddleware extends BaseMiddleware {
-  constructor(readonly cfg: SingleStaticConfig) {
+  constructor(readonly options: SingleStaticOptions) {
     super();
   }
 
@@ -17,18 +17,20 @@ export class SingleStaticMiddleware extends BaseMiddleware {
 
     if (
       normalizePath(this.ctx.req.path) !=
-      normalizePath(this.cfg.reqPath ?? this.cfg.file)
+      normalizePath(this.options.reqPath ?? this.options.file)
     ) {
       await this.next();
       return;
     }
 
-    if (fs.existsSync(this.cfg.file) && fs.statSync(this.cfg.file).isFile()) {
-      this.ok(fs.readFileSync(this.cfg.file, this.cfg.encoding)).setHeader(
-        "content-type",
-        mime.getType(this.cfg.file) || "*/*"
-      );
-      this.setFile(this.cfg.file);
+    if (
+      fs.existsSync(this.options.file) &&
+      fs.statSync(this.options.file).isFile()
+    ) {
+      this.ok(
+        fs.readFileSync(this.options.file, this.options.encoding)
+      ).setHeader("content-type", mime.getType(this.options.file) || "*/*");
+      this.setFile(this.options.file);
       return;
     }
 

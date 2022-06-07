@@ -1,31 +1,31 @@
 import "@sfajs/core";
 import { Startup } from "@sfajs/core";
 import { SingleStaticMiddleware } from "./single-static.middleware";
-import { SingleStaticConfig, StaticConfig } from "./static-config";
+import { SingleStaticOptions, StaticOptions } from "./static-options";
 import { StaticMiddleware } from "./static.middleware";
 
-export { SingleStaticConfig, StaticConfig };
+export { SingleStaticOptions, StaticOptions };
 
 declare module "@sfajs/core" {
   interface Startup {
-    useStatic<T extends this>(cfg?: StaticConfig): T;
-    useStatic<T extends this>(cfg?: SingleStaticConfig): T;
+    useStatic<T extends this>(options?: StaticOptions): T;
+    useStatic<T extends this>(options?: SingleStaticOptions): T;
   }
 }
 
 Startup.prototype.useStatic = function <T extends Startup>(
-  cfg?: StaticConfig | SingleStaticConfig
+  options?: StaticOptions | SingleStaticOptions
 ): T {
-  if (!cfg) {
-    cfg = {
+  if (!options) {
+    options = {
       dir: "static",
     };
   }
 
-  if (cfg.hasOwnProperty("file")) {
-    this.add(() => new SingleStaticMiddleware(cfg as SingleStaticConfig));
+  if (options.hasOwnProperty("file")) {
+    this.add(() => new SingleStaticMiddleware(options as SingleStaticOptions));
   } else {
-    this.add(() => new StaticMiddleware(cfg as StaticConfig));
+    this.add(() => new StaticMiddleware(options as StaticOptions));
   }
   return this as T;
 };

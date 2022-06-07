@@ -1,12 +1,12 @@
 import * as path from "path";
 import * as fs from "fs";
 import * as mime from "mime";
-import { StaticConfig } from "./static-config";
+import { StaticOptions } from "./static-options";
 import { BaseMiddleware } from "./base.middleware";
 import { normalizePath } from "@sfajs/core";
 
 export class StaticMiddleware extends BaseMiddleware {
-  constructor(readonly cfg: StaticConfig) {
+  constructor(readonly options: StaticOptions) {
     super();
   }
 
@@ -17,12 +17,14 @@ export class StaticMiddleware extends BaseMiddleware {
     }
 
     if (
-      !this.cfg.prefix ||
-      this.ctx.req.path.toUpperCase().startsWith(this.cfg.prefix.toUpperCase())
+      !this.options.prefix ||
+      this.ctx.req.path
+        .toUpperCase()
+        .startsWith(this.options.prefix.toUpperCase())
     ) {
       const filePath = this.filePath;
       if (filePath) {
-        this.ok(fs.readFileSync(filePath, this.cfg.encoding)).setHeader(
+        this.ok(fs.readFileSync(filePath, this.options.encoding)).setHeader(
           "content-type",
           mime.getType(filePath) || "*/*"
         );
@@ -31,11 +33,11 @@ export class StaticMiddleware extends BaseMiddleware {
       }
     }
 
-    if (this.cfg.file404) {
+    if (this.options.file404) {
       const file404Path = this.file404Path;
       if (file404Path) {
         this.notFound(
-          fs.readFileSync(file404Path, this.cfg.encoding)
+          fs.readFileSync(file404Path, this.options.encoding)
         ).setHeader("content-type", mime.getType(file404Path) || "*/*");
         this.setFile(file404Path, true);
         return;
@@ -47,11 +49,11 @@ export class StaticMiddleware extends BaseMiddleware {
 
   get filePath(): string | undefined {
     let reqPath = normalizePath(this.ctx.req.path);
-    if (this.cfg.prefix) {
-      reqPath = reqPath.substring(this.cfg.prefix.length, reqPath.length);
+    if (this.options.prefix) {
+      reqPath = reqPath.substring(this.options.prefix.length, reqPath.length);
     }
 
-    const reqFilePath = path.join(this.cfg.dir, reqPath);
+    const reqFilePath = path.join(this.options.dir, reqPath);
     let filePath = reqFilePath;
     if (fs.existsSync(filePath) && fs.lstatSync(filePath).isFile()) {
       return filePath;
@@ -67,8 +69,10 @@ export class StaticMiddleware extends BaseMiddleware {
 
   get file404Path(): string | undefined {
     const filePath = path.join(
-      this.cfg.dir,
-      this.cfg.file404 == true ? "404.html" : (this.cfg.file404 as string)
+      this.options.dir,
+      this.options.file404 == true
+        ? "404.html"
+        : (this.options.file404 as string)
     );
     if (fs.existsSync(filePath) && fs.lstatSync(filePath).isFile()) {
       return filePath;

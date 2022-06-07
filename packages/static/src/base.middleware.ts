@@ -1,22 +1,22 @@
 import { Middleware, HttpMethod } from "@sfajs/core";
-import { SingleStaticConfig, StaticConfig } from "./static-config";
+import { SingleStaticOptions, StaticOptions } from "./static-options";
 
 export abstract class BaseMiddleware extends Middleware {
-  readonly cfg!: StaticConfig | SingleStaticConfig;
+  readonly options!: StaticOptions | SingleStaticOptions;
 
   private get isMethodValid(): boolean {
-    if (!this.cfg.method) {
+    if (!this.options.method) {
       return this.ctx.req.method == HttpMethod.get;
     }
-    if (Array.isArray(this.cfg.method)) {
-      const methods = this.cfg.method.map((m) => m.toUpperCase());
+    if (Array.isArray(this.options.method)) {
+      const methods = this.options.method.map((m) => m.toUpperCase());
       return (
         methods.includes(HttpMethod.any) ||
         methods.includes(this.ctx.req.method)
       );
     } else {
-      if (this.cfg.method.toUpperCase() == HttpMethod.any) return true;
-      if (this.ctx.req.method == this.cfg.method.toUpperCase()) return true;
+      if (this.options.method.toUpperCase() == HttpMethod.any) return true;
+      if (this.ctx.req.method == this.options.method.toUpperCase()) return true;
       return false;
     }
   }
