@@ -3,16 +3,16 @@ import { Startup, HttpContext, ResultHandler } from "@sfajs/core";
 import * as path from "path";
 import * as fs from "fs";
 import {
-  ViewsConfig,
+  ViewsOptions,
   consolidate,
   Engine,
   RendererInterface,
-} from "./views-config";
+} from "./views-options";
 import { RENDERED } from "./constant";
 
 declare module "@sfajs/core" {
   interface Startup {
-    useViews<T extends this>(cfg?: ViewsConfig): T;
+    useViews<T extends this>(options?: ViewsOptions): T;
   }
 
   interface HttpContext {
@@ -25,7 +25,7 @@ declare module "@sfajs/core" {
 }
 
 Startup.prototype.useViews = function <T extends Startup>(
-  cfg: ViewsConfig = {}
+  options: ViewsOptions = {}
 ): T {
   ResultHandler.prototype.view = async function (
     tmpPath,
@@ -41,7 +41,7 @@ Startup.prototype.useViews = function <T extends Startup>(
     if (ctx[RENDERED]) return this;
     ctx[RENDERED] = true;
 
-    await render(ctx, cfg, tmpPath, locals);
+    await render(ctx, options, tmpPath, locals);
     return this;
   };
 
@@ -55,13 +55,17 @@ Startup.prototype.useViews = function <T extends Startup>(
 
 async function render(
   ctx: HttpContext,
-  cfg: ViewsConfig,
+  options: ViewsOptions,
   tmpPath: string,
   locals: Record<string, unknown>
 ): Promise<void> {
-  tmpPath = path.join(cfg.dir ?? "views", tmpPath ?? "");
-  cfg.options = Object.assign(cfg.options ?? {}, ctx.state ?? {}, locals ?? {});
-  let engines = cfg.engines ?? [];
+  tmpPath = path.join(options.dir ?? "views", tmpPath ?? "");
+  options.options = Object.assign(
+    options.options ?? {},
+    ctx.state ?? {},
+    locals ?? {}
+  );
+  let engines = options.engines ?? [];
   if (!Array.isArray(engines)) {
     engines = [engines];
   }
@@ -76,7 +80,7 @@ async function render(
 
   const engine = getEngine(file.ext, engines);
   if (engine) {
-    ctx.ok(await engine(file.filePath, cfg.options));
+    ctx.ok(await engine(file.filePath, options.options));
     ctx.res.setHeader("content-type", "text/html");
   }
   return;
@@ -164,4 +168,4 @@ function getEngine(
   return engine;
 }
 
-export { consolidate, RendererInterface, Engine, ViewsConfig };
+export { consolidate, RendererInterface, Engine, ViewsOptions };

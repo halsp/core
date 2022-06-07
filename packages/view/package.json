@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/views",
-  "version": "1.1.11",
+  "version": "1.1.12",
   "description": "sfa 视图渲染中间件",
   "homepage": "https://github.com/sfajs/views",
   "repository": {
@@ -30,12 +30,12 @@
   "license": "MIT",
   "dependencies": {
     "@sfajs/core": "^1.4.3",
-    "@types/consolidate": "^0.14.1",
     "consolidate": "^0.16.0"
   },
   "devDependencies": {
     "@types/jest": "^28.1.1",
     "@types/node": "^17.0.40",
+    "@types/consolidate": "^0.14.1",
     "@typescript-eslint/eslint-plugin": "^5.27.1",
     "@typescript-eslint/parser": "^5.27.1",
     "codecov": "^3.8.3",
