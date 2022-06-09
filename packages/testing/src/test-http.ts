@@ -29,12 +29,13 @@ export class TestHttp extends SfaHttp {
         resolve(server);
       });
       server.on("error", (err) => {
-        if (err.code == "EADDRINUSE") {
+        const error = err as Error & { code: string };
+        if (error.code == "EADDRINUSE") {
           this.#listen(port + 1).then((svr) => {
             resolve(svr);
           });
         } else {
-          reject(err);
+          reject(error);
         }
       });
     });
