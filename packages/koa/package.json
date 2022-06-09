@@ -35,7 +35,6 @@
   },
   "devDependencies": {
     "@koa/router": "^10.1.1",
-    "@sfajs/http": "^1.1.1",
     "@types/jest": "^28.1.1",
     "@types/koa": "^2.13.4",
     "@types/koa-cors": "0.0.2",
