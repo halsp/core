@@ -1,5 +1,5 @@
 import "@sfajs/core";
-import "@sfajs/cli";
+import "@sfajs/cli-common";
 import {
   MethodNotAllowedException,
   NotFoundException,
@@ -52,7 +52,7 @@ declare module "@sfajs/core" {
   }
 }
 
-declare module "@sfajs/cli" {
+declare module "@sfajs/cli-common" {
   interface Configuration {
     router?: RouterConfig;
   }
