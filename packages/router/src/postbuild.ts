@@ -5,7 +5,7 @@ import { CONFIG_FILE_NAME, DEFAULT_ACTION_DIR } from "./constant";
 import { RouterDistConfig } from "./router-config";
 import { Postbuild } from "@sfajs/cli-common";
 
-export const routerPostBuild: Postbuild = async ({ config, cacheDir }) => {
+export const postbuild: Postbuild = async ({ config, cacheDir }) => {
   const routerDirPath = config.router?.dir ?? DEFAULT_ACTION_DIR;
   const routerDir = path.join(
     cacheDir,

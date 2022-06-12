@@ -1,4 +1,4 @@
-import { routerPostBuild } from "../src";
+import { postbuild } from "../src";
 import * as fs from "fs";
 import { SfaRequest, TestStartup } from "@sfajs/core";
 import { CONFIG_FILE_NAME } from "../src/constant";
@@ -6,7 +6,7 @@ import { CONFIG_FILE_NAME } from "../src/constant";
 test("empty config", async () => {
   let count = 0;
   try {
-    await routerPostBuild({
+    await postbuild({
       config: {},
       cacheDir: ".sfa-cache",
       mode: "",
@@ -24,7 +24,7 @@ test("build actions", async () => {
     force: true,
   });
 
-  await routerPostBuild({
+  await postbuild({
     config: {},
     cacheDir: "test",
     mode: "",
@@ -35,7 +35,7 @@ test("build actions", async () => {
 });
 
 test("build and run", async () => {
-  await routerPostBuild({
+  await postbuild({
     config: {
       router: {
         dir: "test/actions",

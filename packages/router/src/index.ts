@@ -36,7 +36,7 @@ export {
   HttpTrace,
 } from "./decorators";
 export { setActionMetadata, getActionMetadata } from "./action";
-export { routerPostBuild } from "./router-post-build";
+export { postbuild } from "./postbuild";
 
 declare module "@sfajs/core" {
   interface Startup {
