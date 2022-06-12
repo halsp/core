@@ -24,11 +24,7 @@ test("build actions", async () => {
   });
 
   await routerPostBuild({
-    config: {
-      router: {
-        dir: "actions",
-      },
-    },
+    config: {},
     cacheDir: "test",
     mode: "",
     command: "build",
@@ -42,6 +38,8 @@ test("build and run", async () => {
     config: {
       router: {
         dir: "test/actions",
+        prefix: "",
+        customMethods: [],
       },
     },
     cacheDir: "",
