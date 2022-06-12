@@ -63,13 +63,3 @@ test("null body test", async () => {
 
   expect(result.status).toBe(404);
 });
-
-// test("null config", async () => {
-//   const result = await new TestStartup(
-//     new SfaRequest().setPath("").setMethod("GET")
-//   )
-//     .useTestRouter()
-//     .run();
-
-//   expect(result.status).toBe(404);
-// });

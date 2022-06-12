@@ -1,8 +1,6 @@
 import "@sfajs/core";
 import "@sfajs/cli-common";
 import {
-  MethodNotAllowedException,
-  NotFoundException,
   ObjectConstructor,
   QueryDict,
   ReadonlyQueryDict,
@@ -21,6 +19,7 @@ import {
   TEST_STARTUP_ROUTER_CONFIG,
 } from "./constant";
 import * as fs from "fs";
+import { BlanlMiddleware } from "./blank.middleware";
 
 export { Action, MapItem, RouterConfig };
 export {
@@ -67,33 +66,12 @@ Startup.prototype.useRouter = function (): Startup {
   this[STARTUP_ROUTER_CONFIG] =
     this[TEST_STARTUP_ROUTER_CONFIG] ?? readConfig();
 
-  this.use(async (ctx, next) => {
+  return this.use(async (ctx, next) => {
     Object.defineProperty(ctx, "actionMetadata", {
       configurable: false,
       enumerable: false,
       get: () => {
-        if (ctx[CTX_CACHE_METADATA]) {
-          return ctx[CTX_CACHE_METADATA];
-        }
-
-        const cfg: RouterDistConfig = this[STARTUP_ROUTER_CONFIG];
-        const mapParser = new MapParser(ctx, cfg);
-        if (mapParser.notFound) {
-          throw new NotFoundException({
-            message: `Can't find the path：${ctx.req.path}`,
-            path: ctx.req.path,
-          });
-        }
-        if (mapParser.methodNotAllowed) {
-          throw new MethodNotAllowedException({
-            message: `method not allowed：${ctx.req.method}`,
-            method: ctx.req.method,
-            path: ctx.req.path,
-          });
-        }
-        const mapItem = mapParser.mapItem;
-        ctx[CTX_CACHE_METADATA] = mapItem;
-        return mapItem;
+        return ctx[CTX_CACHE_METADATA];
       },
     });
 
@@ -101,33 +79,7 @@ Startup.prototype.useRouter = function (): Startup {
       configurable: false,
       enumerable: false,
       get: () => {
-        const req = ctx.req;
-        if (req[REQUEST_CACHE_PARAMS]) {
-          return req[REQUEST_CACHE_PARAMS];
-        }
-
-        const params: QueryDict = {};
-        const actionMetadata: MapItem = req.ctx.actionMetadata;
-        if (actionMetadata.path.includes("^")) {
-          const mapPathStrs = actionMetadata.url.split("/");
-          const reqPathStrs = req.path.split("/");
-          for (
-            let i = 0;
-            i < Math.min(mapPathStrs.length, reqPathStrs.length);
-            i++
-          ) {
-            const mapPathStr = mapPathStrs[i];
-            if (!mapPathStr.startsWith("^")) continue;
-            const reqPathStr = reqPathStrs[i];
-
-            const key = mapPathStr.substring(1, mapPathStr.length);
-            const value = decodeURIComponent(reqPathStr);
-
-            params[key] = value;
-          }
-        }
-        req[REQUEST_CACHE_PARAMS] = params;
-        return params;
+        return ctx.req[REQUEST_CACHE_PARAMS];
       },
     });
 
@@ -140,20 +92,71 @@ Startup.prototype.useRouter = function (): Startup {
     });
 
     await next();
-  });
+  })
+    .use(async (ctx, next) => {
+      const cfg: RouterDistConfig = this[STARTUP_ROUTER_CONFIG];
+      const mapParser = new MapParser(ctx, cfg);
+      if (mapParser.notFound) {
+        ctx.notFoundMsg({
+          message: `Can't find the path：${ctx.req.path}`,
+          path: ctx.req.path,
+        });
+      } else if (mapParser.methodNotAllowed) {
+        ctx.methodNotAllowedMsg({
+          message: `method not allowed：${ctx.req.method}`,
+          method: ctx.req.method,
+          path: ctx.req.path,
+        });
+      } else {
+        const mapItem = mapParser.mapItem;
+        ctx[CTX_CACHE_METADATA] = mapItem;
+      }
+      await next();
+    })
+    .use(async (ctx, next) => {
+      if (!ctx.actionMetadata) {
+        return await next();
+      }
 
-  return this.add((ctx) => {
-    const filePath = path.join(
-      process.cwd(),
-      this[STARTUP_ROUTER_CONFIG].dir,
-      ctx.actionMetadata.path
-    );
+      const params: QueryDict = {};
+      const actionMetadata: MapItem = ctx.actionMetadata;
+      if (actionMetadata.path.includes("^")) {
+        const mapPathStrs = actionMetadata.url.split("/");
+        const reqPathStrs = ctx.req.path.split("/");
+        for (
+          let i = 0;
+          i < Math.min(mapPathStrs.length, reqPathStrs.length);
+          i++
+        ) {
+          const mapPathStr = mapPathStrs[i];
+          if (!mapPathStr.startsWith("^")) continue;
+          const reqPathStr = reqPathStrs[i];
 
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const module = require(filePath);
-    const action = module[ctx.actionMetadata.actionName];
-    return action as ObjectConstructor<Action>;
-  });
+          const key = mapPathStr.substring(1, mapPathStr.length);
+          const value = decodeURIComponent(reqPathStr);
+
+          params[key] = value;
+        }
+      }
+      ctx.req[REQUEST_CACHE_PARAMS] = params;
+      await next();
+    })
+    .add((ctx) => {
+      if (!ctx.actionMetadata) {
+        return BlanlMiddleware;
+      }
+
+      const filePath = path.join(
+        process.cwd(),
+        this[STARTUP_ROUTER_CONFIG].dir,
+        ctx.actionMetadata.path
+      );
+
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const module = require(filePath);
+      const action = module[ctx.actionMetadata.actionName];
+      return action as ObjectConstructor<Action>;
+    });
 };
 
 function readConfig() {
