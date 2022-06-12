@@ -12,7 +12,7 @@ import { Action } from "./action";
 import MapParser from "./map/map-parser";
 import path = require("path");
 import MapItem from "./map/map-item";
-import RouterConfig from "./router-config";
+import { RouterDistConfig, RouterConfig } from "./router-config";
 import {
   CTX_CACHE_METADATA,
   REQUEST_CACHE_PARAMS,
@@ -75,7 +75,7 @@ Startup.prototype.useRouter = function (): Startup {
           return ctx[CTX_CACHE_METADATA];
         }
 
-        const cfg: RouterConfig = this[STARTUP_ROUTER_CONFIG];
+        const cfg: RouterDistConfig = this[STARTUP_ROUTER_CONFIG];
         const mapParser = new MapParser(ctx, cfg);
         if (mapParser.notFound) {
           throw new NotFoundException({

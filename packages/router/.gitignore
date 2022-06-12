@@ -4,7 +4,6 @@ package-lock.json
 yarn.lock
 pnpm-lock.yaml
 
-sfa-router.map
 test.md
 bin
 coverage

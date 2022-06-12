@@ -1,15 +1,13 @@
-import { existsSync, lstatSync, readFileSync } from "fs";
-import path = require("path");
-import { MAP_FILE_NAME } from "../constant";
+import { existsSync, lstatSync } from "fs";
 import MapCreater from "./map-creater";
 import MapItem from "./map-item";
 import { HttpContext, HttpMethod } from "@sfajs/core";
-import { RouterConfig } from "..";
+import { RouterDistConfig } from "../router-config";
 
 export default class MapParser {
   constructor(
     private readonly ctx: HttpContext,
-    private readonly routerCfg: RouterConfig
+    private readonly routerCfg: RouterDistConfig
   ) {
     if (
       !existsSync(this.routerDir) ||
@@ -135,21 +133,18 @@ export default class MapParser {
   }
 
   private getMap(): MapItem[] {
-    const mapPath = path.join(process.cwd(), MAP_FILE_NAME);
-    if (existsSync(mapPath)) {
-      const result: MapItem[] = JSON.parse(readFileSync(mapPath, "utf-8")).map(
-        (m: MapItem) => {
-          const mapItem = new MapItem(m.path, m.actionName, m.url, [
-            ...m.methods,
-          ]);
-          Object.keys(m).forEach((key) => {
-            if (mapItem[key] == undefined) {
-              mapItem[key] = m[key];
-            }
-          });
-          return mapItem;
-        }
-      );
+    if (this.routerCfg.map?.length) {
+      const result: MapItem[] = this.routerCfg.map.map((m) => {
+        const mapItem = new MapItem(m.path, m.actionName, m.url, [
+          ...m.methods,
+        ]);
+        Object.keys(m).forEach((key) => {
+          if (mapItem[key] == undefined) {
+            mapItem[key] = m[key];
+          }
+        });
+        return mapItem;
+      });
       return result;
     } else {
       return new MapCreater(this.routerDir).map;

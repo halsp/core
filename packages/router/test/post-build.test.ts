@@ -21,9 +21,6 @@ test("build actions", async () => {
   fs.rmSync("test/sfa-router-config.json", {
     force: true,
   });
-  fs.rmSync("test/sfa-router.map", {
-    force: true,
-  });
 
   await routerPostBuild({
     config: {
@@ -37,7 +34,6 @@ test("build actions", async () => {
   });
 
   expect(fs.existsSync("test/sfa-router-config.json")).toBeTruthy();
-  expect(fs.existsSync("test/sfa-router.map")).toBeTruthy();
 });
 
 // test("build config", async () => {

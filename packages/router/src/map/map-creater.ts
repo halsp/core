@@ -3,11 +3,7 @@ import { writeFileSync, existsSync, lstatSync, readdirSync } from "fs";
 import path from "path";
 import { Action } from "../action";
 import { MethodItem } from "../action/method-item";
-import {
-  MAP_FILE_NAME,
-  ACTION_METADATA,
-  ACTION_METHOD_METADATA,
-} from "../constant";
+import { ACTION_METADATA, ACTION_METHOD_METADATA } from "../constant";
 import MapItem from "./map-item";
 import "reflect-metadata";
 
@@ -24,13 +20,6 @@ export default class MapCreater {
 
   get map(): MapItem[] {
     return this.readFilesFromFolder("", []);
-  }
-
-  write(filePath: string = MAP_FILE_NAME): void {
-    writeFileSync(
-      path.join(process.cwd(), filePath.toString()),
-      JSON.stringify(this.map.map((item) => item.plainObject))
-    );
   }
 
   private get dirPath(): string {
