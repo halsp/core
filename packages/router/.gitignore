@@ -8,4 +8,5 @@ test.md
 bin
 coverage
 test.json
-.sfa-cache
+
+sfa-router-config.json

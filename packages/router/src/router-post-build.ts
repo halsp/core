@@ -20,7 +20,7 @@ export const routerPostBuild: Postbuild = async ({ config, cacheDir }) => {
     dir: routerDirPath,
     customMethods: config.router?.customMethods ?? [],
     prefix: config.router?.prefix ?? "",
-    map: map,
+    map: map.map((m) => m.plainObject),
   };
 
   fs.writeFileSync(

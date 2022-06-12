@@ -1,5 +1,6 @@
 import { routerPostBuild } from "../src";
 import * as fs from "fs";
+import { SfaRequest, TestStartup } from "@sfajs/core";
 
 test("empty config", async () => {
   let count = 0;
@@ -34,6 +35,28 @@ test("build actions", async () => {
   });
 
   expect(fs.existsSync("test/sfa-router-config.json")).toBeTruthy();
+});
+
+test("build and run", async () => {
+  await routerPostBuild({
+    config: {
+      router: {
+        dir: "test/actions",
+      },
+    },
+    cacheDir: "",
+    mode: "",
+    command: "build",
+  });
+
+  const res = await new TestStartup(new SfaRequest().setMethod("get"))
+    .useRouter()
+    .run();
+
+  expect(res.status).toBe(200);
+  expect(res.body).toEqual({
+    method: "GET",
+  });
 });
 
 // test("build config", async () => {
