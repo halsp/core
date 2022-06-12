@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/router",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "sfajs 的路由插件",
   "homepage": "https://github.com/sfajs/router",
   "repository": {

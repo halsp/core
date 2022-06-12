@@ -1,5 +1,4 @@
 import "@sfajs/core";
-import "@sfajs/cli-common";
 import {
   ObjectConstructor,
   QueryDict,
