@@ -49,7 +49,7 @@
   },
   "peerDependencies": {
     "@sfajs/core": "~1",
-    "@sfajs/cli-common": "~1"
+    "@sfajs/cli-common": "*"
   },
   "files": [
     "/.github/*",

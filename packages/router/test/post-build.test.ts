@@ -1,6 +1,7 @@
 import { routerPostBuild } from "../src";
 import * as fs from "fs";
 import { SfaRequest, TestStartup } from "@sfajs/core";
+import { CONFIG_FILE_NAME } from "../src/constant";
 
 test("empty config", async () => {
   let count = 0;
@@ -19,7 +20,7 @@ test("empty config", async () => {
 });
 
 test("build actions", async () => {
-  fs.rmSync("test/sfa-router-config.json", {
+  fs.rmSync(`test/${CONFIG_FILE_NAME}`, {
     force: true,
   });
 
@@ -30,7 +31,7 @@ test("build actions", async () => {
     command: "build",
   });
 
-  expect(fs.existsSync("test/sfa-router-config.json")).toBeTruthy();
+  expect(fs.existsSync(`test/${CONFIG_FILE_NAME}`)).toBeTruthy();
 });
 
 test("build and run", async () => {
@@ -56,55 +57,3 @@ test("build and run", async () => {
     method: "GET",
   });
 });
-
-// test("build config", async () => {
-//   fs.unlinkSync("test/sfa-router-config.json");
-//   fs.unlinkSync("test/sfa-router.map");
-
-//   await routerPostBuild({
-//     config: {
-//       router: {
-//         dir: "",
-//         customMethods: ["cu"],
-//         prefix: "pre",
-//       },
-//     },
-//     cacheDir: "test",
-//     mode: "",
-//     command: "build",
-//   });
-
-//   expect(fs.existsSync("test/sfa-router-config.json")).toBeTruthy();
-//   expect(fs.existsSync("test/sfa-router.map")).toBeTruthy();
-// });
-
-// test("error router dir", async () => {
-//   let count = 0;
-//   await runin("test/post-build", async () => {
-//     await new CliStartup()
-//       .add(BuildMiddlware)
-//       .use(async (ctx) => {
-//         await routerPostBuild(ctx);
-//         count++;
-//       })
-//       .run();
-//     const configPath = ".sfa-cache/sfa-router-config.json";
-//     expect(fs.existsSync(configPath)).toBeTruthy();
-//     const config = JSON.parse(fs.readFileSync(configPath, "utf-8"));
-//     config.dir = "actions1";
-//     fs.writeFileSync(configPath, JSON.stringify(config));
-
-//     await runin("./.sfa-cache", async () => {
-//       const res = await new TestStartup()
-//         .use(async (ctx, next) => {
-//           ctx.ok();
-//           await next();
-//         })
-//         .useRouter()
-//         .run(new SfaRequest().setMethod("get"));
-//       expect(res.status).toBe(404);
-//       count++;
-//     });
-//   });
-//   expect(count).toBe(2);
-// });

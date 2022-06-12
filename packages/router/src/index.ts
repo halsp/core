@@ -14,6 +14,7 @@ import path = require("path");
 import MapItem from "./map/map-item";
 import { RouterDistConfig, RouterConfig } from "./router-config";
 import {
+  CONFIG_FILE_NAME,
   CTX_CACHE_METADATA,
   REQUEST_CACHE_PARAMS,
   STARTUP_ROUTER_CONFIG,
@@ -157,7 +158,7 @@ Startup.prototype.useRouter = function (): Startup {
 
 function readConfig() {
   const txt = fs.readFileSync(
-    path.join(process.cwd(), "sfa-router-config.json"),
+    path.join(process.cwd(), CONFIG_FILE_NAME),
     "utf-8"
   );
   return JSON.parse(txt);

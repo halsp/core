@@ -1,7 +1,7 @@
 import path from "path";
 import * as fs from "fs";
 import MapCreater from "./map/map-creater";
-import { DEFAULT_ACTION_DIR } from "./constant";
+import { CONFIG_FILE_NAME, DEFAULT_ACTION_DIR } from "./constant";
 import { RouterDistConfig } from "./router-config";
 import { Postbuild } from "@sfajs/cli-common";
 
@@ -24,7 +24,7 @@ export const routerPostBuild: Postbuild = async ({ config, cacheDir }) => {
   };
 
   fs.writeFileSync(
-    path.resolve(process.cwd(), cacheDir, "sfa-router-config.json"),
+    path.resolve(process.cwd(), cacheDir, CONFIG_FILE_NAME),
     JSON.stringify(routerConfig)
   );
 };
