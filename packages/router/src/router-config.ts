@@ -8,7 +8,12 @@ export interface RouterConfig {
 
 export interface RouterDistConfig {
   dir: string;
-  prefix: string;
-  customMethods: string[];
   map: MapItem[];
+}
+
+export interface RouterConfigMerged {
+  dir: string;
+  map?: MapItem[];
+  prefix?: string;
+  customMethods?: string[];
 }

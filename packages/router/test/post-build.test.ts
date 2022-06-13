@@ -32,16 +32,16 @@ test("build actions", async () => {
   });
 
   expect(fs.existsSync(`test/${CONFIG_FILE_NAME}`)).toBeTruthy();
+
+  fs.rmSync(`test/${CONFIG_FILE_NAME}`, {
+    force: true,
+  });
 });
 
 test("build and run", async () => {
   await postbuild({
     config: {
-      router: {
-        dir: "test/actions",
-        prefix: "",
-        customMethods: [],
-      },
+      routerDir: "test/actions",
     },
     cacheDir: "",
     mode: "",
@@ -51,6 +51,10 @@ test("build and run", async () => {
   const res = await new TestStartup(new SfaRequest().setMethod("get"))
     .useRouter()
     .run();
+
+  fs.rmSync(CONFIG_FILE_NAME, {
+    force: true,
+  });
 
   expect(res.status).toBe(200);
   expect(res.body).toEqual({

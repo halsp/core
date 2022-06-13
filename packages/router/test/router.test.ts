@@ -6,8 +6,7 @@ test("startup test", async () => {
   const result = await new TestStartup(
     new SfaRequest().setPath("/simple/RoUtEr").setMethod("POST")
   )
-    .useTestConfig()
-    .useRouter()
+    .useTestRouter()
     .useRouter()
     .run();
   expect(result.status).toBe(200);
@@ -61,5 +60,14 @@ test("null body test", async () => {
     .useTestRouter()
     .run();
 
+  expect(result.status).toBe(404);
+});
+
+test("blank config", async () => {
+  const result = await new TestStartup(
+    new SfaRequest().setPath("").setMethod("GET")
+  )
+    .useRouter()
+    .run();
   expect(result.status).toBe(404);
 });

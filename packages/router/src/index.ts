@@ -9,13 +9,17 @@ import { Action } from "./action";
 import MapParser from "./map/map-parser";
 import path = require("path");
 import MapItem from "./map/map-item";
-import { RouterDistConfig, RouterConfig } from "./router-config";
+import {
+  RouterDistConfig,
+  RouterConfig,
+  RouterConfigMerged,
+} from "./router-config";
 import {
   CONFIG_FILE_NAME,
   CTX_CACHE_METADATA,
+  DEFAULT_ACTION_DIR,
   REQUEST_CACHE_PARAMS,
   STARTUP_ROUTER_CONFIG,
-  TEST_STARTUP_ROUTER_CONFIG,
 } from "./constant";
 import * as fs from "fs";
 import { BlanlMiddleware } from "./blank.middleware";
@@ -39,7 +43,7 @@ export { postbuild } from "./postbuild";
 
 declare module "@sfajs/core" {
   interface Startup {
-    useRouter(): this;
+    useRouter(cfg?: RouterConfig): this;
   }
 
   interface SfaRequest {
@@ -53,17 +57,23 @@ declare module "@sfajs/core" {
 
 declare module "@sfajs/cli-common" {
   interface Configuration {
-    router?: RouterConfig;
+    routerDir?: string;
   }
 }
 
-Startup.prototype.useRouter = function (): Startup {
+Startup.prototype.useRouter = function (cfg?: RouterConfig): Startup {
   if (!!this[STARTUP_ROUTER_CONFIG]) {
     return this;
   }
 
-  this[STARTUP_ROUTER_CONFIG] =
-    this[TEST_STARTUP_ROUTER_CONFIG] ?? readConfig();
+  const cliCfg = readConfig();
+  const config: RouterConfigMerged = {
+    map: cliCfg?.map,
+    dir: cfg?.dir ?? cliCfg?.dir ?? DEFAULT_ACTION_DIR,
+    prefix: cfg?.prefix,
+    customMethods: cfg?.customMethods,
+  };
+  this[STARTUP_ROUTER_CONFIG] = config;
 
   return this.use(async (ctx, next) => {
     Object.defineProperty(ctx, "actionMetadata", {
@@ -93,7 +103,7 @@ Startup.prototype.useRouter = function (): Startup {
     await next();
   })
     .use(async (ctx, next) => {
-      const cfg: RouterDistConfig = this[STARTUP_ROUTER_CONFIG];
+      const cfg: RouterConfigMerged = this[STARTUP_ROUTER_CONFIG];
       const mapParser = new MapParser(ctx, cfg);
       if (mapParser.notFound) {
         ctx.notFoundMsg({
@@ -158,7 +168,12 @@ Startup.prototype.useRouter = function (): Startup {
     });
 };
 
-function readConfig() {
+function readConfig(): RouterDistConfig | undefined {
+  const filePath = path.join(process.cwd(), CONFIG_FILE_NAME);
+  if (!fs.existsSync(filePath)) {
+    return undefined;
+  }
+
   const txt = fs.readFileSync(
     path.join(process.cwd(), CONFIG_FILE_NAME),
     "utf-8"
