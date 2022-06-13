@@ -1,17 +1,17 @@
 import MapItem from "./map/map-item";
 
-export interface RouterConfig {
+export interface RouterOptions {
   dir?: string;
   prefix?: string;
   customMethods?: string[];
 }
 
-export interface RouterDistConfig {
+export interface RouterDistOptions {
   dir: string;
   map: MapItem[];
 }
 
-export interface RouterConfigMerged {
+export interface RouterOptionsMerged {
   dir: string;
   map?: MapItem[];
   prefix?: string;

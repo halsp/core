@@ -2,12 +2,12 @@ import { existsSync, lstatSync } from "fs";
 import MapCreater from "./map-creater";
 import MapItem from "./map-item";
 import { HttpContext, HttpMethod } from "@sfajs/core";
-import { RouterConfigMerged } from "../router-config";
+import { RouterOptionsMerged } from "../router-options";
 
 export default class MapParser {
   constructor(
     private readonly ctx: HttpContext,
-    private readonly routerCfg: RouterConfigMerged
+    private readonly routerCfg: RouterOptionsMerged
   ) {
     if (
       !existsSync(this.routerDir) ||

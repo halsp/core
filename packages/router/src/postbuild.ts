@@ -2,7 +2,7 @@ import path from "path";
 import * as fs from "fs";
 import MapCreater from "./map/map-creater";
 import { CONFIG_FILE_NAME, DEFAULT_ACTION_DIR } from "./constant";
-import { RouterDistConfig } from "./router-config";
+import { RouterDistOptions } from "./router-options";
 import { Postbuild } from "@sfajs/cli-common";
 
 export const postbuild: Postbuild = async ({ config, cacheDir }) => {
@@ -16,7 +16,7 @@ export const postbuild: Postbuild = async ({ config, cacheDir }) => {
   }
 
   const map = new MapCreater(routerDir).map;
-  const routerConfig: RouterDistConfig = {
+  const routerConfig: RouterDistOptions = {
     dir: routerDirPath,
     map: map.map((m) => m.plainObject),
   };

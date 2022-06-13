@@ -1,4 +1,4 @@
-import { RouterConfig } from "../src";
+import { RouterOptions } from "../src";
 import "@sfajs/core";
 import { TestStartup } from "@sfajs/core";
 import "../src";
@@ -13,12 +13,12 @@ function getDefaultConfig() {
 
 declare module "@sfajs/core" {
   interface TestStartup {
-    useTestRouter(config?: RouterConfig): this;
+    useTestRouter(config?: RouterOptions): this;
   }
 }
 
 TestStartup.prototype.useTestRouter = function (
-  config: RouterConfig = getDefaultConfig()
+  config: RouterOptions = getDefaultConfig()
 ) {
   this.useRouter(config);
   return this;

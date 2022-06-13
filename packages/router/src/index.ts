@@ -10,21 +10,21 @@ import MapParser from "./map/map-parser";
 import path = require("path");
 import MapItem from "./map/map-item";
 import {
-  RouterDistConfig,
-  RouterConfig,
-  RouterConfigMerged,
-} from "./router-config";
+  RouterDistOptions,
+  RouterOptions,
+  RouterOptionsMerged,
+} from "./router-options";
 import {
   CONFIG_FILE_NAME,
   CTX_CACHE_METADATA,
   DEFAULT_ACTION_DIR,
   REQUEST_CACHE_PARAMS,
-  STARTUP_ROUTER_CONFIG,
+  STARTUP_ROUTER_OPTIONS,
 } from "./constant";
 import * as fs from "fs";
 import { BlanlMiddleware } from "./blank.middleware";
 
-export { Action, MapItem, RouterConfig };
+export { Action, MapItem, RouterOptions };
 export {
   SetActionMetadata,
   HttpCustom,
@@ -43,7 +43,7 @@ export { postbuild } from "./postbuild";
 
 declare module "@sfajs/core" {
   interface Startup {
-    useRouter(cfg?: RouterConfig): this;
+    useRouter(options?: RouterOptions): this;
   }
 
   interface SfaRequest {
@@ -61,19 +61,19 @@ declare module "@sfajs/cli-common" {
   }
 }
 
-Startup.prototype.useRouter = function (cfg?: RouterConfig): Startup {
-  if (!!this[STARTUP_ROUTER_CONFIG]) {
+Startup.prototype.useRouter = function (options?: RouterOptions): Startup {
+  if (!!this[STARTUP_ROUTER_OPTIONS]) {
     return this;
   }
 
-  const cliCfg = readConfig();
-  const config: RouterConfigMerged = {
-    map: cliCfg?.map,
-    dir: cfg?.dir ?? cliCfg?.dir ?? DEFAULT_ACTION_DIR,
-    prefix: cfg?.prefix,
-    customMethods: cfg?.customMethods,
+  const mapOptions = readMap();
+  const opts: RouterOptionsMerged = {
+    map: mapOptions?.map,
+    dir: options?.dir ?? mapOptions?.dir ?? DEFAULT_ACTION_DIR,
+    prefix: options?.prefix,
+    customMethods: options?.customMethods,
   };
-  this[STARTUP_ROUTER_CONFIG] = config;
+  this[STARTUP_ROUTER_OPTIONS] = opts;
 
   return this.use(async (ctx, next) => {
     Object.defineProperty(ctx, "actionMetadata", {
@@ -103,7 +103,7 @@ Startup.prototype.useRouter = function (cfg?: RouterConfig): Startup {
     await next();
   })
     .use(async (ctx, next) => {
-      const cfg: RouterConfigMerged = this[STARTUP_ROUTER_CONFIG];
+      const cfg: RouterOptionsMerged = this[STARTUP_ROUTER_OPTIONS];
       const mapParser = new MapParser(ctx, cfg);
       if (mapParser.notFound) {
         ctx.notFoundMsg({
@@ -157,7 +157,7 @@ Startup.prototype.useRouter = function (cfg?: RouterConfig): Startup {
 
       const filePath = path.join(
         process.cwd(),
-        this[STARTUP_ROUTER_CONFIG].dir,
+        this[STARTUP_ROUTER_OPTIONS].dir,
         ctx.actionMetadata.path
       );
 
@@ -168,7 +168,7 @@ Startup.prototype.useRouter = function (cfg?: RouterConfig): Startup {
     });
 };
 
-function readConfig(): RouterDistConfig | undefined {
+function readMap(): RouterDistOptions | undefined {
   const filePath = path.join(process.cwd(), CONFIG_FILE_NAME);
   if (!fs.existsSync(filePath)) {
     return undefined;
