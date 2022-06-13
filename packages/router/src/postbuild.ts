@@ -6,8 +6,11 @@ import { RouterDistConfig } from "./router-config";
 import { Postbuild } from "@sfajs/cli-common";
 
 export const postbuild: Postbuild = async ({ config, cacheDir }) => {
-  const routerDirPath = config.routerDir ?? DEFAULT_ACTION_DIR;
-  const routerDir = path.join(cacheDir, config.routerDir ?? DEFAULT_ACTION_DIR);
+  const routerDirPath = config.routerActionsDir ?? DEFAULT_ACTION_DIR;
+  const routerDir = path.join(
+    cacheDir,
+    config.routerActionsDir ?? DEFAULT_ACTION_DIR
+  );
   if (!fs.existsSync(routerDir) || !fs.statSync(routerDir).isDirectory()) {
     throw new Error("The router dir is not exist");
   }

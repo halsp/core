@@ -57,7 +57,7 @@ declare module "@sfajs/core" {
 
 declare module "@sfajs/cli-common" {
   interface Configuration {
-    routerDir?: string;
+    routerActionsDir?: string;
   }
 }
 
