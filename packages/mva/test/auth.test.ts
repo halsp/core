@@ -1,7 +1,7 @@
 import { SfaRequest, TestStartup } from "@sfajs/core";
 import "../src";
-import { AuthMiddleware } from "./mva/auth.middleware";
 import { runMva } from "./global";
+import { AutFilter } from "./mva/auth.middleware";
 
 test("auth access", async function () {
   await runMva(async () => {
@@ -11,10 +11,7 @@ test("auth access", async function () {
         .setMethod("GET")
         .setHeader("password", "test1password")
     )
-      .use(async (ctx, next) => {
-        await next();
-      })
-      .add(AuthMiddleware)
+      .useGlobalFilter(AutFilter)
       .useMva()
       .run();
 
@@ -32,7 +29,7 @@ test("auth failed", async function () {
         .setMethod("GET")
         .setHeader("password", "test2password")
     )
-      .add(AuthMiddleware)
+      .useGlobalFilter(AutFilter)
       .useMva()
       .run();
 

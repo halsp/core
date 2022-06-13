@@ -1,44 +1,45 @@
 import { users } from "./mock";
-import { Middleware } from "@sfajs/core";
+import { HttpContext } from "@sfajs/core";
 import "../../src";
 import "@sfajs/router";
+import { AuthorizationFilter } from "@sfajs/filter";
 
-export class AuthMiddleware extends Middleware {
-  async invoke(): Promise<void> {
+export class AutFilter implements AuthorizationFilter {
+  async onAuthorization(ctx: HttpContext): Promise<boolean> {
     if (
-      !this.ctx.actionMetadata ||
-      !this.ctx.actionMetadata.roles ||
-      !this.ctx.actionMetadata.roles.length
+      !ctx.actionMetadata ||
+      !ctx.actionMetadata.roles ||
+      !ctx.actionMetadata.roles.length
     ) {
-      return await this.next();
+      return true;
     }
 
-    if (this.ctx.actionMetadata.roles.includes("pl")) {
-      if (!(await this.paramsLoginAuth())) {
-        this.forbiddenMsg({ message: "error email or password" });
-        return;
+    if (ctx.actionMetadata.roles.includes("pl")) {
+      if (!(await this.paramsLoginAuth(ctx))) {
+        ctx.forbiddenMsg({ message: "error email or password" });
+        return false;
       }
     }
 
-    if (this.ctx.actionMetadata.roles.includes("hl")) {
-      if (!(await this.headerLoginAuth())) {
-        this.forbiddenMsg({ message: "error email or password" });
-        return;
+    if (ctx.actionMetadata.roles.includes("hl")) {
+      if (!(await this.headerLoginAuth(ctx))) {
+        ctx.forbiddenMsg({ message: "error email or password" });
+        return false;
       }
     }
 
-    await this.next();
+    return true;
   }
 
-  private async headerLoginAuth(): Promise<boolean> {
-    const { email, password } = this.ctx.req.headers;
+  private async headerLoginAuth(ctx: HttpContext): Promise<boolean> {
+    const { email, password } = ctx.req.headers;
     if (!email || !password) return false;
     return await this.loginAuth(email as string, password as string);
   }
 
-  private async paramsLoginAuth(): Promise<boolean> {
-    const { email } = this.ctx.req.params;
-    const { password } = this.ctx.req.headers;
+  private async paramsLoginAuth(ctx: HttpContext): Promise<boolean> {
+    const { email } = ctx.req.params;
+    const { password } = ctx.req.headers;
     if (!email || !password) return false;
     return await this.loginAuth(email, password as string);
   }

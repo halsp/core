@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/mva",
-  "version": "1.3.2",
+  "version": "1.4.0",
   "description": "sfajs MVA 框架",
   "homepage": "https://github.com/sfajs/mva",
   "repository": {
@@ -29,34 +29,40 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@sfajs/core": "^1.3.7",
-    "@sfajs/filter": "^0.3.0",
-    "@sfajs/router": "^1.6.2",
-    "@sfajs/views": "^1.1.10"
+    "@sfajs/core": "^1.4.3",
+    "@sfajs/filter": "^1.0.1",
+    "@sfajs/router": "^2.0.2",
+    "@sfajs/view": "^1.2.0"
   },
   "devDependencies": {
-    "@types/jest": "^27.5.0",
-    "@types/node": "^17.0.31",
+    "@types/jest": "^28.1.1",
+    "@types/node": "^17.0.42",
     "@types/shelljs": "^0.8.11",
-    "@typescript-eslint/eslint-plugin": "^5.22.0",
-    "@typescript-eslint/parser": "^5.22.0",
+    "@typescript-eslint/eslint-plugin": "^5.27.1",
+    "@typescript-eslint/parser": "^5.27.1",
     "codecov": "^3.8.3",
-    "ejs": "^3.1.7",
-    "eslint": "^8.15.0",
+    "ejs": "^3.1.8",
+    "eslint": "^8.17.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
-    "jest": "^28.1.0",
+    "jest": "^28.1.1",
     "prettier": "^2.6.2",
     "shelljs": "^0.8.5",
-    "ts-jest": "^28.0.1",
-    "typescript": "^4.6.4"
+    "ts-jest": "^28.0.4",
+    "typescript": "^4.7.3"
+  },
+  "peerDependencies": {
+    "@sfajs/core": "~1",
+    "@sfajs/filter": "~1",
+    "@sfajs/router": "~2",
+    "@sfajs/view": "~1"
   },
   "files": [
-    ".github",
-    "dist",
-    "scripts",
-    "src",
-    "test",
+    "/.github/*",
+    "/dist/*",
+    "/scripts/*",
+    "/src/*",
+    "/test/*",
     ".eslintignore",
     ".eslintrc.js",
     ".gitignore",

@@ -1,6 +1,6 @@
 import "@sfajs/core";
 import { HttpContext, HttpException, Startup, HookType } from "@sfajs/core";
-import "@sfajs/views";
+import "@sfajs/view";
 import "@sfajs/router";
 import MvaConfig, { CodeType } from "./mva-config";
 import { ERROR_CODES, USED } from "./constant";
@@ -72,14 +72,14 @@ Startup.prototype.useMva = function (cfg = <MvaConfig>{}): Startup {
         }
       }
 
-      await ctx.view(ctx.actionMetadata.reqPath, ctx.res.body);
+      await ctx.view(ctx.actionMetadata.url, ctx.res.body);
 
       if (action) {
         await execFilters(action, false, "onResultExecuted");
       }
     })
-    .useViews(cfg.viewsConfig)
-    .useRouter(cfg.routerConfig);
+    .useViews(cfg.viewOptions)
+    .useRouter(cfg.routerOptions);
 };
 
 async function errorView(ctx: HttpContext, codes: CodeType[]) {

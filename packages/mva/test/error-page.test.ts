@@ -1,6 +1,11 @@
-import { SfaRequest, SfaResponse, TestStartup } from "@sfajs/core";
+import {
+  NotFoundException,
+  SfaRequest,
+  SfaResponse,
+  TestStartup,
+} from "@sfajs/core";
 import "../src";
-import { AuthMiddleware } from "./mva/auth.middleware";
+import { AutFilter } from "./mva/auth.middleware";
 import { runMva } from "./global";
 
 function expect404(res: SfaResponse, isPage: boolean, replaceCode = 404) {
@@ -20,6 +25,42 @@ function expect404(res: SfaResponse, isPage: boolean, replaceCode = 404) {
   }
 }
 
+function run404(isNumber: boolean) {
+  function runUseAgain(useAgain: boolean) {
+    function runError(throwError: boolean) {
+      test(`useErrorPage ${isNumber}`, async function () {
+        const codes = [isNumber ? 404 : { code: 404 }];
+        await runMva(async () => {
+          const startup = new TestStartup(
+            new SfaRequest().setPath("not-exist").setMethod("GET")
+          )
+            .useErrorPage(codes)
+            .use(async (ctx, next) => {
+              if (throwError) {
+                throw new NotFoundException();
+              }
+              await next();
+            })
+            .useMva();
+          if (useAgain) {
+            startup.useErrorPage(codes).useMva();
+          }
+
+          const res = await startup.run();
+
+          expect404(res, true);
+        });
+      });
+    }
+    runError(true);
+    runError(false);
+  }
+  runUseAgain(true);
+  runUseAgain(false);
+}
+run404(true);
+run404(false);
+
 test("403", async function () {
   await runMva(async () => {
     const res = await new TestStartup(
@@ -29,7 +70,7 @@ test("403", async function () {
         .setHeader("password", "test2password")
     )
       .useErrorPage([{ code: 403 }])
-      .add(AuthMiddleware)
+      .useGlobalFilter(AutFilter)
       .useMva()
       .run();
 
@@ -37,30 +78,6 @@ test("403", async function () {
     expect(res.body).toBe("<p>403</p>");
   });
 });
-
-function run404(isNumber: boolean, useAgain: boolean) {
-  test(`useErrorPage ${isNumber}`, async function () {
-    const codes = [isNumber ? 404 : { code: 404 }];
-    await runMva(async () => {
-      const startup = new TestStartup(
-        new SfaRequest().setPath("not-exist").setMethod("GET")
-      )
-        .useErrorPage(codes)
-        .useMva();
-      if (useAgain) {
-        startup.useErrorPage(codes).useMva();
-      }
-
-      const res = await startup.run();
-
-      expect404(res, true);
-    });
-  });
-}
-run404(true, true);
-run404(true, false);
-run404(false, true);
-run404(false, false);
 
 test("replace", async function () {
   await runMva(async () => {
@@ -129,6 +146,24 @@ test(`useMva before useErrorPage`, async function () {
       .useMva()
       .useErrorPage(404)
       .run();
+
+    expect404(res, false);
+  });
+});
+
+test(`404 default`, async function () {
+  await runMva(async () => {
+    const startup = new TestStartup(
+      new SfaRequest().setPath("not-exist").setMethod("GET")
+    )
+      .useErrorPage()
+      .use(async () => {
+        throw new NotFoundException({
+          message: "Can't find the path：not-exist",
+          path: "not-exist",
+        });
+      });
+    const res = await startup.run();
 
     expect404(res, false);
   });
