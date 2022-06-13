@@ -7,11 +7,11 @@ import { RouterOptionsMerged } from "../router-options";
 export default class MapParser {
   constructor(
     private readonly ctx: HttpContext,
-    private readonly routerCfg: RouterOptionsMerged
+    private readonly options: RouterOptionsMerged
   ) {
     if (
-      !existsSync(this.routerDir) ||
-      !lstatSync(this.routerDir).isDirectory()
+      !existsSync(this.options.dir) ||
+      !lstatSync(this.options.dir).isDirectory()
     ) {
       this.notFound = true;
       return;
@@ -30,13 +30,6 @@ export default class MapParser {
   }
 
   #map!: MapItem[];
-
-  private get routerDir(): string {
-    return this.routerCfg.dir as string;
-  }
-  private get routerPrefix(): string {
-    return this.routerCfg.prefix as string;
-  }
 
   public notFound = false;
   public methodNotAllowed = false;
@@ -64,9 +57,9 @@ export default class MapParser {
 
   private isPathMatched(mapItem: MapItem, methodIncluded: boolean): boolean {
     let reqUrl = this.ctx.req.path;
-    if (this.routerPrefix && reqUrl.startsWith(this.routerPrefix)) {
+    if (this.options.prefix && reqUrl.startsWith(this.options.prefix)) {
       reqUrl = reqUrl
-        .substring(this.routerPrefix.length, reqUrl.length)
+        .substring(this.options.prefix.length, reqUrl.length)
         .replace(/^\//, "");
     }
     const reqUrlStrs = reqUrl.toLowerCase().split("/");
@@ -76,7 +69,7 @@ export default class MapParser {
     if (methodIncluded && !mapItem.methods.includes(HttpMethod.any)) {
       const matchedMethod = HttpMethod.matched(
         this.ctx.req.method,
-        this.routerCfg.customMethods
+        this.options.customMethods
       );
       if (!matchedMethod || !mapItem.methods.includes(matchedMethod)) {
         return false;
@@ -133,8 +126,8 @@ export default class MapParser {
   }
 
   private getMap(): MapItem[] {
-    if (this.routerCfg.map?.length) {
-      const result: MapItem[] = this.routerCfg.map.map((m) => {
+    if (this.options.map?.length) {
+      const result: MapItem[] = this.options.map.map((m) => {
         const mapItem = new MapItem(m.path, m.actionName, m.url, [
           ...m.methods,
         ]);
@@ -147,7 +140,7 @@ export default class MapParser {
       });
       return result;
     } else {
-      return new MapCreater(this.routerDir).map;
+      return new MapCreater(this.options.dir).map;
     }
   }
 }

@@ -1,6 +1,8 @@
 import { TestStartup, SfaRequest } from "@sfajs/core";
 import "../src";
 import "./global";
+import * as fs from "fs";
+import { CONFIG_FILE_NAME } from "../src/constant";
 
 test("startup test", async () => {
   const result = await new TestStartup(
@@ -64,6 +66,17 @@ test("null body test", async () => {
 });
 
 test("blank config", async () => {
+  let waitTimes = 0;
+  while (fs.existsSync(CONFIG_FILE_NAME)) {
+    waitTimes++;
+    if (waitTimes > 10) {
+      throw new Error("timeout");
+    }
+    await new Promise((resolve) => {
+      setTimeout(() => resolve, 200);
+    });
+  }
+
   const result = await new TestStartup(
     new SfaRequest().setPath("").setMethod("GET")
   )
