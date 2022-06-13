@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/filter",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "sfajs 的请求过滤器插件",
   "homepage": "https://github.com/sfajs/filter",
   "repository": {
@@ -28,7 +28,7 @@
   "dependencies": {
     "@sfajs/core": "^1.4.3",
     "@sfajs/inject": "^1.0.7",
-    "@sfajs/router": "^2.0.1",
+    "@sfajs/router": "^2.0.2",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
