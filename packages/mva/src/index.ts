@@ -2,17 +2,17 @@ import "@sfajs/core";
 import { HttpContext, HttpException, Startup, HookType } from "@sfajs/core";
 import "@sfajs/view";
 import "@sfajs/router";
-import MvaConfig, { CodeType } from "./mva-config";
+import { MvaOptions, CodeType } from "./mva-options";
 import { ERROR_CODES, USED } from "./constant";
 import { execFilters } from "@sfajs/filter";
 import { Action } from "@sfajs/router";
 
-export { MvaConfig };
+export { MvaOptions };
 export { ResultFilter } from "./result.filter";
 
 declare module "@sfajs/core" {
   interface Startup {
-    useMva(cfg?: MvaConfig): this;
+    useMva(options?: MvaOptions): this;
     useErrorPage(...codes: CodeType[]): this;
     useErrorPage(codes: CodeType[]): this;
   }
@@ -50,7 +50,7 @@ Startup.prototype.useErrorPage = function (...codes: any[]): Startup {
   });
 };
 
-Startup.prototype.useMva = function (cfg = <MvaConfig>{}): Startup {
+Startup.prototype.useMva = function (options: MvaOptions = {}): Startup {
   if (this[USED]) return this;
   this[USED] = true;
 
@@ -78,8 +78,8 @@ Startup.prototype.useMva = function (cfg = <MvaConfig>{}): Startup {
         await execFilters(action, false, "onResultExecuted");
       }
     })
-    .useViews(cfg.viewOptions)
-    .useRouter(cfg.routerOptions);
+    .useViews(options.viewOptions)
+    .useRouter(options.routerOptions);
 };
 
 async function errorView(ctx: HttpContext, codes: CodeType[]) {

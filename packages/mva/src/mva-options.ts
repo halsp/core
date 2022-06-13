@@ -5,7 +5,7 @@ export type CodeType =
   | { code: number; path?: string; replace?: number }
   | number;
 
-export default interface MvaConfig {
+export interface MvaOptions {
   viewOptions?: ViewOptions;
   routerOptions?: RouterOptions;
 }
