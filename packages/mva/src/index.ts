@@ -78,7 +78,7 @@ Startup.prototype.useMva = function (options: MvaOptions = {}): Startup {
         await execFilters(action, false, "onResultExecuted");
       }
     })
-    .useViews(options.viewOptions)
+    .useView(options.viewOptions)
     .useRouter(options.routerOptions);
 };
 
