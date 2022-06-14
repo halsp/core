@@ -9,7 +9,7 @@ test("default", async function () {
   }
 
   const res = await new TestStartup()
-    .useViews()
+    .useView()
     .add(() => new Md())
     .run();
 
@@ -26,7 +26,7 @@ test("middleware class", async function () {
   }
 
   const res = await new TestStartup()
-    .useViews({
+    .useView({
       dir: "test/views",
     })
     .add(() => new Md())
@@ -45,7 +45,7 @@ test("middleware class default", async function () {
   }
 
   const res = await new TestStartup()
-    .useViews({
+    .useView({
       dir: "test/views",
     })
     .add(() => new Md())

@@ -4,7 +4,7 @@ import "../src";
 function runHtml(renderAgain: boolean) {
   test("html", async function () {
     const res = await new TestStartup()
-      .useViews({
+      .useView({
         dir: "test/views",
       })
       .use(async (ctx) => {

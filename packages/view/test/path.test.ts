@@ -3,7 +3,7 @@ import "../src";
 
 test("run multiple", async function () {
   const startup = new TestStartup()
-    .useViews({
+    .useView({
       dir: "test/views",
     })
     .use(async (ctx) => {
@@ -23,7 +23,7 @@ test("run multiple", async function () {
 
 test("default index", async function () {
   const res = await new TestStartup()
-    .useViews({
+    .useView({
       dir: "test/views",
     })
     .use(async (ctx) => {
@@ -39,7 +39,7 @@ test("default index", async function () {
 
 test("without ext", async function () {
   const res = await new TestStartup()
-    .useViews({
+    .useView({
       dir: "test/views",
     })
     .use(async (ctx) => {
@@ -55,7 +55,7 @@ test("without ext", async function () {
 
 test("default dir", async function () {
   const res = await new TestStartup()
-    .useViews()
+    .useView()
     .use(async (ctx) => {
       await ctx.view("ejs/index", {
         name: "test ejs",
@@ -69,7 +69,7 @@ test("default dir", async function () {
 test("null", async function () {
   const res = await new TestStartup()
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    .useViews()
+    .useView()
     .use(async (ctx) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ctx.state = null as any;

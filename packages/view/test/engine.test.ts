@@ -4,7 +4,7 @@ import { consolidate } from "../src";
 
 test("str engine", async function () {
   const res = await new TestStartup()
-    .useViews({
+    .useView({
       dir: "test/views",
       engines: [
         { ext: "ejs", render: "ejs" },
@@ -25,7 +25,7 @@ test("str engine", async function () {
 
 test("func engine", async function () {
   const res = await new TestStartup()
-    .useViews({
+    .useView({
       dir: "test/views",
       engines: { ext: "ejs", render: consolidate.ejs },
     })
@@ -42,7 +42,7 @@ test("func engine", async function () {
 
 test("empty engine", async function () {
   const res = await new TestStartup()
-    .useViews({
+    .useView({
       dir: "test/views",
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       engines: null as any,

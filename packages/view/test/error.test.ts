@@ -3,7 +3,7 @@ import "../src";
 
 test("dir is not exist", async function () {
   const res = await new TestStartup()
-    .useViews({
+    .useView({
       dir: "test/1views",
     })
     .use(async (ctx) => {
@@ -16,7 +16,7 @@ test("dir is not exist", async function () {
 
 test("dir is not exist", async function () {
   const res = await new TestStartup()
-    .useViews({
+    .useView({
       dir: "test",
     })
     .use(async (ctx) => {
@@ -29,7 +29,7 @@ test("dir is not exist", async function () {
 
 test("engines is not exist", async function () {
   const res = await new TestStartup()
-    .useViews({
+    .useView({
       dir: "test/views",
     })
     .use(async (ctx) => {
@@ -42,7 +42,7 @@ test("engines is not exist", async function () {
 
 test("error path", async function () {
   const res = await new TestStartup()
-    .useViews({
+    .useView({
       dir: "test/views",
     })
     .use(async (ctx) => {

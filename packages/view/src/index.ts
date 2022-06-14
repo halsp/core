@@ -12,7 +12,7 @@ import { RENDERED } from "./constant";
 
 declare module "@sfajs/core" {
   interface Startup {
-    useViews<T extends this>(options?: ViewOptions): T;
+    useView<T extends this>(options?: ViewOptions): T;
   }
 
   interface HttpContext {
@@ -24,7 +24,7 @@ declare module "@sfajs/core" {
   }
 }
 
-Startup.prototype.useViews = function <T extends Startup>(
+Startup.prototype.useView = function <T extends Startup>(
   options: ViewOptions = {}
 ): T {
   ResultHandler.prototype.view = async function (

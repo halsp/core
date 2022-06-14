@@ -3,7 +3,7 @@ import "../src";
 
 test("pug", async function () {
   const res = await new TestStartup()
-    .useViews({
+    .useView({
       dir: "test/views",
     })
     .use(async (ctx) => {
