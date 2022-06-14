@@ -121,7 +121,7 @@ export class JwtService {
 
   #fixToken(token: string) {
     const prefix = this.#options.prefix ?? "Bearer";
-    if (token.startsWith(prefix)) {
+    if (token?.startsWith(prefix)) {
       token = token.substring(prefix.length, token.length).trim();
     }
     return token;
