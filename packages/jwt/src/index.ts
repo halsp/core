@@ -14,6 +14,7 @@ export {
   JwtSignOptions,
   JwtSecretRequestType,
 } from "./jwt-options";
+export { JwtService };
 
 declare module "@sfajs/core" {
   interface Startup {

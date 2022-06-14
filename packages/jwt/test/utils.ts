@@ -1,9 +1,8 @@
 import { SfaRequest, TestStartup } from "@sfajs/core";
 import { parseInject } from "@sfajs/inject";
-import { JwtOptions } from "../src";
+import { JwtOptions, JwtService } from "../src";
 import "../src";
 import "@sfajs/inject";
-import { JwtService } from "../src/jwt.service";
 import { OPTIONS_BAG } from "../src/constant";
 
 export async function createSfaReqeust(
