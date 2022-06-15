@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/filter",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "sfajs 的请求过滤器插件",
   "homepage": "https://github.com/sfajs/filter",
   "repository": {
@@ -28,27 +28,38 @@
   "dependencies": {
     "@sfajs/core": "^1.4.3",
     "@sfajs/inject": "^1.0.7",
-    "@sfajs/router": "^2.0.2",
+    "@sfajs/router": "^2.0.4",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@types/jest": "^28.1.1",
-    "@types/node": "^17.0.42",
-    "@typescript-eslint/eslint-plugin": "^5.27.1",
-    "@typescript-eslint/parser": "^5.27.1",
+    "@types/node": "^17.0.43",
+    "@typescript-eslint/eslint-plugin": "^5.28.0",
+    "@typescript-eslint/parser": "^5.28.0",
     "codecov": "^3.8.3",
     "eslint": "^8.17.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^28.1.1",
-    "prettier": "^2.6.2",
-    "ts-jest": "^28.0.4",
+    "prettier": "^2.7.0",
+    "ts-jest": "^28.0.5",
     "typescript": "^4.7.3"
   },
   "peerDependencies": {
     "@sfajs/core": "~1",
     "@sfajs/inject": "~1",
     "@sfajs/router": "~2"
+  },
+  "peerDependenciesMeta": {
+    "@sfajs/core": {
+      "optional": true
+    },
+    "@sfajs/inject": {
+      "optional": true
+    },
+    "@sfajs/router": {
+      "optional": true
+    }
   },
   "files": [
     "/.github/*",
