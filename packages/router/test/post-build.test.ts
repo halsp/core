@@ -9,8 +9,6 @@ test("empty config", async () => {
     await postbuild({
       config: {},
       cacheDir: ".sfa-cache",
-      mode: "",
-      command: "build",
     });
   } catch (err) {
     count++;
@@ -27,8 +25,6 @@ test("build actions", async () => {
   await postbuild({
     config: {},
     cacheDir: "test",
-    mode: "",
-    command: "build",
   });
 
   expect(fs.existsSync(`test/${CONFIG_FILE_NAME}`)).toBeTruthy();
@@ -44,8 +40,6 @@ test("build and run", async () => {
       routerActionsDir: "test/actions",
     },
     cacheDir: "",
-    mode: "",
-    command: "build",
   });
 
   const res = await new TestStartup(new SfaRequest().setMethod("get"))

@@ -3,9 +3,8 @@ import * as fs from "fs";
 import MapCreater from "./map/map-creater";
 import { CONFIG_FILE_NAME, DEFAULT_ACTION_DIR } from "./constant";
 import { RouterDistOptions } from "./router-options";
-import { Postbuild } from "@sfajs/cli-common";
 
-export const postbuild: Postbuild = async ({ config, cacheDir }) => {
+export const postbuild = async ({ config, cacheDir }) => {
   const routerDirPath = config.routerActionsDir ?? DEFAULT_ACTION_DIR;
   const routerDir = path.join(
     cacheDir,

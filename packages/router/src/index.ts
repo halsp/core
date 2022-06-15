@@ -40,6 +40,7 @@ export {
 } from "./decorators";
 export { setActionMetadata, getActionMetadata } from "./action";
 export { postbuild } from "./postbuild";
+import "./define-configuration";
 
 declare module "@sfajs/core" {
   interface Startup {
@@ -52,12 +53,6 @@ declare module "@sfajs/core" {
 
   interface HttpContext {
     get actionMetadata(): MapItem;
-  }
-}
-
-declare module "@sfajs/cli-common" {
-  interface Configuration {
-    routerActionsDir?: string;
   }
 }
 
