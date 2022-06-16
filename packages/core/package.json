@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/core",
-  "version": "1.4.6",
+  "version": "1.4.7",
   "description": "面向云的现代渐进式轻量 Node.js 框架",
   "homepage": "https://github.com/sfajs/core",
   "repository": {
