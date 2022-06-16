@@ -33,7 +33,7 @@ npm install @sfajs/inject
 
 ## 贡献
 
-请阅读 [SfaJS Contributing Guide](https://github.com/sfajs/core/blob/main/CONTRIBUTING.md)
+请阅读 [SfaJS Contributing Guide](https://github.com/sfajs/inject/blob/main/CONTRIBUTING.md)
 
 ### 贡献列表
 
