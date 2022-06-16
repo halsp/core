@@ -5,12 +5,22 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node_version: [14, 16, 18]
+        include:
+          # Active LTS + other OS
+          - os: macos-latest
+            node_version: 16
+          - os: windows-latest
+            node_version: 16
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: "16"
+          node-version: ${{ matrix.node-version }}
       - run: npm run tests
+      - run: npx codecov
 
   publish-npm:
     needs: test

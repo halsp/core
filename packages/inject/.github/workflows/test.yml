@@ -11,7 +11,13 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [16.x]
+        node_version: [14, 16, 18]
+        include:
+          # Active LTS + other OS
+          - os: macos-latest
+            node_version: 16
+          - os: windows-latest
+            node_version: 16
 
     steps:
       - uses: actions/checkout@v2
@@ -20,4 +26,3 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm run tests
-      - run: npx codecov
