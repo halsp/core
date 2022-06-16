@@ -38,7 +38,7 @@ npm install @sfajs/router
 
 ## 贡献
 
-请阅读 [SfaJS Contributing Guide](https://github.com/sfajs/router/blob/main/CONTRIBUTING.md)
+请阅读 [Contributing to @sfajs/router](https://github.com/sfajs/router/blob/main/CONTRIBUTING.md)
 
 ### 贡献列表
 
