@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/filter",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "sfajs 的请求过滤器插件",
   "homepage": "https://github.com/sfajs/filter",
   "repository": {
@@ -26,9 +26,9 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@sfajs/core": "^1.4.6",
-    "@sfajs/inject": "^1.0.9",
-    "@sfajs/router": "^2.0.5",
+    "@sfajs/core": "^1.4.7",
+    "@sfajs/inject": "^1.0.10",
+    "@sfajs/router": "^2.0.6",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
