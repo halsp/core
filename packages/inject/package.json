@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/inject",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Sfa 依赖注入中间件",
   "homepage": "https://github.com/sfajs/inject",
   "repository": {
