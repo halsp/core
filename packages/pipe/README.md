@@ -33,7 +33,7 @@ npm install @sfajs/pipe
 
 ## 贡献
 
-请阅读 [SfaJS Contributing Guide](https://github.com/sfajs/pipe/blob/main/CONTRIBUTING.md)
+请阅读 [Contributing to @sfajs/pipe](https://github.com/sfajs/pipe/blob/main/CONTRIBUTING.md)
 
 ### 贡献列表
 
