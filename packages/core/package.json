@@ -1,17 +1,17 @@
 {
   "name": "@sfajs/core",
   "version": "1.4.5",
-  "homepage": "https://github.com/sfajs/sfa",
+  "homepage": "https://github.com/sfajs/core",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sfajs/sfa"
+    "url": "https://github.com/sfajs/core"
   },
   "keywords": [
     "sfa",
     "serverless"
   ],
   "bugs": {
-    "url": "https://github.com/sfajs/sfa/issues",
+    "url": "https://github.com/sfajs/core/issues",
     "email": "support@hal.wang"
   },
   "main": "dist/index.js",

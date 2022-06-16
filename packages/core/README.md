@@ -4,13 +4,13 @@
 
 <p align="center">sfajs - 面向云的现代渐进式轻量 <a href="http://nodejs.org" target="_blank">Node.js</a> 框架</p>
 <p align="center">
-    <a href="https://github.com/sfajs/sfa/blob/main/LICENSE" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="GitHub license" /></a>
+    <a href="https://github.com/sfajs/core/blob/main/LICENSE" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="GitHub license" /></a>
     <a href=""><img src="https://img.shields.io/npm/v/@sfajs/core.svg" alt="npm version"></a>
     <a href=""><img src="https://badgen.net/npm/dt/@sfajs/core" alt="npm downloads"></a>
-    <a href="#"><img src="https://github.com/sfajs/sfa/actions/workflows/test.yml/badge.svg?branch=2.x" alt="Build Status"></a>
-    <a href="https://codecov.io/gh/sfajs/sfa/branch/main"><img src="https://img.shields.io/codecov/c/github/sfajs/sfa/main.svg" alt="Test Coverage"></a>
-    <a href="https://github.com/sfajs/sfa/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
-    <a href="https://gitpod.io/#https://github.com/sfajs/sfa"><img src="https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod" alt="Gitpod Ready-to-Code"></a>
+    <a href="#"><img src="https://github.com/sfajs/core/actions/workflows/test.yml/badge.svg?branch=2.x" alt="Build Status"></a>
+    <a href="https://codecov.io/gh/sfajs/core/branch/main"><img src="https://img.shields.io/codecov/c/github/sfajs/core/main.svg" alt="Test Coverage"></a>
+    <a href="https://github.com/sfajs/core/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
+    <a href="https://gitpod.io/#https://github.com/sfajs/core"><img src="https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod" alt="Gitpod Ready-to-Code"></a>
     <a href="https://paypal.me/ihalwang" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
 </p>
 
@@ -48,12 +48,12 @@ npm install @sfajs/core
 
 ## 贡献
 
-请阅读 [SfaJS Contributing Guide](https://github.com/sfajs/sfa/blob/main/CONTRIBUTING.md)
+请阅读 [SfaJS Contributing Guide](https://github.com/sfajs/core/blob/main/CONTRIBUTING.md)
 
 ### 贡献列表
 
-<a href="https://github.com/sfajs/sfa/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=sfajs/sfa" />
+<a href="https://github.com/sfajs/core/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=sfajs/core" />
 </a>
 
 ## License
