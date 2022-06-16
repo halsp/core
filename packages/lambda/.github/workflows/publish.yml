@@ -23,6 +23,7 @@ jobs:
       - run: npx codecov
 
   publish-npm:
+    if: github.repository == 'sfajs/cloudbase'
     needs: test
     runs-on: ubuntu-latest
     steps:
