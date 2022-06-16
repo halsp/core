@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/filter",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "sfajs 的请求过滤器插件",
   "homepage": "https://github.com/sfajs/filter",
   "repository": {
@@ -26,14 +26,14 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@sfajs/core": "^1.4.3",
-    "@sfajs/inject": "^1.0.7",
-    "@sfajs/router": "^2.0.4",
+    "@sfajs/core": "^1.4.6",
+    "@sfajs/inject": "^1.0.9",
+    "@sfajs/router": "^2.0.5",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@types/jest": "^28.1.1",
-    "@types/node": "^17.0.43",
+    "@types/node": "^18.0.0",
     "@typescript-eslint/eslint-plugin": "^5.28.0",
     "@typescript-eslint/parser": "^5.28.0",
     "codecov": "^3.8.3",
@@ -41,7 +41,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.0.0",
     "jest": "^28.1.1",
-    "prettier": "^2.7.0",
+    "prettier": "^2.7.1",
     "ts-jest": "^28.0.5",
     "typescript": "^4.7.3"
   },
