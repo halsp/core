@@ -13,6 +13,7 @@ jobs:
       - run: npm run tests
 
   publish-npm:
+    if: github.repository == 'sfajs/sfa'
     needs: test
     runs-on: ubuntu-latest
     steps:
