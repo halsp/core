@@ -33,7 +33,7 @@ npm install @sfajs/view
 
 ## 贡献
 
-请阅读 [SfaJS Contributing Guide](https://github.com/sfajs/view/blob/main/CONTRIBUTING.md)
+请阅读 [Contributing to @sfajs/view](https://github.com/sfajs/view/blob/main/CONTRIBUTING.md)
 
 ### 贡献列表
 
