@@ -21,6 +21,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: npm run tests
       - run: npx codecov
+
   publish-npm:
     if: github.repository == 'sfajs/router'
     needs: test
