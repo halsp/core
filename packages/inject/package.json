@@ -28,7 +28,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@sfajs/core": "^1.4.6",
+    "@sfajs/core": "^1.4.7",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
