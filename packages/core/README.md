@@ -7,7 +7,8 @@
     <a href="https://github.com/sfajs/core/blob/main/LICENSE" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="GitHub license" /></a>
     <a href=""><img src="https://img.shields.io/npm/v/@sfajs/core.svg" alt="npm version"></a>
     <a href=""><img src="https://badgen.net/npm/dt/@sfajs/core" alt="npm downloads"></a>
-    <a href="#"><img src="https://github.com/sfajs/core/actions/workflows/test.yml/badge.svg?branch=2.x" alt="Build Status"></a>
+    <a href="https://nodejs.org/en/about/releases/"><img src="https://img.shields.io/node/v/vite.svg" alt="node compatibility"></a>
+    <a href="#"><img src="https://github.com/sfajs/core/actions/workflows/test.yml/badge.svg?branch=main" alt="Build Status"></a>
     <a href="https://codecov.io/gh/sfajs/core/branch/main"><img src="https://img.shields.io/codecov/c/github/sfajs/core/main.svg" alt="Test Coverage"></a>
     <a href="https://github.com/sfajs/core/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
     <a href="https://gitpod.io/#https://github.com/sfajs/core"><img src="https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod" alt="Gitpod Ready-to-Code"></a>
@@ -35,6 +36,8 @@ sfajs 源码全部使用 TypeScript 开发，有完善的智能提示
 mva 架构让项目各模块耦合度更低
 
 可选的装饰器功能让接口设计更加简单
+
+预编译路由，启动和响应速度更快，适合用于 serverless 的 nodejs 框架
 
 ## 安装
 
