@@ -54,6 +54,14 @@ Startup.prototype.useMva = function (options: MvaOptions = {}): Startup {
   if (this[USED]) return this;
   this[USED] = true;
 
+  const methods = (() => {
+    let result = options.methods ?? ["get"];
+    if (typeof result == "string") {
+      result = [result];
+    }
+    return result;
+  })();
+
   return this.hook((ctx, md) => {
     if (md instanceof Action) {
       ctx.actionMetadata.actionInstance = md;
@@ -63,6 +71,15 @@ Startup.prototype.useMva = function (options: MvaOptions = {}): Startup {
       await next();
 
       if (!ctx.res.isSuccess) return;
+      if (
+        !methods.some((m) => m.toLowerCase() == "any") &&
+        !methods.some((m) => m.toLowerCase() == ctx.req.method.toLowerCase())
+      ) {
+        return;
+      }
+      if (options.randerEnable && !(await options.randerEnable(ctx))) {
+        return;
+      }
 
       const action = ctx.actionMetadata.actionInstance as Action;
       if (action) {
