@@ -1,3 +1,5 @@
+name: "Publish NPM"
+
 on:
   release:
     types: [created]
