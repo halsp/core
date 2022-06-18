@@ -1,4 +1,4 @@
-import { Middleware, SfaRequest, TestStartup } from "@sfajs/core";
+import { isUndefined, Middleware, SfaRequest, TestStartup } from "@sfajs/core";
 import "../../src";
 import { Service1 } from "../services";
 import { Inject, InjectType } from "../../src";
@@ -20,7 +20,7 @@ class TestMiddleware extends Middleware {
   }
 }
 
-function runTest(type: InjectType) {
+function runTest(type?: InjectType) {
   test(`key inject type ${type}`, async function () {
     const startup = new TestStartup()
       .useInject()
@@ -41,7 +41,7 @@ function runTest(type: InjectType) {
         count1: 1,
         count2: 3,
       });
-    } else if (type == InjectType.Scoped) {
+    } else if (type == InjectType.Scoped || isUndefined(type)) {
       expect(res.body).toEqual({
         count1: 4,
         count2: 4,
@@ -56,6 +56,7 @@ function runTest(type: InjectType) {
   });
 }
 
+runTest();
 runTest(InjectType.Scoped);
 runTest(InjectType.Singleton);
 runTest(InjectType.Transient);

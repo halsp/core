@@ -16,6 +16,7 @@ class TestMiddleware extends Middleware {
       service1: this.service1?.invoke(),
       service11: this.service11?.invoke(),
       service2: this.service2?.invoke(),
+      count: this.service1.count,
     });
   }
 }
@@ -31,5 +32,6 @@ test(`inject decorators`, async function () {
     service1: "service1",
     service11: "service1",
     service2: "service2.service1",
+    count: 3,
   });
 });

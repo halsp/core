@@ -94,7 +94,11 @@ class InjectDecoratorParser<T extends object = any> {
 
     let result: any;
     if (!!existMap) {
-      result = await this.getObjectFromExistMap(existMap, prop.key);
+      result = await this.getObjectFromExistMap(
+        existMap.target,
+        existMap.type,
+        prop.key
+      );
     } else if (!!prop.property) {
       result = await this.getPropertyValue(prop.property);
     } else if (!!prop.parameterIndex) {
@@ -161,29 +165,28 @@ class InjectDecoratorParser<T extends object = any> {
     const existMap = injectMaps.filter(
       (map) => isFunction(map.anestor) && map.anestor == target
     )[0];
-    if (!existMap) {
-      return await this.createObject(target);
-    }
 
-    return await this.getObjectFromExistMap(existMap, target);
+    return await this.getObjectFromExistMap(
+      existMap?.target ?? target,
+      existMap?.type ?? InjectType.Scoped,
+      target
+    );
   }
 
   private async getObjectFromExistMap(
-    existMap: InjectMap,
+    target: ObjectConstructor<T>,
+    type: InjectType,
     injectKey:
       | ObjectConstructor
       | string
       | ((ctx: HttpContext) => any | Promise<any>)
   ) {
-    const { record, records } = this.getExistInjectRecord(
-      existMap.type,
-      injectKey
-    );
+    const { record, records } = this.getExistInjectRecord(type, injectKey);
 
     if (record) {
       return record.value;
     } else {
-      const obj = await this.createObject(existMap.target);
+      const obj = await this.createObject(target);
       records.push({
         injectKey: injectKey,
         value: obj,
@@ -203,12 +206,12 @@ class InjectDecoratorParser<T extends object = any> {
     record: InjectDecoratorRecordItem;
   } {
     let records: InjectDecoratorRecordItem[];
-    if (type == InjectType.Scoped) {
-      records = this.ctx.bag<InjectDecoratorRecordItem[]>(DECORATOR_SCOPED_BAG);
+    if (type == InjectType.Transient) {
+      records = [];
     } else if (type == InjectType.Singleton) {
       records = InjectDecoratorParser.singletonInject;
     } else {
-      records = [];
+      records = this.ctx.bag<InjectDecoratorRecordItem[]>(DECORATOR_SCOPED_BAG);
     }
 
     return {
