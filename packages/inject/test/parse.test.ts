@@ -5,7 +5,6 @@ import { parseInject } from "../src";
 
 test(`inject decorators object`, async function () {
   const res = await new TestStartup()
-    .useInject()
     .use(async (ctx) => {
       const obj = await parseInject(ctx, Service2);
       return ctx.ok(obj.invoke());
@@ -17,7 +16,6 @@ test(`inject decorators object`, async function () {
 
 test(`inject decorators`, async function () {
   const res = await new TestStartup()
-    .useInject()
     .use(async (ctx) => {
       const obj = await parseInject(ctx, Service2);
       return ctx.ok(obj.invoke());

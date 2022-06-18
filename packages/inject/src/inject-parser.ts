@@ -86,6 +86,7 @@ class InjectDecoratorParser<T extends object = any> {
     return this.obj;
   }
 
+  //#region parsePropValue
   private async getKeyPropValue(prop: InjectKey) {
     const injectMaps = this.ctx.bag<InjectMap[]>(MAP_BAG) ?? [];
     const existMap = injectMaps.filter(
@@ -158,7 +159,9 @@ class InjectDecoratorParser<T extends object = any> {
       return undefined;
     }
   }
+  //#endregion
 
+  //#region createObject
   private async createTargetObject() {
     const target = this.target as ObjectConstructor<T>;
     const injectMaps = this.ctx.bag<InjectMap[]>(MAP_BAG) ?? [];
@@ -211,7 +214,7 @@ class InjectDecoratorParser<T extends object = any> {
     } else if (type == InjectType.Singleton) {
       records = InjectDecoratorParser.singletonInject;
     } else {
-      records = this.ctx.bag<InjectDecoratorRecordItem[]>(DECORATOR_SCOPED_BAG);
+      records = this.getScopedRecords();
     }
 
     return {
@@ -220,7 +223,17 @@ class InjectDecoratorParser<T extends object = any> {
     };
   }
 
-  async createObject<T extends object>(
+  private getScopedRecords() {
+    let records =
+      this.ctx.bag<InjectDecoratorRecordItem[]>(DECORATOR_SCOPED_BAG);
+    if (!records) {
+      records = [];
+      this.ctx.bag(DECORATOR_SCOPED_BAG, records);
+    }
+    return records;
+  }
+
+  private async createObject<T extends object>(
     target: ObjectConstructor<T> | T | ((ctx: HttpContext) => T | Promise<T>)
   ): Promise<T> {
     if (isClass<T>(target)) {
@@ -271,8 +284,9 @@ class InjectDecoratorParser<T extends object = any> {
       return undefined;
     }
   }
+  //#endregion
 
-  getConstructorArgsTypes<T extends object>(
+  private getConstructorArgsTypes<T extends object>(
     target: ObjectConstructor<T>
   ): ObjectConstructor[] {
     return Reflect.getMetadata(CLASS_METADATA, target) ?? [];
