@@ -2,8 +2,16 @@ import { SfaRequest } from "./sfa-request";
 import { SfaResponse } from "./sfa-response";
 import { ResultHandler } from "./result-handler";
 import { HttpException, InternalServerErrorException } from "../exceptions";
-import { isNil, isObject, Dict } from "../utils";
+import { isNil, isObject, Dict, isUndefined, isPlainObject } from "../utils";
 import { Startup } from "../startup";
+
+type BuilderBagType = "singleton" | "scoped" | "transient";
+type BuilderBagItem<T> = {
+  key: string;
+  builder: () => T;
+  type: BuilderBagType;
+  isBuilderBag: true;
+};
 
 export class HttpContext extends ResultHandler {
   constructor(req: SfaRequest) {
@@ -16,6 +24,8 @@ export class HttpContext extends ResultHandler {
 
   readonly startup!: Startup;
 
+  static readonly #singletonBag: Dict = {};
+  readonly #scopedBag: Dict = {};
   readonly #bag: Dict = {};
 
   readonly #res = new SfaResponse();
@@ -30,18 +40,50 @@ export class HttpContext extends ResultHandler {
 
   public bag<T>(key: string): T;
   public bag<T>(key: string, value: T): this;
-  public bag<T>(key: string, builder: () => T): this;
-  public bag<T>(key: string, value?: T | (() => T)): this | T {
-    if (value == undefined) {
-      const result = this.#bag[key];
-      if (typeof result == "function") {
-        return result();
+  public bag<T>(key: string, type: BuilderBagType, builder: () => T): this;
+  public bag<T>(key: string, arg1?: any, arg2?: any): this | T {
+    if (!isUndefined(arg1) && !isUndefined(arg2)) {
+      this.#bag[key] = <BuilderBagItem<T>>{
+        type: arg1,
+        builder: arg2,
+        isBuilderBag: true,
+      };
+      return this;
+    } else if (!isUndefined(arg1)) {
+      this.#bag[key] = arg1;
+      return this;
+    } else {
+      if (Object.hasOwn(HttpContext.#singletonBag, key)) {
+        return this.#getBagValue(key, HttpContext.#singletonBag[key]);
+      }
+      if (Object.hasOwn(this.#scopedBag, key)) {
+        return this.#getBagValue(key, this.#scopedBag[key]);
+      }
+      const result: BuilderBagItem<T> | T = this.#bag[key];
+      return this.#getBagValue(key, result);
+    }
+  }
+
+  #getBagValue<T>(key: string, result: BuilderBagItem<T> | T) {
+    if (isPlainObject(result) && result.isBuilderBag) {
+      if (result.type == "transient") {
+        return result.builder();
       } else {
-        return result as T;
+        let dict: Dict;
+        if (result.type == "singleton") {
+          dict = HttpContext.#singletonBag;
+        } else {
+          dict = this.#scopedBag;
+        }
+
+        const exist = Object.hasOwn(dict, key);
+        if (!exist) {
+          dict[key] = result.builder();
+        }
+        return dict[key];
       }
     } else {
-      this.#bag[key] = value;
-      return this;
+      return result as T;
     }
   }
 
