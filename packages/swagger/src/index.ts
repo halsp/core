@@ -1,16 +1,18 @@
 import "@sfajs/core";
-import { Startup } from "@sfajs/core";
-import swaggerJSDoc from "swagger-jsdoc";
+import { isUndefined, Startup } from "@sfajs/core";
+import { OpenApiBuilder, OpenAPIObject } from "openapi3-ts";
+import { USED } from "./constant";
+import { Parser } from "./parser";
+
+type SwaggerBuilder = (builder: OpenApiBuilder) => OpenApiBuilder;
 
 export interface SwaggerOptions {
-  url?: string;
+  path?: string;
+  builder?: SwaggerBuilder;
   customHtml?:
     | ((jsonStr: string) => Promise<string>)
     | ((jsonStr: string) => string);
-  docOptions?: swaggerJSDoc.Options;
 }
-
-export { swaggerJSDoc };
 
 declare module "@sfajs/core" {
   interface Startup {
@@ -18,41 +20,43 @@ declare module "@sfajs/core" {
   }
 }
 
-Startup.prototype.useSwagger = function (
-  options: SwaggerOptions = {}
-): Startup {
+Startup.prototype.useSwagger = function (options?: SwaggerOptions): Startup {
+  if (!!this[USED]) {
+    return this;
+  }
+  this[USED] = true;
+
+  options = options ?? {};
+  let openApiBuilder = new OpenApiBuilder();
+  if (options?.builder) {
+    openApiBuilder = options.builder(openApiBuilder);
+  }
+  const doc = new Parser(openApiBuilder).parse();
+
+  let body: string | undefined = undefined;
+
   return this.use(async (ctx, next) => {
-    if (fixPath(ctx.req.path) != fixPath(options.url)) {
+    if (fixPath(ctx.req.path) != fixPath(options?.path ?? "")) {
       return await next();
     }
-    const jsonStr = JSON.stringify(
-      swaggerJSDoc(options.docOptions ?? defaultDocOptions)
-    );
-    let body;
-    if (options.customHtml) {
-      const html = options.customHtml(jsonStr);
-      if (html instanceof Promise) {
-        body = await html;
-      } else {
-        body = html;
-      }
-    } else {
-      body = getHtml(jsonStr);
+
+    if (isUndefined(body)) {
+      body = await getSwaggerBody(doc, options as SwaggerOptions);
     }
-    ctx.ok(body).setHeader("content-type", "text/html");
+    ctx.setHeader("content-type", "text/html").ok(body);
   });
 };
 
-const defaultDocOptions = {
-  definition: {
-    swagger: "2.0",
-    info: {
-      title: "Test",
-      version: "1.0.0",
-    },
-  },
-  apis: ["./*.ts", "./*.js"],
-};
+async function getSwaggerBody(doc: OpenAPIObject, options: SwaggerOptions) {
+  const docStr = JSON.stringify(doc);
+  let body: string;
+  if (options.customHtml) {
+    body = await options.customHtml(docStr);
+  } else {
+    body = getHtml(docStr);
+  }
+  return body;
+}
 
 function fixPath(path?: string): string {
   return (path ?? "")

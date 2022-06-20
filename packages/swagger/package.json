@@ -28,10 +28,13 @@
   "license": "MIT",
   "dependencies": {
     "@sfajs/core": "^1.5.0",
-    "@types/swagger-jsdoc": "^6.0.1",
-    "swagger-jsdoc": "^6.2.1"
+    "@sfajs/inject": "^1.1.0",
+    "@sfajs/pipe": "^1.1.7",
+    "@sfajs/router": "^2.1.0",
+    "openapi3-ts": "^2.0.2"
   },
   "devDependencies": {
+    "@sfajs/http": "^1.1.2",
     "@types/jest": "^28.1.2",
     "@types/node": "^18.0.0",
     "@types/shelljs": "^0.8.11",
@@ -47,7 +50,24 @@
     "typescript": "^4.7.4"
   },
   "peerDependencies": {
-    "@sfajs/core": "~1"
+    "@sfajs/core": "~1",
+    "@sfajs/inject": "~1",
+    "@sfajs/pipe": "~1",
+    "@sfajs/router": "~2"
+  },
+  "peerDependenciesMeta": {
+    "@sfajs/core": {
+      "optional": true
+    },
+    "@sfajs/inject": {
+      "optional": true
+    },
+    "@sfajs/router": {
+      "optional": true
+    },
+    "@sfajs/pipe": {
+      "optional": true
+    }
   },
   "files": [
     "/.github/*",
