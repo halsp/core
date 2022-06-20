@@ -14,7 +14,7 @@ export default class MapCreater {
       !existsSync(this.dirPath) ||
       !lstatSync(this.dirPath).isDirectory()
     ) {
-      throw new Error("the router dir is not exist");
+      throw new Error("The router dir is not exist");
     }
   }
 

@@ -6,3 +6,4 @@ export const ACTION_METHOD_METADATA = "__@sfajs/router_actionMethodMetadata__";
 export const STARTUP_ROUTER_OPTIONS = "__@sfajs/router_startupRouterOptions__";
 export const REQUEST_CACHE_PARAMS = "__@sfajs/router_ctxCacheParams__";
 export const CTX_CACHE_METADATA = "__@sfajs/router_ctxCacheMetadata__";
+export const STARTUP_ROUTER_MAP = "__@sfajs/router_startupRouterMap__";

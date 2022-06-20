@@ -77,10 +77,14 @@ test("blank config", async () => {
     });
   }
 
-  const result = await new TestStartup(
-    new SfaRequest().setPath("").setMethod("GET")
-  )
-    .useRouter()
-    .run();
-  expect(result.status).toBe(404);
+  let done = false;
+  try {
+    await new TestStartup(new SfaRequest().setPath("").setMethod("GET"))
+      .useRouter()
+      .run();
+  } catch (err) {
+    done = true;
+    expect((err as Error).message).toBe("The router dir is not exist");
+  }
+  expect(done).toBeTruthy();
 });

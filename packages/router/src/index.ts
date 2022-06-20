@@ -19,6 +19,7 @@ import {
   CTX_CACHE_METADATA,
   DEFAULT_ACTION_DIR,
   REQUEST_CACHE_PARAMS,
+  STARTUP_ROUTER_MAP,
   STARTUP_ROUTER_OPTIONS,
 } from "./constant";
 import * as fs from "fs";
@@ -41,6 +42,7 @@ export {
 export { setActionMetadata, getActionMetadata } from "./action";
 export { postbuild } from "./postbuild";
 import "./define-configuration";
+import MapMatcher from "./map/map-matcher";
 
 declare module "@sfajs/core" {
   interface Startup {
@@ -53,6 +55,7 @@ declare module "@sfajs/core" {
 
   interface HttpContext {
     get actionMetadata(): MapItem;
+    get routerMap(): MapItem[];
   }
 }
 
@@ -70,7 +73,17 @@ Startup.prototype.useRouter = function (options?: RouterOptions): Startup {
   };
   this[STARTUP_ROUTER_OPTIONS] = opts;
 
+  this[STARTUP_ROUTER_MAP] = new MapParser(opts).getMap();
+
   return this.use(async (ctx, next) => {
+    Object.defineProperty(ctx, "routerMap", {
+      configurable: false,
+      enumerable: false,
+      get: () => {
+        return this[STARTUP_ROUTER_MAP];
+      },
+    });
+
     Object.defineProperty(ctx, "actionMetadata", {
       configurable: false,
       enumerable: false,
@@ -99,20 +112,20 @@ Startup.prototype.useRouter = function (options?: RouterOptions): Startup {
   })
     .use(async (ctx, next) => {
       const cfg: RouterOptionsMerged = this[STARTUP_ROUTER_OPTIONS];
-      const mapParser = new MapParser(ctx, cfg);
-      if (mapParser.notFound) {
+      const mapMatcher = new MapMatcher(ctx, cfg);
+      if (mapMatcher.notFound) {
         ctx.notFoundMsg({
           message: `Can't find the path：${ctx.req.path}`,
           path: ctx.req.path,
         });
-      } else if (mapParser.methodNotAllowed) {
+      } else if (mapMatcher.methodNotAllowed) {
         ctx.methodNotAllowedMsg({
           message: `method not allowed：${ctx.req.method}`,
           method: ctx.req.method,
           path: ctx.req.path,
         });
       } else {
-        const mapItem = mapParser.mapItem;
+        const mapItem = mapMatcher.mapItem;
         ctx[CTX_CACHE_METADATA] = mapItem;
       }
       await next();
