@@ -63,7 +63,7 @@ async function runErrorOptions(err: boolean) {
     const res = await new TestStartup(new SfaRequest().setMethod("GET"))
       .useSwagger({
         customHtml: async () => "html",
-        options: err ? {} : undefined,
+        docOptions: err ? {} : undefined,
       })
       .run();
     if (!err) {

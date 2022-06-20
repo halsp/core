@@ -2,31 +2,35 @@ import "@sfajs/core";
 import { Startup } from "@sfajs/core";
 import swaggerJSDoc from "swagger-jsdoc";
 
-interface SfaSwaggerConfig {
+export interface SwaggerOptions {
   url?: string;
   customHtml?:
     | ((jsonStr: string) => Promise<string>)
     | ((jsonStr: string) => string);
-  options?: swaggerJSDoc.Options;
+  docOptions?: swaggerJSDoc.Options;
 }
 
-export { swaggerJSDoc, SfaSwaggerConfig };
+export { swaggerJSDoc };
 
 declare module "@sfajs/core" {
   interface Startup {
-    useSwagger(cfg?: SfaSwaggerConfig): this;
+    useSwagger(options?: SwaggerOptions): this;
   }
 }
 
-Startup.prototype.useSwagger = function (cfg: SfaSwaggerConfig = {}): Startup {
+Startup.prototype.useSwagger = function (
+  options: SwaggerOptions = {}
+): Startup {
   return this.use(async (ctx, next) => {
-    if (fixPath(ctx.req.path) != fixPath(cfg.url)) {
+    if (fixPath(ctx.req.path) != fixPath(options.url)) {
       return await next();
     }
-    const jsonStr = JSON.stringify(swaggerJSDoc(cfg.options ?? defaultOptions));
+    const jsonStr = JSON.stringify(
+      swaggerJSDoc(options.docOptions ?? defaultDocOptions)
+    );
     let body;
-    if (cfg.customHtml) {
-      const html = cfg.customHtml(jsonStr);
+    if (options.customHtml) {
+      const html = options.customHtml(jsonStr);
       if (html instanceof Promise) {
         body = await html;
       } else {
@@ -39,7 +43,7 @@ Startup.prototype.useSwagger = function (cfg: SfaSwaggerConfig = {}): Startup {
   });
 };
 
-const defaultOptions = {
+const defaultDocOptions = {
   definition: {
     swagger: "2.0",
     info: {
