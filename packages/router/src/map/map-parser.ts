@@ -28,7 +28,7 @@ export default class MapParser {
       });
       return result;
     } else {
-      return new MapCreater(this.options.dir).map;
+      return new MapCreater(this.options.dir).create();
     }
   }
 }

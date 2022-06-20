@@ -14,13 +14,13 @@ export const postbuild = async ({ config, cacheDir }) => {
     throw new Error("The router dir is not exist");
   }
 
-  const map = new MapCreater(routerDir).map;
+  const map = new MapCreater(routerDir).create();
   const routerConfig: RouterDistOptions = {
     dir: routerDirPath,
     map: map.map((m) => m.plainObject),
   };
 
-  fs.writeFileSync(
+  await fs.promises.writeFile(
     path.resolve(process.cwd(), cacheDir, CONFIG_FILE_NAME),
     JSON.stringify(routerConfig)
   );

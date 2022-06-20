@@ -18,7 +18,7 @@ export default class MapCreater {
     }
   }
 
-  get map(): MapItem[] {
+  public create(): MapItem[] {
     return this.readFilesFromFolder("", []);
   }
 

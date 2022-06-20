@@ -32,7 +32,7 @@
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "@sfajs/cli-common": "^0.2.5",
+    "@sfajs/cli-common": "^0.2.6",
     "@types/jest": "^28.1.2",
     "@types/node": "^18.0.0",
     "@typescript-eslint/eslint-plugin": "^5.28.0",
