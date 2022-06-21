@@ -1,6 +1,6 @@
 import { Middleware } from "@sfajs/core";
 
-export class BlanlMiddleware extends Middleware {
+export class BlankMiddleware extends Middleware {
   async invoke(): Promise<void> {
     await this.next();
   }

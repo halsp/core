@@ -23,7 +23,7 @@ import {
   STARTUP_ROUTER_OPTIONS,
 } from "./constant";
 import * as fs from "fs";
-import { BlanlMiddleware } from "./blank.middleware";
+import { BlankMiddleware } from "./blank.middleware";
 
 export { Action, MapItem, RouterOptions };
 export {
@@ -178,7 +178,7 @@ Startup.prototype.useRouter = function (options?: RouterOptions): Startup {
     })
     .add((ctx) => {
       if (!ctx.actionMetadata) {
-        return BlanlMiddleware;
+        return BlankMiddleware;
       }
 
       const filePath = path.join(
