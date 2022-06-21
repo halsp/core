@@ -47,6 +47,7 @@ import MapMatcher from "./map/map-matcher";
 declare module "@sfajs/core" {
   interface Startup {
     useRouter(options?: RouterOptions): this;
+    get routerMap(): MapItem[];
   }
 
   interface SfaRequest {
@@ -74,6 +75,14 @@ Startup.prototype.useRouter = function (options?: RouterOptions): Startup {
   this[STARTUP_ROUTER_OPTIONS] = opts;
 
   this[STARTUP_ROUTER_MAP] = new MapParser(opts).getMap();
+
+  Object.defineProperty(this, "routerMap", {
+    configurable: false,
+    enumerable: false,
+    get: () => {
+      return this[STARTUP_ROUTER_MAP];
+    },
+  });
 
   return this.use(async (ctx, next) => {
     Object.defineProperty(ctx, "routerMap", {
