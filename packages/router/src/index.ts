@@ -48,6 +48,7 @@ declare module "@sfajs/core" {
   interface Startup {
     useRouter(options?: RouterOptions): this;
     get routerMap(): MapItem[];
+    get routerOptions(): RouterOptions;
   }
 
   interface SfaRequest {
@@ -81,6 +82,14 @@ Startup.prototype.useRouter = function (options?: RouterOptions): Startup {
     enumerable: false,
     get: () => {
       return this[STARTUP_ROUTER_MAP];
+    },
+  });
+
+  Object.defineProperty(this, "routerOptions", {
+    configurable: false,
+    enumerable: false,
+    get: () => {
+      return this[STARTUP_ROUTER_OPTIONS];
     },
   });
 
