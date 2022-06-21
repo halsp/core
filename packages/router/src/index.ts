@@ -1,10 +1,5 @@
 import "@sfajs/core";
-import {
-  ObjectConstructor,
-  QueryDict,
-  ReadonlyQueryDict,
-  Startup,
-} from "@sfajs/core";
+import { QueryDict, ReadonlyQueryDict, Startup } from "@sfajs/core";
 import { Action } from "./action";
 import MapParser from "./map/map-parser";
 import path = require("path");
@@ -48,7 +43,7 @@ declare module "@sfajs/core" {
   interface Startup {
     useRouter(options?: RouterOptions): this;
     get routerMap(): MapItem[];
-    get routerOptions(): RouterOptions;
+    get routerOptions(): RouterOptions & { dir: string };
   }
 
   interface SfaRequest {
@@ -58,11 +53,12 @@ declare module "@sfajs/core" {
   interface HttpContext {
     get actionMetadata(): MapItem;
     get routerMap(): MapItem[];
+    get routerOptions(): RouterOptions & { dir: string };
   }
 }
 
 Startup.prototype.useRouter = function (options?: RouterOptions): Startup {
-  if (!!this[STARTUP_ROUTER_OPTIONS]) {
+  if (!!this.routerOptions) {
     return this;
   }
 
@@ -98,7 +94,15 @@ Startup.prototype.useRouter = function (options?: RouterOptions): Startup {
       configurable: false,
       enumerable: false,
       get: () => {
-        return this[STARTUP_ROUTER_MAP];
+        return this.routerMap;
+      },
+    });
+
+    Object.defineProperty(ctx, "routerOptions", {
+      configurable: false,
+      enumerable: false,
+      get: () => {
+        return this.routerOptions;
       },
     });
 
@@ -129,8 +133,7 @@ Startup.prototype.useRouter = function (options?: RouterOptions): Startup {
     await next();
   })
     .use(async (ctx, next) => {
-      const cfg: RouterOptionsMerged = this[STARTUP_ROUTER_OPTIONS];
-      const mapMatcher = new MapMatcher(ctx, cfg);
+      const mapMatcher = new MapMatcher(ctx);
       if (mapMatcher.notFound) {
         ctx.notFoundMsg({
           message: `Can't find the path：${ctx.req.path}`,
@@ -179,18 +182,9 @@ Startup.prototype.useRouter = function (options?: RouterOptions): Startup {
     .add((ctx) => {
       if (!ctx.actionMetadata) {
         return BlankMiddleware;
+      } else {
+        return ctx.actionMetadata.getAction(opts.dir);
       }
-
-      const filePath = path.join(
-        process.cwd(),
-        this[STARTUP_ROUTER_OPTIONS].dir,
-        ctx.actionMetadata.path
-      );
-
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const module = require(filePath);
-      const action = module[ctx.actionMetadata.actionName];
-      return action as ObjectConstructor<Action>;
     });
 };
 

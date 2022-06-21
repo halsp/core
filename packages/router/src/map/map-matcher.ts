@@ -1,12 +1,8 @@
 import MapItem from "./map-item";
 import { HttpContext, HttpMethod } from "@sfajs/core";
-import { RouterOptionsMerged } from "../router-options";
 
 export default class MapMatcher {
-  constructor(
-    private readonly ctx: HttpContext,
-    private readonly options: RouterOptionsMerged
-  ) {
+  constructor(private readonly ctx: HttpContext) {
     const mapItem = this.getMapItem();
     if (mapItem) {
       this.#mapItem = mapItem;
@@ -43,10 +39,12 @@ export default class MapMatcher {
   }
 
   private isPathMatched(mapItem: MapItem, methodIncluded: boolean): boolean {
+    const options = this.ctx.routerOptions;
+
     let reqUrl = this.ctx.req.path;
-    if (this.options.prefix && reqUrl.startsWith(this.options.prefix)) {
+    if (options.prefix && reqUrl.startsWith(options.prefix)) {
       reqUrl = reqUrl
-        .substring(this.options.prefix.length, reqUrl.length)
+        .substring(options.prefix.length, reqUrl.length)
         .replace(/^\//, "");
     }
     const reqUrlStrs = reqUrl.toLowerCase().split("/");
@@ -56,7 +54,7 @@ export default class MapMatcher {
     if (methodIncluded && !mapItem.methods.includes(HttpMethod.any)) {
       const matchedMethod = HttpMethod.matched(
         this.ctx.req.method,
-        this.options.customMethods
+        options.customMethods
       );
       if (!matchedMethod || !mapItem.methods.includes(matchedMethod)) {
         return false;

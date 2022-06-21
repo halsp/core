@@ -1,4 +1,6 @@
-import { normalizePath } from "@sfajs/core";
+import { normalizePath, ObjectConstructor } from "@sfajs/core";
+import path from "path";
+import { Action } from "../action";
 
 export default class MapItem {
   constructor(
@@ -67,6 +69,15 @@ export default class MapItem {
   }
 
   [key: string]: any;
+
+  public getAction(dir: string): ObjectConstructor<Action> {
+    const filePath = path.join(process.cwd(), dir, this.path);
+
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const module = require(filePath);
+    const action = module[this.actionName];
+    return action;
+  }
 
   public get plainObject() {
     return {
