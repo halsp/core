@@ -13,5 +13,5 @@ export {
 } from "./pipes";
 
 export { PIPE_RECORDS_METADATA } from "./constant";
-export { PipeRecord } from "./pipe-record";
+export { PipeReqRecord } from "./pipe-req-record";
 export { PipeReqType } from "./pipe-req-type";

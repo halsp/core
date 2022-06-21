@@ -3,7 +3,7 @@ import { createInject, parseInject } from "@sfajs/inject";
 import { HttpContext, isClass } from "@sfajs/core";
 import { LambdaPipe, PipeItem } from "../pipes";
 import { getReqHandler, PipeReqType } from "../pipe-req-type";
-import { PipeRecord } from "../pipe-record";
+import { PipeReqRecord } from "../pipe-req-record";
 import { PIPE_RECORDS_METADATA } from "../constant";
 
 async function runPipes(ctx: HttpContext, val: any, pipes: PipeItem[]) {
@@ -28,7 +28,7 @@ function setPipeRecord(
   propertyKey: string | symbol,
   parameterIndex?: number
 ) {
-  const records: PipeRecord[] =
+  const records: PipeReqRecord[] =
     Reflect.getMetadata(PIPE_RECORDS_METADATA, target) ?? [];
   records.push({
     type: type,
