@@ -1,1 +1,1 @@
-export const REQ_PARAMS = "__@sfajs/pipe_reqParams";
+export const PIPE_RECORDS = "__@sfajs/pipe_records";

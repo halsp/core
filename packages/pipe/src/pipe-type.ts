@@ -1,8 +1,8 @@
 import { Dict, HttpContext } from "@sfajs/core";
 
-export type ReqType = "query" | "param" | "header" | "body";
+export type PipeType = "query" | "param" | "header" | "body";
 
-export function getDictHandler(type: ReqType): (ctx: HttpContext) => Dict {
+export function getReqHandler(type: PipeType): (ctx: HttpContext) => Dict {
   switch (type) {
     case "header":
       return (ctx) => ctx.req.headers;

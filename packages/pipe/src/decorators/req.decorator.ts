@@ -2,9 +2,9 @@ import "reflect-metadata";
 import { createInject, parseInject } from "@sfajs/inject";
 import { HttpContext, isClass } from "@sfajs/core";
 import { LambdaPipe, PipeItem } from "../pipes";
-import { getDictHandler, ReqType } from "../req-type";
-import { DecInfo } from "./dec-info";
-import { REQ_PARAMS } from "../constant";
+import { getReqHandler, PipeType } from "../pipe-type";
+import { PipeRecord } from "../pipe-record";
+import { PIPE_RECORDS } from "../constant";
 
 async function runPipes(ctx: HttpContext, val: any, pipes: PipeItem[]) {
   for (let pipe of pipes) {
@@ -21,25 +21,25 @@ async function runPipes(ctx: HttpContext, val: any, pipes: PipeItem[]) {
   return val;
 }
 
-function setParamsReflect(
-  type: ReqType,
+function setPipeRecord(
+  type: PipeType,
   pipes: PipeItem[],
   target: any,
   propertyKey: string | symbol,
   parameterIndex?: number
 ) {
-  const decInfos: DecInfo[] = Reflect.getMetadata(REQ_PARAMS, target) ?? [];
-  decInfos.push({
+  const records: PipeRecord[] = Reflect.getMetadata(PIPE_RECORDS, target) ?? [];
+  records.push({
     type: type,
     pipes: pipes,
     property: propertyKey,
     parameterIndex: parameterIndex,
   });
-  Reflect.defineMetadata(REQ_PARAMS, target, decInfos);
+  Reflect.defineMetadata(PIPE_RECORDS, target, records);
 }
 
 function createReqInjectDecorator<T = any>(
-  type: ReqType,
+  type: PipeType,
   pipes: PipeItem[],
   handler: (ctx: any) => T | Promise<T>
 ) {
@@ -48,13 +48,13 @@ function createReqInjectDecorator<T = any>(
     propertyKey: string | symbol,
     parameterIndex?: number
   ) {
-    setParamsReflect(type, pipes, target, propertyKey, parameterIndex);
+    setPipeRecord(type, pipes, target, propertyKey, parameterIndex);
     createInject(handler, target, propertyKey, parameterIndex);
   };
 }
 
-function getReqInject(type: ReqType, args: any[]) {
-  const handler = getDictHandler(type);
+function getReqInject(type: PipeType, args: any[]) {
+  const handler = getReqHandler(type);
 
   if (typeof args[0] == "string") {
     const pipes = args.slice(1, args.length);
@@ -66,7 +66,7 @@ function getReqInject(type: ReqType, args: any[]) {
     });
   } else if (typeof args[1] == "string") {
     const pipes = args.slice(3, args.length);
-    setParamsReflect(type, pipes, args[0], args[1], args[2]);
+    setPipeRecord(type, pipes, args[0], args[1], args[2]);
     return createInject(
       async (ctx) => await runPipes(ctx, handler(ctx), pipes),
       args[0],
