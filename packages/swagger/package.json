@@ -31,7 +31,8 @@
     "@sfajs/inject": "^1.1.0",
     "@sfajs/pipe": "^1.1.7",
     "@sfajs/router": "^2.1.0",
-    "openapi3-ts": "^2.0.2"
+    "openapi3-ts": "^2.0.2",
+    "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@sfajs/http": "^1.1.2",

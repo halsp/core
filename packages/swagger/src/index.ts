@@ -33,8 +33,9 @@ Startup.prototype.useSwagger = function (options?: SwaggerOptions): Startup {
 
     if (isUndefined(swaggerBody)) {
       const doc = new Parser(
-        this["__@sfajs/router_startupRouterMap__"],
-        openApiBuilder
+        this.routerMap,
+        openApiBuilder,
+        this.routerOptions
       ).parse();
       swaggerBody = await getSwaggerBody(doc, options as SwaggerOptions);
     }
