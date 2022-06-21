@@ -1,9 +1,9 @@
 import { PipeItem } from "./pipes";
-import { PipeType } from "./pipe-type";
+import { PipeReqType } from "./pipe-req-type";
 
 export interface PipeRecord {
   pipes: PipeItem[];
-  type: PipeType;
+  type: PipeReqType;
   property: string | symbol;
   parameterIndex?: number;
 }

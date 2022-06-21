@@ -2,9 +2,9 @@ import "reflect-metadata";
 import { createInject, parseInject } from "@sfajs/inject";
 import { HttpContext, isClass } from "@sfajs/core";
 import { LambdaPipe, PipeItem } from "../pipes";
-import { getReqHandler, PipeType } from "../pipe-type";
+import { getReqHandler, PipeReqType } from "../pipe-req-type";
 import { PipeRecord } from "../pipe-record";
-import { PIPE_RECORDS } from "../constant";
+import { PIPE_RECORDS_METADATA } from "../constant";
 
 async function runPipes(ctx: HttpContext, val: any, pipes: PipeItem[]) {
   for (let pipe of pipes) {
@@ -22,24 +22,25 @@ async function runPipes(ctx: HttpContext, val: any, pipes: PipeItem[]) {
 }
 
 function setPipeRecord(
-  type: PipeType,
+  type: PipeReqType,
   pipes: PipeItem[],
   target: any,
   propertyKey: string | symbol,
   parameterIndex?: number
 ) {
-  const records: PipeRecord[] = Reflect.getMetadata(PIPE_RECORDS, target) ?? [];
+  const records: PipeRecord[] =
+    Reflect.getMetadata(PIPE_RECORDS_METADATA, target) ?? [];
   records.push({
     type: type,
     pipes: pipes,
     property: propertyKey,
     parameterIndex: parameterIndex,
   });
-  Reflect.defineMetadata(PIPE_RECORDS, target, records);
+  Reflect.defineMetadata(PIPE_RECORDS_METADATA, records, target);
 }
 
 function createReqInjectDecorator<T = any>(
-  type: PipeType,
+  type: PipeReqType,
   pipes: PipeItem[],
   handler: (ctx: any) => T | Promise<T>
 ) {
@@ -53,7 +54,7 @@ function createReqInjectDecorator<T = any>(
   };
 }
 
-function getReqInject(type: PipeType, args: any[]) {
+function getReqInject(type: PipeReqType, args: any[]) {
   const handler = getReqHandler(type);
 
   if (typeof args[0] == "string") {
