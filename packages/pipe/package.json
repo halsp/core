@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/pipe",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "sfajs 的管道插件",
   "homepage": "https://github.com/sfajs/pipe",
   "repository": {

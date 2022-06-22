@@ -25,7 +25,7 @@ async function execPipes(
     .filter((p) => p.type == GlobalPipeType.before)
     .map((item) => item.pipe);
   const afterGlobalPipes = globalPipes
-    .filter((p) => p.type == GlobalPipeType.before)
+    .filter((p) => p.type == GlobalPipeType.after)
     .map((item) => item.pipe);
 
   for (let pipe of [...beforeGlobalPipes, ...pipes, ...afterGlobalPipes]) {
