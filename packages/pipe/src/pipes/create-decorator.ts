@@ -1,11 +1,18 @@
 import "reflect-metadata";
 import { createInject, parseInject } from "@sfajs/inject";
-import { HttpContext, isClass, isUndefined } from "@sfajs/core";
+import {
+  Dict,
+  HttpContext,
+  isClass,
+  isUndefined,
+  ObjectConstructor,
+} from "@sfajs/core";
 import { GlobalPipeItem, LambdaPipe, PipeItem } from ".";
 import { getReqHandler, PipeReqType } from "../pipe-req-type";
 import { PipeReqRecord } from "../pipe-req-record";
 import { GLOBAL_PIPE_BAG, PIPE_RECORDS_METADATA } from "../constant";
 import { GlobalPipeType } from "../global-pipe-type";
+import { plainToClass } from "class-transformer";
 
 async function execPipes(
   ctx: HttpContext,
@@ -68,6 +75,13 @@ function getPropertyType(
   }
 }
 
+function getObjectFromDict<T extends object = any>(
+  cls: ObjectConstructor<T>,
+  dict: Dict
+) {
+  return plainToClass(cls, dict);
+}
+
 export function createDecorator(type: PipeReqType, args: any[]) {
   const handler = getReqHandler(type);
 
@@ -84,7 +98,9 @@ export function createDecorator(type: PipeReqType, args: any[]) {
         async (ctx) => {
           const property = args[0];
           const dict = handler(ctx);
-          const val = dict ? dict[property] : undefined;
+          const val = getObjectFromDict(propertyType, dict)
+            ? dict[property]
+            : undefined;
           return await execPipes(ctx, val, propertyType, pipes);
         },
         target,
@@ -97,7 +113,13 @@ export function createDecorator(type: PipeReqType, args: any[]) {
     setPipeRecord(type, pipes, args[0], args[1], args[2]);
     const propertyType = getPropertyType(args[0], args[1], args[2]);
     createInject(
-      async (ctx) => await execPipes(ctx, handler(ctx), propertyType, pipes),
+      async (ctx) =>
+        await execPipes(
+          ctx,
+          getObjectFromDict(propertyType, handler(ctx)),
+          propertyType,
+          pipes
+        ),
       args[0],
       args[1],
       args[2]
@@ -112,7 +134,13 @@ export function createDecorator(type: PipeReqType, args: any[]) {
       setPipeRecord(type, pipes, target, propertyKey, parameterIndex, args[0]);
       const propertyType = getPropertyType(target, propertyKey, parameterIndex);
       createInject(
-        async (ctx) => await execPipes(ctx, handler(ctx), propertyType, pipes),
+        async (ctx) =>
+          await execPipes(
+            ctx,
+            getObjectFromDict(propertyType, handler(ctx)),
+            propertyType,
+            pipes
+          ),
         target,
         propertyKey,
         parameterIndex
