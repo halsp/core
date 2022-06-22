@@ -4,6 +4,7 @@ import { PipeReqType } from "./pipe-req-type";
 export interface PipeReqRecord {
   pipes: PipeItem[];
   type: PipeReqType;
-  property: string | symbol;
+  propertyKey: string | symbol;
+  property?: string;
   parameterIndex?: number;
 }

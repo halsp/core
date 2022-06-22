@@ -26,15 +26,17 @@ function setPipeRecord(
   pipes: PipeItem[],
   target: any,
   propertyKey: string | symbol,
-  parameterIndex?: number
+  parameterIndex?: number,
+  property?: string
 ) {
   const records: PipeReqRecord[] =
     Reflect.getMetadata(PIPE_RECORDS_METADATA, target) ?? [];
   records.push({
     type: type,
     pipes: pipes,
-    property: propertyKey,
+    propertyKey: propertyKey,
     parameterIndex: parameterIndex,
+    property: property,
   });
   Reflect.defineMetadata(PIPE_RECORDS_METADATA, records, target);
 }
@@ -42,14 +44,15 @@ function setPipeRecord(
 function createReqInjectDecorator<T = any>(
   type: PipeReqType,
   pipes: PipeItem[],
-  handler: (ctx: any) => T | Promise<T>
+  handler: (ctx: any) => T | Promise<T>,
+  property?: string
 ) {
   return function (
     target: any,
     propertyKey: string | symbol,
     parameterIndex?: number
   ) {
-    setPipeRecord(type, pipes, target, propertyKey, parameterIndex);
+    setPipeRecord(type, pipes, target, propertyKey, parameterIndex, property);
     createInject(handler, target, propertyKey, parameterIndex);
   };
 }
@@ -59,12 +62,17 @@ function getReqInject(type: PipeReqType, args: any[]) {
 
   if (typeof args[0] == "string") {
     const pipes = args.slice(1, args.length);
-    return createReqInjectDecorator(type, pipes, async (ctx) => {
-      const property = args[0];
-      const dict = handler(ctx);
-      const val = dict ? dict[property] : undefined;
-      return await runPipes(ctx, val, pipes);
-    });
+    return createReqInjectDecorator(
+      type,
+      pipes,
+      async (ctx) => {
+        const property = args[0];
+        const dict = handler(ctx);
+        const val = dict ? dict[property] : undefined;
+        return await runPipes(ctx, val, pipes);
+      },
+      args[0]
+    );
   } else if (typeof args[1] == "string") {
     const pipes = args.slice(3, args.length);
     setPipeRecord(type, pipes, args[0], args[1], args[2]);
