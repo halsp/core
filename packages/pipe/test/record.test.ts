@@ -2,7 +2,7 @@ import { HookType, TestStartup } from "@sfajs/core";
 import { PIPE_RECORDS_METADATA } from "../src";
 import { expectBody, getTestRequest, TestMiddleware } from "./TestMiddleware";
 
-test("simple test", async function () {
+test("record test", async function () {
   let done = false;
   const startup = new TestStartup(getTestRequest()).useInject();
   startup.hook(HookType.BeforeInvoke, (ctx, md) => {
