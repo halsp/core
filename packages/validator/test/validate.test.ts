@@ -38,7 +38,6 @@ function runTest(validate: boolean) {
       .run();
 
     const body = res.body as TestDto;
-    console.log("body", body);
     if (validate) {
       expect(body.b).toBe("a1");
       expect(res.status).toBe(200);
