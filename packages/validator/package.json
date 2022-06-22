@@ -1,0 +1,86 @@
+{
+  "name": "@sfajs/validator",
+  "version": "0.0.1",
+  "description": "sfajs 的参数校验插件",
+  "homepage": "https://github.com/sfajs/validator",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sfajs/validator"
+  },
+  "keywords": [
+    "sfa",
+    "sfajs"
+  ],
+  "bugs": {
+    "url": "https://github.com/sfajs/validator/issues",
+    "email": "support@hal.wang"
+  },
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "sh scripts/build.sh",
+    "publish:beta": "sh scripts/build.sh && npm publish --tag=beta --access=public",
+    "test": "npm run build && jest",
+    "tests": "sh scripts/tests.sh",
+    "lint": "eslint src test --ext .ts"
+  },
+  "author": "hal-wang",
+  "license": "MIT",
+  "dependencies": {
+    "@sfajs/core": "^1.5.0",
+    "@sfajs/inject": "^1.1.1",
+    "@sfajs/pipe": "^1.2.0",
+    "class-validator": "^0.13.2",
+    "reflect-metadata": "^0.1.13"
+  },
+  "devDependencies": {
+    "@types/jest": "^28.1.3",
+    "@types/node": "^18.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.29.0",
+    "@typescript-eslint/parser": "^5.29.0",
+    "codecov": "^3.8.3",
+    "eslint": "^8.18.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "jest": "^28.1.1",
+    "prettier": "^2.7.1",
+    "ts-jest": "^28.0.5",
+    "typescript": "^4.7.4"
+  },
+  "peerDependencies": {
+    "@sfajs/core": "~1",
+    "@sfajs/inject": "~1",
+    "@sfajs/pipe": "~1",
+    "class-validator": "*"
+  },
+  "peerDependenciesMeta": {
+    "@sfajs/core": {
+      "optional": true
+    },
+    "@sfajs/inject": {
+      "optional": true
+    },
+    "@sfajs/pipe": {
+      "optional": true
+    },
+    "class-validator": {
+      "optional": true
+    }
+  },
+  "files": [
+    "/.github/*",
+    "/dist/*",
+    "/scripts/*",
+    "/src/*",
+    "/test/*",
+    ".eslintignore",
+    ".eslintrc.js",
+    ".gitignore",
+    "CODE_OF_CONDUCT.md",
+    "CONTRIBUTING.md",
+    "jest.config.js",
+    "LICENSE",
+    "package.json",
+    "README.md",
+    "tsconfig.json"
+  ]
+}
