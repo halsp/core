@@ -10,7 +10,7 @@ class TestMiddleware extends Middleware {
   }
 }
 
-test("simple test", async function () {
+test("simple test", async () => {
   const res = await new TestStartup(
     new SfaRequest().setBody({
       b1: 1,

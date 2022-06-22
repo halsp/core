@@ -1,7 +1,7 @@
 import { Middleware, SfaRequest, TestStartup } from "@sfajs/core";
 import { Body } from "../src";
 
-test("simple test", async function () {
+test("plain to class", async () => {
   class TestDto {
     h1!: string;
     h2!: number;

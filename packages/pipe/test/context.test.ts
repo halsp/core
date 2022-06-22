@@ -18,7 +18,7 @@ class TestService {
   }
 }
 
-test(`http context`, async function () {
+test(`http context`, async () => {
   const res = await new TestStartup(getTestRequest())
     .useInject()
     .use(async (ctx) => {

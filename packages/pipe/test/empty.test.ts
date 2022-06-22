@@ -1,7 +1,7 @@
 import { Middleware, SfaRequest, TestStartup } from "@sfajs/core";
 import { Body, Param } from "../src";
 
-test("null body", async function () {
+test("null body", async () => {
   class TestMiddleware extends Middleware {
     @Body
     readonly body!: any;
