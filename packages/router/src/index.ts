@@ -158,7 +158,7 @@ Startup.prototype.useRouter = function (options?: RouterOptions): Startup {
 
       const params: QueryDict = {};
       const actionMetadata: MapItem = ctx.actionMetadata;
-      if (actionMetadata.path.includes("^")) {
+      if (actionMetadata.url.includes("^")) {
         const mapPathStrs = actionMetadata.url.split("/");
         const reqPathStrs = ctx.req.path.split("/");
         for (
