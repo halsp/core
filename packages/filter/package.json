@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/filter",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "sfajs 的请求过滤器插件",
   "homepage": "https://github.com/sfajs/filter",
   "repository": {
