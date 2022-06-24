@@ -35,6 +35,9 @@ export async function execFilters(
     }
     return !!func && typeof func == "function";
   });
+  if (!filters.length) {
+    return undefined;
+  }
 
   for (const filter of filters) {
     const obj = await parseInject(action.ctx, filter);

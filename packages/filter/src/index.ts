@@ -1,5 +1,11 @@
 import { execFilters, Filter, FilterItem, OrderRecord } from "./filters";
-import { HookType, isClass, ObjectConstructor, Startup } from "@sfajs/core";
+import {
+  HookType,
+  isClass,
+  isUndefined,
+  ObjectConstructor,
+  Startup,
+} from "@sfajs/core";
 import { FILTERS_ORDER_BAG, GLOBAL_FILTERS_BAG, USE_FILTER } from "./constant";
 import { Action } from "@sfajs/router";
 
@@ -75,7 +81,9 @@ Startup.prototype.useFilter = function (): Startup {
     .hook(HookType.Exception, async (ctx, md, err) => {
       if (!(md instanceof Action)) return false;
 
-      return await execFilters(md, true, "onException", err);
+      const execResult = await execFilters(md, true, "onException", err);
+      if (isUndefined(execResult)) return false;
+      return execResult;
     })
     .hook(HookType.BeforeInvoke, async (ctx, md) => {
       if (!(md instanceof Action)) return;
@@ -87,19 +95,19 @@ Startup.prototype.useFilter = function (): Startup {
       // authorization
       {
         const execResult = await exec("onAuthorization");
-        if (!execResult) return false;
+        if (execResult == false) return false;
       }
 
       // resource
       {
         const execResult = await exec("onResourceExecuting");
-        if (!execResult) return false;
+        if (execResult == false) return false;
       }
 
       // action
       {
         const execResult = await exec("onActionExecuting");
-        if (!execResult) return false;
+        if (execResult == false) return false;
       }
 
       return true;

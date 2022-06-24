@@ -9,6 +9,21 @@ import "../src";
 import { Action } from "@sfajs/router";
 import { ExceptionFilter, UseFilters } from "../src";
 
+test(`empty exception filter`, async () => {
+  class TestAction extends Action {
+    async invoke(): Promise<void> {
+      throw new BadRequestException();
+    }
+  }
+
+  const res = await new TestStartup(new SfaRequest())
+    .useFilter()
+    .add(TestAction)
+    .run();
+
+  expect(res.status).toBe(400);
+});
+
 class TestExceptionFilter implements ExceptionFilter {
   onException(
     ctx: HttpContext,
