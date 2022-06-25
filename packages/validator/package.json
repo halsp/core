@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/validator",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "sfajs 的参数校验插件",
   "homepage": "https://github.com/sfajs/validator",
   "repository": {
