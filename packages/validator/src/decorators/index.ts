@@ -20,10 +20,10 @@ export function UseValidatorOptions(options: any): ClassDecorator {
   };
 }
 
-export function UseValidatorSchema(schemaName: string): ClassDecorator;
 export function UseValidatorSchema(
   schemaName: (ctx: HttpContext, val: any) => string | Promise<string>
 ): ClassDecorator;
+export function UseValidatorSchema(schemaName: string): ClassDecorator;
 export function UseValidatorSchema(schemaName: any): ClassDecorator {
   return function (target: any) {
     Reflect.defineMetadata(SCHAME_METADATA, schemaName, target);

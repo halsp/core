@@ -8,6 +8,12 @@ import {
 } from "class-validator";
 import { ValidatePipe } from "./validate.pipe";
 
+export {
+  UseValidatorOptions,
+  UseValidatorSchema,
+  ValidatorEnable,
+} from "./decorators/index";
+
 declare module "@sfajs/core" {
   interface Startup {
     useValidator(): this;
