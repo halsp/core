@@ -55,7 +55,6 @@ function testSchema(useSchema: boolean) {
       }
       const res = await startup.add(TestMiddleware).run();
 
-      console.log("body", res.body);
       if (useSchema) {
         expect(res.status).toBe(400);
         expect(res.body).toEqual({

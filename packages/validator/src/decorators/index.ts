@@ -1,5 +1,5 @@
 import { HttpContext } from "@sfajs/core";
-import { ValidationOptions } from "class-validator";
+import { ValidatorOptions } from "class-validator";
 import "reflect-metadata";
 import {
   SCHAME_METADATA,
@@ -11,9 +11,9 @@ export function UseValidatorOptions(
   options: (
     ctx: HttpContext,
     val: any
-  ) => ValidationOptions | Promise<ValidationOptions>
+  ) => ValidatorOptions | Promise<ValidatorOptions>
 ): ClassDecorator;
-export function UseValidatorOptions(options: ValidationOptions): ClassDecorator;
+export function UseValidatorOptions(options: ValidatorOptions): ClassDecorator;
 export function UseValidatorOptions(options: any): ClassDecorator {
   return function (target: any) {
     Reflect.defineMetadata(OPTIONS_METADATA, options, target);
