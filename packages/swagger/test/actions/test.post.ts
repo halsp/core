@@ -1,9 +1,12 @@
 import { Header } from "@sfajs/pipe";
 import { Action } from "@sfajs/router";
+import { IsNumber } from "class-validator";
 import { ApiSummary, ApiTags } from "../../src";
 
 class HeaderDto {
   h1?: string;
+
+  @IsNumber()
   h2?: number;
 }
 
