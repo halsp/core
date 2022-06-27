@@ -50,4 +50,5 @@ function fixPath(path?: string): string {
     .replace(/\/+$/, "");
 }
 
-export { ApiTags, ApiSummary } from "./decorators";
+export { ApiTags, ApiSummary, PropertyDescription } from "./decorators";
+export { beforeCompile } from "./before-compile";

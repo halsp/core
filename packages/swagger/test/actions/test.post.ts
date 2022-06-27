@@ -1,22 +1,26 @@
-import { Header } from "@sfajs/pipe";
+import { Body, Header, Param, Query } from "@sfajs/pipe";
 import { Action } from "@sfajs/router";
-import { IsNumber } from "class-validator";
-import { ApiSummary, ApiTags } from "../../src";
+import { ApiSummary, ApiTags, PropertyDescription } from "../../src";
 
-class HeaderDto {
+class BodyDto {
+  @PropertyDescription("sum")
   h1?: string;
-
-  @IsNumber()
   h2?: number;
 }
 
 @ApiSummary("login test")
 @ApiTags("test")
 export default class extends Action {
-  // @Header("h")
-  // private readonly body!: any;
-  @Header
-  private readonly h111!: HeaderDto;
+  @Header("h")
+  private readonly h!: any;
+  @Query("q")
+  private readonly q!: any;
+  @Param("p")
+  private readonly p!: any;
+  @Body
+  private readonly b!: BodyDto;
+  @Body("bbb")
+  private readonly bbb!: string;
 
   async invoke(): Promise<void> {
     this.ok();
