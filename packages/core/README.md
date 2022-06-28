@@ -17,6 +17,10 @@
 
 ## 介绍
 
+sfajs 是一个面向云的现代渐进式轻量 <a href="http://nodejs.org" target="_blank">Node.js</a> 框架
+
+可以运行于 http 服务，也可以运行于 serverless
+
 ### 渐进式
 
 可以根据项目渐进式安装 sfajs 组件，路由、Ioc、视图、过滤器、请求管道等等
