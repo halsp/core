@@ -1,7 +1,7 @@
-export const PROPERTY_METADATA = "__@sfajs/inject_propertyMetadata__";
-export const CLASS_METADATA = "__@sfajs/inject_classMetadata__";
-export const KEY_METADATA = "__@sfajs/inject_keyMetadata__";
-export const CUSTOM_METADATA = "__@sfajs/inject_customMetadata__";
-export const DECORATOR_SCOPED_BAG = "__@sfajs/inject_decoratorScopedBag__";
-export const MAP_BAG = "__@sfajs/inject_mapBag__";
-export const IS_INJECT_USED = "__@sfajs/inject_isInjectUsed__";
+export const PROPERTY_METADATA = "@sfajs/inject/propertyMetadata";
+export const CLASS_METADATA = "@sfajs/inject/classMetadata";
+export const KEY_METADATA = "@sfajs/inject/keyMetadata";
+export const CUSTOM_METADATA = "@sfajs/inject/ustomMetadata";
+export const DECORATOR_SCOPED_BAG = "@sfajs/inject/decoratorScopedBag";
+export const MAP_BAG = "@sfajs/inject/mapBag";
+export const IS_INJECT_USED = "@sfajs/inject/isInjectUsed";
