@@ -13,7 +13,7 @@ export async function execFilters(
   isExecuting: true,
   funcName: string,
   ...params: any[]
-): Promise<boolean>;
+): Promise<boolean | void>;
 export async function execFilters(
   action: Action,
   isExecuting: false,

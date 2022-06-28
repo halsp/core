@@ -83,7 +83,7 @@ Startup.prototype.useFilter = function (): Startup {
 
       const execResult = await execFilters(md, true, "onException", err);
       if (isUndefined(execResult)) return false;
-      return execResult;
+      return execResult == true;
     })
     .hook(HookType.BeforeInvoke, async (ctx, md) => {
       if (!(md instanceof Action)) return;
