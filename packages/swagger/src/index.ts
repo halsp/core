@@ -19,15 +19,15 @@ Startup.prototype.useSwagger = function (options?: SwaggerOptions): Startup {
   }
   this[USED] = true;
 
-  options = options ?? {};
+  const opts = options ?? {};
   let openApiBuilder = new OpenApiBuilder();
-  if (options?.builder) {
-    openApiBuilder = options.builder(openApiBuilder);
+  if (opts.builder) {
+    openApiBuilder = opts.builder(openApiBuilder);
   }
 
   let swaggerBody: string | undefined = undefined;
   return this.use(async (ctx, next) => {
-    if (fixPath(ctx.req.path) != fixPath(options?.path ?? "")) {
+    if (fixPath(ctx.req.path) != fixPath(opts.path ?? "")) {
       return await next();
     }
 
@@ -35,9 +35,10 @@ Startup.prototype.useSwagger = function (options?: SwaggerOptions): Startup {
       const doc = new Parser(
         this.routerMap,
         openApiBuilder,
-        this.routerOptions
+        this.routerOptions,
+        opts
       ).parse();
-      swaggerBody = await getSwaggerBody(doc, options as SwaggerOptions);
+      swaggerBody = await getSwaggerBody(doc, opts);
     }
     ctx.setHeader("content-type", "text/html").ok(swaggerBody);
   });

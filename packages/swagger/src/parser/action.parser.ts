@@ -1,17 +1,14 @@
 import { ObjectConstructor } from "@sfajs/core";
-import { PipeReqRecord, PipeReqType, PIPE_RECORDS_METADATA } from "@sfajs/pipe";
+import { PipeReqRecord, PIPE_RECORDS_METADATA } from "@sfajs/pipe";
 import { Action } from "@sfajs/router";
 import {
-  ContentObject,
   MediaTypeObject,
   OperationObject,
-  ParameterLocation,
   ParameterObject,
   RequestBodyObject,
   SchemaObject,
 } from "openapi3-ts";
-import { MODEL_PROPERTIES } from "../constant";
-import { PropertyDecItem } from "../property-dec-item";
+import { BaseParser } from "./base.parser";
 
 const jsonTypes = [
   "application/json-patch+json",
@@ -20,11 +17,13 @@ const jsonTypes = [
   "application/*+json",
 ];
 
-export class ActionParser {
+export class ActionParser extends BaseParser {
   constructor(
     private readonly optObj: OperationObject,
     private readonly action: ObjectConstructor<Action>
-  ) {}
+  ) {
+    super();
+  }
 
   public parse() {
     const pipeReqRecords: PipeReqRecord[] =
@@ -51,28 +50,8 @@ export class ActionParser {
     }
   }
 
-  private getPipeRecordPropertyType(record: PipeReqRecord) {
-    let result: ObjectConstructor;
-    if (record.parameterIndex) {
-      const paramTypes =
-        Reflect.getMetadata("design:paramtypes", this.action) ?? [];
-      result = paramTypes[record.parameterIndex];
-    } else {
-      result = Reflect.getMetadata(
-        "design:type",
-        this.action.prototype,
-        record.propertyKey
-      );
-    }
-    return result;
-  }
-
-  private getModelProperties(modelType: ObjectConstructor): PropertyDecItem[] {
-    return Reflect.getMetadata(MODEL_PROPERTIES, modelType.prototype) ?? [];
-  }
-
   private updateModelProperties(record: PipeReqRecord) {
-    const modelType = this.getPipeRecordPropertyType(record);
+    const modelType = this.getPipeRecordModelType(this.action, record);
     const params = this.optObj.parameters as ParameterObject[];
 
     const modelProperties = this.getModelProperties(modelType);
@@ -120,71 +99,13 @@ export class ActionParser {
     const properties = schema.properties as {
       [propertyName: string]: SchemaObject;
     };
-    const modelType = this.getPipeRecordPropertyType(record);
+    const modelType = this.getPipeRecordModelType(this.action, record);
     if (record.property) {
       properties[record.property] = {
         type: this.typeToApiType(modelType),
       };
     } else {
-      const modelProperties = this.getModelProperties(modelType);
-      for (const property of modelProperties) {
-        const name = property.propertyKey?.toString();
-        if (!name) continue;
-
-        let propertyValue = properties[name];
-        if (!propertyValue) {
-          const propertyType = Reflect.getMetadata(
-            "design:type",
-            modelType.prototype,
-            property.propertyKey
-          );
-          propertyValue = {
-            type: this.typeToApiType(propertyType),
-          };
-        }
-
-        propertyValue[property.key] = property.value;
-        properties[name] = propertyValue;
-      }
-    }
-  }
-
-  private typeToApiType(
-    type?: any
-  ):
-    | "string"
-    | "number"
-    | "boolean"
-    | "object"
-    | "integer"
-    | "null"
-    | "array"
-    | undefined {
-    if (type == String) {
-      return "string";
-    } else if (type == Number) {
-      return "number";
-    } else if (type == BigInt) {
-      return "integer";
-    } else if (type == Boolean) {
-      return "boolean";
-    } else if (type == Array) {
-      return "array";
-    } else if (!type) {
-      return "null";
-    } else {
-      return "object";
-    }
-  }
-
-  private pipeTypeToDocType(pipeType: PipeReqType): ParameterLocation {
-    switch (pipeType) {
-      case "header":
-        return "header";
-      case "query":
-        return "query";
-      default:
-        return "path";
+      this.setSchemaProperties(modelType, properties);
     }
   }
 }

@@ -2,7 +2,7 @@ import { Body, Header, Param, Query } from "@sfajs/pipe";
 import { Action } from "@sfajs/router";
 import { ApiSummary, ApiTags, PropertyDescription } from "../../src";
 
-class BodyDto {
+export class BodyDto {
   @PropertyDescription("sum")
   h1?: string;
   h2?: number;
