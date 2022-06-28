@@ -84,7 +84,7 @@ Startup.prototype.useMva = function (options: MvaOptions = {}): Startup {
       const action = ctx.actionMetadata.actionInstance as Action;
       if (action) {
         const execResult = await execFilters(action, true, "onResultExecuting");
-        if (!execResult) {
+        if (execResult == false) {
           return;
         }
       }
