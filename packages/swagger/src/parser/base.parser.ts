@@ -1,4 +1,4 @@
-import { ObjectConstructor } from "@sfajs/core";
+import { isUndefined, ObjectConstructor } from "@sfajs/core";
 import { PipeReqRecord, PipeReqType } from "@sfajs/pipe";
 import { ParameterLocation, SchemaObject } from "openapi3-ts";
 import { MODEL_PROPERTIES } from "../constant";
@@ -10,7 +10,7 @@ export abstract class BaseParser {
     record: PipeReqRecord
   ) {
     let result: ObjectConstructor;
-    if (record.parameterIndex) {
+    if (!isUndefined(record.parameterIndex)) {
       const paramTypes = Reflect.getMetadata("design:paramtypes", cls) ?? [];
       result = paramTypes[record.parameterIndex];
     } else {
@@ -33,8 +33,7 @@ export abstract class BaseParser {
   ) {
     const modelProperties = this.getModelProperties(modelCls);
     for (const property of modelProperties) {
-      const name = property.propertyKey?.toString();
-      if (!name) continue;
+      const name = property.propertyKey.toString();
 
       let propertyValue = properties[name];
       if (!propertyValue) {
@@ -75,8 +74,6 @@ export abstract class BaseParser {
       return "boolean";
     } else if (type == Array) {
       return "array";
-    } else if (!type) {
-      return "null";
     } else {
       return "object";
     }

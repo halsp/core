@@ -33,7 +33,8 @@ export class MapParser {
   private parseUrlItems(url: string, mapItems: MapItem[]) {
     url = url.replace(/(^|\/)\^(.*?)($|\/)/, "$1{$2}$3");
     url = "/" + url;
-    const pathItem: PathItemObject = this.builder.getSpec().paths[url] ?? {};
+    const pathItem: PathItemObject = {};
+    this.builder.addPath(url, pathItem);
 
     for (const mapItem of mapItems) {
       const action = mapItem.getAction(this.routerOptions.dir);
@@ -46,8 +47,6 @@ export class MapParser {
         );
       }
     }
-
-    this.builder.addPath(url, pathItem);
   }
 
   private parseUrlMethodItem(
@@ -56,14 +55,13 @@ export class MapParser {
     mapItem: MapItem,
     action: ObjectConstructor<Action>
   ) {
-    const optObj = pathItem[method] ?? {
+    pathItem[method] = {
       tags: mapItem[ACTION_METADATA_API_TAGS] ?? [],
       summary: mapItem[ACTION_METADATA_API_SUMMARY],
       responses: {},
       parameters: [],
     };
-    pathItem[method] = optObj;
 
-    new ActionParser(optObj, action).parse();
+    new ActionParser(pathItem[method], action).parse();
   }
 }
