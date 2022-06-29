@@ -6,6 +6,7 @@ import path = require("path");
 import MapItem from "./map/map-item";
 import {
   RouterDistOptions,
+  RouterInitedOptions,
   RouterOptions,
   RouterOptionsMerged,
 } from "./router-options";
@@ -20,7 +21,7 @@ import {
 import * as fs from "fs";
 import { BlankMiddleware } from "./blank.middleware";
 
-export { Action, MapItem, RouterOptions };
+export { Action, MapItem, RouterOptions, RouterInitedOptions };
 export {
   SetActionMetadata,
   HttpCustom,
@@ -43,7 +44,7 @@ declare module "@sfajs/core" {
   interface Startup {
     useRouter(options?: RouterOptions): this;
     get routerMap(): MapItem[];
-    get routerOptions(): RouterOptions & { dir: string };
+    get routerOptions(): RouterInitedOptions;
   }
 
   interface SfaRequest {
@@ -53,7 +54,7 @@ declare module "@sfajs/core" {
   interface HttpContext {
     get actionMetadata(): MapItem;
     get routerMap(): MapItem[];
-    get routerOptions(): RouterOptions & { dir: string };
+    get routerOptions(): RouterInitedOptions;
   }
 }
 

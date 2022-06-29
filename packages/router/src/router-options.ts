@@ -6,14 +6,15 @@ export interface RouterOptions {
   customMethods?: string[];
 }
 
+export interface RouterInitedOptions extends RouterOptions {
+  dir: string;
+}
+
 export interface RouterDistOptions {
   dir: string;
   map: MapItem[];
 }
 
-export interface RouterOptionsMerged {
-  dir: string;
+export interface RouterOptionsMerged extends RouterInitedOptions {
   map?: MapItem[];
-  prefix?: string;
-  customMethods?: string[];
 }
