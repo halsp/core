@@ -44,13 +44,14 @@ export class ActionParser extends BaseParser {
       params.push({
         name: record.property,
         in: this.pipeTypeToDocType(record.type),
+        required: record.type == "param",
       });
     } else {
-      this.updateModelProperties(record);
+      this.updateParameterModelProperties(record);
     }
   }
 
-  private updateModelProperties(record: PipeReqRecord) {
+  private updateParameterModelProperties(record: PipeReqRecord) {
     const modelType = this.getPipeRecordModelType(this.action, record);
     const params = this.optObj.parameters as ParameterObject[];
 
@@ -65,6 +66,7 @@ export class ActionParser extends BaseParser {
       const parameter = existParameter ?? {
         name,
         in: this.pipeTypeToDocType(record.type),
+        required: record.type == "param",
       };
       parameter[property.key] = property.value;
 

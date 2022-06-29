@@ -1,5 +1,5 @@
 import { Body, Header, Param, Query } from "@sfajs/pipe";
-import { Action } from "@sfajs/router";
+import { Action, HttpPost } from "@sfajs/router";
 import { ApiSummary, ApiTags, PropertyDescription } from "../../src";
 
 export class BodyDto {
@@ -10,6 +10,7 @@ export class BodyDto {
 
 @ApiSummary("login test")
 @ApiTags("test")
+@HttpPost("test/^p")
 export default class extends Action {
   @Header("h")
   private readonly h!: any;

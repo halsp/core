@@ -31,6 +31,8 @@ export class MapParser {
   }
 
   private parseUrlItems(url: string, mapItems: MapItem[]) {
+    url = url.replace(/(^|\/)\^(.*?)($|\/)/, "$1{$2}$3");
+    url = "/" + url;
     const pathItem: PathItemObject = this.builder.getSpec().paths[url] ?? {};
 
     for (const mapItem of mapItems) {
