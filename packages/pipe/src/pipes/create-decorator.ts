@@ -1,12 +1,6 @@
 import "reflect-metadata";
 import { createInject, parseInject } from "@sfajs/inject";
-import {
-  Dict,
-  HttpContext,
-  isClass,
-  isUndefined,
-  ObjectConstructor,
-} from "@sfajs/core";
+import { Dict, HttpContext, isClass, isUndefined } from "@sfajs/core";
 import { GlobalPipeItem, LambdaPipe, PipeItem } from ".";
 import { getReqHandler, PipeReqType } from "../pipe-req-type";
 import { PipeReqRecord } from "../pipe-req-record";
@@ -75,11 +69,12 @@ function getPropertyType(
   }
 }
 
-function getObjectFromDict<T extends object = any>(
-  cls: ObjectConstructor<T>,
-  dict: Dict
-) {
-  return plainToClass(cls, dict);
+function getObjectFromDict(cls: any, dict: Dict) {
+  if (isClass(cls)) {
+    return plainToClass(cls, dict);
+  } else {
+    return dict;
+  }
 }
 
 export function createDecorator(type: PipeReqType, args: any[]) {
