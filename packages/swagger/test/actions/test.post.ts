@@ -1,10 +1,25 @@
 import { Body, Header, Param, Query } from "@sfajs/pipe";
 import { Action, HttpPost } from "@sfajs/router";
-import { ApiSummary, ApiTags, PropertyDescription } from "../../src";
+import {
+  ApiSummary,
+  ApiTags,
+  PropertyDeprecated,
+  PropertyDescription,
+  PropertyRequired,
+} from "../../src";
 
 export class BodyDto {
   @PropertyDescription("sum")
+  b1?: string;
+  b2?: number;
+}
+
+export class HeaderDto {
+  @PropertyDescription("sum")
+  @PropertyRequired()
   h1?: string;
+
+  @PropertyDeprecated()
   h2?: number;
 }
 
@@ -12,8 +27,10 @@ export class BodyDto {
 @ApiTags("test")
 @HttpPost("test/^p")
 export default class extends Action {
-  @Header("h")
-  private readonly h!: any;
+  @Header
+  private readonly 1!: HeaderDto;
+  @Header("h1")
+  private readonly h1!: any;
   @Query("q")
   private readonly q!: any;
   @Param("p")

@@ -1,12 +1,10 @@
-import { ObjectConstructor } from "@sfajs/core";
+import { isClass, ObjectConstructor } from "@sfajs/core";
 import { PipeReqRecord, PIPE_RECORDS_METADATA } from "@sfajs/pipe";
 import { Action } from "@sfajs/router";
 import {
-  MediaTypeObject,
   OperationObject,
   ParameterObject,
   RequestBodyObject,
-  SchemaObject,
 } from "openapi3-ts";
 import { BaseParser } from "./base.parser";
 
@@ -82,32 +80,14 @@ export class ActionParser extends BaseParser {
     };
     this.optObj.requestBody = requestBody;
     for (const media of jsonTypes) {
-      const content = requestBody.content[media] ?? {
-        schema: {
-          type: "object",
-          properties: {},
-        },
-      };
-      requestBody.content[media] = content;
-      this.parseBodyMediaItem(content, record);
-    }
-  }
-
-  private parseBodyMediaItem(
-    mediaObject: MediaTypeObject,
-    record: PipeReqRecord
-  ) {
-    const schema = mediaObject.schema as SchemaObject;
-    const properties = schema.properties as {
-      [propertyName: string]: SchemaObject;
-    };
-    const modelType = this.getPipeRecordModelType(this.action, record);
-    if (record.property) {
-      properties[record.property] = {
-        type: this.typeToApiType(modelType),
-      };
-    } else {
-      this.setSchemaProperties(modelType, properties);
+      const modelType = this.getPipeRecordModelType(this.action, record);
+      if (isClass(modelType)) {
+        requestBody.content[media] = {
+          schema: {
+            $ref: `#/components/schemas/${modelType.name}`,
+          },
+        };
+      }
     }
   }
 }
