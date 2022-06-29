@@ -10,10 +10,6 @@ test("create decorator", async () => {
 });
 
 test("without property", async () => {
-  const decorator = createDecorator("query", [
-    TestClass.prototype,
-    "propertyKey",
-    0,
-  ]);
+  const decorator = createDecorator("query", [TestClass, undefined, 0]);
   expect(decorator).toBeUndefined();
 });

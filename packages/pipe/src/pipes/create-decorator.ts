@@ -81,6 +81,7 @@ export function createDecorator(type: PipeReqType, args: any[]) {
   const handler = getReqHandler(type);
 
   if (typeof args[0] == "string") {
+    // property params
     const pipes = args.slice(1, args.length);
     return function (
       target: any,
@@ -103,17 +104,17 @@ export function createDecorator(type: PipeReqType, args: any[]) {
         parameterIndex
       );
     };
-  } else if (typeof args[1] == "string") {
-    const pipes = args.slice(3, args.length);
-    setPipeRecord(type, pipes, args[0], args[1], args[2]);
-    const propertyType = getPropertyType(args[0], args[1], args[2]);
+  } else if (typeof args[1] == "string" || typeof args[2] == "number") {
+    const target = typeof args[2] == "number" ? args[0].prototype : args[0];
+    setPipeRecord(type, [], target, args[1], args[2]);
+    const propertyType = getPropertyType(target, args[1], args[2]);
     createInject(
       async (ctx) =>
         await execPipes(
           ctx,
           getObjectFromDict(propertyType, handler(ctx)),
           propertyType,
-          pipes
+          []
         ),
       args[0],
       args[1],
