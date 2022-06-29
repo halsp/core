@@ -8,9 +8,20 @@ import {
 } from "./middleware";
 
 export class ComposeMiddleware extends Middleware {
+  constructor(
+    private readonly enable?: (ctx: HttpContext) => boolean | Promise<boolean>
+  ) {
+    super();
+  }
+
   readonly #mds: MiddlewareItem[] = [];
 
   async invoke(): Promise<void> {
+    if (this.enable && !(await this.enable(this.ctx))) {
+      await this.next();
+      return;
+    }
+
     const mds: MiddlewareItem[] = [
       ...this.#mds,
       new LambdaMiddleware(async () => {

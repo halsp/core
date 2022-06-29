@@ -1,6 +1,6 @@
 import { ComposeMiddleware, TestStartup } from "../../src";
 
-test("simpple middleware", async () => {
+test("compose middleware", async () => {
   let index = 0;
   function getIndex() {
     index++;
@@ -75,4 +75,26 @@ test("simpple middleware", async () => {
   expect(res.getHeader("h32")).toBe("14");
   expect(res.getHeader("h22")).toBe("15");
   expect(res.getHeader("h12")).toBe("16");
+});
+
+test("compose enable = true", async () => {
+  const res = await new TestStartup()
+    .add(() =>
+      new ComposeMiddleware(() => true).use(async (ctx) => {
+        ctx.res.setHeader("h", 1);
+      })
+    )
+    .run();
+  expect(res.getHeader("h")).toBe("1");
+});
+
+test("compose enable = false", async () => {
+  const res = await new TestStartup()
+    .add(() =>
+      new ComposeMiddleware(() => false).use(async (ctx) => {
+        ctx.res.setHeader("h", 1);
+      })
+    )
+    .run();
+  expect(res.getHeader("h")).toBeUndefined();
 });
