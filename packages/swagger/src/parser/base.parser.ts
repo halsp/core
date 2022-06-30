@@ -1,9 +1,7 @@
 import { isUndefined, ObjectConstructor } from "@sfajs/core";
 import { PipeReqRecord } from "@sfajs/pipe";
-import { SchemaObject } from "openapi3-ts";
 import { MODEL_PROPERTIES } from "../constant";
-import { PropertyDecItem } from "../property-dec-item";
-import { typeToApiType } from "./utils/doc-types";
+import { DecoratorFn } from "../decorators";
 
 export abstract class BaseParser {
   protected getPipeRecordModelType(
@@ -24,33 +22,7 @@ export abstract class BaseParser {
     return result;
   }
 
-  protected getModelProperties(modelCls: ObjectConstructor): PropertyDecItem[] {
+  protected getModelProperties(modelCls: ObjectConstructor): DecoratorFn[] {
     return Reflect.getMetadata(MODEL_PROPERTIES, modelCls.prototype) ?? [];
-  }
-
-  protected setSchemaProperties(
-    modelCls: ObjectConstructor,
-    properties: Record<string, SchemaObject>
-  ) {
-    const modelProperties = this.getModelProperties(modelCls);
-    for (const property of modelProperties) {
-      const name = property.propertyKey.toString();
-
-      let propertyValue = properties[name];
-      if (!propertyValue) {
-        const propertyType = Reflect.getMetadata(
-          "design:type",
-          modelCls.prototype,
-          property.propertyKey
-        );
-        propertyValue = {
-          type: typeToApiType(propertyType),
-        };
-      }
-
-      propertyValue[property.key] = property.value;
-      properties[name] = propertyValue;
-    }
-    return properties;
   }
 }

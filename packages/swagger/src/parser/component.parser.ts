@@ -61,10 +61,13 @@ export class ComponentParser extends BaseParser {
         this.builder.addSchema(modelType.name, schema);
       }
 
-      const properties = schema.properties as {
-        [propertyName: string]: SchemaObject;
-      };
-      this.setSchemaProperties(modelType, properties);
+      const modelProperties = this.getModelProperties(modelType);
+      for (const fn of modelProperties) {
+        fn({
+          type: "schema",
+          schema: schema,
+        });
+      }
     }
   }
 
