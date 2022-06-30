@@ -23,6 +23,9 @@ export abstract class BaseParser {
   }
 
   protected getModelDecorators(modelCls: ObjectConstructor): DecoratorFn[] {
-    return Reflect.getMetadata(MODEL_DECORATORS, modelCls.prototype) ?? [];
+    return (
+      Reflect.getMetadata(MODEL_DECORATORS, modelCls.prototype ?? modelCls) ??
+      []
+    );
   }
 }

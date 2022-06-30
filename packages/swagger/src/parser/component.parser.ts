@@ -56,7 +56,6 @@ export class ComponentParser extends BaseParser {
       if (!schema) {
         schema = {
           type: "object",
-          properties: {},
         };
         this.builder.addSchema(modelType.name, schema);
       }

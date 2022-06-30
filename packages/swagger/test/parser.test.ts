@@ -45,5 +45,12 @@ test("map parser", async () => {
   mapItems[0][ACTION_METADATA_API_SUMMARY] = "test summary";
   const doc = runParserTest(mapItems);
   expect(Object.hasOwn(doc["paths"]["/test1"], "post")).toBeTruthy();
-  expect(Object.hasOwn(doc["paths"]["/test2"], "post")).toBeTruthy();
+});
+
+test("decorators", async () => {
+  const mapItems = [
+    new MapItem("decorator.ts", "TestDecorator", "test", ["post"]),
+  ];
+  const doc = runParserTest(mapItems);
+  expect(Object.hasOwn(doc["paths"]["/test"], "post")).toBeTruthy();
 });

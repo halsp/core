@@ -2,6 +2,8 @@ import { Inject } from "@sfajs/inject";
 import { Body, Header } from "@sfajs/pipe";
 import { Action } from "@sfajs/router";
 import {
+  ApiSummary,
+  ApiTags,
   PropertyDeprecated,
   PropertyDescription,
   PropertyRequired,
@@ -55,6 +57,8 @@ export class TestPost extends Action {
   }
 }
 
+@ApiTags("test")
+@ApiSummary("summary")
 export class TestGet extends Action {
   @Header
   private readonly h!: TestHeaderDto;
