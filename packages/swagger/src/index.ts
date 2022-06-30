@@ -30,6 +30,16 @@ export {
   PropertyDeprecated,
   PropertyIgnore,
   PropertyRequired,
-  PropertySchema,
+  PropertyBodyArrayType,
+  PropertyExample,
+  PropertyParameterSchema,
+  PropertyParameterStyle,
+  PropertyDefault,
+  PropertyNumRange,
+  PropertyPattern,
+  PropertyPropertiesRange,
+  PropertyReadOnly,
+  PropertyTitle,
+  PropertyWriteOnly,
 } from "./decorators";
 export { beforeCompile } from "./before-compile";

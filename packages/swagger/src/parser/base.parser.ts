@@ -1,6 +1,6 @@
 import { isUndefined, ObjectConstructor } from "@sfajs/core";
 import { PipeReqRecord } from "@sfajs/pipe";
-import { MODEL_PROPERTIES } from "../constant";
+import { MODEL_DECORATORS } from "../constant";
 import { DecoratorFn } from "../decorators";
 
 export abstract class BaseParser {
@@ -22,7 +22,7 @@ export abstract class BaseParser {
     return result;
   }
 
-  protected getModelProperties(modelCls: ObjectConstructor): DecoratorFn[] {
-    return Reflect.getMetadata(MODEL_PROPERTIES, modelCls.prototype) ?? [];
+  protected getModelDecorators(modelCls: ObjectConstructor): DecoratorFn[] {
+    return Reflect.getMetadata(MODEL_DECORATORS, modelCls.prototype) ?? [];
   }
 }

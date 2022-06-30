@@ -127,10 +127,10 @@ export class MapParser extends BaseParser {
       });
     } else {
       const modelType = this.getPipeRecordModelType(action, record);
-      const modelProperties = this.getModelProperties(modelType);
-      for (const fn of modelProperties) {
+      const decs = this.getModelDecorators(modelType);
+      for (const fn of decs) {
         fn({
-          type: "param",
+          type: record.type,
           schema: params,
         });
       }
