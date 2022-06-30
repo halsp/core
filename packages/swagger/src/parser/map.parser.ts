@@ -1,11 +1,13 @@
 import { ObjectConstructor } from "@sfajs/core";
+import { PipeReqRecord, PIPE_RECORDS_METADATA } from "@sfajs/pipe";
 import { Action, MapItem, RouterOptions } from "@sfajs/router";
 import { OpenApiBuilder, PathItemObject } from "openapi3-ts";
 import {
   ACTION_METADATA_API_SUMMARY,
   ACTION_METADATA_API_TAGS,
 } from "../constant";
-import { ActionParser } from "./action.parser";
+import { BodyParser } from "./body.parser";
+import { ParameterParser } from "./parameter.parser";
 
 export class MapParser {
   constructor(
@@ -62,6 +64,16 @@ export class MapParser {
       parameters: [],
     };
 
-    new ActionParser(pathItem[method], action).parse();
+    const optObj = pathItem[method];
+    const pipeReqRecords: PipeReqRecord[] =
+      Reflect.getMetadata(PIPE_RECORDS_METADATA, action.prototype) ?? [];
+
+    for (const record of pipeReqRecords) {
+      if (record.type == "body") {
+        new BodyParser(optObj, action, record).parse();
+      } else {
+        new ParameterParser(optObj, action, record).parse();
+      }
+    }
   }
 }

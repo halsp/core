@@ -1,8 +1,9 @@
 import { isUndefined, ObjectConstructor } from "@sfajs/core";
-import { PipeReqRecord, PipeReqType } from "@sfajs/pipe";
-import { ParameterLocation, SchemaObject } from "openapi3-ts";
+import { PipeReqRecord } from "@sfajs/pipe";
+import { SchemaObject } from "openapi3-ts";
 import { MODEL_PROPERTIES } from "../constant";
 import { PropertyDecItem } from "../property-dec-item";
+import { typeToApiType } from "./utils/doc-types";
 
 export abstract class BaseParser {
   protected getPipeRecordModelType(
@@ -43,7 +44,7 @@ export abstract class BaseParser {
           property.propertyKey
         );
         propertyValue = {
-          type: this.typeToApiType(propertyType),
+          type: typeToApiType(propertyType),
         };
       }
 
@@ -51,42 +52,5 @@ export abstract class BaseParser {
       properties[name] = propertyValue;
     }
     return properties;
-  }
-
-  protected typeToApiType(
-    type?: any
-  ):
-    | "string"
-    | "number"
-    | "boolean"
-    | "object"
-    | "integer"
-    | "null"
-    | "array"
-    | undefined {
-    if (type == String) {
-      return "string";
-    } else if (type == Number) {
-      return "number";
-    } else if (type == BigInt) {
-      return "integer";
-    } else if (type == Boolean) {
-      return "boolean";
-    } else if (type == Array) {
-      return "array";
-    } else {
-      return "object";
-    }
-  }
-
-  protected pipeTypeToDocType(pipeType: PipeReqType): ParameterLocation {
-    switch (pipeType) {
-      case "header":
-        return "header";
-      case "query":
-        return "query";
-      default:
-        return "path";
-    }
   }
 }
