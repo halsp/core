@@ -1,4 +1,4 @@
-import { Body, Header, Param } from "@sfajs/pipe";
+import { Body, Header } from "@sfajs/pipe";
 import { Action } from "@sfajs/router";
 import {
   PropertyDefault,
@@ -16,7 +16,7 @@ import {
   PropertyParameterSchema,
 } from "../../src";
 
-export class TestClassDto {}
+class TestClassDto {}
 
 export class TestDecoratorHeaderDto {
   @PropertyDefault("abc")
@@ -74,8 +74,6 @@ export class TestDecorator extends Action {
   private readonly h!: TestDecoratorHeaderDto;
   @Body
   private readonly b!: TestDecoratorBodyDto;
-  @Param
-  private readonly p!: TestClassDto;
 
   async invoke(): Promise<void> {
     this.ok();

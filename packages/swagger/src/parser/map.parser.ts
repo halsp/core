@@ -12,8 +12,9 @@ import {
   ACTION_METADATA_API_SUMMARY,
   ACTION_METADATA_API_TAGS,
 } from "../constant";
-import { BaseParser } from "./base.parser";
+import { getModelDecorators, getPipeRecordModelType } from "./utils/decorator";
 import { pipeTypeToDocType } from "./utils/doc-types";
+import { ensureModelSchema } from "./utils/model-schema";
 
 const jsonTypes = [
   "application/json-patch+json",
@@ -22,14 +23,12 @@ const jsonTypes = [
   "application/*+json",
 ];
 
-export class MapParser extends BaseParser {
+export class MapParser {
   constructor(
     private readonly routerMap: readonly MapItem[],
     private readonly builder: OpenApiBuilder,
     private readonly routerOptions: RouterOptions & { dir: string }
-  ) {
-    super();
-  }
+  ) {}
 
   public parse() {
     const urls = this.getUrls();
@@ -102,8 +101,9 @@ export class MapParser extends BaseParser {
     };
     optObj.requestBody = requestBody;
     for (const media of jsonTypes) {
-      const modelType = this.getPipeRecordModelType(action, record);
+      const modelType = getPipeRecordModelType(action, record);
       if (isClass(modelType)) {
+        ensureModelSchema(this.builder, modelType, record.type);
         requestBody.content[media] = {
           schema: {
             $ref: `#/components/schemas/${modelType.name}`,
@@ -126,12 +126,13 @@ export class MapParser extends BaseParser {
         required: record.type == "param",
       });
     } else {
-      const modelType = this.getPipeRecordModelType(action, record);
-      const decs = this.getModelDecorators(modelType);
+      const modelType = getPipeRecordModelType(action, record);
+      const decs = getModelDecorators(modelType);
       for (const fn of decs) {
         fn({
           type: record.type,
           schema: params,
+          builder: this.builder,
         });
       }
     }

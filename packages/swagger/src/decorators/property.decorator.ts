@@ -1,17 +1,33 @@
 import { isClass, isUndefined } from "@sfajs/core";
 import { PipeReqType } from "@sfajs/pipe";
-import { ParameterObject, ParameterStyle, SchemaObject } from "openapi3-ts";
+import {
+  OpenApiBuilder,
+  ParameterObject,
+  ParameterStyle,
+  SchemaObject,
+} from "openapi3-ts";
 import { MODEL_DECORATORS } from "../constant";
 import { pipeTypeToDocType, typeToApiType } from "../parser/utils/doc-types";
+import { ensureModelSchema } from "../parser/utils/model-schema";
 
 export type DecoratorFn = (args: {
   type: PipeReqType;
   schema: SchemaObject | ParameterObject[];
+  builder: OpenApiBuilder;
 }) => void;
 
 type SetSchemaValueDecoratorFn = (args: {
   type: PipeReqType;
   schema: SchemaObject | ParameterObject;
+  builder: OpenApiBuilder;
+}) => void;
+
+type CreateDecoratorFn = (args: {
+  type: PipeReqType;
+  schema: SchemaObject | ParameterObject;
+  target: any;
+  propertyKey: string;
+  builder: OpenApiBuilder;
 }) => void;
 
 function isSchemaObject(
@@ -42,6 +58,7 @@ function setValue(
   propertyKey: string,
   type: PipeReqType,
   schema: SchemaObject | ParameterObject[],
+  builder: OpenApiBuilder,
   fn: SetSchemaValueDecoratorFn
 ) {
   let dict: SchemaObject | ParameterObject;
@@ -56,6 +73,7 @@ function setValue(
         propertyKey
       );
       if (isClass(propertyCls)) {
+        ensureModelSchema(builder, propertyCls, type);
         schema.properties[propertyKey] = {
           $ref: `#/components/schemas/${propertyCls.name}`,
         };
@@ -73,29 +91,24 @@ function setValue(
   fn({
     type,
     schema: dict,
+    builder,
   });
 }
 
-function createPropertyDecorator(
-  fn: (args: {
-    type: PipeReqType;
-    schema: SchemaObject | ParameterObject;
-    target: any;
-    propertyKey: string;
-  }) => void
-) {
+function createPropertyDecorator(fn: CreateDecoratorFn) {
   return function (target: any, propertyKey: string) {
     const propertyDecs: DecoratorFn[] =
       Reflect.getMetadata(MODEL_DECORATORS, target) ?? [];
-    propertyDecs.push(({ type, schema }) => {
+    propertyDecs.push(({ type, schema, builder }) => {
       if (isSchemaObject(schema)) {
-        fn({ type, propertyKey, schema, target });
+        fn({ type, propertyKey, schema, target, builder });
       } else {
         fn({
           type,
           propertyKey,
           schema: getParameterObject(propertyKey, type, schema),
           target,
+          builder,
         });
       }
     });
@@ -107,8 +120,8 @@ function createPropertySetValueDecorator(fn: SetSchemaValueDecoratorFn) {
   return function (target: any, propertyKey: string) {
     const propertyDecs: DecoratorFn[] =
       Reflect.getMetadata(MODEL_DECORATORS, target) ?? [];
-    propertyDecs.push(({ type, schema }) =>
-      setValue(target, propertyKey, type, schema, fn)
+    propertyDecs.push(({ type, schema, builder }) =>
+      setValue(target, propertyKey, type, schema, builder, fn)
     );
     Reflect.defineMetadata(MODEL_DECORATORS, propertyDecs, target);
   };
@@ -157,9 +170,10 @@ export function PropertyIgnore() {
 export function PropertyParameterSchema(
   value: SchemaObject | ObjectConstructor
 ) {
-  return createPropertySetValueDecorator(({ schema }) => {
+  return createPropertySetValueDecorator(({ schema, builder, type }) => {
     if (!isSchemaObject(schema)) {
       if (isClass(value)) {
+        ensureModelSchema(builder, value, type);
         schema.schema = {
           $ref: `#/components/schemas/${schema.name}`,
         };
@@ -177,25 +191,28 @@ export function PropertyDeprecated() {
 }
 
 export function PropertyRequired() {
-  return createPropertyDecorator(({ target, propertyKey, schema, type }) => {
-    if (isSchemaObject(schema)) {
-      if (!schema.required) {
-        schema.required = [];
-      }
-      schema.required.push(propertyKey);
-      setValue(
-        target,
-        propertyKey,
-        type,
-        schema,
-        ({ schema: propertySchema }) => {
-          delete propertySchema.nullable;
+  return createPropertyDecorator(
+    ({ target, propertyKey, schema, type, builder }) => {
+      if (isSchemaObject(schema)) {
+        if (!schema.required) {
+          schema.required = [];
         }
-      );
-    } else {
-      schema.required = true;
+        schema.required.push(propertyKey);
+        setValue(
+          target,
+          propertyKey,
+          type,
+          schema,
+          builder,
+          ({ schema: propertySchema }) => {
+            delete propertySchema.nullable;
+          }
+        );
+      } else {
+        schema.required = true;
+      }
     }
-  });
+  );
 }
 
 export function PropertyAllowEmptyValue() {
@@ -207,9 +224,10 @@ export function PropertyAllowEmptyValue() {
 }
 
 export function PropertyBodyArrayType(value: SchemaObject | ObjectConstructor) {
-  return createPropertySetValueDecorator(({ schema }) => {
+  return createPropertySetValueDecorator(({ schema, builder, type }) => {
     if (isSchemaObject(schema)) {
       if (isClass(value)) {
+        ensureModelSchema(builder, value, type);
         schema.items = {
           $ref: `#/components/schemas/${value.name}`,
         };

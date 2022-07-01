@@ -1,17 +1,16 @@
 import { isUndefined, ObjectConstructor } from "@sfajs/core";
 import { PipeReqRecord, PIPE_RECORDS_METADATA } from "@sfajs/pipe";
-import { ComponentsObject, OpenApiBuilder, SchemaObject } from "openapi3-ts";
+import { OpenApiBuilder } from "openapi3-ts";
 import { SwaggerOptions } from "../swagger-options";
-import { BaseParser } from "./base.parser";
 import glob from "glob";
+import { createModelSchema } from "./utils/model-schema";
+import { getPipeRecordModelType } from "./utils/decorator";
 
-export class ComponentParser extends BaseParser {
+export class ComponentParser {
   constructor(
     private readonly builder: OpenApiBuilder,
     private readonly options: SwaggerOptions
-  ) {
-    super();
-  }
+  ) {}
 
   public parse() {
     const paths = glob.sync("**/*.@(t|j)s", {
@@ -49,30 +48,9 @@ export class ComponentParser extends BaseParser {
         continue;
       }
 
-      const modelType = this.getPipeRecordModelType(cls, record);
-      if (!modelType) continue;
-
-      let schema = this.getExistSchema(modelType.name);
-      if (!schema) {
-        schema = {
-          type: "object",
-        };
-        this.builder.addSchema(modelType.name, schema);
-      }
-
-      const decs = this.getModelDecorators(modelType);
-      for (const fn of decs) {
-        fn({
-          type: record.type,
-          schema: schema,
-        });
-      }
+      const modelCls = getPipeRecordModelType(cls, record);
+      if (!modelCls) continue;
+      createModelSchema(this.builder, modelCls, record.type);
     }
-  }
-
-  private getExistSchema(name: string) {
-    const components = this.builder.getSpec().components as ComponentsObject;
-    const schemas = components.schemas as Record<string, SchemaObject>;
-    return schemas[name] as SchemaObject;
   }
 }
