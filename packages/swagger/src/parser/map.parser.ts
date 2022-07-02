@@ -127,6 +127,7 @@ export class MapParser {
       });
     } else {
       const modelType = getPipeRecordModelType(action, record);
+      if (!modelType) return;
       const decs = getModelDecorators(modelType);
       for (const fn of decs) {
         fn({

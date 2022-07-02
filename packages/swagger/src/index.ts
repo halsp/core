@@ -9,6 +9,9 @@ declare module "@sfajs/core" {
   interface Startup {
     useSwagger(options?: SwaggerOptions): this;
   }
+  interface HttpContext {
+    get swaggerOptions(): SwaggerOptions;
+  }
 }
 
 Startup.prototype.useSwagger = function (

@@ -37,6 +37,7 @@ export class TestHeaderDto {
   h2?: number;
 }
 
+@ApiTags("test")
 @Inject
 export class TestPost extends Action {
   constructor(@Header readonly header: TestHeaderDto) {

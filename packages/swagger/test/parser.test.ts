@@ -9,21 +9,21 @@ import { SwaggerOptions } from "../src/swagger-options";
 
 function runParserTest(
   routerMap?: readonly MapItem[],
-  options?: SwaggerOptions
+  options: SwaggerOptions = {}
 ) {
   const builder = new OpenApiBuilder();
-  process.chdir("test");
+  process.chdir("test/parser");
   try {
     new Parser(
       routerMap ?? [],
       builder,
       {
-        dir: "parser",
+        dir: ".",
       },
-      options ?? {}
+      options
     ).parse();
   } finally {
-    process.chdir("..");
+    process.chdir("../..");
   }
   const apiDoc = builder.getSpec();
   return apiDoc;
@@ -47,10 +47,22 @@ test("map parser", async () => {
   expect(Object.hasOwn(doc["paths"]["/test1"], "post")).toBeTruthy();
 });
 
-test("decorators", async () => {
-  const mapItems = [
-    new MapItem("decorator.ts", "TestDecorator", "test", ["post"]),
-  ];
+test("default", async () => {
+  const mapItems = [new MapItem("default.get.ts", "default", "def", ["get"])];
   const doc = runParserTest(mapItems);
-  expect(Object.hasOwn(doc["paths"]["/test"], "post")).toBeTruthy();
+  expect(Object.hasOwn(doc["paths"]["/def"], "get")).toBeTruthy();
+});
+
+test("not action func", async () => {
+  const mapItems = [new MapItem("not-action.ts", "func", "err", ["get"])];
+  const doc = runParserTest(mapItems);
+  console.log("doc", doc["paths"]["/err"]["get"]);
+  expect(doc["paths"]["/err"]["get"]["tags"]).toEqual([]);
+});
+
+test("error pipe records", async () => {
+  const mapItems = [new MapItem("not-action.ts", "TestClass", "err", ["get"])];
+  const doc = runParserTest(mapItems);
+  console.log("doc", doc["paths"]["/err"]["get"]);
+  expect(doc["paths"]["/err"]["get"]["tags"]).toEqual([]);
 });

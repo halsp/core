@@ -12,12 +12,7 @@ export class Parser {
     private readonly builder: OpenApiBuilder,
     private readonly routerOptions: RouterOptions & { dir: string },
     private readonly options: SwaggerOptions
-  ) {
-    builder.addInfo({
-      title: "@sfajs/swagger",
-      version: "1.0.0",
-    });
-  }
+  ) {}
 
   public parse(): OpenAPIObject {
     new ComponentParser(this.builder, this.options).parse();

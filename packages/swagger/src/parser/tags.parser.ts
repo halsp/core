@@ -1,5 +1,5 @@
 import { MapItem } from "@sfajs/router";
-import { OpenApiBuilder } from "openapi3-ts";
+import { OpenApiBuilder, TagObject } from "openapi3-ts";
 import { ACTION_METADATA_API_TAGS } from "../constant";
 
 export class TagsParser {
@@ -9,7 +9,7 @@ export class TagsParser {
   ) {}
 
   public parse() {
-    const tags = this.builder.getSpec().tags ?? [];
+    const tags = this.builder.getSpec().tags as TagObject[];
     this.builder.getSpec().tags = tags;
 
     this.routerMap.forEach((mapItem) => {

@@ -1,18 +1,11 @@
 import { OpenAPIObject } from "openapi3-ts";
 import { SwaggerOptions } from "./swagger-options";
-import prettier from "prettier";
 
 export async function getSwaggerBody(
   doc: OpenAPIObject,
   options: SwaggerOptions
 ) {
   const docStr = JSON.stringify(doc);
-  console.log(
-    "docStr",
-    prettier.format(docStr, {
-      parser: "json",
-    })
-  );
   let body: string;
   if (options.customHtml) {
     body = await options.customHtml(docStr);

@@ -6,7 +6,7 @@ import { DecoratorFn } from "../../decorators";
 export function getPipeRecordModelType(
   cls: ObjectConstructor,
   record: PipeReqRecord
-) {
+): ObjectConstructor | undefined {
   let result: ObjectConstructor;
   if (!isUndefined(record.parameterIndex)) {
     const paramTypes = Reflect.getMetadata("design:paramtypes", cls) ?? [];
@@ -22,7 +22,5 @@ export function getPipeRecordModelType(
 }
 
 export function getModelDecorators(modelCls: ObjectConstructor): DecoratorFn[] {
-  return (
-    Reflect.getMetadata(MODEL_DECORATORS, modelCls.prototype ?? modelCls) ?? []
-  );
+  return Reflect.getMetadata(MODEL_DECORATORS, modelCls.prototype) ?? [];
 }
