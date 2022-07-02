@@ -41,5 +41,8 @@ export {
   PropertyReadOnly,
   PropertyTitle,
   PropertyWriteOnly,
+  PropertyEnum,
+  PropertyFormat,
+  PropertyXml,
 } from "./decorators";
 export { beforeCompile } from "./before-compile";

@@ -14,6 +14,9 @@ import {
   PropertyParameterStyle,
   PropertyBodyArrayType,
   PropertyParameterSchema,
+  PropertyXml,
+  PropertyFormat,
+  PropertyEnum,
 } from "../../src";
 
 class TestClassDto {}
@@ -52,6 +55,15 @@ export class TestDecoratorHeaderDto {
 
   @PropertyParameterSchema(TestClassDto)
   p6!: TestClassDto;
+
+  @PropertyXml({})
+  p7!: string;
+
+  @PropertyFormat("int64")
+  p8!: string;
+
+  @PropertyEnum("abc", "def")
+  p9!: string;
 }
 
 class TestDecoratorBodyDto {

@@ -5,6 +5,7 @@ import {
   ParameterObject,
   ParameterStyle,
   SchemaObject,
+  XmlObject,
 } from "openapi3-ts";
 import { MODEL_DECORATORS } from "../constant";
 import { pipeTypeToDocType, typeToApiType } from "../parser/utils/doc-types";
@@ -117,11 +118,11 @@ function createPropertyDecorator(fn: CreateDecoratorFn) {
 }
 
 function createPropertySetValueDecorator(fn: SetSchemaValueDecoratorFn) {
-  return function (target: any, propertyKey: string) {
+  return function (target: any, propertyKey: string | symbol) {
     const propertyDecs: DecoratorFn[] =
       Reflect.getMetadata(MODEL_DECORATORS, target) ?? [];
     propertyDecs.push(({ type, schema, builder }) =>
-      setValue(target, propertyKey, type, schema, builder, fn)
+      setValue(target, propertyKey as string, type, schema, builder, fn)
     );
     Reflect.defineMetadata(MODEL_DECORATORS, propertyDecs, target);
   };
@@ -267,5 +268,35 @@ export function PropertyPropertiesRange(args: { min?: number; max?: number }) {
   return createPropertySetValueDecorator(({ schema }) => {
     schema.minProperties = args.min;
     schema.maxProperties = args.max;
+  });
+}
+
+export function PropertyFormat(
+  format:
+    | "int32"
+    | "int64"
+    | "float"
+    | "double"
+    | "byte"
+    | "binary"
+    | "date"
+    | "date-time"
+    | "password"
+    | string
+) {
+  return createPropertySetValueDecorator(({ schema }) => {
+    schema.format = format;
+  });
+}
+
+export function PropertyXml(value: XmlObject) {
+  return createPropertySetValueDecorator(({ schema }) => {
+    schema.xml = value;
+  });
+}
+
+export function PropertyEnum(...value: any[]) {
+  return createPropertySetValueDecorator(({ schema }) => {
+    schema.enum = value;
   });
 }
