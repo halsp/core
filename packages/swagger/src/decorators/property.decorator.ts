@@ -7,7 +7,7 @@ import {
   SchemaObject,
   XmlObject,
 } from "openapi3-ts";
-import { MODEL_DECORATORS } from "../constant";
+import { IGNORE, MODEL_DECORATORS } from "../constant";
 import { pipeTypeToDocType, typeToApiType } from "../parser/utils/doc-types";
 import { ensureModelSchema } from "../parser/utils/model-schema";
 
@@ -165,7 +165,9 @@ export function PropertyPattern(pattern: string) {
 }
 
 export function PropertyIgnore() {
-  return createPropertyDecorator(() => undefined);
+  return createPropertySetValueDecorator(({ schema }) => {
+    schema[IGNORE] = true;
+  });
 }
 
 export function PropertyParameterSchema(

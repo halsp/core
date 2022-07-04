@@ -5,6 +5,7 @@ import { TagsParser } from "./tags.parser";
 import { MapParser } from "./map.parser";
 import { SwaggerOptions } from "../swagger-options";
 import { ComponentParser } from "./component.parser";
+import { IgnoreParser } from "./ignore.parser";
 
 export class Parser {
   constructor(
@@ -19,6 +20,7 @@ export class Parser {
     new TagsParser(this.routerMap, this.builder).parse();
     new MapParser(this.routerMap, this.builder, this.routerOptions).parse();
 
+    new IgnoreParser(this.builder).parse();
     return this.builder.getSpec();
   }
 }

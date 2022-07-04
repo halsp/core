@@ -1,5 +1,5 @@
 import path from "path";
-import ts from "typescript";
+import * as ts from "typescript";
 import { beforeCompile } from "../src";
 import * as fs from "fs";
 
@@ -63,9 +63,9 @@ function compile() {
   return !errorsCount;
 }
 
-process.chdir("test/compiler");
+process.chdir("test-compiler");
 try {
   compile();
 } finally {
-  process.chdir("../..");
+  process.chdir("..");
 }
