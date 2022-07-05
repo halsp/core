@@ -4,21 +4,21 @@ import { InjectType } from "../inject-type";
 import { InjectCustom } from "../interfaces";
 
 export function createInject<T = any>(
-  handler: (obj: any) => T | Promise<T>,
+  handler: (parent: any) => T | Promise<T>,
   target: any,
   propertyKey: string | symbol,
   parameterIndex: number | undefined,
   type: InjectType.Singleton
 ): void;
 export function createInject<T = any>(
-  handler: (ctx: HttpContext, obj: any) => T | Promise<T>,
+  handler: (ctx: HttpContext, parent: any) => T | Promise<T>,
   target: any,
   propertyKey: string | symbol,
   parameterIndex?: number,
   type?: InjectType
 ): void;
 export function createInject<T = any>(
-  handler: (obj: any, ctx?: any) => T | Promise<T>,
+  handler: (parent: any, ctx?: any) => T | Promise<T>,
   target: any,
   propertyKey: string | symbol,
   parameterIndex?: number,

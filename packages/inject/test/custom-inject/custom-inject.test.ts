@@ -13,8 +13,8 @@ function Body(arg1: any, arg2?: any): PropertyDecorator | void {
     return Inject((ctx) => ctx.req.body[arg1]);
   } else {
     return createInject(
-      (ctx, obj) => {
-        expect(obj instanceof TestMiddleware).toBeTruthy();
+      (ctx, parent) => {
+        expect(parent instanceof TestMiddleware).toBeTruthy();
         return ctx.req.body;
       },
       arg1,

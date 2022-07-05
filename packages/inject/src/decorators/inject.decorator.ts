@@ -6,11 +6,11 @@ import { createInject } from "./create-inject";
 import "reflect-metadata";
 
 export function Inject<T = any>(
-  handler: (obj: any) => T | Promise<T>,
+  handler: (parent: any) => T | Promise<T>,
   type: InjectType.Singleton
 ): PropertyDecorator & ParameterDecorator;
 export function Inject<T = any>(
-  handler: (ctx: HttpContext, obj: any) => T | Promise<T>,
+  handler: (ctx: HttpContext, parent: any) => T | Promise<T>,
   type?: InjectType.Scoped | InjectType.Transient
 ): PropertyDecorator & ParameterDecorator;
 
