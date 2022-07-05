@@ -12,7 +12,14 @@ function Body(arg1: any, arg2?: any): PropertyDecorator | void {
   if (typeof arg1 == "string") {
     return Inject((ctx) => ctx.req.body[arg1]);
   } else {
-    return createInject((ctx) => ctx.req.body, arg1, arg2);
+    return createInject(
+      (ctx, obj) => {
+        expect(obj instanceof TestMiddleware).toBeTruthy();
+        return ctx.req.body;
+      },
+      arg1,
+      arg2
+    );
   }
 }
 

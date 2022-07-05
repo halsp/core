@@ -24,7 +24,7 @@ type InjectDecoratorRecordItem = {
   injectKey:
     | ObjectConstructor
     | string
-    | ((ctx: HttpContext) => any | Promise<any>);
+    | ((...args: any[]) => any | Promise<any>);
   value: any;
 };
 
@@ -125,8 +125,8 @@ class InjectDecoratorParser<T extends object = any> {
     } else {
       result =
         prop.type == InjectType.Singleton
-          ? await prop.handler()
-          : await prop.handler(this.ctx);
+          ? await prop.handler(this.obj)
+          : await prop.handler(this.ctx, this.obj);
       records.push({
         injectKey: prop.handler,
         value: result,
@@ -203,7 +203,7 @@ class InjectDecoratorParser<T extends object = any> {
     injectKey:
       | ObjectConstructor
       | string
-      | ((ctx: HttpContext) => any | Promise<any>)
+      | ((...angs: any[]) => any | Promise<any>)
   ): {
     records: InjectDecoratorRecordItem[];
     record: InjectDecoratorRecordItem;
