@@ -1,7 +1,8 @@
 import { isUndefined, ObjectConstructor } from "@sfajs/core";
 import { PipeReqRecord } from "@sfajs/pipe";
-import { MODEL_DECORATORS } from "../../constant";
+import { MODEL_DECORATORS, MODEL_PROPERTY_DECORATORS } from "../../constant";
 import { DecoratorFn } from "../../decorators";
+import { ModelDecoratorFn } from "../../decorators/model.decorator";
 
 export function getPipeRecordModelType(
   cls: ObjectConstructor,
@@ -21,6 +22,16 @@ export function getPipeRecordModelType(
   return result;
 }
 
-export function getModelDecorators(modelCls: ObjectConstructor): DecoratorFn[] {
-  return Reflect.getMetadata(MODEL_DECORATORS, modelCls.prototype) ?? [];
+export function getModelPropertyDecorators(
+  modelCls: ObjectConstructor
+): DecoratorFn[] {
+  return (
+    Reflect.getMetadata(MODEL_PROPERTY_DECORATORS, modelCls.prototype) ?? []
+  );
+}
+
+export function getModelDecorators(
+  modelCls: ObjectConstructor
+): ModelDecoratorFn[] {
+  return Reflect.getMetadata(MODEL_DECORATORS, modelCls) ?? [];
 }

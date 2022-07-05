@@ -1,22 +1,15 @@
-import { ObjectConstructor } from "@sfajs/core";
+import { isUndefined, ObjectConstructor } from "@sfajs/core";
 import { PipeReqType } from "@sfajs/pipe";
 import { ComponentsObject, OpenApiBuilder, SchemaObject } from "openapi3-ts";
-import { getModelDecorators } from "./decorator";
+import { getModelDecorators, getModelPropertyDecorators } from "./decorator";
 
-export function createModelSchema(
+function createModelPropertySchema(
   builder: OpenApiBuilder,
   modelCls: ObjectConstructor,
   type: PipeReqType
 ) {
-  let schema = getExistSchema(builder, modelCls.name);
-  if (!schema) {
-    schema = {
-      type: "object",
-    };
-    builder.addSchema(modelCls.name, schema);
-  }
-
-  const decs = getModelDecorators(modelCls);
+  const decs = getModelPropertyDecorators(modelCls);
+  const schema = getSchema(builder, modelCls);
   for (const fn of decs) {
     fn({
       type: type,
@@ -26,15 +19,48 @@ export function createModelSchema(
   }
 }
 
+function createModelSchema(
+  builder: OpenApiBuilder,
+  modelCls: ObjectConstructor
+) {
+  const decs = getModelDecorators(modelCls);
+  if (!decs.length) {
+    return;
+  }
+
+  const schema = getSchema(builder, modelCls);
+  for (const fn of decs) {
+    fn({
+      schema: schema,
+      builder: builder,
+    });
+  }
+}
+
 export function ensureModelSchema(
   builder: OpenApiBuilder,
   modelCls: ObjectConstructor,
-  type: PipeReqType
+  type?: PipeReqType
 ) {
   const schema = getExistSchema(builder, modelCls.name);
   if (!schema) {
-    createModelSchema(builder, modelCls, type);
+    if (isUndefined(type)) {
+      createModelSchema(builder, modelCls);
+    } else {
+      createModelPropertySchema(builder, modelCls, type);
+    }
   }
+}
+
+function getSchema(builder: OpenApiBuilder, modelCls: ObjectConstructor) {
+  let schema = getExistSchema(builder, modelCls.name);
+  if (!schema) {
+    schema = {
+      type: "object",
+    };
+    builder.addSchema(modelCls.name, schema);
+  }
+  return schema;
 }
 
 function getExistSchema(builder: OpenApiBuilder, name: string) {

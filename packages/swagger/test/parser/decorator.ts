@@ -1,5 +1,6 @@
-import { Body, Header } from "@sfajs/pipe";
-import { Action } from "@sfajs/router";
+import { Body, Header, Query } from "@sfajs/pipe";
+import { Action, HttpPost } from "@sfajs/router";
+import { SchemaObject } from "openapi3-ts";
 import {
   PropertyDefault,
   PropertyIgnore,
@@ -17,7 +18,10 @@ import {
   PropertyXml,
   PropertyFormat,
   PropertyEnum,
+  ApiTags,
+  PropertyExamples,
 } from "../../src";
+import { ModelIgnore } from "../../src/decorators/model.decorator";
 
 class TestClassDto {}
 
@@ -27,10 +31,19 @@ export class TestDecoratorHeaderDto {
   @PropertyReadOnly()
   @PropertyPattern("^[a-z]$")
   @PropertyExample("def")
-  @PropertyExample(["ghi", "jkl"])
   @PropertyAllowEmptyValue()
   p1!: string;
 
+  @PropertyExamples({
+    abc: {
+      description: "abc",
+      value: "123",
+    },
+    def: {
+      description: "def",
+      value: 456,
+    },
+  })
   @PropertyWriteOnly()
   p2!: string;
 
@@ -81,11 +94,22 @@ class TestDecoratorBodyDto {
   p3!: string;
 }
 
+@ModelIgnore()
+@ModelIgnore()
+export class TestDecoratorQueryDto {
+  @PropertyDefault("abc")
+  p1!: string;
+}
+
+@HttpPost("test")
+@ApiTags("test")
 export class TestDecorator extends Action {
   @Header
   private readonly h!: TestDecoratorHeaderDto;
   @Body
   private readonly b!: TestDecoratorBodyDto;
+  @Query
+  private readonly q!: TestDecoratorQueryDto;
 
   async invoke(): Promise<void> {
     this.ok();

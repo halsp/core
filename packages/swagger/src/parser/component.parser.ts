@@ -3,7 +3,7 @@ import { PipeReqRecord, PIPE_RECORDS_METADATA } from "@sfajs/pipe";
 import { OpenApiBuilder } from "openapi3-ts";
 import { SwaggerOptions } from "../swagger-options";
 import glob from "glob";
-import { createModelSchema } from "./utils/model-schema";
+import { ensureModelSchema } from "./utils/model-schema";
 import { getPipeRecordModelType } from "./utils/decorator";
 
 export class ComponentParser {
@@ -37,6 +37,8 @@ export class ComponentParser {
     if (typeof cls != "function") {
       return;
     }
+
+    ensureModelSchema(this.builder, cls);
     this.parsePipeReqRecords(cls);
   }
 
@@ -51,7 +53,7 @@ export class ComponentParser {
 
       const modelCls = getPipeRecordModelType(cls, record);
       if (!modelCls) continue;
-      createModelSchema(this.builder, modelCls, record.type);
+      ensureModelSchema(this.builder, modelCls, record.type);
     }
   }
 }

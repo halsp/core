@@ -1,13 +1,14 @@
-import { isClass, isUndefined } from "@sfajs/core";
+import { isClass, isUndefined, ObjectConstructor } from "@sfajs/core";
 import { PipeReqType } from "@sfajs/pipe";
 import {
+  ExampleObject,
   OpenApiBuilder,
   ParameterObject,
   ParameterStyle,
   SchemaObject,
   XmlObject,
 } from "openapi3-ts";
-import { IGNORE, MODEL_DECORATORS } from "../constant";
+import { IGNORE, MODEL_PROPERTY_DECORATORS } from "../constant";
 import { pipeTypeToDocType, typeToApiType } from "../parser/utils/doc-types";
 import { ensureModelSchema } from "../parser/utils/model-schema";
 
@@ -99,7 +100,7 @@ function setValue(
 function createPropertyDecorator(fn: CreateDecoratorFn) {
   return function (target: any, propertyKey: string) {
     const propertyDecs: DecoratorFn[] =
-      Reflect.getMetadata(MODEL_DECORATORS, target) ?? [];
+      Reflect.getMetadata(MODEL_PROPERTY_DECORATORS, target) ?? [];
     propertyDecs.push(({ type, schema, builder }) => {
       if (isSchemaObject(schema)) {
         fn({ type, propertyKey, schema, target, builder });
@@ -113,18 +114,18 @@ function createPropertyDecorator(fn: CreateDecoratorFn) {
         });
       }
     });
-    Reflect.defineMetadata(MODEL_DECORATORS, propertyDecs, target);
+    Reflect.defineMetadata(MODEL_PROPERTY_DECORATORS, propertyDecs, target);
   };
 }
 
 function createPropertySetValueDecorator(fn: SetSchemaValueDecoratorFn) {
   return function (target: any, propertyKey: string | symbol) {
     const propertyDecs: DecoratorFn[] =
-      Reflect.getMetadata(MODEL_DECORATORS, target) ?? [];
+      Reflect.getMetadata(MODEL_PROPERTY_DECORATORS, target) ?? [];
     propertyDecs.push(({ type, schema, builder }) =>
       setValue(target, propertyKey as string, type, schema, builder, fn)
     );
-    Reflect.defineMetadata(MODEL_DECORATORS, propertyDecs, target);
+    Reflect.defineMetadata(MODEL_PROPERTY_DECORATORS, propertyDecs, target);
   };
 }
 
@@ -178,7 +179,7 @@ export function PropertyParameterSchema(
       if (isClass(value)) {
         ensureModelSchema(builder, value, type);
         schema.schema = {
-          $ref: `#/components/schemas/${schema.name}`,
+          $ref: `#/components/schemas/${value.name}`,
         };
       } else {
         schema.schema = value;
@@ -241,15 +242,15 @@ export function PropertyBodyArrayType(value: SchemaObject | ObjectConstructor) {
   });
 }
 
-export function PropertyExample(examples: any[]): PropertyDecorator;
-export function PropertyExample(example: any): PropertyDecorator;
 export function PropertyExample(example: any) {
   return createPropertySetValueDecorator(({ schema }) => {
-    if (Array.isArray(example)) {
-      schema.examples = example;
-    } else {
-      schema.example = example;
-    }
+    schema.example = example;
+  });
+}
+
+export function PropertyExamples(examples: Record<string, ExampleObject>) {
+  return createPropertySetValueDecorator(({ schema }) => {
+    schema.examples = examples;
   });
 }
 

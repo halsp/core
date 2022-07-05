@@ -3,26 +3,24 @@ import { MapItem } from "@sfajs/router";
 import { OpenApiBuilder } from "openapi3-ts";
 import { Parser } from "../src/parser";
 import {
-  getModelDecorators,
+  getModelPropertyDecorators,
   getPipeRecordModelType,
 } from "../src/parser/utils/decorator";
 
 test("decorators", async () => {
   const builder = new OpenApiBuilder();
-  process.chdir("test");
+  process.chdir("test/parser");
   try {
     new Parser(
       [new MapItem("decorator.ts", "TestDecorator", "test", ["post"])],
       builder,
       {
-        dir: "parser",
+        dir: ".",
       },
-      {
-        modelCwd: "parser",
-      }
+      {}
     ).parse();
   } finally {
-    process.chdir("..");
+    process.chdir("../..");
   }
   const doc = builder.getSpec();
   expect(Object.hasOwn(doc["paths"]["/test"], "post")).toBeTruthy();
@@ -40,6 +38,6 @@ test("getPipeRecordModelType error", async () => {
   ).toBeUndefined();
 });
 
-test("getModelDecorators class", async () => {
-  expect(getModelDecorators(TestStartup)).toEqual([]);
+test("getModelPropertyDecorators class", async () => {
+  expect(getModelPropertyDecorators(TestStartup)).toEqual([]);
 });

@@ -12,7 +12,10 @@ import {
   ACTION_METADATA_API_SUMMARY,
   ACTION_METADATA_API_TAGS,
 } from "../constant";
-import { getModelDecorators, getPipeRecordModelType } from "./utils/decorator";
+import {
+  getModelPropertyDecorators,
+  getPipeRecordModelType,
+} from "./utils/decorator";
 import { pipeTypeToDocType } from "./utils/doc-types";
 import { ensureModelSchema } from "./utils/model-schema";
 
@@ -128,7 +131,7 @@ export class MapParser {
     } else {
       const modelType = getPipeRecordModelType(action, record);
       if (!modelType) return;
-      const decs = getModelDecorators(modelType);
+      const decs = getModelPropertyDecorators(modelType);
       for (const fn of decs) {
         fn({
           type: record.type,

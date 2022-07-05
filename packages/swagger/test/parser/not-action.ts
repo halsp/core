@@ -14,11 +14,6 @@ function TestPipeDec(target: any, propertyKey: symbol | string) {
     ],
     target
   );
-  console.log(
-    "TestPipeDec",
-    target,
-    Reflect.getMetadata(PIPE_RECORDS_METADATA, target)
-  );
 }
 
 export function func() {

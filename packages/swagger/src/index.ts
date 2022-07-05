@@ -47,5 +47,6 @@ export {
   PropertyEnum,
   PropertyFormat,
   PropertyXml,
+  PropertyExamples,
 } from "./decorators";
 export { beforeCompile } from "./before-compile";
