@@ -56,13 +56,11 @@ test("default", async () => {
 test("not action func", async () => {
   const mapItems = [new MapItem("not-action.ts", "func", "err", ["get"])];
   const doc = runParserTest(mapItems);
-  console.log("doc", doc["paths"]["/err"]["get"]);
   expect(doc["paths"]["/err"]["get"]["tags"]).toEqual([]);
 });
 
 test("error pipe records", async () => {
   const mapItems = [new MapItem("not-action.ts", "TestClass", "err", ["get"])];
   const doc = runParserTest(mapItems);
-  console.log("doc", doc["paths"]["/err"]["get"]);
   expect(doc["paths"]["/err"]["get"]["tags"]).toEqual([]);
 });

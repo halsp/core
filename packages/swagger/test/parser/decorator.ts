@@ -1,6 +1,5 @@
 import { Body, Header, Query } from "@sfajs/pipe";
 import { Action, HttpPost } from "@sfajs/router";
-import { SchemaObject } from "openapi3-ts";
 import {
   PropertyDefault,
   PropertyIgnore,
@@ -69,14 +68,19 @@ export class TestDecoratorHeaderDto {
   @PropertyParameterSchema(TestClassDto)
   p6!: TestClassDto;
 
-  @PropertyXml({})
+  @PropertyParameterSchema({
+    type: "number",
+  })
   p7!: string;
 
-  @PropertyFormat("int64")
+  @PropertyXml({})
   p8!: string;
 
-  @PropertyEnum("abc", "def")
+  @PropertyFormat("int64")
   p9!: string;
+
+  @PropertyEnum("abc", "def")
+  p10!: string;
 }
 
 class TestDecoratorBodyDto {
@@ -87,11 +91,6 @@ class TestDecoratorBodyDto {
 
   @PropertyBodyArrayType(TestClassDto)
   p2!: number[];
-
-  @PropertyParameterSchema({
-    type: "number",
-  })
-  p3!: string;
 }
 
 @ModelIgnore()

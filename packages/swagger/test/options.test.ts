@@ -42,14 +42,16 @@ test("builder", async () => {
 });
 
 test("other router", async () => {
-  const res = await new TestStartup(new SfaRequest().setPath("/test"))
+  const res = await new TestStartup(
+    new SfaRequest().setPath("/test").setMethod("post")
+  )
     .useSwagger()
     .useRouter({
       dir: "test/parser",
     })
     .run();
 
-  expect(res.status).toBe(404);
+  expect(res.status).toBe(200);
 });
 
 test("custom html", async () => {

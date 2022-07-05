@@ -229,15 +229,13 @@ export function PropertyAllowEmptyValue() {
 
 export function PropertyBodyArrayType(value: SchemaObject | ObjectConstructor) {
   return createPropertySetValueDecorator(({ schema, builder, type }) => {
-    if (isSchemaObject(schema)) {
-      if (isClass(value)) {
-        ensureModelSchema(builder, value, type);
-        schema.items = {
-          $ref: `#/components/schemas/${value.name}`,
-        };
-      } else {
-        schema.schema = value;
-      }
+    if (isClass(value)) {
+      ensureModelSchema(builder, value, type);
+      schema.items = {
+        $ref: `#/components/schemas/${value.name}`,
+      };
+    } else {
+      schema.items = value;
     }
   });
 }

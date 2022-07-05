@@ -45,7 +45,6 @@ export class ComponentParser {
   private parsePipeReqRecords(cls: ObjectConstructor) {
     const pipeReqRecords: PipeReqRecord[] =
       Reflect.getMetadata(PIPE_RECORDS_METADATA, cls.prototype) ?? [];
-    // console.log("pipeReqRecords", cls, pipeReqRecords);
     for (const record of pipeReqRecords) {
       if (!isUndefined(record.property)) {
         continue;
