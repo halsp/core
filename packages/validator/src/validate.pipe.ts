@@ -1,5 +1,10 @@
-import { BadRequestException, HttpContext, isPlainObject } from "@sfajs/core";
-import { PipeTransform } from "@sfajs/pipe";
+import {
+  BadRequestException,
+  HttpContext,
+  isPlainObject,
+  isUndefined,
+} from "@sfajs/core";
+import { PipeTransform, TransformArgs } from "@sfajs/pipe";
 import { validate, ValidatorOptions } from "class-validator";
 import { SCHAME_METADATA, ENABLE_METADATA, OPTIONS_METADATA } from "./constant";
 
@@ -16,8 +21,10 @@ export class ValidatePipe<T extends object = any, R extends T = any>
         ) => ValidatorOptions | Promise<ValidatorOptions>)
   ) {}
 
-  async transform(value: T, ctx: HttpContext, propertyType: any) {
-    if (!this.transformEnable(value)) {
+  async transform(args: TransformArgs<T | R>) {
+    const { value, ctx, propertyType } = args;
+
+    if (!this.transformParentEnable(args) && !this.transformModelEnable(args)) {
       return value;
     }
 
@@ -28,21 +35,74 @@ export class ValidatePipe<T extends object = any, R extends T = any>
     const options = await this.getOptions(value, ctx, propertyType);
     const schemaName = await this.getSchameName(value, ctx);
 
-    const errs = await this.validate(value, schemaName, options);
-    const msgs = errs
-      .filter((item) => !!item.constraints)
-      .map((item) => item.constraints as Record<string, string>)
-      .map((cons) => cons[Object.keys(cons)[0]]);
-    if (msgs.length) {
-      throw new BadRequestException({
-        message: msgs.length == 1 ? msgs[0] : msgs,
-      });
-    }
+    await this.validateParent(args, schemaName, options);
+    await this.validateModel(args, schemaName, options);
 
     return value;
   }
 
-  private transformEnable(value: T): boolean {
+  private async validateModel(
+    args: TransformArgs<T | R>,
+    schemaName?: string,
+    options?: ValidatorOptions
+  ) {
+    const { value } = args;
+    if (!this.transformModelEnable(args)) {
+      return;
+    }
+
+    const errs = await this.validate(value, schemaName, options);
+    const msgs = errs
+      .filter((item) => !!item.constraints)
+      .map((item) => item.constraints as Record<string, string>);
+    this.throwMsg(msgs);
+  }
+
+  private async validateParent(
+    args: TransformArgs<T | R>,
+    schemaName?: string,
+    options?: ValidatorOptions
+  ) {
+    const { parent, propertyKey } = args;
+    if (!this.transformParentEnable(args)) {
+      return;
+    }
+
+    const errs = await this.validate(parent, schemaName, options);
+    const msgs = errs
+      .filter((item) => !!item.constraints)
+      .filter((item) => item.property == propertyKey)
+      .map((item) => item.constraints as Record<string, string>);
+    this.throwMsg(msgs);
+  }
+
+  private throwMsg(msgs: Record<string, string>[]) {
+    const list: string[] = [];
+    for (const msg of msgs) {
+      for (const key in msg) {
+        list.push(msg[key]);
+      }
+    }
+
+    if (list.length) {
+      throw new BadRequestException({
+        message: list.length == 1 ? list[0] : list,
+      });
+    }
+  }
+
+  private transformParentEnable(args: TransformArgs<T | R>): boolean {
+    const { property } = args;
+    return !isUndefined(property);
+    // return (
+    //   typeof parent == "object" &&
+    //   !Array.isArray(parent) &&
+    //   !isPlainObject(parent)
+    // );
+  }
+
+  private transformModelEnable(args: TransformArgs<T | R>): boolean {
+    const { value } = args;
     return (
       typeof value == "object" && !Array.isArray(value) && !isPlainObject(value)
     );

@@ -94,3 +94,26 @@ test("array message", async () => {
     message: ["b1 must be a string", "b2 must be an integer number"],
   });
 });
+
+test("validate disabled", async () => {
+  class TestMiddleware extends Middleware {
+    @Body
+    b!: Record<string, any>;
+
+    async invoke(): Promise<void> {
+      this.ok();
+    }
+  }
+
+  const res = await new TestStartup(
+    new SfaRequest().setBody({
+      b1: 1,
+    })
+  )
+    .useInject()
+    .useValidator()
+    .add(TestMiddleware)
+    .run();
+
+  expect(res.status).toBe(200);
+});

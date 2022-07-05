@@ -26,9 +26,9 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@sfajs/core": "^1.5.2",
-    "@sfajs/inject": "^1.1.2",
-    "@sfajs/pipe": "^1.2.4",
+    "@sfajs/core": "^1.5.3",
+    "@sfajs/inject": "^1.1.3",
+    "@sfajs/pipe": "^1.3.0",
     "class-validator": "^0.13.2",
     "reflect-metadata": "^0.1.13"
   },
