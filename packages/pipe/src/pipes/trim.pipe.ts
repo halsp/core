@@ -19,7 +19,7 @@ export class TrimPipe implements PipeTransform<string, string> {
   }
   readonly #options: TrimPipeOptions;
 
-  transform(value: string) {
+  transform({ value }) {
     if (typeof value != "string" && !!this.#options.notString) {
       return this.#options.notString(value);
     }

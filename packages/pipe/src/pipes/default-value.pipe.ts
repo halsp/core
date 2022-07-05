@@ -20,7 +20,7 @@ export class DefaultValuePipe<T = any, R = any>
 
   readonly #options: DefaultValuePipeOptions;
 
-  transform(value: any): T | R {
+  transform({ value }): T | R {
     if (!this.#options.ignoreUndefined && isUndefined(value)) {
       return this.defaultValue;
     } else if (!this.#options.ignoreNull && isNull(value)) {

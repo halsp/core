@@ -15,6 +15,7 @@ export {
   DefaultValuePipeOptions,
   TrimPipe,
   TrimPipeOptions,
+  TransformArgs,
 } from "./pipes";
 
 export { PIPE_RECORDS_METADATA } from "./constant";

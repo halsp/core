@@ -10,7 +10,10 @@ import { plainToClass } from "class-transformer";
 
 async function execPipes(
   ctx: HttpContext,
-  val: any,
+  target: any,
+  propertyKey: string | symbol,
+  parameterIndex: number | undefined,
+  value: any,
   propertyType: any,
   pipes: PipeItem[]
 ) {
@@ -30,10 +33,18 @@ async function execPipes(
     }
 
     if (pipe.transform) {
-      val = await pipe.transform(val, ctx, propertyType);
+      value = await pipe.transform({
+        value,
+        ctx,
+        propertyType,
+        target,
+        propertyKey,
+        parameterIndex,
+        pipes,
+      });
     }
   }
-  return val;
+  return value;
 }
 
 function setPipeRecord(
@@ -97,7 +108,15 @@ export function createDecorator(type: PipeReqType, args: any[]) {
           const val = getObjectFromDict(propertyType, dict)
             ? dict[property]
             : undefined;
-          return await execPipes(ctx, val, propertyType, pipes);
+          return await execPipes(
+            ctx,
+            target,
+            propertyKey,
+            parameterIndex,
+            val,
+            propertyType,
+            pipes
+          );
         },
         target,
         propertyKey,
@@ -112,6 +131,9 @@ export function createDecorator(type: PipeReqType, args: any[]) {
       async (ctx) =>
         await execPipes(
           ctx,
+          target,
+          args[1],
+          args[2],
           getObjectFromDict(propertyType, handler(ctx)),
           propertyType,
           []
@@ -133,6 +155,9 @@ export function createDecorator(type: PipeReqType, args: any[]) {
         async (ctx) =>
           await execPipes(
             ctx,
+            target,
+            propertyKey,
+            parameterIndex,
             getObjectFromDict(propertyType, handler(ctx)),
             propertyType,
             pipes

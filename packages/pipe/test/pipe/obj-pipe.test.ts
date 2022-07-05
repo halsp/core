@@ -2,7 +2,7 @@ import { Middleware, SfaRequest, TestStartup } from "@sfajs/core";
 import { Body } from "../../src";
 
 class TestMiddleware extends Middleware {
-  @Body((val) => JSON.stringify(val))
+  @Body(({ value }) => JSON.stringify(value))
   readonly body!: any;
 
   invoke(): void {

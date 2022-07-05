@@ -1,9 +1,11 @@
-import { PipeTransform } from "./pipe-transform";
+import { PipeTransform, TransformArgs } from "./pipe-transform";
 
 export class LambdaPipe<T = any, R = any> implements PipeTransform<T, R> {
-  constructor(private readonly handler: (val: T) => R | Promise<R>) {}
+  constructor(
+    private readonly handler: (args: TransformArgs<T>) => R | Promise<R>
+  ) {}
 
-  async transform(value: T) {
-    return await this.handler(value);
+  async transform(args: TransformArgs<T>) {
+    return await this.handler(args);
   }
 }

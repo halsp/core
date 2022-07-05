@@ -16,7 +16,7 @@ export class ParseBoolPipe
   }
   readonly #options: ParseBoolPipeOptions;
 
-  transform(value: string | boolean | number) {
+  transform({ value }) {
     if (typeof value == "boolean") {
       return value;
     } else if (!this.#options.ignoreNumber && (value == 1 || value == "1")) {

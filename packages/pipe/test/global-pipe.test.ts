@@ -1,4 +1,4 @@
-import { HttpContext, Middleware, SfaRequest, TestStartup } from "@sfajs/core";
+import { Middleware, SfaRequest, TestStartup } from "@sfajs/core";
 import { Inject } from "@sfajs/inject";
 import { Header, PipeTransform } from "../src";
 import { GlobalPipeType } from "../src/global-pipe-type";
@@ -6,7 +6,7 @@ import { GlobalPipeType } from "../src/global-pipe-type";
 test("global pipe property", async () => {
   class TestGlobalPipe implements PipeTransform<string | number, number> {
     static index = 0;
-    transform(value: string | number, ctx: HttpContext, propertyType: any) {
+    transform({ ctx, propertyType }) {
       TestGlobalPipe.index++;
       ctx.res["propertyKey" + TestGlobalPipe.index] = propertyType;
       ctx.res["index"] = TestGlobalPipe.index;
@@ -44,7 +44,7 @@ test("global pipe property", async () => {
 test("global pipe params", async () => {
   class TestGlobalPipe implements PipeTransform<string | number, number> {
     static index = 0;
-    transform(value: string | number, ctx: HttpContext, propertyType: any) {
+    transform({ ctx, propertyType }) {
       TestGlobalPipe.index++;
       ctx.res["propertyKey" + TestGlobalPipe.index] = propertyType;
       ctx.res["index"] = TestGlobalPipe.index;

@@ -2,7 +2,7 @@ import { BadRequestException } from "@sfajs/core";
 import { PipeTransform } from "./pipe-transform";
 
 export class ParseIntPipe implements PipeTransform<string | number, number> {
-  transform(value: string | number) {
+  transform({ value }) {
     if (typeof value == "string") {
       value = parseInt(value, 10);
     }

@@ -1,9 +1,9 @@
-import { PipeTransform } from "./pipe-transform";
+import { PipeTransform, TransformArgs } from "./pipe-transform";
 import { ObjectConstructor } from "@sfajs/core";
 import { GlobalPipeType } from "../global-pipe-type";
 
 export type PipeItem<T = any, R = any> =
-  | ((val: T) => R | Promise<R>)
+  | ((args: TransformArgs<T>) => R | Promise<R>)
   | PipeTransform<T, R>
   | ObjectConstructor<PipeTransform<T, R>>;
 
