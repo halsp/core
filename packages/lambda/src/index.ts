@@ -10,3 +10,4 @@ declare module "@sfajs/core" {
 
 export { ResponseStruct };
 export { SfaCloudbase } from "./sfa-cloudbase";
+export { cliConfig } from "./cli-config";
