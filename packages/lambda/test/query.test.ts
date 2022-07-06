@@ -1,6 +1,6 @@
 import { SfaCloudbase } from "../src";
 
-test("query", async function () {
+test("query", async () => {
   const res = await new SfaCloudbase()
     .use(async (ctx, next) => {
       ctx.ok(ctx.req.query);

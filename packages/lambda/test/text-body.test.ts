@@ -1,6 +1,6 @@
 import { SfaCloudbase } from "../src";
 
-test("string body", async function () {
+test("string body", async () => {
   const result = await new SfaCloudbase()
     .use(async (ctx) => {
       ctx.res.body = ctx.req.body;
@@ -20,7 +20,7 @@ test("string body", async function () {
   expect(result.body).toEqual({ test: "sfa" });
 });
 
-test("string body without conent-type", async function () {
+test("string body without conent-type", async () => {
   const result = await new SfaCloudbase()
     .use(async (ctx) => {
       ctx.res.body = ctx.req.body;
@@ -42,7 +42,7 @@ test("string body without conent-type", async function () {
   );
 });
 
-test("set text type", async function () {
+test("set text type", async () => {
   const res = await new SfaCloudbase()
     .use(async (ctx, next) => {
       ctx.res.setHeader("content-type", "text/plain");
@@ -58,7 +58,7 @@ test("set text type", async function () {
   expect(res.statusCode).toBe(200);
 });
 
-test("html", async function () {
+test("html", async () => {
   const res = await new SfaCloudbase()
     .use(async (ctx, next) => {
       ctx.ok("<div></div>");
