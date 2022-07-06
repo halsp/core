@@ -36,6 +36,8 @@ export abstract class HttpBodyPraserStartup extends Startup {
         "application/json-patch+json",
         "application/vnd.api+json",
         "application/csp-report",
+        "text/json",
+        "application/*+json",
       ],
       onError
     );
