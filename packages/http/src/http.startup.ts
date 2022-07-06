@@ -126,8 +126,17 @@ export abstract class HttpStartup<
     );
 
     httpRes.statusCode = 404;
-    (ctx as any).httpRes = httpRes;
-    (ctx as any).httpReq = httpReq;
+
+    Object.defineProperty(ctx, "httpRes", {
+      configurable: false,
+      enumerable: false,
+      get: () => httpRes,
+    });
+    Object.defineProperty(ctx, "httpReq", {
+      configurable: false,
+      enumerable: false,
+      get: () => httpReq,
+    });
 
     const sfaRes = await this.invoke(ctx);
 

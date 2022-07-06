@@ -10,7 +10,7 @@ export {
 
 declare module "@sfajs/core" {
   interface HttpContext {
-    readonly httpReq: http.IncomingMessage;
-    readonly httpRes: http.ServerResponse;
+    get httpReq(): http.IncomingMessage;
+    get httpRes(): http.ServerResponse;
   }
 }
