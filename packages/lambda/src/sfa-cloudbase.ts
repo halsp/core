@@ -23,8 +23,19 @@ export class SfaCloudbase extends Startup {
         .setQuery((event.queryStringParameters ?? {}) as Dict<string>)
         .setPath(event.path as string)
     );
-    (ctx.req as any).context = context;
-    (ctx.req as any).event = event;
+
+    Object.defineProperty(ctx.req, "context", {
+      configurable: false,
+      enumerable: false,
+      get: () => context,
+    });
+
+    Object.defineProperty(ctx.req, "event", {
+      configurable: false,
+      enumerable: false,
+      get: () => event,
+    });
+
     return ctx;
   }
 

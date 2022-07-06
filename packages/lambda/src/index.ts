@@ -3,8 +3,8 @@ import { ResponseStruct } from "./response-struct";
 
 declare module "@sfajs/core" {
   interface SfaRequest {
-    readonly context: Dict;
-    readonly event: Dict;
+    get context(): Dict;
+    get event(): Dict;
   }
 }
 
