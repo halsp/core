@@ -24,13 +24,25 @@ export class SfaCloudbase extends Startup {
         .setPath(event.path as string)
     );
 
-    Object.defineProperty(ctx.req, "context", {
+    Object.defineProperty(ctx.req, "cloudbaseContext", {
       configurable: false,
       enumerable: false,
       get: () => context,
     });
 
-    Object.defineProperty(ctx.req, "event", {
+    Object.defineProperty(ctx.req, "cloudbaseEvent", {
+      configurable: false,
+      enumerable: false,
+      get: () => event,
+    });
+
+    Object.defineProperty(ctx, "cloudbaseContext", {
+      configurable: false,
+      enumerable: false,
+      get: () => context,
+    });
+
+    Object.defineProperty(ctx, "cloudbaseEvent", {
       configurable: false,
       enumerable: false,
       get: () => event,

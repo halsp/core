@@ -2,9 +2,13 @@ import { Dict } from "@sfajs/core";
 import { ResponseStruct } from "./response-struct";
 
 declare module "@sfajs/core" {
+  interface HttpContext {
+    get cloudbaseContext(): Dict;
+    get cloudbaseEvent(): Dict;
+  }
   interface SfaRequest {
-    get context(): Dict;
-    get event(): Dict;
+    get cloudbaseContext(): Dict;
+    get cloudbaseEvent(): Dict;
   }
 }
 
