@@ -1,8 +1,8 @@
-import { SfaAlifunc, AliContext } from "../../src";
+import { SfaAlifunc } from "../../src";
 import { newAliRes, newAliReq } from "../utils";
 
 test("text body", async function () {
-  const aliContext: AliContext = {};
+  const aliContext: any = {};
   const aliReq = newAliReq();
   const aliRes = newAliRes();
 
@@ -18,7 +18,7 @@ test("text body", async function () {
 });
 
 test("text body set type", async function () {
-  const aliContext: AliContext = {};
+  const aliContext: any = {};
   const aliReq = newAliReq();
   const aliRes = newAliRes();
 
@@ -36,7 +36,7 @@ test("text body set type", async function () {
 });
 
 test("html body", async function () {
-  const aliContext: AliContext = {};
+  const aliContext: any = {};
   const aliReq = newAliReq();
   const aliRes = newAliRes();
 

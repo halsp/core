@@ -1,8 +1,8 @@
-import { SfaAlifunc, AliContext } from "../src";
+import { SfaAlifunc } from "../src";
 import { newAliReq, newAliRes } from "./utils";
 
 test("without md", async function () {
-  const aliContext: AliContext = {};
+  const aliContext: any = {};
   const aliReq = newAliReq();
   const aliRes = newAliRes();
 

@@ -1,8 +1,8 @@
-import { SfaAlifunc, AliContext } from "../../src";
+import { SfaAlifunc } from "../../src";
 import { newAliRes, newAliReq } from "../utils";
 
 test("json body", async function () {
-  const aliContext: AliContext = {};
+  const aliContext: any = {};
   const aliReq = newAliReq();
   const aliRes = newAliRes();
 
@@ -26,7 +26,7 @@ test("json body", async function () {
 });
 
 test("json body set type", async function () {
-  const aliContext: AliContext = {};
+  const aliContext: any = {};
   const aliReq = newAliReq();
   const aliRes = newAliRes();
 
@@ -52,7 +52,7 @@ test("json body set type", async function () {
 });
 
 test("prase json", async function () {
-  const aliContext: AliContext = {};
+  const aliContext: any = {};
   const aliReq = newAliReq();
   const aliRes = newAliRes();
 

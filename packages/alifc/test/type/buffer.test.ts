@@ -1,8 +1,8 @@
-import { SfaAlifunc, AliContext } from "../../src";
+import { SfaAlifunc } from "../../src";
 import { newAliRes, newAliReq } from "../utils";
 
 test("buffer body", async function () {
-  const aliContext: AliContext = {};
+  const aliContext: any = {};
   const aliReq = newAliReq();
   const aliRes = newAliRes();
 
@@ -18,7 +18,7 @@ test("buffer body", async function () {
 });
 
 test("buffer body set type", async function () {
-  const aliContext: AliContext = {};
+  const aliContext: any = {};
   const aliReq = newAliReq();
   const aliRes = newAliRes();
 

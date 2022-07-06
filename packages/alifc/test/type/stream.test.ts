@@ -1,9 +1,9 @@
-import { SfaAlifunc, AliContext } from "../../src";
+import { SfaAlifunc } from "../../src";
 import { createReadStream } from "fs";
 import { newAliRes, newAliReq } from "../utils";
 
 test("stream body", async function () {
-  const aliContext: AliContext = {};
+  const aliContext: any = {};
   const aliReq = newAliReq();
   const aliRes = newAliRes();
 
