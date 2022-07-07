@@ -152,7 +152,7 @@ export abstract class Startup {
       }
     } else if (body instanceof Stream) {
       if (writeType) {
-        res.setHeader("Content-Type", mime.contentType("bin") as string);
+        res.setHeader("content-type", mime.contentType("bin") as string);
       }
     } else if (isString(body)) {
       if (writeLength) {

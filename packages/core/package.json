@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/core",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "description": "面向云的现代渐进式轻量 Node.js 框架",
   "homepage": "https://github.com/sfajs/core",
   "repository": {
@@ -32,7 +32,7 @@
   "devDependencies": {
     "@types/jest": "^28.1.4",
     "@types/mime-types": "^2.1.1",
-    "@types/node": "^18.0.1",
+    "@types/node": "^18.0.3",
     "@typescript-eslint/eslint-plugin": "^5.30.5",
     "@typescript-eslint/parser": "^5.30.5",
     "codecov": "^3.8.3",
