@@ -12,5 +12,5 @@ declare module "@sfajs/core" {
 
 export { AliReq } from "./ali-req";
 export { AliRes } from "./ali-res";
-export { SfaAlifunc } from "./sfa-ali-func";
+export { SfaAlifunc } from "./sfa-alifunc";
 export { cliConfig } from "./cli-config";
