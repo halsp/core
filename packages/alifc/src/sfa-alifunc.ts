@@ -17,12 +17,32 @@ export class SfaAlifunc extends HttpBodyPraserStartup {
         .setQuery(aliReq.queries)
         .setMethod(aliReq.method)
     );
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (ctx as any).aliContext = aliContext;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (ctx as any).aliReq = aliReq;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (ctx as any).aliRes = aliRes;
+
+    Object.defineProperty(ctx, "aliContext", {
+      configurable: false,
+      enumerable: false,
+      get: () => aliContext,
+    });
+    Object.defineProperty(ctx, "aliReq", {
+      configurable: false,
+      enumerable: false,
+      get: () => aliReq,
+    });
+    Object.defineProperty(ctx.req, "aliReq", {
+      configurable: false,
+      enumerable: false,
+      get: () => aliReq,
+    });
+    Object.defineProperty(ctx, "aliRes", {
+      configurable: false,
+      enumerable: false,
+      get: () => aliRes,
+    });
+    Object.defineProperty(ctx.res, "aliRes", {
+      configurable: false,
+      enumerable: false,
+      get: () => aliRes,
+    });
 
     const sfaRes = await this.invoke(ctx);
     aliRes.statusCode = sfaRes.status;

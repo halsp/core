@@ -4,9 +4,15 @@ import { AliRes } from "./ali-res";
 
 declare module "@sfajs/core" {
   interface HttpContext {
-    readonly aliContext: any;
-    readonly aliReq: AliReq;
-    readonly aliRes: AliRes;
+    get aliContext(): any;
+    get aliReq(): AliReq;
+    get aliRes(): AliRes;
+  }
+  interface SfaRequest {
+    get aliReq(): AliReq;
+  }
+  interface SfaResponse {
+    get aliRes(): AliRes;
   }
 }
 
