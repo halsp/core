@@ -7,7 +7,7 @@ import {
 } from "@sfajs/core";
 import { ResponseStruct } from "./response-struct";
 
-export class SfaCloudbase extends Startup {
+export class LambdaStartup extends Startup {
   async run(event: Dict, context: Dict): Promise<ResponseStruct> {
     const ctx = this.createContext(event, context);
     await super.invoke(ctx);
@@ -24,25 +24,25 @@ export class SfaCloudbase extends Startup {
         .setPath(event.path as string)
     );
 
-    Object.defineProperty(ctx.req, "cloudbaseContext", {
+    Object.defineProperty(ctx.req, "lambdaContext", {
       configurable: false,
       enumerable: false,
       get: () => context,
     });
 
-    Object.defineProperty(ctx.req, "cloudbaseEvent", {
+    Object.defineProperty(ctx.req, "lambdaEvent", {
       configurable: false,
       enumerable: false,
       get: () => event,
     });
 
-    Object.defineProperty(ctx, "cloudbaseContext", {
+    Object.defineProperty(ctx, "lambdaContext", {
       configurable: false,
       enumerable: false,
       get: () => context,
     });
 
-    Object.defineProperty(ctx, "cloudbaseEvent", {
+    Object.defineProperty(ctx, "lambdaEvent", {
       configurable: false,
       enumerable: false,
       get: () => event,

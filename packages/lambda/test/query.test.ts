@@ -1,7 +1,7 @@
-import { SfaCloudbase } from "../src";
+import { LambdaStartup } from "../src";
 
 test("query", async () => {
-  const res = await new SfaCloudbase()
+  const res = await new LambdaStartup()
     .use(async (ctx, next) => {
       ctx.ok(ctx.req.query);
       await next();

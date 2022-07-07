@@ -1,7 +1,7 @@
-import { SfaCloudbase } from "../src";
+import { LambdaStartup } from "../src";
 
 test("string body", async () => {
-  const result = await new SfaCloudbase()
+  const result = await new LambdaStartup()
     .use(async (ctx) => {
       ctx.res.body = ctx.req.body;
     })
@@ -21,7 +21,7 @@ test("string body", async () => {
 });
 
 test("string body without conent-type", async () => {
-  const result = await new SfaCloudbase()
+  const result = await new LambdaStartup()
     .use(async (ctx) => {
       ctx.res.body = ctx.req.body;
     })
@@ -43,7 +43,7 @@ test("string body without conent-type", async () => {
 });
 
 test("set text type", async () => {
-  const res = await new SfaCloudbase()
+  const res = await new LambdaStartup()
     .use(async (ctx, next) => {
       ctx.res.setHeader("content-type", "text/plain");
       ctx.res.setHeader("content-length", "10");
@@ -59,7 +59,7 @@ test("set text type", async () => {
 });
 
 test("html", async () => {
-  const res = await new SfaCloudbase()
+  const res = await new LambdaStartup()
     .use(async (ctx, next) => {
       ctx.ok("<div></div>");
       await next();

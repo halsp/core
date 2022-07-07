@@ -1,12 +1,12 @@
-import { SfaCloudbase } from "../src";
+import { LambdaStartup } from "../src";
 
 test("context", async () => {
-  await new SfaCloudbase()
+  await new LambdaStartup()
     .use((ctx) => {
-      const context1 = ctx.cloudbaseContext;
-      const context2 = ctx.req.cloudbaseContext;
-      const event1 = ctx.cloudbaseEvent;
-      const event2 = ctx.req.cloudbaseEvent;
+      const context1 = ctx.lambdaContext;
+      const context2 = ctx.req.lambdaContext;
+      const event1 = ctx.lambdaEvent;
+      const event2 = ctx.req.lambdaEvent;
       expect(context1).toEqual({
         a: 1,
       });

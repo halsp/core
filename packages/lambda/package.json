@@ -1,20 +1,23 @@
 {
-  "name": "@sfajs/cloudbase",
-  "version": "1.2.0",
-  "description": "将 sfa 托管到腾讯云 CloudBase",
-  "homepage": "https://github.com/sfajs/cloudbase",
+  "name": "@sfajs/lambda",
+  "version": "0.0.1",
+  "description": "将 sfa 托管到 serverless 云函数，如腾讯云云函数、阿里云云函数、awa lambda、azure functions 等",
+  "homepage": "https://github.com/sfajs/lambda",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sfajs/cloudbase"
+    "url": "https://github.com/sfajs/lambda"
   },
   "keywords": [
     "sfa",
     "sfajs",
+    "lambda",
+    "serverless",
     "cloudbase",
-    "serverless"
+    "azure functions",
+    "awa lambda"
   ],
   "bugs": {
-    "url": "https://github.com/sfajs/cloudbase/issues",
+    "url": "https://github.com/sfajs/lambda/issues",
     "email": "support@hal.wang"
   },
   "main": "dist/index.js",

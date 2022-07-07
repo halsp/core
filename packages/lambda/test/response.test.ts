@@ -1,7 +1,7 @@
-import { SfaCloudbase } from "../src";
+import { LambdaStartup } from "../src";
 
 test("default response", async () => {
-  const res = await new SfaCloudbase().run({}, {});
+  const res = await new LambdaStartup().run({}, {});
 
   expect(res.isBase64Encoded).toBeFalsy();
   expect(res.headers.t).toBeUndefined();
@@ -11,7 +11,7 @@ test("default response", async () => {
 });
 
 test("base response", async () => {
-  const result = await new SfaCloudbase()
+  const result = await new LambdaStartup()
     .use(async (ctx, next) => {
       ctx.res.body = "str body";
       ctx.res.setHeader("t", "test");
@@ -26,7 +26,7 @@ test("base response", async () => {
 });
 
 test("error response", async () => {
-  const result = await new SfaCloudbase()
+  const result = await new LambdaStartup()
     .use(async (ctx, next) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ctx.res.status = undefined as any;
@@ -38,7 +38,7 @@ test("error response", async () => {
 });
 
 test("set json type", async () => {
-  const res = await new SfaCloudbase()
+  const res = await new LambdaStartup()
     .use(async (ctx, next) => {
       ctx.res.setHeader("content-type", "application/json");
       ctx.res.setHeader("content-length", "10");
