@@ -30,7 +30,7 @@ test("return stream", async () => {
 
   expect(res.isBase64Encoded).toBeTruthy();
   expect(res.body).toBe(fs.readFileSync("./LICENSE", "base64"));
-  expect(res.headers["Content-Type"]).toBe("application/octet-stream");
+  expect(res.headers["content-type"]).toBe("application/octet-stream");
 });
 
 test("return stream", async () => {
@@ -44,7 +44,7 @@ test("return stream", async () => {
 
   expect(res.isBase64Encoded).toBeTruthy();
   expect(res.body).toBe(fs.readFileSync("./LICENSE").toString("base64"));
-  expect(res.headers["Content-Type"]).toBe("application/octet-stream");
+  expect(res.headers["content-type"]).toBe("application/octet-stream");
 });
 
 test("error stream", async () => {

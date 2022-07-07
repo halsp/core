@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/lambda",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "将 sfa 托管到 serverless 云函数，如腾讯云云函数、阿里云云函数、awa lambda、azure functions 等",
   "homepage": "https://github.com/sfajs/lambda",
   "repository": {
@@ -32,7 +32,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@sfajs/core": "^1.5.3"
+    "@sfajs/core": "^1.5.4"
   },
   "devDependencies": {
     "@types/jest": "^28.1.4",
