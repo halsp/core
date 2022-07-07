@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/lambda",
-  "version": "0.0.1",
+  "version": "1.3.0",
   "description": "将 sfa 托管到 serverless 云函数，如腾讯云云函数、阿里云云函数、awa lambda、azure functions 等",
   "homepage": "https://github.com/sfajs/lambda",
   "repository": {
@@ -14,7 +14,8 @@
     "serverless",
     "cloudbase",
     "azure functions",
-    "awa lambda"
+    "awa lambda",
+    "function compute"
   ],
   "bugs": {
     "url": "https://github.com/sfajs/lambda/issues",
