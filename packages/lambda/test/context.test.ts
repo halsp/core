@@ -18,3 +18,20 @@ test("context", async () => {
     })
     .run({ a: 1 }, { b: "2" });
 });
+
+test("request context method", async () => {
+  await new LambdaStartup()
+    .use((ctx) => {
+      expect(ctx.req.method).toBe("POST");
+    })
+    .run(
+      {
+        requestContext: {
+          http: {
+            method: "post",
+          },
+        },
+      },
+      {}
+    );
+});

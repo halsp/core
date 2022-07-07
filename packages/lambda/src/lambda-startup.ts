@@ -4,24 +4,30 @@ import {
   Startup,
   Dict,
   HeadersDict,
+  HttpMethod,
 } from "@sfajs/core";
 import { ResponseStruct } from "./response-struct";
+import { Readable } from "stream";
 
 export class LambdaStartup extends Startup {
   async run(event: Dict, context: Dict): Promise<ResponseStruct> {
     const ctx = this.createContext(event, context);
     await super.invoke(ctx);
-    return this.getStruct(ctx);
+    return await this.#getStruct(ctx);
   }
 
   private createContext(event: Dict, context: Dict): HttpContext {
     const ctx = new HttpContext(
       new SfaRequest()
-        .setBody(this.getBody(event))
-        .setMethod(event.httpMethod as string)
-        .setHeaders((event.headers ?? {}) as HeadersDict)
-        .setQuery((event.queryStringParameters ?? {}) as Dict<string>)
-        .setPath(event.path as string)
+        .setBody(this.#getBody(event))
+        .setMethod(
+          event.httpMethod ||
+            event.requestContext?.http?.method ||
+            HttpMethod.get
+        )
+        .setHeaders(event.headers ?? {})
+        .setQuery(event.queryStringParameters ?? {})
+        .setPath(event.path || event.rowPath || "")
     );
 
     Object.defineProperty(ctx.req, "lambdaContext", {
@@ -51,11 +57,15 @@ export class LambdaStartup extends Startup {
     return ctx;
   }
 
-  private getStruct(ctx: HttpContext): ResponseStruct {
+  async #getStruct(ctx: HttpContext): Promise<ResponseStruct> {
     let body = ctx.res.body;
-    const isBase64Encoded = Buffer.isBuffer(body);
-    if (isBase64Encoded) {
-      body = (body as Buffer).toString("base64");
+    let isBase64Encoded = false;
+    if (Buffer.isBuffer(body)) {
+      isBase64Encoded = true;
+      body = body.toString("base64");
+    } else if (body instanceof Readable) {
+      isBase64Encoded = true;
+      body = await this.#readSteram(body);
     }
 
     return <ResponseStruct>{
@@ -66,7 +76,28 @@ export class LambdaStartup extends Startup {
     };
   }
 
-  private getBody(event: Dict): any {
+  async #readSteram(stream: Readable): Promise<string> {
+    const chunks: Buffer[] = [];
+    await new Promise<void>((resolve, reject) => {
+      stream.on("data", (chunk) => {
+        const encoding = stream.readableEncoding ?? undefined;
+        if (Buffer.isBuffer(chunk)) {
+          chunks.push(chunk);
+        } else {
+          chunks.push(Buffer.from(chunk, encoding));
+        }
+      });
+      stream.on("end", () => {
+        resolve();
+      });
+      stream.on("error", (err) => {
+        reject(err);
+      });
+    });
+    return Buffer.concat(chunks).toString("base64");
+  }
+
+  #getBody(event: Dict): any {
     const body = event.body;
     const headers = event.headers as HeadersDict;
     if (body && typeof body == "string") {
