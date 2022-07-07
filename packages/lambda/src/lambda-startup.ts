@@ -22,14 +22,22 @@ export class LambdaStartup extends Startup {
         .setBody(this.#getBody(event))
         .setMethod(
           event.httpMethod ||
+            event.method ||
             event.requestContext?.http?.method ||
             HttpMethod.get
         )
         .setHeaders(event.headers ?? {})
-        .setQuery(event.queryStringParameters ?? {})
-        .setPath(event.path || event.rowPath || "")
+        .setQuery(event.queryStringParameters ?? event.query ?? {})
+        .setPath(
+          event.path || event.rowPath || event.requestPath || event.url || ""
+        )
     );
 
+    this.#defineCtxProperty(ctx, event, context);
+    return ctx;
+  }
+
+  #defineCtxProperty(ctx: HttpContext, event: Dict, context: Dict) {
     Object.defineProperty(ctx.req, "lambdaContext", {
       configurable: false,
       enumerable: false,
@@ -53,8 +61,6 @@ export class LambdaStartup extends Startup {
       enumerable: false,
       get: () => event,
     });
-
-    return ctx;
   }
 
   async #getStruct(ctx: HttpContext): Promise<ResponseStruct> {
@@ -68,9 +74,10 @@ export class LambdaStartup extends Startup {
       body = await this.#readSteram(body);
     }
 
-    return <ResponseStruct>{
+    return {
       headers: ctx.res.headers,
       statusCode: ctx.res.status,
+      status: ctx.res.status,
       isBase64Encoded: isBase64Encoded,
       body: body ?? "",
     };
@@ -100,7 +107,7 @@ export class LambdaStartup extends Startup {
   #getBody(event: Dict): any {
     const body = event.body;
     const headers = event.headers as HeadersDict;
-    if (body && typeof body == "string") {
+    if (typeof body == "string") {
       if (event.isBase64Encoded) {
         return Buffer.from(body, "base64");
       } else if (
@@ -111,6 +118,6 @@ export class LambdaStartup extends Startup {
       }
     }
 
-    return body || {};
+    return body ?? {};
   }
 }

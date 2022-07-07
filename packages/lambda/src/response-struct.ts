@@ -1,8 +1,9 @@
 import { HeadersDict } from "@sfajs/core";
 
 export interface ResponseStruct {
-  isBase64Encoded: boolean;
-  statusCode: number;
-  headers: HeadersDict;
-  body: any;
+  readonly isBase64Encoded: boolean;
+  readonly statusCode: number;
+  readonly status: number;
+  readonly headers: HeadersDict;
+  readonly body: any;
 }

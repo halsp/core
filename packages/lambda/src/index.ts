@@ -1,5 +1,4 @@
 import { Dict } from "@sfajs/core";
-import { ResponseStruct } from "./response-struct";
 
 declare module "@sfajs/core" {
   interface HttpContext {
@@ -12,6 +11,6 @@ declare module "@sfajs/core" {
   }
 }
 
-export { ResponseStruct };
+export { ResponseStruct } from "./response-struct";
 export { LambdaStartup } from "./lambda-startup";
 export { cliConfig } from "./cli-config";
