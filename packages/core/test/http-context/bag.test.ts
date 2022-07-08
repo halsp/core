@@ -1,7 +1,7 @@
-import { HttpContext, SfaRequest } from "../../src";
+import { HttpContext, Request } from "../../src";
 
 test("bag", async () => {
-  const context = new HttpContext(new SfaRequest());
+  const context = new HttpContext(new Request());
   context.bag("BAG1", "BAG1");
   context.bag("BAG2", { bag2: "BAG2" });
 
@@ -11,7 +11,7 @@ test("bag", async () => {
 });
 
 test("transient bag", async () => {
-  const context = new HttpContext(new SfaRequest());
+  const context = new HttpContext(new Request());
   context.bag("BAG3", "transient", () => "BAG3");
   context.bag("BAG4", "transient", () => ({ bag4: "BAG4" }));
 
@@ -22,7 +22,7 @@ test("transient bag", async () => {
 });
 
 test("scoped bag", async () => {
-  const context = new HttpContext(new SfaRequest());
+  const context = new HttpContext(new Request());
   context.bag("BAG3", "scoped", () => "BAG3");
   context.bag("BAG4", "scoped", () => ({ bag4: "BAG4" }));
 
@@ -33,7 +33,7 @@ test("scoped bag", async () => {
 
 test("singleton bag", async () => {
   {
-    const context = new HttpContext(new SfaRequest());
+    const context = new HttpContext(new Request());
     context.bag("BAG3", "singleton", () => "BAG3");
     context.bag("BAG4", "singleton", () => ({ bag4: "BAG4" }));
 
@@ -43,7 +43,7 @@ test("singleton bag", async () => {
   }
 
   {
-    const context = new HttpContext(new SfaRequest());
+    const context = new HttpContext(new Request());
     expect(context.bag("BAG3")).toBe("BAG3");
     expect(context.bag<any>("BAG4").bag4).toBe("BAG4");
     expect(context.bag<any>("BAG4")).toBe(context.bag<any>("BAG4"));

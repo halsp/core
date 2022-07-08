@@ -1,7 +1,7 @@
-import { ReadonlyDict, SfaRequest } from "../../src";
+import { ReadonlyDict, Request } from "../../src";
 
 test("request setQuery", async () => {
-  const req = new SfaRequest()
+  const req = new Request()
     .setQuery("p1", "1")
     .setQuery("p2", "2")
     .setQuery("p3", "3")
@@ -11,7 +11,7 @@ test("request setQuery", async () => {
 });
 
 test("request setQuery", async () => {
-  const req = new SfaRequest().setQuery({
+  const req = new Request().setQuery({
     p1: "1",
     p2: "2",
     p3: "3",

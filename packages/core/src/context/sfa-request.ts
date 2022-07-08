@@ -8,7 +8,7 @@ import {
 import { HttpContext } from "./http-context";
 import { SfaHeader } from "./sfa-header";
 
-export class SfaRequest extends SfaHeader {
+export class Request extends SfaHeader {
   constructor() {
     super(() => this.#headers);
   }

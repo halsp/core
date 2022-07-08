@@ -1,7 +1,7 @@
-import { SfaRequest, TestStartup } from "../../src";
+import { Request, TestStartup } from "../../src";
 
 test("method override", async () => {
-  const req = new SfaRequest()
+  const req = new Request()
     .setMethod("PATCH")
     .setHeader("X-HTTP-Method-Override", "POST");
   expect(req.method).toBe("POST");
@@ -10,7 +10,7 @@ test("method override", async () => {
 });
 
 test("method override upper case", async () => {
-  const req = new SfaRequest()
+  const req = new Request()
     .setMethod("PATCH")
     .setHeader("X-HTTP-Method-Override".toUpperCase(), "POST");
   expect(req.method).toBe("POST");
@@ -19,7 +19,7 @@ test("method override upper case", async () => {
 });
 
 test("method override lower case", async () => {
-  const req = new SfaRequest()
+  const req = new Request()
     .setMethod("PATCH")
     .setHeader("X-HTTP-Method-Override".toLowerCase(), "POST");
   expect(req.headers["X-HTTP-Method-Override".toLowerCase()]).toBe("POST");
@@ -29,7 +29,7 @@ test("method override lower case", async () => {
 });
 
 test("method override array", async () => {
-  const req = new SfaRequest()
+  const req = new Request()
     .setMethod("PATCH")
     .setHeader("X-HTTP-Method-Override".toLowerCase(), ["POST"]);
   expect(req.method).toBe("POST");
@@ -38,7 +38,7 @@ test("method override array", async () => {
 });
 
 test("method override without value", async () => {
-  const req = new SfaRequest()
+  const req = new Request()
     .setMethod("PATCH")
     .setHeader("X-HTTP-Method-Override".toLowerCase(), "");
   expect(req.method).toBe("PATCH");
@@ -47,7 +47,7 @@ test("method override without value", async () => {
 
 test(`method override request`, async () => {
   const result = await new TestStartup(
-    new SfaRequest().setMethod("PATCH".toUpperCase())
+    new Request().setMethod("PATCH".toUpperCase())
   )
     .use(async (ctx) => {
       ctx.ok({
@@ -61,7 +61,7 @@ test(`method override request`, async () => {
 });
 
 test("empty method", async () => {
-  const req = new SfaRequest()
+  const req = new Request()
     .setMethod(null as unknown as string)
     .setHeader("X-HTTP-Method-Override".toLowerCase(), ["POST"]);
   expect(req.method).toBe("POST");

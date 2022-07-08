@@ -1,7 +1,7 @@
 import {
   Middleware,
   HttpContext,
-  SfaRequest,
+  Request,
   getReasonPhrase,
   TestStartup,
 } from "../../src";
@@ -230,7 +230,7 @@ for (let i = 0; i < msgMethods.length; i++) {
     }
     constructor(private existMsg: boolean) {
       super();
-      (this as any).init(new HttpContext(new SfaRequest()), 0);
+      (this as any).init(new HttpContext(new Request()), 0);
     }
   }
 
@@ -273,7 +273,7 @@ class RedirectMd extends Middleware {
   constructor(readonly code: number | undefined, readonly location: string) {
     super();
 
-    (this as any).init(new HttpContext(new SfaRequest()), 0);
+    (this as any).init(new HttpContext(new Request()), 0);
   }
 
   async invoke(): Promise<void> {

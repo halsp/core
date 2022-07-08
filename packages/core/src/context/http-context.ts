@@ -1,4 +1,4 @@
-import { SfaRequest } from "./sfa-request";
+import { Request } from "./sfa-request";
 import { SfaResponse } from "./sfa-response";
 import { ResultHandler } from "./result-handler";
 import { HttpException, InternalServerErrorException } from "../exceptions";
@@ -14,7 +14,7 @@ type BuilderBagItem<T> = {
 };
 
 export class HttpContext extends ResultHandler {
-  constructor(req: SfaRequest) {
+  constructor(req: Request) {
     super(() => this.#res);
 
     this.#req = req;
@@ -33,8 +33,8 @@ export class HttpContext extends ResultHandler {
     return this.#res;
   }
 
-  readonly #req: SfaRequest;
-  public get req(): SfaRequest {
+  readonly #req: Request;
+  public get req(): Request {
     return this.#req;
   }
 

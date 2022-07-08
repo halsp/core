@@ -1,7 +1,7 @@
-import { SfaRequest, TestStartup } from "../../src";
+import { Request, TestStartup } from "../../src";
 
 test("invoke multiple", async () => {
-  const startup = new TestStartup(new SfaRequest())
+  const startup = new TestStartup(new Request())
     .use(async (ctx, next) => {
       if (!ctx.res.body) {
         ctx.res.body = 0;
