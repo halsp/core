@@ -49,13 +49,10 @@ function runTest(executing: boolean) {
   function run(bad: boolean) {
     test(`exception filter ${executing} ${bad}`, async () => {
       const res = await new TestStartup(
-        new Request()
-          .setPath("/filters/exception")
-          .setMethod("GET")
-          .setBody({
-            bad,
-            executing,
-          })
+        new Request().setPath("/filters/exception").setMethod("GET").setBody({
+          bad,
+          executing,
+        })
       )
         .use(async (ctx, next) => {
           ctx.setHeader("h1", 1);
