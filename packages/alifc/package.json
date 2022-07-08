@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/alifunc",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "将 sfajs 托管到阿里云函数计算",
   "homepage": "https://github.com/sfajs/alifunc",
   "repository": {
@@ -48,6 +48,14 @@
   "peerDependencies": {
     "@sfajs/core": "~1",
     "@sfajs/http": "~1"
+  },
+  "peerDependenciesMeta": {
+    "@sfajs/core": {
+      "optional": true
+    },
+    "@sfajs/http": {
+      "optional": true
+    }
   },
   "files": [
     "/.github/*",
