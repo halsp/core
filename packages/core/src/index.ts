@@ -85,6 +85,6 @@ export class SfaRequest extends Request {}
 export class SfaResponse extends Response {}
 
 /**
- * @deprecated use Request
+ * @deprecated use HeaderHandler
  */
 export class SfaHeader extends HeaderHandler {}

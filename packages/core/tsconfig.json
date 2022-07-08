@@ -10,11 +10,7 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "noImplicitAny": false,
-    "types": [
-      "node",
-      "jest"
-    ]
+    "noImplicitAny": false
   },
   "include": [
     "src/**/*"
