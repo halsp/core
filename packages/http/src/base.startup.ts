@@ -12,7 +12,7 @@ import {
 import urlParse from "url-parse";
 import { Stream } from "stream";
 
-export abstract class HttpStartup<
+export abstract class BaseStartup<
   T extends net.Server = net.Server
 > extends HttpBodyPraserStartup {
   constructor() {

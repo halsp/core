@@ -1,7 +1,7 @@
 import * as http from "http";
-import { HttpStartup } from "./http.startup";
+import { BaseStartup } from "./base.startup";
 
-export class SfaHttp extends HttpStartup<http.Server> {
+export class SfaHttp extends BaseStartup<http.Server> {
   readonly server: http.Server;
 
   constructor(private readonly serverOptions?: http.ServerOptions) {
