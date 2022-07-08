@@ -13,9 +13,7 @@ test(`find next`, async () => {
 
 test(`find simple`, async () => {
   const result = await new TestStartup(
-    new Request()
-      .setPath("/restful/method/simple")
-      .setMethod(HttpMethod.post)
+    new Request().setPath("/restful/method/simple").setMethod(HttpMethod.post)
   )
     .useTestRouter()
     .run();
@@ -46,9 +44,7 @@ test(`find miss next`, async () => {
 
 test(`find miss next 2`, async () => {
   const result = await new TestStartup(
-    new Request()
-      .setPath("/restful/method/miss/any")
-      .setMethod(HttpMethod.post)
+    new Request().setPath("/restful/method/miss/any").setMethod(HttpMethod.post)
   )
     .useTestRouter()
     .run();
@@ -58,9 +54,7 @@ test(`find miss next 2`, async () => {
 
 test(`find miss next 3`, async () => {
   const result = await new TestStartup(
-    new Request()
-      .setPath("/restful/method/any/miss")
-      .setMethod(HttpMethod.post)
+    new Request().setPath("/restful/method/any/miss").setMethod(HttpMethod.post)
   )
     .useTestRouter()
     .run();
@@ -70,9 +64,7 @@ test(`find miss next 3`, async () => {
 
 test(`find miss next 4`, async () => {
   const result = await new TestStartup(
-    new Request()
-      .setPath("/restful/method/any/any")
-      .setMethod(HttpMethod.post)
+    new Request().setPath("/restful/method/any/any").setMethod(HttpMethod.post)
   )
     .useTestRouter()
     .run();
@@ -83,9 +75,7 @@ test(`find miss next 4`, async () => {
 test(`mostLikePathParts`, async () => {
   let context!: HttpContext;
   const result = await new TestStartup(
-    new Request()
-      .setPath("/restful/mostLike/q/act")
-      .setMethod(HttpMethod.post)
+    new Request().setPath("/restful/mostLike/q/act").setMethod(HttpMethod.post)
   )
     .use(async (ctx, next) => {
       context = ctx;
