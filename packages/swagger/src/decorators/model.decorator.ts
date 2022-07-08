@@ -1,13 +1,13 @@
-import { OpenApiBuilder, ParameterObject, SchemaObject } from "openapi3-ts";
+import { OpenApiBuilder, SchemaObject } from "openapi3-ts";
 import { IGNORE, MODEL_DECORATORS } from "../constant";
 
 export type ModelDecoratorFn = (args: {
-  schema: SchemaObject | ParameterObject[];
+  schema: SchemaObject;
   builder: OpenApiBuilder;
 }) => void;
 
 type CreateDecoratorFn = (args: {
-  schema: SchemaObject | ParameterObject;
+  schema: SchemaObject;
   target: any;
   builder: OpenApiBuilder;
 }) => void;
