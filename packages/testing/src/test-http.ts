@@ -1,10 +1,9 @@
-import { SfaHttp } from "@sfajs/http";
+import { HttpStartup } from "@sfajs/http";
 import supertest, { Response, SuperTest, Test } from "supertest";
-import net from "net";
 
-export class TestHttp extends SfaHttp {
+export class TestHttpStartup extends HttpStartup {
   constructor(root?: string) {
-    TestHttp["CUSTOM_CONFIG_ROOT"] = root;
+    TestHttpStartup["CUSTOM_CONFIG_ROOT"] = root;
     super();
   }
 
@@ -13,31 +12,12 @@ export class TestHttp extends SfaHttp {
     port = 2333,
     hostName?: string
   ): Promise<Response> {
-    const server = await this.#listen(port, hostName);
+    const listenResult = await this.dynamicListen(port, hostName);
+    console.log(`start: http://localhost:${listenResult.port}`);
     try {
-      return await func(supertest(server));
+      return await func(supertest(listenResult.server));
     } finally {
-      server.close();
+      listenResult.server.close();
     }
-  }
-
-  #listen(port: number, hostName?: string) {
-    return new Promise<net.Server>((resolve, reject) => {
-      const server = this.listen(port, hostName);
-      server.on("listening", () => {
-        console.log(`start: http://localhost:${port}`);
-        resolve(server);
-      });
-      server.on("error", (err) => {
-        const error = err as Error & { code: string };
-        if (error.code == "EADDRINUSE") {
-          this.#listen(port + 1).then((svr) => {
-            resolve(svr);
-          });
-        } else {
-          reject(error);
-        }
-      });
-    });
   }
 }

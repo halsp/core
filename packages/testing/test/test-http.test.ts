@@ -1,7 +1,7 @@
-import { TestHttp } from "../src";
+import { TestHttpStartup } from "../src";
 
 test("test http", async () => {
-  const res = await new TestHttp()
+  const res = await new TestHttpStartup()
     .use((ctx) => {
       ctx.ok({
         method: ctx.req.method,
@@ -17,7 +17,7 @@ test("test http", async () => {
 });
 
 test("test http port occupy", async () => {
-  const res1 = await new TestHttp()
+  const res1 = await new TestHttpStartup()
     .use((ctx) => {
       ctx.ok({
         method: ctx.req.method,
@@ -25,7 +25,7 @@ test("test http port occupy", async () => {
       });
     })
     .run(async (request) => {
-      const res2 = await new TestHttp()
+      const res2 = await new TestHttpStartup()
         .use((ctx) => {
           ctx.ok();
         })
@@ -41,7 +41,7 @@ test("test http port occupy", async () => {
 test("test http port error", async () => {
   let isErr = false;
   try {
-    await new TestHttp()
+    await new TestHttpStartup()
       .use((ctx) => {
         ctx.ok();
       })

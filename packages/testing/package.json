@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/testing",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "sfajs 的测试工具",
   "homepage": "https://github.com/sfajs/testing",
   "repository": {
