@@ -1,4 +1,4 @@
-import { Middleware, SfaRequest, TestStartup } from "@sfajs/core";
+import { Middleware, Request, TestStartup } from "@sfajs/core";
 import { Body } from "@sfajs/pipe";
 import { IsInt } from "class-validator";
 import "@sfajs/inject";
@@ -27,7 +27,7 @@ function testOptions(useOptions: any, decOptions: any, result: boolean) {
     }
 
     const startup = new TestStartup(
-      new SfaRequest().setBody({
+      new Request().setBody({
         b1: null,
       })
     )

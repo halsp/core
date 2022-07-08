@@ -1,4 +1,4 @@
-import { Middleware, SfaRequest, TestStartup } from "@sfajs/core";
+import { Middleware, Request, TestStartup } from "@sfajs/core";
 import { Body } from "@sfajs/pipe";
 import "@sfajs/inject";
 import "../src";
@@ -27,7 +27,7 @@ function runTest(validate: boolean) {
     }
 
     const res = await new TestStartup(
-      new SfaRequest().setBody({
+      new Request().setBody({
         b1: "a",
         b2: validate ? 1 : "1",
       })
@@ -77,7 +77,7 @@ test("array message", async () => {
   }
 
   const res = await new TestStartup(
-    new SfaRequest().setBody({
+    new Request().setBody({
       b1: 1,
       b2: "1",
     })
@@ -106,7 +106,7 @@ test("validate disabled", async () => {
   }
 
   const res = await new TestStartup(
-    new SfaRequest().setBody({
+    new Request().setBody({
       b1: 1,
     })
   )

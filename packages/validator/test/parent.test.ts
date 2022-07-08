@@ -1,4 +1,4 @@
-import { Middleware, SfaRequest, TestStartup } from "@sfajs/core";
+import { Middleware, Request, TestStartup } from "@sfajs/core";
 import { Body } from "@sfajs/pipe";
 import "@sfajs/inject";
 import "../src";
@@ -24,7 +24,7 @@ test("parent validate", async () => {
   }
 
   const res = await new TestStartup(
-    new SfaRequest().setBody({
+    new Request().setBody({
       b1: 1,
     })
   )

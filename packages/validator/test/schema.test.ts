@@ -1,4 +1,4 @@
-import { Middleware, SfaRequest, TestStartup } from "@sfajs/core";
+import { Middleware, Request, TestStartup } from "@sfajs/core";
 import { Body } from "@sfajs/pipe";
 import { IsInt, ValidationSchema } from "class-validator";
 import "@sfajs/inject";
@@ -44,7 +44,7 @@ function testSchema(useSchema: boolean) {
       };
 
       const startup = new TestStartup(
-        new SfaRequest().setBody({
+        new Request().setBody({
           b1: "1",
         })
       )
