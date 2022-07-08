@@ -7,7 +7,7 @@ import {
 import { HttpContext } from "./http-context";
 import { ResultHandler } from "./result-handler";
 
-export class SfaResponse extends ResultHandler {
+export class Response extends ResultHandler {
   constructor(
     public status: StatusCodes = StatusCodes.NOT_FOUND,
     public body: any = undefined,

@@ -3,12 +3,12 @@ import {
   getStatusCode,
   HeadersDict,
   ReasonPhrases,
-  SfaResponse,
+  Response,
   StatusCodes,
 } from "../src";
 
 test("setHeader", async () => {
-  const req = new SfaResponse()
+  const req = new Response()
     .setHeader("h1", "1")
     .setHeader("h2", "2")
     .setHeader("h3", "3")
@@ -18,7 +18,7 @@ test("setHeader", async () => {
 });
 
 test("setHeaders", async () => {
-  const req = new SfaResponse().setHeaders({
+  const req = new Response().setHeaders({
     h1: "1",
     h2: "2",
     h3: "3",
@@ -27,7 +27,7 @@ test("setHeaders", async () => {
 });
 
 test("removeHeader", async () => {
-  const res = new SfaResponse()
+  const res = new Response()
     .setHeader("h1", "1")
     .setHeader("h2", "2")
     .setHeader("h3", "3")
@@ -47,7 +47,7 @@ function expectHeaders(headers: HeadersDict) {
 }
 
 test("array headers", async () => {
-  const res = new SfaResponse().setHeaders({
+  const res = new Response().setHeaders({
     h1: 1,
     h2: ["2.1", 2.2],
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -59,7 +59,7 @@ test("array headers", async () => {
 });
 
 test("append header", async () => {
-  const res = new SfaResponse()
+  const res = new Response()
     .appendHeader("h1", 1)
     .appendHeader("h1", "2")
     .appendHeader("h1", [3, "4"]);

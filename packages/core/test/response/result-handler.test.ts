@@ -1,11 +1,11 @@
-import { ResultHandler, SfaResponse } from "../../src";
+import { ResultHandler, Response } from "../../src";
 
 class CustomResultHandler extends ResultHandler {
   constructor() {
     super(() => this.res);
   }
 
-  readonly res = new SfaResponse();
+  readonly res = new Response();
 }
 
 test("custom result handler", async () => {

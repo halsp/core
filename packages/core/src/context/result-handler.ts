@@ -2,17 +2,17 @@ import { StatusCodes, getReasonPhrase } from "http-status-codes";
 import { isString } from "../utils";
 import { HttpErrorMessage } from "./http-error-message";
 import { SfaHeader } from "./sfa-header";
-import { SfaResponse } from "./sfa-response";
+import { Response } from "./sfa-response";
 
 export abstract class ResultHandler extends SfaHeader {
-  constructor(resFinder: () => SfaResponse) {
+  constructor(resFinder: () => Response) {
     super(() => resFinder().headers);
     this.#resFinder = resFinder;
   }
 
-  readonly #resFinder: () => SfaResponse;
+  readonly #resFinder: () => Response;
 
-  get #res(): SfaResponse {
+  get #res(): Response {
     return this.#resFinder();
   }
 

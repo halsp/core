@@ -1,7 +1,7 @@
-import { SfaResponse } from "../../src";
+import { Response } from "../../src";
 
 test(`response`, async () => {
-  const res = new SfaResponse(201, "", {
+  const res = new Response(201, "", {
     h: 1,
   });
 

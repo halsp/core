@@ -1,4 +1,4 @@
-import { SfaResponse, HttpContext } from "../context";
+import { Response, HttpContext } from "../context";
 import {
   Middleware,
   MdHook,
@@ -116,7 +116,7 @@ export abstract class Startup {
     return this;
   }
 
-  protected async invoke(ctx: HttpContext): Promise<SfaResponse> {
+  protected async invoke(ctx: HttpContext): Promise<Response> {
     (ctx as any).startup = this;
     if (!this.#mds.length) {
       return ctx.res;
@@ -131,7 +131,7 @@ export abstract class Startup {
     return this.#setType(ctx.res);
   }
 
-  #setType(res: SfaResponse): SfaResponse {
+  #setType(res: Response): Response {
     const body = res.body;
 
     if (!body) {

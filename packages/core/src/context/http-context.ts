@@ -1,5 +1,5 @@
 import { Request } from "./sfa-request";
-import { SfaResponse } from "./sfa-response";
+import { Response } from "./sfa-response";
 import { ResultHandler } from "./result-handler";
 import { HttpException, InternalServerErrorException } from "../exceptions";
 import { isNil, isObject, Dict, isUndefined, isPlainObject } from "../utils";
@@ -28,8 +28,8 @@ export class HttpContext extends ResultHandler {
   readonly #scopedBag: Dict = {};
   readonly #bag: Dict = {};
 
-  readonly #res = new SfaResponse();
-  public get res(): SfaResponse {
+  readonly #res = new Response();
+  public get res(): Response {
     return this.#res;
   }
 
