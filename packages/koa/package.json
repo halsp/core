@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/koa",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "让 koa 成为 sfa 的中间件，并打通二者中间件管道",
   "homepage": "https://github.com/sfajs/koa",
   "repository": {
@@ -28,31 +28,31 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@sfajs/core": "^1.4.7",
+    "@sfajs/core": "^1.6.0",
     "koa": "^2.13.4",
     "koa-compose": "^4.1.0",
     "query-string": "^7.1.1"
   },
   "devDependencies": {
-    "@koa/router": "^10.1.1",
-    "@types/jest": "^28.1.1",
+    "@koa/router": "^11.0.1",
+    "@types/jest": "^28.1.4",
     "@types/koa": "^2.13.4",
     "@types/koa-cors": "0.0.2",
     "@types/koa__router": "^8.0.11",
-    "@types/node": "^18.0.0",
+    "@types/node": "^18.0.3",
     "@types/supertest": "^2.0.12",
-    "@typescript-eslint/eslint-plugin": "^5.28.0",
-    "@typescript-eslint/parser": "^5.28.0",
+    "@typescript-eslint/eslint-plugin": "^5.30.5",
+    "@typescript-eslint/parser": "^5.30.5",
     "codecov": "^3.8.3",
-    "eslint": "^8.17.0",
+    "eslint": "^8.19.0",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "jest": "^28.1.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "jest": "^28.1.2",
     "koa-cors": "0.0.16",
     "prettier": "^2.7.1",
-    "supertest": "^6.2.3",
+    "supertest": "^6.2.4",
     "ts-jest": "^28.0.5",
-    "typescript": "^4.7.3"
+    "typescript": "^4.7.4"
   },
   "peerDependencies": {
     "@sfajs/core": "~1"
@@ -66,6 +66,8 @@
     ".eslintignore",
     ".eslintrc.js",
     ".gitignore",
+    "CODE_OF_CONDUCT.md",
+    "CONTRIBUTING.md",
     "jest.config.js",
     "LICENSE",
     "package.json",

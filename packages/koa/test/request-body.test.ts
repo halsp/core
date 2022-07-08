@@ -1,9 +1,9 @@
 import "../src";
-import { TestStartup, SfaRequest } from "@sfajs/core";
+import { TestStartup, Request } from "@sfajs/core";
 import Koa from "koa";
 
 test("text", async function () {
-  const res = await new TestStartup(new SfaRequest().setBody("sfa"))
+  const res = await new TestStartup(new Request().setBody("sfa"))
     .useKoa(
       new Koa().use(async (ctx, next) => {
         ctx.body = ctx.sfaCtx.req.body;
@@ -20,7 +20,7 @@ test("text", async function () {
 
 test("json", async function () {
   const res = await new TestStartup(
-    new SfaRequest().setBody({
+    new Request().setBody({
       sfa: "koa",
     })
   )
@@ -42,7 +42,7 @@ test("json", async function () {
 
 test("buffer", async function () {
   const res = await new TestStartup(
-    new SfaRequest().setBody(Buffer.from("sfa", "utf-8"))
+    new Request().setBody(Buffer.from("sfa", "utf-8"))
   )
     .useKoa(
       new Koa().use(async (ctx, next) => {

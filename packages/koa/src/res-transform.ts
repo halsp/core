@@ -1,4 +1,4 @@
-import { HttpContext, SfaResponse } from "@sfajs/core";
+import { HttpContext, Response } from "@sfajs/core";
 import Koa from "koa";
 import { UseKoaOptions } from "./use-koa-options";
 import http from "http";
@@ -8,7 +8,7 @@ import queryString from "query-string";
 
 export async function koaResToSfaRes(
   koaCtx: Koa.ParameterizedContext,
-  sfaRes: SfaResponse
+  sfaRes: Response
 ) {
   Object.keys(sfaRes.headers).forEach((key) => {
     sfaRes.removeHeader(key);
@@ -25,7 +25,7 @@ export async function koaResToSfaRes(
 }
 
 export async function sfaResToKoaRes(
-  sfaRes: SfaResponse,
+  sfaRes: Response,
   koaCtx: Koa.ParameterizedContext
 ) {
   koaCtx.body = sfaRes.body ?? null;

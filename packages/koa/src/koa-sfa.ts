@@ -2,7 +2,7 @@ import {
   Dict,
   HttpContext,
   NumericalHeadersDict,
-  SfaRequest,
+  Request,
   Startup,
 } from "@sfajs/core";
 import { Context, Next } from "koa";
@@ -15,7 +15,7 @@ class KoaStartup extends Startup {
 
   public async run(): Promise<void> {
     const ctx = new HttpContext(
-      new SfaRequest()
+      new Request()
         .setPath(this.koaCtx.path)
         .setMethod(this.koaCtx.method)
         .setQuery(this.koaCtx.query as Dict<string>)

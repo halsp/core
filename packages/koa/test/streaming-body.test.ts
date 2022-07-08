@@ -1,5 +1,5 @@
 import "../src";
-import { TestStartup, SfaRequest, SfaResponse } from "@sfajs/core";
+import { TestStartup, Request, Response } from "@sfajs/core";
 import Koa from "koa";
 import request from "supertest";
 import path from "path";
@@ -7,10 +7,10 @@ import http from "http";
 
 test("streamingBody", async function () {
   let working = false;
-  let res: SfaResponse | undefined;
+  let res: Response | undefined;
   const server = http.createServer(async (httpReq, httpRes) => {
     res = await new TestStartup(
-      new SfaRequest().setHeader("h1", 1).setHeader("h2", "2")
+      new Request().setHeader("h1", 1).setHeader("h2", "2")
     )
       .useKoa(
         new Koa().use(async (ctx, next) => {
