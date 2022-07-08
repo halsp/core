@@ -1,5 +1,5 @@
-import { Request } from "./sfa-request";
-import { Response } from "./sfa-response";
+import { Request } from "./request";
+import { Response } from "./response";
 import { ResultHandler } from "./result-handler";
 import { HttpException, InternalServerErrorException } from "../exceptions";
 import { isNil, isObject, Dict, isUndefined, isPlainObject } from "../utils";

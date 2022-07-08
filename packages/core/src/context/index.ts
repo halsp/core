@@ -1,5 +1,5 @@
-export * from "./sfa-response";
+export * from "./response";
 export * from "./http-context";
-export * from "./sfa-request";
+export * from "./request";
 export * from "./result-handler";
 export * from "./sfa-header";
