@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/koa",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "description": "让 koa 成为 sfa 的中间件，并打通二者中间件管道",
   "homepage": "https://github.com/sfajs/koa",
   "repository": {
@@ -56,6 +56,11 @@
   },
   "peerDependencies": {
     "@sfajs/core": "~1"
+  },
+  "peerDependenciesMeta": {
+    "@sfajs/core": {
+      "optional": true
+    }
   },
   "files": [
     "/.github/*",
