@@ -1,4 +1,4 @@
-import { Middleware, SfaRequest, TestStartup } from "@sfajs/core";
+import { Middleware, Request, TestStartup } from "@sfajs/core";
 import "../../src";
 import { Inject, InjectType } from "../../src";
 
@@ -39,7 +39,7 @@ function runTest(type: InjectType) {
   test(`custom inject type ${type}`, async function () {
     const startup = new TestStartup().useInject().add(TestMiddleware);
 
-    let res = await startup.run(new SfaRequest());
+    let res = await startup.run(new Request());
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual({
@@ -47,7 +47,7 @@ function runTest(type: InjectType) {
       count2: type == InjectType.Transient ? 2 : 1,
     });
 
-    res = await startup.run(new SfaRequest());
+    res = await startup.run(new Request());
     if (type == InjectType.Transient) {
       expect(res.body).toEqual({
         count1: 1,

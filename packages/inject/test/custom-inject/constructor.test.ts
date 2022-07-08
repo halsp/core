@@ -1,4 +1,4 @@
-import { Middleware, ReadonlyDict, SfaRequest, TestStartup } from "@sfajs/core";
+import { Middleware, ReadonlyDict, Request, TestStartup } from "@sfajs/core";
 import "../../src";
 import { createInject, Inject } from "../../src";
 
@@ -34,7 +34,7 @@ class TestMiddleware extends Middleware {
 
 test(`custom inject`, async function () {
   const res = await new TestStartup(
-    new SfaRequest().setHeader("h1", "1").setHeader("host", "sfa").setBody({
+    new Request().setHeader("h1", "1").setHeader("host", "sfa").setBody({
       b: 2,
     })
   )

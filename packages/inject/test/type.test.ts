@@ -1,4 +1,4 @@
-import { Middleware, SfaRequest, TestStartup } from "@sfajs/core";
+import { Middleware, Request, TestStartup } from "@sfajs/core";
 import "../src";
 import { Service1, Service2 } from "./services";
 import { Inject, InjectType } from "../src";
@@ -28,7 +28,7 @@ function runTest(type: InjectType) {
       .inject(Service2)
       .add(TestMiddleware);
 
-    let res = await startup.run(new SfaRequest());
+    let res = await startup.run(new Request());
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual({
@@ -36,7 +36,7 @@ function runTest(type: InjectType) {
       singleton2: type == InjectType.Transient ? 3 : 4,
     });
 
-    res = await startup.run(new SfaRequest());
+    res = await startup.run(new Request());
     expect(res.status).toBe(200);
     if (type == InjectType.Transient) {
       expect(res.body).toEqual({
