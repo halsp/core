@@ -3,8 +3,8 @@ import { HttpBodyPraserStartup } from "./http-body-praser.startup";
 import * as http from "http";
 import {
   HttpContext,
-  SfaRequest,
-  SfaResponse,
+  Request,
+  Response,
   Dict,
   NumericalHeadersDict,
   isString,
@@ -118,7 +118,7 @@ export abstract class BaseStartup<
   ): Promise<void> => {
     const url = urlParse(httpReq.url as string, true);
     const ctx = new HttpContext(
-      new SfaRequest()
+      new Request()
         .setPath(url.pathname)
         .setMethod(httpReq.method as string)
         .setQuery(url.query as Dict<string>)
@@ -147,7 +147,7 @@ export abstract class BaseStartup<
     }
   };
 
-  #writeHead(sfaRes: SfaResponse, httpRes: http.ServerResponse) {
+  #writeHead(sfaRes: Response, httpRes: http.ServerResponse) {
     if (httpRes.headersSent) return;
     Object.keys(sfaRes.headers)
       .filter((key) => !!sfaRes.headers[key])
@@ -156,7 +156,7 @@ export abstract class BaseStartup<
       });
   }
 
-  #writeBody(sfaRes: SfaResponse, httpRes: http.ServerResponse) {
+  #writeBody(sfaRes: Response, httpRes: http.ServerResponse) {
     if (!sfaRes.body) {
       if (!httpRes.headersSent) {
         httpRes.removeHeader("Content-Type");

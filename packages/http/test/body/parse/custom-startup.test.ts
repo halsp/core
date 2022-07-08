@@ -2,7 +2,7 @@ import { HttpBodyPraserStartup } from "../../../src";
 import * as http from "http";
 import {
   HttpContext,
-  SfaRequest,
+  Request,
   Dict,
   NumericalHeadersDict,
 } from "@sfajs/core";
@@ -25,7 +25,7 @@ class TestHttpStartup extends HttpBodyPraserStartup {
   ): Promise<void> => {
     const url = urlParse(httpReq.url as string, true);
     const ctx = new HttpContext(
-      new SfaRequest()
+      new Request()
         .setPath(url.pathname)
         .setMethod(httpReq.method as string)
         .setQuery(url.query as Dict<string>)
