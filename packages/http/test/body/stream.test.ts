@@ -1,9 +1,9 @@
-import { SfaHttp } from "../../src";
+import { HttpStartup } from "../../src";
 import request from "supertest";
 import { createReadStream } from "fs";
 
 test("stream body", async () => {
-  const server = new SfaHttp()
+  const server = new HttpStartup()
     .use(async (ctx) => {
       ctx.ok(createReadStream("./LICENSE"));
     })
@@ -18,7 +18,7 @@ test("stream body", async () => {
 });
 
 test("stream body explicit type", async () => {
-  const server = new SfaHttp()
+  const server = new HttpStartup()
     .use(async (ctx) => {
       ctx.res.setHeader("content-type", "application/octet-stream");
       ctx.ok(createReadStream("./LICENSE"));

@@ -1,8 +1,8 @@
-import { SfaHttp } from "../../src";
+import { HttpStartup } from "../../src";
 import request from "supertest";
 
 test("empty body", async () => {
-  const server = new SfaHttp()
+  const server = new HttpStartup()
     .use(async (ctx) => {
       ctx.ok(undefined);
     })

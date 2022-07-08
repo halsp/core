@@ -1,7 +1,7 @@
 import * as https from "https";
 import { BaseStartup } from "./base.startup";
 
-export class SfaHttps extends BaseStartup<https.Server> {
+export class HttpsStartup extends BaseStartup<https.Server> {
   readonly server: https.Server;
 
   constructor(private readonly serverOptions?: https.ServerOptions) {

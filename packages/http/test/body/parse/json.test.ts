@@ -1,8 +1,8 @@
-import { SfaHttp } from "../../../src";
+import { HttpStartup } from "../../../src";
 import request from "supertest";
 
 test("useHttpJsonBody", async () => {
-  const server = new SfaHttp()
+  const server = new HttpStartup()
     .useHttpJsonBody()
     .use(async (ctx) => {
       ctx.ok(ctx.req.body);
@@ -21,7 +21,7 @@ test("useHttpJsonBody", async () => {
 });
 
 test("parse json error", async () => {
-  const server = new SfaHttp()
+  const server = new HttpStartup()
     .useHttpJsonBody(
       undefined,
       undefined,
@@ -46,7 +46,7 @@ test("parse json error", async () => {
 });
 
 test("parse json error default", async () => {
-  const server = new SfaHttp()
+  const server = new HttpStartup()
     .useHttpJsonBody()
     .use((ctx) => {
       ctx.ok(ctx.req.body);

@@ -1,10 +1,10 @@
-import { SfaHttp } from "../src";
+import { HttpStartup } from "../src";
 import request from "supertest";
 
 test("dynamicListen", async () => {
-  const { server, port } = await new SfaHttp()
+  const { server, port } = await new HttpStartup()
     .use(async (ctx) => {
-      const { server, port } = await new SfaHttp().dynamicListen(2333);
+      const { server, port } = await new HttpStartup().dynamicListen(2333);
       server.close();
       ctx.ok(port);
     })
@@ -17,9 +17,9 @@ test("dynamicListen", async () => {
 });
 
 test("dynamicListen path", async () => {
-  const { server, port } = await new SfaHttp()
+  const { server, port } = await new HttpStartup()
     .use(async (ctx) => {
-      const { server, port } = await new SfaHttp().dynamicListen({
+      const { server, port } = await new HttpStartup().dynamicListen({
         port: 2333,
       });
       server.close();
@@ -37,7 +37,7 @@ test("dynamicListen path", async () => {
 test("dynamicListen error", async () => {
   let error = false;
   try {
-    const { server } = await new SfaHttp()
+    const { server } = await new HttpStartup()
       .use((ctx) => {
         ctx.ok();
       })
@@ -51,7 +51,7 @@ test("dynamicListen error", async () => {
 });
 
 test("dynamicListen empty", async () => {
-  const { server } = await new SfaHttp()
+  const { server } = await new HttpStartup()
     .use((ctx) => {
       ctx.ok();
     })
@@ -60,7 +60,7 @@ test("dynamicListen empty", async () => {
 });
 
 test("dynamicListen emit error", async () => {
-  const { server } = await new SfaHttp()
+  const { server } = await new HttpStartup()
     .use(async (ctx) => {
       ctx.ok();
     })

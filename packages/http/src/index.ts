@@ -1,8 +1,8 @@
 import * as http from "http";
 import "@sfajs/core";
 
-export { SfaHttp } from "./sfa-http.startup";
-export { SfaHttps } from "./sfa-https.startup";
+export { HttpStartup } from "./http.startup";
+export { HttpsStartup } from "./https.startup";
 export {
   HttpBodyPraserStartup,
   MultipartBody,

@@ -1,8 +1,8 @@
-import { SfaHttp } from "../../../src";
+import { HttpStartup } from "../../../src";
 import request from "supertest";
 
 test("useHttpTextBody", async () => {
-  const server = new SfaHttp()
+  const server = new HttpStartup()
     .useHttpTextBody()
     .use(async (ctx) => {
       ctx.ok(ctx.req.body);
@@ -20,7 +20,7 @@ test("useHttpTextBody", async () => {
 });
 
 test("error type", async () => {
-  const server = new SfaHttp()
+  const server = new HttpStartup()
     .useHttpTextBody()
     .use(async (ctx) => {
       ctx.ok({

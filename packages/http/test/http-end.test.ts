@@ -1,8 +1,8 @@
-import { SfaHttp } from "../src";
+import { HttpStartup } from "../src";
 import request from "supertest";
 
 test("end ahead", async () => {
-  const server = new SfaHttp()
+  const server = new HttpStartup()
     .use(async (ctx, next) => {
       ctx.httpRes.end();
       await next();
@@ -19,7 +19,7 @@ test("end ahead", async () => {
 });
 
 test("writeHead", async () => {
-  const server = new SfaHttp()
+  const server = new HttpStartup()
     .use(async (ctx, next) => {
       ctx.httpRes.writeHead(200);
       await next();

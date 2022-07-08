@@ -1,8 +1,8 @@
-import { SfaHttp } from "../../../src";
+import { HttpStartup } from "../../../src";
 import request from "supertest";
 
 test("useHttpUrlencodedBody", async () => {
-  const server = new SfaHttp()
+  const server = new HttpStartup()
     .useHttpUrlencodedBody()
     .use(async (ctx) => {
       ctx.ok({
