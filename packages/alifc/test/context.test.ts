@@ -1,4 +1,4 @@
-import { SfaResponse } from "@sfajs/core";
+import { Response } from "@sfajs/core";
 import { AlifuncStartup } from "../src";
 
 const req: any = {
@@ -9,7 +9,7 @@ const req: any = {
   clientIP: "",
   headers: {},
 };
-const res: any = new SfaResponse();
+const res: any = new Response();
 res.send = () => undefined;
 
 test("context", async () => {

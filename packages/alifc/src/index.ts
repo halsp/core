@@ -9,10 +9,10 @@ declare module "@sfajs/core" {
     get aliReq(): AliReq;
     get aliRes(): AliRes;
   }
-  interface SfaRequest {
+  interface Request {
     get aliReq(): AliReq;
   }
-  interface SfaResponse {
+  interface Response {
     get aliRes(): AliRes;
   }
 }

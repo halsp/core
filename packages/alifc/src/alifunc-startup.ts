@@ -1,4 +1,4 @@
-import { HttpContext, isString, SfaRequest, SfaResponse } from "@sfajs/core";
+import { HttpContext, isString, Request, Response } from "@sfajs/core";
 import { HttpBodyPraserStartup } from "@sfajs/http";
 import { Stream } from "stream";
 import { AliReq } from "./ali-req";
@@ -11,7 +11,7 @@ export class AlifuncStartup extends HttpBodyPraserStartup {
 
   async run(aliReq: AliReq, aliRes: AliRes, aliContext: any): Promise<void> {
     const ctx = new HttpContext(
-      new SfaRequest()
+      new Request()
         .setPath(aliReq.path)
         .setHeaders(aliReq.headers)
         .setQuery(aliReq.queries)
@@ -55,7 +55,7 @@ export class AlifuncStartup extends HttpBodyPraserStartup {
     return;
   }
 
-  async #writeBody(sfaRes: SfaResponse, aliRes: AliRes) {
+  async #writeBody(sfaRes: Response, aliRes: AliRes) {
     if (!sfaRes.body) {
       aliRes.send("");
       return;
