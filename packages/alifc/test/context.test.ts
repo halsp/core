@@ -1,5 +1,5 @@
 import { SfaResponse } from "@sfajs/core";
-import { SfaAlifunc } from "../src";
+import { AlifuncStartup } from "../src";
 
 const req: any = {
   queries: {},
@@ -13,7 +13,7 @@ const res: any = new SfaResponse();
 res.send = () => undefined;
 
 test("context", async () => {
-  await new SfaAlifunc()
+  await new AlifuncStartup()
     .use((ctx) => {
       const context = ctx.aliContext;
       const aliReq1 = ctx.aliReq;
