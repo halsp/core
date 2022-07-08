@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/http",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "sfajs 的 http 托管环境",
   "homepage": "https://github.com/sfajs/http",
   "repository": {
@@ -62,7 +62,7 @@
     "@sfajs/core": "~1"
   },
   "files": [
-    "/demo/*",
+    "/.github/*",
     "/dist/*",
     "/scripts/*",
     "/src/*",
