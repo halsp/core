@@ -1,9 +1,9 @@
-import { TestStartup, SfaRequest } from "@sfajs/core";
+import { TestStartup, Request } from "@sfajs/core";
 import "../src";
 
 test("default req path not found", async function () {
   const result = await new TestStartup(
-    new SfaRequest().setMethod("get").setPath("ind")
+    new Request().setMethod("get").setPath("ind")
   )
     .useStatic({
       file: "test/static/index.html",
@@ -15,7 +15,7 @@ test("default req path not found", async function () {
 test("default req path found", async function () {
   {
     const result = await new TestStartup(
-      new SfaRequest().setMethod("get").setPath("test/static/index.html")
+      new Request().setMethod("get").setPath("test/static/index.html")
     )
       .useStatic({
         file: "test/static/index.html",
@@ -25,7 +25,7 @@ test("default req path found", async function () {
   }
   {
     const result = await new TestStartup(
-      new SfaRequest().setMethod("get").setPath("test/static/index.html/")
+      new Request().setMethod("get").setPath("test/static/index.html/")
     )
       .useStatic({
         file: "test/static/index.html",

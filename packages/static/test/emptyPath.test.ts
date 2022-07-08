@@ -1,11 +1,11 @@
-import { TestStartup, SfaRequest } from "@sfajs/core";
+import { TestStartup, Request } from "@sfajs/core";
 import "../src";
 
 test("null path", async function () {
   {
     const result = await new TestStartup(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      new SfaRequest().setMethod("get").setPath(null as any)
+      new Request().setMethod("get").setPath(null as any)
     )
       .useStatic({
         dir: "test/static",
@@ -18,7 +18,7 @@ test("null path", async function () {
   {
     const result = await new TestStartup(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      new SfaRequest().setMethod("get").setPath(null as any)
+      new Request().setMethod("get").setPath(null as any)
     )
       .useStatic({
         file: "test/static/index.html",
@@ -31,7 +31,7 @@ test("null path", async function () {
 test("undefined path", async function () {
   const result = await new TestStartup(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    new SfaRequest().setMethod("get").setPath(undefined as any)
+    new Request().setMethod("get").setPath(undefined as any)
   )
     .useStatic({
       dir: "test/static",
@@ -45,7 +45,7 @@ test("undefined path", async function () {
 test("prefix", async function () {
   const result = await new TestStartup(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    new SfaRequest().setMethod("get").setPath(null as any)
+    new Request().setMethod("get").setPath(null as any)
   )
     .useStatic({
       dir: "test/static",

@@ -1,9 +1,9 @@
-import { TestStartup, SfaRequest } from "@sfajs/core";
+import { TestStartup, Request } from "@sfajs/core";
 import "../src";
 
 test("forbidden path", async function () {
   const result = await new TestStartup(
-    new SfaRequest().setMethod("get").setPath("f/../b")
+    new Request().setMethod("get").setPath("f/../b")
   )
     .useStatic({
       dir: "test/static",

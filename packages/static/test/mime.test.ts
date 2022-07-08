@@ -1,10 +1,10 @@
-import { TestStartup, SfaRequest } from "@sfajs/core";
+import { TestStartup, Request } from "@sfajs/core";
 import "../src";
 
 test("unknown mime", async function () {
   {
     const result = await new TestStartup(
-      new SfaRequest().setMethod("get").setPath("index.un")
+      new Request().setMethod("get").setPath("index.un")
     )
       .useStatic({
         dir: "test/static",
@@ -17,7 +17,7 @@ test("unknown mime", async function () {
   }
   {
     const result = await new TestStartup(
-      new SfaRequest().setMethod("get").setPath("not-exist")
+      new Request().setMethod("get").setPath("not-exist")
     )
       .useStatic({
         dir: "test/static",
@@ -33,7 +33,7 @@ test("unknown mime", async function () {
 
 test("single unknown mime", async function () {
   const result = await new TestStartup(
-    new SfaRequest().setMethod("get").setPath("ind")
+    new Request().setMethod("get").setPath("ind")
   )
     .useStatic({
       file: "test/static/index.un",
