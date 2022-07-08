@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/testing",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "sfajs 的测试工具",
   "homepage": "https://github.com/sfajs/testing",
   "repository": {
@@ -52,6 +52,14 @@
   "peerDependencies": {
     "@sfajs/core": "~1",
     "@sfajs/http": "~1"
+  },
+  "peerDependenciesMeta": {
+    "@sfajs/core": {
+      "optional": true
+    },
+    "@sfajs/http": {
+      "optional": true
+    }
   },
   "files": [
     "/.github/*",
