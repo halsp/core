@@ -1,4 +1,4 @@
-import { Middleware, SfaRequest, TestStartup } from "@sfajs/core";
+import { Middleware, Request, TestStartup } from "@sfajs/core";
 import { Body } from "../../src";
 
 class TestMiddleware extends Middleware {
@@ -12,7 +12,7 @@ class TestMiddleware extends Middleware {
 
 test("simple test", async () => {
   const res = await new TestStartup(
-    new SfaRequest().setBody({
+    new Request().setBody({
       b1: 1,
     })
   )

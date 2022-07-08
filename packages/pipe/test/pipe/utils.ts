@@ -1,4 +1,4 @@
-import { Middleware, SfaRequest, TestStartup } from "@sfajs/core";
+import { Middleware, Request, TestStartup } from "@sfajs/core";
 import { Body, PipeItem } from "../../src";
 
 function runPipeTest(
@@ -20,7 +20,7 @@ function runPipeTest(
 
   test(`parse: ${success} ${source}, ${target}`, async () => {
     const res = await new TestStartup(
-      new SfaRequest().setBody({
+      new Request().setBody({
         b1: source,
       })
     )

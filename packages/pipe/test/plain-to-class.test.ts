@@ -1,4 +1,4 @@
-import { Middleware, SfaRequest, TestStartup } from "@sfajs/core";
+import { Middleware, Request, TestStartup } from "@sfajs/core";
 import { Body } from "../src";
 
 test("plain to class", async () => {
@@ -20,7 +20,7 @@ test("plain to class", async () => {
   }
 
   const res = await new TestStartup(
-    new SfaRequest().setBody({
+    new Request().setBody({
       h1: "a",
       h2: 1,
     })

@@ -1,4 +1,4 @@
-import { Middleware, SfaRequest, TestStartup } from "@sfajs/core";
+import { Middleware, Request, TestStartup } from "@sfajs/core";
 import { Body, Param } from "../src";
 
 test("null body", async () => {
@@ -19,7 +19,7 @@ test("null body", async () => {
     }
   }
 
-  const res = await new TestStartup(new SfaRequest().setBody(null))
+  const res = await new TestStartup(new Request().setBody(null))
     .useInject()
     .add(TestMiddleware)
     .run();

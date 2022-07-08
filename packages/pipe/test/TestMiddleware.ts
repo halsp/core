@@ -1,4 +1,4 @@
-import { Middleware, ReadonlyDict, SfaRequest } from "@sfajs/core";
+import { Middleware, ReadonlyDict, Request } from "@sfajs/core";
 import { Header, Query, Param, Body } from "../src";
 
 export class TestMiddleware extends Middleware {
@@ -42,7 +42,7 @@ export const expectBody = {
 };
 
 export function getTestRequest() {
-  const req = new SfaRequest()
+  const req = new Request()
     .setMethod("GET")
     .setBody([0, 1])
     .setHeader("h1", 1)

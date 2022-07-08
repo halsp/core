@@ -1,4 +1,4 @@
-import { Middleware, SfaRequest, TestStartup } from "@sfajs/core";
+import { Middleware, Request, TestStartup } from "@sfajs/core";
 import { Inject } from "@sfajs/inject";
 import { Header, PipeTransform } from "../src";
 import { GlobalPipeType } from "../src/global-pipe-type";
@@ -26,7 +26,7 @@ test("global pipe property", async () => {
     }
   }
 
-  const startup = new TestStartup(new SfaRequest().setHeader("h1", "5"))
+  const startup = new TestStartup(new Request().setHeader("h1", "5"))
     .useInject()
     .useGlobalPipe(GlobalPipeType.before, TestGlobalPipe)
     .useGlobalPipe(GlobalPipeType.after, TestGlobalPipe)
@@ -65,7 +65,7 @@ test("global pipe params", async () => {
     }
   }
 
-  const startup = new TestStartup(new SfaRequest().setHeader("h1", "5"))
+  const startup = new TestStartup(new Request().setHeader("h1", "5"))
     .useInject()
     .useGlobalPipe(GlobalPipeType.before, TestGlobalPipe)
     .useGlobalPipe(GlobalPipeType.after, TestGlobalPipe)
