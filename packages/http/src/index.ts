@@ -1,5 +1,7 @@
 import * as http from "http";
 import "@sfajs/core";
+import { HttpStartup } from "./http.startup";
+import { HttpsStartup } from "./https.startup";
 
 export { HttpStartup } from "./http.startup";
 export { HttpsStartup } from "./https.startup";
@@ -14,3 +16,13 @@ declare module "@sfajs/core" {
     get httpRes(): http.ServerResponse;
   }
 }
+
+/**
+ * @deprecated use HttpStartup
+ */
+export class SfaHttp extends HttpStartup {}
+
+/**
+ * @deprecated use HttpsStartup
+ */
+export class SfaHttps extends HttpsStartup {}

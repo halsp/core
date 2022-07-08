@@ -29,7 +29,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@sfajs/core": "^1.5.3",
+    "@sfajs/core": "^1.5.4",
     "co-body": "^6.1.0",
     "formidable": "^2.0.1",
     "type-is": "^1.6.18",
