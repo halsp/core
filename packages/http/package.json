@@ -61,6 +61,11 @@
   "peerDependencies": {
     "@sfajs/core": "~1"
   },
+  "peerDependenciesMeta": {
+    "@sfajs/core": {
+      "optional": true
+    }
+  },
   "files": [
     "/.github/*",
     "/dist/*",
