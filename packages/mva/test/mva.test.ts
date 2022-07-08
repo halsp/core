@@ -1,10 +1,10 @@
-import { SfaRequest, TestStartup } from "@sfajs/core";
+import { Request, TestStartup } from "@sfajs/core";
 import "../src";
 import { runMva } from "./global";
 
 test("default", async function () {
   await runMva(async () => {
-    const res = await new TestStartup(new SfaRequest().setMethod("GET"))
+    const res = await new TestStartup(new Request().setMethod("GET"))
       .useMva()
       .run();
 
@@ -16,7 +16,7 @@ test("default", async function () {
 
 test("use again", async function () {
   await runMva(async () => {
-    const res = await new TestStartup(new SfaRequest().setMethod("GET"))
+    const res = await new TestStartup(new Request().setMethod("GET"))
       .useMva()
       .useMva()
       .run();

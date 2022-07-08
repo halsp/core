@@ -1,4 +1,4 @@
-import { SfaRequest, TestStartup } from "@sfajs/core";
+import { Request, TestStartup } from "@sfajs/core";
 import "../src";
 import { runMva } from "./global";
 import { AutFilter } from "./mva/auth.middleware";
@@ -6,7 +6,7 @@ import { AutFilter } from "./mva/auth.middleware";
 test("auth access", async function () {
   await runMva(async () => {
     const res = await new TestStartup(
-      new SfaRequest()
+      new Request()
         .setPath("user/test1@hal.wang")
         .setMethod("GET")
         .setHeader("password", "test1password")
@@ -24,7 +24,7 @@ test("auth access", async function () {
 test("auth failed", async function () {
   await runMva(async () => {
     const res = await new TestStartup(
-      new SfaRequest()
+      new Request()
         .setPath("user/test1@hal.wang")
         .setMethod("GET")
         .setHeader("password", "test2password")

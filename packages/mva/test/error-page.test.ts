@@ -1,14 +1,9 @@
-import {
-  NotFoundException,
-  SfaRequest,
-  SfaResponse,
-  TestStartup,
-} from "@sfajs/core";
+import { NotFoundException, Request, Response, TestStartup } from "@sfajs/core";
 import "../src";
 import { AutFilter } from "./mva/auth.middleware";
 import { runMva } from "./global";
 
-function expect404(res: SfaResponse, isPage: boolean, replaceCode = 404) {
+function expect404(res: Response, isPage: boolean, replaceCode = 404) {
   expect(res.status).toBe(replaceCode);
   if (isPage) {
     expect(res.getHeader("content-type")).toBe("text/html");
@@ -32,7 +27,7 @@ function run404(isNumber: boolean) {
         const codes = [isNumber ? 404 : { code: 404 }];
         await runMva(async () => {
           const startup = new TestStartup(
-            new SfaRequest().setPath("not-exist").setMethod("GET")
+            new Request().setPath("not-exist").setMethod("GET")
           )
             .useErrorPage(codes)
             .use(async (ctx, next) => {
@@ -64,7 +59,7 @@ run404(false);
 test("403", async function () {
   await runMva(async () => {
     const res = await new TestStartup(
-      new SfaRequest()
+      new Request()
         .setPath("user/test1@hal.wang")
         .setMethod("GET")
         .setHeader("password", "test2password")
@@ -82,7 +77,7 @@ test("403", async function () {
 test("replace", async function () {
   await runMva(async () => {
     const res = await new TestStartup(
-      new SfaRequest().setPath("not-exist").setMethod("GET")
+      new Request().setPath("not-exist").setMethod("GET")
     )
       .useErrorPage({ code: 404, replace: 204 })
       .useMva()
@@ -95,7 +90,7 @@ test("replace", async function () {
 test("404 without error page", async function () {
   await runMva(async () => {
     const res = await new TestStartup(
-      new SfaRequest().setPath("not-exist").setMethod("GET")
+      new Request().setPath("not-exist").setMethod("GET")
     )
       .useMva()
       .run();
@@ -106,7 +101,7 @@ test("404 without error page", async function () {
 
 test("string error", async function () {
   await runMva(async () => {
-    const res = await new TestStartup(new SfaRequest().setMethod("GET"))
+    const res = await new TestStartup(new Request().setMethod("GET"))
       .useErrorPage([{ code: 404 }])
       .use(() => {
         throw "test";
@@ -121,7 +116,7 @@ function runEmptyCode(isArray: boolean) {
   test(`without error code ${isArray}`, async function () {
     await runMva(async () => {
       const startup = new TestStartup(
-        new SfaRequest().setPath("not-exist").setMethod("GET")
+        new Request().setPath("not-exist").setMethod("GET")
       );
       if (isArray) {
         startup.useErrorPage([]);
@@ -141,7 +136,7 @@ runEmptyCode(false);
 test(`useMva before useErrorPage`, async function () {
   await runMva(async () => {
     const res = await new TestStartup(
-      new SfaRequest().setPath("not-exist").setMethod("GET")
+      new Request().setPath("not-exist").setMethod("GET")
     )
       .useMva()
       .useErrorPage(404)
@@ -154,7 +149,7 @@ test(`useMva before useErrorPage`, async function () {
 test(`404 default`, async function () {
   await runMva(async () => {
     const startup = new TestStartup(
-      new SfaRequest().setPath("not-exist").setMethod("GET")
+      new Request().setPath("not-exist").setMethod("GET")
     )
       .useErrorPage()
       .use(async () => {

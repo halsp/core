@@ -1,4 +1,4 @@
-import { SfaRequest, TestStartup } from "@sfajs/core";
+import { Request, TestStartup } from "@sfajs/core";
 import "../src";
 import { runMva } from "./global";
 import "@sfajs/filter";
@@ -7,7 +7,7 @@ function runTest(executing: boolean) {
   test(`filter ${executing}`, async () => {
     await runMva(async () => {
       const res = await new TestStartup(
-        new SfaRequest().setPath("filter").setMethod("GET").setBody({
+        new Request().setPath("filter").setMethod("GET").setBody({
           executing,
         })
       )

@@ -1,10 +1,10 @@
-import { SfaRequest, TestStartup } from "@sfajs/core";
+import { Request, TestStartup } from "@sfajs/core";
 import { runMva } from "./global";
 import "../src";
 
 test("not allowed method", async function () {
   await runMva(async () => {
-    const res = await new TestStartup(new SfaRequest().setMethod("post"))
+    const res = await new TestStartup(new Request().setMethod("post"))
       .useMva()
       .run();
 
@@ -18,7 +18,7 @@ test("not allowed method", async function () {
 function testRanderEnable(enable: boolean) {
   test(`randerEnable ${enable}`, async function () {
     await runMva(async () => {
-      const res = await new TestStartup(new SfaRequest().setMethod("post"))
+      const res = await new TestStartup(new Request().setMethod("post"))
         .useMva({
           methods: "any",
           randerEnable: () => enable,
