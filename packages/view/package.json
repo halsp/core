@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/view",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "sfa 视图渲染中间件",
   "homepage": "https://github.com/sfajs/view",
   "repository": {
@@ -29,25 +29,25 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@sfajs/core": "^1.4.7",
+    "@sfajs/core": "^1.6.0",
     "consolidate": "^0.16.0"
   },
   "devDependencies": {
-    "@types/jest": "^28.1.1",
-    "@types/node": "^18.0.0",
+    "@types/jest": "^28.1.4",
+    "@types/node": "^18.0.3",
     "@types/consolidate": "^0.14.1",
-    "@typescript-eslint/eslint-plugin": "^5.28.0",
-    "@typescript-eslint/parser": "^5.28.0",
+    "@typescript-eslint/eslint-plugin": "^5.30.5",
+    "@typescript-eslint/parser": "^5.30.5",
     "codecov": "^3.8.3",
     "ejs": "^3.1.8",
-    "eslint": "^8.17.0",
+    "eslint": "^8.19.0",
     "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "jest": "^28.1.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "jest": "^28.1.2",
     "prettier": "^2.7.1",
     "pug": "^3.0.2",
     "ts-jest": "^28.0.5",
-    "typescript": "^4.7.3"
+    "typescript": "^4.7.4"
   },
   "peerDependencies": {
     "@sfajs/core": "~1"
@@ -66,6 +66,8 @@
     ".eslintignore",
     ".eslintrc.js",
     ".gitignore",
+    "CODE_OF_CONDUCT.md",
+    "CONTRIBUTING.md",
     "jest.config.js",
     "LICENSE",
     "package.json",
