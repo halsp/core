@@ -1,4 +1,4 @@
-import { HttpContext, SfaRequest, TestStartup } from "@sfajs/core";
+import { HttpContext, Request, TestStartup } from "@sfajs/core";
 import "../src";
 import { ActionFilter, ResourceFilter, UseFilters } from "../src";
 import { Action } from "@sfajs/router";
@@ -42,7 +42,7 @@ function runExecuting(type: string) {
       body[`${type}-executing`] = executing;
 
       const res = await new TestStartup(
-        new SfaRequest()
+        new Request()
           .setPath("/filters/executing")
           .setMethod("GET")
           .setBody(body)

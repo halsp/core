@@ -2,7 +2,7 @@ import {
   BadRequestException,
   HttpContext,
   HttpException,
-  SfaRequest,
+  Request,
   TestStartup,
 } from "@sfajs/core";
 import "../src";
@@ -16,7 +16,7 @@ test(`empty exception filter`, async () => {
     }
   }
 
-  const res = await new TestStartup(new SfaRequest())
+  const res = await new TestStartup(new Request())
     .useFilter()
     .add(TestAction)
     .run();
@@ -49,7 +49,7 @@ function runTest(executing: boolean) {
   function run(bad: boolean) {
     test(`exception filter ${executing} ${bad}`, async () => {
       const res = await new TestStartup(
-        new SfaRequest()
+        new Request()
           .setPath("/filters/exception")
           .setMethod("GET")
           .setBody({
@@ -94,7 +94,7 @@ runTest(false);
 
 test(`other error`, async () => {
   const res = await new TestStartup(
-    new SfaRequest().setPath("/filters/exception").setMethod("GET")
+    new Request().setPath("/filters/exception").setMethod("GET")
   )
     .useFilter()
     .use(() => {

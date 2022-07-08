@@ -1,4 +1,4 @@
-import { HttpContext, SfaRequest, TestStartup } from "@sfajs/core";
+import { HttpContext, Request, TestStartup } from "@sfajs/core";
 import "../src";
 import { ActionFilter } from "../src";
 import "@sfajs/inject";
@@ -25,7 +25,7 @@ class TestActionFilter implements ActionFilter {
 function runTest(executing: boolean) {
   test(`global filter ${executing}`, async () => {
     const res = await new TestStartup(
-      new SfaRequest().setPath("").setMethod("GET").setBody({
+      new Request().setPath("").setMethod("GET").setBody({
         executing,
       })
     )

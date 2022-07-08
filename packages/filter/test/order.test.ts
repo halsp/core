@@ -1,4 +1,4 @@
-import { HttpContext, SfaRequest, TestStartup } from "@sfajs/core";
+import { HttpContext, Request, TestStartup } from "@sfajs/core";
 import "../src";
 import { ActionFilter, UseFilters } from "../src";
 import "@sfajs/inject";
@@ -91,7 +91,7 @@ class TestAction extends Action {
 
 test(`filter order`, async () => {
   const res = await new TestStartup(
-    new SfaRequest().setPath("filters/order").setMethod("GET")
+    new Request().setPath("filters/order").setMethod("GET")
   )
     .use(async (ctx, next) => {
       ctx.res.body = 0;

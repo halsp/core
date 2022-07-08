@@ -1,4 +1,4 @@
-import { SfaRequest, TestStartup } from "@sfajs/core";
+import { Request, TestStartup } from "@sfajs/core";
 import "../src";
 
 function runTest(executing: boolean) {
@@ -6,7 +6,7 @@ function runTest(executing: boolean) {
     process.chdir("test");
     try {
       const res = await new TestStartup(
-        new SfaRequest().setMethod("get").setPath("auth").setBody({
+        new Request().setMethod("get").setPath("auth").setBody({
           executing,
         })
       )
