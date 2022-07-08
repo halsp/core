@@ -52,6 +52,14 @@
     "@sfajs/core": "~1",
     "@sfajs/inject": "~1"
   },
+  "peerDependenciesMeta": {
+    "@sfajs/core": {
+      "optional": true
+    },
+    "@sfajs/inject": {
+      "optional": true
+    }
+  },
   "files": [
     "/.github/*",
     "/dist/*",
