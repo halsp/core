@@ -9,7 +9,7 @@ import {
   SchemaObject,
   XmlObject,
 } from "openapi3-ts";
-import { IGNORE, MODEL_PROPERTY_DECORATORS } from "../constant";
+import { IGNORE, PIPE_DECORATORS } from "../constant";
 import { pipeTypeToDocType, typeToApiType } from "../parser/utils/doc-types";
 import { ensureModelSchema } from "../parser/utils/model-schema";
 
@@ -102,7 +102,7 @@ function setValue(
 function createPropertyDecorator(fn: CreateDecoratorFn) {
   return function (target: any, propertyKey: string) {
     const propertyDecs: DecoratorFn[] =
-      Reflect.getMetadata(MODEL_PROPERTY_DECORATORS, target) ?? [];
+      Reflect.getMetadata(PIPE_DECORATORS, target) ?? [];
     propertyDecs.push(({ pipeType, schema, builder }) => {
       if (isSchemaObject(schema)) {
         fn({ pipeType, propertyKey, schema, target, builder });
@@ -116,18 +116,18 @@ function createPropertyDecorator(fn: CreateDecoratorFn) {
         });
       }
     });
-    Reflect.defineMetadata(MODEL_PROPERTY_DECORATORS, propertyDecs, target);
+    Reflect.defineMetadata(PIPE_DECORATORS, propertyDecs, target);
   };
 }
 
 function createPropertySetValueDecorator(fn: SetSchemaValueDecoratorFn) {
   return function (target: any, propertyKey: string | symbol) {
     const propertyDecs: DecoratorFn[] =
-      Reflect.getMetadata(MODEL_PROPERTY_DECORATORS, target) ?? [];
+      Reflect.getMetadata(PIPE_DECORATORS, target) ?? [];
     propertyDecs.push(({ pipeType, schema, builder }) =>
       setValue(target, propertyKey as string, pipeType, schema, builder, fn)
     );
-    Reflect.defineMetadata(MODEL_PROPERTY_DECORATORS, propertyDecs, target);
+    Reflect.defineMetadata(PIPE_DECORATORS, propertyDecs, target);
   };
 }
 
