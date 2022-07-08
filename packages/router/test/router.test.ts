@@ -1,4 +1,4 @@
-import { TestStartup, SfaRequest } from "@sfajs/core";
+import { TestStartup, Request } from "@sfajs/core";
 import "../src";
 import "./global";
 import * as fs from "fs";
@@ -6,7 +6,7 @@ import { CONFIG_FILE_NAME } from "../src/constant";
 
 test("startup test", async () => {
   const result = await new TestStartup(
-    new SfaRequest().setPath("/simple/RoUtEr").setMethod("POST")
+    new Request().setPath("/simple/RoUtEr").setMethod("POST")
   )
     .useTestRouter()
     .useRouter()
@@ -16,7 +16,7 @@ test("startup test", async () => {
 
 test("default", async () => {
   const result = await new TestStartup(
-    new SfaRequest().setPath("").setMethod("GET")
+    new Request().setPath("").setMethod("GET")
   )
     .useTestRouter()
     .run();
@@ -25,7 +25,7 @@ test("default", async () => {
 
 test("startup not exist", async () => {
   const result = await new TestStartup(
-    new SfaRequest().setPath("/simple/router1").setMethod("POST")
+    new Request().setPath("/simple/router1").setMethod("POST")
   )
     .useTestRouter()
     .run();
@@ -39,7 +39,7 @@ test("startup not exist", async () => {
 
 test("shallow startup test", async () => {
   const res = await new TestStartup(
-    new SfaRequest().setPath("/router").setMethod("POST")
+    new Request().setPath("/router").setMethod("POST")
   )
     .useTestRouter()
     .run();
@@ -48,7 +48,7 @@ test("shallow startup test", async () => {
 
 test("deep startup test", async () => {
   const result = await new TestStartup(
-    new SfaRequest().setPath("/simple/deepActions/RoUtEr").setMethod("POST")
+    new Request().setPath("/simple/deepActions/RoUtEr").setMethod("POST")
   )
     .useTestRouter()
     .run();
@@ -57,7 +57,7 @@ test("deep startup test", async () => {
 
 test("null body test", async () => {
   const result = await new TestStartup(
-    new SfaRequest().setPath("/nullbody").setMethod("PUT")
+    new Request().setPath("/nullbody").setMethod("PUT")
   )
     .useTestRouter()
     .run();
@@ -79,7 +79,7 @@ test("blank config", async () => {
 
   let done = false;
   try {
-    await new TestStartup(new SfaRequest().setPath("").setMethod("GET"))
+    await new TestStartup(new Request().setPath("").setMethod("GET"))
       .useRouter()
       .run();
   } catch (err) {

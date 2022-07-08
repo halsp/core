@@ -1,10 +1,10 @@
-import { TestStartup, SfaRequest, HttpMethod } from "@sfajs/core";
+import { TestStartup, Request, HttpMethod } from "@sfajs/core";
 import "../../src";
 import "../global";
 
 test(`restful params test1`, async () => {
   const res = await new TestStartup(
-    new SfaRequest().setPath("/restful/45").setMethod(HttpMethod.get)
+    new Request().setPath("/restful/45").setMethod(HttpMethod.get)
   )
     .useTestRouter()
     .run();
@@ -18,7 +18,7 @@ test(`restful params test1`, async () => {
 
 test(`restful params test2`, async () => {
   const res = await new TestStartup(
-    new SfaRequest().setPath("/restful/11/animals").setMethod(HttpMethod.get)
+    new Request().setPath("/restful/11/animals").setMethod(HttpMethod.get)
   )
     .useTestRouter()
     .run();
@@ -32,7 +32,7 @@ test(`restful params test2`, async () => {
 
 test(`get params one object`, async () => {
   const res = await new TestStartup(
-    new SfaRequest().setPath("/restful/45").setMethod(HttpMethod.get)
+    new Request().setPath("/restful/45").setMethod(HttpMethod.get)
   )
     .use(async (ctx, next) => {
       expect(ctx.req.params).toBe(ctx.req.params);

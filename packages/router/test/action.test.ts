@@ -1,6 +1,6 @@
 import {
   StatusCodes,
-  SfaRequest,
+  Request,
   HttpContext,
   Dict,
   TestStartup,
@@ -29,7 +29,7 @@ class Login extends Action {
 test("action test", async () => {
   const loginAction = new Login();
   const ctx = new HttpContext(
-    new SfaRequest().setBody({
+    new Request().setBody({
       account: "abc",
       password: "123456",
     })
@@ -57,7 +57,7 @@ function runMultipleTest(
 ) {
   test(`multiple`, async () => {
     const result = await new TestStartup(
-      new SfaRequest().setPath(path).setMethod(method)
+      new Request().setPath(path).setMethod(method)
     )
       .useTestRouter()
       .run();

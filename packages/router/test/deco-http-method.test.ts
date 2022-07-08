@@ -1,11 +1,11 @@
-import { HttpMethod, SfaRequest, StatusCodes, TestStartup } from "@sfajs/core";
+import { HttpMethod, Request, StatusCodes, TestStartup } from "@sfajs/core";
 import "../src";
 import "./global";
 
 function runTest(method: string, success: boolean) {
   test(`${method} ${success}`, async () => {
     const res = await new TestStartup(
-      new SfaRequest().setPath("/decorator/method").setMethod(method)
+      new Request().setPath("/decorator/method").setMethod(method)
     )
       .useTestRouter()
       .run();
@@ -29,7 +29,7 @@ runTest(HttpMethod.any, false);
 
 test(`custom url`, async () => {
   const res = await new TestStartup(
-    new SfaRequest().setPath("/mu").setMethod(HttpMethod.put)
+    new Request().setPath("/mu").setMethod(HttpMethod.put)
   )
     .useTestRouter()
     .run();
@@ -40,7 +40,7 @@ test(`custom url`, async () => {
 
 test(`base path`, async () => {
   const res = await new TestStartup(
-    new SfaRequest()
+    new Request()
       .setPath("decorator/method-base-path/mup")
       .setMethod(HttpMethod.get)
   )

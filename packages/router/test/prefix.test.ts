@@ -1,11 +1,11 @@
-import { TestStartup, SfaRequest } from "@sfajs/core";
+import { TestStartup, Request } from "@sfajs/core";
 import "../src";
 import "./global";
 import { testDir } from "./global";
 
 test("prefix", async () => {
   const result = await new TestStartup(
-    new SfaRequest().setPath("/api2/simple/router").setMethod("POST")
+    new Request().setPath("/api2/simple/router").setMethod("POST")
   )
     .useTestRouter({
       prefix: "api2",
@@ -17,7 +17,7 @@ test("prefix", async () => {
 
 test("error prefix", async () => {
   const result = await new TestStartup(
-    new SfaRequest().setPath("/api2/simple/router").setMethod("POST")
+    new Request().setPath("/api2/simple/router").setMethod("POST")
   )
     .useTestRouter({
       prefix: "error",

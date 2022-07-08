@@ -1,9 +1,9 @@
 export const DEFAULT_ACTION_DIR = "actions";
 export const CONFIG_FILE_NAME = "sfa-router.config";
-export const ACTION_METADATA = "__@sfajs/router_actionMetadata__";
-export const ACTION_METHOD_METADATA = "__@sfajs/router_actionMethodMetadata__";
+export const ACTION_METADATA = "@sfajs/router/actionMetadata";
+export const ACTION_METHOD_METADATA = "@sfajs/router/actionMethodMetadata";
 
-export const STARTUP_ROUTER_OPTIONS = "__@sfajs/router_startupRouterOptions__";
-export const REQUEST_CACHE_PARAMS = "__@sfajs/router_ctxCacheParams__";
-export const CTX_CACHE_METADATA = "__@sfajs/router_ctxCacheMetadata__";
-export const STARTUP_ROUTER_MAP = "__@sfajs/router_startupRouterMap__";
+export const STARTUP_ROUTER_OPTIONS = "@sfajs/router/startupRouterOptions";
+export const REQUEST_CACHE_PARAMS = "@sfajs/router/ctxCacheParams";
+export const CTX_CACHE_METADATA = "@sfajs/router/ctxCacheMetadata";
+export const STARTUP_ROUTER_MAP = "@sfajs/router/startupRouterMap";

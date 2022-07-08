@@ -1,10 +1,10 @@
 import "../../src";
-import { TestStartup, SfaRequest, HttpMethod } from "@sfajs/core";
+import { TestStartup, Request, HttpMethod } from "@sfajs/core";
 import "../global";
 
 test(`action name error`, async () => {
   const result = await new TestStartup(
-    new SfaRequest().setPath("/err").setMethod(HttpMethod.post)
+    new Request().setPath("/err").setMethod(HttpMethod.post)
   )
     .useTestRouter()
     .run();
@@ -14,7 +14,7 @@ test(`action name error`, async () => {
 
 test(`without method`, async () => {
   const result = await new TestStartup(
-    new SfaRequest().setPath("/restful").setMethod("")
+    new Request().setPath("/restful").setMethod("")
   )
     .useTestRouter()
     .run();

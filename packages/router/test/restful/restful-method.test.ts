@@ -1,4 +1,4 @@
-import { TestStartup, SfaRequest, HttpMethod } from "@sfajs/core";
+import { TestStartup, Request, HttpMethod } from "@sfajs/core";
 import "../../src";
 import "../global";
 
@@ -17,7 +17,7 @@ const methods = [
 methods.forEach((method) => {
   test(`${method} restful test`, async () => {
     const result = await new TestStartup(
-      new SfaRequest().setPath("/restful").setMethod(method)
+      new Request().setPath("/restful").setMethod(method)
     )
       .useTestRouter()
       .run();

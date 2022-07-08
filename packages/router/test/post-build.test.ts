@@ -1,6 +1,6 @@
 import { postbuild } from "../src";
 import * as fs from "fs";
-import { SfaRequest, TestStartup } from "@sfajs/core";
+import { Request, TestStartup } from "@sfajs/core";
 import { CONFIG_FILE_NAME } from "../src/constant";
 
 test("empty config", async () => {
@@ -42,7 +42,7 @@ test("build and run", async () => {
     cacheDir: "",
   });
 
-  const res = await new TestStartup(new SfaRequest().setMethod("get"))
+  const res = await new TestStartup(new Request().setMethod("get"))
     .useRouter()
     .run();
 

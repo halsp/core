@@ -1,10 +1,10 @@
-import { SfaRequest, TestStartup } from "@sfajs/core";
+import { Request, TestStartup } from "@sfajs/core";
 import "../src";
 import "./global";
 
 test("custom metadata", async () => {
   const result = await new TestStartup(
-    new SfaRequest().setPath("/metadata/custom").setMethod("GET")
+    new Request().setPath("/metadata/custom").setMethod("GET")
   )
     .useTestRouter()
     .run();
@@ -21,7 +21,7 @@ test("custom metadata", async () => {
 
 test("set metadata", async () => {
   const result = await new TestStartup(
-    new SfaRequest().setPath("/metadata/set-metadata").setMethod("GET")
+    new Request().setPath("/metadata/set-metadata").setMethod("GET")
   )
     .useTestRouter()
     .run();

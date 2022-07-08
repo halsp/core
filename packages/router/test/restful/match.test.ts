@@ -1,10 +1,10 @@
 import "../../src";
-import { TestStartup, SfaRequest, HttpContext, HttpMethod } from "@sfajs/core";
+import { TestStartup, Request, HttpContext, HttpMethod } from "@sfajs/core";
 import "../global";
 
 test(`find next`, async () => {
   const result = await new TestStartup(
-    new SfaRequest().setPath("/restful/method").setMethod(HttpMethod.post)
+    new Request().setPath("/restful/method").setMethod(HttpMethod.post)
   )
     .useTestRouter()
     .run();
@@ -13,7 +13,7 @@ test(`find next`, async () => {
 
 test(`find simple`, async () => {
   const result = await new TestStartup(
-    new SfaRequest()
+    new Request()
       .setPath("/restful/method/simple")
       .setMethod(HttpMethod.post)
   )
@@ -25,7 +25,7 @@ test(`find simple`, async () => {
 
 test(`find simple next`, async () => {
   const result = await new TestStartup(
-    new SfaRequest().setPath("/restful/method/any").setMethod(HttpMethod.post)
+    new Request().setPath("/restful/method/any").setMethod(HttpMethod.post)
   )
     .useTestRouter()
     .run();
@@ -35,7 +35,7 @@ test(`find simple next`, async () => {
 
 test(`find miss next`, async () => {
   const result = await new TestStartup(
-    new SfaRequest().setPath("/restful/method/miss").setMethod(HttpMethod.post)
+    new Request().setPath("/restful/method/miss").setMethod(HttpMethod.post)
   )
     .useTestRouter()
     .run();
@@ -46,7 +46,7 @@ test(`find miss next`, async () => {
 
 test(`find miss next 2`, async () => {
   const result = await new TestStartup(
-    new SfaRequest()
+    new Request()
       .setPath("/restful/method/miss/any")
       .setMethod(HttpMethod.post)
   )
@@ -58,7 +58,7 @@ test(`find miss next 2`, async () => {
 
 test(`find miss next 3`, async () => {
   const result = await new TestStartup(
-    new SfaRequest()
+    new Request()
       .setPath("/restful/method/any/miss")
       .setMethod(HttpMethod.post)
   )
@@ -70,7 +70,7 @@ test(`find miss next 3`, async () => {
 
 test(`find miss next 4`, async () => {
   const result = await new TestStartup(
-    new SfaRequest()
+    new Request()
       .setPath("/restful/method/any/any")
       .setMethod(HttpMethod.post)
   )
@@ -83,7 +83,7 @@ test(`find miss next 4`, async () => {
 test(`mostLikePathParts`, async () => {
   let context!: HttpContext;
   const result = await new TestStartup(
-    new SfaRequest()
+    new Request()
       .setPath("/restful/mostLike/q/act")
       .setMethod(HttpMethod.post)
   )
@@ -99,7 +99,7 @@ test(`mostLikePathParts`, async () => {
 
 test(`find sortest`, async () => {
   const result = await new TestStartup(
-    new SfaRequest().setPath("/restful/sortest/sort").setMethod(HttpMethod.get)
+    new Request().setPath("/restful/sortest/sort").setMethod(HttpMethod.get)
   )
     .useTestRouter()
     .run();

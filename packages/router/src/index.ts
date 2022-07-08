@@ -47,7 +47,7 @@ declare module "@sfajs/core" {
     get routerOptions(): RouterInitedOptions;
   }
 
-  interface SfaRequest {
+  interface Request {
     get params(): ReadonlyQueryDict;
   }
 
