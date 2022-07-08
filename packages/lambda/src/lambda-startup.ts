@@ -1,6 +1,6 @@
 import {
   HttpContext,
-  SfaRequest,
+  Request,
   Startup,
   Dict,
   HeadersDict,
@@ -18,7 +18,7 @@ export class LambdaStartup extends Startup {
 
   private createContext(event: Dict, context: Dict): HttpContext {
     const ctx = new HttpContext(
-      new SfaRequest()
+      new Request()
         .setBody(this.#getBody(event))
         .setMethod(
           event.httpMethod ||

@@ -5,7 +5,7 @@ declare module "@sfajs/core" {
     get lambdaContext(): Dict;
     get lambdaEvent(): Dict;
   }
-  interface SfaRequest {
+  interface Request {
     get lambdaContext(): Dict;
     get lambdaEvent(): Dict;
   }

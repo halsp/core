@@ -7,7 +7,7 @@
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "noImplicitAny": false,
+    "noImplicitAny": false
   },
   "include": [
     "src/**/*"
