@@ -3,6 +3,7 @@ import { PipeReqType } from "@sfajs/pipe";
 import {
   ExampleObject,
   OpenApiBuilder,
+  OperationObject,
   ParameterObject,
   ParameterStyle,
   SchemaObject,
@@ -14,7 +15,7 @@ import { ensureModelSchema } from "../parser/utils/model-schema";
 
 export type DecoratorFn = (args: {
   pipeType: PipeReqType;
-  schema: SchemaObject | ParameterObject[];
+  schema: SchemaObject | OperationObject;
   builder: OpenApiBuilder;
 }) => void;
 
@@ -33,24 +34,25 @@ type CreateDecoratorFn = (args: {
 }) => void;
 
 function isSchemaObject(
-  schema: SchemaObject | ParameterObject | ParameterObject[]
+  schema: SchemaObject | ParameterObject | OperationObject
 ): schema is SchemaObject {
-  return !Array.isArray(schema) && isUndefined(schema.in);
+  return isUndefined(schema.parameters) && isUndefined(schema.in);
 }
 
 function getParameterObject(
   propertyKey: string,
   pipeType: PipeReqType,
-  schema: ParameterObject[]
+  schema: OperationObject
 ) {
-  const existParameter = schema.filter((p) => p.name == propertyKey)[0];
+  const parameters = schema.parameters as ParameterObject[];
+  const existParameter = parameters.filter((p) => p.name == propertyKey)[0];
   const parameter = existParameter ?? {
     name: propertyKey,
     in: pipeTypeToDocType(pipeType),
     required: pipeType == "param",
   };
   if (!existParameter) {
-    schema.push(parameter);
+    parameters.push(parameter);
   }
   return parameter;
 }
@@ -59,7 +61,7 @@ function setValue(
   target: any,
   propertyKey: string,
   pipeType: PipeReqType,
-  schema: SchemaObject | ParameterObject[],
+  schema: SchemaObject | OperationObject,
   builder: OpenApiBuilder,
   fn: SetSchemaValueDecoratorFn
 ) {

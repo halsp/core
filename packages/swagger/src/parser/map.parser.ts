@@ -135,7 +135,7 @@ export class MapParser {
       for (const fn of decs) {
         fn({
           pipeType: record.type,
-          schema: params,
+          schema: optObj,
           builder: this.builder,
         });
       }
