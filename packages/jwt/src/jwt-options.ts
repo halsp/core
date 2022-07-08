@@ -1,4 +1,4 @@
-import { SfaRequest } from "@sfajs/core";
+import { Request } from "@sfajs/core";
 import * as jwt from "jsonwebtoken";
 
 export enum JwtSecretRequestType {
@@ -17,7 +17,7 @@ export interface JwtOptions {
     options?: jwt.VerifyOptions | jwt.SignOptions
   ) => jwt.Secret;
   verifyOptions?: jwt.VerifyOptions;
-  getToken?: (req: SfaRequest) => string;
+  getToken?: (req: Request) => string;
   prefix?: string;
 }
 

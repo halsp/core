@@ -1,4 +1,4 @@
-import { SfaRequest, TestStartup } from "@sfajs/core";
+import { Request, TestStartup } from "@sfajs/core";
 import { parseInject } from "@sfajs/inject";
 import { JwtOptions, JwtService } from "../src";
 import "../src";
@@ -9,12 +9,12 @@ export async function createSfaReqeust(
   options: JwtOptions,
   payload: any = {},
   prefix = "Bearer "
-): Promise<SfaRequest> {
+): Promise<Request> {
   let token = "";
   await runJwtServiceTest(async (jwtService) => {
     token = await jwtService.sign(payload);
   }, options);
-  return new SfaRequest().setHeader("Authorization", prefix + token);
+  return new Request().setHeader("Authorization", prefix + token);
 }
 
 export async function runJwtServiceTest(
