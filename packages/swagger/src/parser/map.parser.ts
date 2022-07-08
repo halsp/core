@@ -134,7 +134,7 @@ export class MapParser {
       const decs = getModelPropertyDecorators(modelType);
       for (const fn of decs) {
         fn({
-          type: record.type,
+          pipeType: record.type,
           schema: params,
           builder: this.builder,
         });

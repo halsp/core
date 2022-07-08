@@ -6,15 +6,15 @@ import { getModelDecorators, getModelPropertyDecorators } from "./decorator";
 function createModelPropertySchema(
   builder: OpenApiBuilder,
   modelCls: ObjectConstructor,
-  type: PipeReqType
+  pipeType: PipeReqType
 ) {
   const decs = getModelPropertyDecorators(modelCls);
   const schema = getSchema(builder, modelCls);
   for (const fn of decs) {
     fn({
-      type: type,
-      schema: schema,
-      builder: builder,
+      pipeType,
+      schema,
+      builder,
     });
   }
 }
@@ -40,14 +40,14 @@ function createModelSchema(
 export function ensureModelSchema(
   builder: OpenApiBuilder,
   modelCls: ObjectConstructor,
-  type?: PipeReqType
+  pipeType?: PipeReqType
 ) {
   const schema = getExistSchema(builder, modelCls.name);
   if (!schema) {
-    if (isUndefined(type)) {
+    if (isUndefined(pipeType)) {
       createModelSchema(builder, modelCls);
     } else {
-      createModelPropertySchema(builder, modelCls, type);
+      createModelPropertySchema(builder, modelCls, pipeType);
     }
   }
 }
