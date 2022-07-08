@@ -1,4 +1,4 @@
-import { Request, Response } from "./context";
+import { HeaderHandler, Request, Response } from "./context";
 
 export {
   StatusCodes,
@@ -67,7 +67,7 @@ export {
   HttpContext,
   Request,
   ResultHandler,
-  SfaHeader,
+  HeaderHandler,
 } from "./context";
 
 export { Startup, TestStartup } from "./startup";
@@ -80,6 +80,11 @@ export { Middleware, ComposeMiddleware, HookType } from "./middlewares";
 export class SfaRequest extends Request {}
 
 /**
- * @deprecated use Request
+ * @deprecated use Response
  */
 export class SfaResponse extends Response {}
+
+/**
+ * @deprecated use Request
+ */
+export class SfaHeader extends HeaderHandler {}

@@ -1,5 +1,5 @@
 import { getReasonPhrase, StatusCodes } from "http-status-codes";
-import { SfaHeader } from "../context/sfa-header";
+import { HeaderHandler } from "../context/header-handler";
 import { isObject, isString } from "../utils";
 import { Dict } from "../utils/types";
 import { HttpExceptionHeader } from "./http-exception-header";
@@ -27,7 +27,7 @@ export class HttpException extends Error {
   public get header() {
     return this.#header;
   }
-  public setHeaders(funcs: (header: SfaHeader) => void): this {
+  public setHeaders(funcs: (header: HeaderHandler) => void): this {
     funcs(this.#header);
     return this;
   }

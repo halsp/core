@@ -1,10 +1,10 @@
 import { StatusCodes, getReasonPhrase } from "http-status-codes";
 import { isString } from "../utils";
 import { HttpErrorMessage } from "./http-error-message";
-import { SfaHeader } from "./sfa-header";
+import { HeaderHandler } from "./header-handler";
 import { Response } from "./response";
 
-export abstract class ResultHandler extends SfaHeader {
+export abstract class ResultHandler extends HeaderHandler {
   constructor(resFinder: () => Response) {
     super(() => resFinder().headers);
     this.#resFinder = resFinder;

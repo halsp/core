@@ -6,9 +6,9 @@ import {
   normalizePath,
 } from "../utils";
 import { HttpContext } from "./http-context";
-import { SfaHeader } from "./sfa-header";
+import { HeaderHandler } from "./header-handler";
 
-export class Request extends SfaHeader {
+export class Request extends HeaderHandler {
   constructor() {
     super(() => this.#headers);
   }

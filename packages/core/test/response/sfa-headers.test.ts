@@ -1,6 +1,6 @@
-import { HeadersDict, SfaHeader } from "../../src";
+import { HeadersDict, HeaderHandler } from "../../src";
 
-class CustomHeader extends SfaHeader {
+class CustomHeader extends HeaderHandler {
   constructor() {
     super(() => this.headers);
   }

@@ -5,7 +5,7 @@ import {
   NumericalHeaderValue,
 } from "../utils";
 
-export abstract class SfaHeader extends Object {
+export abstract class HeaderHandler extends Object {
   constructor(headersFinder: () => HeadersDict) {
     super();
     this.#headersFinder = headersFinder;

@@ -1,7 +1,7 @@
-import { SfaHeader } from "../context/sfa-header";
+import { HeaderHandler } from "../context/header-handler";
 import { HeadersDict } from "../utils/types";
 
-export class HttpExceptionHeader extends SfaHeader {
+export class HttpExceptionHeader extends HeaderHandler {
   constructor() {
     super(() => this.#headers);
   }
