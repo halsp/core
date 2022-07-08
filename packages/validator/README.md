@@ -19,6 +19,8 @@
 
 `@sfajs/validator` 是 `sfajs` 的参数校验插件
 
+基于 [class-validator](https://github.com/typestack/class-validator) 和 [@sfajs/pipe](https://github.com/sfajs/pipe) 校验请求参数
+
 ## 安装
 
 ```
