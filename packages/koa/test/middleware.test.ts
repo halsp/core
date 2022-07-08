@@ -38,9 +38,7 @@ test("@koa/router", async function () {
     });
 
   async function request(method: string, path: string): Promise<Response> {
-    return await new TestStartup(
-      new Request().setMethod(method).setPath(path)
-    )
+    return await new TestStartup(new Request().setMethod(method).setPath(path))
       .use(async (ctx, next) => {
         await next();
       })
