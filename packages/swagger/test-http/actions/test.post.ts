@@ -28,7 +28,7 @@ export class HeaderDto {
 @HttpPost("test/^p")
 export default class extends Action {
   @Header
-  private readonly 1!: HeaderDto;
+  private readonly h!: HeaderDto;
   @Header("h1")
   private readonly h1!: any;
   @Query("q")

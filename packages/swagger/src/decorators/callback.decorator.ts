@@ -35,7 +35,7 @@ export type CreateCallback = (args: {
   schema?: SchemaObject;
   operation?: OperationObject;
   target: any;
-  propertyKey?: string | symbol;
+  propertyKey?: string;
   parameterIndex?: number;
 }) => void;
 
@@ -47,13 +47,12 @@ export function createCallbackDecorator(
     propertyKey?: string | symbol,
     parameterIndex?: number
   ) {
-    target = target.proptotype ?? target;
     const callbacks: PipeCallback[] =
       Reflect.getMetadata(CALLBACK_DECORATORS, target) ?? [];
     callbacks.push((args: any) => {
       cb({
         target,
-        propertyKey,
+        propertyKey: propertyKey as string,
         parameterIndex,
         builder: args.builder,
         pipeRecord: args.pipeRecord,

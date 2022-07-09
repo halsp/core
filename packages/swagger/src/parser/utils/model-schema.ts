@@ -4,23 +4,12 @@ import { ComponentsObject, OpenApiBuilder, SchemaObject } from "openapi3-ts";
 import { PipeSchemaCallback } from "../../decorators/callback.decorator";
 import { getCallbacks } from "./decorator";
 
-function createModelPropertySchema(
+function createModelSchema(
   builder: OpenApiBuilder,
   modelCls: ObjectConstructor,
   pipeRecord: PipeReqRecord
 ) {
-  const callbacks = getCallbacks(modelCls);
-  const schema = getSchema(builder, modelCls);
-  for (const cb of callbacks) {
-    (cb as PipeSchemaCallback)({
-      pipeRecord,
-      schema,
-      builder,
-    });
-  }
-}
-
-function getSchema(builder: OpenApiBuilder, modelCls: ObjectConstructor) {
+  const callbacks = getCallbacks(modelCls.prototype);
   let schema = getExistSchema(builder, modelCls.name);
   if (!schema) {
     schema = {
@@ -28,7 +17,13 @@ function getSchema(builder: OpenApiBuilder, modelCls: ObjectConstructor) {
     };
     builder.addSchema(modelCls.name, schema);
   }
-  return schema;
+  for (const cb of callbacks) {
+    (cb as PipeSchemaCallback)({
+      pipeRecord,
+      schema,
+      builder,
+    });
+  }
 }
 
 function getExistSchema(builder: OpenApiBuilder, name: string) {
@@ -44,6 +39,6 @@ export function ensureModelSchema(
 ) {
   const schema = getExistSchema(builder, modelCls.name);
   if (!schema) {
-    createModelPropertySchema(builder, modelCls, pipeRecord);
+    createModelSchema(builder, modelCls, pipeRecord);
   }
 }

@@ -14,7 +14,7 @@ export function getPipeRecordModelType(
   } else {
     result = Reflect.getMetadata(
       "design:type",
-      cls.prototype,
+      cls.prototype ?? cls,
       record.propertyKey
     );
   }
@@ -22,8 +22,12 @@ export function getPipeRecordModelType(
 }
 
 export function getCallbacks(modelCls: ObjectConstructor): PipeCallback[] {
-  return (
-    Reflect.getMetadata(CALLBACK_DECORATORS, modelCls.prototype ?? modelCls) ??
-    []
-  );
+  const result: PipeCallback[] = [];
+  if (modelCls.prototype) {
+    result.push(
+      ...(Reflect.getMetadata(CALLBACK_DECORATORS, modelCls.prototype) ?? [])
+    );
+  }
+  result.push(...(Reflect.getMetadata(CALLBACK_DECORATORS, modelCls) ?? []));
+  return result;
 }

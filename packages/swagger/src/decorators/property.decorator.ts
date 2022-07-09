@@ -1,4 +1,4 @@
-import { isClass, isUndefined } from "@sfajs/core";
+import { isUndefined } from "@sfajs/core";
 import { PipeReqRecord, PipeReqType } from "@sfajs/pipe";
 import {
   OpenApiBuilder,
@@ -6,10 +6,11 @@ import {
   ParameterObject,
   SchemaObject,
 } from "openapi3-ts";
-import { getPipeRecordModelType } from "../parser/utils/decorator";
-import { pipeTypeToDocType, typeToApiType } from "../parser/utils/doc-types";
-import { ensureModelSchema } from "../parser/utils/model-schema";
 import { createCallbackDecorator } from "./callback.decorator";
+import {
+  dynamicSetValue,
+  getParameterObject,
+} from "./dynamic-set-value.decorator";
 
 export type CreatePropertyCallback = (args: {
   builder: OpenApiBuilder;
@@ -17,7 +18,7 @@ export type CreatePropertyCallback = (args: {
   schema?: SchemaObject;
   parameter?: ParameterObject;
   target: any;
-  propertyKey?: string | symbol;
+  propertyKey?: string;
   parameterIndex?: number;
 }) => void;
 
@@ -33,28 +34,8 @@ export type DecoratorFn = (args: {
   builder: OpenApiBuilder;
 }) => void;
 
-function getParameterObject(
-  propertyKey: string | symbol,
-  pipeRecord: PipeReqRecord,
-  schema: OperationObject
-) {
-  const parameters = schema.parameters as ParameterObject[];
-  const existParameter = parameters.filter((p) => p.name == propertyKey)[0];
-  const parameter = existParameter ?? {
-    name: propertyKey,
-    in: pipeTypeToDocType(pipeRecord.type),
-    required: pipeRecord.type == "param",
-  };
-  if (!existParameter) {
-    parameters.push(parameter);
-  }
-  return parameter;
-}
-
 export function createPropertyCallbackDecorator(cb: CreatePropertyCallback) {
   return createCallbackDecorator((args) => {
-    if (!args.operation) return;
-
     cb({
       target: args.target,
       propertyKey: args.propertyKey,
@@ -62,11 +43,13 @@ export function createPropertyCallbackDecorator(cb: CreatePropertyCallback) {
       builder: args.builder,
       pipeRecord: args.pipeRecord,
       schema: args.schema,
-      parameter: getParameterObject(
-        args.pipeRecord.property ?? (args.propertyKey as string),
-        args.pipeRecord,
-        args.operation
-      ),
+      parameter: args.operation
+        ? getParameterObject(
+            args.pipeRecord.property ?? (args.propertyKey as string),
+            args.pipeRecord,
+            args.operation
+          )
+        : undefined,
     });
   });
 }
@@ -75,66 +58,15 @@ export function createPropertySetValueCallbackDecorator(
   cb: PropertySetValueCallback
 ) {
   return createPropertyCallbackDecorator((args: any) => {
-    setPropertyValue(
+    dynamicSetValue({
       cb,
-      args.target,
-      args.propertyKey,
-      args.pipeRecord,
-      args.builder,
-      args.schema,
-      args.operation
-    );
-  });
-}
-
-export function setPropertyValue(
-  cb: PropertySetValueCallback,
-  target: any,
-  propertyKey: string,
-  pipeRecord: PipeReqRecord,
-  builder: OpenApiBuilder,
-  schema?: SchemaObject,
-  operation?: OperationObject | ParameterObject
-) {
-  const property = pipeRecord.property ?? propertyKey;
-  let dict: SchemaObject | ParameterObject = {};
-  if (!isUndefined(schema)) {
-    if (!schema.properties) {
-      schema.properties = {};
-    }
-    if (!schema.properties[property]) {
-      const propertyCls = getPipeRecordModelType(target, pipeRecord);
-      if (isClass(propertyCls)) {
-        ensureModelSchema(builder, propertyCls, pipeRecord);
-        schema.properties[property] = {
-          $ref: `#/components/schemas/${propertyCls.name}`,
-        };
-      } else {
-        schema.properties[property] = {
-          type: typeToApiType(propertyCls),
-          nullable: true,
-        };
-      }
-    }
-    dict = schema.properties[property];
-  }
-
-  if (!isUndefined(operation)) {
-    if (!isUndefined(operation.parameters)) {
-      dict = getParameterObject(
-        propertyKey,
-        pipeRecord,
-        operation as OperationObject
-      );
-    } else {
-    }
-    dict = operation;
-  }
-
-  cb({
-    pipeRecord,
-    schema: dict,
-    builder,
+      target: args.target,
+      propertyKey: args.propertyKey,
+      pipeRecord: args.pipeRecord,
+      builder: args.builder,
+      schema: args.schema,
+      parameter: args.parameter,
+    });
   });
 }
 

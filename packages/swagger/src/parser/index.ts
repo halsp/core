@@ -16,7 +16,6 @@ export class Parser {
   ) {}
 
   public parse(): OpenAPIObject {
-    new ComponentParser(this.builder, this.options).parse();
     new TagsParser(this.routerMap, this.builder).parse();
     new MapParser(this.routerMap, this.builder, this.routerOptions).parse();
 

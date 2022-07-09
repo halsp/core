@@ -6,11 +6,11 @@ import {
   XmlObject,
 } from "openapi3-ts";
 import { ensureModelSchema } from "../parser/utils/model-schema";
+import { dynamicSetValue } from "./dynamic-set-value.decorator";
 import {
   createPropertyCallbackDecorator,
   createPropertySetValueCallbackDecorator,
   isSchema,
-  setPropertyValue,
 } from "./property.decorator";
 
 export function PropertyDescription(description: string) {
@@ -83,17 +83,17 @@ export function PropertyRequired() {
           schema.required = [];
         }
         schema.required.push(property);
-        setPropertyValue(
-          ({ schema: propertySchema }) => {
+        dynamicSetValue({
+          cb: ({ schema: propertySchema }) => {
             delete propertySchema.nullable;
           },
           target,
-          property,
+          propertyKey,
           pipeRecord,
           builder,
           schema,
-          parameter
-        );
+          parameter,
+        });
       }
       if (!isUndefined(parameter)) {
         parameter.required = true;
@@ -121,6 +121,7 @@ export function PropertyBodyArrayType(value: SchemaObject | ObjectConstructor) {
       } else {
         schema.items = value;
       }
+      schema.type = "array";
     }
   );
 }
