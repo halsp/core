@@ -19,7 +19,7 @@ import {
   ApiTags,
   PropertyExamples,
 } from "../../src";
-import { Ignore } from "../../src/decorators";
+import { Ignore, PropertyDescription } from "../../src/decorators";
 
 class TestClassDto {}
 
@@ -90,6 +90,9 @@ class TestDecoratorBodyDto {
 
   @PropertyBodyArrayType(TestClassDto)
   p2!: number[];
+
+  @PropertyDescription("")
+  p3!: TestClassDto;
 }
 
 @Ignore()

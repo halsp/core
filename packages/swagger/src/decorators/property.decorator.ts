@@ -45,7 +45,7 @@ export function createPropertyCallbackDecorator(cb: CreatePropertyCallback) {
       schema: args.schema,
       parameter: args.operation
         ? getParameterObject(
-            args.pipeRecord.property ?? (args.propertyKey as string),
+            args.propertyKey as string,
             args.pipeRecord,
             args.operation
           )

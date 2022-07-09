@@ -14,7 +14,7 @@ export function getPipeRecordModelType(
   } else {
     result = Reflect.getMetadata(
       "design:type",
-      cls.prototype ?? cls,
+      cls.prototype,
       record.propertyKey
     );
   }

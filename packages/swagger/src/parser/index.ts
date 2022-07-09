@@ -4,7 +4,6 @@ import "reflect-metadata";
 import { TagsParser } from "./tags.parser";
 import { MapParser } from "./map.parser";
 import { SwaggerOptions } from "../swagger-options";
-import { ComponentParser } from "./component.parser";
 import { IgnoreParser } from "./ignore.parser";
 
 export class Parser {
