@@ -9,6 +9,7 @@ import {
   SchemaObject,
   XmlObject,
 } from "openapi3-ts";
+import { IGNORE } from "../constant";
 import { ensureModelSchema } from "../parser/utils/model-schema";
 import { createCallbackDecorator } from "./callback.decorator";
 import {
@@ -78,6 +79,12 @@ export function createCommonDecorator(callback: SetCommonValueCallback) {
 export function Description(description: string) {
   return createCommonDecorator(({ schema }) => {
     schema.description = description;
+  });
+}
+
+export function Ignore() {
+  return createCommonDecorator(({ schema }) => {
+    schema[IGNORE] = true;
   });
 }
 

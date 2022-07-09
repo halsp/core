@@ -1,5 +1,5 @@
 import { Body, Header, Query } from "@sfajs/pipe";
-import { Action, HttpPost, HttpPut } from "@sfajs/router";
+import { Action, HttpDelete, HttpPost, HttpPut } from "@sfajs/router";
 import {
   PropertyDefault,
   PropertyPattern,
@@ -97,11 +97,10 @@ class TestDecoratorBodyDto {
   p3!: TestClassDto;
 }
 
-@Ignore()
-@Ignore()
 export class TestDecoratorQueryDto {
-  @PropertyDefault("abc")
-  p1!: string;
+  @Ignore()
+  @PropertyDefault("qqq")
+  q1!: string;
 }
 
 @HttpPost("test")
@@ -133,10 +132,31 @@ export class ParameterDecoratorTest extends Action {
 
     @Description("body constructor 2")
     @Body("bc2")
-    readonly bc2: string
+    readonly bc2: string,
+
+    @Description("body constructor 3")
+    @Ignore()
+    readonly bc3: string
   ) {
     super();
   }
+  async invoke(): Promise<void> {
+    this.ok();
+  }
+}
+
+@Ignore()
+class TestIgnoreTest {
+  @PropertyDefault("p1")
+  p1!: string;
+}
+
+@HttpDelete("test")
+@ApiTags("test")
+export class IgnoreBodyTest extends Action {
+  @Body
+  private readonly b!: TestIgnoreTest;
+
   async invoke(): Promise<void> {
     this.ok();
   }

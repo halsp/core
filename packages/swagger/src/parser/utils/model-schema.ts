@@ -43,4 +43,5 @@ export function ensureModelSchema(
   if (!schema) {
     createModelSchema(builder, modelCls, pipeRecord);
   }
+  return schema;
 }
