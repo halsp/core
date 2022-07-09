@@ -9,10 +9,10 @@ import {
 } from "@sfajs/core";
 import { GlobalPipeItem, LambdaPipe, PipeItem } from ".";
 import { getReqHandler, PipeReqType } from "../pipe-req-type";
-import { PipeReqRecord } from "../pipe-req-record";
-import { GLOBAL_PIPE_BAG, PIPE_RECORDS_METADATA } from "../constant";
+import { GLOBAL_PIPE_BAG } from "../constant";
 import { GlobalPipeType } from "../global-pipe-type";
 import { plainToClass } from "class-transformer";
+import { addPipeRecord } from "../pipe-req-record";
 
 async function execPipes<T extends object = any>(
   ctx: HttpContext,
@@ -57,26 +57,6 @@ async function execPipes<T extends object = any>(
   return value;
 }
 
-function setPipeRecord(
-  type: PipeReqType,
-  pipes: PipeItem[],
-  target: any,
-  propertyKey: string | symbol,
-  parameterIndex?: number,
-  property?: string
-) {
-  const records: PipeReqRecord[] =
-    Reflect.getMetadata(PIPE_RECORDS_METADATA, target) ?? [];
-  records.push({
-    type: type,
-    pipes: pipes,
-    propertyKey: propertyKey,
-    parameterIndex: parameterIndex,
-    property: property,
-  });
-  Reflect.defineMetadata(PIPE_RECORDS_METADATA, records, target);
-}
-
 function getPropertyType(
   target: any,
   propertyKey: string | symbol,
@@ -109,7 +89,7 @@ export function createDecorator(type: PipeReqType, args: any[]) {
       propertyKey: string | symbol,
       parameterIndex?: number
     ) {
-      setPipeRecord(type, pipes, target, propertyKey, parameterIndex, args[0]);
+      addPipeRecord(type, pipes, target, propertyKey, parameterIndex, args[0]);
       const propertyType = getPropertyType(target, propertyKey, parameterIndex);
       createInject(
         async (ctx, parent) => {
@@ -137,7 +117,7 @@ export function createDecorator(type: PipeReqType, args: any[]) {
     };
   } else if (typeof args[1] == "string" || typeof args[2] == "number") {
     const target = typeof args[2] == "number" ? args[0].prototype : args[0];
-    setPipeRecord(type, [], target, args[1], args[2]);
+    addPipeRecord(type, [], target, args[1], args[2]);
     const propertyType = getPropertyType(target, args[1], args[2]);
     createInject(
       async (ctx, parent) =>
@@ -163,7 +143,7 @@ export function createDecorator(type: PipeReqType, args: any[]) {
       propertyKey: string | symbol,
       parameterIndex?: number
     ) {
-      setPipeRecord(type, pipes, target, propertyKey, parameterIndex, args[0]);
+      addPipeRecord(type, pipes, target, propertyKey, parameterIndex, args[0]);
       const propertyType = getPropertyType(target, propertyKey, parameterIndex);
       createInject(
         async (ctx, parent) =>

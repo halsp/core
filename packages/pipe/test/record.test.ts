@@ -1,18 +1,20 @@
 import { HookType, TestStartup } from "@sfajs/core";
-import { PIPE_RECORDS_METADATA } from "../src";
+import { getPipeRecords } from "../src";
 import { expectBody, getTestRequest, TestMiddleware } from "./TestMiddleware";
 
 test("record test", async () => {
   let done = false;
   const startup = new TestStartup(getTestRequest()).useInject();
   startup.hook(HookType.BeforeInvoke, (ctx, md) => {
-    const metadata = Reflect.getMetadata(
-      PIPE_RECORDS_METADATA,
-      md.constructor.prototype
-    );
-    expect(metadata).not.toBeUndefined();
-    expect(Array.isArray(metadata)).toBeTruthy();
-    expect(metadata.length > 0).toBeTruthy();
+    const fn = (cls: any, empty: boolean) => {
+      const metadata = getPipeRecords(cls);
+      expect(Array.isArray(metadata)).toBeTruthy();
+      expect(metadata.length > 0).toBe(!empty);
+    };
+
+    // fn(md, true);
+    fn(md.constructor, false);
+    fn(md.constructor.prototype, false);
     done = true;
   });
   startup.add(TestMiddleware);

@@ -1,6 +1,7 @@
 import { PipeItem } from "./pipes";
 import { PipeReqType } from "./pipe-req-type";
 import { PIPE_RECORDS_METADATA } from "./constant";
+import { isClass } from "@sfajs/core";
 
 export interface PipeReqRecord {
   pipes: PipeItem[];
@@ -10,13 +11,35 @@ export interface PipeReqRecord {
   parameterIndex?: number;
 }
 
-export function getPipeRecords(cls: any) {
-  const result: PipeReqRecord[] = [];
-  if (cls.prototype) {
-    result.push(
-      ...(Reflect.getMetadata(PIPE_RECORDS_METADATA, cls.prototype) ?? [])
-    );
-  }
-  result.push(...(Reflect.getMetadata(PIPE_RECORDS_METADATA, cls) ?? []));
-  return result;
+function getProptotype(target: any) {
+  return isClass(target) ? target.prototype : target;
+}
+
+export function getPipeRecords(target: any) {
+  target = getProptotype(target);
+  return Reflect.getMetadata(PIPE_RECORDS_METADATA, target) ?? [];
+}
+
+function setPipeRecords(target: any, records: PipeReqRecord[]) {
+  target = getProptotype(target);
+  Reflect.defineMetadata(PIPE_RECORDS_METADATA, records, target);
+}
+
+export function addPipeRecord(
+  type: PipeReqType,
+  pipes: PipeItem[],
+  target: any,
+  propertyKey: string | symbol,
+  parameterIndex?: number,
+  property?: string
+) {
+  const records = getPipeRecords(target);
+  records.push({
+    type: type,
+    pipes: pipes,
+    propertyKey: propertyKey,
+    parameterIndex: parameterIndex,
+    property: property,
+  });
+  setPipeRecords(target, records);
 }
