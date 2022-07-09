@@ -46,11 +46,9 @@ class InjectDecoratorParser<T extends object = any> {
       : (this.target.constructor as ObjectConstructor<T>);
     this.obj = isConstructor ? await this.createTargetObject() : this.target;
 
-    const customProps =
-      (Reflect.getMetadata(
-        CUSTOM_METADATA,
-        this.injectConstructor.prototype
-      ) as InjectCustom[]) ?? [];
+    const prototype = this.injectConstructor.prototype;
+    const customProps: InjectCustom[] =
+      Reflect.getMetadata(CUSTOM_METADATA, prototype) ?? [];
     for (const prop of customProps.filter(
       (item) => item.parameterIndex == undefined
     )) {
@@ -59,11 +57,8 @@ class InjectDecoratorParser<T extends object = any> {
       }
     }
 
-    const keyProps =
-      (Reflect.getMetadata(
-        KEY_METADATA,
-        this.injectConstructor.prototype
-      ) as InjectKey[]) ?? [];
+    const keyProps: InjectKey[] =
+      Reflect.getMetadata(KEY_METADATA, prototype) ?? [];
     for (const prop of keyProps.filter(
       (item) => item.parameterIndex == undefined
     )) {
@@ -72,11 +67,8 @@ class InjectDecoratorParser<T extends object = any> {
       }
     }
 
-    const injectProps =
-      (Reflect.getMetadata(
-        PROPERTY_METADATA,
-        this.injectConstructor.prototype
-      ) as (string | symbol)[]) ?? [];
+    const injectProps: (string | symbol)[] =
+      Reflect.getMetadata(PROPERTY_METADATA, prototype) ?? [];
     for (const prop of injectProps) {
       if (this.obj[prop] == undefined) {
         this.obj[prop] = await this.getPropertyValue(prop);
@@ -148,11 +140,11 @@ class InjectDecoratorParser<T extends object = any> {
   }
 
   private async getPropertyValue(property: string | symbol) {
-    const constr = Reflect.getMetadata(
+    const constr: ObjectConstructor<T> = Reflect.getMetadata(
       "design:type",
       this.obj,
       property
-    ) as ObjectConstructor<T>;
+    );
     if (isClass(constr)) {
       return await parseInject(this.ctx, constr);
     } else {
@@ -257,9 +249,10 @@ class InjectDecoratorParser<T extends object = any> {
     arg: ObjectConstructor,
     index: number
   ) {
+    target = target.prototype;
     // custom inject
-    const customProps =
-      (Reflect.getMetadata(CUSTOM_METADATA, target) as InjectCustom[]) ?? [];
+    const customProps: InjectCustom[] =
+      Reflect.getMetadata(CUSTOM_METADATA, target) ?? [];
     const existCustomInject = customProps.filter(
       (prop) => prop.parameterIndex != undefined && prop.parameterIndex == index
     )[0];
@@ -268,8 +261,8 @@ class InjectDecoratorParser<T extends object = any> {
     }
 
     // key inject
-    const keyProps =
-      (Reflect.getMetadata(KEY_METADATA, target) as InjectKey[]) ?? [];
+    const keyProps: InjectKey[] =
+      Reflect.getMetadata(KEY_METADATA, target) ?? [];
     const existParamInject = keyProps.filter(
       (prop) => prop.parameterIndex != undefined && prop.parameterIndex == index
     )[0];
@@ -289,12 +282,12 @@ class InjectDecoratorParser<T extends object = any> {
   private getConstructorArgsTypes<T extends object>(
     target: ObjectConstructor<T>
   ): ObjectConstructor[] {
-    return Reflect.getMetadata(CLASS_METADATA, target) ?? [];
+    return Reflect.getMetadata(CLASS_METADATA, target.prototype) ?? [];
   }
 }
 
 export function isInjectClass<T extends object>(target: ObjectConstructor<T>) {
-  return !!Reflect.getMetadata(CLASS_METADATA, target);
+  return !!Reflect.getMetadata(CLASS_METADATA, target.prototype);
 }
 
 export async function parseInject<T extends object = any>(
