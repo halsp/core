@@ -1,2 +1,3 @@
 export * from "./action.decorator";
-export * from "./property.decorator";
+export * from "./ignore.decorator";
+export * from "./common.decorator";

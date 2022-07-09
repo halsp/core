@@ -12,10 +12,8 @@ import {
   ACTION_METADATA_API_SUMMARY,
   ACTION_METADATA_API_TAGS,
 } from "../constant";
-import {
-  getModelPropertyDecorators,
-  getPipeRecordModelType,
-} from "./utils/decorator";
+import { PipeOperationCallback } from "../decorators/callback.decorator";
+import { getCallbacks, getPipeRecordModelType } from "./utils/decorator";
 import { pipeTypeToDocType } from "./utils/doc-types";
 import { ensureModelSchema } from "./utils/model-schema";
 
@@ -106,7 +104,7 @@ export class MapParser {
     for (const media of jsonTypes) {
       const modelType = getPipeRecordModelType(action, record);
       if (isClass(modelType)) {
-        ensureModelSchema(this.builder, modelType, record.type);
+        ensureModelSchema(this.builder, modelType, record);
         requestBody.content[media] = {
           schema: {
             $ref: `#/components/schemas/${modelType.name}`,
@@ -131,11 +129,11 @@ export class MapParser {
     } else {
       const modelType = getPipeRecordModelType(action, record);
       if (!modelType) return;
-      const decs = getModelPropertyDecorators(modelType);
-      for (const fn of decs) {
-        fn({
-          pipeType: record.type,
-          schema: optObj,
+      const callbacks = getCallbacks(modelType);
+      for (const cb of callbacks) {
+        (cb as PipeOperationCallback)({
+          pipeRecord: record,
+          operation: optObj,
           builder: this.builder,
         });
       }

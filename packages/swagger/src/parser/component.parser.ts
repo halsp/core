@@ -38,7 +38,6 @@ export class ComponentParser {
       return;
     }
 
-    ensureModelSchema(this.builder, cls);
     this.parsePipeReqRecords(cls);
   }
 
@@ -52,7 +51,7 @@ export class ComponentParser {
 
       const modelCls = getPipeRecordModelType(cls, record);
       if (!modelCls) continue;
-      ensureModelSchema(this.builder, modelCls, record.type);
+      ensureModelSchema(this.builder, modelCls, record);
     }
   }
 }

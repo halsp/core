@@ -3,7 +3,7 @@ import { MapItem } from "@sfajs/router";
 import { OpenApiBuilder } from "openapi3-ts";
 import { Parser } from "../src/parser";
 import {
-  getModelPropertyDecorators,
+  getCallbacks,
   getPipeRecordModelType,
 } from "../src/parser/utils/decorator";
 
@@ -38,6 +38,6 @@ test("getPipeRecordModelType error", async () => {
   ).toBeUndefined();
 });
 
-test("getModelPropertyDecorators class", async () => {
-  expect(getModelPropertyDecorators(TestStartup)).toEqual([]);
+test("getCallbacks class", async () => {
+  expect(getCallbacks(TestStartup)).toEqual([]);
 });

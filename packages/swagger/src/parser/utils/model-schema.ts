@@ -1,54 +1,22 @@
-import { isUndefined, ObjectConstructor } from "@sfajs/core";
-import { PipeReqType } from "@sfajs/pipe";
+import { ObjectConstructor } from "@sfajs/core";
+import { PipeReqRecord } from "@sfajs/pipe";
 import { ComponentsObject, OpenApiBuilder, SchemaObject } from "openapi3-ts";
-import { getModelDecorators, getModelPropertyDecorators } from "./decorator";
+import { PipeSchemaCallback } from "../../decorators/callback.decorator";
+import { getCallbacks } from "./decorator";
 
 function createModelPropertySchema(
   builder: OpenApiBuilder,
   modelCls: ObjectConstructor,
-  pipeType: PipeReqType
+  pipeRecord: PipeReqRecord
 ) {
-  const decs = getModelPropertyDecorators(modelCls);
+  const callbacks = getCallbacks(modelCls);
   const schema = getSchema(builder, modelCls);
-  for (const fn of decs) {
-    fn({
-      pipeType,
+  for (const cb of callbacks) {
+    (cb as PipeSchemaCallback)({
+      pipeRecord,
       schema,
       builder,
     });
-  }
-}
-
-function createModelSchema(
-  builder: OpenApiBuilder,
-  modelCls: ObjectConstructor
-) {
-  const decs = getModelDecorators(modelCls);
-  if (!decs.length) {
-    return;
-  }
-
-  const schema = getSchema(builder, modelCls);
-  for (const fn of decs) {
-    fn({
-      schema: schema,
-      builder: builder,
-    });
-  }
-}
-
-export function ensureModelSchema(
-  builder: OpenApiBuilder,
-  modelCls: ObjectConstructor,
-  pipeType?: PipeReqType
-) {
-  const schema = getExistSchema(builder, modelCls.name);
-  if (!schema) {
-    if (isUndefined(pipeType)) {
-      createModelSchema(builder, modelCls);
-    } else {
-      createModelPropertySchema(builder, modelCls, pipeType);
-    }
   }
 }
 
@@ -67,4 +35,15 @@ function getExistSchema(builder: OpenApiBuilder, name: string) {
   const components = builder.getSpec().components as ComponentsObject;
   const schemas = components.schemas as Record<string, SchemaObject>;
   return schemas[name] as SchemaObject;
+}
+
+export function ensureModelSchema(
+  builder: OpenApiBuilder,
+  modelCls: ObjectConstructor,
+  pipeRecord: PipeReqRecord
+) {
+  const schema = getExistSchema(builder, modelCls.name);
+  if (!schema) {
+    createModelPropertySchema(builder, modelCls, pipeRecord);
+  }
 }
