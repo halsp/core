@@ -1,4 +1,4 @@
-import { isUndefined, ObjectConstructor } from "@sfajs/core";
+import { isClass, isUndefined, ObjectConstructor } from "@sfajs/core";
 import { PipeReqRecord } from "@sfajs/pipe";
 import {
   OpenApiBuilder,
@@ -30,6 +30,12 @@ export type PipeParameterCallback = (args: PipeParameterCallbackArgs) => void;
 
 export type PipeCallback = PipeSchemaCallback | PipeOperationCallback;
 
+export type SetValueCallback = (args: {
+  pipeRecord: PipeReqRecord;
+  schema: SchemaObject | ParameterObject | OperationObject;
+  builder: OpenApiBuilder;
+}) => void;
+
 export interface CallbackItem {
   callback: PipeCallback;
   propertyKey?: string;
@@ -54,6 +60,7 @@ export function createCallbackDecorator(
     propertyKey?: string | symbol,
     parameterIndex?: number
   ) {
+    target = getProtoType(target);
     const callbacks: CallbackItem[] =
       Reflect.getMetadata(CALLBACK_DECORATORS, target) ?? [];
     callbacks.push({
@@ -93,13 +100,10 @@ export function getPipeRecordModelType(
   return result;
 }
 
-export function getCallbacks(modelCls: ObjectConstructor): CallbackItem[] {
-  const result: CallbackItem[] = [];
-  if (modelCls.prototype) {
-    result.push(
-      ...(Reflect.getMetadata(CALLBACK_DECORATORS, modelCls.prototype) ?? [])
-    );
-  }
-  result.push(...(Reflect.getMetadata(CALLBACK_DECORATORS, modelCls) ?? []));
-  return result;
+export function getCallbacks(target: any): CallbackItem[] {
+  return Reflect.getMetadata(CALLBACK_DECORATORS, getProtoType(target)) ?? [];
+}
+
+function getProtoType(target: any) {
+  return isClass(target) ? target.prototype : target;
 }

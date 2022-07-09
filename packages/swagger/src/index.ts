@@ -28,7 +28,7 @@ Startup.prototype.useSwagger = function (
 export {
   ApiTags,
   ApiSummary,
-  PropertyDescription,
+  Description,
   PropertyAllowEmptyValue,
   PropertyDeprecated,
   Ignore,

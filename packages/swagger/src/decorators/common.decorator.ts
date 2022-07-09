@@ -1,6 +1,10 @@
 import { isClass, isUndefined, ObjectConstructor } from "@sfajs/core";
+import { PipeReqRecord } from "@sfajs/pipe";
 import {
   ExampleObject,
+  OpenApiBuilder,
+  OperationObject,
+  ParameterObject,
   ParameterStyle,
   SchemaObject,
   XmlObject,
@@ -14,8 +18,65 @@ import {
   isSchema,
 } from "./property.decorator";
 
-export function PropertyDescription(description: string) {
-  return createPropertySetValueCallbackDecorator(({ schema }) => {
+export type SetCommonValueCallback = (args: {
+  pipeRecord: PipeReqRecord;
+  schema: SchemaObject | ParameterObject | OperationObject;
+  builder: OpenApiBuilder;
+}) => void;
+
+export function createCommonDecorator(callback: SetCommonValueCallback) {
+  return createCallbackDecorator(
+    ({
+      target,
+      propertyKey,
+      schema,
+      operation,
+      pipeRecord,
+      builder,
+      parameterIndex,
+    }) => {
+      const property = pipeRecord.property ?? propertyKey;
+      if (!isUndefined(schema)) {
+        if (isUndefined(propertyKey) && isUndefined(parameterIndex)) {
+          callback({
+            pipeRecord,
+            schema,
+            builder,
+          });
+        } else {
+          dynamicSetPropertyValue({
+            cb: ({ schema: propertySchema }) => {
+              callback({
+                pipeRecord,
+                schema: propertySchema,
+                builder,
+              });
+            },
+            target,
+            propertyKey,
+            pipeRecord,
+            builder,
+            schema,
+            operation,
+          });
+        }
+      }
+      if (!isUndefined(operation)) {
+        if (property) {
+          const parameter = getParameterObject(property, pipeRecord, operation);
+          callback({
+            pipeRecord,
+            schema: parameter,
+            builder,
+          });
+        }
+      }
+    }
+  );
+}
+
+export function Description(description: string) {
+  return createCommonDecorator(({ schema }) => {
     schema.description = description;
   });
 }

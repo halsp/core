@@ -4,18 +4,18 @@ import {
   ApiSummary,
   ApiTags,
   PropertyDeprecated,
-  PropertyDescription,
+  Description,
   PropertyRequired,
 } from "../../src";
 
 export class BodyDto {
-  @PropertyDescription("sum")
+  @Description("sum")
   b1?: string;
   b2?: number;
 }
 
 export class HeaderDto {
-  @PropertyDescription("sum")
+  @Description("sum")
   @PropertyRequired()
   h1?: string;
 

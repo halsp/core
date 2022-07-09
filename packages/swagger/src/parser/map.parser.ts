@@ -106,22 +106,30 @@ export class MapParser {
     };
     optObj.requestBody = requestBody;
     for (const media of jsonTypes) {
-      const modelType = getPipeRecordModelType(action, record);
-      if (isClass(modelType)) {
-        ensureModelSchema(this.builder, modelType, record);
-        requestBody.content[media] = {
-          schema: {
-            $ref: `#/components/schemas/${modelType.name}`,
-          },
-        };
-      } else {
-        requestBody.content[media] = requestBody.content[media] ?? {};
-        const schema: SchemaObject = requestBody.content[media].schema ?? {
-          type: "object",
-        };
-        requestBody.content[media].schema = schema;
-        this.execActionCallback(action, record, schema);
-      }
+      this.parseBodyMediaSchema(requestBody, media, action, record);
+    }
+  }
+
+  private parseBodyMediaSchema(
+    requestBody: RequestBodyObject,
+    media: string,
+    action: ObjectConstructor<Action>,
+    record: PipeReqRecord
+  ) {
+    const mediaObj = requestBody.content[media] ?? {};
+    requestBody.content[media] = mediaObj;
+
+    const modelType = getPipeRecordModelType(action, record);
+    if (isClass(modelType)) {
+      ensureModelSchema(this.builder, modelType, record);
+      mediaObj.schema = {
+        $ref: `#/components/schemas/${modelType.name}`,
+      };
+    } else {
+      mediaObj.schema = mediaObj.schema ?? {
+        type: "object",
+      };
+      this.execActionCallback(action, record, mediaObj.schema);
     }
   }
 

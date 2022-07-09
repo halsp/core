@@ -91,14 +91,14 @@ export function getSchemaPropertySchema(
   return schema.properties[property];
 }
 
-export type SetValueCallback = (args: {
+export type SetPropertyValueCallback = (args: {
   pipeRecord: PipeReqRecord;
-  schema: SchemaObject | ParameterObject | OperationObject;
+  schema: SchemaObject | ParameterObject;
   builder: OpenApiBuilder;
 }) => void;
 
 export function dynamicSetPropertyValue(args: {
-  cb: SetValueCallback;
+  cb: SetPropertyValueCallback;
   target: any;
   propertyKey?: string;
   pipeRecord: PipeReqRecord;

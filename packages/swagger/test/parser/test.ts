@@ -5,14 +5,14 @@ import {
   ApiSummary,
   ApiTags,
   PropertyDeprecated,
-  PropertyDescription,
+  Description,
   PropertyRequired,
 } from "../../src";
 
 export class TestEmptyDto {}
 
 export class TestBodyDto {
-  @PropertyDescription("sum")
+  @Description("sum")
   b1?: string;
   @PropertyRequired()
   b2?: number;
@@ -29,7 +29,7 @@ export class TestBodyDto {
 }
 
 export class TestHeaderDto {
-  @PropertyDescription("sum")
+  @Description("sum")
   @PropertyRequired()
   h1?: string;
 

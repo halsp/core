@@ -19,7 +19,7 @@ import {
   ApiTags,
   PropertyExamples,
 } from "../../src";
-import { Ignore, PropertyDescription } from "../../src/decorators";
+import { Ignore, Description } from "../../src/decorators";
 
 class TestClassDto {}
 
@@ -82,17 +82,18 @@ export class TestDecoratorHeaderDto {
   p10!: string;
 }
 
+@Description("dto")
 class TestDecoratorBodyDto {
   @PropertyBodyArrayType({
     type: "number",
   })
-  @PropertyDescription("def")
+  @Description("def")
   p1!: number[];
 
   @PropertyBodyArrayType(TestClassDto)
   p2!: number[];
 
-  @PropertyDescription("abc")
+  @Description("abc")
   p3!: TestClassDto;
 }
 
@@ -122,15 +123,15 @@ export class TestDecorator extends Action {
 @ApiTags("test")
 export class ParameterDecoratorTest extends Action {
   constructor(
-    @PropertyDescription("header constructor")
+    @Description("header constructor")
     @Header("hc")
     readonly hc: string,
 
-    @PropertyDescription("body constructor 1")
+    @Description("body constructor 1")
     @Body("bc1")
     readonly bc1: string,
 
-    @PropertyDescription("body constructor 2")
+    @Description("body constructor 2")
     @Body("bc2")
     readonly bc2: string
   ) {
