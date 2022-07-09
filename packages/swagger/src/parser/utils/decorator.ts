@@ -22,6 +22,8 @@ export function getPipeRecordModelType(
 }
 
 export function getCallbacks(modelCls: ObjectConstructor): PipeCallback[] {
+  console.log((modelCls as any).constructor ?? modelCls);
+
   const result: PipeCallback[] = [];
   if (modelCls.prototype) {
     result.push(

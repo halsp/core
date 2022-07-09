@@ -119,9 +119,9 @@ export class MapParser {
     action: ObjectConstructor<Action>,
     record: PipeReqRecord
   ) {
-    const params = optObj.parameters as ParameterObject[];
     if (record.property) {
-      params.push({
+      const parameters = optObj.parameters as ParameterObject[];
+      parameters.push({
         name: record.property,
         in: pipeTypeToDocType(record.type),
         required: record.type == "param",

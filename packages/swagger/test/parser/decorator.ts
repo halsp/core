@@ -86,12 +86,13 @@ class TestDecoratorBodyDto {
   @PropertyBodyArrayType({
     type: "number",
   })
+  @PropertyDescription("def")
   p1!: number[];
 
   @PropertyBodyArrayType(TestClassDto)
   p2!: number[];
 
-  @PropertyDescription("")
+  @PropertyDescription("abc")
   p3!: TestClassDto;
 }
 
@@ -105,6 +106,11 @@ export class TestDecoratorQueryDto {
 @HttpPost("test")
 @ApiTags("test")
 export class TestDecorator extends Action {
+  constructor(
+    @PropertyDescription("header constructor") @Header("hc") readonly hc: string
+  ) {
+    super();
+  }
   @Header
   private readonly h!: TestDecoratorHeaderDto;
   @Body

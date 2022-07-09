@@ -6,10 +6,11 @@ import {
   XmlObject,
 } from "openapi3-ts";
 import { ensureModelSchema } from "../parser/utils/model-schema";
-import { dynamicSetValue } from "./dynamic-set-value.decorator";
+import { createCallbackDecorator } from "./callback.decorator";
 import {
-  createPropertyCallbackDecorator,
   createPropertySetValueCallbackDecorator,
+  dynamicSetPropertyValue,
+  getParameterObject,
   isSchema,
 } from "./property.decorator";
 
@@ -75,15 +76,15 @@ export function PropertyDeprecated() {
 }
 
 export function PropertyRequired() {
-  return createPropertyCallbackDecorator(
-    ({ target, propertyKey, schema, parameter, pipeRecord, builder }) => {
+  return createCallbackDecorator(
+    ({ target, propertyKey, schema, operation, pipeRecord, builder }) => {
       const property = pipeRecord.property ?? (propertyKey as string);
       if (!isUndefined(schema)) {
         if (!schema.required) {
           schema.required = [];
         }
         schema.required.push(property);
-        dynamicSetValue({
+        dynamicSetPropertyValue({
           cb: ({ schema: propertySchema }) => {
             delete propertySchema.nullable;
           },
@@ -92,11 +93,11 @@ export function PropertyRequired() {
           pipeRecord,
           builder,
           schema,
-          parameter,
+          operation,
         });
       }
-      if (!isUndefined(parameter)) {
-        parameter.required = true;
+      if (!isUndefined(operation)) {
+        getParameterObject(property, pipeRecord, operation).required = true;
       }
     }
   );

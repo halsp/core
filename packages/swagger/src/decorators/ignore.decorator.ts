@@ -1,10 +1,10 @@
 import { IGNORE } from "../constant";
 import { createCallbackDecorator } from "./callback.decorator";
-import { dynamicSetValue } from "./dynamic-set-value.decorator";
+import { dynamicSetPropertyValue } from "./property.decorator";
 
 export function Ignore() {
   return createCallbackDecorator((args) => {
-    dynamicSetValue({
+    dynamicSetPropertyValue({
       cb: ({ schema }) => {
         schema[IGNORE] = true;
       },
