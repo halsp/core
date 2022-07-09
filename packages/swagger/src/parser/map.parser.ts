@@ -1,5 +1,5 @@
 import { isClass, ObjectConstructor } from "@sfajs/core";
-import { PipeReqRecord, PIPE_RECORDS_METADATA } from "@sfajs/pipe";
+import { PipeReqRecord, getPipeRecords } from "@sfajs/pipe";
 import { Action, MapItem, RouterOptions } from "@sfajs/router";
 import {
   OpenApiBuilder,
@@ -7,13 +7,18 @@ import {
   ParameterObject,
   PathItemObject,
   RequestBodyObject,
+  SchemaObject,
 } from "openapi3-ts";
 import {
   ACTION_METADATA_API_SUMMARY,
   ACTION_METADATA_API_TAGS,
 } from "../constant";
-import { PipeOperationCallback } from "../decorators/callback.decorator";
-import { getCallbacks, getPipeRecordModelType } from "./utils/decorator";
+import {
+  getCallbacks,
+  getPipeRecordModelType,
+  PipeOperationCallback,
+  PipeSchemaCallback,
+} from "../decorators/callback.decorator";
 import { pipeTypeToDocType } from "./utils/doc-types";
 import { ensureModelSchema } from "./utils/model-schema";
 
@@ -80,8 +85,7 @@ export class MapParser {
     };
 
     const optObj = pathItem[method];
-    const pipeReqRecords: PipeReqRecord[] =
-      Reflect.getMetadata(PIPE_RECORDS_METADATA, action.prototype) ?? [];
+    const pipeReqRecords = getPipeRecords(action);
 
     for (const record of pipeReqRecords) {
       if (record.type == "body") {
@@ -110,6 +114,13 @@ export class MapParser {
             $ref: `#/components/schemas/${modelType.name}`,
           },
         };
+      } else {
+        requestBody.content[media] = requestBody.content[media] ?? {};
+        const schema: SchemaObject = requestBody.content[media].schema ?? {
+          type: "object",
+        };
+        requestBody.content[media].schema = schema;
+        this.execActionCallback(action, record, schema);
       }
     }
   }
@@ -126,17 +137,46 @@ export class MapParser {
         in: pipeTypeToDocType(record.type),
         required: record.type == "param",
       });
+      this.execActionCallback(action, record, optObj);
     } else {
       const modelType = getPipeRecordModelType(action, record);
       if (!modelType) return;
       const callbacks = getCallbacks(modelType);
       for (const cb of callbacks) {
-        (cb as PipeOperationCallback)({
+        (cb.callback as PipeOperationCallback)({
           pipeRecord: record,
           operation: optObj,
           builder: this.builder,
         });
       }
     }
+  }
+
+  private execActionCallback(
+    action: ObjectConstructor<Action>,
+    pipeRecord: PipeReqRecord,
+    schema: SchemaObject | OperationObject
+  ) {
+    getCallbacks(action)
+      .filter(
+        (cb) =>
+          pipeRecord.propertyKey == cb.propertyKey &&
+          pipeRecord.parameterIndex == cb.parameterIndex
+      )
+      .forEach((cb) => {
+        if (pipeRecord.type == "body") {
+          (cb.callback as PipeSchemaCallback)({
+            pipeRecord: pipeRecord,
+            schema: schema as SchemaObject,
+            builder: this.builder,
+          });
+        } else {
+          (cb.callback as PipeOperationCallback)({
+            pipeRecord: pipeRecord,
+            operation: schema as OperationObject,
+            builder: this.builder,
+          });
+        }
+      });
   }
 }

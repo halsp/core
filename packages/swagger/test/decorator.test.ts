@@ -1,11 +1,11 @@
 import { TestStartup } from "@sfajs/core";
 import { MapItem } from "@sfajs/router";
 import { OpenApiBuilder } from "openapi3-ts";
-import { Parser } from "../src/parser";
 import {
   getCallbacks,
   getPipeRecordModelType,
-} from "../src/parser/utils/decorator";
+} from "../src/decorators/callback.decorator";
+import { Parser } from "../src/parser";
 
 test("decorators", async () => {
   const builder = new OpenApiBuilder();

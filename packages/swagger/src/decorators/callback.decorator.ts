@@ -1,3 +1,4 @@
+import { isUndefined, ObjectConstructor } from "@sfajs/core";
 import { PipeReqRecord } from "@sfajs/pipe";
 import {
   OpenApiBuilder,
@@ -29,6 +30,12 @@ export type PipeParameterCallback = (args: PipeParameterCallbackArgs) => void;
 
 export type PipeCallback = PipeSchemaCallback | PipeOperationCallback;
 
+export interface CallbackItem {
+  callback: PipeCallback;
+  propertyKey?: string;
+  parameterIndex?: number;
+}
+
 export type CreateCallback = (args: {
   builder: OpenApiBuilder;
   pipeRecord: PipeReqRecord;
@@ -47,19 +54,52 @@ export function createCallbackDecorator(
     propertyKey?: string | symbol,
     parameterIndex?: number
   ) {
-    const callbacks: PipeCallback[] =
+    const callbacks: CallbackItem[] =
       Reflect.getMetadata(CALLBACK_DECORATORS, target) ?? [];
-    callbacks.push((args: any) => {
-      cb({
-        target,
-        propertyKey: propertyKey as string,
-        parameterIndex,
-        builder: args.builder,
-        pipeRecord: args.pipeRecord,
-        schema: args.schema,
-        operation: args.operation,
-      });
+    callbacks.push({
+      callback: (args: any) => {
+        cb({
+          target,
+          propertyKey: propertyKey as string,
+          parameterIndex,
+          builder: args.builder,
+          pipeRecord: args.pipeRecord,
+          schema: args.schema,
+          operation: args.operation,
+        });
+      },
+      propertyKey: propertyKey as string,
+      parameterIndex,
     });
     Reflect.defineMetadata(CALLBACK_DECORATORS, callbacks, target);
   };
+}
+
+export function getPipeRecordModelType(
+  cls: ObjectConstructor,
+  record: PipeReqRecord
+): ObjectConstructor | undefined {
+  let result: ObjectConstructor;
+  if (!isUndefined(record.parameterIndex)) {
+    const paramTypes = Reflect.getMetadata("design:paramtypes", cls) ?? [];
+    result = paramTypes[record.parameterIndex];
+  } else {
+    result = Reflect.getMetadata(
+      "design:type",
+      cls.prototype,
+      record.propertyKey
+    );
+  }
+  return result;
+}
+
+export function getCallbacks(modelCls: ObjectConstructor): CallbackItem[] {
+  const result: CallbackItem[] = [];
+  if (modelCls.prototype) {
+    result.push(
+      ...(Reflect.getMetadata(CALLBACK_DECORATORS, modelCls.prototype) ?? [])
+    );
+  }
+  result.push(...(Reflect.getMetadata(CALLBACK_DECORATORS, modelCls) ?? []));
+  return result;
 }

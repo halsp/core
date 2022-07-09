@@ -1,5 +1,5 @@
 import { Body, Header, Query } from "@sfajs/pipe";
-import { Action, HttpPost } from "@sfajs/router";
+import { Action, HttpPost, HttpPut } from "@sfajs/router";
 import {
   PropertyDefault,
   PropertyPattern,
@@ -106,11 +106,6 @@ export class TestDecoratorQueryDto {
 @HttpPost("test")
 @ApiTags("test")
 export class TestDecorator extends Action {
-  constructor(
-    @PropertyDescription("header constructor") @Header("hc") readonly hc: string
-  ) {
-    super();
-  }
   @Header
   private readonly h!: TestDecoratorHeaderDto;
   @Body
@@ -118,6 +113,29 @@ export class TestDecorator extends Action {
   @Query
   private readonly q!: TestDecoratorQueryDto;
 
+  async invoke(): Promise<void> {
+    this.ok();
+  }
+}
+
+@HttpPut("test")
+@ApiTags("test")
+export class ParameterDecoratorTest extends Action {
+  constructor(
+    @PropertyDescription("header constructor")
+    @Header("hc")
+    readonly hc: string,
+
+    @PropertyDescription("body constructor 1")
+    @Body("bc1")
+    readonly bc1: string,
+
+    @PropertyDescription("body constructor 2")
+    @Body("bc2")
+    readonly bc2: string
+  ) {
+    super();
+  }
   async invoke(): Promise<void> {
     this.ok();
   }

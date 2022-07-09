@@ -1,8 +1,10 @@
 import { ObjectConstructor } from "@sfajs/core";
 import { PipeReqRecord } from "@sfajs/pipe";
 import { ComponentsObject, OpenApiBuilder, SchemaObject } from "openapi3-ts";
-import { PipeSchemaCallback } from "../../decorators/callback.decorator";
-import { getCallbacks } from "./decorator";
+import {
+  getCallbacks,
+  PipeSchemaCallback,
+} from "../../decorators/callback.decorator";
 
 function createModelSchema(
   builder: OpenApiBuilder,
@@ -18,7 +20,7 @@ function createModelSchema(
     builder.addSchema(modelCls.name, schema);
   }
   for (const cb of callbacks) {
-    (cb as PipeSchemaCallback)({
+    (cb.callback as PipeSchemaCallback)({
       pipeRecord,
       schema,
       builder,

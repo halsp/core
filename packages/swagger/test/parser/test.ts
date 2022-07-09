@@ -51,6 +51,7 @@ export class TestPost extends Action {
   @Body
   private readonly b!: TestBodyDto;
   @Body("bbb")
+  @PropertyRequired()
   private readonly bbb!: string;
 
   async invoke(): Promise<void> {

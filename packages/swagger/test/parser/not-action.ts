@@ -1,19 +1,8 @@
-import { PipeReqRecord, PIPE_RECORDS_METADATA } from "@sfajs/pipe";
+import { addPipeRecord } from "@sfajs/pipe/dist/pipe-req-record";
 import "reflect-metadata";
 
 function TestPipeDec(target: any, propertyKey: symbol | string) {
-  Reflect.defineMetadata(
-    PIPE_RECORDS_METADATA,
-    [
-      {
-        parameterIndex: 0,
-        pipes: [],
-        propertyKey,
-        type: "header",
-      } as PipeReqRecord,
-    ],
-    target
-  );
+  addPipeRecord("header", [], target, propertyKey, 0);
 }
 
 export function func() {
