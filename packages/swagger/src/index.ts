@@ -31,7 +31,7 @@ export {
   PropertyDescription,
   PropertyAllowEmptyValue,
   PropertyDeprecated,
-  PropertyIgnore,
+  Ignore,
   PropertyRequired,
   PropertyBodyArrayType,
   PropertyExample,

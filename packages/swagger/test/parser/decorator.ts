@@ -2,7 +2,6 @@ import { Body, Header, Query } from "@sfajs/pipe";
 import { Action, HttpPost } from "@sfajs/router";
 import {
   PropertyDefault,
-  PropertyIgnore,
   PropertyPattern,
   PropertyReadOnly,
   PropertyTitle,
@@ -20,7 +19,7 @@ import {
   ApiTags,
   PropertyExamples,
 } from "../../src";
-import { ModelIgnore } from "../../src/decorators/model.decorator";
+import { Ignore } from "../../src/decorators";
 
 class TestClassDto {}
 
@@ -46,7 +45,7 @@ export class TestDecoratorHeaderDto {
   @PropertyWriteOnly()
   p2!: string;
 
-  @PropertyIgnore()
+  @Ignore()
   p3!: string;
 
   @PropertyPropertiesRange({
@@ -93,8 +92,8 @@ class TestDecoratorBodyDto {
   p2!: number[];
 }
 
-@ModelIgnore()
-@ModelIgnore()
+@Ignore()
+@Ignore()
 export class TestDecoratorQueryDto {
   @PropertyDefault("abc")
   p1!: string;

@@ -17,8 +17,8 @@ export type CreatePropertyCallback = (args: {
   schema?: SchemaObject;
   parameter?: ParameterObject;
   target: any;
-  propertyKey: string | symbol;
-  parameterIndex: number;
+  propertyKey?: string | symbol;
+  parameterIndex?: number;
 }) => void;
 
 export type PropertySetValueCallback = (args: {
@@ -63,7 +63,7 @@ export function createPropertyCallbackDecorator(cb: CreatePropertyCallback) {
       pipeRecord: args.pipeRecord,
       schema: args.schema,
       parameter: getParameterObject(
-        args.propertyKey,
+        args.pipeRecord.property ?? (args.propertyKey as string),
         args.pipeRecord,
         args.operation
       ),
@@ -79,7 +79,6 @@ export function createPropertySetValueCallbackDecorator(
       cb,
       args.target,
       args.propertyKey,
-      args.parameterIndex,
       args.pipeRecord,
       args.builder,
       args.schema,
@@ -92,7 +91,6 @@ export function setPropertyValue(
   cb: PropertySetValueCallback,
   target: any,
   propertyKey: string,
-  parameterIndex: number,
   pipeRecord: PipeReqRecord,
   builder: OpenApiBuilder,
   schema?: SchemaObject,

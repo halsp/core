@@ -35,15 +35,17 @@ export type CreateCallback = (args: {
   schema?: SchemaObject;
   operation?: OperationObject;
   target: any;
-  propertyKey: string | symbol;
-  parameterIndex: number;
+  propertyKey?: string | symbol;
+  parameterIndex?: number;
 }) => void;
 
-export function createCallbackDecorator(cb: CreateCallback) {
+export function createCallbackDecorator(
+  cb: CreateCallback
+): ClassDecorator & PropertyDecorator & ParameterDecorator {
   return function (
     target: any,
-    propertyKey: string | symbol,
-    parameterIndex: number
+    propertyKey?: string | symbol,
+    parameterIndex?: number
   ) {
     target = target.proptotype ?? target;
     const callbacks: PipeCallback[] =

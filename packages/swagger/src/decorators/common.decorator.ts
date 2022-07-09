@@ -5,7 +5,6 @@ import {
   SchemaObject,
   XmlObject,
 } from "openapi3-ts";
-import { IGNORE } from "../constant";
 import { ensureModelSchema } from "../parser/utils/model-schema";
 import {
   createPropertyCallbackDecorator,
@@ -50,12 +49,6 @@ export function PropertyPattern(pattern: string) {
   });
 }
 
-export function PropertyIgnore() {
-  return createPropertySetValueCallbackDecorator(({ schema }) => {
-    schema[IGNORE] = true;
-  });
-}
-
 export function PropertyParameterSchema(
   value: SchemaObject | ObjectConstructor
 ) {
@@ -83,15 +76,7 @@ export function PropertyDeprecated() {
 
 export function PropertyRequired() {
   return createPropertyCallbackDecorator(
-    ({
-      target,
-      propertyKey,
-      parameterIndex,
-      schema,
-      parameter,
-      pipeRecord,
-      builder,
-    }) => {
+    ({ target, propertyKey, schema, parameter, pipeRecord, builder }) => {
       const property = pipeRecord.property ?? (propertyKey as string);
       if (!isUndefined(schema)) {
         if (!schema.required) {
@@ -104,7 +89,6 @@ export function PropertyRequired() {
           },
           target,
           property,
-          parameterIndex,
           pipeRecord,
           builder,
           schema,
