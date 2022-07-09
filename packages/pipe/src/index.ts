@@ -18,8 +18,7 @@ export {
   TransformArgs,
 } from "./pipes";
 
-export { PIPE_RECORDS_METADATA } from "./constant";
-export { PipeReqRecord } from "./pipe-req-record";
+export { PipeReqRecord, getPipeRecords } from "./pipe-req-record";
 export { PipeReqType } from "./pipe-req-type";
 
 declare module "@sfajs/core" {
