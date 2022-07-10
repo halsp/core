@@ -17,9 +17,9 @@ export function getActionMetadata<T = any>(
     target = target.constructor as ObjectConstructor<Action>;
   }
 
-  const metadata = Reflect.getMetadata(ACTION_METADATA, target);
+  const metadata = Reflect.getMetadata(ACTION_METADATA, target.prototype);
   if (metadataKey) {
-    return metadata[metadataKey];
+    return metadata ? metadata[metadataKey] : undefined;
   } else {
     return metadata;
   }

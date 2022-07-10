@@ -1,5 +1,6 @@
 import { Request, TestStartup } from "@sfajs/core";
 import "../src";
+import { Action, getActionMetadata } from "../src";
 import "./global";
 
 test("custom metadata", async () => {
@@ -39,4 +40,13 @@ test("set metadata", async () => {
     m1: 1,
   });
   expect(result.status).toBe(200);
+});
+
+class TestAction extends Action {
+  invoke() {
+    this.ok();
+  }
+}
+test("get not exist metadata", async () => {
+  expect(getActionMetadata(TestAction, "not-exist")).toBeUndefined();
 });

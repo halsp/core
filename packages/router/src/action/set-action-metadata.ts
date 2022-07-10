@@ -11,7 +11,7 @@ export function setActionMetadata<T>(
     target = target.constructor as ObjectConstructor<Action>;
   }
 
-  const metadata = Reflect.getMetadata(ACTION_METADATA, target) ?? {};
+  const metadata = Reflect.getMetadata(ACTION_METADATA, target.prototype) ?? {};
   metadata[metadataKey] = metadataValue;
-  Reflect.defineMetadata(ACTION_METADATA, metadata, target);
+  Reflect.defineMetadata(ACTION_METADATA, metadata, target.prototype);
 }

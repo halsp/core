@@ -99,11 +99,12 @@ export default class MapCreater {
     actionName: string,
     action: ObjectConstructor<Action>
   ) {
-    const metadata = Reflect.getMetadata(ACTION_METADATA, action) ?? {};
+    const metadata =
+      Reflect.getMetadata(ACTION_METADATA, action.prototype) ?? {};
 
     const decMethods: MethodItem[] = Reflect.getMetadata(
       ACTION_METHOD_METADATA,
-      action
+      action.prototype
     );
     let mapItem: MapItem;
     if (decMethods) {

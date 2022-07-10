@@ -1,6 +1,6 @@
 {
   "name": "@sfajs/router",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "description": "sfajs 的路由插件",
   "homepage": "https://github.com/sfajs/router",
   "repository": {
@@ -28,11 +28,11 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@sfajs/core": "^1.6.0",
+    "@sfajs/core": "^1.6.1",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "@sfajs/cli-common": "^0.2.6",
+    "@sfajs/cli-common": "^0.2.7",
     "@types/jest": "^28.1.4",
     "@types/node": "^18.0.3",
     "@typescript-eslint/eslint-plugin": "^5.30.5",
