@@ -25,6 +25,15 @@ import {
   Required,
   LengthRange,
   Type,
+  ApiCallback,
+  ApiDeprecated,
+  ApiExternalDocs,
+  ApiDescription,
+  ApiOperationId,
+  ApiSummary,
+  ApiSecurity,
+  ApiResponses,
+  ApiServers,
 } from "../../src/decorators";
 
 class TestClassDto {}
@@ -117,6 +126,25 @@ export class TestDecoratorQueryDto {
 
 @HttpPost("test")
 @ApiTags("test")
+@ApiCallback({
+  cb: {},
+})
+@ApiExternalDocs({
+  url: "https://sfajs.com",
+})
+@ApiDescription("desc")
+@ApiOperationId("opt-id")
+@ApiSummary("test summary")
+@ApiSecurity({ jwt: ["123", "456"] })
+@ApiResponses({
+  "200": {
+    a: 1,
+  },
+})
+@ApiServers({
+  url: "https://sfajs.com",
+  description: "servers",
+})
 export class TestDecorator extends Action {
   @Header
   private readonly h!: TestDecoratorHeaderDto;
@@ -167,6 +195,7 @@ class TestIgnoreTest {
 
 @HttpDelete("test")
 @ApiTags("test")
+@ApiDeprecated()
 export class IgnoreBodyTest extends Action {
   @Body
   private readonly b!: TestIgnoreTest;
