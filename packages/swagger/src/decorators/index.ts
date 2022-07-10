@@ -7,8 +7,9 @@ import {
 } from "openapi3-ts";
 import { IGNORE } from "../constant";
 import { ensureModelSchema } from "../parser/utils/model-schema";
+import { isParameterObject, isSchemaObject } from "./callback-dict-type";
 import { createCallbackDecorator } from "./callback.decorator";
-import { createCommonDecorator, isSchema } from "./common.decorator";
+import { createCommonDecorator } from "./common.decorator";
 import { setPropertyValue } from "./set-property-value";
 
 export * from "./callback.decorator";
@@ -58,18 +59,26 @@ export function Pattern(pattern: string) {
   });
 }
 
-export function ParameterSchema(
+export function Schema(
   value: ((schema: SchemaObject) => SchemaObject | void) | ObjectConstructor
 ) {
   return createCommonDecorator(({ schema, builder, pipeRecord }) => {
-    if (!isSchema(schema)) {
+    if (isParameterObject(schema)) {
       if (isClass(value)) {
         ensureModelSchema(builder, value, pipeRecord);
         schema.schema = {
           $ref: `#/components/schemas/${value.name}`,
         };
       } else {
-        schema.schema = value(schema.schema) ?? schema.schema;
+        schema.schema = value(schema.schema as SchemaObject) ?? schema.schema;
+      }
+    }
+
+    if (isSchemaObject(schema)) {
+      if (isClass(value)) {
+        schema["$ref"] = `#/components/schemas/${value.name}`;
+      } else {
+        schema = value(schema) ?? schema;
       }
     }
   });
@@ -120,7 +129,7 @@ export function Required() {
 
 export function AllowEmptyValue() {
   return createCommonDecorator(({ schema }) => {
-    if (!isSchema(schema)) {
+    if (!isSchemaObject(schema)) {
       schema.allowEmptyValue = true;
     }
   });

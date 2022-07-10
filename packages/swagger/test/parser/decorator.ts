@@ -12,7 +12,7 @@ import {
   PropertiesRange,
   ParameterStyle,
   ArrayType,
-  ParameterSchema,
+  Schema,
   Xml,
   Format,
   Enum,
@@ -69,15 +69,15 @@ export class TestDecoratorHeaderDto {
   p4!: number;
 
   @ParameterStyle("form")
-  @ParameterSchema((schema) => {
+  @Schema((schema) => {
     schema.type = "number";
   })
   p5!: number;
 
-  @ParameterSchema(TestClassDto)
+  @Schema(TestClassDto)
   p6!: TestClassDto;
 
-  @ParameterSchema(() => ({
+  @Schema(() => ({
     type: "number",
   }))
   p7!: string;

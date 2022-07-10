@@ -9,12 +9,6 @@ import {
 import { createCallbackDecorator } from "./callback.decorator";
 import { setPropertyValue } from "./set-property-value";
 
-export function isSchema(
-  schema: SchemaObject | ParameterObject | OperationObject
-) {
-  return isUndefined(schema.in) && isUndefined(schema.parameters);
-}
-
 export type SetCommonValueCallback = (args: {
   pipeRecord: PipeReqRecord;
   schema: SchemaObject | ParameterObject | OperationObject;
