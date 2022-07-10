@@ -4,36 +4,36 @@ import { Action } from "@sfajs/router";
 import {
   ApiSummary,
   ApiTags,
-  Deprecated,
-  Description,
-  Required,
+  DtoDeprecated,
+  DtoDescription,
+  DtoRequired,
 } from "../../src";
 
 export class TestEmptyDto {}
 
 export class TestBodyDto {
-  @Description("sum")
+  @DtoDescription("sum")
   b1?: string;
-  @Required()
+  @DtoRequired()
   b2?: number;
-  @Required()
+  @DtoRequired()
   bigint?: bigint;
-  @Required()
+  @DtoRequired()
   bool?: boolean;
-  @Required()
+  @DtoRequired()
   arr?: string[];
-  @Required()
+  @DtoRequired()
   any?: any;
-  @Required()
+  @DtoRequired()
   date?: Date;
 }
 
 export class TestHeaderDto {
-  @Description("sum")
-  @Required()
+  @DtoDescription("sum")
+  @DtoRequired()
   h1?: string;
 
-  @Deprecated()
+  @DtoDeprecated()
   h2?: number;
 }
 
@@ -51,7 +51,7 @@ export class TestPost extends Action {
   @Body
   private readonly b!: TestBodyDto;
   @Body("bbb")
-  @Required()
+  @DtoRequired()
   private readonly bbb!: string;
 
   async invoke(): Promise<void> {

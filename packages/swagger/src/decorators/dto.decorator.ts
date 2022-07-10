@@ -15,13 +15,13 @@ import { IGNORE } from "../constant";
 import { ensureModelSchema } from "../parser/utils/model-schema";
 import { isParameterObject, isSchemaObject } from "./callback-dict-type";
 
-export type SetModelValueCallback = (args: {
+export type SetDtoValueCallback = (args: {
   pipeRecord: PipeReqRecord;
   schema: SchemaObject | ParameterObject | OperationObject;
   builder: OpenApiBuilder;
 }) => void;
 
-export function createModelDecorator(callback: SetModelValueCallback) {
+export function createDtoDecorator(callback: SetDtoValueCallback) {
   return createCallbackDecorator(
     ({
       target,
@@ -82,52 +82,52 @@ export function createModelDecorator(callback: SetModelValueCallback) {
   );
 }
 
-export function Description(description: string) {
-  return createModelDecorator(({ schema }) => {
+export function DtoDescription(description: string) {
+  return createDtoDecorator(({ schema }) => {
     schema.description = description;
   });
 }
 
-export function Ignore() {
-  return createModelDecorator(({ schema }) => {
+export function DtoIgnore() {
+  return createDtoDecorator(({ schema }) => {
     schema[IGNORE] = true;
   });
 }
 
-export function Default(value: any) {
-  return createModelDecorator(({ schema }) => {
+export function DtoDefault(value: any) {
+  return createDtoDecorator(({ schema }) => {
     schema.default = value;
   });
 }
 
-export function Title(value: string) {
-  return createModelDecorator(({ schema }) => {
+export function DtoTitle(value: string) {
+  return createDtoDecorator(({ schema }) => {
     schema.title = value;
   });
 }
 
-export function ReadOnly() {
-  return createModelDecorator(({ schema }) => {
+export function DtoReadOnly() {
+  return createDtoDecorator(({ schema }) => {
     schema.readOnly = true;
   });
 }
 
-export function WriteOnly() {
-  return createModelDecorator(({ schema }) => {
+export function DtoWriteOnly() {
+  return createDtoDecorator(({ schema }) => {
     schema.writeOnly = true;
   });
 }
 
-export function Pattern(pattern: string) {
-  return createModelDecorator(({ schema }) => {
+export function DtoPattern(pattern: string) {
+  return createDtoDecorator(({ schema }) => {
     schema.pattern = pattern;
   });
 }
 
-export function Schema(
+export function DtoSchema(
   value: ((schema: SchemaObject) => SchemaObject | void) | ObjectConstructor
 ) {
-  return createModelDecorator(({ schema, builder, pipeRecord }) => {
+  return createDtoDecorator(({ schema, builder, pipeRecord }) => {
     if (isParameterObject(schema)) {
       if (isClass(value)) {
         ensureModelSchema(builder, value, pipeRecord);
@@ -149,13 +149,13 @@ export function Schema(
   });
 }
 
-export function Deprecated() {
-  return createModelDecorator(({ schema }) => {
+export function DtoDeprecated() {
+  return createDtoDecorator(({ schema }) => {
     schema.deprecated = true;
   });
 }
 
-export function Required() {
+export function DtoRequired() {
   return createCallbackDecorator(
     ({ target, propertyKey, schema, operation, pipeRecord, builder }) => {
       const property = pipeRecord.property ?? (propertyKey as string);
@@ -192,16 +192,16 @@ export function Required() {
   );
 }
 
-export function AllowEmptyValue() {
-  return createModelDecorator(({ schema }) => {
+export function DtoAllowEmptyValue() {
+  return createDtoDecorator(({ schema }) => {
     if (!isSchemaObject(schema)) {
       schema.allowEmptyValue = true;
     }
   });
 }
 
-export function ArrayType(value: SchemaObject | ObjectConstructor) {
-  return createModelDecorator(({ schema, builder, pipeRecord }) => {
+export function DtoArrayType(value: SchemaObject | ObjectConstructor) {
+  return createDtoDecorator(({ schema, builder, pipeRecord }) => {
     if (isClass(value)) {
       ensureModelSchema(builder, value, pipeRecord);
       schema.items = {
@@ -214,46 +214,46 @@ export function ArrayType(value: SchemaObject | ObjectConstructor) {
   });
 }
 
-export function Example(example: any) {
-  return createModelDecorator(({ schema }) => {
+export function DtoExample(example: any) {
+  return createDtoDecorator(({ schema }) => {
     schema.example = example;
   });
 }
 
-export function Examples(examples: Record<string, ExampleObject>) {
-  return createModelDecorator(({ schema }) => {
+export function DtoExamples(examples: Record<string, ExampleObject>) {
+  return createDtoDecorator(({ schema }) => {
     schema.examples = examples;
   });
 }
 
-export function ParameterStyle(style: ParameterStyle) {
-  return createModelDecorator(({ schema }) => {
+export function DtoParameterStyle(style: ParameterStyle) {
+  return createDtoDecorator(({ schema }) => {
     schema.style = style;
   });
 }
 
-export function NumRange(args: { min?: number; max?: number }) {
-  return createModelDecorator(({ schema }) => {
+export function DtoNumRange(args: { min?: number; max?: number }) {
+  return createDtoDecorator(({ schema }) => {
     schema.minimum = args.min;
     schema.maximum = args.max;
   });
 }
 
-export function PropertiesRange(args: { min?: number; max?: number }) {
-  return createModelDecorator(({ schema }) => {
+export function DtoPropertiesRange(args: { min?: number; max?: number }) {
+  return createDtoDecorator(({ schema }) => {
     schema.minProperties = args.min;
     schema.maxProperties = args.max;
   });
 }
 
-export function LengthRange(args: { min?: number; max?: number }) {
-  return createModelDecorator(({ schema }) => {
+export function DtoLengthRange(args: { min?: number; max?: number }) {
+  return createDtoDecorator(({ schema }) => {
     schema.minLength = args.min;
     schema.maxLength = args.max;
   });
 }
 
-export function Format(
+export function DtoFormat(
   format:
     | "int32"
     | "int64"
@@ -266,12 +266,12 @@ export function Format(
     | "password"
     | string
 ) {
-  return createModelDecorator(({ schema }) => {
+  return createDtoDecorator(({ schema }) => {
     schema.format = format;
   });
 }
 
-export function Type(
+export function DtoType(
   type:
     | "integer"
     | "number"
@@ -281,19 +281,19 @@ export function Type(
     | "null"
     | "array"
 ) {
-  return createModelDecorator(({ schema }) => {
+  return createDtoDecorator(({ schema }) => {
     schema.type = type;
   });
 }
 
-export function Xml(value: XmlObject) {
-  return createModelDecorator(({ schema }) => {
+export function DtoXml(value: XmlObject) {
+  return createDtoDecorator(({ schema }) => {
     schema.xml = value;
   });
 }
 
-export function Enum(...value: any[]) {
-  return createModelDecorator(({ schema }) => {
+export function DtoEnum(...value: any[]) {
+  return createDtoDecorator(({ schema }) => {
     schema.enum = value;
   });
 }

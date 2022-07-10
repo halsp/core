@@ -3,23 +3,23 @@ import { Action, HttpPost } from "@sfajs/router";
 import {
   ApiSummary,
   ApiTags,
-  Deprecated,
-  Description,
-  Required,
+  DtoDeprecated,
+  DtoDescription,
+  DtoRequired,
 } from "../../src";
 
 export class BodyDto {
-  @Description("sum")
+  @DtoDescription("sum")
   b1?: string;
   b2?: number;
 }
 
 export class HeaderDto {
-  @Description("sum")
-  @Required()
+  @DtoDescription("sum")
+  @DtoRequired()
   h1?: string;
 
-  @Deprecated()
+  @DtoDeprecated()
   h2?: number;
 }
 

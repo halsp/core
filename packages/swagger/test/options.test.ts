@@ -1,7 +1,7 @@
-import { SfaRequest, SfaResponse, TestStartup } from "@sfajs/core";
+import { Request, Response, TestStartup } from "@sfajs/core";
 import "../src";
 
-function baseExpect(res: SfaResponse) {
+function baseExpect(res: Response) {
   expect(res.status).toBe(200);
   expect(res.getHeader("content-type")).toBe("text/html");
   expect((res.body as string).startsWith("<!DOCTYPE html>")).toBeTruthy();
@@ -43,7 +43,7 @@ test("builder", async () => {
 
 test("other router", async () => {
   const res = await new TestStartup(
-    new SfaRequest().setPath("/test").setMethod("post")
+    new Request().setPath("/test").setMethod("post")
   )
     .useSwagger()
     .useRouter({
