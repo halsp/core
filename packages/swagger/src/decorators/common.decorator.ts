@@ -15,7 +15,7 @@ export type SetCommonValueCallback = (args: {
   builder: OpenApiBuilder;
 }) => void;
 
-export function createCommonDecorator(callback: SetCommonValueCallback) {
+export function createModelDecorator(callback: SetCommonValueCallback) {
   return createCallbackDecorator(
     ({
       target,

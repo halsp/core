@@ -9,7 +9,7 @@ import { IGNORE } from "../constant";
 import { ensureModelSchema } from "../parser/utils/model-schema";
 import { isParameterObject, isSchemaObject } from "./callback-dict-type";
 import { createCallbackDecorator } from "./callback.decorator";
-import { createCommonDecorator } from "./common.decorator";
+import { createModelDecorator } from "./common.decorator";
 import { setPropertyValue } from "./set-property-value";
 
 export * from "./callback.decorator";
@@ -18,43 +18,43 @@ export * from "./common.decorator";
 export * from "./set-property-value";
 
 export function Description(description: string) {
-  return createCommonDecorator(({ schema }) => {
+  return createModelDecorator(({ schema }) => {
     schema.description = description;
   });
 }
 
 export function Ignore() {
-  return createCommonDecorator(({ schema }) => {
+  return createModelDecorator(({ schema }) => {
     schema[IGNORE] = true;
   });
 }
 
 export function Default(value: any) {
-  return createCommonDecorator(({ schema }) => {
+  return createModelDecorator(({ schema }) => {
     schema.default = value;
   });
 }
 
 export function Title(value: string) {
-  return createCommonDecorator(({ schema }) => {
+  return createModelDecorator(({ schema }) => {
     schema.title = value;
   });
 }
 
 export function ReadOnly() {
-  return createCommonDecorator(({ schema }) => {
+  return createModelDecorator(({ schema }) => {
     schema.readOnly = true;
   });
 }
 
 export function WriteOnly() {
-  return createCommonDecorator(({ schema }) => {
+  return createModelDecorator(({ schema }) => {
     schema.writeOnly = true;
   });
 }
 
 export function Pattern(pattern: string) {
-  return createCommonDecorator(({ schema }) => {
+  return createModelDecorator(({ schema }) => {
     schema.pattern = pattern;
   });
 }
@@ -62,7 +62,7 @@ export function Pattern(pattern: string) {
 export function Schema(
   value: ((schema: SchemaObject) => SchemaObject | void) | ObjectConstructor
 ) {
-  return createCommonDecorator(({ schema, builder, pipeRecord }) => {
+  return createModelDecorator(({ schema, builder, pipeRecord }) => {
     if (isParameterObject(schema)) {
       if (isClass(value)) {
         ensureModelSchema(builder, value, pipeRecord);
@@ -85,7 +85,7 @@ export function Schema(
 }
 
 export function Deprecated() {
-  return createCommonDecorator(({ schema }) => {
+  return createModelDecorator(({ schema }) => {
     schema.deprecated = true;
   });
 }
@@ -128,7 +128,7 @@ export function Required() {
 }
 
 export function AllowEmptyValue() {
-  return createCommonDecorator(({ schema }) => {
+  return createModelDecorator(({ schema }) => {
     if (!isSchemaObject(schema)) {
       schema.allowEmptyValue = true;
     }
@@ -136,7 +136,7 @@ export function AllowEmptyValue() {
 }
 
 export function ArrayType(value: SchemaObject | ObjectConstructor) {
-  return createCommonDecorator(({ schema, builder, pipeRecord }) => {
+  return createModelDecorator(({ schema, builder, pipeRecord }) => {
     if (isClass(value)) {
       ensureModelSchema(builder, value, pipeRecord);
       schema.items = {
@@ -150,39 +150,39 @@ export function ArrayType(value: SchemaObject | ObjectConstructor) {
 }
 
 export function Example(example: any) {
-  return createCommonDecorator(({ schema }) => {
+  return createModelDecorator(({ schema }) => {
     schema.example = example;
   });
 }
 
 export function Examples(examples: Record<string, ExampleObject>) {
-  return createCommonDecorator(({ schema }) => {
+  return createModelDecorator(({ schema }) => {
     schema.examples = examples;
   });
 }
 
 export function ParameterStyle(style: ParameterStyle) {
-  return createCommonDecorator(({ schema }) => {
+  return createModelDecorator(({ schema }) => {
     schema.style = style;
   });
 }
 
 export function NumRange(args: { min?: number; max?: number }) {
-  return createCommonDecorator(({ schema }) => {
+  return createModelDecorator(({ schema }) => {
     schema.minimum = args.min;
     schema.maximum = args.max;
   });
 }
 
 export function PropertiesRange(args: { min?: number; max?: number }) {
-  return createCommonDecorator(({ schema }) => {
+  return createModelDecorator(({ schema }) => {
     schema.minProperties = args.min;
     schema.maxProperties = args.max;
   });
 }
 
 export function LengthRange(args: { min?: number; max?: number }) {
-  return createCommonDecorator(({ schema }) => {
+  return createModelDecorator(({ schema }) => {
     schema.minLength = args.min;
     schema.maxLength = args.max;
   });
@@ -201,7 +201,7 @@ export function Format(
     | "password"
     | string
 ) {
-  return createCommonDecorator(({ schema }) => {
+  return createModelDecorator(({ schema }) => {
     schema.format = format;
   });
 }
@@ -216,19 +216,19 @@ export function Type(
     | "null"
     | "array"
 ) {
-  return createCommonDecorator(({ schema }) => {
+  return createModelDecorator(({ schema }) => {
     schema.type = type;
   });
 }
 
 export function Xml(value: XmlObject) {
-  return createCommonDecorator(({ schema }) => {
+  return createModelDecorator(({ schema }) => {
     schema.xml = value;
   });
 }
 
 export function Enum(...value: any[]) {
-  return createCommonDecorator(({ schema }) => {
+  return createModelDecorator(({ schema }) => {
     schema.enum = value;
   });
 }

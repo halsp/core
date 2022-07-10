@@ -40,7 +40,7 @@ export {
   SetPropertyValueCallback,
   createCallbackDecorator,
   CreateCallback,
-  createCommonDecorator,
+  createModelDecorator,
   SetCommonValueCallback,
   Description,
   AllowEmptyValue,
