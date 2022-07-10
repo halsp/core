@@ -114,6 +114,7 @@ export function setPropertyValue(args: {
   } else if (!isUndefined(operation)) {
     // operation -> parameter
     dict = getParameterObject(property, pipeRecord, operation);
+    dict.schema = dict.schema ?? {};
   }
 
   cb({

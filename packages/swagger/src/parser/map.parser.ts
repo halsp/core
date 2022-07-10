@@ -9,10 +9,8 @@ import {
   RequestBodyObject,
   SchemaObject,
 } from "openapi3-ts";
-import {
-  ACTION_METADATA_API_SUMMARY,
-  ACTION_METADATA_API_TAGS,
-} from "../constant";
+import { ACTION_DECORATORS } from "../constant";
+import { ActionCallback } from "../decorators";
 import {
   getCallbacks,
   getPipeRecordModelType,
@@ -77,23 +75,30 @@ export class MapParser {
     mapItem: MapItem,
     action: ObjectConstructor<Action>
   ) {
-    pathItem[method] = {
-      tags: mapItem[ACTION_METADATA_API_TAGS] ?? [],
-      summary: mapItem[ACTION_METADATA_API_SUMMARY],
+    const operation = {
       responses: {},
       parameters: [],
     };
+    pathItem[method] = operation;
+    this.execActionDecoratorCallback(mapItem, operation);
 
-    const optObj = pathItem[method];
     const pipeReqRecords = getPipeRecords(action);
 
     for (const record of pipeReqRecords) {
       if (record.type == "body") {
-        this.parseBody(optObj, action, record);
+        this.parseBody(operation, action, record);
       } else {
-        this.parseParam(optObj, action, record);
+        this.parseParam(operation, action, record);
       }
     }
+  }
+
+  private execActionDecoratorCallback(
+    mapItem: MapItem,
+    operation: OperationObject
+  ) {
+    const cbs: ActionCallback[] = mapItem[ACTION_DECORATORS] ?? [];
+    cbs.forEach((cb) => cb(operation));
   }
 
   private parseBody(

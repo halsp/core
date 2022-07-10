@@ -1,6 +1,7 @@
 import { MapItem } from "@sfajs/router";
-import { OpenApiBuilder, TagObject } from "openapi3-ts";
-import { ACTION_METADATA_API_TAGS } from "../constant";
+import { OpenApiBuilder, OperationObject, TagObject } from "openapi3-ts";
+import { ACTION_DECORATORS } from "../constant";
+import { ActionCallback } from "../decorators";
 
 export class TagsParser {
   constructor(
@@ -13,7 +14,12 @@ export class TagsParser {
     this.builder.getSpec().tags = tags;
 
     this.routerMap.forEach((mapItem) => {
-      const actionTags: string[] = mapItem[ACTION_METADATA_API_TAGS] ?? [];
+      const operation: OperationObject = {
+        responses: {},
+      };
+      const actionCbs: ActionCallback[] = mapItem[ACTION_DECORATORS] ?? [];
+      actionCbs.forEach((cb) => cb(operation));
+      const actionTags = operation.tags ?? [];
       actionTags.forEach((tag) => {
         if (!tags.some((t) => t.name == tag)) {
           this.builder.addTag({

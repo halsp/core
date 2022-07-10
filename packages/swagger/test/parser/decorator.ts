@@ -1,7 +1,7 @@
 import { Body, Header, Query } from "@sfajs/pipe";
 import { Action, HttpDelete, HttpPost, HttpPut } from "@sfajs/router";
 import {
-  Defaul,
+  Default,
   Pattern,
   ReadOnly,
   Title,
@@ -19,12 +19,18 @@ import {
   ApiTags,
   Examples,
 } from "../../src";
-import { Ignore, Description, Required } from "../../src/decorators";
+import {
+  Ignore,
+  Description,
+  Required,
+  LengthRange,
+  Type,
+} from "../../src/decorators";
 
 class TestClassDto {}
 
 export class TestDecoratorHeaderDto {
-  @Defaul("abc")
+  @Default("abc")
   @Title("title")
   @ReadOnly()
   @Pattern("^[a-z]$")
@@ -43,6 +49,10 @@ export class TestDecoratorHeaderDto {
     },
   })
   @WriteOnly()
+  @LengthRange({
+    min: 10,
+    max: 20,
+  })
   p2!: string;
 
   @Ignore()
@@ -59,23 +69,24 @@ export class TestDecoratorHeaderDto {
   p4!: number;
 
   @ParameterStyle("form")
-  @ParameterSchema({
-    type: "number",
+  @ParameterSchema((schema) => {
+    schema.type = "number";
   })
   p5!: number;
 
   @ParameterSchema(TestClassDto)
   p6!: TestClassDto;
 
-  @ParameterSchema({
+  @ParameterSchema(() => ({
     type: "number",
-  })
+  }))
   p7!: string;
 
   @Xml({})
   p8!: string;
 
   @Format("int64")
+  @Type("number")
   p9!: string;
 
   @Enum("abc", "def")
@@ -100,7 +111,7 @@ class TestDecoratorBodyDto {
 
 export class TestDecoratorQueryDto {
   @Ignore()
-  @Defaul("qqq")
+  @Default("qqq")
   q1!: string;
 }
 
@@ -150,7 +161,7 @@ export class ParameterDecoratorTest extends Action {
 
 @Ignore()
 class TestIgnoreTest {
-  @Defaul("p1")
+  @Default("p1")
   p1!: string;
 }
 

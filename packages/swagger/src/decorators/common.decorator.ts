@@ -59,10 +59,15 @@ export function createCommonDecorator(callback: SetCommonValueCallback) {
 
       if (!isUndefined(operation)) {
         setPropertyValue({
-          cb: ({ schema: propertySchema }) => {
+          cb: ({ schema: parameter }) => {
             callback({
               pipeRecord,
-              schema: propertySchema,
+              schema: parameter,
+              builder,
+            });
+            callback({
+              pipeRecord,
+              schema: parameter.schema,
               builder,
             });
           },

@@ -1,13 +1,29 @@
-import { SetActionMetadata } from "@sfajs/router";
-import {
-  ACTION_METADATA_API_TAGS,
-  ACTION_METADATA_API_SUMMARY,
-} from "../constant";
+import { getActionMetadata, setActionMetadata } from "@sfajs/router";
+import { OperationObject } from "openapi3-ts";
+import { ACTION_DECORATORS } from "../constant";
+
+export type ActionCallback = (operation: OperationObject) => void;
+
+export function createActionDecorator(cb: ActionCallback) {
+  return function (target: any) {
+    const cbs =
+      getActionMetadata<ActionCallback[]>(
+        target.prototype,
+        ACTION_DECORATORS
+      ) ?? [];
+    cbs.push(cb);
+    setActionMetadata(target.prototype, ACTION_DECORATORS, cbs);
+  };
+}
 
 export function ApiTags(...tags: string[]) {
-  return SetActionMetadata(ACTION_METADATA_API_TAGS, tags);
+  return createActionDecorator((operation) => {
+    operation.tags = tags;
+  });
 }
 
 export function ApiSummary(summary: string) {
-  return SetActionMetadata(ACTION_METADATA_API_SUMMARY, summary);
+  return createActionDecorator((operation) => {
+    operation.summary = summary;
+  });
 }

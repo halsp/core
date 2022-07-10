@@ -1,9 +1,6 @@
 import { MapItem } from "@sfajs/router";
 import { OpenApiBuilder } from "openapi3-ts";
-import {
-  ACTION_METADATA_API_SUMMARY,
-  ACTION_METADATA_API_TAGS,
-} from "../src/constant";
+import { ACTION_DECORATORS } from "../src/constant";
 import { Parser } from "../src/parser";
 import { SwaggerOptions } from "../src/swagger-options";
 
@@ -41,8 +38,14 @@ test("map parser", async () => {
     new MapItem("test.ts", "TestPost", "test2", ["post"]),
     new MapItem("test.ts", "TestGet", "test2", ["get"]),
   ];
-  mapItems[0][ACTION_METADATA_API_TAGS] = ["test"];
-  mapItems[0][ACTION_METADATA_API_SUMMARY] = "test summary";
+  mapItems[0][ACTION_DECORATORS] = [
+    (opt) => {
+      opt.tags = ["test"];
+    },
+    (opt) => {
+      opt.summary = ["test summary"];
+    },
+  ];
   const doc = runParserTest(mapItems);
   expect(Object.hasOwn(doc["paths"]["/test1"], "post")).toBeTruthy();
 });
@@ -56,11 +59,11 @@ test("default", async () => {
 test("not action func", async () => {
   const mapItems = [new MapItem("not-action.ts", "func", "err", ["get"])];
   const doc = runParserTest(mapItems);
-  expect(doc["paths"]["/err"]["get"]["tags"]).toEqual([]);
+  expect(doc["paths"]["/err"]["get"]["tags"]).toBeUndefined();
 });
 
 test("error pipe records", async () => {
   const mapItems = [new MapItem("not-action.ts", "TestClass", "err", ["get"])];
   const doc = runParserTest(mapItems);
-  expect(doc["paths"]["/err"]["get"]["tags"]).toEqual([]);
+  expect(doc["paths"]["/err"]["get"]["tags"]).toBeUndefined();
 });

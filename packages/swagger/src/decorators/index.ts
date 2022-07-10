@@ -28,7 +28,7 @@ export function Ignore() {
   });
 }
 
-export function Defaul(value: any) {
+export function Default(value: any) {
   return createCommonDecorator(({ schema }) => {
     schema.default = value;
   });
@@ -58,7 +58,9 @@ export function Pattern(pattern: string) {
   });
 }
 
-export function ParameterSchema(value: SchemaObject | ObjectConstructor) {
+export function ParameterSchema(
+  value: ((schema: SchemaObject) => SchemaObject | void) | ObjectConstructor
+) {
   return createCommonDecorator(({ schema, builder, pipeRecord }) => {
     if (!isSchema(schema)) {
       if (isClass(value)) {
@@ -67,7 +69,7 @@ export function ParameterSchema(value: SchemaObject | ObjectConstructor) {
           $ref: `#/components/schemas/${value.name}`,
         };
       } else {
-        schema.schema = value;
+        schema.schema = value(schema.schema) ?? schema.schema;
       }
     }
   });
@@ -101,8 +103,9 @@ export function Required() {
       }
       if (!isUndefined(operation)) {
         setPropertyValue({
-          cb: ({ schema: propertySchema }) => {
-            propertySchema.required = true;
+          cb: ({ schema: parameter }) => {
+            parameter.required = true;
+            parameter.schema.required = true;
           },
           target,
           propertyKey,

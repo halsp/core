@@ -44,7 +44,7 @@ export {
   Example,
   ParameterSchema,
   ParameterStyle,
-  Defaul,
+  Default,
   NumRange,
   Pattern,
   PropertiesRange,
