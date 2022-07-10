@@ -4,9 +4,9 @@ import { Action } from "@sfajs/router";
 import {
   ApiSummary,
   ApiTags,
-  PropertyDeprecated,
+  Deprecated,
   Description,
-  PropertyRequired,
+  Required,
 } from "../../src";
 
 export class TestEmptyDto {}
@@ -14,26 +14,26 @@ export class TestEmptyDto {}
 export class TestBodyDto {
   @Description("sum")
   b1?: string;
-  @PropertyRequired()
+  @Required()
   b2?: number;
-  @PropertyRequired()
+  @Required()
   bigint?: bigint;
-  @PropertyRequired()
+  @Required()
   bool?: boolean;
-  @PropertyRequired()
+  @Required()
   arr?: string[];
-  @PropertyRequired()
+  @Required()
   any?: any;
-  @PropertyRequired()
+  @Required()
   date?: Date;
 }
 
 export class TestHeaderDto {
   @Description("sum")
-  @PropertyRequired()
+  @Required()
   h1?: string;
 
-  @PropertyDeprecated()
+  @Deprecated()
   h2?: number;
 }
 
@@ -51,7 +51,7 @@ export class TestPost extends Action {
   @Body
   private readonly b!: TestBodyDto;
   @Body("bbb")
-  @PropertyRequired()
+  @Required()
   private readonly bbb!: string;
 
   async invoke(): Promise<void> {

@@ -3,9 +3,9 @@ import { Action, HttpPost } from "@sfajs/router";
 import {
   ApiSummary,
   ApiTags,
-  PropertyDeprecated,
+  Deprecated,
   Description,
-  PropertyRequired,
+  Required,
 } from "../../src";
 
 export class BodyDto {
@@ -16,10 +16,10 @@ export class BodyDto {
 
 export class HeaderDto {
   @Description("sum")
-  @PropertyRequired()
+  @Required()
   h1?: string;
 
-  @PropertyDeprecated()
+  @Deprecated()
   h2?: number;
 }
 

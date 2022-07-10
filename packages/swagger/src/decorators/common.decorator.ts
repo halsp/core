@@ -12,20 +12,19 @@ import {
 import { IGNORE } from "../constant";
 import { ensureModelSchema } from "../parser/utils/model-schema";
 import { createCallbackDecorator } from "./callback.decorator";
-import {
-  createPropertySetValueCallbackDecorator,
-  dynamicSetPropertyValue,
-  getParameterObject,
-  isSchema,
-} from "./property.decorator";
+import { setPropertyValue } from "./set-property-value";
 
-export type SetCommonValueCallback = (args: {
+function isSchema(schema: SchemaObject | ParameterObject) {
+  return isUndefined(schema.in);
+}
+
+type SetCommonValueCallback = (args: {
   pipeRecord: PipeReqRecord;
   schema: SchemaObject | ParameterObject | OperationObject;
   builder: OpenApiBuilder;
 }) => void;
 
-export function createCommonDecorator(callback: SetCommonValueCallback) {
+function createCommonDecorator(callback: SetCommonValueCallback) {
   return createCallbackDecorator(
     ({
       target,
@@ -36,7 +35,6 @@ export function createCommonDecorator(callback: SetCommonValueCallback) {
       builder,
       parameterIndex,
     }) => {
-      const property = pipeRecord.property ?? propertyKey;
       if (!isUndefined(schema)) {
         if (isUndefined(propertyKey) && isUndefined(parameterIndex)) {
           callback({
@@ -45,7 +43,7 @@ export function createCommonDecorator(callback: SetCommonValueCallback) {
             builder,
           });
         } else {
-          dynamicSetPropertyValue({
+          setPropertyValue({
             cb: ({ schema: propertySchema }) => {
               callback({
                 pipeRecord,
@@ -58,19 +56,25 @@ export function createCommonDecorator(callback: SetCommonValueCallback) {
             pipeRecord,
             builder,
             schema,
-            operation,
           });
         }
       }
+
       if (!isUndefined(operation)) {
-        if (property) {
-          const parameter = getParameterObject(property, pipeRecord, operation);
-          callback({
-            pipeRecord,
-            schema: parameter,
-            builder,
-          });
-        }
+        setPropertyValue({
+          cb: ({ schema: propertySchema }) => {
+            callback({
+              pipeRecord,
+              schema: propertySchema,
+              builder,
+            });
+          },
+          target,
+          propertyKey,
+          pipeRecord,
+          builder,
+          operation,
+        });
       }
     }
   );
@@ -88,62 +92,58 @@ export function Ignore() {
   });
 }
 
-export function PropertyDefault(value: any) {
-  return createPropertySetValueCallbackDecorator(({ schema }) => {
+export function Defaul(value: any) {
+  return createCommonDecorator(({ schema }) => {
     schema.default = value;
   });
 }
 
-export function PropertyTitle(value: string) {
-  return createPropertySetValueCallbackDecorator(({ schema }) => {
+export function Title(value: string) {
+  return createCommonDecorator(({ schema }) => {
     schema.title = value;
   });
 }
 
-export function PropertyReadOnly() {
-  return createPropertySetValueCallbackDecorator(({ schema }) => {
+export function ReadOnly() {
+  return createCommonDecorator(({ schema }) => {
     schema.readOnly = true;
   });
 }
 
-export function PropertyWriteOnly() {
-  return createPropertySetValueCallbackDecorator(({ schema }) => {
+export function WriteOnly() {
+  return createCommonDecorator(({ schema }) => {
     schema.writeOnly = true;
   });
 }
 
-export function PropertyPattern(pattern: string) {
-  return createPropertySetValueCallbackDecorator(({ schema }) => {
+export function Pattern(pattern: string) {
+  return createCommonDecorator(({ schema }) => {
     schema.pattern = pattern;
   });
 }
 
-export function PropertyParameterSchema(
-  value: SchemaObject | ObjectConstructor
-) {
-  return createPropertySetValueCallbackDecorator(
-    ({ schema, builder, pipeRecord }) => {
-      if (!isSchema(schema)) {
-        if (isClass(value)) {
-          ensureModelSchema(builder, value, pipeRecord);
-          schema.schema = {
-            $ref: `#/components/schemas/${value.name}`,
-          };
-        } else {
-          schema.schema = value;
-        }
+export function ParameterSchema(value: SchemaObject | ObjectConstructor) {
+  return createCommonDecorator(({ schema, builder, pipeRecord }) => {
+    if (!isSchema(schema)) {
+      if (isClass(value)) {
+        ensureModelSchema(builder, value, pipeRecord);
+        schema.schema = {
+          $ref: `#/components/schemas/${value.name}`,
+        };
+      } else {
+        schema.schema = value;
       }
     }
-  );
+  });
 }
 
-export function PropertyDeprecated() {
-  return createPropertySetValueCallbackDecorator(({ schema }) => {
+export function Deprecated() {
+  return createCommonDecorator(({ schema }) => {
     schema.deprecated = true;
   });
 }
 
-export function PropertyRequired() {
+export function Required() {
   return createCallbackDecorator(
     ({ target, propertyKey, schema, operation, pipeRecord, builder }) => {
       const property = pipeRecord.property ?? (propertyKey as string);
@@ -152,7 +152,7 @@ export function PropertyRequired() {
           schema.required = [];
         }
         schema.required.push(property);
-        dynamicSetPropertyValue({
+        setPropertyValue({
           cb: ({ schema: propertySchema }) => {
             delete propertySchema.nullable;
           },
@@ -161,73 +161,79 @@ export function PropertyRequired() {
           pipeRecord,
           builder,
           schema,
-          operation,
         });
       }
       if (!isUndefined(operation)) {
-        getParameterObject(property, pipeRecord, operation).required = true;
+        setPropertyValue({
+          cb: ({ schema: propertySchema }) => {
+            propertySchema.required = true;
+          },
+          target,
+          propertyKey,
+          pipeRecord,
+          builder,
+          operation,
+        });
       }
     }
   );
 }
 
-export function PropertyAllowEmptyValue() {
-  return createPropertySetValueCallbackDecorator(({ schema }) => {
+export function AllowEmptyValue() {
+  return createCommonDecorator(({ schema }) => {
     if (!isSchema(schema)) {
       schema.allowEmptyValue = true;
     }
   });
 }
 
-export function PropertyBodyArrayType(value: SchemaObject | ObjectConstructor) {
-  return createPropertySetValueCallbackDecorator(
-    ({ schema, builder, pipeRecord }) => {
-      if (isClass(value)) {
-        ensureModelSchema(builder, value, pipeRecord);
-        schema.items = {
-          $ref: `#/components/schemas/${value.name}`,
-        };
-      } else {
-        schema.items = value;
-      }
-      schema.type = "array";
+export function ArrayType(value: SchemaObject | ObjectConstructor) {
+  return createCommonDecorator(({ schema, builder, pipeRecord }) => {
+    if (isClass(value)) {
+      ensureModelSchema(builder, value, pipeRecord);
+      schema.items = {
+        $ref: `#/components/schemas/${value.name}`,
+      };
+    } else {
+      schema.items = value;
     }
-  );
+    schema.type = "array";
+  });
 }
 
-export function PropertyExample(example: any) {
-  return createPropertySetValueCallbackDecorator(({ schema }) => {
+export function Example(example: any) {
+  return createCommonDecorator(({ schema }) => {
     schema.example = example;
   });
 }
 
-export function PropertyExamples(examples: Record<string, ExampleObject>) {
-  return createPropertySetValueCallbackDecorator(({ schema }) => {
+export function Examples(examples: Record<string, ExampleObject>) {
+  return createCommonDecorator(({ schema }) => {
     schema.examples = examples;
   });
 }
 
-export function PropertyParameterStyle(style: ParameterStyle) {
-  return createPropertySetValueCallbackDecorator(({ schema }) => {
+export function ParameterStyle(style: ParameterStyle) {
+  return createCommonDecorator(({ schema }) => {
     schema.style = style;
   });
 }
 
-export function PropertyNumRange(args: { min?: number; max?: number }) {
-  return createPropertySetValueCallbackDecorator(({ schema }) => {
+export function NumRange(args: { min?: number; max?: number }) {
+  return createCommonDecorator(({ schema }) => {
     schema.minLength = args.min;
     schema.maxLength = args.max;
   });
 }
 
-export function PropertyPropertiesRange(args: { min?: number; max?: number }) {
-  return createPropertySetValueCallbackDecorator(({ schema }) => {
+export function PropertiesRange(args: { min?: number; max?: number }) {
+  return createCommonDecorator(({ schema }) => {
     schema.minProperties = args.min;
     schema.maxProperties = args.max;
   });
 }
 
-export function PropertyFormat(
+export function Format(
   format:
     | "int32"
     | "int64"
@@ -240,19 +246,19 @@ export function PropertyFormat(
     | "password"
     | string
 ) {
-  return createPropertySetValueCallbackDecorator(({ schema }) => {
+  return createCommonDecorator(({ schema }) => {
     schema.format = format;
   });
 }
 
-export function PropertyXml(value: XmlObject) {
-  return createPropertySetValueCallbackDecorator(({ schema }) => {
+export function Xml(value: XmlObject) {
+  return createCommonDecorator(({ schema }) => {
     schema.xml = value;
   });
 }
 
-export function PropertyEnum(...value: any[]) {
-  return createPropertySetValueCallbackDecorator(({ schema }) => {
+export function Enum(...value: any[]) {
+  return createCommonDecorator(({ schema }) => {
     schema.enum = value;
   });
 }

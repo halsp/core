@@ -1,38 +1,38 @@
 import { Body, Header, Query } from "@sfajs/pipe";
 import { Action, HttpDelete, HttpPost, HttpPut } from "@sfajs/router";
 import {
-  PropertyDefault,
-  PropertyPattern,
-  PropertyReadOnly,
-  PropertyTitle,
-  PropertyWriteOnly,
-  PropertyAllowEmptyValue,
-  PropertyExample,
-  PropertyNumRange,
-  PropertyPropertiesRange,
-  PropertyParameterStyle,
-  PropertyBodyArrayType,
-  PropertyParameterSchema,
-  PropertyXml,
-  PropertyFormat,
-  PropertyEnum,
+  Defaul,
+  Pattern,
+  ReadOnly,
+  Title,
+  WriteOnly,
+  AllowEmptyValue,
+  Example,
+  NumRange,
+  PropertiesRange,
+  ParameterStyle,
+  ArrayType,
+  ParameterSchema,
+  Xml,
+  Format,
+  Enum,
   ApiTags,
-  PropertyExamples,
+  Examples,
 } from "../../src";
-import { Ignore, Description } from "../../src/decorators";
+import { Ignore, Description, Required } from "../../src/decorators";
 
 class TestClassDto {}
 
 export class TestDecoratorHeaderDto {
-  @PropertyDefault("abc")
-  @PropertyTitle("title")
-  @PropertyReadOnly()
-  @PropertyPattern("^[a-z]$")
-  @PropertyExample("def")
-  @PropertyAllowEmptyValue()
+  @Defaul("abc")
+  @Title("title")
+  @ReadOnly()
+  @Pattern("^[a-z]$")
+  @Example("def")
+  @AllowEmptyValue()
   p1!: string;
 
-  @PropertyExamples({
+  @Examples({
     abc: {
       description: "abc",
       value: "123",
@@ -42,64 +42,65 @@ export class TestDecoratorHeaderDto {
       value: 456,
     },
   })
-  @PropertyWriteOnly()
+  @WriteOnly()
   p2!: string;
 
   @Ignore()
   p3!: string;
 
-  @PropertyPropertiesRange({
+  @PropertiesRange({
     min: 1,
     max: 10,
   })
-  @PropertyNumRange({
+  @NumRange({
     min: 1,
     max: 10,
   })
   p4!: number;
 
-  @PropertyParameterStyle("form")
-  @PropertyParameterSchema({
+  @ParameterStyle("form")
+  @ParameterSchema({
     type: "number",
   })
   p5!: number;
 
-  @PropertyParameterSchema(TestClassDto)
+  @ParameterSchema(TestClassDto)
   p6!: TestClassDto;
 
-  @PropertyParameterSchema({
+  @ParameterSchema({
     type: "number",
   })
   p7!: string;
 
-  @PropertyXml({})
+  @Xml({})
   p8!: string;
 
-  @PropertyFormat("int64")
+  @Format("int64")
   p9!: string;
 
-  @PropertyEnum("abc", "def")
+  @Enum("abc", "def")
   p10!: string;
 }
 
 @Description("dto")
 class TestDecoratorBodyDto {
-  @PropertyBodyArrayType({
+  @ArrayType({
     type: "number",
   })
   @Description("def")
   p1!: number[];
 
-  @PropertyBodyArrayType(TestClassDto)
+  @ArrayType(TestClassDto)
   p2!: number[];
 
+  @Required()
   @Description("abc")
   p3!: TestClassDto;
 }
 
 export class TestDecoratorQueryDto {
   @Ignore()
-  @PropertyDefault("qqq")
+  @Defaul("qqq")
   q1!: string;
 }
 
@@ -122,6 +123,7 @@ export class TestDecorator extends Action {
 @ApiTags("test")
 export class ParameterDecoratorTest extends Action {
   constructor(
+    @Required()
     @Description("header constructor")
     @Header("hc")
     readonly hc: string,
@@ -130,6 +132,7 @@ export class ParameterDecoratorTest extends Action {
     @Body("bc1")
     readonly bc1: string,
 
+    @Required()
     @Description("body constructor 2")
     @Body("bc2")
     readonly bc2: string,
@@ -147,7 +150,7 @@ export class ParameterDecoratorTest extends Action {
 
 @Ignore()
 class TestIgnoreTest {
-  @PropertyDefault("p1")
+  @Defaul("p1")
   p1!: string;
 }
 

@@ -8,45 +8,8 @@ import {
 } from "openapi3-ts";
 import { pipeTypeToDocType } from "../parser/utils/doc-types";
 import { ensureModelSchema } from "../parser/utils/model-schema";
-import { createCallbackDecorator } from "./callback.decorator";
 
-export type CreatePropertyCallback = (args: {
-  builder: OpenApiBuilder;
-  pipeRecord: PipeReqRecord;
-  schema?: SchemaObject;
-  parameter?: ParameterObject;
-  target: any;
-  propertyKey?: string;
-  parameterIndex?: number;
-}) => void;
-
-export type PropertySetValueCallback = (args: {
-  pipeRecord: PipeReqRecord;
-  schema: SchemaObject | ParameterObject;
-  builder: OpenApiBuilder;
-}) => void;
-
-export function createPropertySetValueCallbackDecorator(
-  cb: PropertySetValueCallback
-) {
-  return createCallbackDecorator((args) => {
-    dynamicSetPropertyValue({
-      cb,
-      target: args.target,
-      propertyKey: args.propertyKey,
-      pipeRecord: args.pipeRecord,
-      builder: args.builder,
-      schema: args.schema,
-      operation: args.operation,
-    });
-  });
-}
-
-export function isSchema(schema: SchemaObject | ParameterObject) {
-  return isUndefined(schema.in);
-}
-
-export function getParameterObject(
+function getParameterObject(
   propertyKey: string,
   pipeRecord: PipeReqRecord,
   schema: OperationObject
@@ -64,7 +27,7 @@ export function getParameterObject(
   return parameter;
 }
 
-export function getSchemaPropertySchema(
+function getSchemaPropertySchema(
   schema: SchemaObject,
   property: string,
   pipeRecord: PipeReqRecord,
@@ -91,13 +54,39 @@ export function getSchemaPropertySchema(
   return schema.properties[property];
 }
 
-export type SetPropertyValueCallback = (args: {
+type SetPropertyValueCallback = (args: {
   pipeRecord: PipeReqRecord;
   schema: SchemaObject | ParameterObject;
   builder: OpenApiBuilder;
 }) => void;
 
-export function dynamicSetPropertyValue(args: {
+function typeToApiType(
+  type?: any
+):
+  | "string"
+  | "number"
+  | "boolean"
+  | "object"
+  | "integer"
+  | "null"
+  | "array"
+  | undefined {
+  if (type == String) {
+    return "string";
+  } else if (type == Number) {
+    return "number";
+  } else if (type == BigInt) {
+    return "integer";
+  } else if (type == Boolean) {
+    return "boolean";
+  } else if (type == Array) {
+    return "array";
+  } else {
+    return "object";
+  }
+}
+
+export function setPropertyValue(args: {
   cb: SetPropertyValueCallback;
   target: any;
   propertyKey?: string;
@@ -132,30 +121,4 @@ export function dynamicSetPropertyValue(args: {
     schema: dict,
     builder,
   });
-}
-
-function typeToApiType(
-  type?: any
-):
-  | "string"
-  | "number"
-  | "boolean"
-  | "object"
-  | "integer"
-  | "null"
-  | "array"
-  | undefined {
-  if (type == String) {
-    return "string";
-  } else if (type == Number) {
-    return "number";
-  } else if (type == BigInt) {
-    return "integer";
-  } else if (type == Boolean) {
-    return "boolean";
-  } else if (type == Array) {
-    return "array";
-  } else {
-    return "object";
-  }
 }
