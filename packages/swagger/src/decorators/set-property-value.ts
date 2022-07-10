@@ -54,7 +54,7 @@ function getSchemaPropertySchema(
   return schema.properties[property];
 }
 
-type SetPropertyValueCallback = (args: {
+export type SetPropertyValueCallback = (args: {
   pipeRecord: PipeReqRecord;
   schema: SchemaObject | ParameterObject;
   builder: OpenApiBuilder;

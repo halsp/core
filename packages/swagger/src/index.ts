@@ -28,6 +28,13 @@ Startup.prototype.useSwagger = function (
 export {
   ApiTags,
   ApiSummary,
+  setPropertyValue,
+  SetPropertyValueCallback,
+  createCallbackDecorator,
+  CreateCallback,
+  createCommonDecorator,
+  SetCommonValueCallback,
+  isSchema,
   Description,
   AllowEmptyValue,
   Deprecated,
