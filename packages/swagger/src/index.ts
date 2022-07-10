@@ -41,7 +41,7 @@ export {
   createCallbackDecorator,
   CreateCallback,
   createModelDecorator,
-  SetCommonValueCallback,
+  SetModelValueCallback,
   Description,
   AllowEmptyValue,
   Deprecated,

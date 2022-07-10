@@ -9,13 +9,13 @@ import {
 import { createCallbackDecorator } from "./callback.decorator";
 import { setPropertyValue } from "./set-property-value";
 
-export type SetCommonValueCallback = (args: {
+export type SetModelValueCallback = (args: {
   pipeRecord: PipeReqRecord;
   schema: SchemaObject | ParameterObject | OperationObject;
   builder: OpenApiBuilder;
 }) => void;
 
-export function createModelDecorator(callback: SetCommonValueCallback) {
+export function createModelDecorator(callback: SetModelValueCallback) {
   return createCallbackDecorator(
     ({
       target,
