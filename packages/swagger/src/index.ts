@@ -57,5 +57,6 @@ export {
   DtoFormat,
   DtoXml,
   DtoExamples,
+  DtoType,
 } from "./decorators";
 export { beforeCompile } from "./before-compile";

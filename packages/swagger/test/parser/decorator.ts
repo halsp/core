@@ -18,8 +18,6 @@ import {
   DtoEnum,
   ApiTags,
   DtoExamples,
-} from "../../src";
-import {
   DtoIgnore,
   DtoDescription,
   DtoRequired,
@@ -34,7 +32,7 @@ import {
   ApiSecurity,
   ApiResponses,
   ApiServers,
-} from "../../src/decorators";
+} from "../../src";
 
 class TestClassDto {}
 
@@ -104,6 +102,11 @@ export class TestDecoratorHeaderDto {
 
 @DtoDescription("dto")
 class TestDecoratorBodyDto {
+  constructor(
+    @DtoDescription("invalid")
+    readonly invalid: string
+  ) {}
+
   @DtoArrayType({
     type: "number",
   })
@@ -178,6 +181,7 @@ export class ParameterDecoratorTest extends Action {
 
     @DtoDescription("body constructor 3")
     @DtoIgnore()
+    @Body("bc3")
     readonly bc3: string
   ) {
     super();

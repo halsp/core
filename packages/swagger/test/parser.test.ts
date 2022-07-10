@@ -1,7 +1,8 @@
 import { MapItem } from "@sfajs/router";
 import { OpenApiBuilder } from "openapi3-ts";
-import { ACTION_DECORATORS } from "../src/constant";
+import { ACTION_DECORATORS, IGNORE } from "../src/constant";
 import { Parser } from "../src/parser";
+import { IgnoreParser } from "../src/parser/ignore.parser";
 import { SwaggerOptions } from "../src/swagger-options";
 
 function runParserTest(
@@ -66,4 +67,19 @@ test("error pipe records", async () => {
   const mapItems = [new MapItem("not-action.ts", "TestClass", "err", ["get"])];
   const doc = runParserTest(mapItems);
   expect(doc["paths"]["/err"]["get"]["tags"]).toBeUndefined();
+});
+
+test("ignore", async () => {
+  const builder = new OpenApiBuilder();
+  const item: any = {};
+  item["$ref"] = `#/components/schemas/testName`;
+  builder.addPath("p", {
+    abc: [item],
+  });
+  const schema = {};
+  schema[IGNORE] = true;
+  builder.addSchema("testName", schema);
+  new IgnoreParser(builder).parse();
+  const doc = builder.getSpec();
+  expect(JSON.stringify(doc).includes("testName")).toBeFalsy();
 });
