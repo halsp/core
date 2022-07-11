@@ -1,4 +1,4 @@
-import { Middleware, Request, TestStartup } from "@sfajs/core";
+import { Middleware, Request, TestStartup } from "@ipare/core";
 import { Body, PipeItem } from "../../src";
 
 function runPipeTest(

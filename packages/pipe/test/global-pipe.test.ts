@@ -1,5 +1,5 @@
-import { Middleware, Request, TestStartup } from "@sfajs/core";
-import { Inject } from "@sfajs/inject";
+import { Middleware, Request, TestStartup } from "@ipare/core";
+import { Inject } from "@ipare/inject";
 import { Header, PipeTransform } from "../src";
 import { GlobalPipeType } from "../src/global-pipe-type";
 

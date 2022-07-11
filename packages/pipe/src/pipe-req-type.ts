@@ -1,4 +1,4 @@
-import { Dict, HttpContext } from "@sfajs/core";
+import { Dict, HttpContext } from "@ipare/core";
 
 export type PipeReqType = "query" | "param" | "header" | "body";
 

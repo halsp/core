@@ -1,5 +1,5 @@
-import { HttpContext, TestStartup } from "@sfajs/core";
-import { parseInject } from "@sfajs/inject";
+import { HttpContext, TestStartup } from "@ipare/core";
+import { parseInject } from "@ipare/inject";
 import "../src";
 import { Context } from "../src";
 import { expectBody, getTestRequest } from "./TestMiddleware";

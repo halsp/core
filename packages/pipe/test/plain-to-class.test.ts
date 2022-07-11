@@ -1,4 +1,4 @@
-import { Middleware, Request, TestStartup } from "@sfajs/core";
+import { Middleware, Request, TestStartup } from "@ipare/core";
 import { Body } from "../src";
 
 test("plain to class", async () => {

@@ -1,4 +1,4 @@
-import { isNull, isNumber, isUndefined } from "@sfajs/core";
+import { isNull, isNumber, isUndefined } from "@ipare/core";
 import { PipeTransform } from "./pipe-transform";
 
 export interface DefaultValuePipeOptions {

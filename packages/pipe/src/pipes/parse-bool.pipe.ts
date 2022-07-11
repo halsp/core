@@ -1,4 +1,4 @@
-import { BadRequestException } from "@sfajs/core";
+import { BadRequestException } from "@ipare/core";
 import { PipeTransform } from "./pipe-transform";
 
 export interface ParseBoolPipeOptions {

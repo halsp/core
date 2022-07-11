@@ -1,4 +1,4 @@
-import { HookType, TestStartup } from "@sfajs/core";
+import { HookType, TestStartup } from "@ipare/core";
 import { getPipeRecords } from "../src";
 import { expectBody, getTestRequest, TestMiddleware } from "./TestMiddleware";
 

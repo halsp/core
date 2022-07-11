@@ -1,4 +1,4 @@
 import "reflect-metadata";
-import { Inject } from "@sfajs/inject";
+import { Inject } from "@ipare/inject";
 
 export const Context = Inject((ctx) => ctx);

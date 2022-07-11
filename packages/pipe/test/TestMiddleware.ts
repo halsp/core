@@ -1,4 +1,4 @@
-import { Middleware, ReadonlyDict, Request } from "@sfajs/core";
+import { Middleware, ReadonlyDict, Request } from "@ipare/core";
 import { Header, Query, Param, Body } from "../src";
 
 export class TestMiddleware extends Middleware {

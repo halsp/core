@@ -1,4 +1,4 @@
-import { HttpContext, ObjectConstructor } from "@sfajs/core";
+import { HttpContext, ObjectConstructor } from "@ipare/core";
 import { PipeItem } from "./pipe";
 
 export interface TransformArgs<T = any, U extends object = any> {

@@ -1,7 +1,7 @@
 import { PipeItem } from "./pipes";
 import { PipeReqType } from "./pipe-req-type";
 import { PIPE_RECORDS_METADATA } from "./constant";
-import { isClass } from "@sfajs/core";
+import { isClass } from "@ipare/core";
 
 export interface PipeReqRecord {
   pipes: PipeItem[];

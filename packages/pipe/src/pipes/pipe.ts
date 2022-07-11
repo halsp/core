@@ -1,5 +1,5 @@
 import { PipeTransform, TransformArgs } from "./pipe-transform";
-import { ObjectConstructor } from "@sfajs/core";
+import { ObjectConstructor } from "@ipare/core";
 import { GlobalPipeType } from "../global-pipe-type";
 
 export type PipeItem<T = any, R = any> =

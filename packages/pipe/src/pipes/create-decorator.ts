@@ -1,12 +1,12 @@
 import "reflect-metadata";
-import { createInject, parseInject } from "@sfajs/inject";
+import { createInject, parseInject } from "@ipare/inject";
 import {
   Dict,
   HttpContext,
   isClass,
   isUndefined,
   ObjectConstructor,
-} from "@sfajs/core";
+} from "@ipare/core";
 import { GlobalPipeItem, LambdaPipe, PipeItem } from ".";
 import { getReqHandler, PipeReqType } from "../pipe-req-type";
 import { GLOBAL_PIPE_BAG } from "../constant";

@@ -1,5 +1,5 @@
-import { TestStartup } from "@sfajs/core";
-import "@sfajs/inject";
+import { TestStartup } from "@ipare/core";
+import "@ipare/inject";
 import "../src";
 import { expectBody, getTestRequest, TestMiddleware } from "./TestMiddleware";
 
