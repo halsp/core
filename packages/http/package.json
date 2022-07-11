@@ -20,7 +20,7 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "sh scripts/build.sh",
-    "deploy:beta": "sh scripts/build.sh && npm publish --tag=beta --access=public",
+    "publish:beta": "sh scripts/build.sh && npm publish --tag=beta --access=public",
     "test": "npm run build && jest",
     "tests": "sh scripts/tests.sh",
     "lint": "eslint src test --ext .ts"
