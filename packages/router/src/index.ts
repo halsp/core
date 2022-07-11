@@ -1,5 +1,5 @@
-import "@sfajs/core";
-import { QueryDict, ReadonlyQueryDict, Startup } from "@sfajs/core";
+import "@ipare/core";
+import { QueryDict, ReadonlyQueryDict, Startup } from "@ipare/core";
 import { Action } from "./action";
 import MapParser from "./map/map-parser";
 import path = require("path");
@@ -40,7 +40,7 @@ export { postbuild } from "./postbuild";
 import "./define-configuration";
 import MapMatcher from "./map/map-matcher";
 
-declare module "@sfajs/core" {
+declare module "@ipare/core" {
   interface Startup {
     useRouter(options?: RouterOptions): this;
     get routerMap(): MapItem[];

@@ -1,5 +1,5 @@
 import "../../src";
-import { TestStartup, Request, HttpContext, HttpMethod } from "@sfajs/core";
+import { TestStartup, Request, HttpContext, HttpMethod } from "@ipare/core";
 import "../global";
 
 test(`find next`, async () => {

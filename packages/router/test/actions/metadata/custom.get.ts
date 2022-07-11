@@ -1,4 +1,4 @@
-import { ObjectConstructor } from "@sfajs/core";
+import { ObjectConstructor } from "@ipare/core";
 import { Action, getActionMetadata, SetActionMetadata } from "../../../src";
 
 const Admin = SetActionMetadata("admin", true);

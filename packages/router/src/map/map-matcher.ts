@@ -1,5 +1,5 @@
 import MapItem from "./map-item";
-import { HttpContext, HttpMethod } from "@sfajs/core";
+import { HttpContext, HttpMethod } from "@ipare/core";
 
 export default class MapMatcher {
   constructor(private readonly ctx: HttpContext) {

@@ -1,5 +1,5 @@
 import { Action } from "../action";
-import { Dict, ObjectConstructor } from "@sfajs/core";
+import { Dict, ObjectConstructor } from "@ipare/core";
 import { ACTION_METADATA } from "../constant";
 
 export function getActionMetadata(

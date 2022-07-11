@@ -1,4 +1,4 @@
-import { Middleware } from "@sfajs/core";
+import { Middleware } from "@ipare/core";
 
 export abstract class Action extends Middleware {}
 

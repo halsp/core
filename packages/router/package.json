@@ -1,20 +1,19 @@
 {
-  "name": "@sfajs/router",
-  "version": "2.1.5",
-  "description": "sfajs 的路由插件",
-  "homepage": "https://github.com/sfajs/router",
+  "name": "@ipare/router",
+  "version": "2.1.6",
+  "description": "Ipare 的路由插件",
+  "homepage": "https://github.com/ipare/router",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sfajs/router"
+    "url": "https://github.com/ipare/router"
   },
   "keywords": [
-    "sfa",
-    "sfajs",
+    "ipare",
     "restful",
     "router"
   ],
   "bugs": {
-    "url": "https://github.com/sfajs/router/issues",
+    "url": "https://github.com/ipare/router/issues",
     "email": "support@hal.wang"
   },
   "main": "dist/index.js",
@@ -28,11 +27,11 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@sfajs/core": "^1.6.1",
+    "@ipare/core": "^1.6.1",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "@sfajs/cli-common": "^0.2.7",
+    "@ipare/cli-common": "^0.2.8",
     "@types/jest": "^28.1.4",
     "@types/node": "^18.0.3",
     "@typescript-eslint/eslint-plugin": "^5.30.5",
@@ -47,14 +46,14 @@
     "typescript": "^4.7.4"
   },
   "peerDependencies": {
-    "@sfajs/cli-common": "0.2.x",
-    "@sfajs/core": "~1"
+    "@ipare/cli-common": "0.2.x",
+    "@ipare/core": "~1"
   },
   "peerDependenciesMeta": {
-    "@sfajs/core": {
+    "@ipare/core": {
       "optional": true
     },
-    "@sfajs/cli-common": {
+    "@ipare/cli-common": {
       "optional": true
     }
   },

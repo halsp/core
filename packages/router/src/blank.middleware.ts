@@ -1,4 +1,4 @@
-import { Middleware } from "@sfajs/core";
+import { Middleware } from "@ipare/core";
 
 export class BlankMiddleware extends Middleware {
   async invoke(): Promise<void> {

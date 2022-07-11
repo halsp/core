@@ -9,4 +9,4 @@ bin
 coverage
 test.json
 
-sfa-router.config
+ipare-router.config

@@ -1,4 +1,4 @@
-import { HttpMethod } from "@sfajs/core";
+import { HttpMethod } from "@ipare/core";
 import "reflect-metadata";
 import { MethodItem } from "../action/method-item";
 import { ACTION_METHOD_METADATA } from "../constant";

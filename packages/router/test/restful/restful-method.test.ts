@@ -1,4 +1,4 @@
-import { TestStartup, Request, HttpMethod } from "@sfajs/core";
+import { TestStartup, Request, HttpMethod } from "@ipare/core";
 import "../../src";
 import "../global";
 

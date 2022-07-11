@@ -1,4 +1,4 @@
-import { normalizePath, ObjectConstructor } from "@sfajs/core";
+import { normalizePath, ObjectConstructor } from "@ipare/core";
 import path from "path";
 import { Action } from "../action";
 

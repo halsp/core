@@ -5,7 +5,7 @@ import {
   Dict,
   TestStartup,
   HttpMethod,
-} from "@sfajs/core";
+} from "@ipare/core";
 import { Action } from "../src";
 import "./global";
 

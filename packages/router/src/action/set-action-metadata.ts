@@ -1,5 +1,5 @@
 import { Action } from "../action";
-import { ObjectConstructor } from "@sfajs/core";
+import { ObjectConstructor } from "@ipare/core";
 import { ACTION_METADATA } from "../constant";
 
 export function setActionMetadata<T>(

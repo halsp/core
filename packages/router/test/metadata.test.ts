@@ -1,4 +1,4 @@
-import { Request, TestStartup } from "@sfajs/core";
+import { Request, TestStartup } from "@ipare/core";
 import "../src";
 import { Action, getActionMetadata } from "../src";
 import "./global";

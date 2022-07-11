@@ -1,6 +1,6 @@
 import { RouterOptions } from "../src";
-import "@sfajs/core";
-import { TestStartup } from "@sfajs/core";
+import "@ipare/core";
+import { TestStartup } from "@ipare/core";
 import "../src";
 
 export const testDir = "test/actions";
@@ -11,7 +11,7 @@ function getDefaultConfig() {
   };
 }
 
-declare module "@sfajs/core" {
+declare module "@ipare/core" {
   interface TestStartup {
     useTestRouter(config?: RouterOptions): this;
   }

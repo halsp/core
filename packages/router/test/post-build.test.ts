@@ -1,6 +1,6 @@
 import { postbuild } from "../src";
 import * as fs from "fs";
-import { Request, TestStartup } from "@sfajs/core";
+import { Request, TestStartup } from "@ipare/core";
 import { CONFIG_FILE_NAME } from "../src/constant";
 
 test("empty config", async () => {
@@ -8,7 +8,7 @@ test("empty config", async () => {
   try {
     await postbuild({
       config: {},
-      cacheDir: ".sfa-cache",
+      cacheDir: ".ipare-cache",
     });
   } catch (err) {
     count++;

@@ -1,5 +1,5 @@
 import "../../src";
-import { TestStartup, Request } from "@sfajs/core";
+import { TestStartup, Request } from "@ipare/core";
 import "../global";
 
 test(`method not allowed`, async () => {

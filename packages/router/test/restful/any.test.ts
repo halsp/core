@@ -1,5 +1,5 @@
 import "../../src";
-import { TestStartup, Request, HttpMethod } from "@sfajs/core";
+import { TestStartup, Request, HttpMethod } from "@ipare/core";
 import "../global";
 
 const methods = ["test", "aaa", "NO"];

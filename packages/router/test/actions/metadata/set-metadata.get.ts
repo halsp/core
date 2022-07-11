@@ -1,4 +1,4 @@
-import { ObjectConstructor } from "@sfajs/core";
+import { ObjectConstructor } from "@ipare/core";
 import {
   Action,
   getActionMetadata,
