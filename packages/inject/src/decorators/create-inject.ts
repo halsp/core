@@ -1,4 +1,4 @@
-import { HttpContext } from "@sfajs/core";
+import { HttpContext } from "@ipare/core";
 import { CUSTOM_METADATA } from "../constant";
 import { InjectType } from "../inject-type";
 import { InjectCustom } from "../interfaces";

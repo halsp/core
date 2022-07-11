@@ -1,4 +1,4 @@
-import { HttpContext } from "@sfajs/core";
+import { HttpContext } from "@ipare/core";
 import { InjectType } from "../inject-type";
 
 export type InjectCustom<T = any> =

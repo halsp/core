@@ -1,4 +1,4 @@
-import { Middleware, Request, TestStartup } from "@sfajs/core";
+import { Middleware, Request, TestStartup } from "@ipare/core";
 import "../src";
 import { Service1, Service2 } from "./services";
 import { Inject, InjectType } from "../src";

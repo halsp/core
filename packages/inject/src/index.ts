@@ -1,12 +1,12 @@
-import "@sfajs/core";
-import { Startup, ObjectConstructor, HttpContext } from "@sfajs/core";
-import { HookType } from "@sfajs/core/dist/middlewares";
+import "@ipare/core";
+import { Startup, ObjectConstructor, HttpContext } from "@ipare/core";
+import { HookType } from "@ipare/core/dist/middlewares";
 import { IS_INJECT_USED, MAP_BAG } from "./constant";
 import { KeyTargetType, InjectMap } from "./interfaces";
 import { isInjectClass, parseInject } from "./inject-parser";
 import { InjectType } from "./inject-type";
 
-declare module "@sfajs/core" {
+declare module "@ipare/core" {
   interface Startup {
     useInject(): this;
 

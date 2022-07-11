@@ -1,4 +1,4 @@
-import { isUndefined, Middleware, Request, TestStartup } from "@sfajs/core";
+import { isUndefined, Middleware, Request, TestStartup } from "@ipare/core";
 import "../../src";
 import { Service1 } from "../services";
 import { Inject, InjectType } from "../../src";

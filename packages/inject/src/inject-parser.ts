@@ -5,7 +5,7 @@ import {
   isString,
   isClass,
   ObjectConstructor,
-} from "@sfajs/core";
+} from "@ipare/core";
 import {
   CLASS_METADATA,
   CUSTOM_METADATA,

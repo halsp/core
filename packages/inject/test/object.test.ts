@@ -1,4 +1,4 @@
-import { HttpContext, TestStartup } from "@sfajs/core";
+import { HttpContext, TestStartup } from "@ipare/core";
 import { InjectType, parseInject } from "../src";
 import "../src";
 

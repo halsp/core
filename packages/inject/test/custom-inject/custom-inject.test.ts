@@ -1,4 +1,4 @@
-import { Middleware, Request, TestStartup } from "@sfajs/core";
+import { Middleware, Request, TestStartup } from "@ipare/core";
 import "../../src";
 import { createInject, Inject } from "../../src";
 
@@ -48,7 +48,7 @@ class TestMiddleware extends Middleware {
 
 test(`custom inject`, async function () {
   const res = await new TestStartup(
-    new Request().setHeader("h1", "1").setHeader("host", "sfa").setBody({
+    new Request().setHeader("h1", "1").setHeader("host", "ipare").setBody({
       b: 2,
     })
   )
@@ -59,7 +59,7 @@ test(`custom inject`, async function () {
   expect(res.body).toEqual({
     headers: {
       h1: "1",
-      host: "sfa",
+      host: "ipare",
     },
     body1: {
       b: 2,
@@ -67,7 +67,7 @@ test(`custom inject`, async function () {
     body2: {
       b: 2,
     },
-    host: "sfa",
+    host: "ipare",
     b: 2,
   });
   expect(res.status).toBe(200);

@@ -1,4 +1,4 @@
-import { HttpContext, isClass, ObjectConstructor } from "@sfajs/core";
+import { HttpContext, isClass, ObjectConstructor } from "@ipare/core";
 import { PROPERTY_METADATA, CLASS_METADATA, KEY_METADATA } from "../constant";
 import { InjectType } from "../inject-type";
 import { InjectKey } from "../interfaces";

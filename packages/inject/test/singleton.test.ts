@@ -1,4 +1,4 @@
-import { Middleware, TestStartup } from "@sfajs/core";
+import { Middleware, TestStartup } from "@ipare/core";
 import { Inject, InjectType } from "../src";
 
 export class Service1 extends Object {

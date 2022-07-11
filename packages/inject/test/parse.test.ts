@@ -1,4 +1,4 @@
-import { TestStartup } from "@sfajs/core";
+import { TestStartup } from "@ipare/core";
 import "../src";
 import { Service2 } from "./services";
 import { parseInject } from "../src";

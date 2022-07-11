@@ -1,4 +1,4 @@
-import { HttpContext, ObjectConstructor } from "@sfajs/core";
+import { HttpContext, ObjectConstructor } from "@ipare/core";
 import { InjectType } from "../inject-type";
 
 export interface InjectMap<T extends object = any, U extends T = any> {
