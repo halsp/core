@@ -25,7 +25,7 @@ jobs:
       - run: npx codecov
 
   publish-npm:
-    if: github.repository == 'sfajs/http'
+    if: github.repository == 'ipare/http'
     needs: test
     runs-on: ubuntu-latest
     steps:

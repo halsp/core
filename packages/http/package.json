@@ -1,21 +1,20 @@
 {
-  "name": "@sfajs/http",
-  "version": "1.2.2",
-  "description": "sfajs 的 http 托管环境",
-  "homepage": "https://github.com/sfajs/http",
+  "name": "@ipare/http",
+  "version": "1.2.3",
+  "description": "Ipare 的 http 托管环境",
+  "homepage": "https://github.com/ipare/http",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sfajs/http"
+    "url": "https://github.com/ipare/http"
   },
   "keywords": [
-    "sfa",
-    "sfajs",
+    "ipare",
     "nodejs-server",
     "http",
     "https"
   ],
   "bugs": {
-    "url": "https://github.com/sfajs/http/issues",
+    "url": "https://github.com/ipare/http/issues",
     "email": "support@hal.wang"
   },
   "main": "dist/index.js",
@@ -29,7 +28,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@sfajs/core": "^1.6.0",
+    "@ipare/core": "^1.6.1",
     "co-body": "^6.1.0",
     "formidable": "^2.0.1",
     "type-is": "^1.6.18",
@@ -59,10 +58,10 @@
     "typescript": "^4.7.4"
   },
   "peerDependencies": {
-    "@sfajs/core": "~1"
+    "@ipare/core": "~1"
   },
   "peerDependenciesMeta": {
-    "@sfajs/core": {
+    "@ipare/core": {
       "optional": true
     }
   },

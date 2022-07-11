@@ -1,7 +1,5 @@
 import * as http from "http";
-import "@sfajs/core";
-import { HttpStartup } from "./http.startup";
-import { HttpsStartup } from "./https.startup";
+import "@ipare/core";
 
 export { HttpStartup } from "./http.startup";
 export { HttpsStartup } from "./https.startup";
@@ -10,19 +8,9 @@ export {
   MultipartBody,
 } from "./http-body-praser.startup";
 
-declare module "@sfajs/core" {
+declare module "@ipare/core" {
   interface HttpContext {
     get httpReq(): http.IncomingMessage;
     get httpRes(): http.ServerResponse;
   }
 }
-
-/**
- * @deprecated use HttpStartup
- */
-export class SfaHttp extends HttpStartup {}
-
-/**
- * @deprecated use HttpsStartup
- */
-export class SfaHttps extends HttpsStartup {}

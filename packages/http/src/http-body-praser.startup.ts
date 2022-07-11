@@ -1,4 +1,4 @@
-import { HttpContext, Startup, StatusCodes } from "@sfajs/core";
+import { HttpContext, Startup, StatusCodes } from "@ipare/core";
 import typeis from "type-is";
 import cobody from "co-body";
 import { IParseOptions } from "qs";

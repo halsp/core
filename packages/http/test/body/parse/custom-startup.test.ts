@@ -1,6 +1,6 @@
 import { HttpBodyPraserStartup } from "../../../src";
 import * as http from "http";
-import { HttpContext, Request, Dict, NumericalHeadersDict } from "@sfajs/core";
+import { HttpContext, Request, Dict, NumericalHeadersDict } from "@ipare/core";
 import urlParse from "url-parse";
 import request from "supertest";
 

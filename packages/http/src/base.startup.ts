@@ -8,7 +8,7 @@ import {
   Dict,
   NumericalHeadersDict,
   isString,
-} from "@sfajs/core";
+} from "@ipare/core";
 import urlParse from "url-parse";
 import { Stream } from "stream";
 
@@ -138,26 +138,26 @@ export abstract class BaseStartup<
       get: () => httpReq,
     });
 
-    const sfaRes = await this.invoke(ctx);
+    const ipareRes = await this.invoke(ctx);
 
     if (!httpRes.writableEnded) {
-      httpRes.statusCode = sfaRes.status;
-      this.#writeHead(sfaRes, httpRes);
-      this.#writeBody(sfaRes, httpRes);
+      httpRes.statusCode = ipareRes.status;
+      this.#writeHead(ipareRes, httpRes);
+      this.#writeBody(ipareRes, httpRes);
     }
   };
 
-  #writeHead(sfaRes: Response, httpRes: http.ServerResponse) {
+  #writeHead(ipareRes: Response, httpRes: http.ServerResponse) {
     if (httpRes.headersSent) return;
-    Object.keys(sfaRes.headers)
-      .filter((key) => !!sfaRes.headers[key])
+    Object.keys(ipareRes.headers)
+      .filter((key) => !!ipareRes.headers[key])
       .forEach((key) => {
-        httpRes.setHeader(key, sfaRes.headers[key] as string | string[]);
+        httpRes.setHeader(key, ipareRes.headers[key] as string | string[]);
       });
   }
 
-  #writeBody(sfaRes: Response, httpRes: http.ServerResponse) {
-    if (!sfaRes.body) {
+  #writeBody(ipareRes: Response, httpRes: http.ServerResponse) {
+    if (!ipareRes.body) {
       if (!httpRes.headersSent) {
         httpRes.removeHeader("Content-Type");
         httpRes.removeHeader("Content-Length");
@@ -166,14 +166,14 @@ export abstract class BaseStartup<
       return;
     }
 
-    if (sfaRes.body instanceof Stream) {
-      sfaRes.body.pipe(httpRes);
-    } else if (Buffer.isBuffer(sfaRes.body)) {
-      httpRes.end(sfaRes.body);
-    } else if (isString(sfaRes.body)) {
-      httpRes.end(sfaRes.body);
+    if (ipareRes.body instanceof Stream) {
+      ipareRes.body.pipe(httpRes);
+    } else if (Buffer.isBuffer(ipareRes.body)) {
+      httpRes.end(ipareRes.body);
+    } else if (isString(ipareRes.body)) {
+      httpRes.end(ipareRes.body);
     } else {
-      httpRes.end(JSON.stringify(sfaRes.body));
+      httpRes.end(JSON.stringify(ipareRes.body));
     }
   }
 }
