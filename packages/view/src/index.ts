@@ -1,5 +1,5 @@
-import "@sfajs/core";
-import { Startup, HttpContext, ResultHandler } from "@sfajs/core";
+import "@ipare/core";
+import { Startup, HttpContext, ResultHandler } from "@ipare/core";
 import * as path from "path";
 import * as fs from "fs";
 import {
@@ -10,7 +10,7 @@ import {
 } from "./view-options";
 import { RENDERED } from "./constant";
 
-declare module "@sfajs/core" {
+declare module "@ipare/core" {
   interface Startup {
     useView<T extends this>(options?: ViewOptions): T;
   }

@@ -1,1 +1,1 @@
-export const RENDERED = "__@sfajs/views_rendered__";
+export const RENDERED = "@ipare/view/rendered";
