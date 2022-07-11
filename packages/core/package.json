@@ -1,18 +1,18 @@
 {
-  "name": "@sfajs/core",
+  "name": "@ipare/core",
   "version": "1.6.1",
   "description": "面向云的现代渐进式轻量 Node.js 框架",
-  "homepage": "https://github.com/sfajs/core",
+  "homepage": "https://github.com/ipare/core",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sfajs/core"
+    "url": "https://github.com/ipare/core"
   },
   "keywords": [
-    "sfa",
+    "ipare",
     "serverless"
   ],
   "bugs": {
-    "url": "https://github.com/sfajs/core/issues",
+    "url": "https://github.com/ipare/core/issues",
     "email": "support@hal.wang"
   },
   "main": "dist/index.js",

@@ -4,15 +4,15 @@ import { TestStartup } from "../../src";
 test(`buffer`, async () => {
   const res = await new TestStartup()
     .use(async (ctx) => {
-      ctx.ok(Buffer.from("sfa"));
+      ctx.ok(Buffer.from("ipare"));
     })
     .run();
   expect(res.status).toBe(200);
   expect(res.getHeader("content-type")).toBe("application/octet-stream");
   expect(res.getHeader("content-length")).toBe(
-    Buffer.byteLength("sfa").toString()
+    Buffer.byteLength("ipare").toString()
   );
-  expect(res.body).toEqual(Buffer.from("sfa"));
+  expect(res.body).toEqual(Buffer.from("ipare"));
 });
 
 test(`stream`, async () => {
@@ -30,22 +30,22 @@ test(`stream`, async () => {
 test(`html`, async () => {
   const res = await new TestStartup()
     .use(async (ctx) => {
-      ctx.ok("<div>sfa</div>");
+      ctx.ok("<div>ipare</div>");
     })
     .run();
   expect(res.status).toBe(200);
   expect(res.getHeader("content-type")).toBe("text/html; charset=utf-8");
   expect(res.getHeader("content-length")).toBe(
-    Buffer.byteLength("<div>sfa</div>").toString()
+    Buffer.byteLength("<div>ipare</div>").toString()
   );
-  expect(res.body).toBe("<div>sfa</div>");
+  expect(res.body).toBe("<div>ipare</div>");
 });
 
 test(`json`, async () => {
   const res = await new TestStartup()
     .use(async (ctx) => {
       ctx.ok({
-        sfa: true,
+        ipare: true,
       });
     })
     .run();
@@ -54,12 +54,12 @@ test(`json`, async () => {
   expect(res.getHeader("content-length")).toBe(
     Buffer.byteLength(
       JSON.stringify({
-        sfa: true,
+        ipare: true,
       })
     ).toString()
   );
   expect(res.body).toEqual({
-    sfa: true,
+    ipare: true,
   });
 });
 
@@ -81,7 +81,7 @@ test(`string set type`, async () => {
   const res = await new TestStartup()
     .use(async (ctx) => {
       ctx
-        .ok("sfa")
+        .ok("ipare")
         .setHeader("content-type", "text")
         .setHeader("content-length", 100);
     })
@@ -89,7 +89,7 @@ test(`string set type`, async () => {
   expect(res.status).toBe(200);
   expect(res.getHeader("content-type")).toBe("text");
   expect(res.getHeader("content-length")).toBe("100");
-  expect(res.body).toBe("sfa");
+  expect(res.body).toBe("ipare");
 });
 
 test(`josn set type`, async () => {
@@ -97,7 +97,7 @@ test(`josn set type`, async () => {
     .use(async (ctx) => {
       ctx
         .ok({
-          app: "sfa",
+          app: "ipare",
         })
         .setHeader("content-type", "json")
         .setHeader("content-length", 100);
@@ -107,7 +107,7 @@ test(`josn set type`, async () => {
   expect(res.getHeader("content-type")).toBe("json");
   expect(res.getHeader("content-length")).toBe("100");
   expect(res.body).toEqual({
-    app: "sfa",
+    app: "ipare",
   });
 });
 
@@ -115,7 +115,7 @@ test(`buffer set type`, async () => {
   const res = await new TestStartup()
     .use(async (ctx) => {
       ctx
-        .ok(Buffer.from("sfa"))
+        .ok(Buffer.from("ipare"))
         .setHeader("content-type", "bin")
         .setHeader("content-length", 100);
     })
@@ -123,7 +123,7 @@ test(`buffer set type`, async () => {
   expect(res.status).toBe(200);
   expect(res.getHeader("content-type")).toBe("bin");
   expect(res.getHeader("content-length")).toBe("100");
-  expect(res.body).toEqual(Buffer.from("sfa"));
+  expect(res.body).toEqual(Buffer.from("ipare"));
 });
 
 test(`stream set type`, async () => {

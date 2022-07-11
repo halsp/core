@@ -1,5 +1,3 @@
-import { HeaderHandler, Request, Response } from "./context";
-
 export {
   StatusCodes,
   getStatusCode,
@@ -73,18 +71,3 @@ export {
 export { Startup, TestStartup } from "./startup";
 
 export { Middleware, ComposeMiddleware, HookType } from "./middlewares";
-
-/**
- * @deprecated use Request
- */
-export class SfaRequest extends Request {}
-
-/**
- * @deprecated use Response
- */
-export class SfaResponse extends Response {}
-
-/**
- * @deprecated use HeaderHandler
- */
-export class SfaHeader extends HeaderHandler {}

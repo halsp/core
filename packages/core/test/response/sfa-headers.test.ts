@@ -8,7 +8,7 @@ class CustomHeader extends HeaderHandler {
   readonly headers: HeadersDict = {};
 }
 
-test("custom sfa headers", async () => {
+test("custom ipare headers", async () => {
   const header = new CustomHeader()
     .setHeader("h1", "1")
     .setHeaders({

@@ -1,7 +1,7 @@
 import { HttpContext } from "../context";
 import { Middleware, MiddlewareConstructor } from "./middleware";
 
-const MIDDLEWARE_HOOK_BAG = "__@sfajs/core_middlewareHooksBag__";
+const MIDDLEWARE_HOOK_BAG = "@ipare/core/middlewareHooksBag";
 
 export type MdHook<T extends Middleware | MiddlewareConstructor | Error = any> =
   (
