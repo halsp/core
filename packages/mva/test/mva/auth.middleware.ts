@@ -1,8 +1,8 @@
 import { users } from "./mock";
-import { HttpContext } from "@sfajs/core";
+import { HttpContext } from "@ipare/core";
 import "../../src";
-import "@sfajs/router";
-import { AuthorizationFilter } from "@sfajs/filter";
+import "@ipare/router";
+import { AuthorizationFilter } from "@ipare/filter";
 
 export class AutFilter implements AuthorizationFilter {
   async onAuthorization(ctx: HttpContext): Promise<boolean> {

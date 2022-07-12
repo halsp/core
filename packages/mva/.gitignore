@@ -4,7 +4,6 @@ package-lock.json
 yarn.lock
 yarn-error.log
 
-sfa-mva.map
 test.md
 bin
 coverage

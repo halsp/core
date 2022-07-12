@@ -1,5 +1,5 @@
-import { HttpContext } from "@sfajs/core";
-import { Filter } from "@sfajs/filter";
+import { HttpContext } from "@ipare/core";
+import { Filter } from "@ipare/filter";
 
 export interface ResultFilter extends Filter {
   onResultExecuted(ctx: HttpContext): void | Promise<void>;

@@ -1,4 +1,4 @@
-import { NotFoundException, Request, Response, TestStartup } from "@sfajs/core";
+import { NotFoundException, Request, Response, TestStartup } from "@ipare/core";
 import "../src";
 import { AutFilter } from "./mva/auth.middleware";
 import { runMva } from "./global";

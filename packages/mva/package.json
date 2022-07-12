@@ -1,21 +1,20 @@
 {
-  "name": "@sfajs/mva",
-  "version": "1.5.2",
-  "description": "sfajs MVA 框架",
-  "homepage": "https://github.com/sfajs/mva",
+  "name": "@ipare/mva",
+  "version": "1.5.3",
+  "description": "Ipare MVA 框架",
+  "homepage": "https://github.com/ipare/mva",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sfajs/mva"
+    "url": "https://github.com/ipare/mva"
   },
   "keywords": [
-    "sfa",
-    "sfajs",
+    "ipare",
     "restful",
     "mvc",
     "mva"
   ],
   "bugs": {
-    "url": "https://github.com/sfajs/mva/issues",
+    "url": "https://github.com/ipare/mva/issues",
     "email": "support@hal.wang"
   },
   "main": "dist/index.js",
@@ -29,10 +28,10 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@sfajs/core": "^1.6.0",
-    "@sfajs/filter": "^1.0.7",
-    "@sfajs/router": "^2.1.4",
-    "@sfajs/view": "^1.3.3"
+    "@ipare/core": "^1.6.0",
+    "@ipare/filter": "^1.0.7",
+    "@ipare/router": "^2.1.4",
+    "@ipare/view": "^1.3.3"
   },
   "devDependencies": {
     "@types/jest": "^28.1.4",
@@ -52,22 +51,22 @@
     "typescript": "^4.7.4"
   },
   "peerDependencies": {
-    "@sfajs/core": "~1",
-    "@sfajs/filter": "~1",
-    "@sfajs/router": "~2",
-    "@sfajs/view": "~1"
+    "@ipare/core": "~1",
+    "@ipare/filter": "~1",
+    "@ipare/router": "~2",
+    "@ipare/view": "~1"
   },
   "peerDependenciesMeta": {
-    "@sfajs/core": {
+    "@ipare/core": {
       "optional": true
     },
-    "@sfajs/filter": {
+    "@ipare/filter": {
       "optional": true
     },
-    "@sfajs/router": {
+    "@ipare/router": {
       "optional": true
     },
-    "@sfajs/view": {
+    "@ipare/view": {
       "optional": true
     }
   },

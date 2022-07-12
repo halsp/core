@@ -1,6 +1,6 @@
-import { HttpContext } from "@sfajs/core";
-import { UseFilters } from "@sfajs/filter";
-import { Action } from "@sfajs/router";
+import { HttpContext } from "@ipare/core";
+import { UseFilters } from "@ipare/filter";
+import { Action } from "@ipare/router";
 import { ResultFilter } from "../../../src";
 
 class TestFilter implements ResultFilter {

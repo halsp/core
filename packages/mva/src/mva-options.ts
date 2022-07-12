@@ -1,6 +1,6 @@
-import { HttpContext } from "@sfajs/core";
-import { RouterOptions } from "@sfajs/router";
-import { ViewOptions } from "@sfajs/view";
+import { HttpContext } from "@ipare/core";
+import { RouterOptions } from "@ipare/router";
+import { ViewOptions } from "@ipare/view";
 
 export type CodeType =
   | { code: number; path?: string; replace?: number }

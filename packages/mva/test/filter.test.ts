@@ -1,7 +1,7 @@
-import { Request, TestStartup } from "@sfajs/core";
+import { Request, TestStartup } from "@ipare/core";
 import "../src";
 import { runMva } from "./global";
-import "@sfajs/filter";
+import "@ipare/filter";
 
 function runTest(executing: boolean) {
   test(`filter ${executing}`, async () => {

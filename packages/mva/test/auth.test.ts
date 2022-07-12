@@ -1,4 +1,4 @@
-import { Request, TestStartup } from "@sfajs/core";
+import { Request, TestStartup } from "@ipare/core";
 import "../src";
 import { runMva } from "./global";
 import { AutFilter } from "./mva/auth.middleware";

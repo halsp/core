@@ -1,16 +1,16 @@
-import "@sfajs/core";
-import { HttpContext, HttpException, Startup, HookType } from "@sfajs/core";
-import "@sfajs/view";
-import "@sfajs/router";
+import "@ipare/core";
+import { HttpContext, HttpException, Startup, HookType } from "@ipare/core";
+import "@ipare/view";
+import "@ipare/router";
 import { MvaOptions, CodeType } from "./mva-options";
 import { ERROR_CODES, USED } from "./constant";
-import { execFilters } from "@sfajs/filter";
-import { Action } from "@sfajs/router";
+import { execFilters } from "@ipare/filter";
+import { Action } from "@ipare/router";
 
 export { MvaOptions };
 export { ResultFilter } from "./result.filter";
 
-declare module "@sfajs/core" {
+declare module "@ipare/core" {
   interface Startup {
     useMva(options?: MvaOptions): this;
     useErrorPage(...codes: CodeType[]): this;
