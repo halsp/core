@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as mime from "mime";
 import { SingleStaticOptions } from "./static-options";
 import { BaseMiddleware } from "./base.middleware";
-import { normalizePath } from "@sfajs/core";
+import { normalizePath } from "@ipare/core";
 
 export class SingleStaticMiddleware extends BaseMiddleware {
   constructor(readonly options: SingleStaticOptions) {

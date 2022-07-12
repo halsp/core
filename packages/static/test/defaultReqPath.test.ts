@@ -1,4 +1,4 @@
-import { TestStartup, Request } from "@sfajs/core";
+import { TestStartup, Request } from "@ipare/core";
 import "../src";
 
 test("default req path not found", async function () {

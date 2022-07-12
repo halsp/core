@@ -1,4 +1,4 @@
-import { Middleware, HttpMethod } from "@sfajs/core";
+import { Middleware, HttpMethod } from "@ipare/core";
 import { SingleStaticOptions, StaticOptions } from "./static-options";
 
 export abstract class BaseMiddleware extends Middleware {

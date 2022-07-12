@@ -1,12 +1,12 @@
-import "@sfajs/core";
-import { Startup } from "@sfajs/core";
+import "@ipare/core";
+import { Startup } from "@ipare/core";
 import { SingleStaticMiddleware } from "./single-static.middleware";
 import { SingleStaticOptions, StaticOptions } from "./static-options";
 import { StaticMiddleware } from "./static.middleware";
 
 export { SingleStaticOptions, StaticOptions };
 
-declare module "@sfajs/core" {
+declare module "@ipare/core" {
   interface Startup {
     useStatic<T extends this>(options?: StaticOptions): T;
     useStatic<T extends this>(options?: SingleStaticOptions): T;

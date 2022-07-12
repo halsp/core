@@ -1,4 +1,4 @@
-import { TestStartup, Request } from "@sfajs/core";
+import { TestStartup, Request } from "@ipare/core";
 import "../src";
 
 test("not found", async function () {
