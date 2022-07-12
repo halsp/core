@@ -1,6 +1,6 @@
-import { Middleware, Request, TestStartup } from "@sfajs/core";
-import { Body } from "@sfajs/pipe";
-import "@sfajs/inject";
+import { Middleware, Request, TestStartup } from "@ipare/core";
+import { Body } from "@ipare/pipe";
+import "@ipare/inject";
 import "../src";
 import { IsBase64, IsNumber, IsString } from "class-validator";
 

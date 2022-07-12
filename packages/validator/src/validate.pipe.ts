@@ -3,8 +3,8 @@ import {
   HttpContext,
   isPlainObject,
   isUndefined,
-} from "@sfajs/core";
-import { PipeTransform, TransformArgs } from "@sfajs/pipe";
+} from "@ipare/core";
+import { PipeTransform, TransformArgs } from "@ipare/pipe";
 import { validate, ValidatorOptions } from "class-validator";
 import { SCHAME_METADATA, ENABLE_METADATA, OPTIONS_METADATA } from "./constant";
 

@@ -1,4 +1,4 @@
-import { HttpContext } from "@sfajs/core";
+import { HttpContext } from "@ipare/core";
 import { ValidatorOptions } from "class-validator";
 import "reflect-metadata";
 import {

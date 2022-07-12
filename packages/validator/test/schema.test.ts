@@ -1,7 +1,7 @@
-import { Middleware, Request, TestStartup } from "@sfajs/core";
-import { Body } from "@sfajs/pipe";
+import { Middleware, Request, TestStartup } from "@ipare/core";
+import { Body } from "@ipare/pipe";
 import { IsInt, ValidationSchema } from "class-validator";
-import "@sfajs/inject";
+import "@ipare/inject";
 import "../src";
 import { UseValidatorSchema, ValidatorEnable } from "../src";
 

@@ -1,3 +1,3 @@
-export const SCHAME_METADATA = "@sfajs/validator/schameMetadata";
-export const OPTIONS_METADATA = "@sfajs/validator/optionsMetadata";
-export const ENABLE_METADATA = "@sfajs/validator/enableMetadata";
+export const SCHAME_METADATA = "@ipare/validator/schameMetadata";
+export const OPTIONS_METADATA = "@ipare/validator/optionsMetadata";
+export const ENABLE_METADATA = "@ipare/validator/enableMetadata";

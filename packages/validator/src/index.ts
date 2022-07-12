@@ -1,6 +1,6 @@
-import { HttpContext, Startup } from "@sfajs/core";
-import "@sfajs/pipe";
-import { GlobalPipeType } from "@sfajs/pipe/dist/global-pipe-type";
+import { HttpContext, Startup } from "@ipare/core";
+import "@ipare/pipe";
+import { GlobalPipeType } from "@ipare/pipe/dist/global-pipe-type";
 import {
   registerSchema,
   ValidationSchema,
@@ -14,7 +14,7 @@ export {
   ValidatorEnable,
 } from "./decorators/index";
 
-declare module "@sfajs/core" {
+declare module "@ipare/core" {
   interface Startup {
     useValidator(): this;
     useValidator(validatorOptions: ValidatorOptions): this;
