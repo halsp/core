@@ -1,6 +1,9 @@
 {
   "name": "@ipare/inject",
-  "version": "1.2.1",
+  "version": "1.2.2",
+  "engines": {
+    "node": ">=14.18.0"
+  },
   "description": "Ipare 依赖注入中间件",
   "homepage": "https://github.com/ipare/inject",
   "repository": {
@@ -27,14 +30,14 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^1.6.1",
+    "@ipare/core": "^1.6.2",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@types/jest": "^28.1.4",
     "@types/node": "^18.0.3",
-    "@typescript-eslint/eslint-plugin": "^5.30.5",
-    "@typescript-eslint/parser": "^5.30.5",
+    "@typescript-eslint/eslint-plugin": "^5.30.6",
+    "@typescript-eslint/parser": "^5.30.6",
     "codecov": "^3.8.3",
     "eslint": "^8.19.0",
     "eslint-config-prettier": "^8.5.0",
