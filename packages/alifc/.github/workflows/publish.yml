@@ -25,7 +25,7 @@ jobs:
       - run: npx codecov
 
   publish-npm:
-    if: github.repository == 'sfajs/alifunc'
+    if: github.repository == 'ipare/alifunc'
     needs: test
     runs-on: ubuntu-latest
     steps:

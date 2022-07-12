@@ -1,4 +1,4 @@
-import { Response } from "@sfajs/core";
+import { Response } from "@ipare/core";
 import { AlifuncStartup } from "../src";
 
 const req: any = {

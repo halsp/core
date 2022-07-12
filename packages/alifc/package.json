@@ -1,20 +1,19 @@
 {
-  "name": "@sfajs/alifunc",
-  "version": "1.2.2",
-  "description": "将 sfajs 托管到阿里云函数计算",
-  "homepage": "https://github.com/sfajs/alifunc",
+  "name": "@ipare/alifunc",
+  "version": "1.2.3",
+  "description": "将 Ipare 托管到阿里云函数计算",
+  "homepage": "https://github.com/ipare/alifunc",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sfajs/alifunc"
+    "url": "https://github.com/ipare/alifunc"
   },
   "keywords": [
-    "sfa",
-    "sfajs",
+    "ipare",
     "aliyun",
     "serverless"
   ],
   "bugs": {
-    "url": "https://github.com/sfajs/alifunc/issues",
+    "url": "https://github.com/ipare/alifunc/issues",
     "email": "support@hal.wang"
   },
   "main": "dist/index.js",
@@ -28,14 +27,14 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@sfajs/core": "^1.6.0",
-    "@sfajs/http": "^1.2.2"
+    "@ipare/core": "^1.6.1",
+    "@ipare/http": "^1.2.3"
   },
   "devDependencies": {
     "@types/jest": "^28.1.4",
     "@types/node": "^18.0.3",
-    "@typescript-eslint/eslint-plugin": "^5.30.5",
-    "@typescript-eslint/parser": "^5.30.5",
+    "@typescript-eslint/eslint-plugin": "^5.30.6",
+    "@typescript-eslint/parser": "^5.30.6",
     "codecov": "^3.8.3",
     "eslint": "^8.19.0",
     "eslint-config-prettier": "^8.5.0",
@@ -46,14 +45,14 @@
     "typescript": "^4.7.4"
   },
   "peerDependencies": {
-    "@sfajs/core": "~1",
-    "@sfajs/http": "~1"
+    "@ipare/core": "~1",
+    "@ipare/http": "~1"
   },
   "peerDependenciesMeta": {
-    "@sfajs/core": {
+    "@ipare/core": {
       "optional": true
     },
-    "@sfajs/http": {
+    "@ipare/http": {
       "optional": true
     }
   },

@@ -1,5 +1,5 @@
-import { HttpContext, isString, Request, Response } from "@sfajs/core";
-import { HttpBodyPraserStartup } from "@sfajs/http";
+import { HttpContext, isString, Request, Response } from "@ipare/core";
+import { HttpBodyPraserStartup } from "@ipare/http";
 import { Stream } from "stream";
 import { AliReq } from "./ali-req";
 import { AliRes } from "./ali-res";
@@ -44,31 +44,31 @@ export class AlifuncStartup extends HttpBodyPraserStartup {
       get: () => aliRes,
     });
 
-    const sfaRes = await this.invoke(ctx);
-    aliRes.statusCode = sfaRes.status;
-    Object.keys(sfaRes.headers)
-      .filter((key) => !!sfaRes.headers[key])
+    const ipareRes = await this.invoke(ctx);
+    aliRes.statusCode = ipareRes.status;
+    Object.keys(ipareRes.headers)
+      .filter((key) => !!ipareRes.headers[key])
       .forEach((key) => {
-        aliRes.setHeader(key, sfaRes.headers[key] as string);
+        aliRes.setHeader(key, ipareRes.headers[key] as string);
       });
-    await this.#writeBody(sfaRes, aliRes);
+    await this.#writeBody(ipareRes, aliRes);
     return;
   }
 
-  async #writeBody(sfaRes: Response, aliRes: AliRes) {
-    if (!sfaRes.body) {
+  async #writeBody(ipareRes: Response, aliRes: AliRes) {
+    if (!ipareRes.body) {
       aliRes.send("");
       return;
     }
 
-    if (sfaRes.body instanceof Stream) {
-      aliRes.send(await this.#streamToBuffer(sfaRes.body));
-    } else if (Buffer.isBuffer(sfaRes.body)) {
-      aliRes.send(sfaRes.body);
-    } else if (isString(sfaRes.body)) {
-      aliRes.send(sfaRes.body);
+    if (ipareRes.body instanceof Stream) {
+      aliRes.send(await this.#streamToBuffer(ipareRes.body));
+    } else if (Buffer.isBuffer(ipareRes.body)) {
+      aliRes.send(ipareRes.body);
+    } else if (isString(ipareRes.body)) {
+      aliRes.send(ipareRes.body);
     } else {
-      aliRes.send(JSON.stringify(sfaRes.body));
+      aliRes.send(JSON.stringify(ipareRes.body));
     }
   }
 
