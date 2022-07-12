@@ -1,6 +1,6 @@
-export const USE_FILTER = "__@sfajs/filter_useFilter__";
+export const USE_FILTER = "@ipare/filter/useFilter";
 
-export const FILTERS_METADATA = "__@sfajs/filter_filtersMetadata__";
+export const FILTERS_METADATA = "@ipare/filter/filtersMetadata";
 
-export const GLOBAL_FILTERS_BAG = "__@sfajs/filter_globalFiltersBag__";
-export const FILTERS_ORDER_BAG = "__@sfajs/filter_filtersOrderBag__";
+export const GLOBAL_FILTERS_BAG = "@ipare/filter/globalFiltersBag";
+export const FILTERS_ORDER_BAG = "@ipare/filter/filtersOrderBag";

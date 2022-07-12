@@ -1,4 +1,4 @@
-import { Request, TestStartup } from "@sfajs/core";
+import { Request, TestStartup } from "@ipare/core";
 import "../src";
 
 function runTest(executing: boolean) {

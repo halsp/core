@@ -1,5 +1,5 @@
-import { HttpContext, TestStartup } from "@sfajs/core";
-import { Action } from "@sfajs/router";
+import { HttpContext, TestStartup } from "@ipare/core";
+import { Action } from "@ipare/router";
 import { execFilters, Filter, UseFilters } from "../src";
 
 class CustomFilter implements Filter {

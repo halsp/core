@@ -1,4 +1,4 @@
-import { HttpContext } from "@sfajs/core";
+import { HttpContext } from "@ipare/core";
 import { Filter } from "./filter";
 
 export interface AuthorizationFilter extends Filter {

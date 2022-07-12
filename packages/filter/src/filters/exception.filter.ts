@@ -1,4 +1,4 @@
-import { HttpContext, HttpException } from "@sfajs/core";
+import { HttpContext, HttpException } from "@ipare/core";
 import { Filter } from "./filter";
 
 export interface ExceptionFilter<T extends Error = HttpException>

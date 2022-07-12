@@ -1,6 +1,6 @@
-import { isClass, ObjectConstructor } from "@sfajs/core";
-import { parseInject } from "@sfajs/inject";
-import { Action } from "@sfajs/router";
+import { isClass, ObjectConstructor } from "@ipare/core";
+import { parseInject } from "@ipare/inject";
+import { Action } from "@ipare/router";
 import {
   FILTERS_METADATA,
   FILTERS_ORDER_BAG,

@@ -1,8 +1,8 @@
-import { HttpContext, Request, TestStartup } from "@sfajs/core";
+import { HttpContext, Request, TestStartup } from "@ipare/core";
 import "../src";
 import { ActionFilter, UseFilters } from "../src";
-import "@sfajs/inject";
-import { Action } from "@sfajs/router";
+import "@ipare/inject";
+import { Action } from "@ipare/router";
 
 export class TestActionFilter1 implements ActionFilter {
   onActionExecuted(ctx: HttpContext): void | Promise<void> {

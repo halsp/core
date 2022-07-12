@@ -1,18 +1,17 @@
 {
-  "name": "@sfajs/filter",
-  "version": "1.0.7",
-  "description": "sfajs 的请求过滤器插件",
-  "homepage": "https://github.com/sfajs/filter",
+  "name": "@ipare/filter",
+  "version": "1.0.8",
+  "description": "Ipare 的请求过滤器插件",
+  "homepage": "https://github.com/ipare/filter",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sfajs/filter"
+    "url": "https://github.com/ipare/filter"
   },
   "keywords": [
-    "sfa",
-    "sfajs"
+    "ipare"
   ],
   "bugs": {
-    "url": "https://github.com/sfajs/filter/issues",
+    "url": "https://github.com/ipare/filter/issues",
     "email": "support@hal.wang"
   },
   "main": "dist/index.js",
@@ -26,16 +25,16 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@sfajs/core": "^1.6.0",
-    "@sfajs/inject": "^1.1.4",
-    "@sfajs/router": "^2.1.4",
+    "@ipare/core": "^1.6.1",
+    "@ipare/inject": "^1.2.1",
+    "@ipare/router": "^2.1.6",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@types/jest": "^28.1.4",
     "@types/node": "^18.0.3",
-    "@typescript-eslint/eslint-plugin": "^5.30.5",
-    "@typescript-eslint/parser": "^5.30.5",
+    "@typescript-eslint/eslint-plugin": "^5.30.6",
+    "@typescript-eslint/parser": "^5.30.6",
     "codecov": "^3.8.3",
     "eslint": "^8.19.0",
     "eslint-config-prettier": "^8.5.0",
@@ -46,18 +45,18 @@
     "typescript": "^4.7.4"
   },
   "peerDependencies": {
-    "@sfajs/core": "~1",
-    "@sfajs/inject": "~1",
-    "@sfajs/router": "~2"
+    "@ipare/core": "~1",
+    "@ipare/inject": "~1",
+    "@ipare/router": "~2"
   },
   "peerDependenciesMeta": {
-    "@sfajs/core": {
+    "@ipare/core": {
       "optional": true
     },
-    "@sfajs/inject": {
+    "@ipare/inject": {
       "optional": true
     },
-    "@sfajs/router": {
+    "@ipare/router": {
       "optional": true
     }
   },

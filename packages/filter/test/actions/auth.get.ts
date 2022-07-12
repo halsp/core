@@ -1,5 +1,5 @@
-import { HttpContext } from "@sfajs/core";
-import { Action, SetActionMetadata } from "@sfajs/router";
+import { HttpContext } from "@ipare/core";
+import { Action, SetActionMetadata } from "@ipare/router";
 import { AuthorizationFilter, UseFilters } from "../../src";
 
 const Admin = SetActionMetadata("admin", "true");

@@ -1,7 +1,7 @@
-import { HttpContext, Request, TestStartup } from "@sfajs/core";
+import { HttpContext, Request, TestStartup } from "@ipare/core";
 import "../src";
 import { ActionFilter, ResourceFilter, UseFilters } from "../src";
-import { Action } from "@sfajs/router";
+import { Action } from "@ipare/router";
 
 class TestResourceFilter implements ResourceFilter {
   onResourceExecuted(ctx: HttpContext): void | Promise<void> {

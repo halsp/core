@@ -1,8 +1,8 @@
-import { HttpContext, Request, TestStartup } from "@sfajs/core";
+import { HttpContext, Request, TestStartup } from "@ipare/core";
 import "../src";
 import { ActionFilter } from "../src";
-import "@sfajs/inject";
-import { Action } from "@sfajs/router";
+import "@ipare/inject";
+import { Action } from "@ipare/router";
 
 class TestAction extends Action {
   async invoke(): Promise<void> {

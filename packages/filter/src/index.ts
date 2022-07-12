@@ -5,9 +5,9 @@ import {
   isUndefined,
   ObjectConstructor,
   Startup,
-} from "@sfajs/core";
+} from "@ipare/core";
 import { FILTERS_ORDER_BAG, GLOBAL_FILTERS_BAG, USE_FILTER } from "./constant";
-import { Action } from "@sfajs/router";
+import { Action } from "@ipare/router";
 
 export {
   Filter,
@@ -20,7 +20,7 @@ export {
 } from "./filters";
 export { UseFilters } from "./use-filters.decorator";
 
-declare module "@sfajs/core" {
+declare module "@ipare/core" {
   interface Startup {
     useFilter(): this;
     useGlobalFilter<T extends Filter = Filter>(

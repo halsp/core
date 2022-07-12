@@ -4,9 +4,9 @@ import {
   HttpException,
   Request,
   TestStartup,
-} from "@sfajs/core";
+} from "@ipare/core";
 import "../src";
-import { Action } from "@sfajs/router";
+import { Action } from "@ipare/router";
 import { ExceptionFilter, UseFilters } from "../src";
 
 test(`empty exception filter`, async () => {
