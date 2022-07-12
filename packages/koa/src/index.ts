@@ -1,46 +1,50 @@
-import "@sfajs/core";
-import { Startup } from "@sfajs/core";
+import "@ipare/core";
+import { Startup } from "@ipare/core";
 import Koa from "koa";
 import compose from "koa-compose";
 import { UseKoaOptions } from "./use-koa-options";
-import { createContext, koaResToSfaRes, sfaResToKoaRes } from "./res-transform";
+import {
+  createContext,
+  koaResToIpareRes,
+  ipareResToKoaRes,
+} from "./res-transform";
 
-declare module "@sfajs/core" {
+declare module "@ipare/core" {
   interface Startup {
     useKoa<T extends this>(app: Koa, options?: UseKoaOptions): T;
   }
 }
 
-// step: sfa -> koa -> sfa ->koa ->sfa
+// step: ipare -> koa -> ipare ->koa ->ipare
 Startup.prototype.useKoa = function <T extends Startup>(
   app: Koa,
   options: UseKoaOptions = {}
 ): T {
   app.middleware.splice(0, 0, async (koaCtx, next) => {
-    koaCtx.status = koaCtx.sfaInStatus;
+    koaCtx.status = koaCtx.ipareInStatus;
     await next();
   });
   const fn = compose(app.middleware);
   if (!app.listenerCount("error")) app.on("error", app.onerror);
 
   app.use(async (koaCtx) => {
-    await koaResToSfaRes(koaCtx, koaCtx.sfaCtx.res); // step 2. koa -> sfa
-    await koaCtx.sfaNext();
-    await sfaResToKoaRes(koaCtx.sfaCtx.res, koaCtx); // step 3. sfa-> koa
+    await koaResToIpareRes(koaCtx, koaCtx.ipareCtx.res); // step 2. koa -> ipare
+    await koaCtx.ipareNext();
+    await ipareResToKoaRes(koaCtx.ipareCtx.res, koaCtx); // step 3. ipare-> koa
   });
 
-  this.use(async (sfaCtx, next) => {
-    const koaCtx = await createContext(app, sfaCtx, options); // step 1. sfa-> koa
-    koaCtx.sfaNext = next;
-    koaCtx.sfaCtx = sfaCtx;
+  this.use(async (ipareCtx, next) => {
+    const koaCtx = await createContext(app, ipareCtx, options); // step 1. ipare-> koa
+    koaCtx.ipareNext = next;
+    koaCtx.ipareCtx = ipareCtx;
 
-    koaCtx.sfaInStatus = koaCtx.status; // status will be set to 404 in 'handleRequest'
+    koaCtx.ipareInStatus = koaCtx.status; // status will be set to 404 in 'handleRequest'
 
     await (app as any).handleRequest(koaCtx, fn);
-    await koaResToSfaRes(koaCtx, sfaCtx.res); // step 4. koa -> sfa
+    await koaResToIpareRes(koaCtx, ipareCtx.res); // step 4. koa -> ipare
   });
   return this as T;
 };
 
 export { UseKoaOptions, Koa };
-export { koaSfa } from "./koa-sfa";
+export { koaIpare } from "./koa-ipare";

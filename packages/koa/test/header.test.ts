@@ -1,5 +1,5 @@
 import "../src";
-import { TestStartup } from "@sfajs/core";
+import { TestStartup } from "@ipare/core";
 import Koa from "koa";
 
 test("writeHead", async function () {

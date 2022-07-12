@@ -1,5 +1,5 @@
 import "../src";
-import { TestStartup } from "@sfajs/core";
+import { TestStartup } from "@ipare/core";
 import Koa from "koa";
 import { TransResponse } from "../src/trans-response";
 
@@ -11,7 +11,7 @@ test("middleware pipe", async function () {
     })
     .useKoa(
       new Koa().use(async (ctx, next) => {
-        ctx.body = "sfa";
+        ctx.body = "ipare";
         ctx.set("h", "h");
         await next();
       })
@@ -38,7 +38,7 @@ test("middleware pipe", async function () {
     })
     .run();
 
-  expect(res.body).toBe("sfaaaa");
+  expect(res.body).toBe("ipareaaa");
   expect(res.getHeader("h")).toBe("hhhh");
   expect(res.status).toBe(201);
 });
@@ -50,7 +50,7 @@ test("koa break", async function () {
     })
     .useKoa(
       new Koa().use(async (ctx) => {
-        ctx.body = "sfa";
+        ctx.body = "ipare";
         ctx.status = 201;
         ctx.set("h", "h");
       })
@@ -62,7 +62,7 @@ test("koa break", async function () {
     })
     .run();
 
-  expect(res.body).toBe("sfa");
+  expect(res.body).toBe("ipare");
   expect(res.getHeader("h")).toBe("h");
   expect(res.status).toBe(201);
 });

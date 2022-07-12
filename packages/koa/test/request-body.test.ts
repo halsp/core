@@ -1,12 +1,12 @@
 import "../src";
-import { TestStartup, Request } from "@sfajs/core";
+import { TestStartup, Request } from "@ipare/core";
 import Koa from "koa";
 
 test("text", async function () {
-  const res = await new TestStartup(new Request().setBody("sfa"))
+  const res = await new TestStartup(new Request().setBody("ipare"))
     .useKoa(
       new Koa().use(async (ctx, next) => {
-        ctx.body = ctx.sfaCtx.req.body;
+        ctx.body = ctx.ipareCtx.req.body;
         ctx.status = 200;
         await next();
       })
@@ -14,19 +14,19 @@ test("text", async function () {
     .run();
 
   expect(res.status).toBe(200);
-  expect(res.body).toBe("sfa");
+  expect(res.body).toBe("ipare");
   expect(res.getHeader("content-type")).toBe("text/plain; charset=utf-8");
 });
 
 test("json", async function () {
   const res = await new TestStartup(
     new Request().setBody({
-      sfa: "koa",
+      ipare: "koa",
     })
   )
     .useKoa(
       new Koa().use(async (ctx, next) => {
-        ctx.body = ctx.sfaCtx.req.body;
+        ctx.body = ctx.ipareCtx.req.body;
         ctx.status = 200;
         await next();
       })
@@ -35,18 +35,18 @@ test("json", async function () {
 
   expect(res.status).toBe(200);
   expect(res.body).toEqual({
-    sfa: "koa",
+    ipare: "koa",
   });
   expect(res.getHeader("content-type")).toBe("application/json; charset=utf-8");
 });
 
 test("buffer", async function () {
   const res = await new TestStartup(
-    new Request().setBody(Buffer.from("sfa", "utf-8"))
+    new Request().setBody(Buffer.from("ipare", "utf-8"))
   )
     .useKoa(
       new Koa().use(async (ctx, next) => {
-        ctx.body = ctx.sfaCtx.req.body;
+        ctx.body = ctx.ipareCtx.req.body;
         ctx.status = 200;
         await next();
       })
@@ -54,6 +54,6 @@ test("buffer", async function () {
     .run();
 
   expect(res.status).toBe(200);
-  expect(res.body).toEqual(Buffer.from("sfa", "utf-8"));
+  expect(res.body).toEqual(Buffer.from("ipare", "utf-8"));
   expect(res.getHeader("content-type")).toBe("application/octet-stream");
 });

@@ -1,20 +1,19 @@
 {
-  "name": "@sfajs/koa",
-  "version": "1.1.6",
-  "description": "让 koa 成为 sfa 的中间件，并打通二者中间件管道",
-  "homepage": "https://github.com/sfajs/koa",
+  "name": "@ipare/koa",
+  "version": "1.1.7",
+  "description": "让 Koa 成为 Ipare 的中间件，或 Ipare 成为 Koa 的中间件，并打通二者中间件管道",
+  "homepage": "https://github.com/ipare/koa",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sfajs/koa"
+    "url": "https://github.com/ipare/koa"
   },
   "keywords": [
-    "sfa",
-    "sfajs",
+    "ipare",
     "middleware",
     "koa"
   ],
   "bugs": {
-    "url": "https://github.com/sfajs/koa/issues",
+    "url": "https://github.com/ipare/koa/issues",
     "email": "support@hal.wang"
   },
   "main": "dist/index.js",
@@ -28,7 +27,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@sfajs/core": "^1.6.0",
+    "@ipare/core": "^1.6.1",
     "koa": "^2.13.4",
     "koa-compose": "^4.1.0",
     "query-string": "^7.1.1"
@@ -41,8 +40,8 @@
     "@types/koa__router": "^8.0.11",
     "@types/node": "^18.0.3",
     "@types/supertest": "^2.0.12",
-    "@typescript-eslint/eslint-plugin": "^5.30.5",
-    "@typescript-eslint/parser": "^5.30.5",
+    "@typescript-eslint/eslint-plugin": "^5.30.6",
+    "@typescript-eslint/parser": "^5.30.6",
     "codecov": "^3.8.3",
     "eslint": "^8.19.0",
     "eslint-config-prettier": "^8.5.0",
@@ -55,10 +54,10 @@
     "typescript": "^4.7.4"
   },
   "peerDependencies": {
-    "@sfajs/core": "~1"
+    "@ipare/core": "~1"
   },
   "peerDependenciesMeta": {
-    "@sfajs/core": {
+    "@ipare/core": {
       "optional": true
     }
   },

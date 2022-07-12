@@ -4,9 +4,9 @@ import {
   NumericalHeadersDict,
   Request,
   Startup,
-} from "@sfajs/core";
+} from "@ipare/core";
 import { Context, Next } from "koa";
-import { koaResToSfaRes, sfaResToKoaRes } from "./res-transform";
+import { koaResToIpareRes, ipareResToKoaRes } from "./res-transform";
 
 class KoaStartup extends Startup {
   constructor(private readonly koaCtx: Context) {
@@ -22,22 +22,22 @@ class KoaStartup extends Startup {
         .setHeaders(this.koaCtx.req.headers as NumericalHeadersDict)
         .setBody(this.koaCtx.body)
     );
-    await koaResToSfaRes(this.koaCtx, ctx.res);
+    await koaResToIpareRes(this.koaCtx, ctx.res);
     const res = await super.invoke(ctx);
-    await sfaResToKoaRes(res, this.koaCtx);
+    await ipareResToKoaRes(res, this.koaCtx);
   }
 }
 
-export function koaSfa(
+export function koaIpare(
   useMiddlewares: (startup: Startup) => Promise<void> | void
 ) {
-  return async function sfa(koaCtx: Context, koaNext: Next) {
+  return async function (koaCtx: Context, koaNext: Next) {
     const startup = new KoaStartup(koaCtx);
     await useMiddlewares(startup);
-    startup.use(async (sfaCtx) => {
-      await sfaResToKoaRes(sfaCtx.res, koaCtx);
+    startup.use(async (ipareCtx) => {
+      await ipareResToKoaRes(ipareCtx.res, koaCtx);
       await koaNext();
-      await koaResToSfaRes(koaCtx, sfaCtx.res);
+      await koaResToIpareRes(koaCtx, ipareCtx.res);
     });
     await startup.run();
   };

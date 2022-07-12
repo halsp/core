@@ -25,7 +25,7 @@ jobs:
       - run: npx codecov
 
   publish-npm:
-    if: github.repository == 'sfajs/koa'
+    if: github.repository == 'ipare/koa'
     needs: test
     runs-on: ubuntu-latest
     steps:

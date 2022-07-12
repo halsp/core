@@ -1,8 +1,8 @@
 import Koa from "koa";
 import request from "supertest";
-import { koaSfa } from "../src";
+import { koaIpare } from "../src";
 
-test("koaSfa", async () => {
+test("koaIpare", async () => {
   let index = 1;
 
   function getIndexValue() {
@@ -18,7 +18,7 @@ test("koaSfa", async () => {
       ctx.set("h5", getIndexValue());
     })
     .use(
-      koaSfa((startup) => {
+      koaIpare((startup) => {
         startup.use(async (ctx, next) => {
           ctx.res.created("created").setBody({
             b: 1,

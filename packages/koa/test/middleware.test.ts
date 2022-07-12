@@ -1,5 +1,5 @@
 import "../src";
-import { TestStartup, Request, Response } from "@sfajs/core";
+import { TestStartup, Request, Response } from "@ipare/core";
 import Koa from "koa";
 import cors from "koa-cors";
 import Router from "@koa/router";
@@ -15,12 +15,12 @@ test("koa-cors", async function () {
       )
     )
     .use(async (ctx) => {
-      ctx.ok("sfa");
+      ctx.ok("ipare");
     })
     .run();
 
   expect(res.status).toBe(200);
-  expect(res.body).toBe("sfa");
+  expect(res.body).toBe("ipare");
   expect(res.getHeader("Access-Control-Allow-Methods")).toBe("GET,POST");
   expect(res.getHeader("Access-Control-Allow-Origin")).toBe("http://localhost");
 });
