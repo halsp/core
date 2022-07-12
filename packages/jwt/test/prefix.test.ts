@@ -1,10 +1,10 @@
-import { TestStartup } from "@sfajs/core";
-import { createSfaReqeust } from "./utils";
+import { TestStartup } from "@ipare/core";
+import { createIpareReqeust } from "./utils";
 import "../src";
 
 test("prefix", async function () {
   const result = await new TestStartup(
-    await createSfaReqeust(
+    await createIpareReqeust(
       {
         secret: "secret",
       },

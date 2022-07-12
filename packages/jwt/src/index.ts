@@ -1,10 +1,10 @@
-import "@sfajs/core";
-import "@sfajs/inject";
-import { HttpContext, Startup } from "@sfajs/core";
+import "@ipare/core";
+import "@ipare/inject";
+import { HttpContext, Startup } from "@ipare/core";
 import { OPTIONS_BAG, STARTUP_OPTIONS } from "./constant";
 import { JwtOptions } from "./jwt-options";
 import { JwtService } from "./jwt.service";
-import { parseInject } from "@sfajs/inject";
+import { parseInject } from "@ipare/inject";
 import * as jwt from "jsonwebtoken";
 
 export { JwtObject, JwtPayload, JwtToken } from "./decorators";
@@ -16,7 +16,7 @@ export {
 } from "./jwt-options";
 export { JwtService };
 
-declare module "@sfajs/core" {
+declare module "@ipare/core" {
   interface Startup {
     useJwt(options: JwtOptions): this;
     useJwtVerify(

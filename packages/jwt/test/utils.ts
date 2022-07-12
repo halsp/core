@@ -1,11 +1,11 @@
-import { Request, TestStartup } from "@sfajs/core";
-import { parseInject } from "@sfajs/inject";
+import { Request, TestStartup } from "@ipare/core";
+import { parseInject } from "@ipare/inject";
 import { JwtOptions, JwtService } from "../src";
 import "../src";
-import "@sfajs/inject";
+import "@ipare/inject";
 import { OPTIONS_BAG } from "../src/constant";
 
-export async function createSfaReqeust(
+export async function createIpareReqeust(
   options: JwtOptions,
   payload: any = {},
   prefix = "Bearer "

@@ -1,13 +1,13 @@
-import { TestStartup } from "@sfajs/core";
-import { parseInject } from "@sfajs/inject";
+import { TestStartup } from "@ipare/core";
+import { parseInject } from "@ipare/inject";
 import "../src";
 import { JwtService } from "../src";
-import { createSfaReqeust } from "./utils";
+import { createIpareReqeust } from "./utils";
 
 function runTest(auth: boolean) {
   test(`auth ${auth}`, async function () {
     const res = await new TestStartup(
-      await createSfaReqeust({
+      await createIpareReqeust({
         secret: "secret",
       })
     )
@@ -26,7 +26,7 @@ runTest(false);
 
 test(`auth failed with custom status`, async function () {
   const res = await new TestStartup(
-    await createSfaReqeust({
+    await createIpareReqeust({
       secret: "secret",
     })
   )

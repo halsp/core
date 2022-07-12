@@ -5,9 +5,9 @@ import {
   JwtVerifyOptions,
 } from "./jwt-options";
 import * as jwt from "jsonwebtoken";
-import { HttpContext } from "@sfajs/core";
+import { HttpContext } from "@ipare/core";
 import { OPTIONS_BAG } from "./constant";
-import { Inject } from "@sfajs/inject";
+import { Inject } from "@ipare/inject";
 
 export class JwtService {
   @Inject((ctx) => ctx)

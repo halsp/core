@@ -1,12 +1,12 @@
-import { TestStartup } from "@sfajs/core";
-import { createSfaReqeust } from "./utils";
+import { TestStartup } from "@ipare/core";
+import { createIpareReqeust } from "./utils";
 import "../src";
 
 function testErrorSecret(isError: boolean) {
   function runTest(customError: boolean) {
     test(`error secret ${isError}`, async function () {
       const result = await new TestStartup(
-        await createSfaReqeust({
+        await createIpareReqeust({
           secret: isError ? "secret1" : "secret",
         })
       )

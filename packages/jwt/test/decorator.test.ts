@@ -1,8 +1,8 @@
-import { Middleware, TestStartup } from "@sfajs/core";
+import { Middleware, TestStartup } from "@ipare/core";
 import * as jwt from "jsonwebtoken";
 import { JwtObject, JwtPayload, JwtToken } from "../src";
 import "../src";
-import { createSfaReqeust } from "./utils";
+import { createIpareReqeust } from "./utils";
 
 class TestMiddleware extends Middleware {
   @JwtObject
@@ -27,7 +27,7 @@ class TestMiddleware extends Middleware {
 test("decorator", async function () {
   let jwt = "";
   const res = await new TestStartup(
-    await createSfaReqeust({
+    await createIpareReqeust({
       secret: "secret",
     })
   )
@@ -58,7 +58,7 @@ test("decorator", async function () {
 function testGetToken(skip: boolean) {
   test("getToken option", async function () {
     const res = await new TestStartup(
-      await createSfaReqeust({
+      await createIpareReqeust({
         secret: "secret",
       })
     )

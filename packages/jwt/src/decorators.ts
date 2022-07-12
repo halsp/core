@@ -1,4 +1,4 @@
-import { Inject, parseInject } from "@sfajs/inject";
+import { Inject, parseInject } from "@ipare/inject";
 import "reflect-metadata";
 import { JwtService } from "./jwt.service";
 
