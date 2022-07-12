@@ -1,5 +1,5 @@
-import { ObjectConstructor } from "@sfajs/core";
-import { PipeReqRecord } from "@sfajs/pipe";
+import { ObjectConstructor } from "@ipare/core";
+import { PipeReqRecord } from "@ipare/pipe";
 import { ComponentsObject, OpenApiBuilder, SchemaObject } from "openapi3-ts";
 import {
   getCallbacks,

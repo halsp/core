@@ -1,4 +1,4 @@
-import { isUndefined } from "@sfajs/core";
+import { isUndefined } from "@ipare/core";
 import { OperationObject, ParameterObject, SchemaObject } from "openapi3-ts";
 
 export function isOperationObject(

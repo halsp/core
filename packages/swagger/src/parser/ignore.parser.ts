@@ -1,4 +1,4 @@
-import { isObject } from "@sfajs/core";
+import { isObject } from "@ipare/core";
 import { OpenApiBuilder, OpenAPIObject } from "openapi3-ts";
 import { IGNORE } from "../constant";
 

@@ -1,5 +1,5 @@
-import { TestStartup } from "@sfajs/core";
-import { MapItem } from "@sfajs/router";
+import { TestStartup } from "@ipare/core";
+import { MapItem } from "@ipare/router";
 import { OpenApiBuilder } from "openapi3-ts";
 import {
   getCallbacks,

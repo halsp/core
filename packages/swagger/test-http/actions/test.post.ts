@@ -1,5 +1,5 @@
-import { Body, Header, Param, Query } from "@sfajs/pipe";
-import { Action, HttpPost } from "@sfajs/router";
+import { Body, Header, Param, Query } from "@ipare/pipe";
+import { Action, HttpPost } from "@ipare/router";
 import {
   ApiSummary,
   ApiTags,

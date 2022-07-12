@@ -1,6 +1,6 @@
-import { Inject } from "@sfajs/inject";
-import { Body, Header } from "@sfajs/pipe";
-import { Action } from "@sfajs/router";
+import { Inject } from "@ipare/inject";
+import { Body, Header } from "@ipare/pipe";
+import { Action } from "@ipare/router";
 import {
   ApiSummary,
   ApiTags,

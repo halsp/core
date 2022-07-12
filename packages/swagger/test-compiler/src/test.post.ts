@@ -1,5 +1,5 @@
-import { Header } from "@sfajs/pipe";
-import { Action } from "@sfajs/router";
+import { Header } from "@ipare/pipe";
+import { Action } from "@ipare/router";
 
 function Property(target: any, propertyKey: string) {
   //

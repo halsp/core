@@ -1,6 +1,6 @@
-import { isClass, ObjectConstructor } from "@sfajs/core";
-import { PipeReqRecord, getPipeRecords } from "@sfajs/pipe";
-import { Action, MapItem, RouterOptions } from "@sfajs/router";
+import { isClass, ObjectConstructor } from "@ipare/core";
+import { PipeReqRecord, getPipeRecords } from "@ipare/pipe";
+import { Action, MapItem, RouterOptions } from "@ipare/router";
 import {
   OpenApiBuilder,
   OperationObject,

@@ -1,4 +1,4 @@
-import { MapItem, RouterOptions } from "@sfajs/router";
+import { MapItem, RouterOptions } from "@ipare/router";
 import { OpenApiBuilder, OpenAPIObject } from "openapi3-ts";
 import "reflect-metadata";
 import { TagsParser } from "./tags.parser";

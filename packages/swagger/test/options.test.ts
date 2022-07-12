@@ -1,4 +1,4 @@
-import { Request, Response, TestStartup } from "@sfajs/core";
+import { Request, Response, TestStartup } from "@ipare/core";
 import "../src";
 
 function baseExpect(res: Response) {

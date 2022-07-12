@@ -1,11 +1,11 @@
-import "@sfajs/core";
-import "@sfajs/router";
-import { Startup } from "@sfajs/core";
+import "@ipare/core";
+import "@ipare/router";
+import { Startup } from "@ipare/core";
 import { USED } from "./constant";
 import { SwaggerOptions } from "./swagger-options";
 import { useSetup } from "./use-setup";
 
-declare module "@sfajs/core" {
+declare module "@ipare/core" {
   interface Startup {
     useSwagger(options?: SwaggerOptions): this;
   }

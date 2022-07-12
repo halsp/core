@@ -1,4 +1,4 @@
-import { MapItem } from "@sfajs/router";
+import { MapItem } from "@ipare/router";
 import { OpenApiBuilder } from "openapi3-ts";
 import { ACTION_DECORATORS, IGNORE } from "../src/constant";
 import { Parser } from "../src/parser";

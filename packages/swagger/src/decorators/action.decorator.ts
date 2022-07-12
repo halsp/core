@@ -1,4 +1,4 @@
-import { getActionMetadata, setActionMetadata } from "@sfajs/router";
+import { getActionMetadata, setActionMetadata } from "@ipare/router";
 import {
   CallbacksObject,
   ExternalDocumentationObject,

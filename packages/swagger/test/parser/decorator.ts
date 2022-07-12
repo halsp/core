@@ -1,5 +1,5 @@
-import { Body, Header, Query } from "@sfajs/pipe";
-import { Action, HttpDelete, HttpPost, HttpPut } from "@sfajs/router";
+import { Body, Header, Query } from "@ipare/pipe";
+import { Action, HttpDelete, HttpPost, HttpPut } from "@ipare/router";
 import {
   DtoDefault,
   DtoPattern,
@@ -133,7 +133,7 @@ export class TestDecoratorQueryDto {
   cb: {},
 })
 @ApiExternalDocs({
-  url: "https://sfajs.com",
+  url: "https://ipare.org",
 })
 @ApiDescription("desc")
 @ApiOperationId("opt-id")
@@ -145,7 +145,7 @@ export class TestDecoratorQueryDto {
   },
 })
 @ApiServers({
-  url: "https://sfajs.com",
+  url: "https://ipare.org",
   description: "servers",
 })
 export class TestDecorator extends Action {

@@ -1,7 +1,7 @@
-import { HttpStartup } from "@sfajs/http";
+import { HttpStartup } from "@ipare/http";
 import chalk from "chalk";
 import "../src";
-import "@sfajs/router";
+import "@ipare/router";
 
 async function bootstrap() {
   // const startup = new HttpStartup()

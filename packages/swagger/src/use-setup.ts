@@ -1,4 +1,4 @@
-import { isUndefined, Startup } from "@sfajs/core";
+import { isUndefined, Startup } from "@ipare/core";
 import { OpenApiBuilder } from "openapi3-ts";
 import { Parser } from "./parser";
 import { getSwaggerBody } from "./swagger-body";
@@ -27,7 +27,7 @@ export function useSetup<T extends Startup>(
 
       if (isUndefined(swaggerBody)) {
         let openApiBuilder = new OpenApiBuilder().addInfo({
-          title: "@sfajs/swagger",
+          title: "@ipare/swagger",
           version: "0.0.1",
         });
         if (options.builder) {

@@ -1,4 +1,4 @@
-import { PipeReqRecord } from "@sfajs/pipe";
+import { PipeReqRecord } from "@ipare/pipe";
 import {
   ExampleObject,
   OpenApiBuilder,
@@ -10,7 +10,7 @@ import {
 } from "openapi3-ts";
 import { createCallbackDecorator } from "./callback.decorator";
 import { setPropertyValue } from "./set-property-value";
-import { isClass, isUndefined, ObjectConstructor } from "@sfajs/core";
+import { isClass, isUndefined, ObjectConstructor } from "@ipare/core";
 import { IGNORE } from "../constant";
 import { ensureModelSchema } from "../parser/utils/model-schema";
 import { isParameterObject, isSchemaObject } from "./callback-dict-type";

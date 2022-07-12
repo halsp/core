@@ -1,4 +1,4 @@
-import { addPipeRecord } from "@sfajs/pipe/dist/pipe-req-record";
+import { addPipeRecord } from "@ipare/pipe/dist/pipe-req-record";
 import "reflect-metadata";
 
 function TestPipeDec(target: any, propertyKey: symbol | string) {

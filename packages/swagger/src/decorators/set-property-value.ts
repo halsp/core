@@ -1,5 +1,5 @@
-import { isClass, isUndefined } from "@sfajs/core";
-import { PipeReqRecord } from "@sfajs/pipe";
+import { isClass, isUndefined } from "@ipare/core";
+import { PipeReqRecord } from "@ipare/pipe";
 import {
   OpenApiBuilder,
   OperationObject,

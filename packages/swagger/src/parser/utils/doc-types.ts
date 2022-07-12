@@ -1,4 +1,4 @@
-import { PipeReqType } from "@sfajs/pipe";
+import { PipeReqType } from "@ipare/pipe";
 import { ParameterLocation } from "openapi3-ts";
 
 export function pipeTypeToDocType(pipeType: PipeReqType): ParameterLocation {
