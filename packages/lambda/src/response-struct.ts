@@ -1,4 +1,4 @@
-import { HeadersDict } from "@sfajs/core";
+import { HeadersDict } from "@ipare/core";
 
 export interface ResponseStruct {
   readonly isBase64Encoded: boolean;

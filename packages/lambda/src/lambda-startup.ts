@@ -5,7 +5,7 @@ import {
   Dict,
   HeadersDict,
   HttpMethod,
-} from "@sfajs/core";
+} from "@ipare/core";
 import { ResponseStruct } from "./response-struct";
 import { Readable } from "stream";
 

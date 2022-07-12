@@ -1,6 +1,6 @@
-import { Dict } from "@sfajs/core";
+import { Dict } from "@ipare/core";
 
-declare module "@sfajs/core" {
+declare module "@ipare/core" {
   interface HttpContext {
     get lambdaContext(): Dict;
     get lambdaEvent(): Dict;

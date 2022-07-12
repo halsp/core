@@ -11,13 +11,13 @@ test("string body", async () => {
           "content-type": "application/json",
         },
         body: JSON.stringify({
-          test: "sfa",
+          test: "ipare",
         }),
       },
       {}
     );
 
-  expect(result.body).toEqual({ test: "sfa" });
+  expect(result.body).toEqual({ test: "ipare" });
 });
 
 test("string body without conent-type", async () => {
@@ -29,7 +29,7 @@ test("string body without conent-type", async () => {
       {
         headers: {},
         body: JSON.stringify({
-          test: "sfa",
+          test: "ipare",
         }),
       },
       {}
@@ -37,7 +37,7 @@ test("string body without conent-type", async () => {
 
   expect(result.body).toBe(
     JSON.stringify({
-      test: "sfa",
+      test: "ipare",
     })
   );
 });
