@@ -25,7 +25,7 @@ jobs:
       - run: npx codecov
 
   publish-npm:
-    if: github.repository == 'sfajs/testing'
+    if: github.repository == 'ipare/testing'
     needs: test
     runs-on: ubuntu-latest
     steps:

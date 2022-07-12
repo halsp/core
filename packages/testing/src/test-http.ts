@@ -1,4 +1,4 @@
-import { HttpStartup } from "@sfajs/http";
+import { HttpStartup } from "@ipare/http";
 import supertest, { Response, SuperTest, Test } from "supertest";
 
 export class TestHttpStartup extends HttpStartup {

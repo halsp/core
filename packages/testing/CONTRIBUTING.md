@@ -1,6 +1,6 @@
-# Contributing to @sfajs/testing
+# Contributing to @ipare/testing
 
-We would love for you to contribute to @sfajs/testing and help make it even better than it is
+We would love for you to contribute to @ipare/testing and help make it even better than it is
 today! As a contributor, here are the guidelines we would like you to follow:
 
 - [Question or Problem?](#question)
@@ -13,7 +13,7 @@ today! As a contributor, here are the guidelines we would like you to follow:
 
 ## <a name="question"></a> Got a Question or Problem?
 
-**Do not open issues for general support questions as we want to keep GitHub issues for bug reports and feature requests.** You've got much better chances of getting your question answered on [Discussions](https://github.com/sfajs/core/discussions).
+**Do not open issues for general support questions as we want to keep GitHub issues for bug reports and feature requests.** You've got much better chances of getting your question answered on [Discussions](https://github.com/ipare/core/discussions).
 
 ## <a name="issue"></a> Found a Bug?
 
@@ -41,22 +41,22 @@ Before you submit an issue, please search the issue tracker, maybe an issue for 
 
 We want to fix all the issues as soon as possible, but before fixing a bug we need to reproduce and confirm it. In order to reproduce bugs we will systematically ask you to provide a minimal reproduction scenario using a repository or [Gist](https://gist.github.com/). Having a live, reproducible scenario gives us wealth of important information without going back & forth to you with additional questions like:
 
-- version of @sfajs/core and @sfajs/testing used
+- version of @ipare/core and @ipare/testing used
 - plugins and their versions
 - 3rd-party libraries and their versions
 - and most importantly - a use-case that fails
 
 Unfortunately, we are not able to investigate / fix bugs without a minimal reproduction, so if we don't hear back from you we are going to close an issue that doesn't have enough info to be reproduced.
 
-You can file new issues by filling out our [issue forms](https://github.com/sfajs/testing/issues/new/choose).
+You can file new issues by filling out our [issue forms](https://github.com/ipare/testing/issues/new/choose).
 
 ### <a name="submit-pr"></a> Submitting a Pull Request (PR)
 
 Before you submit your Pull Request (PR) consider the following guidelines:
 
-1. Search [GitHub](https://github.com/sfajs/testing/pulls) for an open or closed PR
+1. Search [GitHub](https://github.com/ipare/testing/pulls) for an open or closed PR
    that relates to your submission. You don't want to duplicate effort.
-1. Fork the @sfajs/testing repo.
+1. Fork the @ipare/testing repo.
 1. Make your changes in a new git branch:
 
    ```shell
@@ -65,7 +65,7 @@ Before you submit your Pull Request (PR) consider the following guidelines:
 
 1. Create your patch, **including appropriate test cases**.
 1. Follow our [Coding Rules](#rules).
-1. Run the full @sfajs/testing test suite (see [common scripts](#common-scripts)),
+1. Run the full @ipare/testing test suite (see [common scripts](#common-scripts)),
    and ensure that all tests pass.
 1. Commit your changes using a descriptive commit message that follows our
    [commit message conventions](#commit). Adherence to these conventions
@@ -83,12 +83,12 @@ Before you submit your Pull Request (PR) consider the following guidelines:
    git push origin my-fix-branch
    ```
 
-1. In GitHub, send a pull request to `sfajs/testing:main`.
+1. In GitHub, send a pull request to `ipare/testing:main`.
 
 - If we suggest changes then:
 
   - Make the required updates.
-  - Re-run the @sfajs/testing test suites to ensure tests are still passing.
+  - Re-run the @ipare/testing test suites to ensure tests are still passing.
   - Rebase your branch and force push to your GitHub repository (this will update your Pull Request):
 
     ```shell
@@ -165,7 +165,7 @@ To ensure consistency throughout the source code, keep these rules in mind as yo
 
 We have very precise rules over how our git commit messages can be formatted. This leads to **more
 readable messages** that are easy to follow when looking through the **project history**. But also,
-we use the git commit messages to **generate the @sfajs/testing change log**.
+we use the git commit messages to **generate the @ipare/testing change log**.
 
 ### Commit Message Format
 
@@ -187,7 +187,7 @@ to read on GitHub as well as in various git tools.
 
 Footer should contain a [closing reference to an issue](https://help.github.com/articles/closing-issues-via-commit-messages/) if any.
 
-Samples: (even more [samples](https://github.com/sfajs/testing/commits/main))
+Samples: (even more [samples](https://github.com/ipare/testing/commits/main))
 
 ### Revert
 
@@ -234,5 +234,5 @@ reference GitHub issues that this commit **Closes**.
 **Breaking Changes** should start with the word `BREAKING CHANGE:` with a space or two newlines. The rest of the commit message is then used for this.
 
 
-[github]: https://github.com/sfajs/testing
+[github]: https://github.com/ipare/testing
 [js-style-guide]: https://google.github.io/styleguide/jsguide.html

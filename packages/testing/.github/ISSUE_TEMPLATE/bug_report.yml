@@ -1,5 +1,5 @@
 name: "\U0001F41E Bug report"
-description: Report an issue with sfajs
+description: Report an issue with Ipare
 labels: [pending triage]
 body:
   - type: markdown
@@ -18,7 +18,7 @@ body:
     id: reproduction
     attributes:
       label: Reproduction
-      description: Please provide a link via [minimal.sfajs.com](http://minimal.sfajs.com) or a link to a repo that can reproduce the problem you ran into. A [minimal reproduction](https://stackoverflow.com/help/minimal-reproducible-example) is required. If a report is vague (e.g. just a generic error message) and has no reproduction, it will receive a "need reproduction" label. If no reproduction is provided after 3 days, it will be auto-closed.
+      description: Please provide a link via [minimal.ipare.org](http://minimal.ipare.org) or a link to a repo that can reproduce the problem you ran into. A [minimal reproduction](https://stackoverflow.com/help/minimal-reproducible-example) is required. If a report is vague (e.g. just a generic error message) and has no reproduction, it will receive a "need reproduction" label. If no reproduction is provided after 3 days, it will be auto-closed.
       placeholder: Reproduction
     validations:
       required: true
@@ -27,8 +27,8 @@ body:
     attributes:
       label: System Info
       description: |
-        1. Install @sfajs/cli `npm install @sfajs/cli -g`.
-        2. Run `sfa info` in project.
+        1. Install @ipare/cli `npm install @ipare/cli -g`.
+        2. Run `ipare info` in project.
         3. Provide the output here.
       render: shell
       placeholder: System, Binaries
@@ -61,17 +61,17 @@ body:
       label: Validations
       description: Before submitting the issue, please make sure you do the following
       options:
-        - label: Follow our [Code of Conduct](https://github.com/sfajs/testing/blob/main/CODE_OF_CONDUCT.md)
+        - label: Follow our [Code of Conduct](https://github.com/ipare/testing/blob/main/CODE_OF_CONDUCT.md)
           required: true
-        - label: Read the [Contributing Guidelines](https://github.com/sfajs/testing/blob/main/CONTRIBUTING.md).
+        - label: Read the [Contributing Guidelines](https://github.com/ipare/testing/blob/main/CONTRIBUTING.md).
           required: true
-        - label: Read the [docs](https://sfajs.com).
+        - label: Read the [docs](https://ipare.org).
           required: true
-        - label: Check that there isn't [already an issue](https://github.com/sfajs/testing/issues) that reports the same bug to avoid creating a duplicate.
+        - label: Check that there isn't [already an issue](https://github.com/ipare/testing/issues) that reports the same bug to avoid creating a duplicate.
           required: true
-        - label: Make sure this is a @sfajs/testing issue and not @sfajs/core issue or other plugins issue. For example, if it's a router bug, it should likely be reported to https://github.com/sfajs/router instead.
+        - label: Make sure this is a @ipare/testing issue and not @ipare/core issue or other plugins issue. For example, if it's a router bug, it should likely be reported to https://github.com/ipare/router instead.
           required: true
-        - label: Check that this is a concrete bug. For Q&A open a [GitHub Discussion](https://github.com/sfajs/core/discussions).
+        - label: Check that this is a concrete bug. For Q&A open a [GitHub Discussion](https://github.com/ipare/core/discussions).
           required: true
         - label: The provided reproduction is a [minimal reproducible example](https://stackoverflow.com/help/minimal-reproducible-example) of the bug.
           required: true

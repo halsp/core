@@ -1,14 +1,14 @@
 blank_issues_enabled: false
 contact_links:
   - name: Document
-    url: https://sfajs.com
+    url: https://ipare.org
     about: Find the answer in the document first.
-  - name: sfajs/core
-    url: https://github.com/sfajs/core
-    about: This is a problem of @sfajs/core.
-  - name: sfajs/http
-    url: https://github.com/sfajs/http
-    about: This is a problem of @sfajs/http.
+  - name: ipare/core
+    url: https://github.com/ipare/core
+    about: This is a problem of @ipare/core.
+  - name: ipare/http
+    url: https://github.com/ipare/http
+    about: This is a problem of @ipare/http.
   - name: Questions & Discussions
-    url: https://github.com/sfajs/core/discussions
+    url: https://github.com/ipare/core/discussions
     about: Use GitHub discussions for message-board style questions and discussions.

@@ -1,5 +1,5 @@
 name: "\U0001F680 New feature proposal"
-description: Propose a new feature to be added to SfaJS
+description: Propose a new feature to be added to Ipare
 labels: ["enhancement: pending triage"]
 body:
   - type: markdown
@@ -10,7 +10,7 @@ body:
     id: feature-description
     attributes:
       label: Clear and concise description of the problem
-      description: "As a developer using SfaJS I want [goal / wish] so that [benefit]. If you intend to submit a PR for this issue, tell us in the description. Thanks!"
+      description: "As a developer using Ipare I want [goal / wish] so that [benefit]. If you intend to submit a PR for this issue, tell us in the description. Thanks!"
     validations:
       required: true
   - type: textarea
@@ -36,11 +36,11 @@ body:
       label: Validations
       description: Before submitting the issue, please make sure you do the following
       options:
-        - label: Follow our [Code of Conduct](https://github.com/sfajs/testing/blob/main/CODE_OF_CONDUCT.md)
+        - label: Follow our [Code of Conduct](https://github.com/ipare/testing/blob/main/CODE_OF_CONDUCT.md)
           required: true
-        - label: Read the [Contributing Guidelines](https://github.com/sfajs/testing/blob/main/CONTRIBUTING.md).
+        - label: Read the [Contributing Guidelines](https://github.com/ipare/testing/blob/main/CONTRIBUTING.md).
           required: true
-        - label: Read the [docs](https://sfajs.com).
+        - label: Read the [docs](https://ipare.org).
           required: true
         - label: Check that there isn't already an issue that request the same feature to avoid creating a duplicate.
           required: true
