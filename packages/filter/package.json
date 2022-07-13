@@ -1,6 +1,6 @@
 {
   "name": "@ipare/filter",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Ipare 的请求过滤器插件",
   "engines": {
     "node": ">=14.18.0"
