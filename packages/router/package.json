@@ -1,6 +1,9 @@
 {
   "name": "@ipare/router",
-  "version": "2.1.6",
+  "version": "2.1.7",
+  "engines": {
+    "node": ">=14.18.0"
+  },
   "description": "Ipare 的路由插件",
   "homepage": "https://github.com/ipare/router",
   "repository": {
@@ -27,15 +30,15 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^1.6.1",
+    "@ipare/core": "^1.6.2",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "@ipare/cli-common": "^0.2.8",
-    "@types/jest": "^28.1.4",
+    "@ipare/cli-config": "^0.2.3",
+    "@types/jest": "^28.1.5",
     "@types/node": "^18.0.3",
-    "@typescript-eslint/eslint-plugin": "^5.30.5",
-    "@typescript-eslint/parser": "^5.30.5",
+    "@typescript-eslint/eslint-plugin": "^5.30.6",
+    "@typescript-eslint/parser": "^5.30.6",
     "codecov": "^3.8.3",
     "eslint": "^8.19.0",
     "eslint-config-prettier": "^8.5.0",
@@ -46,14 +49,14 @@
     "typescript": "^4.7.4"
   },
   "peerDependencies": {
-    "@ipare/cli-common": "0.2.x",
+    "@ipare/cli-config": "0.2.x",
     "@ipare/core": "~1"
   },
   "peerDependenciesMeta": {
     "@ipare/core": {
       "optional": true
     },
-    "@ipare/cli-common": {
+    "@ipare/cli-config": {
       "optional": true
     }
   },
