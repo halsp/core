@@ -1,6 +1,6 @@
 {
   "name": "@ipare/mva",
-  "version": "1.5.3",
+  "version": "1.5.4",
   "description": "Ipare MVA 框架",
   "engines": {
     "node": ">=14.18.0"
