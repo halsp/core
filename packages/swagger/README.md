@@ -7,7 +7,7 @@
     <a href="https://github.com/ipare/swagger/blob/main/LICENSE" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="GitHub license" /></a>
     <a href=""><img src="https://img.shields.io/npm/v/@ipare/swagger.svg" alt="npm version"></a>
     <a href=""><img src="https://badgen.net/npm/dt/@ipare/swagger" alt="npm downloads"></a>
-    <a href="https://nodejs.org/en/about/releases/"><img src="https://img.shields.io/node/v/vite.svg" alt="node compatibility"></a>
+    <a href="https://nodejs.org/en/about/releases/"><img src="https://img.shields.io/node/v/@ipare/swagger.svg" alt="node compatibility"></a>
     <a href="#"><img src="https://github.com/ipare/swagger/actions/workflows/test.yml/badge.svg?branch=main" alt="Build Status"></a>
     <a href="https://codecov.io/gh/ipare/swagger/branch/main"><img src="https://img.shields.io/codecov/c/github/ipare/swagger/main.svg" alt="Test Coverage"></a>
     <a href="https://github.com/ipare/swagger/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
@@ -19,7 +19,7 @@
 
 `@ipare/swagger` 是 `Ipare` 的 swagger 文档插件
 
-基于 [swagger-jsdoc](https://github.com/Surnet/swagger-jsdoc) 生成页面
+使用装饰器注释文档
 
 在浏览器中使用 [swagger-ui](https://github.com/swagger-api/swagger-ui) 渲染文档
 
