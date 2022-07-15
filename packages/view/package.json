@@ -1,9 +1,9 @@
 {
   "name": "@ipare/view",
-  "version": "1.3.5",
+  "version": "1.3.6",
   "description": "Ipare 视图渲染中间件",
   "engines": {
-    "node": ">=14.18.0"
+    "node": ">=12.16.0"
   },
   "homepage": "https://github.com/ipare/view",
   "repository": {
@@ -14,7 +14,8 @@
     "ipare",
     "render",
     "views",
-    "templates"
+    "templates",
+    "consolidate"
   ],
   "bugs": {
     "url": "https://github.com/ipare/view/issues",
@@ -31,12 +32,12 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^1.6.2",
+    "@ipare/core": "^1.6.3",
     "consolidate": "^0.16.0"
   },
   "devDependencies": {
     "@types/jest": "^28.1.5",
-    "@types/node": "^18.0.3",
+    "@types/node": "^18.0.4",
     "@types/consolidate": "^0.14.1",
     "@typescript-eslint/eslint-plugin": "^5.30.6",
     "@typescript-eslint/parser": "^5.30.6",
@@ -45,10 +46,10 @@
     "eslint": "^8.19.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "jest": "^28.1.2",
+    "jest": "^28.1.3",
     "prettier": "^2.7.1",
     "pug": "^3.0.2",
-    "ts-jest": "^28.0.5",
+    "ts-jest": "^28.0.6",
     "typescript": "^4.7.4"
   },
   "peerDependencies": {
