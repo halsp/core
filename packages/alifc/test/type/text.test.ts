@@ -1,4 +1,4 @@
-import { AlifuncStartup } from "../../src";
+import { AlifcStartup } from "../../src";
 import { newAliRes, newAliReq } from "../utils";
 
 test("text body", async function () {
@@ -6,7 +6,7 @@ test("text body", async function () {
   const aliReq = newAliReq();
   const aliRes = newAliRes();
 
-  await new AlifuncStartup()
+  await new AlifcStartup()
     .use((ctx) => {
       ctx.ok("BODY");
     })
@@ -22,7 +22,7 @@ test("text body set type", async function () {
   const aliReq = newAliReq();
   const aliRes = newAliRes();
 
-  await new AlifuncStartup()
+  await new AlifcStartup()
     .use((ctx) => {
       ctx.res.setHeader("content-type", "text/plain");
       ctx.res.setHeader("content-length", Buffer.byteLength("BODY").toString());
@@ -40,7 +40,7 @@ test("html body", async function () {
   const aliReq = newAliReq();
   const aliRes = newAliRes();
 
-  await new AlifuncStartup()
+  await new AlifcStartup()
     .use((ctx) => {
       ctx.ok("<div>BODY</div>");
     })

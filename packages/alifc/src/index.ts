@@ -18,5 +18,5 @@ declare module "@ipare/core" {
 
 export { AliReq } from "./ali-req";
 export { AliRes } from "./ali-res";
-export { AlifuncStartup } from "./alifunc-startup";
+export { AlifcStartup } from "./alifc-startup";
 export { cliConfig } from "./cli-config";

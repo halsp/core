@@ -1,6 +1,6 @@
-# Contributing to @ipare/alifunc
+# Contributing to @ipare/alifc
 
-We would love for you to contribute to @ipare/alifunc and help make it even better than it is
+We would love for you to contribute to @ipare/alifc and help make it even better than it is
 today! As a contributor, here are the guidelines we would like you to follow:
 
 - [Question or Problem?](#question)
@@ -41,22 +41,22 @@ Before you submit an issue, please search the issue tracker, maybe an issue for 
 
 We want to fix all the issues as soon as possible, but before fixing a bug we need to reproduce and confirm it. In order to reproduce bugs we will systematically ask you to provide a minimal reproduction scenario using a repository or [Gist](https://gist.github.com/). Having a live, reproducible scenario gives us wealth of important information without going back & forth to you with additional questions like:
 
-- version of @ipare/core and @ipare/alifunc used
+- version of @ipare/core and @ipare/alifc used
 - plugins and their versions
 - 3rd-party libraries and their versions
 - and most importantly - a use-case that fails
 
 Unfortunately, we are not able to investigate / fix bugs without a minimal reproduction, so if we don't hear back from you we are going to close an issue that doesn't have enough info to be reproduced.
 
-You can file new issues by filling out our [issue forms](https://github.com/ipare/alifunc/issues/new/choose).
+You can file new issues by filling out our [issue forms](https://github.com/ipare/alifc/issues/new/choose).
 
 ### <a name="submit-pr"></a> Submitting a Pull Request (PR)
 
 Before you submit your Pull Request (PR) consider the following guidelines:
 
-1. Search [GitHub](https://github.com/ipare/alifunc/pulls) for an open or closed PR
+1. Search [GitHub](https://github.com/ipare/alifc/pulls) for an open or closed PR
    that relates to your submission. You don't want to duplicate effort.
-1. Fork the @ipare/alifunc repo.
+1. Fork the @ipare/alifc repo.
 1. Make your changes in a new git branch:
 
    ```shell
@@ -65,7 +65,7 @@ Before you submit your Pull Request (PR) consider the following guidelines:
 
 1. Create your patch, **including appropriate test cases**.
 1. Follow our [Coding Rules](#rules).
-1. Run the full @ipare/alifunc test suite (see [common scripts](#common-scripts)),
+1. Run the full @ipare/alifc test suite (see [common scripts](#common-scripts)),
    and ensure that all tests pass.
 1. Commit your changes using a descriptive commit message that follows our
    [commit message conventions](#commit). Adherence to these conventions
@@ -83,12 +83,12 @@ Before you submit your Pull Request (PR) consider the following guidelines:
    git push origin my-fix-branch
    ```
 
-1. In GitHub, send a pull request to `ipare/alifunc:main`.
+1. In GitHub, send a pull request to `ipare/alifc:main`.
 
 - If we suggest changes then:
 
   - Make the required updates.
-  - Re-run the @ipare/alifunc test suites to ensure tests are still passing.
+  - Re-run the @ipare/alifc test suites to ensure tests are still passing.
   - Rebase your branch and force push to your GitHub repository (this will update your Pull Request):
 
     ```shell
@@ -165,7 +165,7 @@ To ensure consistency throughout the source code, keep these rules in mind as yo
 
 We have very precise rules over how our git commit messages can be formatted. This leads to **more
 readable messages** that are easy to follow when looking through the **project history**. But also,
-we use the git commit messages to **generate the @ipare/alifunc change log**.
+we use the git commit messages to **generate the @ipare/alifc change log**.
 
 ### Commit Message Format
 
@@ -187,7 +187,7 @@ to read on GitHub as well as in various git tools.
 
 Footer should contain a [closing reference to an issue](https://help.github.com/articles/closing-issues-via-commit-messages/) if any.
 
-Samples: (even more [samples](https://github.com/ipare/alifunc/commits/main))
+Samples: (even more [samples](https://github.com/ipare/alifc/commits/main))
 
 ### Revert
 
@@ -234,5 +234,5 @@ reference GitHub issues that this commit **Closes**.
 **Breaking Changes** should start with the word `BREAKING CHANGE:` with a space or two newlines. The rest of the commit message is then used for this.
 
 
-[github]: https://github.com/ipare/alifunc
+[github]: https://github.com/ipare/alifc
 [js-style-guide]: https://google.github.io/styleguide/jsguide.html

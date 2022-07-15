@@ -1,5 +1,5 @@
 import { Response } from "@ipare/core";
-import { AlifuncStartup } from "../src";
+import { AlifcStartup } from "../src";
 
 const req: any = {
   queries: {},
@@ -13,7 +13,7 @@ const res: any = new Response();
 res.send = () => undefined;
 
 test("context", async () => {
-  await new AlifuncStartup()
+  await new AlifcStartup()
     .use((ctx) => {
       const context = ctx.aliContext;
       const aliReq1 = ctx.aliReq;

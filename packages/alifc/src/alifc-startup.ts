@@ -4,7 +4,7 @@ import { Stream } from "stream";
 import { AliReq } from "./ali-req";
 import { AliRes } from "./ali-res";
 
-export class AlifuncStartup extends HttpBodyPraserStartup {
+export class AlifcStartup extends HttpBodyPraserStartup {
   constructor() {
     super((ctx) => ctx.aliReq);
   }

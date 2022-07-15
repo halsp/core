@@ -1,4 +1,4 @@
-import { AlifuncStartup } from "../../src";
+import { AlifcStartup } from "../../src";
 import { newAliRes, newAliReq } from "../utils";
 
 test("json body", async function () {
@@ -6,7 +6,7 @@ test("json body", async function () {
   const aliReq = newAliReq();
   const aliRes = newAliRes();
 
-  await new AlifuncStartup()
+  await new AlifcStartup()
     .use((ctx) => {
       ctx.ok({
         content: "BODY",
@@ -35,7 +35,7 @@ test("json body set type", async function () {
   };
   const strBody = JSON.stringify(body);
 
-  await new AlifuncStartup()
+  await new AlifcStartup()
     .use((ctx) => {
       ctx.res.setHeader("content-type", "application/json");
       ctx.res.setHeader(
@@ -58,7 +58,7 @@ test("prase json", async function () {
 
   aliReq.headers["content-type"] = "application/json";
 
-  await new AlifuncStartup()
+  await new AlifcStartup()
     .useHttpJsonBody()
     .use((ctx) => {
       ctx.ok(ctx.req.body);

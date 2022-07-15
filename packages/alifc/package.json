@@ -1,22 +1,23 @@
 {
-  "name": "@ipare/alifunc",
+  "name": "@ipare/alifc",
   "version": "1.2.4",
   "description": "将 Ipare 托管到阿里云函数计算",
   "engines": {
     "node": ">=12.16.0"
   },
-  "homepage": "https://github.com/ipare/alifunc",
+  "homepage": "https://github.com/ipare/alifc",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ipare/alifunc"
+    "url": "https://github.com/ipare/alifc"
   },
   "keywords": [
     "ipare",
     "aliyun",
-    "serverless"
+    "serverless",
+    "fc"
   ],
   "bugs": {
-    "url": "https://github.com/ipare/alifunc/issues",
+    "url": "https://github.com/ipare/alifc/issues",
     "email": "support@hal.wang"
   },
   "main": "dist/index.js",

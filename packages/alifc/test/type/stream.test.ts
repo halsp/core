@@ -1,4 +1,4 @@
-import { AlifuncStartup } from "../../src";
+import { AlifcStartup } from "../../src";
 import { createReadStream } from "fs";
 import { newAliRes, newAliReq } from "../utils";
 
@@ -7,7 +7,7 @@ test("stream body", async function () {
   const aliReq = newAliReq();
   const aliRes = newAliRes();
 
-  await new AlifuncStartup()
+  await new AlifcStartup()
     .use((ctx) => {
       ctx.ok(createReadStream("./LICENSE"));
     })
