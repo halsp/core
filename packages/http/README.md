@@ -7,7 +7,7 @@
     <a href="https://github.com/ipare/http/blob/main/LICENSE" target="_blank"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="GitHub license" /></a>
     <a href=""><img src="https://img.shields.io/npm/v/@ipare/http.svg" alt="npm version"></a>
     <a href=""><img src="https://badgen.net/npm/dt/@ipare/http" alt="npm downloads"></a>
-    <a href="https://nodejs.org/en/about/releases/"><img src="https://img.shields.io/node/v/vite.svg" alt="node compatibility"></a>
+    <a href="https://nodejs.org/en/about/releases/"><img src="https://img.shields.io/node/v/@ipare/http.svg" alt="node compatibility"></a>
     <a href="#"><img src="https://github.com/ipare/http/actions/workflows/test.yml/badge.svg?branch=main" alt="Build Status"></a>
     <a href="https://codecov.io/gh/ipare/http/branch/main"><img src="https://img.shields.io/codecov/c/github/ipare/http/main.svg" alt="Test Coverage"></a>
     <a href="https://github.com/ipare/http/pulls"><img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs Welcome"></a>
@@ -17,11 +17,11 @@
 
 ## 介绍
 
-`@ipare/http` 是 `Ipare` 的 http 托管环境
+`@ipare/http` 是 `Ipare` 的 Http 托管环境
 
-让 Ipare 能够运行于 http(s) 服务
+让 Ipare 能够运行于 Http(s) 服务
 
-你可以随时将 Ipare 云函数简单改为 nginx 托管的原生 http 服务，当然也可以将 nginx 托管的原生 http 服务简单改为 Ipare 云函数
+你可以随时将 Ipare 云函数简单改为 Nginx 托管的原生 Http 服务，当然也可以将 Nginx 托管的原生 Http 服务简单改为 Ipare 云函数
 
 ## 安装
 
