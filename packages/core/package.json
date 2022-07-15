@@ -1,9 +1,9 @@
 {
   "name": "@ipare/core",
-  "version": "1.6.2",
+  "version": "1.6.3",
   "description": "面向云的现代渐进式轻量 Node.js 框架",
   "engines": {
-    "node": ">=14.18.0"
+    "node": ">=12.16.0"
   },
   "homepage": "https://github.com/ipare/core",
   "repository": {
