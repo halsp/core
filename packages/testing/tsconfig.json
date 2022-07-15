@@ -1,8 +1,5 @@
 {
   "compilerOptions": {
-    "lib": [
-      "esnext"
-    ],
     "module": "commonjs",
     "declaration": true,
     "outDir": "./dist",
@@ -12,17 +9,9 @@
     "skipLibCheck": true,
     "noImplicitAny": false,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "types": [
-      "node",
-      "jest"
-    ]
+    "emitDecoratorMetadata": true
   },
   "include": [
     "src/**/*"
-  ],
-  "exclude": [
-    "test",
-    "bin"
   ]
 }
