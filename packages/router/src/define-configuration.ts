@@ -1,4 +1,4 @@
-declare module "@ipare/cli-config" {
+declare module "@ipare/cli" {
   interface Configuration {
     routerActionsDir?: string;
   }
