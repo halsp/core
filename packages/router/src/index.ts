@@ -37,7 +37,6 @@ export {
 } from "./decorators";
 export { setActionMetadata, getActionMetadata } from "./action";
 export { postbuild } from "./postbuild";
-import "./define-configuration";
 import MapMatcher from "./map/map-matcher";
 
 declare module "@ipare/core" {

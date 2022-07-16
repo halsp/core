@@ -1,8 +1,5 @@
 {
   "compilerOptions": {
-    "lib": [
-      "esnext"
-    ],
     "module": "commonjs",
     "declaration": true,
     "outDir": "./dist",
@@ -16,9 +13,5 @@
   },
   "include": [
     "src/**/*"
-  ],
-  "exclude": [
-    "test",
-    "dist"
   ]
 }

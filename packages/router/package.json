@@ -1,6 +1,6 @@
 {
   "name": "@ipare/router",
-  "version": "2.1.8",
+  "version": "2.1.9",
   "engines": {
     "node": ">=12.16.0"
   },
@@ -34,8 +34,8 @@
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "@types/jest": "^28.1.5",
-    "@types/node": "^18.0.4",
+    "@types/jest": "^28.1.6",
+    "@types/node": "^18.0.5",
     "@typescript-eslint/eslint-plugin": "^5.30.6",
     "@typescript-eslint/parser": "^5.30.6",
     "codecov": "^3.8.3",
