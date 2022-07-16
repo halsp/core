@@ -1,6 +1,6 @@
 {
   "name": "@ipare/filter",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "Ipare 的请求过滤器插件",
   "engines": {
     "node": ">=12.16.0"
@@ -30,12 +30,12 @@
   "dependencies": {
     "@ipare/core": "^1.6.3",
     "@ipare/inject": "^1.2.3",
-    "@ipare/router": "^2.1.8",
+    "@ipare/router": "^2.1.9",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "@types/jest": "^28.1.5",
-    "@types/node": "^18.0.4",
+    "@types/jest": "^28.1.6",
+    "@types/node": "^18.0.5",
     "@typescript-eslint/eslint-plugin": "^5.30.6",
     "@typescript-eslint/parser": "^5.30.6",
     "codecov": "^3.8.3",
