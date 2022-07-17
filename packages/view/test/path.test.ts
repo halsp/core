@@ -1,7 +1,7 @@
 import { TestStartup } from "@ipare/core";
 import "../src";
 
-test("run multiple", async function () {
+test("run multiple", async () => {
   const startup = new TestStartup()
     .useView({
       dir: "test/views",
@@ -21,7 +21,7 @@ test("run multiple", async function () {
   expect(res2.body).toBe("<p>test ejs</p>");
 });
 
-test("default index", async function () {
+test("default index", async () => {
   const res = await new TestStartup()
     .useView({
       dir: "test/views",
@@ -37,7 +37,7 @@ test("default index", async function () {
   expect(res.body).toBe("<p>test ejs</p>");
 });
 
-test("without ext", async function () {
+test("without ext", async () => {
   const res = await new TestStartup()
     .useView({
       dir: "test/views",
@@ -53,7 +53,7 @@ test("without ext", async function () {
   expect(res.body).toBe("<p>test ejs</p>");
 });
 
-test("default dir", async function () {
+test("default dir", async () => {
   const res = await new TestStartup()
     .useView()
     .use(async (ctx) => {
@@ -66,7 +66,7 @@ test("default dir", async function () {
   expect(res.status).toBe(404);
 });
 
-test("null", async function () {
+test("null", async () => {
   const res = await new TestStartup()
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .useView()

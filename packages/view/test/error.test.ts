@@ -1,7 +1,7 @@
 import { TestStartup } from "@ipare/core";
 import "../src";
 
-test("dir is not exist", async function () {
+test("dir is not exist", async () => {
   const res = await new TestStartup()
     .useView({
       dir: "test/1views",
@@ -14,7 +14,7 @@ test("dir is not exist", async function () {
   expect(res.status).toBe(404);
 });
 
-test("dir is not exist", async function () {
+test("dir is not exist", async () => {
   const res = await new TestStartup()
     .useView({
       dir: "test",
@@ -27,7 +27,7 @@ test("dir is not exist", async function () {
   expect(res.status).toBe(404);
 });
 
-test("engines is not exist", async function () {
+test("engines is not exist", async () => {
   const res = await new TestStartup()
     .useView({
       dir: "test/views",
@@ -40,7 +40,7 @@ test("engines is not exist", async function () {
   expect(res.status).toBe(404);
 });
 
-test("error path", async function () {
+test("error path", async () => {
   const res = await new TestStartup()
     .useView({
       dir: "test/views",

@@ -2,7 +2,7 @@ import { TestStartup } from "@ipare/core";
 import "../src";
 import { consolidate } from "../src";
 
-test("str engine", async function () {
+test("str engine", async () => {
   const res = await new TestStartup()
     .useView({
       dir: "test/views",
@@ -23,7 +23,7 @@ test("str engine", async function () {
   expect(res.body).toBe("<p>test ejs</p>");
 });
 
-test("func engine", async function () {
+test("func engine", async () => {
   const res = await new TestStartup()
     .useView({
       dir: "test/views",
@@ -40,7 +40,7 @@ test("func engine", async function () {
   expect(res.body).toBe("<p>test ejs</p>");
 });
 
-test("empty engine", async function () {
+test("empty engine", async () => {
   const res = await new TestStartup()
     .useView({
       dir: "test/views",

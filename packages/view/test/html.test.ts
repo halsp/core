@@ -2,7 +2,7 @@ import { TestStartup } from "@ipare/core";
 import "../src";
 
 function runHtml(renderAgain: boolean) {
-  test("html", async function () {
+  test("html", async () => {
     const res = await new TestStartup()
       .useView({
         dir: "test/views",

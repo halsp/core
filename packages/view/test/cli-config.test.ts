@@ -1,6 +1,6 @@
 import { cliConfigHook } from "../src";
 
-test("cli config hook", async function () {
+test("cli config hook", async () => {
   const config = cliConfigHook({});
   expect(config).toEqual({
     build: {
@@ -17,7 +17,7 @@ test("cli config hook", async function () {
   });
 });
 
-test("cli config hook with custom assets", async function () {
+test("cli config hook with custom assets", async () => {
   const config = cliConfigHook({
     build: {
       assets: [

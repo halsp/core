@@ -1,7 +1,7 @@
 import { TestStartup } from "@ipare/core";
 import "../src";
 
-test("ejs", async function () {
+test("ejs", async () => {
   const res = await new TestStartup()
     .useView({
       dir: "test/views",
@@ -18,7 +18,7 @@ test("ejs", async function () {
   expect(res.body).toBe("<p>test ejs</p>");
 });
 
-test("ejs index", async function () {
+test("ejs index", async () => {
   const res = await new TestStartup()
     .useView({
       dir: "test/views/ejs",

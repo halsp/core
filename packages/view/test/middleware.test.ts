@@ -1,7 +1,7 @@
 import { Middleware, TestStartup } from "@ipare/core";
 import "../src";
 
-test("default", async function () {
+test("default", async () => {
   class Md extends Middleware {
     async invoke(): Promise<void> {
       await this.view("");
@@ -16,7 +16,7 @@ test("default", async function () {
   expect(res.status).toBe(404);
 });
 
-test("middleware class", async function () {
+test("middleware class", async () => {
   class Md extends Middleware {
     async invoke(): Promise<void> {
       await this.view("ejs", {
@@ -37,7 +37,7 @@ test("middleware class", async function () {
   expect(res.body).toBe("<p>test ejs</p>");
 });
 
-test("middleware class default", async function () {
+test("middleware class default", async () => {
   class Md extends Middleware {
     async invoke(): Promise<void> {
       await this.view("");
