@@ -1,11 +1,6 @@
 import "@ipare/core";
 import { Startup } from "@ipare/core";
-import {
-  ViewOptions,
-  consolidate,
-  Engine,
-  RendererInterface,
-} from "./view-options";
+import { ViewOptions } from "./view-options";
 import { useView } from "./user-view";
 
 declare module "@ipare/core" {
@@ -29,4 +24,10 @@ Startup.prototype.useView = function <T extends Startup>(
   return this as T;
 };
 
-export { consolidate, RendererInterface, Engine, ViewOptions };
+export {
+  consolidate,
+  Engine,
+  RendererInterface,
+  ViewOptions,
+} from "./view-options";
+export { cliConfigHook } from "./cli-config";
