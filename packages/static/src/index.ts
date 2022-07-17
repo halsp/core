@@ -5,6 +5,7 @@ import { SingleStaticOptions, StaticOptions } from "./static-options";
 import { StaticMiddleware } from "./static.middleware";
 
 export { SingleStaticOptions, StaticOptions };
+export { cliConfigHook } from "./cli-config";
 
 declare module "@ipare/core" {
   interface Startup {
