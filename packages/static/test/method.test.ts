@@ -1,7 +1,7 @@
 import { TestStartup, Request } from "@ipare/core";
 import "../src";
 
-test("method", async function () {
+test("method", async () => {
   {
     const result = await new TestStartup(new Request().setMethod("GET"))
       .useStatic({
@@ -29,7 +29,7 @@ test("method", async function () {
   }
 });
 
-test("single method", async function () {
+test("single method", async () => {
   {
     const result = await new TestStartup(
       new Request().setMethod("get").setPath("ind")
@@ -52,7 +52,7 @@ test("single method", async function () {
   }
 });
 
-test("custom method", async function () {
+test("custom method", async () => {
   {
     const result = await new TestStartup(
       new Request().setMethod("head").setPath("ind")
@@ -76,7 +76,7 @@ test("custom method", async function () {
   }
 });
 
-test("array method", async function () {
+test("array method", async () => {
   {
     const result = await new TestStartup(
       new Request().setMethod("head").setPath("ind")
@@ -100,7 +100,7 @@ test("array method", async function () {
   }
 });
 
-test("any method", async function () {
+test("any method", async () => {
   {
     const result = await new TestStartup(new Request().setMethod("HEAD"))
       .useStatic({

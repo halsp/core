@@ -1,7 +1,7 @@
 import { TestStartup, Request } from "@ipare/core";
 import "../src";
 
-test("index html", async function () {
+test("index html", async () => {
   {
     const result = await new TestStartup(new Request().setMethod("get"))
       .useStatic({
@@ -30,7 +30,7 @@ test("index html", async function () {
   }
 });
 
-test("default static dir", async function () {
+test("default static dir", async () => {
   const result = await new TestStartup(new Request().setMethod("get"))
     .use(async (ctx, next) => {
       await next();

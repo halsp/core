@@ -1,7 +1,7 @@
 import { TestStartup, Request } from "@ipare/core";
 import "../src";
 
-test("match", async function () {
+test("match", async () => {
   {
     const result = await new TestStartup(
       new Request().setMethod("get").setPath("ind")
@@ -47,7 +47,7 @@ test("match", async function () {
   }
 });
 
-test("not found path", async function () {
+test("not found path", async () => {
   const result = await new TestStartup(
     new Request().setMethod("get").setPath("ind1")
   )
@@ -64,7 +64,7 @@ test("not found path", async function () {
   expect(result.status).toBe(404);
 });
 
-test("not found file", async function () {
+test("not found file", async () => {
   const result = await new TestStartup(
     new Request().setMethod("get").setPath("ind")
   )
@@ -77,7 +77,7 @@ test("not found file", async function () {
   expect(result.status).toBe(404);
 });
 
-test("found dir instead of file", async function () {
+test("found dir instead of file", async () => {
   const result = await new TestStartup(
     new Request().setMethod("get").setPath("sta")
   )
@@ -90,7 +90,7 @@ test("found dir instead of file", async function () {
   expect(result.status).toBe(404);
 });
 
-test("empty req path", async function () {
+test("empty req path", async () => {
   {
     const result = await new TestStartup(
       new Request().setMethod("get").setPath("")

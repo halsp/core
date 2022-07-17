@@ -1,7 +1,7 @@
 import { TestStartup, Request } from "@ipare/core";
 import "../src";
 
-test("forbidden path", async function () {
+test("forbidden path", async () => {
   const result = await new TestStartup(
     new Request().setMethod("get").setPath("f/../b")
   )

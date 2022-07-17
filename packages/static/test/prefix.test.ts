@@ -1,7 +1,7 @@
 import { TestStartup, Request } from "@ipare/core";
 import "../src";
 
-test("prefix", async function () {
+test("prefix", async () => {
   const result = await new TestStartup(
     new Request().setMethod("get").setPath("static/index.un")
   )
@@ -15,7 +15,7 @@ test("prefix", async function () {
   expect(result.body).toBe("unknown");
 });
 
-test("prefix with /", async function () {
+test("prefix with /", async () => {
   const result = await new TestStartup(
     new Request().setMethod("get").setPath("/static/index.un/")
   )
@@ -29,7 +29,7 @@ test("prefix with /", async function () {
   expect(result.body).toBe("unknown");
 });
 
-test("prefix not found", async function () {
+test("prefix not found", async () => {
   const result = await new TestStartup(
     new Request().setMethod("get").setPath("/static/index.un/")
   )

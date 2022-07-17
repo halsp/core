@@ -1,7 +1,7 @@
 import { TestStartup, Request } from "@ipare/core";
 import "../src";
 
-test("default req path not found", async function () {
+test("default req path not found", async () => {
   const result = await new TestStartup(
     new Request().setMethod("get").setPath("ind")
   )
@@ -12,7 +12,7 @@ test("default req path not found", async function () {
   expect(result.status).toBe(404);
 });
 
-test("default req path found", async function () {
+test("default req path found", async () => {
   {
     const result = await new TestStartup(
       new Request().setMethod("get").setPath("test/static/index.html")

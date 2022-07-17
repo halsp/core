@@ -1,7 +1,7 @@
 import { TestStartup, Request } from "@ipare/core";
 import "../src";
 
-test("unknown mime", async function () {
+test("unknown mime", async () => {
   {
     const result = await new TestStartup(
       new Request().setMethod("get").setPath("index.un")
@@ -31,7 +31,7 @@ test("unknown mime", async function () {
   }
 });
 
-test("single unknown mime", async function () {
+test("single unknown mime", async () => {
   const result = await new TestStartup(
     new Request().setMethod("get").setPath("ind")
   )

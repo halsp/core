@@ -1,7 +1,7 @@
 import { TestStartup, Request } from "@ipare/core";
 import "../src";
 
-test("null path", async function () {
+test("null path", async () => {
   {
     const result = await new TestStartup(
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -28,7 +28,7 @@ test("null path", async function () {
   }
 });
 
-test("undefined path", async function () {
+test("undefined path", async () => {
   const result = await new TestStartup(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     new Request().setMethod("get").setPath(undefined as any)
@@ -42,7 +42,7 @@ test("undefined path", async function () {
   expect(result.body).toBe("TEST");
 });
 
-test("prefix", async function () {
+test("prefix", async () => {
   const result = await new TestStartup(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     new Request().setMethod("get").setPath(null as any)

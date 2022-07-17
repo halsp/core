@@ -1,7 +1,7 @@
 import { TestStartup, Request } from "@ipare/core";
 import "../src";
 
-test("not found", async function () {
+test("not found", async () => {
   const result = await new TestStartup(
     new Request().setMethod("get").setPath("not-exist")
   )
@@ -13,7 +13,7 @@ test("not found", async function () {
   expect(result.status).toBe(404);
 });
 
-test("404 page", async function () {
+test("404 page", async () => {
   {
     const result = await new TestStartup(
       new Request().setMethod("get").setPath("not-exist")
@@ -47,7 +47,7 @@ test("404 page", async function () {
   }
 });
 
-test("404 page not found", async function () {
+test("404 page not found", async () => {
   const result = await new TestStartup(
     new Request().setMethod("get").setPath("not-exist")
   )
