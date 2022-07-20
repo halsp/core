@@ -136,7 +136,10 @@ export class ValidatePipe<T extends object = any, R extends T = any>
 
     let decOptions = Reflect.getMetadata(OPTIONS_METADATA, value.constructor);
     if (typeof decOptions == "function") {
-      decOptions = await decOptions(ctx, value);
+      decOptions = await decOptions({
+        ctx,
+        val: value,
+      });
     }
 
     if (!opts && !decOptions) {
@@ -157,7 +160,10 @@ export class ValidatePipe<T extends object = any, R extends T = any>
   ): Promise<string | undefined> {
     let decSchameName = Reflect.getMetadata(SCHAME_METADATA, value.constructor);
     if (typeof decSchameName == "function") {
-      decSchameName = await decSchameName(ctx, value);
+      decSchameName = await decSchameName({
+        ctx,
+        val: value,
+      });
     }
 
     return decSchameName;
@@ -166,7 +172,10 @@ export class ValidatePipe<T extends object = any, R extends T = any>
   private async getEnable(value: T, ctx: HttpContext): Promise<boolean> {
     let enable = Reflect.getMetadata(ENABLE_METADATA, value.constructor);
     if (typeof enable == "function") {
-      enable = await enable(ctx, value);
+      enable = await enable({
+        ctx,
+        val: value,
+      });
     }
 
     return enable != false;

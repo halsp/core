@@ -8,10 +8,10 @@ import {
 } from "../constant";
 
 export function UseValidatorOptions(
-  options: (
-    ctx: HttpContext,
-    val: any
-  ) => ValidatorOptions | Promise<ValidatorOptions>
+  options: (args: {
+    ctx: HttpContext;
+    val: any;
+  }) => ValidatorOptions | Promise<ValidatorOptions>
 ): ClassDecorator;
 export function UseValidatorOptions(options: ValidatorOptions): ClassDecorator;
 export function UseValidatorOptions(options: any): ClassDecorator {
@@ -21,7 +21,7 @@ export function UseValidatorOptions(options: any): ClassDecorator {
 }
 
 export function UseValidatorSchema(
-  schemaName: (ctx: HttpContext, val: any) => string | Promise<string>
+  schemaName: (args: { ctx: HttpContext; val: any }) => string | Promise<string>
 ): ClassDecorator;
 export function UseValidatorSchema(schemaName: string): ClassDecorator;
 export function UseValidatorSchema(schemaName: any): ClassDecorator {
@@ -31,7 +31,7 @@ export function UseValidatorSchema(schemaName: any): ClassDecorator {
 }
 
 export function ValidatorEnable(
-  fn: (ctx: HttpContext, val: any) => boolean | Promise<boolean>
+  fn: (args: { ctx: HttpContext; val: any }) => boolean | Promise<boolean>
 ): ClassDecorator {
   return function (target: any) {
     Reflect.defineMetadata(ENABLE_METADATA, fn, target);
