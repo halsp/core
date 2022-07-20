@@ -19,11 +19,11 @@ declare module "@ipare/core" {
     useValidator(): this;
     useValidator(validatorOptions: ValidatorOptions): this;
     useValidator(
-      validatorOptions: (
-        ctx: HttpContext,
-        val: any,
-        propertyType: any
-      ) => ValidatorOptions | Promise<ValidatorOptions>
+      validatorOptions: (args: {
+        ctx: HttpContext;
+        val: any;
+        propertyType: any;
+      }) => ValidatorOptions | Promise<ValidatorOptions>
     ): this;
 
     useValidationSchema(schema: ValidationSchema): this;
@@ -33,11 +33,11 @@ declare module "@ipare/core" {
 Startup.prototype.useValidator = function (
   options?:
     | ValidatorOptions
-    | ((
-        ctx: HttpContext,
-        val: any,
-        propertyType: any
-      ) => ValidatorOptions | Promise<ValidatorOptions>)
+    | ((args: {
+        ctx: HttpContext;
+        val: any;
+        propertyType: any;
+      }) => ValidatorOptions | Promise<ValidatorOptions>)
 ): Startup {
   return this.useGlobalPipe(GlobalPipeType.after, new ValidatePipe(options));
 };

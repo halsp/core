@@ -14,11 +14,11 @@ export class ValidatePipe<T extends object = any, R extends T = any>
   constructor(
     private readonly options?:
       | ValidatorOptions
-      | ((
-          ctx: HttpContext,
-          val: any,
-          propertyType: any
-        ) => ValidatorOptions | Promise<ValidatorOptions>)
+      | ((args: {
+          ctx: HttpContext;
+          val: any;
+          propertyType: any;
+        }) => ValidatorOptions | Promise<ValidatorOptions>)
   ) {}
 
   async transform(args: TransformArgs<T | R>) {
@@ -127,7 +127,11 @@ export class ValidatePipe<T extends object = any, R extends T = any>
   ): Promise<ValidatorOptions | undefined> {
     let opts = this.options;
     if (typeof opts == "function") {
-      opts = await opts(ctx, value, propertyType);
+      opts = await opts({
+        ctx,
+        propertyType,
+        val: value,
+      });
     }
 
     let decOptions = Reflect.getMetadata(OPTIONS_METADATA, value.constructor);
