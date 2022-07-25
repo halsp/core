@@ -1,5 +1,6 @@
 import { Startup } from "@ipare/core";
 import winston from "winston";
+import Transport from "winston-transport";
 import { OPTIONS_IDENTITY } from "./constant";
 import { Options } from "./options";
 
@@ -17,5 +18,6 @@ Startup.prototype.useLogger = function (options?: Options): Startup {
   );
 };
 
+export { winston, Transport };
 export { Logger } from "./decorators";
 export { Options } from "./options";
