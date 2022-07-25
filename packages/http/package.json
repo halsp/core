@@ -22,10 +22,10 @@
   },
   "main": "dist/index.js",
   "scripts": {
+    "prebuild": "npm run lint",
     "build": "sh scripts/build.sh",
     "prepublish": "npm run build",
     "publish:beta": "sh scripts/build.sh && npm publish --tag=beta --access=public",
-    "tests": "sh scripts/tests.sh",
     "lint": "eslint src test --ext .ts"
   },
   "author": "hal-wang",
