@@ -67,7 +67,6 @@
     ".eslintignore",
     ".eslintrc.js",
     ".gitignore",
-    "CODE_OF_CONDUCT.md",
     "jest.config.js",
     "LICENSE",
     "package.json",
