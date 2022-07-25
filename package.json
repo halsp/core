@@ -2,9 +2,8 @@
   "name": "ipare",
   "private": true,
   "scripts": {
-    "build": "npx lerna run build",
+    "build": "npx lerna run build && sh scripts/prerelease.sh",
     "test": "npm run build && jest",
-    "prerelease": "sh scripts/prerelease.sh",
     "bootstrap": "npx lerna bootstrap"
   },
   "devDependencies": {
