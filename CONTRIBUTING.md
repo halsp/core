@@ -1,6 +1,6 @@
-# Contributing to @ipare/inject
+# Contributing to @ipare/core
 
-We would love for you to contribute to @ipare/inject and help make it even better than it is
+We would love for you to contribute to @ipare/core and help make it even better than it is
 today! As a contributor, here are the guidelines we would like you to follow:
 
 - [Question or Problem?](#question)
@@ -41,22 +41,22 @@ Before you submit an issue, please search the issue tracker, maybe an issue for 
 
 We want to fix all the issues as soon as possible, but before fixing a bug we need to reproduce and confirm it. In order to reproduce bugs we will systematically ask you to provide a minimal reproduction scenario using a repository or [Gist](https://gist.github.com/). Having a live, reproducible scenario gives us wealth of important information without going back & forth to you with additional questions like:
 
-- version of @ipare/core and @ipare/inject used
+- version of @ipare/core used
 - plugins and their versions
 - 3rd-party libraries and their versions
 - and most importantly - a use-case that fails
 
 Unfortunately, we are not able to investigate / fix bugs without a minimal reproduction, so if we don't hear back from you we are going to close an issue that doesn't have enough info to be reproduced.
 
-You can file new issues by filling out our [issue forms](https://github.com/ipare/inject/issues/new/choose).
+You can file new issues by filling out our [issue forms](https://github.com/ipare/core/issues/new/choose).
 
 ### <a name="submit-pr"></a> Submitting a Pull Request (PR)
 
 Before you submit your Pull Request (PR) consider the following guidelines:
 
-1. Search [GitHub](https://github.com/ipare/inject/pulls) for an open or closed PR
+1. Search [GitHub](https://github.com/ipare/core/pulls) for an open or closed PR
    that relates to your submission. You don't want to duplicate effort.
-1. Fork the @ipare/inject repo.
+1. Fork the @ipare/core repo.
 1. Make your changes in a new git branch:
 
    ```shell
@@ -65,7 +65,7 @@ Before you submit your Pull Request (PR) consider the following guidelines:
 
 1. Create your patch, **including appropriate test cases**.
 1. Follow our [Coding Rules](#rules).
-1. Run the full @ipare/inject test suite (see [common scripts](#common-scripts)),
+1. Run the full @ipare/core test suite (see [common scripts](#common-scripts)),
    and ensure that all tests pass.
 1. Commit your changes using a descriptive commit message that follows our
    [commit message conventions](#commit). Adherence to these conventions
@@ -83,12 +83,12 @@ Before you submit your Pull Request (PR) consider the following guidelines:
    git push origin my-fix-branch
    ```
 
-1. In GitHub, send a pull request to `ipare/inject:main`.
+1. In GitHub, send a pull request to `ipare/core:main`.
 
 - If we suggest changes then:
 
   - Make the required updates.
-  - Re-run the @ipare/inject test suites to ensure tests are still passing.
+  - Re-run the @ipare/core test suites to ensure tests are still passing.
   - Rebase your branch and force push to your GitHub repository (this will update your Pull Request):
 
     ```shell
@@ -165,7 +165,7 @@ To ensure consistency throughout the source code, keep these rules in mind as yo
 
 We have very precise rules over how our git commit messages can be formatted. This leads to **more
 readable messages** that are easy to follow when looking through the **project history**. But also,
-we use the git commit messages to **generate the @ipare/inject change log**.
+we use the git commit messages to **generate the @ipare/core change log**.
 
 ### Commit Message Format
 
@@ -187,7 +187,7 @@ to read on GitHub as well as in various git tools.
 
 Footer should contain a [closing reference to an issue](https://help.github.com/articles/closing-issues-via-commit-messages/) if any.
 
-Samples: (even more [samples](https://github.com/ipare/inject/commits/main))
+Samples: (even more [samples](https://github.com/ipare/core/commits/main))
 
 ### Revert
 
@@ -211,7 +211,22 @@ Must be one of the following:
 
 ### Scope
 
-The scope should be the name of the npm package affected (as perceived by person reading changelog generated from commit messages.
+The scope should have the name of the npm package affected (as perceived by person reading changelog generated from commit messages).
+
+The following is the list of supported scopes:
+
+- **core**: for changes made on `packages/core` directory
+- **inject**: for changes made on `packages/inject` directory
+- **router**: for changes made on `packages/router` directory
+- ...
+
+If your change affect more than one package, separate the scopes with a comma (e.g. `core,inject`).
+
+There are currently a few exceptions to the "use package name" rule:
+
+- **packaging**: used for changes that change the npm package layout in all of our packages, e.g. public path changes, package.json changes done to all packages, d.ts file/format changes, changes to bundles, etc.
+- **changelog**: used for updating the release notes in CHANGELOG.md
+- none/empty string: useful for `style`, `test` and `refactor` changes that are done across all packages (e.g. `style: add missing semicolons`)
 
 ### Subject
 
@@ -233,6 +248,5 @@ reference GitHub issues that this commit **Closes**.
 
 **Breaking Changes** should start with the word `BREAKING CHANGE:` with a space or two newlines. The rest of the commit message is then used for this.
 
-
-[github]: https://github.com/ipare/inject
+[github]: https://github.com/ipare/core
 [js-style-guide]: https://google.github.io/styleguide/jsguide.html
