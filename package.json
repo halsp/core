@@ -2,5 +2,7 @@
   "name": "ipare",
   "private": true,
   "devDependencies": {
+    "codecov": "^3.8.3",
+    "lerna": "5.2.0"
   }
 }
