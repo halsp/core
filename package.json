@@ -1,9 +1,13 @@
 {
   "name": "ipare",
   "private": true,
+  "scripts": {
+    "prerelease":"sh scripts/prerelease.sh"
+  },
   "devDependencies": {
     "codecov": "^3.8.3",
-    "lerna": "5.2.0"
+    "lerna": "5.2.0",
+    "ts-node": "10.9.1"
   },
   "workspaces": [
     "packages/*"
