@@ -4,5 +4,5 @@ contact_links:
     url: https://ipare.org
     about: Find the answer in the document first.
   - name: Questions & Discussions
-    url: https://github.com/ipare/core/discussions
+    url: https://github.com/ipare/ipare/discussions
     about: Use GitHub discussions for message-board style questions and discussions.

@@ -1,5 +1,5 @@
 name: "\U0001F41E Bug report"
-description: Report an issue with Ipare
+description: Report an issue with ipare
 labels: [pending triage]
 body:
   - type: markdown
@@ -63,15 +63,13 @@ body:
       options:
         - label: Follow our [Code of Conduct](https://github.com/ipare/ipare/blob/main/CODE_OF_CONDUCT.md)
           required: true
-        - label: Read the [Contributing Guidelines](https://github.com/ipare/http/blob/main/CONTRIBUTING.md).
+        - label: Read the [Contributing Guidelines](https://github.com/ipare/ipare/blob/main/CONTRIBUTING.md).
           required: true
         - label: Read the [docs](https://ipare.org).
           required: true
-        - label: Check that there isn't [already an issue](https://github.com/ipare/http/issues) that reports the same bug to avoid creating a duplicate.
+        - label: Check that there isn't [already an issue](https://github.com/ipare/ipare/issues) that reports the same bug to avoid creating a duplicate.
           required: true
-        - label: Make sure this is a @ipare/http issue and not @ipare/core issue or other plugins issue. For example, if it's a router bug, it should likely be reported to https://github.com/ipare/router instead.
-          required: true
-        - label: Check that this is a concrete bug. For Q&A open a [GitHub Discussion](https://github.com/ipare/core/discussions).
+        - label: Check that this is a concrete bug. For Q&A open a [GitHub Discussion](https://github.com/ipare/ipare/discussions).
           required: true
         - label: The provided reproduction is a [minimal reproducible example](https://stackoverflow.com/help/minimal-reproducible-example) of the bug.
           required: true
