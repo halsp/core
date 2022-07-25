@@ -1,23 +1,9 @@
 {
+  "extends": "../tsconfig.base.json",
   "compilerOptions": {
-    "lib": [
-      "esnext"
-    ],
-    "module": "commonjs",
-    "declaration": true,
-    "outDir": "./dist",
-    "target": "esnext",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "noImplicitAny": false
+    "outDir": "dist"
   },
   "include": [
     "src/**/*"
-  ],
-  "exclude": [
-    "test",
-    "dist",
-    "demo"
   ]
 }
