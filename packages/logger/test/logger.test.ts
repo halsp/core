@@ -34,3 +34,13 @@ test("logger", async () => {
     message: "info",
   });
 });
+
+test("default", async () => {
+  await new TestStartup().useLogger().add(TestMiddleware).run();
+
+  await new Promise<void>((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, 1000);
+  });
+});
