@@ -1,7 +1,7 @@
 {
   "name": "@ipare/pipe",
   "version": "1.3.5",
-  "description": "Ipare 的管道插件",
+  "description": "Ipare 的管道插件，用于校验、转换、格式化请求参数",
   "engines": {
     "node": ">=12.16.0"
   },

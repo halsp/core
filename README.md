@@ -17,6 +17,8 @@
 
 ## 介绍
 
+<!--intro-->
+
 Ipare 是一个面向云的现代渐进式轻量 <a href="http://nodejs.org" target="_blank">Node.js</a> 框架
 
 可以运行于原生 http 服务，也可以运行于 serverless
@@ -42,6 +44,8 @@ mva 架构让项目各模块耦合度更低
 可选的装饰器功能让接口设计更加简单
 
 预编译路由，启动和响应速度更快，适合用于 serverless 的 nodejs 框架
+
+<!--intro-end-->
 
 ## 开始使用
 

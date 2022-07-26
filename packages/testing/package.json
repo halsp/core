@@ -1,7 +1,7 @@
 {
   "name": "@ipare/testing",
   "version": "0.0.6",
-  "description": "Ipare 的测试工具",
+  "description": "Ipare 的测试插件，用于单元测试、本地测试等",
   "engines": {
     "node": ">=12.16.0"
   },

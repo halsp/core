@@ -5,4 +5,6 @@ ts-node scripts/copy-package-file.ts ../LICENSE LICENSE
 ts-node scripts/copy-package-file.ts ../.eslintignore .eslintignore
 ts-node scripts/copy-package-file.ts ../.eslintrc.js .eslintrc.js
 
+ts-node scripts/create-readme.ts
+
 cp README.md packages/core/README.md

@@ -1,6 +1,7 @@
 dist
 node_modules
 LICENSE
+README.md
 jest.config.js
 jest.setup.js
 .eslintignore
