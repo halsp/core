@@ -2,5 +2,6 @@
   "packages": ["packages/*"],
   "npmClient": "yarn",
   "useWorkspaces": true,
-  "version": "1.7.0"
+  "version": "1.7.0",
+  "ignoreChanges": ["packages/*/test/**", "**/*.md"]
 }

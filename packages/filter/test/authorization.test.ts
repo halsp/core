@@ -3,7 +3,7 @@ import "../src";
 
 function runTest(executing: boolean) {
   test(`authorization filter ${executing}`, async () => {
-    process.chdir("test");
+    process.chdir(__dirname);
     try {
       const res = await new TestStartup(
         new Request().setMethod("get").setPath("auth").setBody({
