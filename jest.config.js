@@ -1,9 +1,6 @@
 module.exports = {
-  testRegex: "<rootDir>/packages/*/test/(.+)\\.test\\.(jsx?|tsx?)$",
-  transform: {
-    "^.+\\.tsx?$": "ts-jest",
-  },
-  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
-  collectCoverageFrom: ["packages/*/src/**/*.ts"],
+  projects: ["<rootDir>/packages/*/jest.config.js"],
   collectCoverage: true,
+  collectCoverageFrom: ["src/**/*.ts"],
+  verbose: true,
 };

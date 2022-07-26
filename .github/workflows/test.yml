@@ -28,3 +28,4 @@ jobs:
     - run: sh scripts/install-yarn.sh
     - run: npm run bootstrap
     - run: npm run test
+    - run: npx codecov

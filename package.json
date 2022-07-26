@@ -2,9 +2,11 @@
   "name": "ipare",
   "private": true,
   "scripts": {
-    "build": "npx lerna run build && sh scripts/prerelease.sh",
-    "test": "npm run build && jest",
-    "bootstrap": "npx lerna bootstrap"
+    "build": "lerna run build && sh scripts/prerelease.sh",
+    "pretest": "npm run build",
+    "test": "jest",
+    "test-q": "ts-node scripts/copy-jest-config.ts && jest",
+    "bootstrap": "lerna bootstrap"
   },
   "devDependencies": {
     "@types/jest": "^28.1.6",

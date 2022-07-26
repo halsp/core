@@ -45,7 +45,7 @@ test("streamingBody", async function () {
     await request(server)
       .put("")
       .field("name", "fileName")
-      .attach("file", path.join(__dirname, "../../tsconfig.json"));
+      .attach("file", path.join(__dirname, "../tsconfig.json"));
   } catch (err) {
     // node 16.x bug
   } finally {

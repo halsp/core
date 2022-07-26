@@ -3,3 +3,5 @@ node_modules
 coverage
 
 packages/*/LICENSE
+packages/*/jest.config.js
+packages/*/jest.setup.js
