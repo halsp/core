@@ -3,4 +3,6 @@ node_modules
 LICENSE
 jest.config.js
 jest.setup.js
+.eslintignore
+.eslintrc.js
 .gitignore
