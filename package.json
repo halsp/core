@@ -7,7 +7,9 @@
     "pretest": "npm run build",
     "test": "jest",
     "test-q": "npm run prebuild && jest",
-    "bootstrap": "lerna bootstrap"
+    "bootstrap": "lerna bootstrap",
+    "prepublish": "npm run test",
+    "publish": "lerna publish"
   },
   "devDependencies": {
     "@types/jest": "^28.1.6",
