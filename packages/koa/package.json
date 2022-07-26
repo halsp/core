@@ -22,7 +22,7 @@
   "main": "dist/index.js",
   "scripts": {
     "prebuild": "npm run lint",
-    "build": "sh scripts/build.sh",
+    "build": "rimraf ./dist/* && tsc",
     "prepublish": "npm run build",
     "publish:beta": "npm run build && npm publish --tag=beta --access=public",
     "lint": "eslint src test --ext .ts"
@@ -49,6 +49,7 @@
     "eslint-plugin-prettier": "^4.2.1",
     "koa-cors": "0.0.16",
     "prettier": "^2.7.1",
+    "rimraf": "^3.0.2",
     "supertest": "^6.2.4",
     "typescript": "^4.7.4"
   },
@@ -63,7 +64,6 @@
   "files": [
     "/.github/*",
     "/dist/*",
-    "/scripts/*",
     "/src/*",
     "/test/*",
     ".eslintignore",

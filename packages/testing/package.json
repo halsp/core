@@ -21,9 +21,9 @@
   "main": "dist/index.js",
   "scripts": {
     "prebuild": "npm run lint",
-    "build": "sh scripts/build.sh",
+    "build": "rimraf ./dist/* && tsc",
     "prepublish": "npm run build",
-    "publish:beta": "sh scripts/build.sh && npm publish --tag=beta --access=public",
+    "publish:beta": "npm run build && npm publish --tag=beta --access=public",
     "lint": "eslint src test --ext .ts"
   },
   "author": "hal-wang",
@@ -45,6 +45,7 @@
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "prettier": "^2.7.1",
+    "rimraf": "^3.0.2",
     "typescript": "^4.7.4"
   },
   "peerDependencies": {
