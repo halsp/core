@@ -1,6 +1,6 @@
 {
   "name": "@ipare/router",
-  "version": "2.1.9",
+  "version": "1.1.9",
   "engines": {
     "node": ">=12.16.0"
   },

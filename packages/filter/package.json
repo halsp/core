@@ -30,7 +30,7 @@
   "dependencies": {
     "@ipare/core": "^1.6.3",
     "@ipare/inject": "^1.2.3",
-    "@ipare/router": "^2.1.9",
+    "@ipare/router": "^1.1.9",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
@@ -47,7 +47,7 @@
   "peerDependencies": {
     "@ipare/core": "~1",
     "@ipare/inject": "~1",
-    "@ipare/router": "~2"
+    "@ipare/router": "~1"
   },
   "peerDependenciesMeta": {
     "@ipare/core": {

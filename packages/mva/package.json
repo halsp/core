@@ -33,7 +33,7 @@
   "dependencies": {
     "@ipare/core": "^1.6.3",
     "@ipare/filter": "^1.0.13",
-    "@ipare/router": "^2.1.9",
+    "@ipare/router": "^1.1.9",
     "@ipare/view": "^1.4.0"
   },
   "devDependencies": {
@@ -53,7 +53,7 @@
   "peerDependencies": {
     "@ipare/core": "~1",
     "@ipare/filter": "~1",
-    "@ipare/router": "~2",
+    "@ipare/router": "~1",
     "@ipare/view": "~1"
   },
   "peerDependenciesMeta": {
