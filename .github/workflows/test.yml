@@ -20,12 +20,11 @@ jobs:
           - os: windows-latest
             node_version: 16
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: sh scripts/install-yarn.sh
-    - run: npm run bootstrap
-    - run: npm run test
-    - run: npx codecov
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: sh scripts/install-yarn.sh
+      - run: npm run bootstrap
+      - run: npm run test

@@ -1,0 +1,49 @@
+name: "Publish NPM"
+
+on:
+  release:
+    types: [created]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node_version: [14, 16, 18]
+        include:
+          # Active LTS + other OS
+          - os: macos-latest
+            node_version: 16
+          - os: windows-latest
+            node_version: 16
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+      - run: sh scripts/install-yarn.sh
+      - run: npm run bootstrap
+      - run: npm run test
+      - run: npx codecov
+
+  publish-npm:
+    if: github.repository == 'ipare/ipare'
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+          registry-url: https://registry.npmjs.org/
+      - name: Setup Git
+        run: |
+          git config --global user.email hi@hal.wang
+          git config --global user.namehal-wang
+      - run: sh scripts/install-yarn.sh
+      - run: npm run bootstrap
+      - run: npm run build
+      - run: npx lerna publish --yes --no-verify-access -m \"chore(release) publish %s\"
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
