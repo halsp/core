@@ -9,7 +9,7 @@ fs.readdirSync("packages")
   .filter((item) => fs.existsSync(path.join("packages", item, "package.json")))
   .forEach((item) => {
     fs.copyFileSync(
-      `packages/${sourceFileName}`,
-      `packages/${item}/${targetFileName}`
+      path.join("packages", sourceFileName),
+      path.join("packages", item, targetFileName)
     );
   });

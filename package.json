@@ -2,10 +2,11 @@
   "name": "ipare",
   "private": true,
   "scripts": {
-    "build": "lerna run build && sh scripts/prerelease.sh",
+    "prebuild": "sh scripts/copy-package-files.sh",
+    "build": "lerna run build",
     "pretest": "npm run build",
     "test": "jest",
-    "test-q": "sh scripts/copy-package-files.sh && jest",
+    "test-q": "npm run prebuild && jest",
     "bootstrap": "lerna bootstrap"
   },
   "devDependencies": {
