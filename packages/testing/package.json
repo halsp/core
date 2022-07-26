@@ -5,17 +5,17 @@
   "engines": {
     "node": ">=12.16.0"
   },
-  "homepage": "https://github.com/ipare/testing",
+  "homepage": "https://github.com/ipare/ipare",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ipare/testing"
+    "url": "https://github.com/ipare/ipare"
   },
   "keywords": [
     "ipare",
     "test"
   ],
   "bugs": {
-    "url": "https://github.com/ipare/testing/issues",
+    "url": "https://github.com/ipare/ipare/issues",
     "email": "support@hal.wang"
   },
   "main": "dist/index.js",

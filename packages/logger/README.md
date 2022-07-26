@@ -21,7 +21,7 @@
 
 基于 [winston](https://github.com/winstonjs/winston)
 
-通过依赖注入 [inject](https://github.com/ipare/inject) 的方式使用
+通过依赖注入 [inject](https://github.com/ipare/ipare) 的方式使用
 
 ## 安装
 

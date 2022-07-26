@@ -5,10 +5,10 @@
     "node": ">=12.16.0"
   },
   "description": "Ipare 依赖注入中间件",
-  "homepage": "https://github.com/ipare/inject",
+  "homepage": "https://github.com/ipare/ipare",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ipare/inject"
+    "url": "https://github.com/ipare/ipare"
   },
   "keywords": [
     "ipare",
@@ -16,7 +16,7 @@
     "di"
   ],
   "bugs": {
-    "url": "https://github.com/ipare/inject/issues",
+    "url": "https://github.com/ipare/ipare/issues",
     "email": "support@hal.wang"
   },
   "main": "dist/index.js",

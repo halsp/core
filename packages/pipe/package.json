@@ -5,16 +5,16 @@
   "engines": {
     "node": ">=12.16.0"
   },
-  "homepage": "https://github.com/ipare/pipe",
+  "homepage": "https://github.com/ipare/ipare",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ipare/pipe"
+    "url": "https://github.com/ipare/ipare"
   },
   "keywords": [
     "ipare"
   ],
   "bugs": {
-    "url": "https://github.com/ipare/pipe/issues",
+    "url": "https://github.com/ipare/ipare/issues",
     "email": "support@hal.wang"
   },
   "main": "dist/index.js",

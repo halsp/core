@@ -5,10 +5,10 @@
   "engines": {
     "node": ">=12.16.0"
   },
-  "homepage": "https://github.com/ipare/koa",
+  "homepage": "https://github.com/ipare/ipare",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ipare/koa"
+    "url": "https://github.com/ipare/ipare"
   },
   "keywords": [
     "ipare",
@@ -16,7 +16,7 @@
     "koa"
   ],
   "bugs": {
-    "url": "https://github.com/ipare/koa/issues",
+    "url": "https://github.com/ipare/ipare/issues",
     "email": "support@hal.wang"
   },
   "main": "dist/index.js",

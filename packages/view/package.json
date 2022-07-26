@@ -5,10 +5,10 @@
   "engines": {
     "node": ">=12.16.0"
   },
-  "homepage": "https://github.com/ipare/view",
+  "homepage": "https://github.com/ipare/ipare",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ipare/view"
+    "url": "https://github.com/ipare/ipare"
   },
   "keywords": [
     "ipare",
@@ -18,7 +18,7 @@
     "consolidate"
   ],
   "bugs": {
-    "url": "https://github.com/ipare/view/issues",
+    "url": "https://github.com/ipare/ipare/issues",
     "email": "support@hal.wang"
   },
   "main": "dist/index.js",

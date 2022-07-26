@@ -5,10 +5,10 @@
   "engines": {
     "node": ">=12.16.0"
   },
-  "homepage": "https://github.com/ipare/jwt",
+  "homepage": "https://github.com/ipare/ipare",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ipare/jwt"
+    "url": "https://github.com/ipare/ipare"
   },
   "keywords": [
     "ipare",
@@ -16,7 +16,7 @@
     "authentication"
   ],
   "bugs": {
-    "url": "https://github.com/ipare/jwt/issues",
+    "url": "https://github.com/ipare/ipare/issues",
     "email": "support@hal.wang"
   },
   "main": "dist/index.js",
