@@ -67,7 +67,6 @@
     ".eslintignore",
     ".eslintrc.js",
     ".gitignore",
-    "jest.config.js",
     "LICENSE",
     "package.json",
     "README.md",

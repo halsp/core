@@ -22,10 +22,10 @@
   },
   "main": "dist/index.js",
   "scripts": {
-    "build": "sh scripts/build.sh",
-    "deploy:beta": "sh scripts/build.sh && npm publish --tag=beta --access=public",
-    "test": "npm run build && jest",
-    "tests": "sh scripts/tests.sh",
+    "prebuild": "npm run lint",
+    "build": "rimraf ./dist/* && tsc",
+    "prepublish": "npm run build",
+    "publish:beta": "npm run build && npm publish --tag=beta --access=public",
     "lint": "eslint src test --ext .ts"
   },
   "author": "hal-wang",
@@ -35,17 +35,14 @@
     "@ipare/http": "^1.2.4"
   },
   "devDependencies": {
-    "@types/jest": "^28.1.5",
-    "@types/node": "^18.0.4",
-    "@typescript-eslint/eslint-plugin": "^5.30.6",
-    "@typescript-eslint/parser": "^5.30.6",
-    "codecov": "^3.8.3",
-    "eslint": "^8.19.0",
+    "@types/node": "^18.6.1",
+    "@typescript-eslint/eslint-plugin": "^5.31.0",
+    "@typescript-eslint/parser": "^5.31.0",
+    "eslint": "^8.20.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
-    "jest": "^28.1.3",
     "prettier": "^2.7.1",
-    "ts-jest": "^28.0.6",
+    "rimraf": "^3.0.2",
     "typescript": "^4.7.4"
   },
   "peerDependencies": {
@@ -71,7 +68,6 @@
     ".gitignore",
     "CODE_OF_CONDUCT.md",
     "CONTRIBUTING.md",
-    "jest.config.js",
     "LICENSE",
     "package.json",
     "README.md",
