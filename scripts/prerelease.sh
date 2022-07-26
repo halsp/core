@@ -1,3 +1,4 @@
 ts-node scripts/copy-base-file.ts LICENSE
+ts-node scripts/copy-base-file.ts .gitignore
 cp README.md packages/core/README.md
-ts-node scripts/copy-jest-config.ts
+sh scripts/copy-package-files.sh

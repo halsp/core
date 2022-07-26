@@ -5,7 +5,7 @@
     "build": "lerna run build && sh scripts/prerelease.sh",
     "pretest": "npm run build",
     "test": "jest",
-    "test-q": "ts-node scripts/copy-jest-config.ts && jest",
+    "test-q": "sh scripts/copy-package-files.sh && jest",
     "bootstrap": "lerna bootstrap"
   },
   "devDependencies": {

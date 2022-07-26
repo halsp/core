@@ -1,0 +1,6 @@
+dist
+node_modules
+LICENSE
+jest.config.js
+jest.setup.js
+.gitignore
