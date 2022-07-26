@@ -44,6 +44,6 @@ jobs:
       - run: sh scripts/install-yarn.sh
       - run: npm run bootstrap
       - run: npm run build
-      - run: npx lerna publish --yes --no-verify-access -m \"chore(release) publish %s\"
+      - run: npx lerna publish from-package -y -m "chore(release):publish %s"
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
