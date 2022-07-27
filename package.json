@@ -9,8 +9,8 @@
     "test-q": "npm run prebuild && jest",
     "bootstrap": "lerna bootstrap",
     "update": "lerna version",
-    "publish:beta": "npm run test && lerna publish --npm-tag=beta -m \"chore(release):publish %s\"",
-    "publish:test": "npm run test && lerna publish --npm-tag=test --skip-git -m \"chore(release):publish %s\""
+    "publish:beta": "npm run test && lerna publish --npm-tag=beta -m \"chore(release): publish %s\"",
+    "publish:test": "npm run test && lerna publish --npm-tag=test --skip-git -m \"chore(release): publish %s\""
   },
   "devDependencies": {
     "@types/jest": "^28.1.6",

@@ -40,10 +40,10 @@ jobs:
       - name: Setup Git
         run: |
           git config --global user.email hi@hal.wang
-          git config --global user.namehal-wang
+          git config --global user.name hal-wang
       - run: sh scripts/install-yarn.sh
       - run: npm run bootstrap
       - run: npm run build
-      - run: npx lerna publish from-package -y -m "chore(release):publish %s"
+      - run: npx lerna publish from-package -y -m "chore(release):\ publish %s"
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
