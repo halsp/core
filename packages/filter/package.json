@@ -1,6 +1,6 @@
 {
   "name": "@ipare/filter",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "Ipare 的请求过滤器插件",
   "engines": {
     "node": ">=12.16.0"
@@ -30,9 +30,9 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^1.7.0",
-    "@ipare/inject": "^1.7.0",
-    "@ipare/router": "^1.7.0",
+    "@ipare/core": "^1.7.1",
+    "@ipare/inject": "^1.7.1",
+    "@ipare/router": "^1.7.1",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {

@@ -1,6 +1,6 @@
 {
   "name": "@ipare/lambda",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "将 Ipare 托管到 serverless 云函数，如腾讯云云函数、阿里云云函数、awa lambda、azure functions 等",
   "engines": {
     "node": ">=12.16.0"
@@ -36,7 +36,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^1.7.0"
+    "@ipare/core": "^1.7.1"
   },
   "devDependencies": {
     "@types/jest": "^28.1.6",
