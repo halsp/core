@@ -497,14 +497,6 @@
   resolved "https://registry.npmjs.org/@hutson/parse-repository-url/-/parse-repository-url-3.0.2.tgz#98c23c950a3d9b6c8f0daed06da6c3af06981340"
   integrity sha512-H9XAx3hc0BQHY6l+IFSWHDySypcXsvsuLhgYLUGywmJ5pswRVQJUHpOsobnLYp2ZUaUlKiKDrgWWhosOwAEM8Q==
 
-"@ipare/router@^2.1.7":
-  version "2.1.9"
-  resolved "https://registry.npmjs.org/@ipare/router/-/router-2.1.9.tgz#0267ca0bed7c09d467fadfce576cd2723b8dbc8e"
-  integrity sha512-3GuvtKXz75yLBMhS6QnLNaEDYaz/oEyzvCTa/WShWXsCDo/rdVhOxqJGWuuXilTX8dbqGbLJf5E+ghdHbrd1Qg==
-  dependencies:
-    "@ipare/core" "^1.6.3"
-    reflect-metadata "^0.1.13"
-
 "@isaacs/string-locale-compare@^1.1.0":
   version "1.1.0"
   resolved "https://registry.npmjs.org/@isaacs/string-locale-compare/-/string-locale-compare-1.1.0.tgz#291c227e93fd407a96ecd59879a35809120e432b"
