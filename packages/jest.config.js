@@ -10,4 +10,6 @@ module.exports = {
   displayName: name,
   verbose: true,
   setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
+  collectCoverage: true,
+  collectCoverageFrom: ["src/**/*.ts"],
 };
