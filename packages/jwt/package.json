@@ -24,7 +24,6 @@
     "prebuild": "npm run lint",
     "build": "rimraf ./dist/* && tsc",
     "prepublish": "npm run build",
-    "publish:beta": "npm run build && npm publish --tag=beta --access=public",
     "lint": "eslint src test --ext .ts",
     "pretest": "npm run build",
     "test": "jest"
