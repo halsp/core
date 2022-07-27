@@ -66,17 +66,3 @@ test("use again", async () => {
 
   baseExpect(res);
 });
-
-test("ignore", async () => {
-  const res = await new TestStartup()
-    .useSwagger({
-      modelIgnore: ["**/*.@(t|j)s"],
-    })
-    .useSwagger({})
-    .useRouter({
-      dir: "test/parser",
-    })
-    .run();
-
-  baseExpect(res);
-});
