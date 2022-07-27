@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import prettier from "prettier";
-import { getPackages } from "./packages";
+import { getPackages } from "./get-packages";
 
 const baseReadme = fs.readFileSync("./README.md", "utf-8");
 const introRegExp = /<!--intro-->([\s\S]+?)<!--intro-end-->/m;
@@ -48,7 +48,7 @@ function getPackageReadme(name: string) {
   return baseReadme.replace(introRegExp, intro);
 }
 
-getPackages().forEach((item) => {
+getPackages().forEach((item: string) => {
   fs.writeFileSync(
     `packages/${item}/README.md`,
     prettier.format(getPackageReadme(item), {

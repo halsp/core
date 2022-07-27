@@ -1,7 +1,7 @@
-import * as fs from "fs";
-import path from "path";
+const fs = require("fs");
+const path = require("path");
 
-export function getPackages(cwd = process.cwd()) {
+const getPackages = (cwd = process.cwd()) => {
   return fs
     .readdirSync(path.join(cwd, "packages"))
     .filter((item) =>
@@ -10,4 +10,6 @@ export function getPackages(cwd = process.cwd()) {
     .filter((item) =>
       fs.existsSync(path.join(cwd, "packages", item, "package.json"))
     );
-}
+};
+
+module.exports = { getPackages };
