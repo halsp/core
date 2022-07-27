@@ -31,6 +31,6 @@ module.exports = {
         "test",
       ],
     ],
-    "scope-enum": [1, "always", ["release", ...getPackages()]],
+    "scope-enum": [2, "always", ["release", ...getPackages()]],
   },
 };
