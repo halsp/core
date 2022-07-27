@@ -25,7 +25,6 @@
   "scripts": {
     "prebuild": "npm run lint",
     "build": "rimraf ./dist/* && tsc",
-    "prepublish": "npm run build",
     "lint": "eslint src test --ext .ts",
     "pretest": "npm run build",
     "test": "jest"
