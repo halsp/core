@@ -32,7 +32,7 @@
     "@ipare/core": "^1.7.3",
     "@ipare/inject": "^1.7.3",
     "@ipare/pipe": "^1.7.3",
-    "@ipare/router": "^2.1.7",
+    "@ipare/router": "^1.7.3",
     "openapi3-ts": "^2.0.2",
     "reflect-metadata": "^0.1.13"
   },
@@ -56,7 +56,7 @@
     "@ipare/core": "~1",
     "@ipare/inject": "~1",
     "@ipare/pipe": "~1",
-    "@ipare/router": "~2"
+    "@ipare/router": "~1"
   },
   "peerDependenciesMeta": {
     "@ipare/core": {
