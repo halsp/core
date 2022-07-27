@@ -5,10 +5,10 @@
   "engines": {
     "node": ">=12.16.0"
   },
-  "homepage": "https://github.com/ipare/alifc",
+  "homepage": "https://github.com/ipare/ipare",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ipare/alifc"
+    "url": "https://github.com/ipare/ipare"
   },
   "keywords": [
     "ipare",
@@ -17,7 +17,7 @@
     "fc"
   ],
   "bugs": {
-    "url": "https://github.com/ipare/alifc/issues",
+    "url": "https://github.com/ipare/ipare/issues",
     "email": "support@hal.wang"
   },
   "main": "dist/index.js",
