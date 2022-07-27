@@ -7,19 +7,6 @@ function baseExpect(res: Response) {
   expect((res.body as string).startsWith("<!DOCTYPE html>")).toBeTruthy();
 }
 
-test("modelCwd", async () => {
-  const res = await new TestStartup()
-    .useSwagger({
-      modelCwd: "test/parser",
-    })
-    .useRouter({
-      dir: "test/parser",
-    })
-    .run();
-
-  baseExpect(res);
-});
-
 test("builder", async () => {
   const res = await new TestStartup()
     .use(async (ctx, next) => {
@@ -27,7 +14,6 @@ test("builder", async () => {
       expect(typeof ctx.swaggerOptions.builder).toBe("function");
     })
     .useSwagger({
-      modelCwd: "test/parser",
       builder: (builder) =>
         builder.addInfo({
           title: "test",
@@ -57,7 +43,6 @@ test("other router", async () => {
 test("custom html", async () => {
   const res = await new TestStartup()
     .useSwagger({
-      modelCwd: "test/parser",
       customHtml: () => "abc",
     })
     .useRouter({
@@ -72,12 +57,8 @@ test("custom html", async () => {
 
 test("use again", async () => {
   const res = await new TestStartup()
-    .useSwagger({
-      modelCwd: "test/parser",
-    })
-    .useSwagger({
-      modelCwd: "test/parser",
-    })
+    .useSwagger({})
+    .useSwagger({})
     .useRouter({
       dir: "test/parser",
     })
@@ -89,12 +70,9 @@ test("use again", async () => {
 test("ignore", async () => {
   const res = await new TestStartup()
     .useSwagger({
-      modelCwd: "test/parser",
       modelIgnore: ["**/*.@(t|j)s"],
     })
-    .useSwagger({
-      modelCwd: "test/parser",
-    })
+    .useSwagger({})
     .useRouter({
       dir: "test/parser",
     })

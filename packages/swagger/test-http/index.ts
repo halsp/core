@@ -6,9 +6,7 @@ import "@ipare/router";
 async function bootstrap() {
   // const startup = new HttpStartup()
   //   .useHttpJsonBody()
-  //   .useSwagger({
-  //     modelCwd: "test-http/actions",
-  //   })
+  //   .useSwagger({})
   //   .useRouter({
   //     dir: "test-http/actions",
   //   });
