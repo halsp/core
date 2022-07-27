@@ -48,13 +48,17 @@ test("map parser", async () => {
     },
   ];
   const doc = runParserTest(mapItems);
-  expect(Object.hasOwn(doc["paths"]["/test1"], "post")).toBeTruthy();
+  expect(
+    Object.prototype.hasOwnProperty.call(doc["paths"]["/test1"], "post")
+  ).toBeTruthy();
 });
 
 test("default", async () => {
   const mapItems = [new MapItem("default.get.ts", "default", "def", ["get"])];
   const doc = runParserTest(mapItems);
-  expect(Object.hasOwn(doc["paths"]["/def"], "get")).toBeTruthy();
+  expect(
+    Object.prototype.hasOwnProperty.call(doc["paths"]["/def"], "get")
+  ).toBeTruthy();
 });
 
 test("not action func", async () => {

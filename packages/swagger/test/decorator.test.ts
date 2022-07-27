@@ -23,7 +23,9 @@ test("decorators", async () => {
     process.chdir("../..");
   }
   const doc = builder.getSpec();
-  expect(Object.hasOwn(doc["paths"]["/test"], "post")).toBeTruthy();
+  expect(
+    Object.prototype.hasOwnProperty.call(doc["paths"]["/test"], "post")
+  ).toBeTruthy();
 });
 
 test("getPipeRecordModelType error", async () => {
