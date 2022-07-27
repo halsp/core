@@ -9,7 +9,7 @@
     "test-q": "npm run prebuild && jest",
     "bootstrap": "lerna bootstrap",
     "preupdate": "npm run test",
-    "update": "lerna version --force-publish",
+    "update": "lerna version --force-publish -m \"chore(release): publish %s\"",
     "publish:beta": "npm run test && lerna publish --npm-tag=beta -m \"chore(release): publish %s\"",
     "publish:test": "npm run test && lerna publish --npm-tag=test --skip-git -m \"chore(release): publish %s\""
   },

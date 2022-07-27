@@ -59,8 +59,7 @@
     "rimraf": "^3.0.2",
     "shelljs": "^0.8.5",
     "supertest": "^6.2.4",
-    "ts-jest": "^28.0.7",
-    "typescript": "^4.7.4"
+    "ts-jest": "^28.0.7"
   },
   "peerDependencies": {
     "@ipare/core": "~1"
