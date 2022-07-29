@@ -26,18 +26,3 @@ test("cwd", async () => {
   expect(env.NAME).toBe("PRODUCTION");
   expect(env.SNAME).toBe("PROD");
 });
-
-test("mode options", async () => {
-  const env = await getEnv({
-    mode: "development",
-    override: true,
-  });
-  expect(env.BNAME).toBe("DEVELOPMENT");
-  expect(env.NAME).toBe("DEVELOPMENT");
-  expect(env.SNAME).toBe("DEV");
-});
-
-test("mode", async () => {
-  const env = await getEnv("stage");
-  expect(env.NAME).toBe("STAGE");
-});
