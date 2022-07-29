@@ -1,0 +1,72 @@
+{
+  "name": "@ipare/env",
+  "version": "0.0.1-beta.1",
+  "description": "Ipare 的环境配置插件，可以根据运行环境加载不同的配置",
+  "engines": {
+    "node": ">=12.16.0"
+  },
+  "homepage": "https://github.com/ipare/ipare",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ipare/ipare"
+  },
+  "keywords": [
+    "ipare",
+    "dotenv"
+  ],
+  "bugs": {
+    "url": "https://github.com/ipare/ipare/issues",
+    "email": "support@hal.wang"
+  },
+  "main": "dist/index.js",
+  "scripts": {
+    "prebuild": "npm run lint",
+    "build": "rimraf ./dist/* && tsc",
+    "publish:beta": "npm run build && npm publish --tag=beta --access=public",
+    "lint": "eslint src test --ext .ts",
+    "pretest": "npm run build",
+    "test": "jest"
+  },
+  "author": "hal-wang",
+  "license": "MIT",
+  "dependencies": {
+    "@ipare/core": "^1.7.4",
+    "dotenv": "^16.0.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^28.1.6",
+    "@types/node": "^18.6.1",
+    "@typescript-eslint/eslint-plugin": "^5.31.0",
+    "@typescript-eslint/parser": "^5.31.0",
+    "eslint": "^8.20.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "jest": "^28.1.3",
+    "prettier": "^2.7.1",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^28.0.7"
+  },
+  "peerDependencies": {
+    "@ipare/core": "~1"
+  },
+  "peerDependenciesMeta": {
+    "@ipare/core": {
+      "optional": true
+    },
+    "@ipare/inject": {
+      "optional": true
+    }
+  },
+  "files": [
+    "/dist/*",
+    "/src/*",
+    "/test/*",
+    ".eslintignore",
+    ".eslintrc.js",
+    ".gitignore",
+    "LICENSE",
+    "package.json",
+    "README.md",
+    "tsconfig.json"
+  ]
+}
