@@ -52,9 +52,6 @@
   "peerDependenciesMeta": {
     "@ipare/core": {
       "optional": true
-    },
-    "@ipare/inject": {
-      "optional": true
     }
   },
   "files": [

@@ -7,7 +7,7 @@ export async function getEnv(options?: EnvOptions | string) {
   try {
     const res = await new TestStartup()
       .useConfig(options as any)
-      .use(async (ctx) => {
+      .use((ctx) => {
         ctx.ok(process.env);
       })
       .run();

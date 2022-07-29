@@ -1,5 +1,6 @@
 import { isString, Startup } from "@ipare/core";
 import dotenv from "dotenv";
+import path from "path";
 import { BASE_USED } from "./constant";
 import { EnvOptions, isModelOptions } from "./options";
 
@@ -18,13 +19,14 @@ export function useSetup<T extends Startup>(
     for (const fileName of fileNames) {
       dotenv.config({
         path: fileName,
+        override: true,
       });
     }
   } else if (isModelOptions(options)) {
     const fileNames = getFileNames(options.mode);
     for (const fileName of fileNames) {
       dotenv.config({
-        path: fileName,
+        path: options.cwd ? path.join(options.cwd, fileName) : fileName,
         debug: options.debug,
         encoding: options.encoding,
         override: options.override,
