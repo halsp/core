@@ -1,4 +1,4 @@
-import { isString, Startup } from "@ipare/core";
+import { isString, isUndefined, Startup } from "@ipare/core";
 import dotenv from "dotenv";
 import path from "path";
 import { BASE_USED } from "./constant";
@@ -8,6 +8,10 @@ export function useEnv<T extends Startup>(
   startup: T,
   options?: EnvOptions | string
 ): T {
+  if (isUndefined(process.env.NODE_ENV)) {
+    process.env.NODE_ENV = "production";
+  }
+
   if (!startup[BASE_USED]) {
     startup[BASE_USED] = dotenv.config({
       path: ".env",
