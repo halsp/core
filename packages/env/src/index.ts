@@ -1,6 +1,6 @@
 import { Startup } from "@ipare/core";
 import { EnvOptions } from "./options";
-import { useSetup } from "./use-setup";
+import { useEnv } from "./use-env";
 import { useVersion } from "./use-version";
 
 declare module "@ipare/core" {
@@ -12,7 +12,7 @@ declare module "@ipare/core" {
 }
 
 Startup.prototype.useEnv = function (options?: EnvOptions | string): Startup {
-  return useSetup(this, options);
+  return useEnv(this, options);
 };
 
 Startup.prototype.useVersion = function (

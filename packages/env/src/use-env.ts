@@ -4,7 +4,7 @@ import path from "path";
 import { BASE_USED } from "./constant";
 import { EnvOptions, isModelOptions } from "./options";
 
-export function useSetup<T extends Startup>(
+export function useEnv<T extends Startup>(
   startup: T,
   options?: EnvOptions | string
 ): T {
