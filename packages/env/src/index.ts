@@ -4,14 +4,12 @@ import { useSetup } from "./use-setup";
 
 declare module "@ipare/core" {
   interface Startup {
-    useConfig(mode: string): this;
-    useConfig(options?: EnvOptions): this;
+    useEnv(mode: string): this;
+    useEnv(options?: EnvOptions): this;
   }
 }
 
-Startup.prototype.useConfig = function (
-  options?: EnvOptions | string
-): Startup {
+Startup.prototype.useEnv = function (options?: EnvOptions | string): Startup {
   return useSetup(this, options);
 };
 
