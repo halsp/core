@@ -23,3 +23,4 @@ Startup.prototype.useVersion = function (
 };
 
 export { EnvOptions, ModeConfigOptions, DotenvConfigOptions } from "./options";
+export { cliConfigHook } from "./cli-config";
