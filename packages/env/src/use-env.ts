@@ -15,6 +15,7 @@ export function useEnv<T extends Startup>(
   }
 
   if (isString(options)) {
+    process.env.NODE_ENV = options;
     const fileNames = getFileNames(options);
     for (const fileName of fileNames) {
       dotenv.config({
@@ -23,6 +24,7 @@ export function useEnv<T extends Startup>(
       });
     }
   } else if (isModelOptions(options)) {
+    process.env.NODE_ENV = options.mode;
     const fileNames = getFileNames(options.mode);
     for (const fileName of fileNames) {
       dotenv.config({

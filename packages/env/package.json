@@ -1,6 +1,6 @@
 {
   "name": "@ipare/env",
-  "version": "0.0.1-beta.3",
+  "version": "0.0.1-beta.4",
   "description": "Ipare 的环境配置插件，可以根据运行环境加载不同的配置",
   "engines": {
     "node": ">=12.16.0"
