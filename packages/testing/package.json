@@ -63,9 +63,7 @@
     }
   },
   "files": [
-    "/.github/*",
     "/dist/*",
-    "/scripts/*",
     "/src/*",
     "/test/*",
     ".eslintignore",

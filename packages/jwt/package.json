@@ -62,7 +62,6 @@
     }
   },
   "files": [
-    "/.github/*",
     "/dist/*",
     "/src/*",
     "/test/*",

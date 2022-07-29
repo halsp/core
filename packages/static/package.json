@@ -51,9 +51,7 @@
     "@ipare/core": "~1"
   },
   "files": [
-    "/.github/*",
     "/dist/*",
-    "/scripts/*",
     "/src/*",
     "/test/*",
     ".eslintrc.js",
