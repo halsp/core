@@ -8,7 +8,10 @@ export function useVersion<T extends Startup>(
   cwd: string
 ): T {
   return startup.use(async (ctx, next) => {
-    const pkgStr = fs.readFileSync(path.join(cwd, "package.json"), "utf-8");
+    const pkgStr = await fs.promises.readFile(
+      path.join(cwd, "package.json"),
+      "utf-8"
+    );
     const version = JSON.parse(pkgStr).version ?? "0";
     ctx.setHeader(header, version);
     await next();

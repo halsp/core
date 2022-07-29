@@ -11,7 +11,7 @@ test("empty options", async () => {
 
 test("cwd", async () => {
   const res = await new TestStartup()
-    .useConfig({
+    .useEnv({
       mode: "production",
       cwd: "test/envs",
       override: true,

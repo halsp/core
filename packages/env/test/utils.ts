@@ -6,7 +6,7 @@ export async function getEnv(options?: EnvOptions | string) {
   process.chdir("test/envs");
   try {
     const res = await new TestStartup()
-      .useConfig(options as any)
+      .useEnv(options as any)
       .use((ctx) => {
         ctx.ok(process.env);
       })
