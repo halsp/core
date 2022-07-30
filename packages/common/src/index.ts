@@ -27,6 +27,6 @@ export {
   isClass,
   normalizePath,
   addLeadingSlash,
-} from "./shared";
+} from "./typeis";
 
 export { isCliAssetExist, tryAddCliAssets, getCliAssets } from "./cli-assets";

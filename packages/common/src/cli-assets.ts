@@ -1,4 +1,4 @@
-import { isString } from "./shared";
+import { isString } from "./typeis";
 
 export function isCliAssetExist(
   assets: any[],
