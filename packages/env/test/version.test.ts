@@ -2,8 +2,6 @@ import { TestStartup } from "@ipare/core";
 import * as fs from "fs";
 import "../src";
 
-const version = JSON.parse(fs.readFileSync("package.json", "utf-8")).version;
-
 test("use version", async () => {
   const res = await new TestStartup()
     .useVersion()
@@ -11,6 +9,8 @@ test("use version", async () => {
       ctx.ok(process.env);
     })
     .run();
+
+  const version = JSON.parse(fs.readFileSync("package.json", "utf-8")).version;
   expect(res.getHeader("version")).toBe(version);
 });
 
