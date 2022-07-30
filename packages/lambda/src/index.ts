@@ -13,4 +13,4 @@ declare module "@ipare/core" {
 
 export { ResponseStruct } from "./response-struct";
 export { LambdaStartup } from "./lambda-startup";
-export { cliConfig } from "./cli-config";
+export { cliConfigHook } from "./cli-config";
