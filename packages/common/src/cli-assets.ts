@@ -22,17 +22,20 @@ export function tryAddCliAssets(
   compare: (asset: string) => boolean,
   ...addAssets: any[]
 ) {
+  const assets = getCliAssets(config);
+
+  if (!isCliAssetExist(assets, compare)) {
+    assets.push(...addAssets);
+  }
+  return config;
+}
+
+export function getCliAssets(config: any) {
   if (!config.build) {
     config.build = {};
   }
   if (!config.build.assets) {
     config.build.assets = [];
   }
-
-  const assets = config.build.assets as any[];
-
-  if (!isCliAssetExist(assets, compare)) {
-    assets.push(...addAssets);
-  }
-  return config;
+  return config.build.assets as any[];
 }
