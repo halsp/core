@@ -32,7 +32,6 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/common": "^1.7.4",
     "@ipare/core": "^1.7.4",
     "consolidate": "^0.16.0"
   },
@@ -53,14 +52,10 @@
     "ts-jest": "^28.0.7"
   },
   "peerDependencies": {
-    "@ipare/core": "~1",
-    "@ipare/common": "~1"
+    "@ipare/core": "~1"
   },
   "peerDependenciesMeta": {
     "@ipare/core": {
-      "optional": true
-    },
-    "@ipare/common": {
       "optional": true
     }
   },

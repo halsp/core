@@ -30,7 +30,6 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/common": "^1.7.4",
     "@ipare/core": "^1.7.4",
     "dotenv": "^16.0.1"
   },

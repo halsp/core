@@ -1,4 +1,4 @@
-import { getCliAssets, isCliAssetExist } from "@ipare/common";
+import { getCliAssets, isCliAssetExist } from "@ipare/core";
 
 export const cliConfigHook = (config: any, { command }) => {
   const assets = getCliAssets(config);
