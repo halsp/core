@@ -5,7 +5,7 @@
     "node": ">=12.16.0"
   },
   "description": "Ipare 依赖注入中间件",
-  "homepage": "https://github.com/ipare/ipare",
+  "homepage": "https://ipare.org",
   "repository": {
     "type": "git",
     "url": "https://github.com/ipare/ipare"

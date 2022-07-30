@@ -5,7 +5,7 @@
     "node": ">=12.16.0"
   },
   "description": "Ipare 的路由插件",
-  "homepage": "https://github.com/ipare/ipare",
+  "homepage": "https://ipare.org",
   "repository": {
     "type": "git",
     "url": "https://github.com/ipare/ipare"
