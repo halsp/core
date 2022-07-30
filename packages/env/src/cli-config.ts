@@ -1,4 +1,6 @@
-export const cliConfigHook = (config: any) => {
+import { isString } from "@ipare/core";
+
+export const cliConfigHook = (config: any, { command }) => {
   if (!config.build) {
     config.build = {};
   }
@@ -7,15 +9,35 @@ export const cliConfigHook = (config: any) => {
   }
 
   const assets = config.build.assets as any[];
-  if (!assets.some((ass) => ass.include == ".env")) {
-    assets.push({
-      include: ".env",
-    });
+  if (!isAssetExist(assets, (ass) => ass == ".env")) {
+    assets.push(".env");
   }
-  if (!assets.some((ass) => !!ass.include?.startsWith(".env."))) {
-    assets.push({
-      include: ".env.*",
-    });
+  if (!isAssetExist(assets, (ass) => ass.startsWith(".env."))) {
+    if (command == "start") {
+      assets.push(".env.*");
+    } else {
+      assets.push({
+        include: ".env.*",
+        exclude: ".env.local",
+      });
+    }
   }
   return config;
 };
+
+function isAssetExist(
+  assets: any[],
+  compare: (asset: string) => boolean
+): boolean {
+  return assets.some((item) => {
+    if (isString(item)) {
+      return compare(item);
+    } else {
+      if (isString(item.include)) {
+        return compare(item.include);
+      } else {
+        return item.include.some((item: string) => compare(item));
+      }
+    }
+  });
+}
