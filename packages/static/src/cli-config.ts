@@ -1,20 +1,15 @@
-export const cliConfigHook = (config: any) => {
-  if (!config.build) {
-    config.build = {};
-  }
-  if (!config.build.assets) {
-    config.build.assets = [];
-  }
+import { tryAddCliAssets } from "@ipare/common";
 
-  const assets = config.build.assets as any[];
-  if (!assets.some((ass) => ass.include == "static/*")) {
-    assets.push({
+export const cliConfigHook = (config: any) => {
+  return tryAddCliAssets(
+    config,
+    (ass) => ass.startsWith("static/"),
+    {
       include: "static/*",
       root: "src",
-    });
-    assets.push({
+    },
+    {
       include: "static/*",
-    });
-  }
-  return config;
+    }
+  );
 };

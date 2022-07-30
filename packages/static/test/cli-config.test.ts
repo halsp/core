@@ -17,23 +17,15 @@ test("cli config hook", async () => {
   });
 });
 
-test("cli config hook with custom assets", async () => {
+test("cli config hook", async () => {
   const config = cliConfigHook({
     build: {
-      assets: [
-        {
-          include: "static/*",
-        },
-      ],
+      assets: ["static/*"],
     },
   });
   expect(config).toEqual({
     build: {
-      assets: [
-        {
-          include: "static/*",
-        },
-      ],
+      assets: ["static/*"],
     },
   });
 });
