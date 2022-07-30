@@ -49,7 +49,16 @@
     "ts-jest": "^28.0.7"
   },
   "peerDependencies": {
-    "@ipare/core": "~1"
+    "@ipare/core": "~1",
+    "@ipare/common": "~1"
+  },
+  "peerDependenciesMeta": {
+    "@ipare/core": {
+      "optional": true
+    },
+    "@ipare/common": {
+      "optional": true
+    }
   },
   "files": [
     "/dist/*",

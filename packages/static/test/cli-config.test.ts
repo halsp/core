@@ -9,9 +9,7 @@ test("cli config hook", async () => {
           include: "static/*",
           root: "src",
         },
-        {
-          include: "static/*",
-        },
+        "static/*",
       ],
     },
   });

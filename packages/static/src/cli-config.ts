@@ -8,8 +8,6 @@ export const cliConfigHook = (config: any) => {
       include: "static/*",
       root: "src",
     },
-    {
-      include: "static/*",
-    }
+    "static/*"
   );
 };
