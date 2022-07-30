@@ -16,3 +16,23 @@ export function isCliAssetExist(
     }
   });
 }
+
+export function tryAddCliAssets(
+  config: any,
+  compare: (asset: string) => boolean,
+  ...addAssets: any[]
+) {
+  if (!config.build) {
+    config.build = {};
+  }
+  if (!config.build.assets) {
+    config.build.assets = [];
+  }
+
+  const assets = config.build.assets as any[];
+
+  if (!isCliAssetExist(assets, compare)) {
+    assets.push(...addAssets);
+  }
+  return config;
+}

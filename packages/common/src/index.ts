@@ -29,4 +29,4 @@ export {
   addLeadingSlash,
 } from "./shared";
 
-export { isCliAssetExist } from "./cli-assets";
+export { isCliAssetExist, tryAddCliAssets } from "./cli-assets";

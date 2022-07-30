@@ -1,4 +1,4 @@
-import { isCliAssetExist } from "../src";
+import { isCliAssetExist, tryAddCliAssets } from "../src";
 
 test("string array", async () => {
   expect(
@@ -59,4 +59,17 @@ test("include not exist", async () => {
       (asset) => asset.startsWith("views/")
     )
   ).toBeFalsy();
+});
+
+test("cli config hook", async () => {
+  const config = tryAddCliAssets(
+    {},
+    (asset) => asset.startsWith("views/"),
+    "views/*"
+  );
+  expect(config).toEqual({
+    build: {
+      assets: ["views/*"],
+    },
+  });
 });
