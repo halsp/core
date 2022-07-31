@@ -15,6 +15,10 @@
     <a href="https://paypal.me/ihalwang" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
 </p>
 
+## 开始使用
+
+请跟随文档 [ipare.org](https://ipare.org)
+
 ## 介绍
 
 <!--intro-->
@@ -43,19 +47,15 @@ mva 架构让项目各模块耦合度更低
 
 可选的装饰器功能让接口设计更加简单
 
-预编译路由，启动和响应速度更快，适合用于 serverless 的 nodejs 框架
+预编译路由，启动和响应速度更快，适合用于 serverless
+
+开箱即用的 [CLI](https://github.com/ipare/cli) 让创建、调试、运行项目更加简单
 
 <!--intro-end-->
 
-## 开始使用
-
-请访问 <https://ipare.org>
-
 ## 贡献
 
-请阅读 [Contributing to @ipare/ipare](https://github.com/ipare/ipare/blob/main/CONTRIBUTING.md)
-
-### 贡献列表
+在提交 PR 前请先阅读 [Contributing to ipare](https://github.com/ipare/ipare/blob/main/CONTRIBUTING.md).
 
 <a href="https://github.com/ipare/ipare/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=ipare/ipare" />
@@ -63,4 +63,6 @@ mva 架构让项目各模块耦合度更低
 
 ## License
 
-Ipare is MIT licensed.
+[MIT](https://opensource.org/licenses/MIT)
+
+Copyright (c) 2022-present, Hal Wang

@@ -47,7 +47,6 @@
     "ts-jest": "^28.0.7"
   },
   "files": [
-    "/coverage/*",
     "/dist/*",
     "/src/*",
     "/test/*",
