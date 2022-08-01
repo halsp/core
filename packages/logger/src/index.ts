@@ -32,10 +32,10 @@ Startup.prototype.useLogger = function (options?: Options): Startup {
       } finally {
         if (!options?.injectType || options.injectType == InjectType.Scoped) {
           const logger = tryParseInject<winston.Logger>(ctx, injectKey);
-          logger?.destroy();
+          !logger?.destroyed && logger?.destroy();
         } else if (options.injectType == InjectType.Transient) {
           getTransientInstances<winston.Logger>(ctx, injectKey).forEach(
-            (item) => item.destroyed && item.destroy()
+            (item) => !item.destroyed && item.destroy()
           );
         }
       }
