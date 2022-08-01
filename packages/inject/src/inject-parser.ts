@@ -86,6 +86,20 @@ class InjectDecoratorParser<T extends object = any> {
     );
   }
 
+  public async tryParseInject(
+    target: string | ObjectConstructor<T>
+  ): Promise<T | undefined> {
+    const existMap = isString(target)
+      ? this.getExistKeyMap(target)
+      : this.getExistTargetMap(target);
+
+    const { record } = this.getExistInjectRecord(
+      existMap?.type ?? InjectType.Scoped,
+      target
+    );
+    return record?.value;
+  }
+
   //#region parsePropValue
   private async getKeyPropValue(prop: InjectKey) {
     const existMap = this.getExistKeyMap(prop.key);
@@ -107,13 +121,6 @@ class InjectDecoratorParser<T extends object = any> {
     }
 
     return this.parsePropValue(result);
-  }
-
-  private getExistKeyMap(key: string) {
-    const injectMaps = this.ctx.bag<InjectMap[]>(MAP_BAG) ?? [];
-    return injectMaps.filter(
-      (map) => isString(map.anestor) && map.anestor == key
-    )[0];
   }
 
   private async getCustomPropValue(prop: InjectCustom) {
@@ -166,10 +173,7 @@ class InjectDecoratorParser<T extends object = any> {
 
   //#region createObject
   private async createTargetObject(target: ObjectConstructor<T>) {
-    const injectMaps = this.ctx.bag<InjectMap[]>(MAP_BAG) ?? [];
-    const existMap = injectMaps.filter(
-      (map) => isFunction(map.anestor) && map.anestor == target
-    )[0];
+    const existMap = this.getExistTargetMap(target);
 
     return await this.getObjectFromExistMap(
       existMap?.target ?? target,
@@ -294,6 +298,20 @@ class InjectDecoratorParser<T extends object = any> {
   ): ObjectConstructor[] {
     return Reflect.getMetadata(CLASS_METADATA, target.prototype) ?? [];
   }
+
+  private getExistKeyMap(key: string) {
+    const injectMaps = this.ctx.bag<InjectMap[]>(MAP_BAG) ?? [];
+    return injectMaps.filter(
+      (map) => isString(map.anestor) && map.anestor == key
+    )[0];
+  }
+
+  private getExistTargetMap(target: ObjectConstructor<T>) {
+    const injectMaps = this.ctx.bag<InjectMap[]>(MAP_BAG) ?? [];
+    return injectMaps.filter(
+      (map) => isFunction(map.anestor) && map.anestor == target
+    )[0];
+  }
 }
 
 export function isInjectClass<T extends object>(target: ObjectConstructor<T>) {
@@ -302,14 +320,26 @@ export function isInjectClass<T extends object>(target: ObjectConstructor<T>) {
 
 export async function parseInject<T extends object = any>(
   ctx: HttpContext,
+  key: string
+): Promise<T | undefined>;
+export async function parseInject<T extends object = any>(
+  ctx: HttpContext,
   target: InjectTarget<T>
-): Promise<T> {
-  return await new InjectDecoratorParser<T>(ctx).parseTarget(target);
+): Promise<T>;
+export async function parseInject<T extends object = any>(
+  ctx: HttpContext,
+  target: InjectTarget<T> | string
+): Promise<T | undefined> {
+  if (isString(target)) {
+    return await new InjectDecoratorParser<T>(ctx).parseKey(target);
+  } else {
+    return await new InjectDecoratorParser<T>(ctx).parseTarget(target);
+  }
 }
 
-export async function parseKeyInject<T extends object = any>(
+export async function tryParseInject<T extends object = any>(
   ctx: HttpContext,
-  key: string
+  target: ObjectConstructor<T> | string
 ): Promise<T | undefined> {
-  return await new InjectDecoratorParser<T>(ctx).parseKey(key);
+  return await new InjectDecoratorParser<T>(ctx).tryParseInject(target);
 }
