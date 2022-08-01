@@ -1,7 +1,7 @@
 import "@ipare/core";
 import { Startup, ObjectConstructor, HttpContext } from "@ipare/core";
 import { HookType } from "@ipare/core/dist/middlewares";
-import { USED, MAP_BAG } from "./constant";
+import { USED, MAP_BAG, SINGLETON_BAG } from "./constant";
 import { KeyTargetType, InjectMap } from "./interfaces";
 import { isInjectClass, parseInject } from "./inject-parser";
 import { InjectType } from "./inject-type";
@@ -49,13 +49,19 @@ Startup.prototype.useInject = function (): Startup {
   }
   this[USED] = true;
 
-  return this.hook(HookType.Constructor, async (ctx, mh) => {
-    if (isInjectClass(mh)) {
-      return await parseInject(ctx, mh);
-    }
-  }).hook(async (ctx, mh) => {
-    await parseInject(ctx, mh);
-  });
+  const singletons = [];
+  return this.use(async (ctx, next) => {
+    ctx.bag(SINGLETON_BAG, singletons);
+    await next();
+  })
+    .hook(HookType.Constructor, async (ctx, mh) => {
+      if (isInjectClass(mh)) {
+        return await parseInject(ctx, mh);
+      }
+    })
+    .hook(async (ctx, mh) => {
+      await parseInject(ctx, mh);
+    });
 };
 
 Startup.prototype.inject = function (...args: any[]): Startup {

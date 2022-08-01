@@ -14,6 +14,7 @@ import {
   MAP_BAG,
   PROPERTY_METADATA,
   TRANSIENT_BAG,
+  SINGLETON_BAG,
 } from "./constant";
 import { InjectType } from "./inject-type";
 import "reflect-metadata";
@@ -27,8 +28,6 @@ type InjectDecoratorRecordItem<T = any> = {
 };
 
 class InjectDecoratorParser<T extends object = any> {
-  private static readonly singletonInject: InjectDecoratorRecordItem[] = [];
-
   constructor(private readonly ctx: HttpContext) {}
 
   private injectConstructor!: ObjectConstructor<T>;
@@ -220,7 +219,7 @@ class InjectDecoratorParser<T extends object = any> {
     if (type == InjectType.Transient) {
       records = this.getRecordsFromBag(TRANSIENT_BAG);
     } else if (type == InjectType.Singleton) {
-      records = InjectDecoratorParser.singletonInject;
+      records = this.getRecordsFromBag(SINGLETON_BAG);
     } else {
       records = this.getRecordsFromBag(SCOPED_BAG);
     }
