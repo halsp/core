@@ -1,8 +1,12 @@
 import { TestStartup } from "@ipare/core";
 import "../src";
 import { Service2 } from "./services";
-import { InjectType, parseInject, tryParseInject } from "../src";
-import { getTransientInstance } from "../src/inject-parser";
+import {
+  getTransientInstances,
+  InjectType,
+  parseInject,
+  tryParseInject,
+} from "../src";
 
 test(`inject decorators object`, async function () {
   const res = await new TestStartup()
@@ -55,7 +59,7 @@ test(`try parse`, async function () {
     .use(async (ctx) => {
       const service1 = await parseInject(ctx, Service2);
       const service2 = await parseInject(ctx, Service2);
-      const svs = getTransientInstance(ctx, Service2);
+      const svs = getTransientInstances(ctx, Service2);
       return ctx.ok({
         eq: service1 == service2,
         sv1: svs[0] == service1,

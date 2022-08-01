@@ -96,7 +96,7 @@ class InjectDecoratorParser<T extends object = any> {
     return record?.value;
   }
 
-  public getTransientInstance(target: string | ObjectConstructor<T>): T[] {
+  public getTransientInstances(target: string | ObjectConstructor<T>): T[] {
     return this.getRecordsFromBag(TRANSIENT_BAG)
       .filter((item) => item.injectKey == target)
       .map((item) => item.value);
@@ -349,9 +349,9 @@ export function tryParseInject<T extends object = any>(
   return new InjectDecoratorParser<T>(ctx).tryParseInject(target);
 }
 
-export function getTransientInstance<T extends object = any>(
+export function getTransientInstances<T extends object = any>(
   ctx: HttpContext,
   target: ObjectConstructor<T> | string
 ): T[] {
-  return new InjectDecoratorParser<T>(ctx).getTransientInstance(target);
+  return new InjectDecoratorParser<T>(ctx).getTransientInstances(target);
 }

@@ -95,5 +95,9 @@ Startup.prototype.inject = function (...args: any[]): Startup {
 };
 
 export { Inject, createInject } from "./decorators";
-export { parseInject, tryParseInject } from "./inject-parser";
+export {
+  parseInject,
+  tryParseInject,
+  getTransientInstances,
+} from "./inject-parser";
 export { InjectType } from "./inject-type";
