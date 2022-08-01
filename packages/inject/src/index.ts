@@ -1,7 +1,7 @@
 import "@ipare/core";
 import { Startup, ObjectConstructor, HttpContext } from "@ipare/core";
 import { HookType } from "@ipare/core/dist/middlewares";
-import { IS_INJECT_USED, MAP_BAG } from "./constant";
+import { USED, MAP_BAG } from "./constant";
 import { KeyTargetType, InjectMap } from "./interfaces";
 import { isInjectClass, parseInject } from "./inject-parser";
 import { InjectType } from "./inject-type";
@@ -44,10 +44,10 @@ declare module "@ipare/core" {
 }
 
 Startup.prototype.useInject = function (): Startup {
-  if (this[IS_INJECT_USED]) {
+  if (this[USED]) {
     return this;
   }
-  this[IS_INJECT_USED] = true;
+  this[USED] = true;
 
   return this.hook(HookType.Constructor, async (ctx, mh) => {
     if (isInjectClass(mh)) {

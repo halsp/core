@@ -9,10 +9,11 @@ import {
 import {
   CLASS_METADATA,
   CUSTOM_METADATA,
-  DECORATOR_SCOPED_BAG,
+  SCOPED_BAG,
   KEY_METADATA,
   MAP_BAG,
   PROPERTY_METADATA,
+  TRANSIENT_BAG,
 } from "./constant";
 import { InjectType } from "./inject-type";
 import "reflect-metadata";
@@ -20,12 +21,9 @@ import { InjectMap, InjectCustom, InjectKey } from "./interfaces";
 
 type InjectTarget<T extends object = any> = T | ObjectConstructor<T>;
 
-type InjectDecoratorRecordItem = {
-  injectKey:
-    | ObjectConstructor
-    | string
-    | ((...args: any[]) => any | Promise<any>);
-  value: any;
+type InjectDecoratorRecordItem<T = any> = {
+  injectKey: ObjectConstructor | string | ((...args: any[]) => T | Promise<T>);
+  value: T;
 };
 
 class InjectDecoratorParser<T extends object = any> {
@@ -86,9 +84,7 @@ class InjectDecoratorParser<T extends object = any> {
     );
   }
 
-  public async tryParseInject(
-    target: string | ObjectConstructor<T>
-  ): Promise<T | undefined> {
+  public tryParseInject(target: string | ObjectConstructor<T>): T | undefined {
     const existMap = isString(target)
       ? this.getExistKeyMap(target)
       : this.getExistTargetMap(target);
@@ -98,6 +94,12 @@ class InjectDecoratorParser<T extends object = any> {
       target
     );
     return record?.value;
+  }
+
+  public getTransientInstance(target: string | ObjectConstructor<T>): T[] {
+    return this.getRecordsFromBag(TRANSIENT_BAG)
+      .filter((item) => item.injectKey == target)
+      .map((item) => item.value);
   }
 
   //#region parsePropValue
@@ -212,29 +214,32 @@ class InjectDecoratorParser<T extends object = any> {
       | ((...angs: any[]) => any | Promise<any>)
   ): {
     records: InjectDecoratorRecordItem[];
-    record: InjectDecoratorRecordItem;
+    record?: InjectDecoratorRecordItem;
   } {
     let records: InjectDecoratorRecordItem[];
     if (type == InjectType.Transient) {
-      records = [];
+      records = this.getRecordsFromBag(TRANSIENT_BAG);
     } else if (type == InjectType.Singleton) {
       records = InjectDecoratorParser.singletonInject;
     } else {
-      records = this.getScopedRecords();
+      records = this.getRecordsFromBag(SCOPED_BAG);
     }
+    const existedRecord =
+      type == InjectType.Transient
+        ? undefined
+        : records.filter((item) => item.injectKey == injectKey)[0];
 
     return {
       records: records,
-      record: records.filter((item) => item.injectKey == injectKey)[0],
+      record: existedRecord,
     };
   }
 
-  private getScopedRecords() {
-    let records =
-      this.ctx.bag<InjectDecoratorRecordItem[]>(DECORATOR_SCOPED_BAG);
+  private getRecordsFromBag(bagName: string) {
+    let records = this.ctx.bag<InjectDecoratorRecordItem[]>(bagName);
     if (!records) {
       records = [];
-      this.ctx.bag(DECORATOR_SCOPED_BAG, records);
+      this.ctx.bag(bagName, records);
     }
     return records;
   }
@@ -337,9 +342,16 @@ export async function parseInject<T extends object = any>(
   }
 }
 
-export async function tryParseInject<T extends object = any>(
+export function tryParseInject<T extends object = any>(
   ctx: HttpContext,
   target: ObjectConstructor<T> | string
-): Promise<T | undefined> {
-  return await new InjectDecoratorParser<T>(ctx).tryParseInject(target);
+): T | undefined {
+  return new InjectDecoratorParser<T>(ctx).tryParseInject(target);
+}
+
+export function getTransientInstance<T extends object = any>(
+  ctx: HttpContext,
+  target: ObjectConstructor<T> | string
+): T[] {
+  return new InjectDecoratorParser<T>(ctx).getTransientInstance(target);
 }
