@@ -1,4 +1,9 @@
 import { Startup } from "@ipare/core";
+import {
+  InjectType,
+  tryParseInject,
+  getTransientInstances,
+} from "@ipare/inject";
 import winston from "winston";
 import Transport from "winston-transport";
 import { FileTransportOptions } from "winston/lib/winston/transports";
@@ -18,11 +23,23 @@ declare module "@ipare/core" {
 }
 
 Startup.prototype.useLogger = function (options?: Options): Startup {
-  return this.useInject().inject(
-    OPTIONS_IDENTITY + (options?.identity ?? ""),
-    () => winston.createLogger(options),
-    options?.injectType
-  );
+  const injectKey = OPTIONS_IDENTITY + (options?.identity ?? "");
+  return this.useInject()
+    .inject(injectKey, () => winston.createLogger(options), options?.injectType)
+    .use(async (ctx, next) => {
+      try {
+        await next();
+      } finally {
+        if (!options?.injectType || options.injectType == InjectType.Scoped) {
+          const logger = tryParseInject<winston.Logger>(ctx, injectKey);
+          logger?.destroy();
+        } else if (options.injectType == InjectType.Transient) {
+          getTransientInstances<winston.Logger>(ctx, injectKey).forEach(
+            (item) => item.destroyed && item.destroy()
+          );
+        }
+      }
+    });
 };
 
 Startup.prototype.useConsoleLogger = function (options: Options = {}): Startup {

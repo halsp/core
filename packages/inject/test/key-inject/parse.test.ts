@@ -42,9 +42,9 @@ test(`try parse`, async function () {
     .useInject()
     .inject("SERVICE1", TestService1)
     .use(async (ctx) => {
-      const obj1 = await tryParseInject(ctx, "SERVICE1");
+      const obj1 = tryParseInject(ctx, "SERVICE1");
       const obj2 = await parseInject(ctx, "SERVICE1");
-      const obj3 = await tryParseInject(ctx, "SERVICE1");
+      const obj3 = tryParseInject(ctx, "SERVICE1");
       return ctx.ok({
         obj1: !!obj1,
         obj2: !!obj2,
