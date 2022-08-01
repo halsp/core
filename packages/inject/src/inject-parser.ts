@@ -31,20 +31,17 @@ type InjectDecoratorRecordItem = {
 class InjectDecoratorParser<T extends object = any> {
   private static readonly singletonInject: InjectDecoratorRecordItem[] = [];
 
-  constructor(
-    private readonly ctx: HttpContext,
-    private readonly target: InjectTarget<T>
-  ) {}
+  constructor(private readonly ctx: HttpContext) {}
 
   private injectConstructor!: ObjectConstructor<T>;
   private obj!: any;
 
-  public async parse(): Promise<T> {
-    const isConstructor = !isObject(this.target);
+  public async parseTarget(target: InjectTarget<T>): Promise<T> {
+    const isConstructor = !isObject(target);
     this.injectConstructor = isConstructor
-      ? (this.target as ObjectConstructor<T>)
-      : (this.target.constructor as ObjectConstructor<T>);
-    this.obj = isConstructor ? await this.createTargetObject() : this.target;
+      ? (target as ObjectConstructor<T>)
+      : (target.constructor as ObjectConstructor<T>);
+    this.obj = isConstructor ? await this.createTargetObject(target) : target;
 
     const prototype = this.injectConstructor.prototype;
     const customProps: InjectCustom[] =
@@ -78,13 +75,20 @@ class InjectDecoratorParser<T extends object = any> {
     return this.obj;
   }
 
+  public async parseKey(key: string): Promise<T | undefined> {
+    const existMap = this.getExistKeyMap(key);
+    if (!existMap) return undefined;
+
+    return await this.getObjectFromExistMap(
+      existMap.target,
+      existMap.type,
+      key
+    );
+  }
+
   //#region parsePropValue
   private async getKeyPropValue(prop: InjectKey) {
-    const injectMaps = this.ctx.bag<InjectMap[]>(MAP_BAG) ?? [];
-    const existMap = injectMaps.filter(
-      (map) => isString(map.anestor) && map.anestor == prop.key
-    )[0];
-
+    const existMap = this.getExistKeyMap(prop.key);
     let result: any;
     if (!!existMap) {
       result = await this.getObjectFromExistMap(
@@ -103,6 +107,13 @@ class InjectDecoratorParser<T extends object = any> {
     }
 
     return this.parsePropValue(result);
+  }
+
+  private getExistKeyMap(key: string) {
+    const injectMaps = this.ctx.bag<InjectMap[]>(MAP_BAG) ?? [];
+    return injectMaps.filter(
+      (map) => isString(map.anestor) && map.anestor == key
+    )[0];
   }
 
   private async getCustomPropValue(prop: InjectCustom) {
@@ -154,8 +165,7 @@ class InjectDecoratorParser<T extends object = any> {
   //#endregion
 
   //#region createObject
-  private async createTargetObject() {
-    const target = this.target as ObjectConstructor<T>;
+  private async createTargetObject(target: ObjectConstructor<T>) {
     const injectMaps = this.ctx.bag<InjectMap[]>(MAP_BAG) ?? [];
     const existMap = injectMaps.filter(
       (map) => isFunction(map.anestor) && map.anestor == target
@@ -294,5 +304,12 @@ export async function parseInject<T extends object = any>(
   ctx: HttpContext,
   target: InjectTarget<T>
 ): Promise<T> {
-  return await new InjectDecoratorParser<T>(ctx, target).parse();
+  return await new InjectDecoratorParser<T>(ctx).parseTarget(target);
+}
+
+export async function parseKeyInject<T extends object = any>(
+  ctx: HttpContext,
+  key: string
+): Promise<T | undefined> {
+  return await new InjectDecoratorParser<T>(ctx).parseKey(key);
 }
