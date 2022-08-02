@@ -10,7 +10,7 @@ import "../src";
 import { OPTIONS_IDENTITY } from "../src/constant";
 
 it("scoped instance should be destroyed", async () => {
-  await new TestStartup()
+  const res = await new TestStartup()
     .use(async (ctx, next) => {
       await next();
       const dataSource = await parseInject<typeorm.DataSource>(
@@ -23,20 +23,22 @@ it("scoped instance should be destroyed", async () => {
       type: "sqlite",
       database: "test/sqlite.db",
       injectType: InjectType.Scoped,
+      initialize: true,
     })
     .use(async (ctx, next) => {
       const dataSource = await parseInject<typeorm.DataSource>(
         ctx,
         OPTIONS_IDENTITY
       );
-      expect(dataSource?.isInitialized).toBeFalsy();
+      expect(dataSource?.isInitialized).toBeTruthy();
       await next();
     })
     .run();
+  expect(res.status).toBe(404);
 });
 
 it("transient instance should be destroyed", async () => {
-  await new TestStartup()
+  const res = await new TestStartup()
     .use(async (ctx, next) => {
       await next();
       const dataSource = getTransientInstances<typeorm.DataSource>(
@@ -55,23 +57,24 @@ it("transient instance should be destroyed", async () => {
         ctx,
         OPTIONS_IDENTITY
       );
+      expect(dataSource1?.isInitialized).toBeTruthy();
+      await dataSource1?.destroy();
+      expect(dataSource1?.isInitialized).toBeFalsy();
+
       const dataSource2 = await parseInject<typeorm.DataSource>(
         ctx,
         OPTIONS_IDENTITY
       );
-      expect(dataSource1?.isInitialized).toBeTruthy();
       expect(dataSource2?.isInitialized).toBeTruthy();
-
-      dataSource1?.destroy();
-      expect(dataSource1?.isInitialized).toBeFalsy();
 
       await next();
     })
     .run();
+  expect(res.status).toBe(404);
 });
 
 it("singleton instance should not be destroyed", async () => {
-  await new TestStartup()
+  const res = await new TestStartup()
     .use(async (ctx, next) => {
       await next();
       const dataSource = await parseInject<typeorm.DataSource>(
@@ -84,7 +87,6 @@ it("singleton instance should not be destroyed", async () => {
       type: "sqlite",
       database: "test/sqlite.db",
       injectType: InjectType.Singleton,
-      initialize: false,
     })
     .use(async (ctx, next) => {
       const dataSource = await parseInject<typeorm.DataSource>(
@@ -95,10 +97,11 @@ it("singleton instance should not be destroyed", async () => {
       await next();
     })
     .run();
+  expect(res.status).toBe(404);
 });
 
 it("instance should be undefined", async () => {
-  await new TestStartup()
+  const res = await new TestStartup()
     .use(async (ctx, next) => {
       await next();
       const dataSource = tryParseInject<typeorm.DataSource>(
@@ -112,4 +115,5 @@ it("instance should be undefined", async () => {
       database: "test/sqlite.db",
     })
     .run();
+  expect(res.status).toBe(404);
 });

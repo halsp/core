@@ -35,11 +35,15 @@ Startup.prototype.useTypeorm = function (options: Options): Startup {
       } finally {
         if (!options.injectType || options.injectType == InjectType.Scoped) {
           const dataSource = tryParseInject<typeorm.DataSource>(ctx, injectKey);
-          dataSource?.isInitialized && dataSource.destroy();
+          dataSource?.isInitialized && (await dataSource.destroy());
         } else if (options.injectType == InjectType.Transient) {
-          getTransientInstances<typeorm.DataSource>(ctx, injectKey).forEach(
-            (item) => item.isInitialized && item.destroy()
+          const instances = getTransientInstances<typeorm.DataSource>(
+            ctx,
+            injectKey
           );
+          for (const instance of instances) {
+            instance.isInitialized && (await instance.destroy());
+          }
         }
       }
     });
