@@ -7,4 +7,4 @@ jest.setup.js
 .eslintignore
 .eslintrc.js
 .gitignore
-tsconfig.json
+/tsconfig.json
