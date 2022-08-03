@@ -1,4 +1,4 @@
-import { MapItem } from "@ipare/router";
+import { MapItem, RouterInitedOptions } from "@ipare/router";
 import { OpenApiBuilder, OperationObject, TagObject } from "openapi3-ts";
 import { ACTION_DECORATORS } from "../constant";
 import { ActionCallback } from "../decorators";
@@ -6,7 +6,8 @@ import { ActionCallback } from "../decorators";
 export class TagsParser {
   constructor(
     private readonly routerMap: readonly MapItem[],
-    private readonly builder: OpenApiBuilder
+    private readonly builder: OpenApiBuilder,
+    private readonly routerOptions: RouterInitedOptions
   ) {}
 
   public parse() {
@@ -17,7 +18,10 @@ export class TagsParser {
       const operation: OperationObject = {
         responses: {},
       };
-      const actionCbs: ActionCallback[] = mapItem[ACTION_DECORATORS] ?? [];
+
+      const action = mapItem.getAction(this.routerOptions.dir);
+      const actionCbs: ActionCallback[] =
+        Reflect.getMetadata(ACTION_DECORATORS, action.prototype) ?? [];
       actionCbs.forEach((cb) => cb(operation));
       const actionTags = operation.tags ?? [];
       actionTags.forEach((tag) => {

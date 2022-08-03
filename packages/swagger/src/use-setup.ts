@@ -37,8 +37,7 @@ export function useSetup<T extends Startup>(
         const doc = new Parser(
           startup.routerMap,
           openApiBuilder,
-          startup.routerOptions,
-          options
+          startup.routerOptions
         ).parse();
         swaggerBody = await getSwaggerBody(doc, options);
       }

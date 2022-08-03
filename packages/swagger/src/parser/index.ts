@@ -3,19 +3,17 @@ import { OpenApiBuilder, OpenAPIObject } from "openapi3-ts";
 import "reflect-metadata";
 import { TagsParser } from "./tags.parser";
 import { MapParser } from "./map.parser";
-import { SwaggerOptions } from "../swagger-options";
 import { IgnoreParser } from "./ignore.parser";
 
 export class Parser {
   constructor(
     private readonly routerMap: readonly MapItem[],
     private readonly builder: OpenApiBuilder,
-    private readonly routerOptions: RouterOptions & { dir: string },
-    private readonly options: SwaggerOptions
+    private readonly routerOptions: RouterOptions & { dir: string }
   ) {}
 
   public parse(): OpenAPIObject {
-    new TagsParser(this.routerMap, this.builder).parse();
+    new TagsParser(this.routerMap, this.builder, this.routerOptions).parse();
     new MapParser(this.routerMap, this.builder, this.routerOptions).parse();
 
     new IgnoreParser(this.builder).parse();

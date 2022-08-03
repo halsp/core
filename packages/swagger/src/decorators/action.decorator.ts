@@ -1,4 +1,3 @@
-import { getActionMetadata, setActionMetadata } from "@ipare/router";
 import {
   CallbacksObject,
   ExternalDocumentationObject,
@@ -13,13 +12,10 @@ export type ActionCallback = (operation: OperationObject) => void;
 
 export function createActionDecorator(cb: ActionCallback) {
   return function (target: any) {
-    const cbs =
-      getActionMetadata<ActionCallback[]>(
-        target.prototype,
-        ACTION_DECORATORS
-      ) ?? [];
-    cbs.push(cb);
-    setActionMetadata(target.prototype, ACTION_DECORATORS, cbs);
+    const callbacks: ActionCallback[] =
+      Reflect.getMetadata(ACTION_DECORATORS, target.prototype) ?? [];
+    callbacks.push(cb);
+    Reflect.defineMetadata(ACTION_DECORATORS, callbacks, target.prototype);
   };
 }
 

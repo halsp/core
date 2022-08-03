@@ -1,6 +1,6 @@
 import { isClass, ObjectConstructor } from "@ipare/core";
 import { PipeReqRecord, getPipeRecords } from "@ipare/pipe";
-import { Action, MapItem, RouterOptions } from "@ipare/router";
+import { Action, MapItem, RouterInitedOptions } from "@ipare/router";
 import {
   OpenApiBuilder,
   OperationObject,
@@ -31,7 +31,7 @@ export class MapParser {
   constructor(
     private readonly routerMap: readonly MapItem[],
     private readonly builder: OpenApiBuilder,
-    private readonly routerOptions: RouterOptions & { dir: string }
+    private readonly routerOptions: RouterInitedOptions
   ) {}
 
   public parse() {
@@ -59,12 +59,7 @@ export class MapParser {
     for (const mapItem of mapItems) {
       const action = mapItem.getAction(this.routerOptions.dir);
       for (const method of mapItem.methods) {
-        this.parseUrlMethodItem(
-          pathItem,
-          method.toLowerCase(),
-          mapItem,
-          action
-        );
+        this.parseUrlMethodItem(pathItem, method.toLowerCase(), action);
       }
     }
   }
@@ -72,7 +67,6 @@ export class MapParser {
   private parseUrlMethodItem(
     pathItem: PathItemObject,
     method: string,
-    mapItem: MapItem,
     action: ObjectConstructor<Action>
   ) {
     const operation = {
@@ -80,7 +74,7 @@ export class MapParser {
       parameters: [],
     };
     pathItem[method] = operation;
-    this.execActionDecoratorCallback(mapItem, operation);
+    this.execActionDecoratorCallback(action, operation);
 
     const pipeReqRecords = getPipeRecords(action);
 
@@ -94,10 +88,11 @@ export class MapParser {
   }
 
   private execActionDecoratorCallback(
-    mapItem: MapItem,
+    action: ObjectConstructor<Action>,
     operation: OperationObject
   ) {
-    const cbs: ActionCallback[] = mapItem[ACTION_DECORATORS] ?? [];
+    const cbs: ActionCallback[] =
+      Reflect.getMetadata(ACTION_DECORATORS, action.prototype) ?? [];
     cbs.forEach((cb) => cb(operation));
   }
 

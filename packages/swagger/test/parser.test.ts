@@ -3,23 +3,14 @@ import { OpenApiBuilder } from "openapi3-ts";
 import { ACTION_DECORATORS, IGNORE } from "../src/constant";
 import { Parser } from "../src/parser";
 import { IgnoreParser } from "../src/parser/ignore.parser";
-import { SwaggerOptions } from "../src/swagger-options";
 
-function runParserTest(
-  routerMap?: readonly MapItem[],
-  options: SwaggerOptions = {}
-) {
+function runParserTest(routerMap?: readonly MapItem[]) {
   const builder = new OpenApiBuilder();
   process.chdir("test/parser");
   try {
-    new Parser(
-      routerMap ?? [],
-      builder,
-      {
-        dir: ".",
-      },
-      options
-    ).parse();
+    new Parser(routerMap ?? [], builder, {
+      dir: ".",
+    }).parse();
   } finally {
     process.chdir("../..");
   }
