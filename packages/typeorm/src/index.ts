@@ -5,6 +5,7 @@ import {
   InjectType,
   tryParseInject,
 } from "@ipare/inject";
+import path from "path";
 import * as typeorm from "typeorm";
 import { OPTIONS_IDENTITY } from "./constant";
 import { Options } from "./options";
@@ -17,12 +18,24 @@ declare module "@ipare/core" {
 
 Startup.prototype.useTypeorm = function (options: Options): Startup {
   const injectKey = OPTIONS_IDENTITY + (options.identity ?? "");
+  options.initialize = options.initialize ?? true;
+  if (!options.entities) {
+    options = Object.assign(options, {
+      entities: [
+        path.join(
+          process.cwd(),
+          process.env.TS_JEST ? "entities/*.ts" : "entities/*.js"
+        ),
+      ],
+    });
+  }
+
   return this.useInject()
     .inject(
       injectKey,
       async () => {
         const dataSource = new typeorm.DataSource(options);
-        if (options.initialize ?? true) {
+        if (options.initialize) {
           await dataSource.initialize();
         }
         return dataSource;

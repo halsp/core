@@ -1,10 +1,10 @@
 dist
 node_modules
-LICENSE
-README.md
-jest.config.js
-jest.setup.js
-.eslintignore
-.eslintrc.js
-.gitignore
+/LICENSE
+/README.md
+/jest.config.js
+/jest.setup.js
+/.eslintignore
+/.eslintrc.js
+/.gitignore
 /tsconfig.json
