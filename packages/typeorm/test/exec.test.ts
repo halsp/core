@@ -4,7 +4,7 @@ import path from "path";
 import "../src";
 import { typeorm } from "../src";
 import { OPTIONS_IDENTITY } from "../src/constant";
-import { TestDto } from "./entities/TestDto";
+import { TestEntity } from "./entities/TestEntity";
 
 it("should insert entity to sqlite", async () => {
   const res = await new TestStartup()
@@ -21,10 +21,10 @@ it("should insert entity to sqlite", async () => {
       );
       if (!dataSource) throw new Error();
 
-      const testDto = new TestDto();
+      const testDto = new TestEntity();
       testDto.name = "test";
       await dataSource.manager.save(testDto);
-      const findResult = await dataSource.getRepository(TestDto).findOne({
+      const findResult = await dataSource.getRepository(TestEntity).findOne({
         where: {
           name: "test",
         },
