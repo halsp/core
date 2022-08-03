@@ -1,6 +1,6 @@
 {
   "name": "@ipare/http",
-  "version": "1.7.6",
+  "version": "1.7.7",
   "description": "Ipare 的 Http 托管环境",
   "engines": {
     "node": ">=12.16.0"
@@ -31,7 +31,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^1.7.6",
+    "@ipare/core": "^1.7.7",
     "co-body": "^6.1.0",
     "formidable": "^2.0.1",
     "type-is": "^1.6.18",

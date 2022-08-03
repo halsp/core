@@ -1,6 +1,6 @@
 {
   "name": "@ipare/typeorm",
-  "version": "0.0.1-beta.1",
+  "version": "1.7.7",
   "description": "Ipare TypeORM 插件",
   "engines": {
     "node": ">=12.16.0"
@@ -28,8 +28,8 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^1.7.6",
-    "@ipare/inject": "^1.7.6",
+    "@ipare/core": "^1.7.7",
+    "@ipare/inject": "^1.7.7",
     "reflect-metadata": "^0.1.13",
     "typeorm": "^0.3.7"
   },
