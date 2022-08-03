@@ -24,7 +24,11 @@ Startup.prototype.useTypeorm = function (options: Options): Startup {
       entities: [
         path.join(
           process.cwd(),
-          process.env.TS_JEST ? "entities/*.ts" : "entities/*.js"
+          process.env.TS_JEST ? "entities/**/*.ts" : "entities/**/*.js"
+        ),
+        path.join(
+          process.cwd(),
+          process.env.TS_JEST ? "entity/**/*.ts" : "entity/**/*.js"
         ),
       ],
     });
