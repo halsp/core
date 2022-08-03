@@ -1,6 +1,6 @@
 {
   "name": "@ipare/testing",
-  "version": "1.7.7",
+  "version": "1.7.8",
   "description": "Ipare 的测试插件，用于单元测试、本地测试等",
   "engines": {
     "node": ">=12.16.0"
@@ -29,8 +29,8 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^1.7.7",
-    "@ipare/http": "^1.7.7",
+    "@ipare/core": "^1.7.8",
+    "@ipare/http": "^1.7.8",
     "@types/shelljs": "^0.8.11",
     "@types/supertest": "^2.0.12",
     "reflect-metadata": "^0.1.13",
