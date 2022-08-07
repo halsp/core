@@ -1,10 +1,21 @@
 import "@ipare/core";
-import { Startup, ObjectConstructor, HttpContext } from "@ipare/core";
+import {
+  Startup,
+  ObjectConstructor,
+  HttpContext,
+  isFunction,
+} from "@ipare/core";
 import { HookType } from "@ipare/core/dist/middlewares";
 import { USED, MAP_BAG, SINGLETON_BAG } from "./constant";
 import { KeyTargetType, InjectMap } from "./interfaces";
-import { isInjectClass, parseInject } from "./inject-parser";
+import {
+  getTransientInstances,
+  isInjectClass,
+  parseInject,
+  tryParseInject,
+} from "./inject-parser";
 import { InjectType } from "./inject-type";
+import { InjectDisposable } from "./interfaces/inject-disposable";
 
 declare module "@ipare/core" {
   interface Startup {
@@ -88,17 +99,47 @@ Startup.prototype.inject = function (...args: any[]): Startup {
   }
 
   this.use(async (ctx, next) => {
+    const injectType = type ?? InjectType.Scoped;
     const injectMaps = ctx.bag<InjectMap[]>(MAP_BAG) ?? [];
     injectMaps.push({
       anestor,
       target,
-      type: type ?? InjectType.Scoped,
+      type: injectType,
     });
     ctx.bag(MAP_BAG, injectMaps);
-    await next();
+
+    try {
+      await next();
+    } finally {
+      await dispose(ctx, injectType, target);
+    }
   });
   return this;
 };
+
+async function dispose<T extends object = any>(
+  ctx: HttpContext,
+  injectType: InjectType,
+  target: ObjectConstructor<T> | string
+) {
+  async function disposeObject<T extends InjectDisposable = any>(instance?: T) {
+    if (!instance) return;
+    if (!instance.dispose || !isFunction(instance.dispose)) return;
+    if (instance.disposed == true) return;
+
+    await instance.dispose();
+  }
+
+  if (injectType == InjectType.Scoped) {
+    const instance = tryParseInject(ctx, target) as InjectDisposable;
+    await disposeObject(instance);
+  } else if (injectType == InjectType.Transient) {
+    const instances = getTransientInstances(ctx, target) as InjectDisposable[];
+    for (const instance of instances) {
+      await disposeObject(instance);
+    }
+  }
+}
 
 export { Inject, createInject } from "./decorators";
 export {
@@ -107,3 +148,4 @@ export {
   getTransientInstances,
 } from "./inject-parser";
 export { InjectType } from "./inject-type";
+export { InjectDisposable } from "./interfaces";
