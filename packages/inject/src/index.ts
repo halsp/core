@@ -111,7 +111,7 @@ Startup.prototype.inject = function (...args: any[]): Startup {
     try {
       await next();
     } finally {
-      await dispose(ctx, injectType, target);
+      await dispose(ctx, injectType, anestor);
     }
   });
   return this;
@@ -125,7 +125,6 @@ async function dispose<T extends object = any>(
   async function disposeObject<T extends InjectDisposable = any>(instance?: T) {
     if (!instance) return;
     if (!instance.dispose || !isFunction(instance.dispose)) return;
-    if (instance.disposed == true) return;
 
     await instance.dispose();
   }
