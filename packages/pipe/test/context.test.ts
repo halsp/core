@@ -1,5 +1,6 @@
-import { HttpContext, TestStartup } from "@ipare/core";
+import { HttpContext } from "@ipare/core";
 import { parseInject } from "@ipare/inject";
+import { TestStartup } from "@ipare/testing";
 import "../src";
 import { Context } from "../src";
 import { expectBody, getTestRequest } from "./TestMiddleware";
@@ -19,7 +20,9 @@ class TestService {
 }
 
 test(`http context`, async () => {
-  const res = await new TestStartup(getTestRequest())
+  const res = await new TestStartup({
+    req: getTestRequest(),
+  })
     .useInject()
     .use(async (ctx) => {
       const obj = await parseInject(ctx, new TestService());

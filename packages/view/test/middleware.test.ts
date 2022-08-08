@@ -1,4 +1,5 @@
-import { Middleware, TestStartup } from "@ipare/core";
+import { Middleware } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import "../src";
 
 test("default", async () => {

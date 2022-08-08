@@ -1,7 +1,8 @@
-import { isUndefined, Middleware, Request, TestStartup } from "@ipare/core";
+import { isUndefined, Middleware } from "@ipare/core";
 import "../../src";
 import { Service1 } from "../services";
 import { Inject, InjectType } from "../../src";
+import { TestStartup } from "@ipare/testing";
 
 class TestMiddleware extends Middleware {
   @Inject("KEY1")
@@ -27,7 +28,7 @@ function runTest(type?: InjectType) {
       .inject("KEY1", Service1, type)
       .add(TestMiddleware);
 
-    let res = await startup.run(new Request());
+    let res = await startup.run();
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual({
@@ -35,7 +36,7 @@ function runTest(type?: InjectType) {
       count2: type == InjectType.Transient ? 3 : 4,
     });
 
-    res = await startup.run(new Request());
+    res = await startup.run();
     if (type == InjectType.Transient) {
       expect(res.body).toEqual({
         count1: 1,

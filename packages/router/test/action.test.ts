@@ -3,9 +3,9 @@ import {
   Request,
   HttpContext,
   Dict,
-  TestStartup,
   HttpMethod,
 } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import { Action } from "../src";
 import "./global";
 

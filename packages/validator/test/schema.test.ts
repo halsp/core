@@ -1,4 +1,5 @@
-import { Middleware, Request, TestStartup } from "@ipare/core";
+import { Middleware, Request } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import { Body } from "@ipare/pipe";
 import { IsInt, ValidationSchema } from "class-validator";
 import "@ipare/inject";
@@ -43,11 +44,12 @@ function testSchema(useSchema: boolean) {
         },
       };
 
-      const startup = new TestStartup(
-        new Request().setBody({
+      const startup = new TestStartup({
+        req: new Request().setBody({
           b1: "1",
-        })
-      )
+        }),
+        skipThrow: true,
+      })
         .useInject()
         .useValidator();
       if (useSchema) {

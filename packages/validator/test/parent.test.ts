@@ -1,4 +1,5 @@
-import { Middleware, Request, TestStartup } from "@ipare/core";
+import { Middleware, Request } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import { Body } from "@ipare/pipe";
 import "@ipare/inject";
 import "../src";
@@ -23,11 +24,12 @@ test("parent validate", async () => {
     }
   }
 
-  const res = await new TestStartup(
-    new Request().setBody({
+  const res = await new TestStartup({
+    req: new Request().setBody({
       b1: 1,
-    })
-  )
+    }),
+    skipThrow: true,
+  })
     .useInject()
     .useValidator()
     .add(TestMiddleware)

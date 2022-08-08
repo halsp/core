@@ -1,5 +1,6 @@
 import "../../src";
-import { TestStartup, Request, HttpMethod } from "@ipare/core";
+import { Request, HttpMethod } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import "../global";
 
 const methods = ["test", "aaa", "NO"];

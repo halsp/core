@@ -1,4 +1,5 @@
-import { TestStartup, Request, HttpMethod } from "@ipare/core";
+import { Request, HttpMethod } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import "../../src";
 import "../global";
 

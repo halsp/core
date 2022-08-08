@@ -1,10 +1,13 @@
-import { HookType, TestStartup } from "@ipare/core";
+import { HookType } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import { getPipeRecords } from "../src";
 import { expectBody, getTestRequest, TestMiddleware } from "./TestMiddleware";
 
 test("record test", async () => {
   let done = false;
-  const startup = new TestStartup(getTestRequest()).useInject();
+  const startup = new TestStartup({
+    req: getTestRequest(),
+  }).useInject();
   startup.hook(HookType.BeforeInvoke, (ctx, md) => {
     const fn = (cls: any, empty: boolean) => {
       const metadata = getPipeRecords(cls);

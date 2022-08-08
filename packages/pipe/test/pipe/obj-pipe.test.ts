@@ -1,4 +1,5 @@
-import { Middleware, Request, TestStartup } from "@ipare/core";
+import { Middleware, Request } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import { Body } from "../../src";
 
 class TestMiddleware extends Middleware {
@@ -11,11 +12,11 @@ class TestMiddleware extends Middleware {
 }
 
 test("simple test", async () => {
-  const res = await new TestStartup(
-    new Request().setBody({
+  const res = await new TestStartup({
+    req: new Request().setBody({
       b1: 1,
-    })
-  )
+    }),
+  })
     .useInject()
     .add(new TestMiddleware())
     .run();

@@ -1,17 +1,17 @@
-import { TestStartup } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import { createIpareReqeust } from "./utils";
 import "../src";
 
 test("prefix", async function () {
-  const result = await new TestStartup(
-    await createIpareReqeust(
+  const result = await new TestStartup({
+    req: await createIpareReqeust(
       {
         secret: "secret",
       },
       undefined,
       "custom "
-    )
-  )
+    ),
+  })
     .useJwt({
       secret: "secret",
       prefix: "custom",

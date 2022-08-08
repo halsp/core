@@ -1,4 +1,5 @@
-import { TestStartup, Request } from "@ipare/core";
+import { Request } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import "../src";
 
 test("default req path not found", async () => {

@@ -1,4 +1,5 @@
-import { Middleware, Request, TestStartup } from "@ipare/core";
+import { Middleware, Request } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import { Body, PipeItem } from "../../src";
 
 function runPipeTest(
@@ -19,11 +20,12 @@ function runPipeTest(
   }
 
   test(`parse: ${success} ${source}, ${target}`, async () => {
-    const res = await new TestStartup(
-      new Request().setBody({
+    const res = await new TestStartup({
+      req: new Request().setBody({
         b1: source,
-      })
-    )
+      }),
+      skipThrow: true,
+    })
       .useInject()
       .add(new TestMiddleware())
       .run();

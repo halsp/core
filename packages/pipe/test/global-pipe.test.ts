@@ -1,5 +1,6 @@
-import { Middleware, Request, TestStartup } from "@ipare/core";
+import { Middleware, Request } from "@ipare/core";
 import { Inject } from "@ipare/inject";
+import { TestStartup } from "@ipare/testing";
 import { Header, PipeTransform } from "../src";
 import { GlobalPipeType } from "../src/global-pipe-type";
 
@@ -26,7 +27,9 @@ test("global pipe property", async () => {
     }
   }
 
-  const startup = new TestStartup(new Request().setHeader("h1", "5"))
+  const startup = new TestStartup({
+    req: new Request().setHeader("h1", "5"),
+  })
     .useInject()
     .useGlobalPipe(GlobalPipeType.before, TestGlobalPipe)
     .useGlobalPipe(GlobalPipeType.after, TestGlobalPipe)
@@ -65,7 +68,9 @@ test("global pipe params", async () => {
     }
   }
 
-  const startup = new TestStartup(new Request().setHeader("h1", "5"))
+  const startup = new TestStartup({
+    req: new Request().setHeader("h1", "5"),
+  })
     .useInject()
     .useGlobalPipe(GlobalPipeType.before, TestGlobalPipe)
     .useGlobalPipe(GlobalPipeType.after, TestGlobalPipe)

@@ -1,16 +1,17 @@
-import { Request, TestStartup } from "@ipare/core";
+import { Request } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import "../src";
 import { runMva } from "./global";
 import { AutFilter } from "./mva/auth.middleware";
 
 test("auth access", async function () {
   await runMva(async () => {
-    const res = await new TestStartup(
-      new Request()
+    const res = await new TestStartup({
+      req: new Request()
         .setPath("user/test1@hal.wang")
         .setMethod("GET")
-        .setHeader("password", "test1password")
-    )
+        .setHeader("password", "test1password"),
+    })
       .useGlobalFilter(AutFilter)
       .useMva()
       .run();
@@ -23,12 +24,12 @@ test("auth access", async function () {
 
 test("auth failed", async function () {
   await runMva(async () => {
-    const res = await new TestStartup(
-      new Request()
+    const res = await new TestStartup({
+      req: new Request()
         .setPath("user/test1@hal.wang")
         .setMethod("GET")
-        .setHeader("password", "test2password")
-    )
+        .setHeader("password", "test2password"),
+    })
       .useGlobalFilter(AutFilter)
       .useMva()
       .run();

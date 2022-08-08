@@ -1,4 +1,5 @@
-import { Middleware, Request, TestStartup } from "@ipare/core";
+import { Middleware, Request } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import { Body, Param } from "../src";
 
 test("null body", async () => {
@@ -19,7 +20,9 @@ test("null body", async () => {
     }
   }
 
-  const res = await new TestStartup(new Request().setBody(null))
+  const res = await new TestStartup({
+    req: new Request().setBody(null),
+  })
     .useInject()
     .add(TestMiddleware)
     .run();

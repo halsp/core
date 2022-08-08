@@ -1,4 +1,5 @@
-import { Middleware, TestStartup } from "@ipare/core";
+import { Middleware } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import "../../src";
 import { InjectType, parseInject, tryParseInject } from "../../src";
 

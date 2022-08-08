@@ -1,4 +1,5 @@
-import { Request, TestStartup } from "@ipare/core";
+import { Request } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import "../src";
 import { Action, getActionMetadata } from "../src";
 import "./global";

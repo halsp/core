@@ -6,8 +6,11 @@ it("default status is 404", async () => {
   expect(res.status).toBe(404);
 });
 
-it("status shound be 500 if throw error", async () => {
-  const res = await new TestStartup()
+it("status shound be 500 if skip throw error", async () => {
+  const res = await new TestStartup({
+    req: new Request(),
+    skipThrow: true,
+  })
     .use(() => {
       throw new Error("err");
     })
@@ -22,10 +25,7 @@ it("status shound be 500 if throw error", async () => {
 it("error shound be throw", async () => {
   let errMsg: string | undefined;
   try {
-    await new TestStartup({
-      req: new Request(),
-      throwIfError: true,
-    })
+    await new TestStartup()
       .use(() => {
         throw new Error("err");
       })

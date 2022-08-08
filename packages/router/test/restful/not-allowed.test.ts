@@ -1,5 +1,6 @@
 import "../../src";
-import { TestStartup, Request } from "@ipare/core";
+import { Request } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import "../global";
 
 test(`method not allowed`, async () => {

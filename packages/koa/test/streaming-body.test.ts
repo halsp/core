@@ -1,17 +1,18 @@
 import "../src";
-import { TestStartup, Request, Response } from "@ipare/core";
+import { Request, Response } from "@ipare/core";
 import Koa from "koa";
 import request from "supertest";
 import path from "path";
 import http from "http";
+import { TestStartup } from "@ipare/testing";
 
 test("streamingBody", async function () {
   let working = false;
   let res: Response | undefined;
   const server = http.createServer(async (httpReq, httpRes) => {
-    res = await new TestStartup(
-      new Request().setHeader("h1", 1).setHeader("h2", "2")
-    )
+    res = await new TestStartup({
+      req: new Request().setHeader("h1", 1).setHeader("h2", "2"),
+    })
       .useKoa(
         new Koa().use(async (ctx, next) => {
           ctx.body = ctx.req.read(100);

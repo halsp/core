@@ -1,4 +1,4 @@
-import { TestStartup } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import { EnvOptions } from "../src";
 import "../src";
 

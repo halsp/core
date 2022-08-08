@@ -1,4 +1,4 @@
-import { TestStartup } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import { parseInject } from "@ipare/inject";
 import "../src";
 import { JwtService } from "../src";
@@ -6,11 +6,11 @@ import { createIpareReqeust } from "./utils";
 
 function runTest(auth: boolean) {
   test(`auth ${auth}`, async function () {
-    const res = await new TestStartup(
-      await createIpareReqeust({
+    const res = await new TestStartup({
+      req: await createIpareReqeust({
         secret: "secret",
-      })
-    )
+      }),
+    })
       .useJwt({
         secret: "secret",
       })
@@ -25,11 +25,11 @@ runTest(true);
 runTest(false);
 
 test(`auth failed with custom status`, async function () {
-  const res = await new TestStartup(
-    await createIpareReqeust({
+  const res = await new TestStartup({
+    req: await createIpareReqeust({
       secret: "secret",
-    })
-  )
+    }),
+  })
     .useJwt({
       secret: "secret",
     })

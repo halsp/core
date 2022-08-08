@@ -1,5 +1,5 @@
 import "../src";
-import { TestStartup } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import Koa from "koa";
 
 test("arr header type", async function () {

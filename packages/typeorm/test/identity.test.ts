@@ -1,5 +1,6 @@
 import "../src";
-import { Middleware, TestStartup } from "@ipare/core";
+import { Middleware } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import { DataSource, typeorm } from "../src";
 
 class TestMiddleware extends Middleware {

@@ -1,7 +1,8 @@
 import { postbuild } from "../src";
 import * as fs from "fs";
-import { Request, TestStartup } from "@ipare/core";
+import { Request } from "@ipare/core";
 import { CONFIG_FILE_NAME } from "../src/constant";
+import { TestStartup } from "@ipare/testing";
 
 test("empty config", async () => {
   let count = 0;

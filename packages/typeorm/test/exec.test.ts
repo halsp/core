@@ -1,4 +1,4 @@
-import { TestStartup } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import { parseInject } from "@ipare/inject";
 import path from "path";
 import "../src";

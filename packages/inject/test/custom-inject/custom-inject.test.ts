@@ -1,4 +1,5 @@
-import { Middleware, Request, TestStartup } from "@ipare/core";
+import { Middleware, Request } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import "../../src";
 import { createInject, Inject } from "../../src";
 
@@ -47,11 +48,11 @@ class TestMiddleware extends Middleware {
 }
 
 test(`custom inject`, async function () {
-  const res = await new TestStartup(
-    new Request().setHeader("h1", "1").setHeader("host", "ipare").setBody({
+  const res = await new TestStartup({
+    req: new Request().setHeader("h1", "1").setHeader("host", "ipare").setBody({
       b: 2,
-    })
-  )
+    }),
+  })
     .useInject()
     .add(TestMiddleware)
     .run();

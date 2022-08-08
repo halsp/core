@@ -8,7 +8,7 @@ declare module "@ipare/core" {
 
 export interface TestStartupOptions {
   req?: Request;
-  throwIfError?: boolean;
+  skipThrow?: boolean;
 }
 
 export class TestStartup extends Startup {
@@ -43,7 +43,7 @@ export class TestStartup extends Startup {
       new HttpContext(this.#options.req ?? new Request())
     );
 
-    if (this.#options.throwIfError && res.testError) {
+    if (!this.#options.skipThrow && res.testError) {
       throw res.testError;
     }
     return res;

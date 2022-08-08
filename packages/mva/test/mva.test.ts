@@ -1,10 +1,13 @@
-import { Request, TestStartup } from "@ipare/core";
+import { Request } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import "../src";
 import { runMva } from "./global";
 
 test("default", async function () {
   await runMva(async () => {
-    const res = await new TestStartup(new Request().setMethod("GET"))
+    const res = await new TestStartup({
+      req: new Request().setMethod("GET"),
+    })
       .useMva()
       .run();
 
@@ -16,7 +19,9 @@ test("default", async function () {
 
 test("use again", async function () {
   await runMva(async () => {
-    const res = await new TestStartup(new Request().setMethod("GET"))
+    const res = await new TestStartup({
+      req: new Request().setMethod("GET"),
+    })
       .useMva()
       .useMva()
       .run();

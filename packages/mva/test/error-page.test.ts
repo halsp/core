@@ -1,7 +1,8 @@
-import { NotFoundException, Request, Response, TestStartup } from "@ipare/core";
+import { NotFoundException, Request, Response } from "@ipare/core";
 import "../src";
 import { AutFilter } from "./mva/auth.middleware";
 import { runMva } from "./global";
+import { TestStartup } from "@ipare/testing";
 
 function expect404(res: Response, isPage: boolean, replaceCode = 404) {
   expect(res.status).toBe(replaceCode);
@@ -26,9 +27,10 @@ function run404(isNumber: boolean) {
       test(`useErrorPage ${isNumber}`, async function () {
         const codes = [isNumber ? 404 : { code: 404 }];
         await runMva(async () => {
-          const startup = new TestStartup(
-            new Request().setPath("not-exist").setMethod("GET")
-          )
+          const startup = new TestStartup({
+            req: new Request().setPath("not-exist").setMethod("GET"),
+            skipThrow: true,
+          })
             .useErrorPage(codes)
             .use(async (ctx, next) => {
               if (throwError) {
@@ -58,12 +60,12 @@ run404(false);
 
 test("403", async function () {
   await runMva(async () => {
-    const res = await new TestStartup(
-      new Request()
+    const res = await new TestStartup({
+      req: new Request()
         .setPath("user/test1@hal.wang")
         .setMethod("GET")
-        .setHeader("password", "test2password")
-    )
+        .setHeader("password", "test2password"),
+    })
       .useErrorPage([{ code: 403 }])
       .useGlobalFilter(AutFilter)
       .useMva()
@@ -76,9 +78,9 @@ test("403", async function () {
 
 test("replace", async function () {
   await runMva(async () => {
-    const res = await new TestStartup(
-      new Request().setPath("not-exist").setMethod("GET")
-    )
+    const res = await new TestStartup({
+      req: new Request().setPath("not-exist").setMethod("GET"),
+    })
       .useErrorPage({ code: 404, replace: 204 })
       .useMva()
       .run();
@@ -89,9 +91,9 @@ test("replace", async function () {
 
 test("404 without error page", async function () {
   await runMva(async () => {
-    const res = await new TestStartup(
-      new Request().setPath("not-exist").setMethod("GET")
-    )
+    const res = await new TestStartup({
+      req: new Request().setPath("not-exist").setMethod("GET"),
+    })
       .useMva()
       .run();
 
@@ -101,7 +103,10 @@ test("404 without error page", async function () {
 
 test("string error", async function () {
   await runMva(async () => {
-    const res = await new TestStartup(new Request().setMethod("GET"))
+    const res = await new TestStartup({
+      req: new Request().setMethod("GET"),
+      skipThrow: true,
+    })
       .useErrorPage([{ code: 404 }])
       .use(() => {
         throw "test";
@@ -115,9 +120,9 @@ test("string error", async function () {
 function runEmptyCode(isArray: boolean) {
   test(`without error code ${isArray}`, async function () {
     await runMva(async () => {
-      const startup = new TestStartup(
-        new Request().setPath("not-exist").setMethod("GET")
-      );
+      const startup = new TestStartup({
+        req: new Request().setPath("not-exist").setMethod("GET"),
+      });
       if (isArray) {
         startup.useErrorPage([]);
       } else {
@@ -135,9 +140,9 @@ runEmptyCode(false);
 
 test(`useMva before useErrorPage`, async function () {
   await runMva(async () => {
-    const res = await new TestStartup(
-      new Request().setPath("not-exist").setMethod("GET")
-    )
+    const res = await new TestStartup({
+      req: new Request().setPath("not-exist").setMethod("GET"),
+    })
       .useMva()
       .useErrorPage(404)
       .run();
@@ -148,9 +153,10 @@ test(`useMva before useErrorPage`, async function () {
 
 test(`404 default`, async function () {
   await runMva(async () => {
-    const startup = new TestStartup(
-      new Request().setPath("not-exist").setMethod("GET")
-    )
+    const startup = new TestStartup({
+      req: new Request().setPath("not-exist").setMethod("GET"),
+      skipThrow: true,
+    })
       .useErrorPage()
       .use(async () => {
         throw new NotFoundException({

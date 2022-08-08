@@ -1,6 +1,7 @@
-import { HttpContext, TestStartup } from "@ipare/core";
+import { HttpContext } from "@ipare/core";
 import { InjectType, parseInject } from "../src";
 import "../src";
+import { TestStartup } from "@ipare/testing";
 
 export class Service extends Object {
   public count = 0;

@@ -1,4 +1,5 @@
-import { Middleware, Request, TestStartup } from "@ipare/core";
+import { Middleware, Request } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import { Body } from "../src";
 
 test("plain to class", async () => {
@@ -19,12 +20,12 @@ test("plain to class", async () => {
     }
   }
 
-  const res = await new TestStartup(
-    new Request().setBody({
+  const res = await new TestStartup({
+    req: new Request().setBody({
       h1: "a",
       h2: 1,
-    })
-  )
+    }),
+  })
     .useInject()
     .add(TestMiddleware)
     .run();

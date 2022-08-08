@@ -1,4 +1,5 @@
-import { Request, Response, TestStartup } from "@ipare/core";
+import { Request, Response } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import "../src";
 
 function baseExpect(res: Response) {

@@ -1,4 +1,5 @@
-import { Middleware, Request, TestStartup } from "@ipare/core";
+import { Middleware } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import "../../src";
 import { Inject, InjectType } from "../../src";
 
@@ -36,7 +37,7 @@ function runTest(type: InjectType) {
   test(`custom inject type ${type}`, async function () {
     const startup = new TestStartup().useInject().add(TestMiddleware);
 
-    let res = await startup.run(new Request());
+    let res = await startup.run();
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual({
@@ -44,7 +45,7 @@ function runTest(type: InjectType) {
       count2: type == InjectType.Transient ? 2 : 1,
     });
 
-    res = await startup.run(new Request());
+    res = await startup.run();
     if (type == InjectType.Transient) {
       expect(res.body).toEqual({
         count1: 1,

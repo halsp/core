@@ -1,4 +1,4 @@
-import { TestStartup } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import { MapItem } from "@ipare/router";
 import { OpenApiBuilder } from "openapi3-ts";
 import {

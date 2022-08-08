@@ -1,5 +1,6 @@
 import "../../src";
-import { TestStartup, Request, HttpContext, HttpMethod } from "@ipare/core";
+import { Request, HttpContext, HttpMethod } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import "../global";
 
 test(`find next`, async () => {

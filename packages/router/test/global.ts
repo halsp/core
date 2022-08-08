@@ -1,6 +1,6 @@
 import { RouterOptions } from "../src";
 import "@ipare/core";
-import { TestStartup } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import "../src";
 
 export const testDir = "test/actions";
@@ -11,7 +11,7 @@ function getDefaultConfig() {
   };
 }
 
-declare module "@ipare/core" {
+declare module "@ipare/testing" {
   interface TestStartup {
     useTestRouter(config?: RouterOptions): this;
   }

@@ -1,4 +1,4 @@
-import { TestStartup } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import { Inject, parseInject } from "../src";
 
 export class Service1 extends Object {

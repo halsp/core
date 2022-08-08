@@ -1,15 +1,15 @@
-import { TestStartup } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import { createIpareReqeust } from "./utils";
 import "../src";
 
 function testErrorSecret(isError: boolean) {
   function runTest(customError: boolean) {
     test(`error secret ${isError}`, async function () {
-      const result = await new TestStartup(
-        await createIpareReqeust({
+      const result = await new TestStartup({
+        req: await createIpareReqeust({
           secret: isError ? "secret1" : "secret",
-        })
-      )
+        }),
+      })
         .useJwt({
           secret: "secret",
         })

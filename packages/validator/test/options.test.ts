@@ -1,9 +1,10 @@
-import { Middleware, Request, TestStartup } from "@ipare/core";
+import { Middleware, Request } from "@ipare/core";
 import { Body } from "@ipare/pipe";
 import { IsInt } from "class-validator";
 import "@ipare/inject";
 import "../src";
 import { UseValidatorOptions } from "../src";
+import { TestStartup } from "@ipare/testing";
 
 function testOptions(useOptions: any, decOptions: any, result: boolean) {
   test(`options test ${!!useOptions} ${!!decOptions}`, async () => {
@@ -26,11 +27,12 @@ function testOptions(useOptions: any, decOptions: any, result: boolean) {
       }
     }
 
-    const startup = new TestStartup(
-      new Request().setBody({
+    const startup = new TestStartup({
+      req: new Request().setBody({
         b1: null,
-      })
-    )
+      }),
+      skipThrow: true,
+    })
       .useInject()
       .useValidator(useOptions);
     const res = await startup.add(TestMiddleware).run();

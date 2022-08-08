@@ -1,8 +1,9 @@
 import "../src";
-import { Middleware, TestStartup } from "@ipare/core";
+import { Middleware } from "@ipare/core";
 import { Logger } from "../src";
 import winston from "winston";
 import { CustomTransport } from "./utils";
+import { TestStartup } from "@ipare/testing";
 
 class TestMiddleware extends Middleware {
   @Logger("app")

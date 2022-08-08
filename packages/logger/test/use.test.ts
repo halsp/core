@@ -1,5 +1,5 @@
 import { Middleware } from "@ipare/core";
-import { TestStartup } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import { Logger, winston } from "../src";
 import "../src";
 

@@ -1,11 +1,12 @@
-import { Middleware, Request, TestStartup } from "@ipare/core";
+import { Middleware, Request } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import { Body } from "@ipare/pipe";
 import "@ipare/inject";
 import "../src";
 import { IsInt, IsString } from "class-validator";
 
 function runTest(validate: boolean) {
-  test("validate", async () => {
+  test(`validate ${validate}`, async () => {
     class TestDto {
       b1!: string;
 
@@ -26,12 +27,13 @@ function runTest(validate: boolean) {
       }
     }
 
-    const res = await new TestStartup(
-      new Request().setBody({
+    const res = await new TestStartup({
+      req: new Request().setBody({
         b1: "a",
         b2: validate ? 1 : "1",
-      })
-    )
+      }),
+      skipThrow: true,
+    })
       .useInject()
       .useValidator()
       .add(TestMiddleware)
@@ -76,12 +78,13 @@ test("array message", async () => {
     }
   }
 
-  const res = await new TestStartup(
-    new Request().setBody({
+  const res = await new TestStartup({
+    req: new Request().setBody({
       b1: 1,
       b2: "1",
-    })
-  )
+    }),
+    skipThrow: true,
+  })
     .useInject()
     .useValidator()
     .add(TestMiddleware)
