@@ -18,7 +18,7 @@ npm install @ipare/${name}
 }
 
 function getPackageIntro(name: string) {
-  const readme = fs.readFileSync(`packages/${name}/base.readme.md`, "utf-8");
+  const readme = getPackageBaseReadme(name);
   const install = readme.includes("<!--install-->");
   const useBaseIntro = readme.includes("<!--base-intro-->");
   const useDescIntro = readme.includes("<!--intro-desc-->");
@@ -43,7 +43,20 @@ function getPackageIntro(name: string) {
   }
 }
 
-function getPackageReadme(name: string) {
+function getPackageBaseReadme(name: string) {
+  const readmePath = `packages/${name}/base.readme.md`;
+  if (fs.existsSync(readmePath)) {
+    return fs.readFileSync(readmePath, "utf-8");
+  } else {
+    let result = "<!--intro-desc-->";
+    if (name != "core") {
+      result += "\n<!--install-->";
+    }
+    return result;
+  }
+}
+
+function createPackageReadme(name: string) {
   const intro = getPackageIntro(name);
   return baseReadme.replace(introRegExp, intro);
 }
@@ -51,7 +64,7 @@ function getPackageReadme(name: string) {
 getPackages().forEach((item: string) => {
   fs.writeFileSync(
     `packages/${item}/README.md`,
-    prettier.format(getPackageReadme(item), {
+    prettier.format(createPackageReadme(item), {
       parser: "markdown",
     })
   );
