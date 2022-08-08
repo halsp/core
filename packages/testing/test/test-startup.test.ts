@@ -2,15 +2,12 @@ import { TestStartup } from "../src";
 import { Request } from "@ipare/core";
 
 it("default status is 404", async () => {
-  const res = await new TestStartup().run();
+  const res = await new TestStartup(new Request()).run();
   expect(res.status).toBe(404);
 });
 
 it("status shound be 500 if throw error", async () => {
-  const res = await new TestStartup({
-    hookException: false,
-    req: new Request(),
-  })
+  const res = await new TestStartup()
     .use(() => {
       throw new Error("err");
     })
@@ -25,7 +22,10 @@ it("status shound be 500 if throw error", async () => {
 it("error shound be throw", async () => {
   let errMsg: string | undefined;
   try {
-    await new TestStartup()
+    await new TestStartup({
+      req: new Request(),
+      throwIfError: true,
+    })
       .use(() => {
         throw new Error("err");
       })
