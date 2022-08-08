@@ -3,8 +3,8 @@ import {
   ForbiddenException,
   getReasonPhrase,
   StatusCodes,
-  TestStartup,
 } from "../../src";
+import { TestStartup } from "../test-startup";
 
 test("throw base error", async () => {
   const startup = new TestStartup();

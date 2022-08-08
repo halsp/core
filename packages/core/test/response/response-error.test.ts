@@ -1,4 +1,5 @@
-import { StatusCodes, TestStartup } from "../../src";
+import { StatusCodes } from "../../src";
+import { TestStartup } from "../test-startup";
 
 test("response error message", async () => {
   const result = await new TestStartup()

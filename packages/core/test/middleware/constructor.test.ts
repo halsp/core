@@ -1,4 +1,5 @@
-import { Middleware, TestStartup } from "../../src";
+import { Middleware } from "../../src";
+import { TestStartup } from "../test-startup";
 
 class TestMiddleware extends Middleware {
   async invoke(): Promise<void> {

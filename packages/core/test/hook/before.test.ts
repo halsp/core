@@ -1,4 +1,5 @@
-import { Middleware, HookType, TestStartup } from "../../src";
+import { Middleware, HookType } from "../../src";
+import { TestStartup } from "../test-startup";
 
 test("simple hook", async () => {
   class TestMiddleware extends Middleware {

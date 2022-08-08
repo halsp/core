@@ -1,10 +1,5 @@
-import {
-  Middleware,
-  HttpContext,
-  Request,
-  getReasonPhrase,
-  TestStartup,
-} from "../../src";
+import { Middleware, HttpContext, Request, getReasonPhrase } from "../../src";
+import { TestStartup } from "../test-startup";
 
 const normalMethod = [
   {

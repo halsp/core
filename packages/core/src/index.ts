@@ -71,6 +71,6 @@ export {
   HeaderHandler,
 } from "./context";
 
-export { Startup, TestStartup } from "./startup";
+export { Startup } from "./startup";
 
 export { Middleware, ComposeMiddleware, HookType } from "./middlewares";

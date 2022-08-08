@@ -1,4 +1,5 @@
-import { Request, TestStartup } from "../../src";
+import { Request } from "../../src";
+import { TestStartup } from "../test-startup";
 
 test("invoke multiple", async () => {
   const startup = new TestStartup(new Request())

@@ -1,4 +1,5 @@
-import { Request, TestStartup } from "../../src";
+import { Request } from "../../src";
+import { TestStartup } from "../test-startup";
 
 test("method override", async () => {
   const req = new Request()

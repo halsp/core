@@ -14,8 +14,11 @@ import {
   isSymbol,
   isUndefined,
   normalizePath,
-  TestStartup,
 } from "../src";
+
+class TestClass {
+  //
+}
 
 test("isNil", async () => {
   expect(isNil(undefined)).toBeTruthy();
@@ -54,7 +57,7 @@ test("isFunction", async () => {
 test("isObject", async () => {
   expect(isObject({})).toBeTruthy();
   expect(isObject([1, 2])).toBeTruthy();
-  expect(isObject(new TestStartup())).toBeTruthy();
+  expect(isObject(new TestClass())).toBeTruthy();
 
   expect(isObject(() => 0)).toBeFalsy();
   expect(isObject(1)).toBeFalsy();
@@ -79,7 +82,7 @@ test("isPlainObject", async () => {
       return 0;
     })
   ).toBeFalsy();
-  expect(isPlainObject(new TestStartup())).toBeFalsy();
+  expect(isPlainObject(new TestClass())).toBeFalsy();
 });
 
 test("isString", async () => {
@@ -180,7 +183,7 @@ test("normalizePath ", async () => {
 });
 
 test("isClass", async () => {
-  expect(isClass(TestStartup)).toBeTruthy();
+  expect(isClass(TestClass)).toBeTruthy();
 
   expect(isClass({})).toBeFalsy();
   expect(isClass(Object.create(null))).toBeFalsy();
@@ -195,5 +198,5 @@ test("isClass", async () => {
       return 0;
     })
   ).toBeFalsy();
-  expect(isClass(new TestStartup())).toBeFalsy();
+  expect(isClass(new TestClass())).toBeFalsy();
 });

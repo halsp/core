@@ -1,5 +1,5 @@
 import { createReadStream, ReadStream } from "fs";
-import { TestStartup } from "../../src";
+import { TestStartup } from "../test-startup";
 
 test(`buffer`, async () => {
   const res = await new TestStartup()

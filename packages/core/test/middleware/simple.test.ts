@@ -1,4 +1,4 @@
-import { TestStartup } from "../../src";
+import { TestStartup } from "../test-startup";
 
 test("simpple middleware", async () => {
   const startup = new TestStartup()
