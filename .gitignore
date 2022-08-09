@@ -3,3 +3,4 @@ node_modules
 coverage
 *debug.log
 .husky/_
+yarn-error.log

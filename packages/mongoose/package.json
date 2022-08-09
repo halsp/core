@@ -1,7 +1,7 @@
 {
-  "name": "@ipare/redis",
+  "name": "@ipare/mongoose",
   "version": "0.0.1-beta.1",
-  "description": "Ipare Redis 插件",
+  "description": "Ipare Mongoose 插件",
   "engines": {
     "node": ">=12.16.0"
   },
@@ -30,7 +30,7 @@
   "dependencies": {
     "@ipare/core": "^1.7.8",
     "@ipare/inject": "^1.7.8",
-    "redis": "^4.2.0",
+    "mongoose": "^6.5.1",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
