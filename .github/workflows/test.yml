@@ -27,4 +27,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - run: sh scripts/install-yarn.sh
       - run: npm run bootstrap
-      - run: npm run test
+      - name: Test
+        env:
+          NODE_OPTIONS: "--max-old-space-size=8192"
+        run: npm run test
