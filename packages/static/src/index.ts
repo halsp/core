@@ -8,24 +8,21 @@ export { cliConfigHook } from "./cli-config";
 
 declare module "@ipare/core" {
   interface Startup {
-    useStatic<T extends this>(options?: FileOptions): T;
-    useStatic<T extends this>(options?: DirectoryOptions): T;
+    useStatic(): this;
+    useStatic(options: DirectoryOptions): this;
+    useStatic(options: FileOptions): this;
   }
 }
 
-Startup.prototype.useStatic = function <T extends Startup>(
-  options?: FileOptions | DirectoryOptions
-): T {
-  if (!options) {
-    options = {
-      dir: "static",
-    };
+Startup.prototype.useStatic = function (
+  options: FileOptions | DirectoryOptions = {
+    dir: "static",
   }
-
+): Startup {
   if (options.hasOwnProperty("file")) {
     this.add(() => new FileMiddleware(options as FileOptions));
   } else {
     this.add(() => new DirectoryMiddleware(options as DirectoryOptions));
   }
-  return this as T;
+  return this;
 };
