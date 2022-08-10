@@ -9,7 +9,7 @@ import {
 import * as path from "path";
 import * as fs from "fs";
 
-export function useView<T extends Startup>(startup: T, options: ViewOptions) {
+export function useView(startup: Startup, options: ViewOptions) {
   ResultHandler.prototype.view = async function (
     tmpPath,
     locals: Record<string, unknown> = {}
@@ -28,7 +28,7 @@ export function useView<T extends Startup>(startup: T, options: ViewOptions) {
     return this;
   };
 
-  startup.use(async (ctx, next) => {
+  return startup.use(async (ctx, next) => {
     ctx.state = {};
     await next();
   });

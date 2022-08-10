@@ -17,11 +17,8 @@ declare module "@ipare/core" {
   }
 }
 
-Startup.prototype.useView = function <T extends Startup>(
-  options: ViewOptions = {}
-): T {
-  useView(this, options);
-  return this as T;
+Startup.prototype.useView = function (options: ViewOptions = {}): Startup {
+  return useView(this, options);
 };
 
 export {

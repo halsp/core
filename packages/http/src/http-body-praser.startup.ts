@@ -16,14 +16,14 @@ export abstract class HttpBodyPraserStartup extends Startup {
     super();
   }
 
-  public useHttpJsonBody<T extends this>(
+  public useHttpJsonBody(
     strict = true,
     limit = "1mb",
     encoding: BufferEncoding = "utf-8",
     returnRawBody = false,
     onError?: (ctx: HttpContext, err: unknown) => Promise<void>
-  ): T {
-    this.useBodyPraser(
+  ): this {
+    this.#useBodyPraser(
       async (ctx) =>
         await cobody.json(this.sourceReqBuilder(ctx), {
           encoding: encoding,
@@ -41,16 +41,16 @@ export abstract class HttpBodyPraserStartup extends Startup {
       ],
       onError
     );
-    return this as T;
+    return this;
   }
 
-  public useHttpTextBody<T extends this>(
+  public useHttpTextBody(
     limit = "56kb",
     encoding: BufferEncoding = "utf-8",
     returnRawBody = false,
     onError?: (ctx: HttpContext, err: unknown) => Promise<void>
-  ): T {
-    this.useBodyPraser(
+  ): this {
+    this.#useBodyPraser(
       async (ctx) =>
         await cobody.text(this.sourceReqBuilder(ctx), {
           encoding: encoding,
@@ -60,17 +60,17 @@ export abstract class HttpBodyPraserStartup extends Startup {
       ["text/*"],
       onError
     );
-    return this as T;
+    return this;
   }
 
-  public useHttpUrlencodedBody<T extends this>(
+  public useHttpUrlencodedBody(
     queryString?: IParseOptions,
     limit = "56kb",
     encoding: BufferEncoding = "utf-8",
     returnRawBody = false,
     onError?: (ctx: HttpContext, err: Error) => Promise<void>
-  ): T {
-    this.useBodyPraser(
+  ): this {
+    this.#useBodyPraser(
       async (ctx) =>
         await cobody.form(this.sourceReqBuilder(ctx), {
           encoding: encoding,
@@ -81,23 +81,24 @@ export abstract class HttpBodyPraserStartup extends Startup {
       ["urlencoded"],
       onError
     );
-    return this as T;
+    return this;
   }
 
-  public useHttpMultipartBody<T extends this>(
+  public useHttpMultipartBody(
     opts?: Partial<Options | undefined>,
     onFileBegin?: (ctx: HttpContext, formName: string, file: File) => void,
     onError?: (ctx: HttpContext, err: Error) => Promise<void>
-  ): T {
-    this.useBodyPraser(
-      async (ctx) => await this.parseMultipart(ctx, opts, onFileBegin, onError),
+  ): this {
+    this.#useBodyPraser(
+      async (ctx) =>
+        await this.#parseMultipart(ctx, opts, onFileBegin, onError),
       ["multipart"],
       onError
     );
-    return this as T;
+    return this;
   }
 
-  private parseMultipart(
+  #parseMultipart(
     ctx: HttpContext,
     opts?: Partial<Options | undefined>,
     onFileBegin?: (ctx: HttpContext, formName: string, file: File) => void,
@@ -128,7 +129,7 @@ export abstract class HttpBodyPraserStartup extends Startup {
     });
   }
 
-  private useBodyPraser(
+  #useBodyPraser(
     bodyBuilder: (ctx: HttpContext) => Promise<unknown>,
     types: string[],
     onError?: (ctx: HttpContext, err: Error) => Promise<void>

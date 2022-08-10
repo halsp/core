@@ -4,10 +4,7 @@ import { Parser } from "./parser";
 import { getSwaggerBody } from "./swagger-body";
 import { SwaggerOptions } from "./swagger-options";
 
-export function useSetup<T extends Startup>(
-  startup: T,
-  options: SwaggerOptions
-): T {
+export function useSetup(startup: Startup, options: SwaggerOptions): Startup {
   let swaggerBody: string | undefined = undefined;
   return startup
     .use(async (ctx, next) => {

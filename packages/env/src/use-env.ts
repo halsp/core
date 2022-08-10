@@ -4,10 +4,10 @@ import path from "path";
 import { BASE_USED } from "./constant";
 import { EnvOptions, isModelOptions } from "./options";
 
-export function useEnv<T extends Startup>(
-  startup: T,
+export function useEnv(
+  startup: Startup,
   options?: EnvOptions | string
-): T {
+): Startup {
   if (isUndefined(process.env.NODE_ENV)) {
     process.env.NODE_ENV = "production";
   }

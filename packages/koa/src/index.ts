@@ -11,15 +11,15 @@ import {
 
 declare module "@ipare/core" {
   interface Startup {
-    useKoa<T extends this>(app: Koa, options?: UseKoaOptions): T;
+    useKoa(app: Koa, options?: UseKoaOptions): this;
   }
 }
 
 // step: ipare -> koa -> ipare ->koa ->ipare
-Startup.prototype.useKoa = function <T extends Startup>(
+Startup.prototype.useKoa = function (
   app: Koa,
   options: UseKoaOptions = {}
-): T {
+): Startup {
   app.middleware.splice(0, 0, async (koaCtx, next) => {
     koaCtx.status = koaCtx.ipareInStatus;
     await next();
@@ -43,7 +43,7 @@ Startup.prototype.useKoa = function <T extends Startup>(
     await (app as any).handleRequest(koaCtx, fn);
     await koaResToIpareRes(koaCtx, ipareCtx.res); // step 4. koa -> ipare
   });
-  return this as T;
+  return this;
 };
 
 export { UseKoaOptions, Koa };

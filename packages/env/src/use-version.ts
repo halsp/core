@@ -3,11 +3,11 @@ import path from "path";
 import * as fs from "fs";
 import { VERSION } from "./constant";
 
-export function useVersion<T extends Startup>(
-  startup: T,
+export function useVersion(
+  startup: Startup,
   header: string,
   cwd: string
-): T {
+): Startup {
   return startup.use(async (ctx, next) => {
     if (isUndefined(startup[VERSION])) {
       startup[VERSION] = getVersion(cwd) ?? "0";
