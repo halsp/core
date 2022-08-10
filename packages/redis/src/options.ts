@@ -8,5 +8,4 @@ export type Options<
 > = redis.RedisClientOptions<M, F, S> & {
   injectType?: InjectType;
   identity?: string;
-  connect?: boolean;
 };

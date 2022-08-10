@@ -7,21 +7,18 @@ import { Options } from "./options";
 
 declare module "@ipare/core" {
   interface Startup {
-    useRedis(options: Options): this;
+    useRedis(options?: Options): this;
   }
 }
 
-Startup.prototype.useRedis = function (options: Options): Startup {
+Startup.prototype.useRedis = function (options: Options = {}): Startup {
   const injectKey = OPTIONS_IDENTITY + (options.identity ?? "");
-  options.connect = options.connect ?? true;
 
   return this.useInject().inject(
     injectKey,
     async () => {
       const client = redis.createClient(options);
-      if (options.connect) {
-        await client.connect();
-      }
+      await client.connect();
 
       const disposedClient = client as InjectDisposable & typeof client;
       disposedClient.dispose = async () => {
