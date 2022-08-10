@@ -1,20 +1,20 @@
 import "@ipare/core";
 import { Startup } from "@ipare/core";
-import { SingleMiddleware, MultipleMiddleware } from "./middlewares";
-import { SingleStaticOptions, StaticOptions } from "./static-options";
+import { FileMiddleware, DirectoryMiddleware } from "./middlewares";
+import { FileOptions, DirectoryOptions } from "./options";
 
-export { SingleStaticOptions, StaticOptions };
+export { FileOptions, DirectoryOptions };
 export { cliConfigHook } from "./cli-config";
 
 declare module "@ipare/core" {
   interface Startup {
-    useStatic<T extends this>(options?: StaticOptions): T;
-    useStatic<T extends this>(options?: SingleStaticOptions): T;
+    useStatic<T extends this>(options?: FileOptions): T;
+    useStatic<T extends this>(options?: DirectoryOptions): T;
   }
 }
 
 Startup.prototype.useStatic = function <T extends Startup>(
-  options?: StaticOptions | SingleStaticOptions
+  options?: FileOptions | DirectoryOptions
 ): T {
   if (!options) {
     options = {
@@ -23,9 +23,9 @@ Startup.prototype.useStatic = function <T extends Startup>(
   }
 
   if (options.hasOwnProperty("file")) {
-    this.add(() => new SingleMiddleware(options as SingleStaticOptions));
+    this.add(() => new FileMiddleware(options as FileOptions));
   } else {
-    this.add(() => new MultipleMiddleware(options as StaticOptions));
+    this.add(() => new DirectoryMiddleware(options as DirectoryOptions));
   }
   return this as T;
 };

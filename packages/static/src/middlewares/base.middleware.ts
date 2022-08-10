@@ -1,8 +1,8 @@
 import { Middleware, HttpMethod } from "@ipare/core";
-import { SingleStaticOptions, StaticOptions } from "../static-options";
+import { FileOptions, DirectoryOptions } from "../options";
 
 export abstract class BaseMiddleware extends Middleware {
-  readonly options!: StaticOptions | SingleStaticOptions;
+  readonly options!: FileOptions | DirectoryOptions;
 
   private get isMethodValid(): boolean {
     if (!this.options.method) {

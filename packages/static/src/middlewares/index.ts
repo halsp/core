@@ -1,2 +1,2 @@
-export * from "./multiple.middleware";
-export * from "./single.middleware";
+export * from "./directory.middleware";
+export * from "./file.middleware";

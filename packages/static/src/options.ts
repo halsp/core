@@ -3,13 +3,13 @@ interface Options extends Object {
   method?: string | string[];
 }
 
-export interface StaticOptions extends Options {
+export interface DirectoryOptions extends Options {
   dir: string;
   prefix?: string;
   file404?: string | true;
 }
 
-export interface SingleStaticOptions extends Options {
+export interface FileOptions extends Options {
   file: string;
   reqPath?: string;
 }
