@@ -1,4 +1,5 @@
 import { Middleware, HttpMethod } from "@ipare/core";
+import { FILE_404_BAG, FILE_BAG } from "../constant";
 import { FileOptions, DirectoryOptions } from "../options";
 
 export abstract class BaseMiddleware extends Middleware {
@@ -33,10 +34,10 @@ export abstract class BaseMiddleware extends Middleware {
     return this.isMethodValid && this.isPathValidated;
   }
 
-  protected setFile(file: string, is404 = false): void {
-    this.ctx.bag("STATIC_FILE", file);
+  protected setBagFile(file: string, is404 = false): void {
+    this.ctx.bag(FILE_BAG, file);
     if (is404) {
-      this.ctx.bag("STATIC_FILE_404", true);
+      this.ctx.bag(FILE_404_BAG, true);
     }
   }
 }

@@ -27,10 +27,15 @@ export class FileMiddleware extends BaseMiddleware {
       fs.existsSync(this.options.file) &&
       fs.statSync(this.options.file).isFile()
     ) {
-      this.ok(
-        fs.readFileSync(this.options.file, this.options.encoding)
-      ).setHeader("content-type", mime.getType(this.options.file) || "*/*");
-      this.setFile(this.options.file);
+      const content = await fs.promises.readFile(
+        this.options.file,
+        this.options.encoding
+      );
+      this.setHeader(
+        "content-type",
+        mime.getType(this.options.file) || "*/*"
+      ).ok(content);
+      this.setBagFile(this.options.file);
       return;
     }
 

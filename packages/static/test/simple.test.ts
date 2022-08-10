@@ -1,6 +1,7 @@
 import { Request } from "@ipare/core";
 import { TestStartup } from "@ipare/testing";
 import "../src";
+import { FILE_BAG } from "../src/constant";
 
 test("index html", async () => {
   {
@@ -19,7 +20,7 @@ test("index html", async () => {
     )
       .use(async (ctx, next) => {
         await next();
-        expect(ctx.bag<string>("STATIC_FILE")).not.toBeUndefined();
+        expect(ctx.bag<string>(FILE_BAG)).not.toBeUndefined();
       })
       .useStatic({
         dir: "test/static",
@@ -35,7 +36,7 @@ test("default static dir", async () => {
   const result = await new TestStartup(new Request().setMethod("get"))
     .use(async (ctx, next) => {
       await next();
-      expect(ctx.bag<string>("STATIC_FILE")).toBeUndefined();
+      expect(ctx.bag<string>(FILE_BAG)).toBeUndefined();
     })
     .useStatic()
     .run();

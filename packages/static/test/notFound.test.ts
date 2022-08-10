@@ -1,6 +1,7 @@
 import { Request } from "@ipare/core";
 import { TestStartup } from "@ipare/testing";
 import "../src";
+import { FILE_404_BAG, FILE_BAG } from "../src/constant";
 
 test("not found", async () => {
   const result = await new TestStartup(
@@ -21,8 +22,8 @@ test("404 page", async () => {
     )
       .use(async (ctx, next) => {
         await next();
-        expect(ctx.bag<string>("STATIC_FILE")).not.toBeUndefined();
-        expect(ctx.bag<boolean>("STATIC_FILE_404")).toBeTruthy();
+        expect(ctx.bag<string>(FILE_BAG)).not.toBeUndefined();
+        expect(ctx.bag<boolean>(FILE_404_BAG)).toBeTruthy();
       })
       .useStatic({
         dir: "test/static",

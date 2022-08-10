@@ -1,6 +1,7 @@
 import { Request } from "@ipare/core";
 import { TestStartup } from "@ipare/testing";
 import "../src";
+import { FILE_BAG } from "../src/constant";
 
 test("match", async () => {
   {
@@ -9,7 +10,7 @@ test("match", async () => {
     )
       .use(async (ctx, next) => {
         await next();
-        expect(ctx.bag<string>("STATIC_FILE")).not.toBeUndefined();
+        expect(ctx.bag<string>(FILE_BAG)).not.toBeUndefined();
       })
       .useStatic({
         file: "test/static/index.html",
@@ -54,7 +55,7 @@ test("not found path", async () => {
   )
     .use(async (ctx, next) => {
       await next();
-      expect(ctx.bag<string>("STATIC_FILE")).toBeUndefined();
+      expect(ctx.bag<string>(FILE_BAG)).toBeUndefined();
     })
     .useStatic({
       file: "test/static/index.html",

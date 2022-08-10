@@ -28,7 +28,7 @@ export class DirectoryMiddleware extends BaseMiddleware {
           "content-type",
           mime.getType(filePath) || "*/*"
         );
-        this.setFile(filePath);
+        this.setBagFile(filePath);
         return;
       }
     }
@@ -39,7 +39,7 @@ export class DirectoryMiddleware extends BaseMiddleware {
         this.notFound(
           fs.readFileSync(file404Path, this.options.encoding)
         ).setHeader("content-type", mime.getType(file404Path) || "*/*");
-        this.setFile(file404Path, true);
+        this.setBagFile(file404Path, true);
         return;
       }
     }
