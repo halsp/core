@@ -68,7 +68,7 @@ export class DirectoryMiddleware extends BaseMiddleware {
   }
 
   get file404Path(): string | undefined {
-    const filePath = path.join(
+    const filePath = path.resolve(
       this.options.dir,
       this.options.file404 == true
         ? "404.html"
