@@ -14,7 +14,6 @@ declare module "@ipare/core" {
 
 Startup.prototype.useTypeorm = function (options: Options): Startup {
   const injectKey = OPTIONS_IDENTITY + (options.identity ?? "");
-  options.initialize = options.initialize ?? true;
   if (!options.entities) {
     options = Object.assign(options, {
       entities: [
@@ -35,9 +34,7 @@ Startup.prototype.useTypeorm = function (options: Options): Startup {
     async () => {
       const dataSource = new typeorm.DataSource(options) as InjectDisposable &
         typeorm.DataSource;
-      if (options.initialize) {
-        await dataSource.initialize();
-      }
+      await dataSource.initialize();
 
       dataSource.dispose = async () => {
         if (dataSource.isInitialized) {

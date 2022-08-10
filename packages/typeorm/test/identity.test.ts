@@ -24,12 +24,10 @@ test("identity", async () => {
       identity: "app",
       type: "sqlite",
       database: "test/sqlite.db",
-      initialize: false,
     })
     .useTypeorm({
       type: "sqlite",
       database: "test/sqlite.db",
-      initialize: false,
     })
     .add(TestMiddleware)
     .run();
