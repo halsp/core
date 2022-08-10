@@ -1,5 +1,5 @@
 import { Middleware, HttpMethod } from "@ipare/core";
-import { SingleStaticOptions, StaticOptions } from "./static-options";
+import { SingleStaticOptions, StaticOptions } from "../static-options";
 
 export abstract class BaseMiddleware extends Middleware {
   readonly options!: StaticOptions | SingleStaticOptions;

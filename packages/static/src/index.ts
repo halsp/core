@@ -1,8 +1,7 @@
 import "@ipare/core";
 import { Startup } from "@ipare/core";
-import { SingleStaticMiddleware } from "./single-static.middleware";
+import { SingleMiddleware, MultipleMiddleware } from "./middlewares";
 import { SingleStaticOptions, StaticOptions } from "./static-options";
-import { StaticMiddleware } from "./static.middleware";
 
 export { SingleStaticOptions, StaticOptions };
 export { cliConfigHook } from "./cli-config";
@@ -24,9 +23,9 @@ Startup.prototype.useStatic = function <T extends Startup>(
   }
 
   if (options.hasOwnProperty("file")) {
-    this.add(() => new SingleStaticMiddleware(options as SingleStaticOptions));
+    this.add(() => new SingleMiddleware(options as SingleStaticOptions));
   } else {
-    this.add(() => new StaticMiddleware(options as StaticOptions));
+    this.add(() => new MultipleMiddleware(options as StaticOptions));
   }
   return this as T;
 };

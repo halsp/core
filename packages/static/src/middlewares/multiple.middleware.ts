@@ -1,11 +1,11 @@
 import * as path from "path";
 import * as fs from "fs";
 import * as mime from "mime";
-import { StaticOptions } from "./static-options";
+import { StaticOptions } from "../static-options";
 import { BaseMiddleware } from "./base.middleware";
 import { normalizePath } from "@ipare/core";
 
-export class StaticMiddleware extends BaseMiddleware {
+export class MultipleMiddleware extends BaseMiddleware {
   constructor(readonly options: StaticOptions) {
     super();
   }
