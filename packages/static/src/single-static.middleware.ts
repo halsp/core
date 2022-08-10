@@ -10,7 +10,7 @@ export class SingleStaticMiddleware extends BaseMiddleware {
   }
 
   async invoke(): Promise<void> {
-    if (!this.isReqValida) {
+    if (!this.isReqValidated) {
       await this.next();
       return;
     }

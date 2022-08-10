@@ -21,7 +21,7 @@ export abstract class BaseMiddleware extends Middleware {
     }
   }
 
-  private get isPathValid(): boolean {
+  private get isPathValidated(): boolean {
     if (this.ctx.req.path.includes("..")) {
       return false;
     } else {
@@ -29,8 +29,8 @@ export abstract class BaseMiddleware extends Middleware {
     }
   }
 
-  protected get isReqValida(): boolean {
-    return this.isMethodValid && this.isPathValid;
+  protected get isReqValidated(): boolean {
+    return this.isMethodValid && this.isPathValidated;
   }
 
   protected setFile(file: string, is404 = false): void {
