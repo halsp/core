@@ -67,10 +67,10 @@ export abstract class HeaderHandler extends Object {
     return this;
   }
 
-  getHeader(key: string): HeaderValue | undefined {
+  getHeader<T extends HeaderValue = HeaderValue>(key: string): T | undefined {
     const existKey = this.hasHeader(key);
     if (existKey) {
-      return this.#headers[existKey];
+      return this.#headers[existKey] as T;
     }
   }
 }
