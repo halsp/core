@@ -1,4 +1,4 @@
-import { HttpContext, ResultHandler } from "../context";
+import { HttpContext, Request, Response, ResultHandler } from "../context";
 import { HttpException } from "../exceptions";
 import { execHooks, HookType } from "./hook.middleware";
 import { LambdaMiddleware } from "./lambda.middleware";
@@ -35,7 +35,10 @@ export async function createMiddleware(
 
 export abstract class Middleware extends ResultHandler {
   constructor() {
-    super(() => this.ctx.res);
+    super(
+      () => this.ctx.res,
+      () => this.ctx.req.headers
+    );
   }
 
   #index!: number;
@@ -44,6 +47,19 @@ export abstract class Middleware extends ResultHandler {
   #ctx!: HttpContext;
   public get ctx(): HttpContext {
     return this.#ctx;
+  }
+
+  public get req(): Request {
+    return this.#ctx.req;
+  }
+  public get request(): Request {
+    return this.req;
+  }
+  public get res(): Response {
+    return this.#ctx.res;
+  }
+  public get response(): Response {
+    return this.res;
   }
 
   abstract invoke(): void | Promise<void>;

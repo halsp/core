@@ -2,10 +2,14 @@ import {
   getReasonPhrase,
   getStatusCode,
   HeadersDict,
+  HttpContext,
+  Middleware,
   ReasonPhrases,
+  Request,
   Response,
   StatusCodes,
 } from "../src";
+import { TestStartup } from "./test-startup";
 
 test("setHeader", async () => {
   const req = new Response()
@@ -71,4 +75,45 @@ test("status code", () => {
   expect(getStatusCode).not.toBeUndefined();
   expect(ReasonPhrases).not.toBeUndefined();
   expect(getReasonPhrase).not.toBeUndefined();
+});
+
+it("should get from md.req and set to md.res", async () => {
+  class TestMiddleware extends Middleware {
+    invoke(): void | Promise<void> {
+      this.set("h1", 1);
+      this.response.set("h2", 2);
+      this.request.set("h3", 3);
+
+      expect(this.get("h1")).toBeUndefined();
+      expect(this.get("h2")).toBeUndefined();
+      expect(this.get("h3")).toBe("3");
+    }
+  }
+  await new TestStartup().add(TestMiddleware).run();
+});
+
+it("should append to ctx.res", async () => {
+  const ctx = new HttpContext(new Request());
+  ctx.append("h1", 1);
+  ctx.append("h1", 2);
+
+  expect(ctx.get("h1")).toBeUndefined();
+  expect(ctx.res.get("h1")).toEqual(["1", "2"]);
+});
+
+it("should remove to ctx.res", async () => {
+  const ctx = new HttpContext(new Request());
+  ctx.res.set("h1", 1);
+  expect(ctx.response.get("h1")).toBe("1");
+  ctx.remove("h1");
+  expect(ctx.res.get("h1")).toBeUndefined();
+});
+
+it("should has from ctx.req", async () => {
+  const ctx = new HttpContext(new Request());
+  ctx.set("h1", 1);
+  ctx.request.set("h2", 2);
+
+  expect(ctx.has("h1")).toBeFalsy();
+  expect(ctx.get("h2")).toBeTruthy();
 });

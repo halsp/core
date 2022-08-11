@@ -15,7 +15,10 @@ type BuilderBagItem<T> = {
 
 export class HttpContext extends ResultHandler {
   constructor(req: Request) {
-    super(() => this.#res);
+    super(
+      () => this.#res,
+      () => this.#req.headers
+    );
 
     this.#req = req;
     (this.#req as any).ctx = this;
@@ -32,10 +35,16 @@ export class HttpContext extends ResultHandler {
   public get res(): Response {
     return this.#res;
   }
+  public get response(): Response {
+    return this.res;
+  }
 
   readonly #req: Request;
   public get req(): Request {
     return this.#req;
+  }
+  public get request(): Request {
+    return this.req;
   }
 
   public bag<T>(key: string): T;

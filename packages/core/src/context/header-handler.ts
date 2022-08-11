@@ -6,15 +6,20 @@ import {
 } from "../utils";
 
 export abstract class HeaderHandler extends Object {
-  constructor(headersFinder: () => HeadersDict) {
+  constructor(getFinder: () => HeadersDict, setFinder?: () => HeadersDict) {
     super();
-    this.#headersFinder = headersFinder;
+    this.#getFinder = getFinder;
+    this.#setFinder = setFinder ?? getFinder;
   }
 
-  readonly #headersFinder: () => HeadersDict;
+  readonly #getFinder: () => HeadersDict;
+  readonly #setFinder: () => HeadersDict;
 
-  get #headers(): HeadersDict {
-    return this.#headersFinder();
+  get #getHeaders(): HeadersDict {
+    return this.#getFinder();
+  }
+  get #setHeaders(): HeadersDict {
+    return this.#setFinder();
   }
 
   setHeaders(headers: NumericalHeadersDict): this {
@@ -26,51 +31,77 @@ export abstract class HeaderHandler extends Object {
     }
     return this;
   }
-
   setHeader(key: string, value: NumericalHeaderValue): this {
     if (value == undefined) return this;
 
     if (Array.isArray(value)) {
-      this.#headers[key] = value.map((item) =>
+      this.#setHeaders[key] = value.map((item) =>
         typeof item == "string" ? item : String(item)
       );
     } else if (typeof value != "string") {
-      this.#headers[key] = String(value);
+      this.#setHeaders[key] = String(value);
     } else {
-      this.#headers[key] = value;
+      this.#setHeaders[key] = value;
     }
     return this;
   }
+  set(key: string, value: NumericalHeaderValue): this {
+    return this.setHeader(key, value);
+  }
 
   appendHeader(key: string, value: NumericalHeaderValue): this {
-    const prev = this.getHeader(key) as NumericalHeaderValue;
+    const prev = this.#getHeaderFromDict(
+      key,
+      this.#setHeaders
+    ) as NumericalHeaderValue;
     if (prev) {
       value = (Array.isArray(prev) ? prev : [prev]).concat(value);
     }
     return this.setHeader(key, value);
   }
+  append(key: string, value: NumericalHeaderValue): this {
+    return this.appendHeader(key, value);
+  }
 
-  hasHeader(key: string): string | false {
-    for (const item of Object.keys(this.#headers)) {
+  #hasHeaderFromDict(key: string, dict: HeadersDict): string | false {
+    for (const item in dict) {
       if (item.toUpperCase() == key.toUpperCase()) {
         return item;
       }
     }
     return false;
   }
+  hasHeader(key: string): string | false {
+    return this.#hasHeaderFromDict(key, this.#getHeaders);
+  }
+  has(key: string): string | false {
+    return this.hasHeader(key);
+  }
 
   removeHeader(key: string): this {
-    const existKey = this.hasHeader(key);
+    const existKey = this.#hasHeaderFromDict(key, this.#setHeaders);
     if (existKey) {
-      delete this.#headers[existKey];
+      delete this.#setHeaders[existKey];
     }
     return this;
   }
+  remove(key: string): this {
+    return this.removeHeader(key);
+  }
 
-  getHeader<T extends HeaderValue = HeaderValue>(key: string): T | undefined {
-    const existKey = this.hasHeader(key);
+  #getHeaderFromDict<T extends HeaderValue = HeaderValue>(
+    key: string,
+    dict: HeadersDict
+  ): T | undefined {
+    const existKey = this.#hasHeaderFromDict(key, dict);
     if (existKey) {
-      return this.#headers[existKey] as T;
+      return dict[existKey] as T;
     }
+  }
+  getHeader<T extends HeaderValue = HeaderValue>(key: string): T | undefined {
+    return this.#getHeaderFromDict(key, this.#getHeaders);
+  }
+  get<T extends HeaderValue = HeaderValue>(key: string): T | undefined {
+    return this.getHeader<T>(key);
   }
 }

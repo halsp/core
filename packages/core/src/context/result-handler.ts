@@ -1,12 +1,15 @@
 import { StatusCodes, getReasonPhrase } from "http-status-codes";
-import { isString } from "../utils";
+import { HeadersDict, isString } from "../utils";
 import { HttpErrorMessage } from "./http-error-message";
 import { HeaderHandler } from "./header-handler";
 import { Response } from "./response";
 
 export abstract class ResultHandler extends HeaderHandler {
-  constructor(resFinder: () => Response) {
-    super(() => resFinder().headers);
+  constructor(resFinder: () => Response, getHeaderFinder?: () => HeadersDict) {
+    super(
+      getHeaderFinder ?? (() => resFinder().headers),
+      () => resFinder().headers
+    );
     this.#resFinder = resFinder;
   }
 
