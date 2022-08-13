@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   HttpContext,
+  isObject,
   isPlainObject,
   isUndefined,
 } from "@ipare/core";
@@ -28,12 +29,24 @@ export class ValidatePipe<T extends object = any, R extends T = any>
       return value;
     }
 
-    if (!(await this.getEnable(value, ctx))) {
+    const enable = await this.getMetadata<boolean>(
+      ctx,
+      value,
+      ENABLE_METADATA,
+      true
+    );
+    if (!enable) {
       return value;
     }
 
     const options = await this.getOptions(value, ctx, propertyType);
-    const schemaName = await this.getSchameName(value, ctx);
+
+    const schemaName = await this.getMetadata<string | undefined>(
+      ctx,
+      value,
+      SCHAME_METADATA,
+      undefined
+    );
 
     await this.validateParent(args, schemaName, options);
     await this.validateModel(args, schemaName, options);
@@ -134,13 +147,12 @@ export class ValidatePipe<T extends object = any, R extends T = any>
       });
     }
 
-    let decOptions = Reflect.getMetadata(OPTIONS_METADATA, value.constructor);
-    if (typeof decOptions == "function") {
-      decOptions = await decOptions({
-        ctx,
-        val: value,
-      });
-    }
+    const decOptions = await this.getMetadata<ValidatorOptions | undefined>(
+      ctx,
+      value,
+      OPTIONS_METADATA,
+      undefined
+    );
 
     if (!opts && !decOptions) {
       return undefined;
@@ -154,30 +166,22 @@ export class ValidatePipe<T extends object = any, R extends T = any>
     return Object.assign({}, opts, decOptions);
   }
 
-  private async getSchameName(
-    value: T,
-    ctx: HttpContext
-  ): Promise<string | undefined> {
-    let decSchameName = Reflect.getMetadata(SCHAME_METADATA, value.constructor);
-    if (typeof decSchameName == "function") {
-      decSchameName = await decSchameName({
+  private async getMetadata<T>(
+    ctx: HttpContext,
+    value: any,
+    key: string,
+    def: T
+  ): Promise<T | undefined> {
+    if (isUndefined(value) || !isObject(value)) return def;
+
+    let metadataValue = Reflect.getMetadata(key, value);
+    if (typeof metadataValue == "function") {
+      metadataValue = await metadataValue({
         ctx,
         val: value,
       });
     }
 
-    return decSchameName;
-  }
-
-  private async getEnable(value: T, ctx: HttpContext): Promise<boolean> {
-    let enable = Reflect.getMetadata(ENABLE_METADATA, value.constructor);
-    if (typeof enable == "function") {
-      enable = await enable({
-        ctx,
-        val: value,
-      });
-    }
-
-    return enable != false;
+    return metadataValue ?? def;
   }
 }

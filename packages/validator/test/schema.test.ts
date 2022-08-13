@@ -57,6 +57,11 @@ function testSchema(useSchema: boolean) {
       }
       const res = await startup.add(TestMiddleware).run();
 
+      if (res.status == 500) {
+        res.ctx.errorStack.forEach((er) => {
+          console.error("errorStack", er);
+        });
+      }
       if (useSchema) {
         expect(res.status).toBe(400);
         expect(res.body).toEqual({

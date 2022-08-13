@@ -7,7 +7,7 @@ import { UseValidatorOptions } from "../src";
 import { TestStartup } from "@ipare/testing";
 
 function testOptions(useOptions: any, decOptions: any, result: boolean) {
-  test(`options test ${!!useOptions} ${!!decOptions}`, async () => {
+  test(`options test ${!!useOptions} ${!!decOptions} ${result}`, async () => {
     @UseValidatorOptions(decOptions)
     class TestDto {
       @IsInt()

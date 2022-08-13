@@ -16,7 +16,7 @@ export function UseValidatorOptions(
 export function UseValidatorOptions(options: ValidatorOptions): ClassDecorator;
 export function UseValidatorOptions(options: any): ClassDecorator {
   return function (target: any) {
-    Reflect.defineMetadata(OPTIONS_METADATA, options, target);
+    Reflect.defineMetadata(OPTIONS_METADATA, options, target.prototype);
   };
 }
 
@@ -26,7 +26,7 @@ export function UseValidatorSchema(
 export function UseValidatorSchema(schemaName: string): ClassDecorator;
 export function UseValidatorSchema(schemaName: any): ClassDecorator {
   return function (target: any) {
-    Reflect.defineMetadata(SCHAME_METADATA, schemaName, target);
+    Reflect.defineMetadata(SCHAME_METADATA, schemaName, target.prototype);
   };
 }
 
@@ -34,6 +34,6 @@ export function ValidatorEnable(
   fn: (args: { ctx: HttpContext; val: any }) => boolean | Promise<boolean>
 ): ClassDecorator {
   return function (target: any) {
-    Reflect.defineMetadata(ENABLE_METADATA, fn, target);
+    Reflect.defineMetadata(ENABLE_METADATA, fn, target.prototype);
   };
 }
