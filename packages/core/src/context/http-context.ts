@@ -27,7 +27,12 @@ export class HttpContext extends ResultHandler {
 
   readonly startup!: Startup;
 
-  static readonly #singletonBag: Dict = {};
+  get #singletonBag() {
+    const key = "@ipare/core/singletonBag";
+    const singletonBag: Dict = this.startup[key] ?? {};
+    this.startup[key] = singletonBag;
+    return singletonBag;
+  }
   readonly #scopedBag: Dict = {};
   readonly #bag: Dict = {};
 
@@ -62,10 +67,8 @@ export class HttpContext extends ResultHandler {
       this.#bag[key] = arg1;
       return this;
     } else {
-      if (
-        Object.prototype.hasOwnProperty.call(HttpContext.#singletonBag, key)
-      ) {
-        return this.#getBagValue(key, HttpContext.#singletonBag[key]);
+      if (Object.prototype.hasOwnProperty.call(this.#singletonBag, key)) {
+        return this.#getBagValue(key, this.#singletonBag[key]);
       }
       if (Object.prototype.hasOwnProperty.call(this.#scopedBag, key)) {
         return this.#getBagValue(key, this.#scopedBag[key]);
@@ -82,7 +85,7 @@ export class HttpContext extends ResultHandler {
       } else {
         let dict: Dict;
         if (result.type == "singleton") {
-          dict = HttpContext.#singletonBag;
+          dict = this.#singletonBag;
         } else {
           dict = this.#scopedBag;
         }

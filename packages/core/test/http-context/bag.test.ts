@@ -1,7 +1,12 @@
-import { HttpContext, Request } from "../../src";
+import { TestStartup } from "../test-startup";
+
+async function getContext() {
+  const res = await new TestStartup().run();
+  return res.ctx;
+}
 
 test("bag", async () => {
-  const context = new HttpContext(new Request());
+  const context = await getContext();
   context.bag("BAG1", "BAG1");
   context.bag("BAG2", { bag2: "BAG2" });
 
@@ -11,7 +16,7 @@ test("bag", async () => {
 });
 
 test("transient bag", async () => {
-  const context = new HttpContext(new Request());
+  const context = await getContext();
   context.bag("BAG3", "transient", () => "BAG3");
   context.bag("BAG4", "transient", () => ({ bag4: "BAG4" }));
 
@@ -22,7 +27,7 @@ test("transient bag", async () => {
 });
 
 test("scoped bag", async () => {
-  const context = new HttpContext(new Request());
+  const context = await getContext();
   context.bag("BAG3", "scoped", () => "BAG3");
   context.bag("BAG4", "scoped", () => ({ bag4: "BAG4" }));
 
@@ -33,7 +38,7 @@ test("scoped bag", async () => {
 
 test("singleton bag", async () => {
   {
-    const context = new HttpContext(new Request());
+    const context = await getContext();
     context.bag("BAG3", "singleton", () => "BAG3");
     context.bag("BAG4", "singleton", () => ({ bag4: "BAG4" }));
 
@@ -43,7 +48,10 @@ test("singleton bag", async () => {
   }
 
   {
-    const context = new HttpContext(new Request());
+    const context = await getContext();
+    context.bag("BAG3", "singleton", () => "BAG3");
+    context.bag("BAG4", "singleton", () => ({ bag4: "BAG4" }));
+
     expect(context.bag("BAG3")).toBe("BAG3");
     expect(context.bag<any>("BAG4").bag4).toBe("BAG4");
     expect(context.bag<any>("BAG4")).toBe(context.bag<any>("BAG4"));
