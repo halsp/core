@@ -46,6 +46,15 @@ export class CorsMiddleware extends Middleware {
       credentials = !!this.options.credentials;
     }
 
+    const allowMethods = this.options.allowMethods ?? [
+      "GET",
+      "HEAD",
+      "PUT",
+      "POST",
+      "DELETE",
+      "PATCH",
+    ];
+
     this.#setHeader("Access-Control-Allow-Origin", origin);
     this.#setHeader(
       "Access-Control-Allow-Credentials",
@@ -78,8 +87,8 @@ export class CorsMiddleware extends Middleware {
       );
       this.#setHeader(
         "Access-Control-Allow-Methods",
-        this.options.allowMethods,
-        () => !!this.options.allowMethods
+        allowMethods,
+        () => !!allowMethods
       );
 
       let allowHeaders = this.options.allowHeaders;
