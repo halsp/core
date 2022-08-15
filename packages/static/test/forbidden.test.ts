@@ -3,9 +3,8 @@ import { TestStartup } from "@ipare/testing";
 import "../src";
 
 test("forbidden path", async () => {
-  const result = await new TestStartup(
-    new Request().setMethod("get").setPath("f/../b")
-  )
+  const result = await new TestStartup()
+    .setRequest(new Request().setMethod("get").setPath("f/../b"))
     .useStatic({
       dir: "test/static",
       encoding: "utf-8",

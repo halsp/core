@@ -34,11 +34,12 @@ class TestMiddleware extends Middleware {
 }
 
 test(`custom inject`, async function () {
-  const res = await new TestStartup({
-    req: new Request().setHeader("h1", "1").setHeader("host", "ipare").setBody({
-      b: 2,
-    }),
-  })
+  const res = await new TestStartup()
+    .setRequest(
+      new Request().setHeader("h1", "1").setHeader("host", "ipare").setBody({
+        b: 2,
+      })
+    )
     .useInject()
     .add(TestMiddleware)
     .run();

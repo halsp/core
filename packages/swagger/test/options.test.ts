@@ -29,9 +29,8 @@ test("builder", async () => {
 });
 
 test("other router", async () => {
-  const res = await new TestStartup(
-    new Request().setPath("/test").setMethod("post")
-  )
+  const res = await new TestStartup()
+    .setRequest(new Request().setPath("/test").setMethod("post"))
     .useSwagger()
     .useRouter({
       dir: "test/parser",

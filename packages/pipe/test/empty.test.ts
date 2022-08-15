@@ -20,9 +20,8 @@ test("null body", async () => {
     }
   }
 
-  const res = await new TestStartup({
-    req: new Request().setBody(null),
-  })
+  const res = await new TestStartup()
+    .setRequest(new Request().setBody(null))
     .useInject()
     .add(TestMiddleware)
     .run();

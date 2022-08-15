@@ -17,9 +17,8 @@ const methods = [
 
 methods.forEach((method) => {
   test(`${method} restful test`, async () => {
-    const result = await new TestStartup(
-      new Request().setPath("/restful").setMethod(method)
-    )
+    const result = await new TestStartup()
+      .setRequest(new Request().setPath("/restful").setMethod(method))
       .useTestRouter()
       .run();
     expect(result.status).toBe(200);

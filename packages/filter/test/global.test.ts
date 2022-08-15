@@ -25,11 +25,12 @@ class TestActionFilter implements ActionFilter {
 
 function runTest(executing: boolean) {
   test(`global filter ${executing}`, async () => {
-    const res = await new TestStartup({
-      req: new Request().setPath("").setMethod("GET").setBody({
-        executing,
-      }),
-    })
+    const res = await new TestStartup()
+      .setRequest(
+        new Request().setPath("").setMethod("GET").setBody({
+          executing,
+        })
+      )
       .useGlobalFilter(TestActionFilter)
       .useGlobalFilter(TestActionFilter)
       .add(TestAction)

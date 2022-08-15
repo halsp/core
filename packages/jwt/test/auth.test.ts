@@ -6,11 +6,12 @@ import { createIpareReqeust } from "./utils";
 
 function runTest(auth: boolean) {
   test(`auth ${auth}`, async function () {
-    const res = await new TestStartup({
-      req: await createIpareReqeust({
-        secret: "secret",
-      }),
-    })
+    const res = await new TestStartup()
+      .setRequest(
+        await createIpareReqeust({
+          secret: "secret",
+        })
+      )
       .useJwt({
         secret: "secret",
       })
@@ -25,11 +26,12 @@ runTest(true);
 runTest(false);
 
 test(`auth failed with custom status`, async function () {
-  const res = await new TestStartup({
-    req: await createIpareReqeust({
-      secret: "secret",
-    }),
-  })
+  const res = await new TestStartup()
+    .setRequest(
+      await createIpareReqeust({
+        secret: "secret",
+      })
+    )
     .useJwt({
       secret: "secret",
     })

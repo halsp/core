@@ -7,9 +7,8 @@ const methods = ["test", "aaa", "NO"];
 
 methods.forEach((method) => {
   test(`${method} -> any restful test`, async () => {
-    const result = await new TestStartup(
-      new Request().setPath("/restful").setMethod(method)
-    )
+    const result = await new TestStartup()
+      .setRequest(new Request().setPath("/restful").setMethod(method))
       .useTestRouter()
       .run();
 

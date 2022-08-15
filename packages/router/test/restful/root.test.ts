@@ -4,9 +4,10 @@ import "../../src";
 import "../global";
 
 test("restful root get", async () => {
-  const result = await new TestStartup(
-    new Request().setPath("/").setMethod(HttpMethod.get.toUpperCase())
-  )
+  const result = await new TestStartup()
+    .setRequest(
+      new Request().setPath("/").setMethod(HttpMethod.get.toUpperCase())
+    )
     .useTestRouter()
     .run();
   expect(result.status).toBe(200);

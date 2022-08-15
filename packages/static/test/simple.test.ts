@@ -5,7 +5,8 @@ import { FILE_BAG } from "../src/constant";
 
 test("index html", async () => {
   {
-    const result = await new TestStartup(new Request().setMethod("get"))
+    const result = await new TestStartup()
+      .setRequest(new Request().setMethod("get"))
       .useStatic({
         dir: "test/static",
         encoding: "utf-8",
@@ -15,9 +16,8 @@ test("index html", async () => {
     expect(result.body).toBe("TEST");
   }
   {
-    const result = await new TestStartup(
-      new Request().setMethod("get").setPath("index.html")
-    )
+    const result = await new TestStartup()
+      .setRequest(new Request().setMethod("get").setPath("index.html"))
       .use(async (ctx, next) => {
         await next();
         expect(ctx.bag<string>(FILE_BAG)).not.toBeUndefined();
@@ -33,7 +33,8 @@ test("index html", async () => {
 });
 
 test("default static dir", async () => {
-  const result = await new TestStartup(new Request().setMethod("get"))
+  const result = await new TestStartup()
+    .setRequest(new Request().setMethod("get"))
     .use(async (ctx, next) => {
       await next();
       expect(ctx.bag<string>(FILE_BAG)).toBeUndefined();

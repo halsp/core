@@ -10,9 +10,8 @@ test("streamingBody", async function () {
   let working = false;
   let res: Response | undefined;
   const server = http.createServer(async (httpReq, httpRes) => {
-    res = await new TestStartup({
-      req: new Request().setHeader("h1", 1).setHeader("h2", "2"),
-    })
+    res = await new TestStartup()
+      .setRequest(new Request().setHeader("h1", 1).setHeader("h2", "2"))
       .useKoa(
         new Koa().use(async (ctx, next) => {
           ctx.body = ctx.req.read(100);

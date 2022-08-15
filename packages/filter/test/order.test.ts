@@ -91,9 +91,8 @@ class TestAction extends Action {
 }
 
 test(`filter order`, async () => {
-  const res = await new TestStartup({
-    req: new Request().setPath("filters/order").setMethod("GET"),
-  })
+  const res = await new TestStartup()
+    .setRequest(new Request().setPath("filters/order").setMethod("GET"))
     .use(async (ctx, next) => {
       ctx.res.body = 0;
       await next();

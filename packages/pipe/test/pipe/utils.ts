@@ -20,12 +20,13 @@ function runPipeTest(
   }
 
   test(`parse: ${success} ${source}, ${target}`, async () => {
-    const res = await new TestStartup({
-      req: new Request().setBody({
-        b1: source,
-      }),
-      skipThrow: true,
-    })
+    const res = await new TestStartup()
+      .skipThrow()
+      .setRequest(
+        new Request().setBody({
+          b1: source,
+        })
+      )
       .useInject()
       .add(new TestMiddleware())
       .run();

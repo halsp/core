@@ -5,9 +5,7 @@ import { expectBody, getTestRequest, TestMiddleware } from "./TestMiddleware";
 
 test("record test", async () => {
   let done = false;
-  const startup = new TestStartup({
-    req: getTestRequest(),
-  }).useInject();
+  const startup = new TestStartup().setRequest(getTestRequest()).useInject();
   startup.hook(HookType.BeforeInvoke, (ctx, md) => {
     const fn = (cls: any, empty: boolean) => {
       const metadata = getPipeRecords(cls);

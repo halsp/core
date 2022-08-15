@@ -5,9 +5,8 @@ import { TestStartup } from "@ipare/testing";
 
 test("not allowed method", async function () {
   await runMva(async () => {
-    const res = await new TestStartup({
-      req: new Request().setMethod("post"),
-    })
+    const res = await new TestStartup()
+      .setRequest(new Request().setMethod("post"))
       .useMva()
       .run();
 
@@ -21,9 +20,8 @@ test("not allowed method", async function () {
 function testRanderEnable(enable: boolean) {
   test(`randerEnable ${enable}`, async function () {
     await runMva(async () => {
-      const res = await new TestStartup({
-        req: new Request().setMethod("post"),
-      })
+      const res = await new TestStartup()
+        .setRequest(new Request().setMethod("post"))
         .useMva({
           methods: "any",
           randerEnable: () => enable,

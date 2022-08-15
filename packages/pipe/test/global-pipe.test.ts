@@ -27,9 +27,8 @@ test("global pipe property", async () => {
     }
   }
 
-  const startup = new TestStartup({
-    req: new Request().setHeader("h1", "5"),
-  })
+  const startup = new TestStartup()
+    .setRequest(new Request().setHeader("h1", "5"))
     .useInject()
     .useGlobalPipe(GlobalPipeType.before, TestGlobalPipe)
     .useGlobalPipe(GlobalPipeType.after, TestGlobalPipe)
@@ -68,9 +67,8 @@ test("global pipe params", async () => {
     }
   }
 
-  const startup = new TestStartup({
-    req: new Request().setHeader("h1", "5"),
-  })
+  const startup = new TestStartup()
+    .setRequest(new Request().setHeader("h1", "5"))
     .useInject()
     .useGlobalPipe(GlobalPipeType.before, TestGlobalPipe)
     .useGlobalPipe(GlobalPipeType.after, TestGlobalPipe)

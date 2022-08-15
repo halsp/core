@@ -6,9 +6,8 @@ import Router from "@koa/router";
 import { TestStartup } from "@ipare/testing";
 
 test("koa-cors", async function () {
-  const res = await new TestStartup({
-    req: new Request().setMethod("POST"),
-  })
+  const res = await new TestStartup()
+    .setRequest(new Request().setMethod("POST"))
     .useKoa(
       new Koa().use(
         cors({
@@ -41,9 +40,8 @@ test("@koa/router", async function () {
     });
 
   async function request(method: string, path: string): Promise<Response> {
-    return await new TestStartup({
-      req: new Request().setMethod(method).setPath(path),
-    })
+    return await new TestStartup()
+      .setRequest(new Request().setMethod(method).setPath(path))
       .use(async (ctx, next) => {
         await next();
       })

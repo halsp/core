@@ -10,9 +10,8 @@ it("default options", async () => {
 });
 
 it("should set 'Access-Control-Allow-Origin'", async () => {
-  const res = await new TestStartup(
-    new Request().setHeader("Origin", "https://ipare.org")
-  )
+  const res = await new TestStartup()
+    .setRequest(new Request().setHeader("Origin", "https://ipare.org"))
     .useCors()
     .run();
 
@@ -22,11 +21,12 @@ it("should set 'Access-Control-Allow-Origin'", async () => {
 });
 
 it("should not set 'Access-Control-Allow-Origin' when method is OPTIONS and no 'Access-Control-Request-Metho'", async () => {
-  const res = await new TestStartup(
-    new Request()
-      .setHeader("Origin", "https://ipare.org")
-      .setMethod(HttpMethod.options)
-  )
+  const res = await new TestStartup()
+    .setRequest(
+      new Request()
+        .setHeader("Origin", "https://ipare.org")
+        .setMethod(HttpMethod.options)
+    )
     .useCors()
     .run();
 
@@ -34,12 +34,13 @@ it("should not set 'Access-Control-Allow-Origin' when method is OPTIONS and no '
 });
 
 it("should set status to 204 when method is OPTIONS", async () => {
-  const res = await new TestStartup(
-    new Request()
-      .setHeader("Origin", "https://ipare.org")
-      .setHeader("Access-Control-Request-Method", "POST")
-      .setMethod(HttpMethod.options)
-  )
+  const res = await new TestStartup()
+    .setRequest(
+      new Request()
+        .setHeader("Origin", "https://ipare.org")
+        .setHeader("Access-Control-Request-Method", "POST")
+        .setMethod(HttpMethod.options)
+    )
     .useCors()
     .run();
 

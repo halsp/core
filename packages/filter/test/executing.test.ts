@@ -42,12 +42,13 @@ function runExecuting(type: string) {
       const body: any = {};
       body[`${type}-executing`] = executing;
 
-      const res = await new TestStartup({
-        req: new Request()
-          .setPath("/filters/executing")
-          .setMethod("GET")
-          .setBody(body),
-      })
+      const res = await new TestStartup()
+        .setRequest(
+          new Request()
+            .setPath("/filters/executing")
+            .setMethod("GET")
+            .setBody(body)
+        )
         .useFilter()
         .add(TestAction)
         .run();

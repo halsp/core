@@ -5,11 +5,12 @@ import "../src";
 function testErrorSecret(isError: boolean) {
   function runTest(customError: boolean) {
     test(`error secret ${isError}`, async function () {
-      const result = await new TestStartup({
-        req: await createIpareReqeust({
-          secret: isError ? "secret1" : "secret",
-        }),
-      })
+      const result = await new TestStartup()
+        .setRequest(
+          await createIpareReqeust({
+            secret: isError ? "secret1" : "secret",
+          })
+        )
         .useJwt({
           secret: "secret",
         })

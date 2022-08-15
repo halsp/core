@@ -3,9 +3,8 @@ import { TestStartup } from "@ipare/testing";
 import "../src";
 
 test("prefix", async () => {
-  const result = await new TestStartup(
-    new Request().setMethod("get").setPath("static/index.un")
-  )
+  const result = await new TestStartup()
+    .setRequest(new Request().setMethod("get").setPath("static/index.un"))
     .useStatic({
       dir: "test/static",
       encoding: "utf-8",
@@ -17,9 +16,8 @@ test("prefix", async () => {
 });
 
 test("prefix with /", async () => {
-  const result = await new TestStartup(
-    new Request().setMethod("get").setPath("/static/index.un/")
-  )
+  const result = await new TestStartup()
+    .setRequest(new Request().setMethod("get").setPath("/static/index.un/"))
     .useStatic({
       dir: "test/static",
       encoding: "utf-8",
@@ -31,9 +29,8 @@ test("prefix with /", async () => {
 });
 
 test("prefix not found", async () => {
-  const result = await new TestStartup(
-    new Request().setMethod("get").setPath("/static/index.un/")
-  )
+  const result = await new TestStartup()
+    .setRequest(new Request().setMethod("get").setPath("/static/index.un/"))
     .useStatic({
       dir: "test/static",
       encoding: "utf-8",

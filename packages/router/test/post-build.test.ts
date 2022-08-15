@@ -43,7 +43,8 @@ test("build and run", async () => {
     cacheDir: "",
   });
 
-  const res = await new TestStartup(new Request().setMethod("get"))
+  const res = await new TestStartup()
+    .setRequest(new Request().setMethod("get"))
     .useRouter()
     .run();
 

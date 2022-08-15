@@ -20,9 +20,8 @@ class TestService {
 }
 
 test(`http context`, async () => {
-  const res = await new TestStartup({
-    req: getTestRequest(),
-  })
+  const res = await new TestStartup()
+    .setRequest(getTestRequest())
     .useInject()
     .use(async (ctx) => {
       const obj = await parseInject(ctx, new TestService());

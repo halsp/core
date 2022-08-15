@@ -1,28 +1,23 @@
 import { HttpContext, Startup, Request, Response } from "@ipare/core";
-import { TestStartupOptions } from "./options";
 
 export class TestStartup extends Startup {
-  #options: TestStartupOptions;
+  #skipThrow?: boolean;
+  #req?: Request;
 
-  constructor(req: Request);
-  constructor(options?: TestStartupOptions);
-  constructor(options: TestStartupOptions | Request = {}) {
-    super();
+  setRequest(req: Request): this {
+    this.#req = req;
+    return this;
+  }
 
-    if (options instanceof Request) {
-      options = {
-        req: options,
-      } as TestStartupOptions;
-    }
-    this.#options = options;
+  skipThrow(): this {
+    this.#skipThrow = true;
+    return this;
   }
 
   async run(): Promise<Response> {
-    const res = await super.invoke(
-      new HttpContext(this.#options.req ?? new Request())
-    );
+    const res = await super.invoke(new HttpContext(this.#req ?? new Request()));
 
-    if (!this.#options.skipThrow && res.ctx.errorStack.length) {
+    if (!this.#skipThrow && res.ctx.errorStack.length) {
       throw res.ctx.errorStack[0];
     }
     return res;

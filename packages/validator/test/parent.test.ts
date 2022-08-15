@@ -24,12 +24,13 @@ test("parent validate", async () => {
     }
   }
 
-  const res = await new TestStartup({
-    req: new Request().setBody({
-      b1: 1,
-    }),
-    skipThrow: true,
-  })
+  const res = await new TestStartup()
+    .skipThrow()
+    .setRequest(
+      new Request().setBody({
+        b1: 1,
+      })
+    )
     .useInject()
     .useValidator()
     .add(TestMiddleware)

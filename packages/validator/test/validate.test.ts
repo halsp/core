@@ -27,13 +27,14 @@ function runTest(validate: boolean) {
       }
     }
 
-    const res = await new TestStartup({
-      req: new Request().setBody({
-        b1: "a",
-        b2: validate ? 1 : "1",
-      }),
-      skipThrow: true,
-    })
+    const res = await new TestStartup()
+      .skipThrow()
+      .setRequest(
+        new Request().setBody({
+          b1: "a",
+          b2: validate ? 1 : "1",
+        })
+      )
       .useInject()
       .useValidator()
       .add(TestMiddleware)
@@ -78,13 +79,14 @@ test("array message", async () => {
     }
   }
 
-  const res = await new TestStartup({
-    req: new Request().setBody({
-      b1: 1,
-      b2: "1",
-    }),
-    skipThrow: true,
-  })
+  const res = await new TestStartup()
+    .skipThrow()
+    .setRequest(
+      new Request().setBody({
+        b1: 1,
+        b2: "1",
+      })
+    )
     .useInject()
     .useValidator()
     .add(TestMiddleware)
@@ -108,11 +110,12 @@ test("validate disabled", async () => {
     }
   }
 
-  const res = await new TestStartup(
-    new Request().setBody({
-      b1: 1,
-    })
-  )
+  const res = await new TestStartup()
+    .setRequest(
+      new Request().setBody({
+        b1: 1,
+      })
+    )
     .useInject()
     .useValidator()
     .add(TestMiddleware)

@@ -16,9 +16,8 @@ test(`empty exception filter`, async () => {
     }
   }
 
-  const res = await new TestStartup({
-    skipThrow: true,
-  })
+  const res = await new TestStartup()
+    .skipThrow()
     .useFilter()
     .add(TestAction)
     .run();
@@ -50,16 +49,14 @@ class TestAction extends Action {
 function runTest(executing: boolean) {
   function run(bad: boolean) {
     test(`exception filter ${executing} ${bad}`, async () => {
-      const res = await new TestStartup({
-        req: new Request()
-          .setPath("/filters/exception")
-          .setMethod("GET")
-          .setBody({
+      const res = await new TestStartup()
+        .skipThrow()
+        .setRequest(
+          new Request().setPath("/filters/exception").setMethod("GET").setBody({
             bad,
             executing,
-          }),
-        skipThrow: true,
-      })
+          })
+        )
         .use(async (ctx, next) => {
           ctx.setHeader("h1", 1);
           await next();
@@ -96,10 +93,9 @@ runTest(true);
 runTest(false);
 
 test(`other error`, async () => {
-  const res = await new TestStartup({
-    skipThrow: true,
-    req: new Request().setPath("/filters/exception").setMethod("GET"),
-  })
+  const res = await new TestStartup()
+    .setRequest(new Request().setPath("/filters/exception").setMethod("GET"))
+    .skipThrow()
     .useFilter()
     .use(() => {
       throw new BadRequestException();

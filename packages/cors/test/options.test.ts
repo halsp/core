@@ -3,9 +3,8 @@ import { HttpMethod, Request } from "@ipare/core";
 import "../src";
 
 it("should set headers when set options of empty origin", async () => {
-  const res = await new TestStartup(
-    new Request().setHeader("Origin", "https://ipare.org")
-  )
+  const res = await new TestStartup()
+    .setRequest(new Request().setHeader("Origin", "https://ipare.org"))
     .useCors({
       origin: () => "",
     })
@@ -15,9 +14,8 @@ it("should set headers when set options of empty origin", async () => {
 });
 
 it("should set Access-Control-Allow-Credentials when set credentials true", async () => {
-  const res = await new TestStartup(
-    new Request().setHeader("Origin", "https://ipare.org")
-  )
+  const res = await new TestStartup()
+    .setRequest(new Request().setHeader("Origin", "https://ipare.org"))
     .useCors({
       credentials: () => true,
     })
@@ -26,12 +24,13 @@ it("should set Access-Control-Allow-Credentials when set credentials true", asyn
 });
 
 it("should set Access-Control-Allow-Headers when set allowHeaders option", async () => {
-  const res = await new TestStartup(
-    new Request()
-      .setHeader("Origin", "https://ipare.org")
-      .setHeader("Access-Control-Request-Method", "POST")
-      .setMethod(HttpMethod.options)
-  )
+  const res = await new TestStartup()
+    .setRequest(
+      new Request()
+        .setHeader("Origin", "https://ipare.org")
+        .setHeader("Access-Control-Request-Method", "POST")
+        .setMethod(HttpMethod.options)
+    )
     .useCors({
       allowHeaders: ["get"],
     })
@@ -41,12 +40,13 @@ it("should set Access-Control-Allow-Headers when set allowHeaders option", async
 
 describe("privateNetworkAccess", () => {
   it("should not set Access-Control-Request-Private-Network when privateNetworkAccess is false", async () => {
-    const res = await new TestStartup(
-      new Request()
-        .setHeader("Origin", "https://ipare.org")
-        .setHeader("Access-Control-Request-Method", "POST")
-        .setMethod(HttpMethod.options)
-    )
+    const res = await new TestStartup()
+      .setRequest(
+        new Request()
+          .setHeader("Origin", "https://ipare.org")
+          .setHeader("Access-Control-Request-Method", "POST")
+          .setMethod(HttpMethod.options)
+      )
       .useCors({
         privateNetworkAccess: false,
       })
@@ -55,12 +55,13 @@ describe("privateNetworkAccess", () => {
   });
 
   it("should not set Access-Control-Request-Private-Network if Access-Control-Request-Private-Network not exist", async () => {
-    const res = await new TestStartup(
-      new Request()
-        .setHeader("Origin", "https://ipare.org")
-        .setHeader("Access-Control-Request-Method", "POST")
-        .setMethod(HttpMethod.options)
-    )
+    const res = await new TestStartup()
+      .setRequest(
+        new Request()
+          .setHeader("Origin", "https://ipare.org")
+          .setHeader("Access-Control-Request-Method", "POST")
+          .setMethod(HttpMethod.options)
+      )
       .useCors({
         privateNetworkAccess: true,
       })
@@ -69,13 +70,14 @@ describe("privateNetworkAccess", () => {
   });
 
   it("should set Access-Control-Request-Private-Network", async () => {
-    const res = await new TestStartup(
-      new Request()
-        .setHeader("Origin", "https://ipare.org")
-        .setHeader("Access-Control-Request-Method", "POST")
-        .setHeader("Access-Control-Request-Private-Network", "true")
-        .setMethod(HttpMethod.options)
-    )
+    const res = await new TestStartup()
+      .setRequest(
+        new Request()
+          .setHeader("Origin", "https://ipare.org")
+          .setHeader("Access-Control-Request-Method", "POST")
+          .setHeader("Access-Control-Request-Private-Network", "true")
+          .setMethod(HttpMethod.options)
+      )
       .useCors({
         privateNetworkAccess: true,
       })
@@ -86,21 +88,21 @@ describe("privateNetworkAccess", () => {
 
 describe("allowMethods", () => {
   it("should not set Access-Control-Allow-Methods when the method is not OPTIONS", async () => {
-    const res = await new TestStartup(
-      new Request().setHeader("Origin", "https://ipare.org")
-    )
+    const res = await new TestStartup()
+      .setRequest(new Request().setHeader("Origin", "https://ipare.org"))
       .useCors()
       .run();
     expect(res.getHeader("Access-Control-Allow-Methods")).toBeUndefined();
   });
 
   it("should set default Access-Control-Allow-Methods", async () => {
-    const res = await new TestStartup(
-      new Request()
-        .setHeader("Origin", "https://ipare.org")
-        .setHeader("Access-Control-Request-Method", "POST")
-        .setMethod(HttpMethod.options)
-    )
+    const res = await new TestStartup()
+      .setRequest(
+        new Request()
+          .setHeader("Origin", "https://ipare.org")
+          .setHeader("Access-Control-Request-Method", "POST")
+          .setMethod(HttpMethod.options)
+      )
       .useCors()
       .run();
     expect(res.getHeader("Access-Control-Allow-Methods")).toEqual([
@@ -115,12 +117,13 @@ describe("allowMethods", () => {
 
   it("should set Access-Control-Allow-Methods when set allowMethods option", async () => {
     const allowMethods = ["POST"];
-    const res = await new TestStartup(
-      new Request()
-        .setHeader("Origin", "https://ipare.org")
-        .setHeader("Access-Control-Request-Method", "POST")
-        .setMethod(HttpMethod.options)
-    )
+    const res = await new TestStartup()
+      .setRequest(
+        new Request()
+          .setHeader("Origin", "https://ipare.org")
+          .setHeader("Access-Control-Request-Method", "POST")
+          .setMethod(HttpMethod.options)
+      )
       .useCors({
         allowMethods,
       })

@@ -27,11 +27,12 @@ class TestMiddleware extends Middleware {
 
 test("decorator", async function () {
   let jwt = "";
-  const res = await new TestStartup({
-    req: await createIpareReqeust({
-      secret: "secret",
-    }),
-  })
+  const res = await new TestStartup()
+    .setRequest(
+      await createIpareReqeust({
+        secret: "secret",
+      })
+    )
     .useJwt({
       secret: "secret",
     })
@@ -58,11 +59,12 @@ test("decorator", async function () {
 
 function testGetToken(skip: boolean) {
   test("getToken option", async function () {
-    const res = await new TestStartup({
-      req: await createIpareReqeust({
-        secret: "secret",
-      }),
-    })
+    const res = await new TestStartup()
+      .setRequest(
+        await createIpareReqeust({
+          secret: "secret",
+        })
+      )
       .useJwt({
         secret: "secret",
         getToken: () => "test",

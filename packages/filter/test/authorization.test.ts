@@ -6,11 +6,12 @@ function runTest(executing: boolean) {
   test(`authorization filter ${executing}`, async () => {
     process.chdir(__dirname);
     try {
-      const res = await new TestStartup({
-        req: new Request().setMethod("get").setPath("auth").setBody({
-          executing,
-        }),
-      })
+      const res = await new TestStartup()
+        .setRequest(
+          new Request().setMethod("get").setPath("auth").setBody({
+            executing,
+          })
+        )
         .use(async (ctx, next) => {
           ctx.setHeader("h1", 1);
           await next();

@@ -7,11 +7,12 @@ import { TestStartup } from "@ipare/testing";
 function runTest(executing: boolean) {
   test(`filter ${executing}`, async () => {
     await runMva(async () => {
-      const res = await new TestStartup({
-        req: new Request().setPath("filter").setMethod("GET").setBody({
-          executing,
-        }),
-      })
+      const res = await new TestStartup()
+        .setRequest(
+          new Request().setPath("filter").setMethod("GET").setBody({
+            executing,
+          })
+        )
         .useFilter()
         .useMva()
         .run();

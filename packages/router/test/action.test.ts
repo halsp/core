@@ -56,9 +56,8 @@ function runMultipleTest(
   body?: string
 ) {
   test(`multiple`, async () => {
-    const result = await new TestStartup(
-      new Request().setPath(path).setMethod(method)
-    )
+    const result = await new TestStartup()
+      .setRequest(new Request().setPath(path).setMethod(method))
       .useTestRouter()
       .run();
     if (body) {

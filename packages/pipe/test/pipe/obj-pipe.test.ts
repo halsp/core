@@ -12,11 +12,12 @@ class TestMiddleware extends Middleware {
 }
 
 test("simple test", async () => {
-  const res = await new TestStartup({
-    req: new Request().setBody({
-      b1: 1,
-    }),
-  })
+  const res = await new TestStartup()
+    .setRequest(
+      new Request().setBody({
+        b1: 1,
+      })
+    )
     .useInject()
     .add(new TestMiddleware())
     .run();

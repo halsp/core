@@ -5,9 +5,8 @@ import { runMva } from "./global";
 
 test("default", async function () {
   await runMva(async () => {
-    const res = await new TestStartup({
-      req: new Request().setMethod("GET"),
-    })
+    const res = await new TestStartup()
+      .setRequest(new Request().setMethod("GET"))
       .useMva()
       .run();
 
@@ -19,9 +18,8 @@ test("default", async function () {
 
 test("use again", async function () {
   await runMva(async () => {
-    const res = await new TestStartup({
-      req: new Request().setMethod("GET"),
-    })
+    const res = await new TestStartup()
+      .setRequest(new Request().setMethod("GET"))
       .useMva()
       .useMva()
       .run();

@@ -5,9 +5,8 @@ import "./global";
 
 function runTest(method: string, success: boolean) {
   test(`${method} ${success}`, async () => {
-    const res = await new TestStartup(
-      new Request().setPath("/decorator/method").setMethod(method)
-    )
+    const res = await new TestStartup()
+      .setRequest(new Request().setPath("/decorator/method").setMethod(method))
       .useTestRouter()
       .run();
 
@@ -29,9 +28,8 @@ runTest(HttpMethod.put, false);
 runTest(HttpMethod.any, false);
 
 test(`custom url`, async () => {
-  const res = await new TestStartup(
-    new Request().setPath("/mu").setMethod(HttpMethod.put)
-  )
+  const res = await new TestStartup()
+    .setRequest(new Request().setPath("/mu").setMethod(HttpMethod.put))
     .useTestRouter()
     .run();
 
@@ -40,11 +38,12 @@ test(`custom url`, async () => {
 });
 
 test(`base path`, async () => {
-  const res = await new TestStartup(
-    new Request()
-      .setPath("decorator/method-base-path/mup")
-      .setMethod(HttpMethod.get)
-  )
+  const res = await new TestStartup()
+    .setRequest(
+      new Request()
+        .setPath("decorator/method-base-path/mup")
+        .setMethod(HttpMethod.get)
+    )
     .useTestRouter()
     .run();
 

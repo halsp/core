@@ -5,9 +5,8 @@ import { Action, getActionMetadata } from "../src";
 import "./global";
 
 test("custom metadata", async () => {
-  const result = await new TestStartup(
-    new Request().setPath("/metadata/custom").setMethod("GET")
-  )
+  const result = await new TestStartup()
+    .setRequest(new Request().setPath("/metadata/custom").setMethod("GET"))
     .useTestRouter()
     .run();
   expect(result.body).toEqual({
@@ -22,9 +21,10 @@ test("custom metadata", async () => {
 });
 
 test("set metadata", async () => {
-  const result = await new TestStartup(
-    new Request().setPath("/metadata/set-metadata").setMethod("GET")
-  )
+  const result = await new TestStartup()
+    .setRequest(
+      new Request().setPath("/metadata/set-metadata").setMethod("GET")
+    )
     .useTestRouter()
     .run();
   expect(result.body).toEqual({

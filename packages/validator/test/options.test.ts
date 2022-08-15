@@ -27,12 +27,13 @@ function testOptions(useOptions: any, decOptions: any, result: boolean) {
       }
     }
 
-    const startup = new TestStartup({
-      req: new Request().setBody({
-        b1: null,
-      }),
-      skipThrow: true,
-    })
+    const startup = new TestStartup()
+      .skipThrow()
+      .setRequest(
+        new Request().setBody({
+          b1: null,
+        })
+      )
       .useInject()
       .useValidator(useOptions);
     const res = await startup.add(TestMiddleware).run();

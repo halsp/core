@@ -20,12 +20,13 @@ test("plain to class", async () => {
     }
   }
 
-  const res = await new TestStartup({
-    req: new Request().setBody({
-      h1: "a",
-      h2: 1,
-    }),
-  })
+  const res = await new TestStartup()
+    .setRequest(
+      new Request().setBody({
+        h1: "a",
+        h2: 1,
+      })
+    )
     .useInject()
     .add(TestMiddleware)
     .run();

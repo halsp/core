@@ -1,16 +1,15 @@
-import { TestStartup } from "../src";
 import { Request } from "@ipare/core";
+import { TestStartup } from "../src";
 
 it("default status is 404", async () => {
-  const res = await new TestStartup(new Request()).run();
+  const res = await new TestStartup().run();
   expect(res.status).toBe(404);
 });
 
 it("status shound be 500 if skip throw error", async () => {
-  const res = await new TestStartup({
-    req: new Request(),
-    skipThrow: true,
-  })
+  const res = await new TestStartup()
+    .skipThrow()
+    .setRequest(new Request())
     .use(() => {
       throw new Error("err");
     })

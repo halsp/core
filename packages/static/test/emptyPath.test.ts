@@ -4,10 +4,8 @@ import "../src";
 
 test("null path", async () => {
   {
-    const result = await new TestStartup(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      new Request().setMethod("get").setPath(null as any)
-    )
+    const result = await new TestStartup()
+      .setRequest(new Request().setMethod("get").setPath(null as any))
       .useStatic({
         dir: "test/static",
         encoding: "utf-8",
@@ -17,10 +15,8 @@ test("null path", async () => {
     expect(result.body).toBe("TEST");
   }
   {
-    const result = await new TestStartup(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      new Request().setMethod("get").setPath(null as any)
-    )
+    const result = await new TestStartup()
+      .setRequest(new Request().setMethod("get").setPath(null as any))
       .useStatic({
         file: "test/static/index.html",
       })
@@ -30,10 +26,8 @@ test("null path", async () => {
 });
 
 test("undefined path", async () => {
-  const result = await new TestStartup(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    new Request().setMethod("get").setPath(undefined as any)
-  )
+  const result = await new TestStartup()
+    .setRequest(new Request().setMethod("get").setPath(undefined as any))
     .useStatic({
       dir: "test/static",
       encoding: "utf-8",
@@ -44,10 +38,8 @@ test("undefined path", async () => {
 });
 
 test("prefix", async () => {
-  const result = await new TestStartup(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    new Request().setMethod("get").setPath(null as any)
-  )
+  const result = await new TestStartup()
+    .setRequest(new Request().setMethod("get").setPath(null as any))
     .useStatic({
       dir: "test/static",
       prefix: "static",

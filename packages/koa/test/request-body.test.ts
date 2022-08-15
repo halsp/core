@@ -4,9 +4,8 @@ import Koa from "koa";
 import { TestStartup } from "@ipare/testing";
 
 test("text", async function () {
-  const res = await new TestStartup({
-    req: new Request().setBody("ipare"),
-  })
+  const res = await new TestStartup()
+    .setRequest(new Request().setBody("ipare"))
     .useKoa(
       new Koa().use(async (ctx, next) => {
         ctx.body = ctx.ipareCtx.req.body;
@@ -22,11 +21,12 @@ test("text", async function () {
 });
 
 test("json", async function () {
-  const res = await new TestStartup({
-    req: new Request().setBody({
-      ipare: "koa",
-    }),
-  })
+  const res = await new TestStartup()
+    .setRequest(
+      new Request().setBody({
+        ipare: "koa",
+      })
+    )
     .useKoa(
       new Koa().use(async (ctx, next) => {
         ctx.body = ctx.ipareCtx.req.body;
@@ -44,9 +44,8 @@ test("json", async function () {
 });
 
 test("buffer", async function () {
-  const res = await new TestStartup({
-    req: new Request().setBody(Buffer.from("ipare", "utf-8")),
-  })
+  const res = await new TestStartup()
+    .setRequest(new Request().setBody(Buffer.from("ipare", "utf-8")))
     .useKoa(
       new Koa().use(async (ctx, next) => {
         ctx.body = ctx.ipareCtx.req.body;

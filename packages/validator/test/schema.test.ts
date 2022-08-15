@@ -44,12 +44,13 @@ function testSchema(useSchema: boolean) {
         },
       };
 
-      const startup = new TestStartup({
-        req: new Request().setBody({
-          b1: "1",
-        }),
-        skipThrow: true,
-      })
+      const startup = new TestStartup()
+        .skipThrow()
+        .setRequest(
+          new Request().setBody({
+            b1: "1",
+          })
+        )
         .useInject()
         .useValidator();
       if (useSchema) {

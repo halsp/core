@@ -4,9 +4,8 @@ import { TestStartup } from "@ipare/testing";
 import "../global";
 
 test(`action name error`, async () => {
-  const result = await new TestStartup(
-    new Request().setPath("/err").setMethod(HttpMethod.post)
-  )
+  const result = await new TestStartup()
+    .setRequest(new Request().setPath("/err").setMethod(HttpMethod.post))
     .useTestRouter()
     .run();
 
@@ -14,9 +13,8 @@ test(`action name error`, async () => {
 });
 
 test(`without method`, async () => {
-  const result = await new TestStartup(
-    new Request().setPath("/restful").setMethod("")
-  )
+  const result = await new TestStartup()
+    .setRequest(new Request().setPath("/restful").setMethod(""))
     .useTestRouter()
     .run();
 

@@ -4,9 +4,8 @@ import "../src";
 
 test("unknown mime", async () => {
   {
-    const result = await new TestStartup(
-      new Request().setMethod("get").setPath("index.un")
-    )
+    const result = await new TestStartup()
+      .setRequest(new Request().setMethod("get").setPath("index.un"))
       .useStatic({
         dir: "test/static",
         encoding: "utf-8",
@@ -17,9 +16,8 @@ test("unknown mime", async () => {
     expect(result.headers["content-type"]).toBe("*/*");
   }
   {
-    const result = await new TestStartup(
-      new Request().setMethod("get").setPath("not-exist")
-    )
+    const result = await new TestStartup()
+      .setRequest(new Request().setMethod("get").setPath("not-exist"))
       .useStatic({
         dir: "test/static",
         encoding: "utf-8",
@@ -33,9 +31,8 @@ test("unknown mime", async () => {
 });
 
 test("single unknown mime", async () => {
-  const result = await new TestStartup(
-    new Request().setMethod("get").setPath("ind")
-  )
+  const result = await new TestStartup()
+    .setRequest(new Request().setMethod("get").setPath("ind"))
     .useStatic({
       file: "test/static/index.un",
       reqPath: "ind",

@@ -6,9 +6,8 @@ import { CONFIG_FILE_NAME } from "../src/constant";
 import { TestStartup } from "@ipare/testing";
 
 test("startup test", async () => {
-  const result = await new TestStartup({
-    req: new Request().setPath("/simple/RoUtEr").setMethod("POST"),
-  })
+  const result = await new TestStartup()
+    .setRequest(new Request().setPath("/simple/RoUtEr").setMethod("POST"))
     .useTestRouter()
     .useRouter()
     .run();
@@ -16,18 +15,16 @@ test("startup test", async () => {
 });
 
 test("default", async () => {
-  const result = await new TestStartup({
-    req: new Request().setPath("").setMethod("GET"),
-  })
+  const result = await new TestStartup()
+    .setRequest(new Request().setPath("").setMethod("GET"))
     .useTestRouter()
     .run();
   expect(result.status).toBe(200);
 });
 
 test("startup not exist", async () => {
-  const result = await new TestStartup({
-    req: new Request().setPath("/simple/router1").setMethod("POST"),
-  })
+  const result = await new TestStartup()
+    .setRequest(new Request().setPath("/simple/router1").setMethod("POST"))
     .useTestRouter()
     .run();
   expect(result.status).toBe(404);
@@ -39,27 +36,26 @@ test("startup not exist", async () => {
 });
 
 test("shallow startup test", async () => {
-  const res = await new TestStartup({
-    req: new Request().setPath("/router").setMethod("POST"),
-  })
+  const res = await new TestStartup()
+    .setRequest(new Request().setPath("/router").setMethod("POST"))
     .useTestRouter()
     .run();
   expect(res.status).toBe(200);
 });
 
 test("deep startup test", async () => {
-  const result = await new TestStartup({
-    req: new Request().setPath("/simple/deepActions/RoUtEr").setMethod("POST"),
-  })
+  const result = await new TestStartup()
+    .setRequest(
+      new Request().setPath("/simple/deepActions/RoUtEr").setMethod("POST")
+    )
     .useTestRouter()
     .run();
   expect(result.status).toBe(200);
 });
 
 test("null body test", async () => {
-  const result = await new TestStartup({
-    req: new Request().setPath("/nullbody").setMethod("PUT"),
-  })
+  const result = await new TestStartup()
+    .setRequest(new Request().setPath("/nullbody").setMethod("PUT"))
     .useTestRouter()
     .run();
 
@@ -80,9 +76,8 @@ test("blank config", async () => {
 
   let done = false;
   try {
-    await new TestStartup({
-      req: new Request().setPath("").setMethod("GET"),
-    })
+    await new TestStartup()
+      .setRequest(new Request().setPath("").setMethod("GET"))
       .useRouter()
       .run();
   } catch (err) {

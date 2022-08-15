@@ -4,9 +4,8 @@ import "../src";
 import { FILE_404_BAG, FILE_BAG } from "../src/constant";
 
 test("not found", async () => {
-  const result = await new TestStartup(
-    new Request().setMethod("get").setPath("not-exist")
-  )
+  const result = await new TestStartup()
+    .setRequest(new Request().setMethod("get").setPath("not-exist"))
     .useStatic({
       dir: "test/static",
       encoding: "utf-8",
@@ -17,9 +16,8 @@ test("not found", async () => {
 
 test("404 page", async () => {
   {
-    const result = await new TestStartup(
-      new Request().setMethod("get").setPath("not-exist")
-    )
+    const result = await new TestStartup()
+      .setRequest(new Request().setMethod("get").setPath("not-exist"))
       .use(async (ctx, next) => {
         await next();
         expect(ctx.bag<string>(FILE_BAG)).not.toBeUndefined();
@@ -35,9 +33,8 @@ test("404 page", async () => {
     expect(result.body).toBe("404 page");
   }
   {
-    const result = await new TestStartup(
-      new Request().setMethod("get").setPath("not-exist")
-    )
+    const result = await new TestStartup()
+      .setRequest(new Request().setMethod("get").setPath("not-exist"))
       .useStatic({
         dir: "test/static",
         encoding: "utf-8",
@@ -50,9 +47,8 @@ test("404 page", async () => {
 });
 
 test("404 page not found", async () => {
-  const result = await new TestStartup(
-    new Request().setMethod("get").setPath("not-exist")
-  )
+  const result = await new TestStartup()
+    .setRequest(new Request().setMethod("get").setPath("not-exist"))
     .useStatic({
       dir: "test/static",
       encoding: "utf-8",

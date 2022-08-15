@@ -3,15 +3,16 @@ import { createIpareReqeust } from "./utils";
 import "../src";
 
 test("prefix", async function () {
-  const result = await new TestStartup({
-    req: await createIpareReqeust(
-      {
-        secret: "secret",
-      },
-      undefined,
-      "custom "
-    ),
-  })
+  const result = await new TestStartup()
+    .setRequest(
+      await createIpareReqeust(
+        {
+          secret: "secret",
+        },
+        undefined,
+        "custom "
+      )
+    )
     .useJwt({
       secret: "secret",
       prefix: "custom",
