@@ -31,10 +31,8 @@
   "dependencies": {
     "@ipare/core": "^1.8.2",
     "@ipare/http": "^1.8.2",
-    "@types/shelljs": "^0.8.11",
     "@types/supertest": "^2.0.12",
     "reflect-metadata": "^0.1.13",
-    "shelljs": "^0.8.5",
     "supertest": "^6.2.4"
   },
   "devDependencies": {
