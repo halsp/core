@@ -1,4 +1,5 @@
 export { runin } from "./runin";
 
 export { TestHttpStartup } from "./test-http-startup";
-export { TestStartup, TestStartupOptions } from "./test-startup";
+export { TestStartup } from "./test-startup";
+export { TestStartupOptions, SkipThrowOptions } from "./options";

@@ -1,15 +1,5 @@
-import { HookType, HttpContext, Startup, Request, Response } from "@ipare/core";
-
-declare module "@ipare/core" {
-  interface Response {
-    get testError(): Error | undefined;
-  }
-}
-
-export interface TestStartupOptions {
-  req?: Request;
-  skipThrow?: boolean;
-}
+import { HttpContext, Startup, Request, Response } from "@ipare/core";
+import { TestStartupOptions } from "./options";
 
 export class TestStartup extends Startup {
   #options: TestStartupOptions;
@@ -25,17 +15,6 @@ export class TestStartup extends Startup {
       } as TestStartupOptions;
     }
     this.#options = options;
-
-    this.hook(HookType.Exception, (ctx, md, ex) => {
-      Object.defineProperty(ctx.res, "testError", {
-        configurable: false,
-        enumerable: false,
-        get: () => {
-          return ex;
-        },
-      });
-      return false;
-    });
   }
 
   async run(): Promise<Response> {
@@ -43,8 +22,8 @@ export class TestStartup extends Startup {
       new HttpContext(this.#options.req ?? new Request())
     );
 
-    if (!this.#options.skipThrow && res.testError) {
-      throw res.testError;
+    if (!this.#options.skipThrow && res.ctx.errorStack.length) {
+      throw res.ctx.errorStack[0];
     }
     return res;
   }
