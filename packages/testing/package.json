@@ -31,7 +31,6 @@
   "dependencies": {
     "@ipare/core": "^1.8.2",
     "@ipare/http": "^1.8.2",
-    "@ipare/inject": "^1.8.2",
     "@types/supertest": "^2.0.12",
     "reflect-metadata": "^0.1.13",
     "supertest": "^6.2.4"

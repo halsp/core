@@ -1,6 +1,6 @@
 import "@ipare/core";
 import { HttpContext, ObjectConstructor, Startup } from "@ipare/core";
-import { parseInject } from "@ipare/inject";
+import { getDepFunc } from "./deps";
 
 declare module "@ipare/core" {
   interface Startup {
@@ -21,6 +21,10 @@ Startup.prototype.expectService = function <T extends object>(
 ) {
   return this.use(async (ctx, next) => {
     await next();
+
+    const parseInject = getDepFunc<
+      <T>(ctx: HttpContext, service: any) => Promise<T>
+    >("@ipare/inject", "parseInject");
 
     const sv = await parseInject<T>(ctx, service as any);
     if (!sv) throw new Error("Create service failed");
