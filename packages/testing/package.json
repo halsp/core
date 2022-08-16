@@ -51,13 +51,17 @@
   },
   "peerDependencies": {
     "@ipare/core": "~1",
-    "@ipare/http": "~1"
+    "@ipare/http": "~1",
+    "@ipare/inject": "~1"
   },
   "peerDependenciesMeta": {
     "@ipare/core": {
       "optional": true
     },
     "@ipare/http": {
+      "optional": true
+    },
+    "@ipare/inject": {
       "optional": true
     }
   },
