@@ -1,4 +1,5 @@
 import "./middleware";
+import "./service";
 
 export { runin } from "./runin";
 
