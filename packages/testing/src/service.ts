@@ -4,18 +4,18 @@ import { getDepFunc } from "./deps";
 
 declare module "@ipare/core" {
   interface Startup {
-    expectService<T extends object>(
+    expectInject<T extends object>(
       key: string,
       fn: (service: T, ctx: HttpContext) => void | Promise<void>
     ): this;
-    expectService<T extends object>(
+    expectInject<T extends object>(
       service: ObjectConstructor<T>,
       fn: (service: T, ctx: HttpContext) => void | Promise<void>
     ): this;
   }
 }
 
-Startup.prototype.expectService = function <T extends object>(
+Startup.prototype.expectInject = function <T extends object>(
   service: ObjectConstructor<T> | string,
   fn: (service: T, ctx: HttpContext) => void | Promise<void>
 ) {

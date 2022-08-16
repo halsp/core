@@ -17,7 +17,7 @@ class TestService2 {
 
 describe("service", () => {
   new TestStartup()
-    .expectService(TestService2, (service) => {
+    .expectInject(TestService2, (service) => {
       expect(service.fn()).toBe(1);
     })
     .it("should create service by @ipare/inject");
@@ -26,7 +26,7 @@ describe("service", () => {
     let err = false;
     try {
       await new TestStartup()
-        .expectService("not-exist", () => {
+        .expectInject("not-exist", () => {
           //
         })
         .run();
