@@ -1,6 +1,6 @@
 {
   "name": "@ipare/mongoose",
-  "version": "1.8.3",
+  "version": "1.8.4",
   "description": "Ipare Mongoose 插件",
   "engines": {
     "node": ">=12.16.0"
@@ -28,8 +28,8 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^1.8.3",
-    "@ipare/inject": "^1.8.3",
+    "@ipare/core": "^1.8.4",
+    "@ipare/inject": "^1.8.4",
     "mongoose": "^6.5.2",
     "reflect-metadata": "^0.1.13"
   },

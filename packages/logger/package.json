@@ -1,6 +1,6 @@
 {
   "name": "@ipare/logger",
-  "version": "1.8.3",
+  "version": "1.8.4",
   "description": "Ipare 的日志插件",
   "engines": {
     "node": ">=12.16.0"
@@ -28,8 +28,8 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^1.8.3",
-    "@ipare/inject": "^1.8.3",
+    "@ipare/core": "^1.8.4",
+    "@ipare/inject": "^1.8.4",
     "class-transformer": "^0.5.1",
     "reflect-metadata": "^0.1.13",
     "winston": "^3.8.1"
