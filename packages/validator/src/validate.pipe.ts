@@ -81,7 +81,13 @@ export class ValidatePipe<T extends object = any, R extends T = any>
       return;
     }
 
-    const errs = await this.validate(parent, schemaName, options);
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    function NewClass() {}
+    NewClass.prototype = parent.constructor.prototype;
+    const newObj = new NewClass();
+    newObj[propertyKey] = args.value;
+
+    const errs = await this.validate(newObj, schemaName, options);
     const msgs = errs
       .filter((item) => !!item.constraints)
       .filter((item) => item.property == propertyKey)

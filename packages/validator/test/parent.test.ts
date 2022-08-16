@@ -28,7 +28,7 @@ test("parent validate", async () => {
     .skipThrow()
     .setRequest(
       new Request().setBody({
-        b1: 1,
+        b1: "1",
       })
     )
     .useInject()
@@ -39,6 +39,6 @@ test("parent validate", async () => {
   expect(res.status).toBe(400);
   expect(res.body).toEqual({
     status: 400,
-    message: ["b1 must be base64 encoded", "b1 must be a string"],
+    message: "b1 must be base64 encoded",
   });
 });
