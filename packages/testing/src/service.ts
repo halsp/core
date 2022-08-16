@@ -20,10 +20,11 @@ Startup.prototype.expectService = function <T extends object>(
   fn: (service: T, ctx: HttpContext) => void | Promise<void>
 ) {
   return this.use(async (ctx, next) => {
+    await next();
+
     const sv = await parseInject<T>(ctx, service as any);
     if (!sv) throw new Error("Create service failed");
 
     await fn(sv, ctx);
-    await next();
   });
 };

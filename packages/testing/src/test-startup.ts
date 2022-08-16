@@ -23,12 +23,16 @@ export class TestStartup extends Startup {
     return res;
   }
 
-  it(name: string, fn?: (res: Response) => void, timeout?: number): void {
+  it(
+    name: string,
+    fn?: (res: Response) => void | Promise<void>,
+    timeout?: number
+  ): void {
     it(
       name,
       async () => {
         const res = await this.run();
-        if (fn) fn(res);
+        if (fn) await fn(res);
       },
       timeout
     );
