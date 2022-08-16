@@ -13,7 +13,7 @@ class TestMiddleware extends Middleware {
 
 describe("middleware", () => {
   new TestStartup()
-    .expectMiddleware(TestMiddleware, (ctx, md) => {
+    .expectMiddleware(TestMiddleware, (md) => {
       expect(md.fn()).toBe(1);
     })
     .add(TestMiddleware)

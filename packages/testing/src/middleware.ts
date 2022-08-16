@@ -8,8 +8,8 @@ import {
 } from "@ipare/core";
 
 export type TestMiddlewareFn<T extends Middleware> = (
-  ctx: HttpContext,
-  md: T
+  md: T,
+  ctx: HttpContext
 ) => void | Promise<void>;
 
 export type ExpectMiddlewareType =
@@ -34,7 +34,7 @@ Startup.prototype.expectMiddleware = function <T extends Middleware>(
 ) {
   return this.hook(type as any, async (ctx, md: T) => {
     if (md.constructor == mdCls) {
-      await fn(ctx, md);
+      await fn(md, ctx);
     }
   });
 };
