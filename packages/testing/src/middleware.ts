@@ -24,13 +24,7 @@ Startup.prototype.expectMiddleware = function <T extends Middleware>(
   fn: TestMiddlewareFn<T>,
   type: ExpectMiddlewareType
 ) {
-  if (type == HookType.AfterInvoke) {
-    return this.hook(type, async (ctx, md: T) => {
-      await fn(ctx, md);
-    });
-  } else {
-    return this.hook(type, async (ctx, md: T) => {
-      await fn(ctx, md);
-    });
-  }
+  return this.hook(type as any, async (ctx, md: T) => {
+    await fn(ctx, md);
+  });
 };

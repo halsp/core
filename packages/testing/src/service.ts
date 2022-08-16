@@ -1,5 +1,5 @@
 import "@ipare/core";
-import { isString, ObjectConstructor, Startup } from "@ipare/core";
+import { ObjectConstructor, Startup } from "@ipare/core";
 import { parseInject } from "@ipare/inject";
 
 declare module "@ipare/core" {
@@ -20,14 +20,10 @@ Startup.prototype.expectService = function <T extends object>(
   fn: (service: T) => void | Promise<void>
 ) {
   return this.use(async (ctx, next) => {
-    if (isString(service)) {
-      const sv = await parseInject<T>(ctx, service);
-      if (!sv) throw new Error("Create service failed");
-      await fn(sv);
-    } else {
-      const sv = await parseInject<T>(ctx, service);
-      await fn(sv);
-    }
+    const sv = await parseInject<T>(ctx, service as any);
+    if (!sv) throw new Error("Create service failed");
+
+    await fn(sv);
     await next();
   });
 };
