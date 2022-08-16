@@ -1,5 +1,11 @@
 import "@ipare/core";
-import { HookType, HttpContext, Middleware, Startup } from "@ipare/core";
+import {
+  HookType,
+  HttpContext,
+  Middleware,
+  ObjectConstructor,
+  Startup,
+} from "@ipare/core";
 
 export type TestMiddlewareFn<T extends Middleware> = (
   ctx: HttpContext,
@@ -14,17 +20,21 @@ export type ExpectMiddlewareType =
 declare module "@ipare/core" {
   interface Startup {
     expectMiddleware<T extends Middleware>(
+      mdCls: ObjectConstructor<T>,
       fn: TestMiddlewareFn<T>,
-      type: ExpectMiddlewareType
+      type?: ExpectMiddlewareType
     ): this;
   }
 }
 
 Startup.prototype.expectMiddleware = function <T extends Middleware>(
+  mdCls: ObjectConstructor<T>,
   fn: TestMiddlewareFn<T>,
-  type: ExpectMiddlewareType
+  type: ExpectMiddlewareType = HookType.BeforeInvoke
 ) {
   return this.hook(type as any, async (ctx, md: T) => {
-    await fn(ctx, md);
+    if (md.constructor == mdCls) {
+      await fn(ctx, md);
+    }
   });
 };
