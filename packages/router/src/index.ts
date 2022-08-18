@@ -17,6 +17,7 @@ import {
   REQUEST_CACHE_PARAMS,
   STARTUP_ROUTER_MAP,
   STARTUP_ROUTER_OPTIONS,
+  TEST_ACTION_DIR_BAG,
 } from "./constant";
 import * as fs from "fs";
 import { BlankMiddleware } from "./blank.middleware";
@@ -65,7 +66,7 @@ Startup.prototype.useRouter = function (options?: RouterOptions): Startup {
   const mapOptions = readMap();
   const opts: RouterOptionsMerged = {
     map: mapOptions?.map,
-    dir: options?.dir ?? mapOptions?.dir ?? DEFAULT_ACTION_DIR,
+    dir: this[TEST_ACTION_DIR_BAG] ?? mapOptions?.dir ?? DEFAULT_ACTION_DIR,
     prefix: options?.prefix,
     customMethods: options?.customMethods,
   };
