@@ -1,6 +1,18 @@
 import { Request, Response } from "@ipare/core";
 import { TestStartup } from "@ipare/testing";
 import "../src";
+import { TEST_ACTION_DIR_BAG } from "@ipare/router/dist/constant";
+
+declare module "@ipare/core" {
+  interface Startup {
+    setTestDir(dir: string): this;
+  }
+}
+
+TestStartup.prototype.setTestDir = function (dir: string) {
+  this[TEST_ACTION_DIR_BAG] = dir;
+  return this;
+};
 
 function baseExpect(res: Response) {
   expect(res.status).toBe(200);
@@ -21,9 +33,8 @@ test("builder", async () => {
           version: "1.0.1",
         }),
     })
-    .useRouter({
-      dir: "test/parser",
-    })
+    .setTestDir("test/parser")
+    .useRouter()
     .run();
   baseExpect(res);
 });
@@ -32,9 +43,8 @@ test("other router", async () => {
   const res = await new TestStartup()
     .setRequest(new Request().setPath("/test").setMethod("post"))
     .useSwagger()
-    .useRouter({
-      dir: "test/parser",
-    })
+    .setTestDir("test/parser")
+    .useRouter()
     .run();
 
   expect(res.status).toBe(200);
@@ -45,9 +55,8 @@ test("custom html", async () => {
     .useSwagger({
       customHtml: () => "abc",
     })
-    .useRouter({
-      dir: "test/parser",
-    })
+    .setTestDir("test/parser")
+    .useRouter()
     .run();
 
   expect(res.status).toBe(200);
@@ -59,9 +68,8 @@ test("use again", async () => {
   const res = await new TestStartup()
     .useSwagger({})
     .useSwagger({})
-    .useRouter({
-      dir: "test/parser",
-    })
+    .setTestDir("test/parser")
+    .useRouter()
     .run();
 
   baseExpect(res);
