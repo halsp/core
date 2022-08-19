@@ -17,7 +17,7 @@ export function useVersion(
   });
 }
 
-export function getVersion(cwd: string): string | undefined {
+export function getVersion(cwd = process.cwd()): string | undefined {
   let pkgPath = "package.json";
   while (true) {
     const absolutePath = path.join(cwd, pkgPath);

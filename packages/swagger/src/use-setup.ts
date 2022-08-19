@@ -28,7 +28,7 @@ export function useSetup(startup: Startup, options: SwaggerOptions): Startup {
           version: "0.0.1",
         });
         if (options.builder) {
-          openApiBuilder = options.builder(openApiBuilder);
+          openApiBuilder = await options.builder(openApiBuilder, ctx);
         }
 
         const doc = new Parser(
