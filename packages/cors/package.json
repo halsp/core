@@ -1,6 +1,6 @@
 {
   "name": "@ipare/cors",
-  "version": "1.8.4",
+  "version": "1.8.5",
   "description": "Ipare 跨域插件",
   "engines": {
     "node": ">=12.16.0"
@@ -28,7 +28,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^1.8.4"
+    "@ipare/core": "^1.8.5"
   },
   "devDependencies": {
     "@types/jest": "^28.1.7",

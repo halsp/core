@@ -1,6 +1,6 @@
 {
   "name": "@ipare/env",
-  "version": "1.8.4",
+  "version": "1.8.5",
   "description": "Ipare 的环境配置插件，可以根据运行环境加载不同的配置",
   "engines": {
     "node": ">=12.16.0"
@@ -29,7 +29,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^1.8.4",
+    "@ipare/core": "^1.8.5",
     "dotenv": "^16.0.1"
   },
   "devDependencies": {
