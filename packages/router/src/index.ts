@@ -12,11 +12,7 @@ import {
 } from "./router-options";
 import {
   CONFIG_FILE_NAME,
-  CTX_CACHE_METADATA,
   DEFAULT_ACTION_DIR,
-  REQUEST_CACHE_PARAMS,
-  STARTUP_ROUTER_MAP,
-  STARTUP_ROUTER_OPTIONS,
   TEST_ACTION_DIR_BAG,
 } from "./constant";
 import * as fs from "fs";
@@ -70,15 +66,13 @@ Startup.prototype.useRouter = function (options?: RouterOptions): Startup {
     prefix: options?.prefix,
     customMethods: options?.customMethods,
   };
-  this[STARTUP_ROUTER_OPTIONS] = opts;
 
-  this[STARTUP_ROUTER_MAP] = new MapParser(opts).getMap();
-
+  const routerMap = new MapParser(opts).getMap();
   Object.defineProperty(this, "routerMap", {
     configurable: false,
     enumerable: false,
     get: () => {
-      return this[STARTUP_ROUTER_MAP];
+      return routerMap;
     },
   });
 
@@ -86,7 +80,7 @@ Startup.prototype.useRouter = function (options?: RouterOptions): Startup {
     configurable: false,
     enumerable: false,
     get: () => {
-      return this[STARTUP_ROUTER_OPTIONS];
+      return opts;
     },
   });
 
@@ -95,7 +89,7 @@ Startup.prototype.useRouter = function (options?: RouterOptions): Startup {
       configurable: false,
       enumerable: false,
       get: () => {
-        return this.routerMap;
+        return routerMap;
       },
     });
 
@@ -103,31 +97,7 @@ Startup.prototype.useRouter = function (options?: RouterOptions): Startup {
       configurable: false,
       enumerable: false,
       get: () => {
-        return this.routerOptions;
-      },
-    });
-
-    Object.defineProperty(ctx, "actionMetadata", {
-      configurable: false,
-      enumerable: false,
-      get: () => {
-        return ctx[CTX_CACHE_METADATA];
-      },
-    });
-
-    Object.defineProperty(ctx.req, "params", {
-      configurable: false,
-      enumerable: false,
-      get: () => {
-        return ctx.req[REQUEST_CACHE_PARAMS];
-      },
-    });
-
-    Object.defineProperty(ctx.req, "param", {
-      configurable: false,
-      enumerable: false,
-      get: () => {
-        return ctx.req.params;
+        return opts;
       },
     });
 
@@ -148,7 +118,13 @@ Startup.prototype.useRouter = function (options?: RouterOptions): Startup {
         });
       } else {
         const mapItem = mapMatcher.mapItem;
-        ctx[CTX_CACHE_METADATA] = mapItem;
+        Object.defineProperty(ctx, "actionMetadata", {
+          configurable: false,
+          enumerable: false,
+          get: () => {
+            return mapItem;
+          },
+        });
       }
       await next();
     })
@@ -177,7 +153,22 @@ Startup.prototype.useRouter = function (options?: RouterOptions): Startup {
           params[key] = value;
         }
       }
-      ctx.req[REQUEST_CACHE_PARAMS] = params;
+
+      Object.defineProperty(ctx.req, "params", {
+        configurable: false,
+        enumerable: false,
+        get: () => {
+          return params;
+        },
+      });
+      Object.defineProperty(ctx.req, "param", {
+        configurable: false,
+        enumerable: false,
+        get: () => {
+          return params;
+        },
+      });
+
       await next();
     })
     .add((ctx) => {
