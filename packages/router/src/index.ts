@@ -14,7 +14,7 @@ import {
   CONFIG_FILE_NAME,
   DEFAULT_ACTION_DIR,
   PARSER_USED,
-  TEST_ACTION_DIR_BAG,
+  TEST_ACTION_DIR,
   USED,
 } from "./constant";
 import * as fs from "fs";
@@ -83,7 +83,7 @@ Startup.prototype.useRouterParser = function (
   const mapOptions = readMap();
   const opts: RouterOptionsMerged = {
     map: mapOptions?.map,
-    dir: this[TEST_ACTION_DIR_BAG] ?? mapOptions?.dir ?? DEFAULT_ACTION_DIR,
+    dir: this[TEST_ACTION_DIR] ?? mapOptions?.dir ?? DEFAULT_ACTION_DIR,
     prefix: options?.prefix,
     customMethods: options?.customMethods,
   };

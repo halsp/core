@@ -1,7 +1,7 @@
 import { Request, Response } from "@ipare/core";
 import { TestStartup } from "@ipare/testing";
 import "../src";
-import { TEST_ACTION_DIR_BAG } from "@ipare/router/dist/constant";
+import { TEST_ACTION_DIR } from "@ipare/router/dist/constant";
 
 declare module "@ipare/core" {
   interface Startup {
@@ -10,7 +10,7 @@ declare module "@ipare/core" {
 }
 
 TestStartup.prototype.setTestDir = function (dir: string) {
-  this[TEST_ACTION_DIR_BAG] = dir;
+  this[TEST_ACTION_DIR] = dir;
   return this;
 };
 

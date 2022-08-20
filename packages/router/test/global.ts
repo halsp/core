@@ -2,7 +2,7 @@ import { RouterOptions } from "../src";
 import "@ipare/core";
 import { TestStartup } from "@ipare/testing";
 import "../src";
-import { TEST_ACTION_DIR_BAG } from "../src/constant";
+import { TEST_ACTION_DIR } from "../src/constant";
 
 export const testDir = "test/actions";
 
@@ -14,13 +14,13 @@ declare module "@ipare/testing" {
 }
 
 TestStartup.prototype.useTestRouter = function (config = {}) {
-  this[TEST_ACTION_DIR_BAG] = testDir;
+  this[TEST_ACTION_DIR] = testDir;
   this.useRouter(config);
   return this;
 };
 
 TestStartup.prototype.useTestRouterParser = function (config = {}) {
-  this[TEST_ACTION_DIR_BAG] = testDir;
+  this[TEST_ACTION_DIR] = testDir;
   this.useRouterParser(config);
   return this;
 };
