@@ -17,7 +17,7 @@ export interface JwtOptions {
     options?: jwt.VerifyOptions | jwt.SignOptions
   ) => jwt.Secret;
   verifyOptions?: jwt.VerifyOptions;
-  getToken?: (req: Request) => string;
+  tokenProvider?: (req: Request) => string;
   prefix?: string;
 }
 

@@ -10,7 +10,7 @@ test(`sign`, async () => {
           secret: "secret",
         }
       );
-      ctx[OPTIONS].getToken = () => token;
+      ctx[OPTIONS].tokenProvider = () => token;
 
       const jwt =
         jwtService.decode({
@@ -36,7 +36,7 @@ test(`secretOrKeyProvider`, async () => {
           secret: "secret",
         }
       );
-      ctx[OPTIONS].getToken = () => token;
+      ctx[OPTIONS].tokenProvider = () => token;
 
       const jwt =
         jwtService.decode({

@@ -89,8 +89,8 @@ Startup.prototype.useJwt = function (options: JwtOptions): Startup {
         configurable: false,
         enumerable: false,
         get: () => {
-          if (options.getToken) {
-            return options.getToken(ctx.req);
+          if (options.tokenProvider) {
+            return options.tokenProvider(ctx.req);
           } else {
             return ctx.req.getHeader("Authorization");
           }

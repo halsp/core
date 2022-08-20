@@ -58,7 +58,7 @@ test("decorator", async function () {
 });
 
 function testGetToken(skip: boolean) {
-  test("getToken option", async function () {
+  test("tokenProvider option", async function () {
     const res = await new TestStartup()
       .setRequest(
         await createIpareReqeust({
@@ -67,7 +67,7 @@ function testGetToken(skip: boolean) {
       )
       .useJwt({
         secret: "secret",
-        getToken: () => "test",
+        tokenProvider: () => "test",
       })
       .useJwtVerify(() => skip)
       .add(TestMiddleware)
