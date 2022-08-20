@@ -23,7 +23,7 @@
 
 请访问 <http://minimal.ipare.org> 🌈
 
-该示例是由 `@ipare/cli` 生成，运行于 [StackBlitz](https://stackblitz.com)，可以在线编辑、运行、调试
+> 该示例是由 `@ipare/cli` 生成，运行于 [StackBlitz](https://stackblitz.com)，可以在线编辑、运行、调试
 
 ## 介绍
 
@@ -61,7 +61,7 @@ mva 架构让项目各模块耦合度更低
 
 ## 贡献
 
-在提交 PR 前请先阅读 [Contributing to ipare](https://github.com/ipare/ipare/blob/main/CONTRIBUTING.md).
+在提交 PR 前请先阅读 [Contributing to Ipare](https://github.com/ipare/ipare/blob/main/CONTRIBUTING.md).
 
 <a href="https://github.com/ipare/ipare/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=ipare/ipare" />
@@ -71,7 +71,7 @@ mva 架构让项目各模块耦合度更低
 
 首先查找是否已有相关问题：
 
-1. 查看文档是否有相关内容 [ipare.org](https://ipare.org)
+1. 查看文档 [ipare.org](https://ipare.org) 是否有相关内容
 2. 查看 [Discussions](https://github.com/ipare/ipare/discussions) 是否有相关讨论
 3. 查看 [Issues](https://github.com/ipare/ipare/issues) 是否有相关内容
 
