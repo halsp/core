@@ -10,19 +10,21 @@ export function useVersion(
 ): Startup {
   return startup.use(async (ctx, next) => {
     if (isUndefined(startup[VERSION])) {
-      startup[VERSION] = getVersion(cwd) ?? "0";
+      startup[VERSION] = (await getVersion(cwd)) ?? "0";
     }
     ctx.setHeader(header, startup[VERSION]);
     await next();
   });
 }
 
-export function getVersion(cwd = process.cwd()): string | undefined {
+export async function getVersion(
+  cwd = process.cwd()
+): Promise<string | undefined> {
   let pkgPath = "package.json";
   while (true) {
     const absolutePath = path.join(cwd, pkgPath);
     if (fs.existsSync(absolutePath)) {
-      const pkgStr = fs.readFileSync(absolutePath, "utf-8");
+      const pkgStr = await fs.promises.readFile(absolutePath, "utf-8");
       const version = JSON.parse(pkgStr).version ?? "0";
       return version;
     } else {

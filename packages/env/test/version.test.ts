@@ -1,6 +1,8 @@
 import { TestStartup } from "@ipare/testing";
 import * as fs from "fs";
+import path from "path";
 import "../src";
+import { getVersion } from "../src";
 
 test("use version", async () => {
   const res = await new TestStartup()
@@ -60,4 +62,12 @@ it("should not find package.json", async () => {
   } finally {
     process.chdir(current);
   }
+});
+
+it("should find current version", async () => {
+  const version = await getVersion();
+  const pkg = JSON.parse(
+    fs.readFileSync(path.join(__dirname, "../package.json"), "utf-8")
+  );
+  expect(version).toBe(pkg.version);
 });
