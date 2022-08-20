@@ -1,12 +1,11 @@
 import {
-  JwtOptions,
   JwtSecretRequestType,
   JwtSignOptions,
   JwtVerifyOptions,
 } from "./jwt-options";
 import * as jwt from "jsonwebtoken";
 import { HttpContext } from "@ipare/core";
-import { OPTIONS_BAG } from "./constant";
+import { OPTIONS } from "./constant";
 import { Inject } from "@ipare/inject";
 
 export class JwtService {
@@ -14,7 +13,7 @@ export class JwtService {
   private readonly ctx!: HttpContext;
 
   get #options() {
-    return this.ctx.bag<JwtOptions>(OPTIONS_BAG);
+    return this.ctx[OPTIONS];
   }
 
   sign(

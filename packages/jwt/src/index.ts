@@ -1,7 +1,7 @@
 import "@ipare/core";
 import "@ipare/inject";
 import { HttpContext, Startup } from "@ipare/core";
-import { OPTIONS_BAG, STARTUP_OPTIONS } from "./constant";
+import { OPTIONS, USED } from "./constant";
 import { JwtOptions } from "./jwt-options";
 import { JwtService } from "./jwt.service";
 import { parseInject } from "@ipare/inject";
@@ -34,20 +34,6 @@ declare module "@ipare/core" {
     get jwtToken(): string;
   }
 }
-
-Object.defineProperty(HttpContext.prototype, "jwtToken", {
-  configurable: false,
-  enumerable: false,
-  get: function () {
-    const ctx = this as HttpContext;
-    const opt = ctx.bag<JwtOptions>(OPTIONS_BAG);
-    if (opt.getToken) {
-      return opt.getToken(ctx.req);
-    } else {
-      return ctx.req.getHeader("Authorization");
-    }
-  },
-});
 
 Startup.prototype.useJwtVerify = function (
   skip?: (ctx: HttpContext) => boolean | Promise<boolean>,
@@ -89,15 +75,28 @@ Startup.prototype.useJwtExtraAuth = function (
 };
 
 Startup.prototype.useJwt = function (options: JwtOptions): Startup {
-  if (this[STARTUP_OPTIONS]) {
+  if (this[USED]) {
     return this;
   }
-  this[STARTUP_OPTIONS] = options;
+  this[USED] = true;
 
   return this.useInject()
     .inject(JwtService)
     .use(async (ctx, next) => {
-      ctx.bag(OPTIONS_BAG, options);
+      ctx[OPTIONS] = options;
+
+      Object.defineProperty(ctx, "jwtToken", {
+        configurable: false,
+        enumerable: false,
+        get: () => {
+          if (options.getToken) {
+            return options.getToken(ctx.req);
+          } else {
+            return ctx.req.getHeader("Authorization");
+          }
+        },
+      });
+
       await next();
     });
 };
