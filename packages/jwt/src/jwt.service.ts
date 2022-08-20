@@ -38,17 +38,14 @@ export class JwtService {
     );
   }
 
-  verify(
-    token: string,
-    options?: JwtVerifyOptions & { complete: true }
-  ): Promise<jwt.Jwt>;
-  verify(token: string, options?: JwtVerifyOptions): Promise<jwt.JwtPayload>;
-  verify(token: string, options?: JwtVerifyOptions) {
-    token = this.#fixToken(token);
+  verify(options?: JwtVerifyOptions & { complete: true }): Promise<jwt.Jwt>;
+  verify(options?: JwtVerifyOptions): Promise<jwt.JwtPayload>;
+  verify(options?: JwtVerifyOptions) {
     const verifyOptions = this.#mergeJwtOptions(
       { ...options },
       "verifyOptions"
     );
+    const token = this.#fixToken;
     const secret = this.#getSecretKey(
       token,
       options,
@@ -63,21 +60,11 @@ export class JwtService {
     );
   }
 
-  decode(
-    token: string,
-    options?: jwt.DecodeOptions & { complete: true }
-  ): jwt.Jwt | null;
-  decode(
-    token: string,
-    options?: jwt.DecodeOptions & { json: true }
-  ): jwt.JwtPayload | null;
-  decode(
-    token: string,
-    options?: jwt.DecodeOptions & { json: false }
-  ): any | null;
-  decode(token: string, options?: jwt.DecodeOptions): any {
-    token = this.#fixToken(token);
-    return jwt.decode(token, options);
+  decode(options?: jwt.DecodeOptions & { complete: true }): jwt.Jwt | null;
+  decode(options?: jwt.DecodeOptions & { json: true }): jwt.JwtPayload | null;
+  decode(options?: jwt.DecodeOptions & { json: false }): any | null;
+  decode(options?: jwt.DecodeOptions): any {
+    return jwt.decode(this.#fixToken, options);
   }
 
   #mergeJwtOptions(
@@ -118,7 +105,8 @@ export class JwtService {
     );
   }
 
-  #fixToken(token: string) {
+  get #fixToken() {
+    let token = this.ctx.jwtToken;
     const prefix = this.#options.prefix ?? "Bearer";
     if (token?.startsWith(prefix)) {
       token = token.substring(prefix.length, token.length).trim();

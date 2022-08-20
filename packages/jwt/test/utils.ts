@@ -1,9 +1,8 @@
-import { Request } from "@ipare/core";
+import { HttpContext, Request } from "@ipare/core";
 import { parseInject } from "@ipare/inject";
 import { JwtOptions, JwtService } from "../src";
 import "../src";
 import "@ipare/inject";
-import { OPTIONS } from "../src/constant";
 import { TestStartup } from "@ipare/testing";
 
 export async function createIpareReqeust(
@@ -19,18 +18,15 @@ export async function createIpareReqeust(
 }
 
 export async function runJwtServiceTest(
-  test: (jwtService: JwtService) => Promise<void>,
+  test: (jwtService: JwtService, ctx: HttpContext) => Promise<void>,
   options: JwtOptions = {}
 ) {
   await new TestStartup()
     .useInject()
-    .use(async (ctx, next) => {
-      ctx[OPTIONS] = options;
-      await next();
-    })
+    .useJwt(options)
     .use(async (ctx) => {
       const jwtService = await parseInject(ctx, JwtService);
-      await test(jwtService);
+      await test(jwtService, ctx);
     })
     .run();
 }

@@ -47,7 +47,7 @@ Startup.prototype.useJwtVerify = function (
 
     const jwtService = await parseInject(ctx, JwtService);
     try {
-      await jwtService.verify(ctx.jwtToken);
+      await jwtService.verify();
       await next();
     } catch (err) {
       const error = err as jwt.VerifyErrors;

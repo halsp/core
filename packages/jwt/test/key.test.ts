@@ -1,4 +1,5 @@
 import { JwtSecretRequestType } from "../src";
+import { OPTIONS } from "../src/constant";
 import { runJwtServiceTest } from "./utils";
 
 const publicKey = `-----BEGIN PUBLIC KEY-----
@@ -39,12 +40,13 @@ C+FNbeux5oFpmYzhpvNFn59A9zjFYWSGTlbDdgJIVxOxWqNxIww=
 -----END RSA PRIVATE KEY-----`;
 
 test(`key`, async () => {
-  await runJwtServiceTest(async (jwtService) => {
+  await runJwtServiceTest(async (jwtService, ctx) => {
     const token = await jwtService.sign(
       {},
       { privateKey: privateKey, algorithm: "RS256" }
     );
-    const jwt = await jwtService.verify(token, {
+    ctx[OPTIONS].getToken = () => token;
+    const jwt = await jwtService.verify({
       publicKey: publicKey,
     });
     expect(Object.keys(jwt)).toEqual(["iat"]);
@@ -53,9 +55,10 @@ test(`key`, async () => {
 
 test(`options key`, async () => {
   await runJwtServiceTest(
-    async (jwtService) => {
+    async (jwtService, ctx) => {
       const token = await jwtService.sign({}, { algorithm: "RS256" });
-      const jwt = await jwtService.verify(token);
+      ctx[OPTIONS].getToken = () => token;
+      const jwt = await jwtService.verify();
       expect(Object.keys(jwt)).toEqual(["iat"]);
     },
     {
@@ -67,9 +70,10 @@ test(`options key`, async () => {
 
 test(`secretOrKeyProvider`, async () => {
   await runJwtServiceTest(
-    async (jwtService) => {
+    async (jwtService, ctx) => {
       const token = await jwtService.sign({}, { algorithm: "RS256" });
-      const jwt = await jwtService.verify(token);
+      ctx[OPTIONS].getToken = () => token;
+      const jwt = await jwtService.verify();
       expect(Object.keys(jwt)).toEqual(["iat"]);
     },
     {
