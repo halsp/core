@@ -13,7 +13,9 @@ import {
 import {
   CONFIG_FILE_NAME,
   DEFAULT_ACTION_DIR,
+  PARSER_USED,
   TEST_ACTION_DIR_BAG,
+  USED,
 } from "./constant";
 import * as fs from "fs";
 import { BlankMiddleware } from "./blank.middleware";
@@ -39,6 +41,7 @@ import MapMatcher from "./map/map-matcher";
 declare module "@ipare/core" {
   interface Startup {
     useRouter(options?: RouterOptions): this;
+    useRouterParser(options?: RouterOptions): this;
     get routerMap(): MapItem[];
     get routerOptions(): RouterInitedOptions;
   }
@@ -55,9 +58,27 @@ declare module "@ipare/core" {
 }
 
 Startup.prototype.useRouter = function (options?: RouterOptions): Startup {
-  if (!!this.routerOptions) {
+  if (this[USED]) {
     return this;
   }
+  this[USED] = true;
+
+  return this.useRouterParser(options).add((ctx) => {
+    if (!ctx.actionMetadata) {
+      return BlankMiddleware;
+    } else {
+      return ctx.actionMetadata.getAction(ctx.routerOptions.dir);
+    }
+  });
+};
+
+Startup.prototype.useRouterParser = function (
+  options?: RouterOptions
+): Startup {
+  if (this[PARSER_USED]) {
+    return this;
+  }
+  this[PARSER_USED] = true;
 
   const mapOptions = readMap();
   const opts: RouterOptionsMerged = {
@@ -170,13 +191,6 @@ Startup.prototype.useRouter = function (options?: RouterOptions): Startup {
       });
 
       await next();
-    })
-    .add((ctx) => {
-      if (!ctx.actionMetadata) {
-        return BlankMiddleware;
-      } else {
-        return ctx.actionMetadata.getAction(opts.dir);
-      }
     });
 };
 

@@ -86,3 +86,21 @@ test("blank config", async () => {
   }
   expect(done).toBeTruthy();
 }, 10000);
+
+describe("useRouterParser", () => {
+  it("should not replace options", async () => {
+    await new TestStartup()
+      .use(async (ctx, next) => {
+        await next();
+        expect(ctx.routerOptions).toBe(ctx.startup.routerOptions);
+        expect(ctx.routerOptions.customMethods).toEqual(["CUSTOM1"]);
+      })
+      .useTestRouterParser({
+        customMethods: ["CUSTOM1"],
+      })
+      .useRouter({
+        customMethods: ["CUSTOM2"],
+      })
+      .run();
+  });
+});
