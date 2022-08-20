@@ -23,7 +23,7 @@ function testRanderEnable(enable: boolean) {
       const res = await new TestStartup()
         .setRequest(new Request().setMethod("post"))
         .useMva({
-          methods: "any",
+          renderMethods: "any",
           randerEnable: () => enable,
         })
         .run();

@@ -9,6 +9,6 @@ export type CodeType =
 export interface MvaOptions {
   viewOptions?: ViewOptions;
   routerOptions?: RouterOptions;
-  methods?: string | string[];
+  renderMethods?: string | string[];
   randerEnable?: (ctx: HttpContext) => Promise<boolean> | boolean;
 }

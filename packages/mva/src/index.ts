@@ -54,8 +54,8 @@ Startup.prototype.useMva = function (options: MvaOptions = {}): Startup {
   if (this[USED]) return this;
   this[USED] = true;
 
-  const methods = (() => {
-    let result = options.methods ?? ["get"];
+  const renderMethods = (() => {
+    let result = options.renderMethods ?? ["get"];
     if (typeof result == "string") {
       result = [result];
     }
@@ -72,8 +72,10 @@ Startup.prototype.useMva = function (options: MvaOptions = {}): Startup {
 
       if (!ctx.res.isSuccess) return;
       if (
-        !methods.some((m) => m.toLowerCase() == "any") &&
-        !methods.some((m) => m.toLowerCase() == ctx.req.method.toLowerCase())
+        !renderMethods.some((m) => m.toLowerCase() == "any") &&
+        !renderMethods.some(
+          (m) => m.toLowerCase() == ctx.req.method.toLowerCase()
+        )
       ) {
         return;
       }
