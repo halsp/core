@@ -1,5 +1,5 @@
 {
-  "name": "@ipare/coolie",
+  "name": "@ipare/cookie",
   "version": "1.8.7",
   "description": "Ipare Cookie 插件，用于解析、设置 Cookie",
   "engines": {
