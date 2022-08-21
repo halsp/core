@@ -1,10 +1,10 @@
 import { Dict, HttpContext, isObject, Startup } from "@ipare/core";
-import cookie, { CookieSerializeOptions } from "cookie";
+import cookie from "cookie";
 import { REQUEST_HEADER_NAME, RESPONSE_HEADER_NAME, USED } from "./constant";
 import { Options } from "./options";
 
 export type CookieValue =
-  | (CookieSerializeOptions & {
+  | (cookie.CookieSerializeOptions & {
       value?: string;
     })
   | string
@@ -85,7 +85,7 @@ function serializeCookie(
   for (const key in cookies) {
     const value = cookies[key];
     let cookieStr: string;
-    if (isObject<CookieSerializeOptions>(value)) {
+    if (isObject<cookie.CookieSerializeOptions>(value)) {
       cookieStr = cookie.serialize(
         key,
         String(value.value),

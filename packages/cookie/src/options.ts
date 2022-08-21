@@ -1,6 +1,6 @@
-import { CookieParseOptions, CookieSerializeOptions } from "cookie";
+import cookie from "cookie";
 
 export interface Options {
-  serialize?: CookieSerializeOptions;
-  parse?: CookieParseOptions;
+  serialize?: cookie.CookieSerializeOptions;
+  parse?: cookie.CookieParseOptions;
 }
