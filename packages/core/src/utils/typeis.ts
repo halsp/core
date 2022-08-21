@@ -9,7 +9,7 @@ export const isNull = (obj: any): obj is null =>
 export const isNil = (val: any): val is null | undefined =>
   isUndefined(val) || isNull(val);
 
-export const isObject = (fn: any): fn is any =>
+export const isObject = <T extends object = any>(fn: any): fn is T =>
   !isNil(fn) && typeof fn == "object";
 
 export const isPlainObject = (fn: any): fn is object => {
