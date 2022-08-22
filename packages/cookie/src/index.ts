@@ -10,18 +10,18 @@ import setCookieParser from "set-cookie-parser";
 import { REQUEST_HEADER_NAME, RESPONSE_HEADER_NAME, USED } from "./constant";
 import { Options } from "./options";
 
-export type SetCookieValue =
-  | {
-      value: string;
-      path?: string | undefined;
-      expires?: Date | undefined;
-      maxAge?: number | undefined;
-      domain?: string | undefined;
-      secure?: boolean | undefined;
-      httpOnly?: boolean | undefined;
-      sameSite?: string | undefined;
-    }
-  | string;
+export type SetCookieValueWithArgs = {
+  value: string;
+  path?: string | undefined;
+  expires?: Date | undefined;
+  maxAge?: number | undefined;
+  domain?: string | undefined;
+  secure?: boolean | undefined;
+  httpOnly?: boolean | undefined;
+  sameSite?: string | undefined;
+};
+
+export type SetCookieValue = SetCookieValueWithArgs | string;
 
 export { Options };
 
@@ -75,10 +75,26 @@ Startup.prototype.useCookie = function (options: Options = {}) {
 
     await next();
   }).use(async (ctx, next) => {
-    function createCookies(val: Dict<SetCookieValue>) {
-      return new Proxy(val, {
+    function createOptionsProxy(
+      parent: Dict<SetCookieValue>,
+      args: SetCookieValueWithArgs
+    ) {
+      return new Proxy(args, {
         set: (target, p, value) => {
-          target[p as string] = value;
+          target[p] = value;
+          serializeCookie(ctx, parent, options.serialize);
+          return true;
+        },
+      });
+    }
+    function createProxy(val: Dict<SetCookieValue>) {
+      return new Proxy(val, {
+        set: (target, p: string, value) => {
+          if (isObject(value)) {
+            target[p] = createOptionsProxy(target, value);
+          } else {
+            target[p] = value;
+          }
           serializeCookie(ctx, target, options.serialize);
           return true;
         },
@@ -97,8 +113,12 @@ Startup.prototype.useCookie = function (options: Options = {}) {
         );
         for (const key in cookies) {
           delete cookies[key]["name"];
+          const args = cookies[key];
+          if (isObject<SetCookieValueWithArgs>(args)) {
+            cookies[key] = createOptionsProxy(cookies, args);
+          }
         }
-        return createCookies(cookies);
+        return createProxy(cookies);
       },
       set: (val: Dict<any>) => {
         serializeCookie(ctx, val, options.serialize);

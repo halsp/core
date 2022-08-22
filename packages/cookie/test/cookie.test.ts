@@ -86,10 +86,15 @@ describe("set cookie", () => {
           num: {
             value: "123",
           },
+          obj: {
+            value: "val",
+            httpOnly: true,
+          },
         });
         expect(ctx.res.getHeader(RESPONSE_HEADER_NAME)).toEqual([
           "str=abc",
           "num=123",
+          "obj=val; HttpOnly",
         ]);
       })
       .useCookie()
@@ -97,6 +102,10 @@ describe("set cookie", () => {
         ctx.res.cookies = {};
         ctx.res.cookies.str = "abc";
         ctx.res.cookies["num"] = 123 as any;
+        ctx.res.cookies.obj = {
+          value: "val",
+        };
+        ctx.res.cookies.obj.httpOnly = true;
       })
       .run();
   });
