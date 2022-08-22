@@ -70,6 +70,56 @@ describe("set cookie", () => {
       })
       .run();
   });
+
+  it("should set cookies properties", async () => {
+    await new TestStartup()
+      .use(async (ctx, next) => {
+        await next();
+        expect(ctx.res.cookies).toEqual({
+          str: "abc",
+          num: 123,
+        });
+        expect(ctx.res.getHeader(RESPONSE_HEADER_NAME)).toEqual([
+          "str=abc",
+          "num=123",
+        ]);
+      })
+      .useCookie()
+      .use(async (ctx) => {
+        ctx.res.cookies = {};
+        ctx.res.cookies.str = "abc";
+        ctx.res.cookies["num"] = 123 as any;
+      })
+      .run();
+  });
+
+  it("should log error if set request cookies", async () => {
+    await new TestStartup()
+      .useCookie()
+      .use(async (ctx) => {
+        const errLog = console.error;
+        let msg: string | undefined = undefined;
+        try {
+          console.error = (...data: any[]) => {
+            msg = data[0];
+          };
+          (ctx.cookies as any).a = "abc";
+        } finally {
+          console.error = errLog;
+        }
+        expect(msg).toBe(
+          `Can't set request cookies. You may want to do this: ctx.res.cookies.a = abc`
+        );
+        expect(ctx.cookies).toEqual({
+          a: "abc",
+        });
+        expect(ctx.res.cookies).toEqual({});
+        expect(ctx.req.cookies).toEqual({
+          a: "abc",
+        });
+      })
+      .run();
+  });
 });
 
 describe("options", () => {
