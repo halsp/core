@@ -31,12 +31,14 @@
   "license": "MIT",
   "dependencies": {
     "@ipare/core": "^1.8.8",
-    "@types/cookie": "^0.5.1",
-    "cookie": "^0.5.0"
+    "cookie": "^0.5.0",
+    "set-cookie-parser": "^2.5.1"
   },
   "devDependencies": {
     "@types/jest": "^28.1.7",
     "@types/node": "^18.7.8",
+    "@types/cookie": "^0.5.1",
+    "@types/set-cookie-parser": "^2.4.2",
     "@typescript-eslint/eslint-plugin": "^5.33.1",
     "@typescript-eslint/parser": "^5.33.1",
     "eslint": "^8.22.0",

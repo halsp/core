@@ -6,28 +6,37 @@ import {
   Startup,
 } from "@ipare/core";
 import cookie from "cookie";
+import setCookieParser from "set-cookie-parser";
 import { REQUEST_HEADER_NAME, RESPONSE_HEADER_NAME, USED } from "./constant";
 import { Options } from "./options";
 
-export type CookieValue =
-  | (cookie.CookieSerializeOptions & {
-      value?: string;
-    })
-  | string
-  | undefined;
+export type SetCookieValue =
+  | {
+      value: string;
+      path?: string | undefined;
+      expires?: Date | undefined;
+      maxAge?: number | undefined;
+      domain?: string | undefined;
+      secure?: boolean | undefined;
+      httpOnly?: boolean | undefined;
+      sameSite?: string | undefined;
+    }
+  | string;
+
+export { Options };
 
 declare module "@ipare/core" {
   interface Request {
     get cookies(): ReadonlyDict<string>;
   }
   interface Response {
-    get cookies(): Dict<CookieValue>;
-    set cookies(val: Dict<CookieValue>);
+    get cookies(): Dict<SetCookieValue>;
+    set cookies(val: Dict<SetCookieValue>);
   }
 
   interface HttpContext {
     get cookies(): ReadonlyDict<string>;
-    set cookies(val: Dict<CookieValue>);
+    set cookies(val: Dict<SetCookieValue>);
   }
 
   interface Startup {
@@ -66,7 +75,7 @@ Startup.prototype.useCookie = function (options: Options = {}) {
 
     await next();
   }).use(async (ctx, next) => {
-    function createCookies(val: Dict<CookieValue>) {
+    function createCookies(val: Dict<SetCookieValue>) {
       return new Proxy(val, {
         set: (target, p, value) => {
           target[p as string] = value;
@@ -76,14 +85,22 @@ Startup.prototype.useCookie = function (options: Options = {}) {
       });
     }
 
-    let cookies = createCookies({});
-
     Object.defineProperty(ctx.res, "cookies", {
       configurable: false,
       enumerable: false,
-      get: () => cookies,
+      get: () => {
+        const cookies: Dict<SetCookieValue> = setCookieParser(
+          ctx.res.getHeader(RESPONSE_HEADER_NAME) ?? "",
+          {
+            map: true,
+          }
+        );
+        for (const key in cookies) {
+          delete cookies[key]["name"];
+        }
+        return createCookies(cookies);
+      },
       set: (val: Dict<any>) => {
-        cookies = createCookies(val);
         serializeCookie(ctx, val, options.serialize);
       },
     });
@@ -103,14 +120,14 @@ Startup.prototype.useCookie = function (options: Options = {}) {
 
 function serializeCookie(
   ctx: HttpContext,
-  cookies: Dict<CookieValue>,
+  cookies: Dict<SetCookieValue>,
   options?: cookie.CookieSerializeOptions
 ) {
   ctx.res.removeHeader(RESPONSE_HEADER_NAME);
   for (const key in cookies) {
     const value = cookies[key];
     let cookieStr: string;
-    if (isObject<cookie.CookieSerializeOptions>(value)) {
+    if (isObject<setCookieParser.Cookie>(value)) {
       cookieStr = cookie.serialize(
         key,
         String(value.value),
@@ -122,5 +139,3 @@ function serializeCookie(
     ctx.res.append(RESPONSE_HEADER_NAME, cookieStr);
   }
 }
-
-export { cookie, Options };

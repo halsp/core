@@ -12,8 +12,8 @@ describe("get cookie", () => {
       .use(async (ctx, next) => {
         await next();
         expect(ctx.cookies).toEqual({
-          str: "abc",
           num: "123",
+          str: "abc",
         });
         expect(ctx.req.cookies).toBe(ctx.cookies);
       })
@@ -38,8 +38,12 @@ describe("set cookie", () => {
       .use(async (ctx, next) => {
         await next();
         expect(ctx.res.cookies).toEqual({
-          str: "abc",
-          num: 123,
+          str: {
+            value: "abc",
+          },
+          num: {
+            value: "123",
+          },
         });
         expect(ctx.res.getHeader(RESPONSE_HEADER_NAME)).toEqual([
           "str=abc",
@@ -76,8 +80,12 @@ describe("set cookie", () => {
       .use(async (ctx, next) => {
         await next();
         expect(ctx.res.cookies).toEqual({
-          str: "abc",
-          num: 123,
+          str: {
+            value: "abc",
+          },
+          num: {
+            value: "123",
+          },
         });
         expect(ctx.res.getHeader(RESPONSE_HEADER_NAME)).toEqual([
           "str=abc",
