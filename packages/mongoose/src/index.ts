@@ -7,20 +7,17 @@ import { Options } from "./options";
 
 declare module "@ipare/core" {
   interface Startup {
-    useMongoose(url: string, options?: Options): this;
+    useMongoose(options: Options): this;
   }
 }
 
-Startup.prototype.useMongoose = function (
-  url: string,
-  options: Options = {}
-): Startup {
+Startup.prototype.useMongoose = function (options: Options): Startup {
   const injectKey = OPTIONS_IDENTITY + (options.identity ?? "");
 
   return this.useInject().inject(
     injectKey,
     async () => {
-      const connection = await mongoose.createConnection(url, options);
+      const connection = await mongoose.createConnection(options.url, options);
       const disposedClient = connection as InjectDisposable & typeof connection;
       disposedClient.dispose = async () => {
         if (

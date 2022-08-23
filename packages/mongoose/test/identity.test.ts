@@ -31,10 +31,13 @@ test("identity", async () => {
       };
       await next();
     })
-    .useMongoose("test", {
+    .useMongoose({
+      url: "test",
       identity: "app",
     })
-    .useMongoose("test")
+    .useMongoose({
+      url: "test",
+    })
     .add(TestMiddleware)
     .run();
 

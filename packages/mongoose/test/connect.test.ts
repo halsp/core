@@ -18,7 +18,9 @@ test("connected connection should be destroy", async () => {
       };
       await next();
     })
-    .useMongoose("mongodb://test")
+    .useMongoose({
+      url: "mongodb://test",
+    })
     .use(async (ctx) => {
       const client = await parseInject<mongoose.Connection>(
         ctx,
@@ -46,7 +48,9 @@ it("disconnected connection should not be destroy", async () => {
       };
       await next();
     })
-    .useMongoose("mongodb://test")
+    .useMongoose({
+      url: "mongodb://test",
+    })
     .use(async (ctx) => {
       const client = await parseInject<mongoose.Connection>(
         ctx,
