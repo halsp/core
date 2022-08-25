@@ -1,5 +1,5 @@
-import { Startup } from "@ipare/core";
-import { InjectDisposable } from "@ipare/inject";
+import { HttpContext, Startup } from "@ipare/core";
+import { InjectDisposable, parseInject } from "@ipare/inject";
 import winston from "winston";
 import Transport from "winston-transport";
 import { FileTransportOptions } from "winston/lib/winston/transports";
@@ -15,6 +15,10 @@ declare module "@ipare/core" {
         fileTransportOptions: FileTransportOptions;
       }
     ): this;
+  }
+
+  interface HttpContext {
+    getLogger(identity?: string): Promise<winston.Logger | undefined>;
   }
 }
 
@@ -36,6 +40,13 @@ Startup.prototype.useLogger = function (options?: Options): Startup {
     },
     options?.injectType
   );
+};
+
+HttpContext.prototype.getLogger = async function (
+  identity?: string
+): Promise<winston.Logger | undefined> {
+  const injectKey = OPTIONS_IDENTITY + (identity ?? "");
+  return await parseInject(this, injectKey);
 };
 
 Startup.prototype.useConsoleLogger = function (options: Options = {}): Startup {

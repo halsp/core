@@ -14,34 +14,40 @@ class TestMiddleware extends Middleware {
   }
 }
 
-test("logger", async () => {
-  const buffer = [];
-  await new TestStartup()
-    .useLogger({
-      transports: [new CustomTransport(buffer)],
-    })
-    .add(TestMiddleware)
-    .run();
+describe("logger", () => {
+  it("should log info", async () => {
+    const buffer = [];
+    await new TestStartup()
+      .useLogger({
+        transports: [new CustomTransport(buffer)],
+      })
+      .add(TestMiddleware)
+      .run();
 
-  await new Promise<void>((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, 1000);
+    await new Promise<void>((resolve) => {
+      setTimeout(() => {
+        resolve();
+      }, 1000);
+    });
+
+    const obj = buffer[0] as any;
+    expect({ level: obj.level, message: obj.message }).toEqual({
+      level: "info",
+      message: "info",
+    });
   });
 
-  const obj = buffer[0] as any;
-  expect({ level: obj.level, message: obj.message }).toEqual({
-    level: "info",
-    message: "info",
-  });
-});
-
-test("default", async () => {
-  await new TestStartup().useLogger().add(TestMiddleware).run();
-
-  await new Promise<void>((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, 1000);
+  it("should get logger from ctx", async () => {
+    await new TestStartup()
+      .useLogger()
+      .useLogger({
+        identity: "abc",
+      })
+      .use(async (ctx) => {
+        expect(!!(await ctx.getLogger())).toBeTruthy();
+        expect(!!(await ctx.getLogger("abc"))).toBeTruthy();
+        expect(!!(await ctx.getLogger("def"))).toBeFalsy();
+      })
+      .run();
   });
 });
