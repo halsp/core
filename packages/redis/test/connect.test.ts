@@ -1,7 +1,7 @@
 import "../src";
 import { TestStartup } from "@ipare/testing";
 import { parseInject } from "@ipare/inject";
-import { redis } from "../src";
+import { RedisConnection } from "../src";
 import { OPTIONS_IDENTITY } from "../src/constant";
 import RedisClient from "@redis/client/dist/lib/client";
 
@@ -20,13 +20,13 @@ test("connect failed", async () => {
       url: "redis://test",
     })
     .use(async (ctx) => {
-      const client = await parseInject<redis.RedisClientType>(
+      const connection = await parseInject<RedisConnection>(
         ctx,
         OPTIONS_IDENTITY
       );
-      if (!client) throw new Error();
+      if (!connection) throw new Error();
 
-      Object.defineProperty(client, "isOpen", {
+      Object.defineProperty(connection, "isOpen", {
         get: () => true,
       });
     })

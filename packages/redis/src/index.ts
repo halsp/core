@@ -5,13 +5,15 @@ import * as redis from "redis";
 import { OPTIONS_IDENTITY } from "./constant";
 import { Options } from "./options";
 
+export type RedisConnection = redis.RedisClientType;
+
 declare module "@ipare/core" {
   interface Startup {
     useRedis(options?: Options): this;
   }
 
   interface HttpContext {
-    getRedis(identity?: string): Promise<redis.RedisClientType>;
+    getRedis(identity?: string): Promise<RedisConnection>;
   }
 }
 
@@ -39,11 +41,11 @@ Startup.prototype.useRedis = function (options: Options = {}): Startup {
 
 HttpContext.prototype.getRedis = async function (
   identity?: string
-): Promise<redis.RedisClientType> {
+): Promise<RedisConnection> {
   const injectKey = OPTIONS_IDENTITY + (identity ?? "");
-  return (await parseInject(this, injectKey)) as redis.RedisClientType;
+  return (await parseInject(this, injectKey)) as RedisConnection;
 };
 
 export { redis };
-export { RedisClient } from "./decorators";
+export { RedisInject } from "./decorators";
 export { Options } from "./options";

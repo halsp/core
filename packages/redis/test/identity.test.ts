@@ -1,20 +1,20 @@
 import "../src";
 import { Middleware } from "@ipare/core";
-import { redis, RedisClient } from "../src";
+import { RedisConnection, RedisInject } from "../src";
 import { TestStartup } from "@ipare/testing";
 import RC from "@redis/client/dist/lib/client";
 
 class TestMiddleware extends Middleware {
-  @RedisClient("app")
-  private readonly appDataSource!: redis.RedisClientType;
-  @RedisClient()
-  private readonly coreDataSource!: redis.RedisClientType;
+  @RedisInject("app")
+  private readonly appConnection!: RedisConnection;
+  @RedisInject()
+  private readonly coreConnection!: RedisConnection;
 
   async invoke(): Promise<void> {
     this.ok({
-      app: !!this.appDataSource,
-      core: !!this.coreDataSource,
-      eq: this.appDataSource == this.coreDataSource,
+      app: !!this.appConnection,
+      core: !!this.coreConnection,
+      eq: this.appConnection == this.coreConnection,
     });
   }
 }
