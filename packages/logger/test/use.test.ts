@@ -1,11 +1,11 @@
 import { Middleware } from "@ipare/core";
 import { TestStartup } from "@ipare/testing";
-import { Logger, winston } from "../src";
+import { LoggerInject, Logger, winston } from "../src";
 import "../src";
 
 class TestMiddleware extends Middleware {
-  @Logger()
-  private readonly logger!: winston.Logger;
+  @LoggerInject()
+  private readonly logger!: Logger;
 
   async invoke(): Promise<void> {
     this.ctx.res["RESULT"] = this.logger.transports;
