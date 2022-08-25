@@ -18,7 +18,7 @@ declare module "@ipare/core" {
   }
 
   interface HttpContext {
-    getLogger(identity?: string): Promise<winston.Logger | undefined>;
+    getLogger(identity?: string): Promise<winston.Logger>;
   }
 }
 
@@ -44,9 +44,9 @@ Startup.prototype.useLogger = function (options?: Options): Startup {
 
 HttpContext.prototype.getLogger = async function (
   identity?: string
-): Promise<winston.Logger | undefined> {
+): Promise<winston.Logger> {
   const injectKey = OPTIONS_IDENTITY + (identity ?? "");
-  return await parseInject(this, injectKey);
+  return (await parseInject(this, injectKey)) as winston.Logger;
 };
 
 Startup.prototype.useConsoleLogger = function (options: Options = {}): Startup {
