@@ -2,7 +2,7 @@ import "../src";
 import { mongoose } from "../src";
 import { TestStartup } from "@ipare/testing";
 
-it("should get mongoose from ctx", async () => {
+it("should get mongoose by ctx", async () => {
   await new TestStartup()
     .use(async (ctx, next) => {
       mongoose.Mongoose.prototype.createConnection = async () => {

@@ -37,7 +37,7 @@ describe("logger", () => {
     });
   });
 
-  it("should get logger from ctx", async () => {
+  it("should get logger by ctx", async () => {
     await new TestStartup()
       .useLogger()
       .useLogger({
