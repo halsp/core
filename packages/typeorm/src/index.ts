@@ -1,6 +1,6 @@
 import "@ipare/core";
-import { Startup } from "@ipare/core";
-import { InjectDisposable } from "@ipare/inject";
+import { HttpContext, Startup } from "@ipare/core";
+import { InjectDisposable, parseInject } from "@ipare/inject";
 import path from "path";
 import * as typeorm from "typeorm";
 import { OPTIONS_IDENTITY } from "./constant";
@@ -9,6 +9,10 @@ import { Options } from "./options";
 declare module "@ipare/core" {
   interface Startup {
     useTypeorm(options: Options): this;
+  }
+
+  interface HttpContext {
+    getTypeorm(identity?: string): Promise<typeorm.DataSource>;
   }
 }
 
@@ -46,6 +50,13 @@ Startup.prototype.useTypeorm = function (options: Options): Startup {
     },
     options.injectType
   );
+};
+
+HttpContext.prototype.getTypeorm = async function (
+  identity?: string
+): Promise<typeorm.DataSource> {
+  const injectKey = OPTIONS_IDENTITY + (identity ?? "");
+  return (await parseInject(this, injectKey)) as typeorm.DataSource;
 };
 
 export { typeorm };
