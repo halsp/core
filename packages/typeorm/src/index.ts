@@ -6,13 +6,15 @@ import * as typeorm from "typeorm";
 import { OPTIONS_IDENTITY } from "./constant";
 import { Options } from "./options";
 
+export type TypeormConnection = typeorm.DataSource;
+
 declare module "@ipare/core" {
   interface Startup {
     useTypeorm(options: Options): this;
   }
 
   interface HttpContext {
-    getTypeorm(identity?: string): Promise<typeorm.DataSource>;
+    getTypeorm(identity?: string): Promise<TypeormConnection>;
   }
 }
 
@@ -54,11 +56,11 @@ Startup.prototype.useTypeorm = function (options: Options): Startup {
 
 HttpContext.prototype.getTypeorm = async function (
   identity?: string
-): Promise<typeorm.DataSource> {
+): Promise<TypeormConnection> {
   const injectKey = OPTIONS_IDENTITY + (identity ?? "");
-  return (await parseInject(this, injectKey)) as typeorm.DataSource;
+  return (await parseInject(this, injectKey)) as TypeormConnection;
 };
 
 export { typeorm };
-export { DataSource } from "./decorators";
+export { TypeormInject } from "./decorators";
 export { Options } from "./options";

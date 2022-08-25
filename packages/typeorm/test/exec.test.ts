@@ -2,7 +2,7 @@ import { TestStartup } from "@ipare/testing";
 import { parseInject } from "@ipare/inject";
 import path from "path";
 import "../src";
-import { typeorm } from "../src";
+import { TypeormConnection } from "../src";
 import { OPTIONS_IDENTITY } from "../src/constant";
 import { TestEntity } from "./entities/TestEntity";
 
@@ -15,16 +15,16 @@ it("should insert entity to sqlite", async () => {
       entities: [path.join(__dirname, "entities/*.ts")],
     })
     .use(async (ctx) => {
-      const dataSource = await parseInject<typeorm.DataSource>(
+      const connection = await parseInject<TypeormConnection>(
         ctx,
         OPTIONS_IDENTITY
       );
-      if (!dataSource) throw new Error();
+      if (!connection) throw new Error();
 
       const testDto = new TestEntity();
       testDto.name = "test";
-      await dataSource.manager.save(testDto);
-      const findResult = await dataSource.getRepository(TestEntity).findOne({
+      await connection.manager.save(testDto);
+      const findResult = await connection.getRepository(TestEntity).findOne({
         where: {
           name: "test",
         },

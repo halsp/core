@@ -1,13 +1,13 @@
 import "../src";
 import { Middleware } from "@ipare/core";
 import { TestStartup } from "@ipare/testing";
-import { DataSource, typeorm } from "../src";
+import { TypeormInject, TypeormConnection } from "../src";
 
 class TestMiddleware extends Middleware {
-  @DataSource("app")
-  private readonly appDataSource!: typeorm.DataSource;
-  @DataSource()
-  private readonly coreDataSource!: typeorm.DataSource;
+  @TypeormInject("app")
+  private readonly appDataSource!: TypeormConnection;
+  @TypeormInject()
+  private readonly coreDataSource!: TypeormConnection;
 
   async invoke(): Promise<void> {
     this.ok({
