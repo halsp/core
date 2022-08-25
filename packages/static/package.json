@@ -1,6 +1,6 @@
 {
   "name": "@ipare/static",
-  "version": "1.8.10",
+  "version": "1.8.11",
   "description": "Ipare 的静态资源插件",
   "engines": {
     "node": ">=12.16.0"
@@ -30,7 +30,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^1.8.10",
+    "@ipare/core": "^1.8.11",
     "mime": "^3.0.0"
   },
   "devDependencies": {
