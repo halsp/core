@@ -1,7 +1,7 @@
 import "../src";
 import { TestStartup } from "@ipare/testing";
 import { parseInject } from "@ipare/inject";
-import { mongoose } from "../src";
+import { mongoose, MongooseConnection } from "../src";
 import { OPTIONS_IDENTITY } from "../src/constant";
 
 test("connected connection should be destroy", async () => {
@@ -22,11 +22,11 @@ test("connected connection should be destroy", async () => {
       url: "mongodb://test",
     })
     .use(async (ctx) => {
-      const client = await parseInject<mongoose.Connection>(
+      const connection = await parseInject<MongooseConnection>(
         ctx,
         OPTIONS_IDENTITY
       );
-      if (!client) throw new Error();
+      if (!connection) throw new Error();
     })
     .run();
 
@@ -52,11 +52,11 @@ it("disconnected connection should not be destroy", async () => {
       url: "mongodb://test",
     })
     .use(async (ctx) => {
-      const client = await parseInject<mongoose.Connection>(
+      const connection = await parseInject<MongooseConnection>(
         ctx,
         OPTIONS_IDENTITY
       );
-      if (!client) throw new Error();
+      if (!connection) throw new Error();
     })
     .run();
 

@@ -5,13 +5,15 @@ import mongoose from "mongoose";
 import { OPTIONS_IDENTITY } from "./constant";
 import { Options } from "./options";
 
+export type MongooseConnection = mongoose.Connection;
+
 declare module "@ipare/core" {
   interface Startup {
     useMongoose(options: Options): this;
   }
 
   interface HttpContext {
-    getMongoose(identity?: string): Promise<mongoose.Connection>;
+    getMongoose(identity?: string): Promise<MongooseConnection>;
   }
 }
 
@@ -39,11 +41,11 @@ Startup.prototype.useMongoose = function (options: Options): Startup {
 
 HttpContext.prototype.getMongoose = async function (
   identity?: string
-): Promise<mongoose.Connection> {
+): Promise<MongooseConnection> {
   const injectKey = OPTIONS_IDENTITY + (identity ?? "");
-  return (await parseInject(this, injectKey)) as mongoose.Connection;
+  return (await parseInject(this, injectKey)) as MongooseConnection;
 };
 
 export { mongoose };
-export { MongoConnection } from "./decorators";
+export { MongooseInject } from "./decorators";
 export { Options } from "./options";

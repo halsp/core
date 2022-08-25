@@ -5,15 +5,15 @@ import { TypeormInject, TypeormConnection } from "../src";
 
 class TestMiddleware extends Middleware {
   @TypeormInject("app")
-  private readonly appDataSource!: TypeormConnection;
+  private readonly appConnection!: TypeormConnection;
   @TypeormInject()
-  private readonly coreDataSource!: TypeormConnection;
+  private readonly coreConnection!: TypeormConnection;
 
   async invoke(): Promise<void> {
     this.ok({
-      app: !!this.appDataSource,
-      core: !!this.coreDataSource,
-      eq: this.appDataSource == this.coreDataSource,
+      app: !!this.appConnection,
+      core: !!this.coreConnection,
+      eq: this.appConnection == this.coreConnection,
     });
   }
 }

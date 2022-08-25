@@ -1,13 +1,13 @@
 import "../src";
 import { Middleware } from "@ipare/core";
-import { mongoose, MongoConnection } from "../src";
+import { mongoose, MongooseConnection, MongooseInject } from "../src";
 import { TestStartup } from "@ipare/testing";
 
 class TestMiddleware extends Middleware {
-  @MongoConnection("app")
-  private readonly appConnection!: mongoose.Connection;
-  @MongoConnection()
-  private readonly coreConnection!: mongoose.Connection;
+  @MongooseInject("app")
+  private readonly appConnection!: MongooseConnection;
+  @MongooseInject()
+  private readonly coreConnection!: MongooseConnection;
 
   async invoke(): Promise<void> {
     this.ok({
