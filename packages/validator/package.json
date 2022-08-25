@@ -1,6 +1,6 @@
 {
   "name": "@ipare/validator",
-  "version": "1.8.9",
+  "version": "1.8.10",
   "description": "Ipare 的参数校验插件",
   "engines": {
     "node": ">=12.16.0"
@@ -30,9 +30,9 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^1.8.9",
-    "@ipare/inject": "^1.8.9",
-    "@ipare/pipe": "^1.8.9",
+    "@ipare/core": "^1.8.10",
+    "@ipare/inject": "^1.8.10",
+    "@ipare/pipe": "^1.8.10",
     "class-validator": "^0.13.2",
     "reflect-metadata": "^0.1.13"
   },
