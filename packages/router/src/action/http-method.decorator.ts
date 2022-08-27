@@ -1,6 +1,6 @@
 import { HttpMethod } from "@ipare/core";
 import "reflect-metadata";
-import { MethodItem } from "../action/method-item";
+import { MethodItem } from "./method-item";
 import { ACTION_METHOD_METADATA } from "../constant";
 
 function setHttpMethodMetadata(target: any, method: string, url?: string) {

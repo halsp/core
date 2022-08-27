@@ -33,8 +33,9 @@ export {
   HttpPost,
   HttpPut,
   HttpTrace,
-} from "./decorators";
-export { setActionMetadata, getActionMetadata } from "./action";
+  setActionMetadata,
+  getActionMetadata,
+} from "./action";
 export { postbuild } from "./postbuild";
 import MapMatcher from "./map/map-matcher";
 
