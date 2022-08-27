@@ -5,6 +5,7 @@ import {
   isString,
   isClass,
   ObjectConstructor,
+  isUndefined,
 } from "@ipare/core";
 import {
   CLASS_METADATA,
@@ -40,6 +41,47 @@ class InjectDecoratorParser<T extends object = any> {
       : (target.constructor as ObjectConstructor<T>);
     this.obj = isConstructor ? await this.createTargetObject(target) : target;
 
+    if (!isUndefined(this.obj)) {
+      await this.injectObj();
+    }
+    return this.obj;
+  }
+
+  public async parseKey(key: string): Promise<T | undefined> {
+    const existMap = this.getExistKeyMap(key);
+    if (!existMap) return undefined;
+
+    this.obj = await this.getObjectFromExistMap(
+      existMap.target,
+      existMap.type,
+      key
+    );
+    if (!isUndefined(this.obj)) {
+      this.injectConstructor = this.obj.constructor;
+      await this.injectObj();
+    }
+    return this.obj;
+  }
+
+  public tryParseInject(target: string | ObjectConstructor<T>): T | undefined {
+    const existMap = isString(target)
+      ? this.getExistKeyMap(target)
+      : this.getExistTargetMap(target);
+
+    const { record } = this.getExistInjectRecord(
+      existMap?.type ?? InjectType.Scoped,
+      target
+    );
+    return record?.value;
+  }
+
+  public getTransientInstances(target: string | ObjectConstructor<T>): T[] {
+    return this.getRecordsFromBag(TRANSIENT_BAG)
+      .filter((item) => item.injectKey == target)
+      .map((item) => item.value);
+  }
+
+  private async injectObj(): Promise<void> {
     const prototype = this.injectConstructor.prototype;
     const customProps: InjectCustom[] =
       Reflect.getMetadata(CUSTOM_METADATA, prototype) ?? [];
@@ -68,37 +110,6 @@ class InjectDecoratorParser<T extends object = any> {
         this.obj[prop] = await this.getPropertyValue(prop);
       }
     }
-
-    return this.obj;
-  }
-
-  public async parseKey(key: string): Promise<T | undefined> {
-    const existMap = this.getExistKeyMap(key);
-    if (!existMap) return undefined;
-
-    return await this.getObjectFromExistMap(
-      existMap.target,
-      existMap.type,
-      key
-    );
-  }
-
-  public tryParseInject(target: string | ObjectConstructor<T>): T | undefined {
-    const existMap = isString(target)
-      ? this.getExistKeyMap(target)
-      : this.getExistTargetMap(target);
-
-    const { record } = this.getExistInjectRecord(
-      existMap?.type ?? InjectType.Scoped,
-      target
-    );
-    return record?.value;
-  }
-
-  public getTransientInstances(target: string | ObjectConstructor<T>): T[] {
-    return this.getRecordsFromBag(TRANSIENT_BAG)
-      .filter((item) => item.injectKey == target)
-      .map((item) => item.value);
   }
 
   //#region parsePropValue
