@@ -22,6 +22,7 @@ import { BlankMiddleware } from "./blank.middleware";
 
 export { Action, MapItem, RouterOptions, RouterInitedOptions };
 export {
+  ActionMetadata,
   SetActionMetadata,
   HttpCustom,
   HttpConnect,

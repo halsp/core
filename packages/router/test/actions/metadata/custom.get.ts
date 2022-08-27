@@ -1,9 +1,9 @@
 import { ObjectConstructor } from "@ipare/core";
-import { Action, getActionMetadata, SetActionMetadata } from "../../../src";
+import { Action, getActionMetadata, ActionMetadata } from "../../../src";
 
-const Admin = SetActionMetadata("admin", true);
+const Admin = ActionMetadata("admin", true);
 
-@SetActionMetadata("custom", "11")
+@ActionMetadata("custom", "11")
 @Admin
 export default class extends Action {
   async invoke(): Promise<void> {

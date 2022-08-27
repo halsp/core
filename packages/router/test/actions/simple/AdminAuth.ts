@@ -1,6 +1,6 @@
-import { Action, SetActionMetadata } from "../../../src";
+import { Action, ActionMetadata } from "../../../src";
 
-@SetActionMetadata("roles", ["admin"])
+@ActionMetadata("roles", ["admin"])
 export default class extends Action {
   async invoke(): Promise<void> {
     const { account, password } = this.ctx.req.headers;

@@ -85,7 +85,7 @@ test("blank config", async () => {
     expect((err as Error).message).toBe("The router dir is not exist");
   }
   expect(done).toBeTruthy();
-}, 10000);
+}, 20000);
 
 describe("useRouterParser", () => {
   it("should not replace options", async () => {

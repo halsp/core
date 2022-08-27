@@ -2,11 +2,11 @@ import { ObjectConstructor } from "@ipare/core";
 import {
   Action,
   getActionMetadata,
-  SetActionMetadata,
+  ActionMetadata,
   setActionMetadata,
 } from "../../../src";
 
-@SetActionMetadata("m1", 1)
+@ActionMetadata("m1", 1)
 export default class extends Action {
   async invoke(): Promise<void> {
     setActionMetadata(this, "m2", 2);
