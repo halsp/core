@@ -19,6 +19,7 @@ module.exports = {
         "style",
         "test",
         "typo",
+        "test",
       ],
     ],
     "scope-enum": [2, "always", ["release", ...getPackages()]],
