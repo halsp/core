@@ -42,7 +42,7 @@ Startup.prototype.useTypeorm = function (options: Options): Startup {
         typeorm.DataSource;
       await dataSource.initialize();
 
-      dataSource.onDispose = async () => {
+      dataSource.dispose = async () => {
         if (dataSource.isInitialized) {
           await dataSource.destroy();
         }

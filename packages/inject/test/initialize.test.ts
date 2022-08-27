@@ -6,10 +6,10 @@ describe("initialize", () => {
     let initializingExecuted = false;
     let initializedExecuted = false;
     class TestService {
-      onInitializing() {
+      initializing() {
         initializingExecuted = true;
       }
-      onInitialized() {
+      initialized() {
         initializedExecuted = true;
       }
     }
@@ -29,10 +29,10 @@ describe("initialize", () => {
     let initializingExecuted = 0;
     let initializedExecuted = 0;
     class TestService {
-      onInitializing() {
+      initializing() {
         initializingExecuted++;
       }
-      onInitialized() {
+      initialized() {
         initializedExecuted++;
       }
     }
@@ -62,11 +62,11 @@ describe("initialize", () => {
       @Inject
       private readonly service1!: TestService1;
 
-      onInitializing() {
+      initializing() {
         execute++;
         expect(!!this.service1).toBeFalsy();
       }
-      onInitialized() {
+      initialized() {
         execute++;
         expect(!!this.service1).toBeTruthy();
       }

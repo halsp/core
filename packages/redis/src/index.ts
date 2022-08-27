@@ -27,7 +27,7 @@ Startup.prototype.useRedis = function (options: Options = {}): Startup {
       await client.connect();
 
       const disposedClient = client as IService & typeof client;
-      disposedClient.onDispose = async () => {
+      disposedClient.dispose = async () => {
         if (disposedClient.isOpen) {
           disposedClient.disconnect();
         }

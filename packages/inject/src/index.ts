@@ -124,9 +124,9 @@ async function dispose<T extends object = any>(
 ) {
   async function disposeObject<T extends IService = any>(instance?: T) {
     if (!instance) return;
-    if (!instance.onDispose || !isFunction(instance.onDispose)) return;
+    if (!instance.dispose || !isFunction(instance.dispose)) return;
 
-    await instance.onDispose(ctx);
+    await instance.dispose(ctx);
   }
 
   if (injectType == InjectType.Scoped) {

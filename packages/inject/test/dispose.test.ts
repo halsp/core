@@ -13,7 +13,7 @@ class TestService {
     return this.#disposed;
   }
 
-  async onDispose() {
+  async dispose() {
     this.#disposed = true;
   }
 }
@@ -48,7 +48,7 @@ it("transient instance should be dispose", async () => {
     .use(async (ctx, next) => {
       const dataSource1 = await parseInject(ctx, TestService);
       expect(dataSource1?.disposed).toBeFalsy();
-      await dataSource1?.onDispose();
+      await dataSource1?.dispose();
       expect(dataSource1?.disposed).toBeTruthy();
 
       const dataSource2 = await parseInject(ctx, TestService);

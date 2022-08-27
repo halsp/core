@@ -4,14 +4,14 @@ export interface IService {
   /**
    * Execute after request, Scoped/Transient
    */
-  onDispose: (ctx: HttpContext) => Promise<void> | void;
+  dispose: (ctx: HttpContext) => Promise<void> | void;
   /**
    * Execute before injecting property
    */
-  onInitializing: (ctx: HttpContext) => Promise<void> | void;
+  initializing: (ctx: HttpContext) => Promise<void> | void;
 
   /**
-   * Execute after injection
+   * Execute after injecting
    */
-  onInitialized: (ctx: HttpContext) => Promise<void> | void;
+  initialized: (ctx: HttpContext) => Promise<void> | void;
 }

@@ -98,8 +98,8 @@ class InjectDecoratorParser<T extends object = any> {
     }
 
     const service = this.obj as IService;
-    if (isFunction(service.onInitializing)) {
-      await service.onInitializing(this.ctx);
+    if (isFunction(service.initializing)) {
+      await service.initializing(this.ctx);
     }
 
     const prototype = this.injectConstructor.prototype;
@@ -141,8 +141,8 @@ class InjectDecoratorParser<T extends object = any> {
         });
       }
 
-      if (isFunction(service.onInitialized)) {
-        await service.onInitialized(this.ctx);
+      if (isFunction(service.initialized)) {
+        await service.initialized(this.ctx);
       }
     }
   }

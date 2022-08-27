@@ -25,7 +25,7 @@ Startup.prototype.useMongoose = function (options: Options): Startup {
     async () => {
       const connection = await mongoose.createConnection(options.url, options);
       const disposedClient = connection as IService & typeof connection;
-      disposedClient.onDispose = async () => {
+      disposedClient.dispose = async () => {
         if (
           disposedClient.readyState == mongoose.ConnectionStates.connected ||
           disposedClient.readyState == mongoose.ConnectionStates.connecting

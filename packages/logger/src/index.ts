@@ -31,7 +31,7 @@ Startup.prototype.useLogger = function (options?: Options): Startup {
     () => {
       const logger = winston.createLogger(options) as IService & Logger;
 
-      logger.onDispose = async () => {
+      logger.dispose = async () => {
         if (!logger.destroyed) {
           logger.destroy();
         }
