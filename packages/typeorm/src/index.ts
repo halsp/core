@@ -1,6 +1,6 @@
 import "@ipare/core";
 import { HttpContext, Startup } from "@ipare/core";
-import { InjectDisposable, parseInject } from "@ipare/inject";
+import { IService, parseInject } from "@ipare/inject";
 import path from "path";
 import * as typeorm from "typeorm";
 import { OPTIONS_IDENTITY } from "./constant";
@@ -38,11 +38,11 @@ Startup.prototype.useTypeorm = function (options: Options): Startup {
   return this.useInject().inject(
     injectKey,
     async () => {
-      const dataSource = new typeorm.DataSource(options) as InjectDisposable &
+      const dataSource = new typeorm.DataSource(options) as IService &
         typeorm.DataSource;
       await dataSource.initialize();
 
-      dataSource.dispose = async () => {
+      dataSource.onDispose = async () => {
         if (dataSource.isInitialized) {
           await dataSource.destroy();
         }

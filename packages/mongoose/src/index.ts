@@ -1,6 +1,6 @@
 import "@ipare/core";
 import { HttpContext, Startup } from "@ipare/core";
-import { InjectDisposable, parseInject } from "@ipare/inject";
+import { IService, parseInject } from "@ipare/inject";
 import mongoose from "mongoose";
 import { OPTIONS_IDENTITY } from "./constant";
 import { Options } from "./options";
@@ -24,8 +24,8 @@ Startup.prototype.useMongoose = function (options: Options): Startup {
     injectKey,
     async () => {
       const connection = await mongoose.createConnection(options.url, options);
-      const disposedClient = connection as InjectDisposable & typeof connection;
-      disposedClient.dispose = async () => {
+      const disposedClient = connection as IService & typeof connection;
+      disposedClient.onDispose = async () => {
         if (
           disposedClient.readyState == mongoose.ConnectionStates.connected ||
           disposedClient.readyState == mongoose.ConnectionStates.connecting

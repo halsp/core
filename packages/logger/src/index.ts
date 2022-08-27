@@ -1,5 +1,5 @@
 import { HttpContext, Startup } from "@ipare/core";
-import { InjectDisposable, parseInject } from "@ipare/inject";
+import { IService, parseInject } from "@ipare/inject";
 import winston from "winston";
 import Transport from "winston-transport";
 import { FileTransportOptions } from "winston/lib/winston/transports";
@@ -29,9 +29,9 @@ Startup.prototype.useLogger = function (options?: Options): Startup {
   return this.useInject().inject(
     injectKey,
     () => {
-      const logger = winston.createLogger(options) as InjectDisposable & Logger;
+      const logger = winston.createLogger(options) as IService & Logger;
 
-      logger.dispose = async () => {
+      logger.onDispose = async () => {
         if (!logger.destroyed) {
           logger.destroy();
         }

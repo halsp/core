@@ -1,6 +1,6 @@
 import "@ipare/core";
 import { HttpContext, Startup } from "@ipare/core";
-import { InjectDisposable, parseInject } from "@ipare/inject";
+import { IService, parseInject } from "@ipare/inject";
 import * as redis from "redis";
 import { OPTIONS_IDENTITY } from "./constant";
 import { Options } from "./options";
@@ -26,8 +26,8 @@ Startup.prototype.useRedis = function (options: Options = {}): Startup {
       const client = redis.createClient(options);
       await client.connect();
 
-      const disposedClient = client as InjectDisposable & typeof client;
-      disposedClient.dispose = async () => {
+      const disposedClient = client as IService & typeof client;
+      disposedClient.onDispose = async () => {
         if (disposedClient.isOpen) {
           disposedClient.disconnect();
         }
