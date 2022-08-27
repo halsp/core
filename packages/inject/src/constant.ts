@@ -7,3 +7,5 @@ export const TRANSIENT_BAG = "@ipare/inject/transientBag";
 export const SINGLETON_BAG = "@ipare/inject/singletonBag";
 export const MAP_BAG = "@ipare/inject/mapBag";
 export const USED = "@ipare/inject/used";
+export const INITIALIZING_EXECUTED = "@ipare/inject/initializingExecuted";
+export const INITIALIZED_EXECUTED = "@ipare/inject/initializdExecuted";

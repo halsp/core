@@ -15,7 +15,7 @@ import {
   tryParseInject,
 } from "./inject-parser";
 import { InjectType } from "./inject-type";
-import { InjectDisposable } from "./interfaces/inject-disposable";
+import { IService } from "./interfaces/service";
 
 declare module "@ipare/core" {
   interface Startup {
@@ -122,18 +122,18 @@ async function dispose<T extends object = any>(
   injectType: InjectType,
   target: ObjectConstructor<T> | string
 ) {
-  async function disposeObject<T extends InjectDisposable = any>(instance?: T) {
+  async function disposeObject<T extends IService = any>(instance?: T) {
     if (!instance) return;
     if (!instance.dispose || !isFunction(instance.dispose)) return;
 
-    await instance.dispose();
+    await instance.dispose(ctx);
   }
 
   if (injectType == InjectType.Scoped) {
-    const instance = tryParseInject(ctx, target) as InjectDisposable;
+    const instance = tryParseInject(ctx, target) as IService;
     await disposeObject(instance);
   } else if (injectType == InjectType.Transient) {
-    const instances = getTransientInstances(ctx, target) as InjectDisposable[];
+    const instances = getTransientInstances(ctx, target) as IService[];
     for (const instance of instances) {
       await disposeObject(instance);
     }
@@ -147,4 +147,4 @@ export {
   getTransientInstances,
 } from "./inject-parser";
 export { InjectType } from "./inject-type";
-export { InjectDisposable } from "./interfaces";
+export { IService } from "./interfaces";

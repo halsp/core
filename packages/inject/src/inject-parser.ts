@@ -16,10 +16,12 @@ import {
   PROPERTY_METADATA,
   TRANSIENT_BAG,
   SINGLETON_BAG,
+  INITIALIZING_EXECUTED,
+  INITIALIZED_EXECUTED,
 } from "./constant";
 import { InjectType } from "./inject-type";
 import "reflect-metadata";
-import { InjectMap, InjectCustom, InjectKey } from "./interfaces";
+import { InjectMap, InjectCustom, InjectKey, IService } from "./interfaces";
 
 type InjectTarget<T extends object = any> = T | ObjectConstructor<T>;
 
@@ -82,6 +84,24 @@ class InjectDecoratorParser<T extends object = any> {
   }
 
   private async injectObj(): Promise<void> {
+    if (this.obj[INITIALIZING_EXECUTED]) {
+      return;
+    }
+
+    if (isObject(this.obj)) {
+      Object.defineProperty(this.obj, INITIALIZING_EXECUTED, {
+        enumerable: false,
+        configurable: false,
+        writable: false,
+        value: true,
+      });
+    }
+
+    const service = this.obj as IService;
+    if (isFunction(service.onInitializing)) {
+      await service.onInitializing(this.ctx);
+    }
+
     const prototype = this.injectConstructor.prototype;
     const customProps: InjectCustom[] =
       Reflect.getMetadata(CUSTOM_METADATA, prototype) ?? [];
@@ -108,6 +128,21 @@ class InjectDecoratorParser<T extends object = any> {
     for (const prop of injectProps) {
       if (this.obj[prop] == undefined) {
         this.obj[prop] = await this.getPropertyValue(prop);
+      }
+    }
+
+    if (!this.obj[INITIALIZED_EXECUTED]) {
+      if (isObject(this.obj)) {
+        Object.defineProperty(this.obj, INITIALIZED_EXECUTED, {
+          enumerable: false,
+          configurable: false,
+          writable: false,
+          value: true,
+        });
+      }
+
+      if (isFunction(service.onInitialized)) {
+        await service.onInitialized(this.ctx);
       }
     }
   }
