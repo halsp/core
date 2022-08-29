@@ -1,6 +1,6 @@
 {
   "name": "@ipare/mva",
-  "version": "1.8.12",
+  "version": "1.8.13",
   "description": "Ipare MVA 框架",
   "engines": {
     "node": ">=12.16.0"
@@ -31,10 +31,10 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^1.8.12",
-    "@ipare/filter": "^1.8.12",
-    "@ipare/router": "^1.8.12",
-    "@ipare/view": "^1.8.12"
+    "@ipare/core": "^1.8.13",
+    "@ipare/filter": "^1.8.13",
+    "@ipare/router": "^1.8.13",
+    "@ipare/view": "^1.8.13"
   },
   "devDependencies": {
     "@types/jest": "^28.1.8",
