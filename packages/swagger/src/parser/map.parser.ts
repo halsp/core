@@ -129,7 +129,7 @@ export class MapParser {
       mediaObj.schema = mediaObj.schema ?? {
         type: "object",
       };
-      this.execActionCallback(action, record, mediaObj.schema);
+      this.execActionCallback(action, record, mediaObj.schema as SchemaObject);
     }
   }
 

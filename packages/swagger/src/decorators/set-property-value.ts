@@ -33,7 +33,7 @@ function getSchemaPropertySchema(
   pipeRecord: PipeReqRecord,
   builder: OpenApiBuilder,
   target: any
-) {
+): SchemaObject {
   if (!schema.properties) {
     schema.properties = {};
   }
@@ -51,7 +51,7 @@ function getSchemaPropertySchema(
       };
     }
   }
-  return schema.properties[property];
+  return schema.properties[property] as SchemaObject;
 }
 
 export type SetPropertyValueCallback = (args: {

@@ -70,7 +70,7 @@ test("ignore", async () => {
   item["$ref"] = `#/components/schemas/testName`;
   builder.addPath("p", {
     abc: [item],
-  });
+  } as any);
   const schema = {};
   schema[IGNORE] = true;
   builder.addSchema("testName", schema);
