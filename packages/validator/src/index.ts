@@ -9,10 +9,13 @@ import {
 import { ValidatePipe } from "./validate.pipe";
 
 export {
+  V,
+  getRules,
   UseValidatorOptions,
   UseValidatorSchema,
   ValidatorEnable,
-} from "./decorators/index";
+} from "./decorators";
+export { ValidateItem, RuleRecord } from "./create-decorator";
 
 declare module "@ipare/core" {
   interface Startup {

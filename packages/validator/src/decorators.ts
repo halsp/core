@@ -1,11 +1,14 @@
-import { HttpContext } from "@ipare/core";
-import { ValidatorOptions } from "class-validator";
 import "reflect-metadata";
+import { HttpContext, isUndefined } from "@ipare/core";
 import {
-  SCHAME_METADATA,
   ENABLE_METADATA,
+  METADATA,
   OPTIONS_METADATA,
-} from "../constant";
+  SCHAME_METADATA,
+} from "./constant";
+import { createLib, ValidatorLib } from "./validator-lib";
+import { RuleRecord } from "./create-decorator";
+import { isNumber, ValidatorOptions } from "class-validator";
 
 export function UseValidatorOptions(
   options: (args: {
@@ -36,4 +39,29 @@ export function ValidatorEnable(
   return function (target: any) {
     Reflect.defineMetadata(ENABLE_METADATA, fn, target.prototype);
   };
+}
+
+export const V = (): PropertyDecorator &
+  ParameterDecorator &
+  ClassDecorator &
+  ValidatorLib => {
+  const decorator = () => undefined;
+  Object.assign(decorator, createLib());
+  return decorator as any;
+};
+
+export function getRules(
+  target: any,
+  propertyOrIndex?: string | symbol | number
+) {
+  target = target?.prototype ?? target;
+  if (!target) return [];
+
+  let rules: RuleRecord[] = Reflect.getMetadata(METADATA, target) ?? [];
+  rules = rules.filter((rule) => {
+    if (isUndefined(propertyOrIndex)) return true;
+    if (isNumber(propertyOrIndex)) return rule.paramIndex == propertyOrIndex;
+    else return rule.propertyKey == propertyOrIndex;
+  });
+  return rules;
 }

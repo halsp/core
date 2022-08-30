@@ -1,16 +1,15 @@
 import { Middleware, Request } from "@ipare/core";
 import { Body } from "@ipare/pipe";
-import { IsInt } from "class-validator";
 import "@ipare/inject";
 import "../src";
-import { UseValidatorOptions } from "../src";
+import { UseValidatorOptions, V } from "../src";
 import { TestStartup } from "@ipare/testing";
 
 function testOptions(useOptions: any, decOptions: any, result: boolean) {
   test(`options test ${!!useOptions} ${!!decOptions} ${result}`, async () => {
     @UseValidatorOptions(decOptions)
     class TestDto {
-      @IsInt()
+      @V().IsInt()
       b1!: number;
 
       get b() {

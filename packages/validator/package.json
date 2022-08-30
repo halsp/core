@@ -51,8 +51,7 @@
   "peerDependencies": {
     "@ipare/core": "~1",
     "@ipare/inject": "~1",
-    "@ipare/pipe": "~1",
-    "class-validator": "*"
+    "@ipare/pipe": "~1"
   },
   "peerDependenciesMeta": {
     "@ipare/core": {

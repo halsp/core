@@ -3,14 +3,14 @@ import { TestStartup } from "@ipare/testing";
 import { Body } from "@ipare/pipe";
 import "@ipare/inject";
 import "../src";
-import { IsInt, IsString } from "class-validator";
+import { V } from "../src";
 
 function runTest(validate: boolean) {
   test(`validate ${validate}`, async () => {
     class TestDto {
       b1!: string;
 
-      @IsInt()
+      @V().IsInt()
       b2!: number;
 
       get b() {
@@ -59,10 +59,10 @@ runTest(false);
 
 test("array message", async () => {
   class TestDto {
-    @IsString()
+    @V().IsInt().IsString()
     b1!: string;
 
-    @IsInt()
+    @V().IsInt()
     b2!: number;
 
     get b() {
@@ -122,4 +122,11 @@ test("validate disabled", async () => {
     .run();
 
   expect(res.status).toBe(200);
+});
+
+it("should be undefined when exec V()()", async () => {
+  class TestClass {
+    //
+  }
+  expect(V()(TestClass, "")).toBeUndefined();
 });

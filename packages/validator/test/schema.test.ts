@@ -1,10 +1,10 @@
 import { Middleware, Request } from "@ipare/core";
 import { TestStartup } from "@ipare/testing";
 import { Body } from "@ipare/pipe";
-import { IsInt, ValidationSchema } from "class-validator";
+import { ValidationSchema } from "class-validator";
 import "@ipare/inject";
 import "../src";
-import { UseValidatorSchema, ValidatorEnable } from "../src";
+import { UseValidatorSchema, V, ValidatorEnable } from "../src";
 
 function testSchema(useSchema: boolean) {
   function runTest(func: boolean) {
@@ -13,7 +13,7 @@ function testSchema(useSchema: boolean) {
       @UseValidatorSchema(schemaName as any)
       @ValidatorEnable(() => useSchema)
       class TestDto {
-        @IsInt()
+        @V().IsInt()
         b1!: number;
 
         get b() {

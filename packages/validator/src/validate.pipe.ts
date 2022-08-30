@@ -6,8 +6,10 @@ import {
   isUndefined,
 } from "@ipare/core";
 import { PipeTransform, TransformArgs } from "@ipare/pipe";
-import { validate, ValidatorOptions } from "class-validator";
-import { SCHAME_METADATA, ENABLE_METADATA, OPTIONS_METADATA } from "./constant";
+import { validate, ValidationError, ValidatorOptions } from "class-validator";
+import { ENABLE_METADATA, OPTIONS_METADATA, SCHAME_METADATA } from "./constant";
+import { RuleRecord } from "./create-decorator";
+import { getRules } from "./decorators";
 
 export class ValidatePipe<T extends object = any, R extends T = any>
   implements PipeTransform<T, T | R>
@@ -64,7 +66,19 @@ export class ValidatePipe<T extends object = any, R extends T = any>
       return;
     }
 
-    const errs = await this.validate(value, schemaName, options);
+    const errs: ValidationError[] = [];
+    for (const key in value) {
+      const rules = getRules(value, key);
+      const propertyErrs = await this.validate(
+        rules,
+        value[key],
+        key,
+        schemaName,
+        options
+      );
+      errs.push(...propertyErrs);
+    }
+
     const msgs = errs
       .filter((item) => !!item.constraints)
       .map((item) => item.constraints as Record<string, string>);
@@ -76,21 +90,20 @@ export class ValidatePipe<T extends object = any, R extends T = any>
     schemaName?: string,
     options?: ValidatorOptions
   ) {
-    const { parent, propertyKey } = args;
+    const { parent, property, propertyKey, parameterIndex } = args;
     if (!this.transformParentEnable(args)) {
       return;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    function NewClass() {}
-    NewClass.prototype = parent.constructor.prototype;
-    const newObj = new NewClass();
-    newObj[propertyKey] = args.value;
-
-    const errs = await this.validate(newObj, schemaName, options);
+    const errs = await this.validate(
+      getRules(parent, propertyKey ?? parameterIndex),
+      args.value,
+      property as string,
+      schemaName,
+      options
+    );
     const msgs = errs
       .filter((item) => !!item.constraints)
-      .filter((item) => item.property == propertyKey)
       .map((item) => item.constraints as Record<string, string>);
     this.throwMsg(msgs);
   }
@@ -113,11 +126,6 @@ export class ValidatePipe<T extends object = any, R extends T = any>
   private transformParentEnable(args: TransformArgs<T | R>): boolean {
     const { property } = args;
     return !isUndefined(property);
-    // return (
-    //   typeof parent == "object" &&
-    //   !Array.isArray(parent) &&
-    //   !isPlainObject(parent)
-    // );
   }
 
   private transformModelEnable(args: TransformArgs<T | R>): boolean {
@@ -128,15 +136,27 @@ export class ValidatePipe<T extends object = any, R extends T = any>
   }
 
   private async validate(
+    rules: RuleRecord[],
     value: any,
+    property: string,
     schemaName?: string,
     options?: ValidatorOptions
   ) {
-    if (schemaName) {
-      return await validate(schemaName, value, options);
-    } else {
-      return await validate(value, options);
+    const result: ValidationError[] = [];
+    for (const rule of rules) {
+      for (const validateItem of rule.validates) {
+        const obj = validateItem.createTempObj(property, value);
+
+        let msgs: ValidationError[];
+        if (schemaName) {
+          msgs = await validate(schemaName, obj, options);
+        } else {
+          msgs = await validate(obj, options);
+        }
+        result.push(...msgs);
+      }
     }
+    return result;
   }
 
   private async getOptions(
