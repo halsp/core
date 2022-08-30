@@ -1,12 +1,14 @@
 import { METADATA } from "./constant";
-import { ValidatorDecoratorReturnType } from "./validator-lib";
+import {
+  CustomValidatorItem,
+  ValidatorDecoratorReturnType,
+} from "./validator-lib";
 
 export type ValidateItem = {
   createTempObj?: (property: string, value: any) => object;
   name: string;
-  validate?: (property: string, value: any) => Promise<boolean> | boolean;
-  errorMessage?: string | ((property: string, value: any) => string);
-};
+  args?: any[]; // not be undefined if it is custom validator
+} & Partial<CustomValidatorItem>;
 
 export type RuleRecord = {
   validates: ValidateItem[];
@@ -37,14 +39,12 @@ export function createClassValidatorDecorator(
 
 export function createCustomValidatorDecorator(
   lib: ValidatorDecoratorReturnType,
-  validate: (property: string, value: any) => Promise<boolean> | boolean,
-  methodName: string,
-  errorMessage: string | ((property: string, value: any) => string)
+  validator: CustomValidatorItem,
+  args: any[]
 ): ValidatorDecoratorReturnType {
   lib.validates.push({
-    validate,
-    name: methodName,
-    errorMessage,
+    ...validator,
+    args,
   });
 
   return createDecorator(lib);

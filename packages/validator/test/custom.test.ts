@@ -14,6 +14,10 @@ declare module "../src" {
   interface ValidatorLib {
     CustomDecorator1: () => ValidatorDecoratorReturnType;
     CustomDecorator2: () => ValidatorDecoratorReturnType;
+    CustomDecorator3: (
+      arg1: string,
+      arg2: number
+    ) => ValidatorDecoratorReturnType;
   }
 }
 
@@ -82,6 +86,38 @@ describe("custom", () => {
       status: 400,
     });
     expect(res.status).toEqual(400);
+  });
+
+  it("should validate custom validation with args", async () => {
+    addCustomValidator({
+      validate: () => false,
+      errorMessage: (propty, value, args) =>
+        `${propty} ${value} ${args.join(",")}`,
+      name: "CustomDecorator3",
+    });
+
+    class TestMiddleware extends Middleware {
+      @V().CustomDecorator3("arg11", 22)
+      @Body("abc")
+      private readonly prop!: string;
+
+      invoke(): void | Promise<void> {
+        this.ok();
+      }
+    }
+
+    const res = await new TestStartup()
+      .skipThrow()
+      .useInject()
+      .useValidator()
+      .add(TestMiddleware)
+      .run();
+
+    expect(res.status).toEqual(400);
+    expect(res.body).toEqual({
+      message: "abc undefined arg11,22",
+      status: 400,
+    });
   });
 });
 

@@ -177,17 +177,25 @@ export class ValidatePipe<T extends object = any, R extends T = any>
       for (const validateItem of rule.validates.filter(
         (item) => !!item.validate
       )) {
-        const validateResult = await (
-          validateItem.validate as (
-            property: string,
-            value: any
-          ) => Promise<boolean>
-        )(property, value);
-        if (!validateResult) {
-          if (typeof validateItem.errorMessage == "function") {
-            result.push(validateItem.errorMessage(property, value));
-          } else {
-            result.push(validateItem.errorMessage as string);
+        if (validateItem.validate) {
+          const validateResult = await validateItem.validate(
+            property,
+            value,
+            validateItem.args as any[]
+          );
+
+          if (!validateResult) {
+            if (typeof validateItem.errorMessage == "function") {
+              result.push(
+                validateItem.errorMessage(
+                  property,
+                  value,
+                  validateItem.args as any[]
+                )
+              );
+            } else {
+              result.push(validateItem.errorMessage as string);
+            }
           }
         }
       }

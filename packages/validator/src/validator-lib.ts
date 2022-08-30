@@ -135,10 +135,21 @@ export type ValidatorDecoratorReturnType = PropertyDecorator &
   ValidatorDecorators &
   ValidatorLib;
 
+export type CustomValidatorFunc = (
+  property: string,
+  value: any,
+  args: any[]
+) => Promise<boolean> | boolean;
+export type CustomValidatorMessageFunc = (
+  property: string,
+  value: any,
+  args: any[]
+) => string;
+
 export type CustomValidatorItem = {
   name: string;
-  validate: (property: string, value: any) => Promise<boolean> | boolean;
-  errorMessage: string | ((property: string, value: any) => string);
+  validate: CustomValidatorFunc;
+  errorMessage: string | CustomValidatorMessageFunc;
 };
 const customValidator: CustomValidatorItem[] = [];
 
@@ -164,13 +175,8 @@ export function createLib(): ValidatorDecoratorReturnType {
   });
 
   customValidator.forEach((validator) => {
-    lib[validator.name] = () =>
-      createCustomValidatorDecorator(
-        lib,
-        validator.validate,
-        validator.name,
-        validator.errorMessage
-      );
+    lib[validator.name] = (...args: any[]) =>
+      createCustomValidatorDecorator(lib, validator, args);
   });
 
   return lib;
