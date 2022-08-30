@@ -2,7 +2,6 @@ import {
   BadRequestException,
   HttpContext,
   isObject,
-  isPlainObject,
   isUndefined,
 } from "@ipare/core";
 import { PipeTransform, TransformArgs } from "@ipare/pipe";
@@ -26,10 +25,6 @@ export class ValidatePipe<T extends object = any, R extends T = any>
 
   async transform(args: TransformArgs<T | R>) {
     const { value, ctx, propertyType } = args;
-
-    if (!this.transformParentEnable(args) && !this.transformModelEnable(args)) {
-      return value;
-    }
 
     const enable = await this.getMetadata<boolean>(
       ctx,
@@ -61,27 +56,35 @@ export class ValidatePipe<T extends object = any, R extends T = any>
     schemaName?: string,
     options?: ValidatorOptions
   ) {
-    const { value } = args;
-    if (!this.transformModelEnable(args)) {
-      return;
-    }
+    const { value, propertyType } = args;
 
-    const errs: ValidationError[] = [];
-    for (const key in value) {
-      const rules = getRules(value, key);
-      const propertyErrs = await this.validate(
-        rules,
-        value[key],
-        key,
+    const errs: (ValidationError | string)[] = [];
+    const rules = getRules(propertyType);
+    for (const rule of rules) {
+      const propertyErrs = await this.validateClassValidator(
+        [rule],
+        isUndefined(value) ? undefined : value[rule.propertyKey as string],
+        rule.propertyKey as string,
         schemaName,
         options
       );
       errs.push(...propertyErrs);
+
+      const customPropertyErrs = await this.validateCustomValidator(
+        [rule],
+        isUndefined(value) ? undefined : value[rule.propertyKey as string],
+        rule.propertyKey as string
+      );
+      errs.push(...customPropertyErrs);
     }
 
     const msgs = errs
-      .filter((item) => !!item.constraints)
-      .map((item) => item.constraints as Record<string, string>);
+      .filter((item) => typeof item == "string" || !!item.constraints)
+      .map((item) =>
+        typeof item == "string"
+          ? item
+          : (item.constraints as Record<string, string>)
+      );
     this.throwMsg(msgs);
   }
 
@@ -91,28 +94,41 @@ export class ValidatePipe<T extends object = any, R extends T = any>
     options?: ValidatorOptions
   ) {
     const { parent, property, propertyKey, parameterIndex } = args;
-    if (!this.transformParentEnable(args)) {
+    if (isUndefined(property)) {
       return;
     }
 
-    const errs = await this.validate(
-      getRules(parent, propertyKey ?? parameterIndex),
+    const rules = getRules(parent, propertyKey ?? parameterIndex);
+    const errs = await this.validateClassValidator(
+      rules,
       args.value,
       property as string,
       schemaName,
       options
     );
-    const msgs = errs
+    const msgs: (Record<string, string> | string)[] = errs
       .filter((item) => !!item.constraints)
       .map((item) => item.constraints as Record<string, string>);
+
+    const customMsgs = await this.validateCustomValidator(
+      rules,
+      args.value,
+      property as string
+    );
+    msgs.push(...customMsgs);
+
     this.throwMsg(msgs);
   }
 
-  private throwMsg(msgs: Record<string, string>[]) {
+  private throwMsg(msgs: (Record<string, string> | string)[]) {
     const list: string[] = [];
     for (const msg of msgs) {
-      for (const key in msg) {
-        list.push(msg[key]);
+      if (typeof msg == "string") {
+        list.push(msg);
+      } else {
+        for (const key in msg) {
+          list.push(msg[key]);
+        }
       }
     }
 
@@ -123,19 +139,7 @@ export class ValidatePipe<T extends object = any, R extends T = any>
     }
   }
 
-  private transformParentEnable(args: TransformArgs<T | R>): boolean {
-    const { property } = args;
-    return !isUndefined(property);
-  }
-
-  private transformModelEnable(args: TransformArgs<T | R>): boolean {
-    const { value } = args;
-    return (
-      typeof value == "object" && !Array.isArray(value) && !isPlainObject(value)
-    );
-  }
-
-  private async validate(
+  private async validateClassValidator(
     rules: RuleRecord[],
     value: any,
     property: string,
@@ -144,8 +148,12 @@ export class ValidatePipe<T extends object = any, R extends T = any>
   ) {
     const result: ValidationError[] = [];
     for (const rule of rules) {
-      for (const validateItem of rule.validates) {
-        const obj = validateItem.createTempObj(property, value);
+      for (const validateItem of rule.validates.filter(
+        (item) => !!item.createTempObj
+      )) {
+        const obj = (
+          validateItem.createTempObj as (property: string, value: any) => object
+        )(property, value);
 
         let msgs: ValidationError[];
         if (schemaName) {
@@ -154,6 +162,34 @@ export class ValidatePipe<T extends object = any, R extends T = any>
           msgs = await validate(obj, options);
         }
         result.push(...msgs);
+      }
+    }
+    return result;
+  }
+
+  private async validateCustomValidator(
+    rules: RuleRecord[],
+    value: any,
+    property: string
+  ) {
+    const result: string[] = [];
+    for (const rule of rules) {
+      for (const validateItem of rule.validates.filter(
+        (item) => !!item.validate
+      )) {
+        const validateResult = await (
+          validateItem.validate as (
+            property: string,
+            value: any
+          ) => Promise<boolean>
+        )(property, value);
+        if (!validateResult) {
+          if (typeof validateItem.errorMessage == "function") {
+            result.push(validateItem.errorMessage(property, value));
+          } else {
+            result.push(validateItem.errorMessage as string);
+          }
+        }
       }
     }
     return result;

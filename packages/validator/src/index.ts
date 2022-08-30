@@ -16,6 +16,13 @@ export {
   ValidatorEnable,
 } from "./decorators";
 export { ValidateItem, RuleRecord } from "./create-decorator";
+export {
+  validatorMethods,
+  ValidatorLib,
+  CustomValidatorItem,
+  ValidatorDecoratorReturnType,
+  addCustomValidator,
+} from "./validator-lib";
 
 declare module "@ipare/core" {
   interface Startup {

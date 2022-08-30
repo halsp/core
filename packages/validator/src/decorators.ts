@@ -6,7 +6,7 @@ import {
   OPTIONS_METADATA,
   SCHAME_METADATA,
 } from "./constant";
-import { createLib, ValidatorLib } from "./validator-lib";
+import { createLib, ValidatorDecoratorReturnType } from "./validator-lib";
 import { RuleRecord } from "./create-decorator";
 import { isNumber, ValidatorOptions } from "class-validator";
 
@@ -41,10 +41,7 @@ export function ValidatorEnable(
   };
 }
 
-export const V = (): PropertyDecorator &
-  ParameterDecorator &
-  ClassDecorator &
-  ValidatorLib => {
+export const V = (): ValidatorDecoratorReturnType => {
   const decorator = () => undefined;
   Object.assign(decorator, createLib());
   return decorator as any;

@@ -1,9 +1,11 @@
 import { METADATA } from "./constant";
-import { ValidatorLib } from "./validator-lib";
+import { ValidatorDecoratorReturnType } from "./validator-lib";
 
 export type ValidateItem = {
-  createTempObj: (property: string, value: any) => object;
+  createTempObj?: (property: string, value: any) => object;
   name: string;
+  validate?: (property: string, value: any) => Promise<boolean> | boolean;
+  errorMessage?: string | ((property: string, value: any) => string);
 };
 
 export type RuleRecord = {
@@ -14,10 +16,10 @@ export type RuleRecord = {
 };
 
 export function createClassValidatorDecorator(
-  lib: ValidatorLib,
+  lib: ValidatorDecoratorReturnType,
   validator: () => PropertyDecorator,
   methodName: string
-): PropertyDecorator & ParameterDecorator & ValidatorLib {
+): ValidatorDecoratorReturnType {
   lib.validates.push({
     createTempObj: (property: string, value: any) => {
       function TestClass() {
@@ -30,6 +32,25 @@ export function createClassValidatorDecorator(
     name: methodName,
   });
 
+  return createDecorator(lib);
+}
+
+export function createCustomValidatorDecorator(
+  lib: ValidatorDecoratorReturnType,
+  validate: (property: string, value: any) => Promise<boolean> | boolean,
+  methodName: string,
+  errorMessage: string | ((property: string, value: any) => string)
+): ValidatorDecoratorReturnType {
+  lib.validates.push({
+    validate,
+    name: methodName,
+    errorMessage,
+  });
+
+  return createDecorator(lib);
+}
+
+function createDecorator(lib: ValidatorDecoratorReturnType) {
   const decorator = function (
     target: any,
     propertyKey?: symbol | string,

@@ -1,6 +1,7 @@
 import * as cv from "class-validator";
 import {
   createClassValidatorDecorator,
+  createCustomValidatorDecorator,
   ValidateItem,
 } from "./create-decorator";
 
@@ -118,19 +119,37 @@ export const validatorMethods = [
   "Allow",
 ] as const;
 
-type ValidatDecorators = {
+export interface ValidatorLib {
+  validates: ValidateItem[];
+}
+
+type ValidatorDecorators = {
   [K in typeof validatorMethods[number]]: ((
     ...args: any[]
-  ) => PropertyDecorator & ParameterDecorator & ValidatDecorators) &
+  ) => ValidatorDecoratorReturnType) &
     typeof cv[K];
 };
 
-export type ValidatorLib = ValidatDecorators & { validates: ValidateItem[] };
+export type ValidatorDecoratorReturnType = PropertyDecorator &
+  ParameterDecorator &
+  ValidatorDecorators &
+  ValidatorLib;
 
-export function createLib(): ValidatorLib {
+export type CustomValidatorItem = {
+  name: string;
+  validate: (property: string, value: any) => Promise<boolean> | boolean;
+  errorMessage: string | ((property: string, value: any) => string);
+};
+const customValidator: CustomValidatorItem[] = [];
+
+export function addCustomValidator(validator: CustomValidatorItem) {
+  customValidator.push(validator);
+}
+
+export function createLib(): ValidatorDecoratorReturnType {
   const lib = {
     validates: [] as ValidateItem[],
-  } as ValidatorLib;
+  } as ValidatorDecoratorReturnType;
 
   validatorMethods.forEach((methodName) => {
     const cvMethod = cv[methodName] as (...args: any[]) => PropertyDecorator;
@@ -142,6 +161,16 @@ export function createLib(): ValidatorLib {
       );
     };
     lib[methodName] = method;
+  });
+
+  customValidator.forEach((validator) => {
+    lib[validator.name] = () =>
+      createCustomValidatorDecorator(
+        lib,
+        validator.validate,
+        validator.name,
+        validator.errorMessage
+      );
   });
 
   return lib;
