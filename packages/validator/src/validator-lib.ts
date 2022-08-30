@@ -136,13 +136,13 @@ export type ValidatorDecoratorReturnType = PropertyDecorator &
   ValidatorLib;
 
 export type CustomValidatorFunc = (
-  property: string,
   value: any,
+  property: string,
   args: any[]
 ) => Promise<boolean> | boolean;
 export type CustomValidatorMessageFunc = (
-  property: string,
   value: any,
+  property: string,
   args: any[]
 ) => string;
 

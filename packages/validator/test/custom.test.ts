@@ -56,7 +56,7 @@ describe("custom", () => {
   it("should validate custom validation for dto", async () => {
     addCustomValidator({
       validate: () => false,
-      errorMessage: (propty) => `${propty}: error`,
+      errorMessage: (value, property) => `${property}: error`,
       name: "CustomDecorator2",
     });
 
@@ -91,8 +91,8 @@ describe("custom", () => {
   it("should validate custom validation with args", async () => {
     addCustomValidator({
       validate: () => false,
-      errorMessage: (propty, value, args) =>
-        `${propty} ${value} ${args.join(",")}`,
+      errorMessage: (value, property, args) =>
+        `${property} ${value} ${args.join(",")}`,
       name: "CustomDecorator3",
     });
 

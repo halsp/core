@@ -179,8 +179,8 @@ export class ValidatePipe<T extends object = any, R extends T = any>
       )) {
         if (validateItem.validate) {
           const validateResult = await validateItem.validate(
-            property,
             value,
+            property,
             validateItem.args as any[]
           );
 
@@ -188,8 +188,8 @@ export class ValidatePipe<T extends object = any, R extends T = any>
             if (typeof validateItem.errorMessage == "function") {
               result.push(
                 validateItem.errorMessage(
-                  property,
                   value,
+                  property,
                   validateItem.args as any[]
                 )
               );
