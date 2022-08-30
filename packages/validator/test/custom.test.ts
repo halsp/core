@@ -128,3 +128,36 @@ describe("methods", () => {
     expect(methods.length > 0).toBeTruthy();
   });
 });
+
+describe("Is", () => {
+  it("should validate by Is decorator", async () => {
+    class TestMiddleware extends Middleware {
+      @V()
+        .Is(() => false, `error1`)
+        .Is(
+          () => false,
+          (v, p) => `${p} Is error2`
+        )
+        .Is(() => true, `not-error3`)
+      @Body("abc")
+      private readonly prop!: string;
+
+      invoke(): void | Promise<void> {
+        this.ok();
+      }
+    }
+
+    const res = await new TestStartup()
+      .skipThrow()
+      .useInject()
+      .useValidator()
+      .add(TestMiddleware)
+      .run();
+
+    expect(res.status).toEqual(400);
+    expect(res.body).toEqual({
+      message: ["error1", "abc Is error2"],
+      status: 400,
+    });
+  });
+});

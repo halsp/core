@@ -121,6 +121,10 @@ export const validatorMethods = [
 
 export interface ValidatorLib {
   validates: ValidateItem[];
+  Is: (
+    validate: (value: any, property: string) => Promise<boolean> | boolean,
+    errorMessage: string | ((value: any, property: string) => string)
+  ) => ValidatorDecoratorReturnType;
 }
 
 type ValidatorDecorators = {
@@ -178,6 +182,19 @@ export function createLib(): ValidatorDecoratorReturnType {
     lib[validator.name] = (...args: any[]) =>
       createCustomValidatorDecorator(lib, validator, args);
   });
+  lib.Is = (
+    validate: CustomValidatorFunc,
+    errorMessage: string | CustomValidatorMessageFunc
+  ) =>
+    createCustomValidatorDecorator(
+      lib,
+      {
+        validate,
+        errorMessage,
+        name: "Is",
+      },
+      []
+    );
 
   return lib;
 }
