@@ -182,8 +182,8 @@ class InjectDecoratorParser<T extends object = any> {
     } else {
       result =
         prop.type == InjectType.Singleton
-          ? await prop.handler(this.obj)
-          : await prop.handler(this.ctx, this.obj);
+          ? await prop.handler(this.obj ?? this.injectConstructor)
+          : await prop.handler(this.ctx, this.obj ?? this.injectConstructor);
       records.push({
         injectKey: prop.handler,
         value: result,
