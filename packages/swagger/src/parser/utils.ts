@@ -1,10 +1,16 @@
-import { isUndefined, ObjectConstructor } from "@ipare/core";
+import { isClass, isUndefined, ObjectConstructor } from "@ipare/core";
 import { PipeReqType } from "@ipare/pipe";
-import { getRules, ValidatorDecoratorReturnType } from "@ipare/validator";
+import {
+  getRules,
+  RuleRecord,
+  ValidateItem,
+  ValidatorDecoratorReturnType,
+} from "@ipare/validator";
 import {
   ComponentsObject,
   OpenApiBuilder,
   ParameterLocation,
+  ReferenceObject,
   SchemaObject,
 } from "openapi3-ts";
 import { setSchemaValue } from "./schema-dict";
@@ -52,6 +58,7 @@ export function pipeTypeToDocType(pipeType: PipeReqType): ParameterLocation {
 
 export function setModelSchema(
   lib: ValidatorDecoratorReturnType,
+  builder: OpenApiBuilder,
   modelType: ObjectConstructor,
   schema: SchemaObject
 ) {
@@ -71,26 +78,68 @@ export function setModelSchema(
     return prev;
   }, {});
   Object.keys(properties).forEach((property) => {
-    const propertyCls = Reflect.getMetadata("design:type", modelType, property);
+    parsePropertyModel(
+      lib,
+      builder,
+      propertiesObject,
+      modelType,
+      property,
+      properties[property]
+    );
 
-    const propertySchema = {
-      type: typeToApiType(propertyCls),
-    } as SchemaObject;
-    propertiesObject[property] = propertySchema;
-
-    const propertyRules = properties[property];
-    setSchemaValue(lib, propertySchema, propertyRules);
-
-    if (propertySchema.nullable == false) {
+    if ((propertiesObject[property] as SchemaObject).nullable == false) {
       requiredProperties.push(property);
     }
   });
 }
 
-export function getComponentSchema(builder: OpenApiBuilder, name: string) {
-  const components = builder.getSpec().components as ComponentsObject;
-  const schemas = components.schemas as Record<string, SchemaObject>;
-  let schema = schemas[name] as SchemaObject;
+export function parsePropertyModel(
+  lib: ValidatorDecoratorReturnType,
+  builder: OpenApiBuilder,
+  propertiesObject: Record<string, SchemaObject | ReferenceObject>,
+  modelType: ObjectConstructor,
+  property: string,
+  rules: RuleRecord[]
+) {
+  const propertyCls = Reflect.getMetadata("design:type", modelType, property);
+
+  if (isClass(propertyCls)) {
+    propertiesObject[property] = {
+      $ref: `#/components/schemas/${propertyCls.name}`,
+    } as ReferenceObject;
+    setSchemaValue(
+      lib,
+      builder,
+      propertiesObject[property] as SchemaObject,
+      rules
+    );
+    setComponentModelSchema(lib, builder, propertyCls);
+  } else {
+    const propertySchema = {
+      type: typeToApiType(propertyCls),
+    } as SchemaObject;
+    propertiesObject[property] = propertySchema;
+    setSchemaValue(lib, builder, propertySchema, rules);
+  }
+}
+
+export function setComponentModelSchema(
+  lib: ValidatorDecoratorReturnType,
+  builder: OpenApiBuilder,
+  modelType: ObjectConstructor
+) {
+  let schema = tryGetComponentSchema(builder, modelType.name);
+  if (!schema) {
+    schema = getComponentSchema(builder, modelType.name);
+    setModelSchema(lib, builder, modelType, schema);
+  }
+}
+
+function getComponentSchema(
+  builder: OpenApiBuilder,
+  name: string
+): SchemaObject {
+  let schema = tryGetComponentSchema(builder, name);
   if (!schema) {
     schema = {
       type: "object",
@@ -99,4 +148,21 @@ export function getComponentSchema(builder: OpenApiBuilder, name: string) {
     builder.addSchema(name, schema);
   }
   return schema;
+}
+
+function tryGetComponentSchema(
+  builder: OpenApiBuilder,
+  name: string
+): SchemaObject | undefined {
+  const components = builder.getSpec().components as ComponentsObject;
+  const schemas = components.schemas as Record<string, SchemaObject>;
+  return schemas[name];
+}
+
+export function getNamedValidates(rules: RuleRecord[], name: string) {
+  const validates: ValidateItem[] = [];
+  rules.forEach((r) => {
+    validates.push(...r.validates.filter((v) => v.name == name));
+  });
+  return validates;
 }

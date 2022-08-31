@@ -13,17 +13,17 @@ import {
 } from "openapi3-ts";
 import "../validator.decorator";
 import {
-  getNamedValidates,
   setActionValue,
   setSchemaValue,
   setParamValue,
   setRequestBodyValue,
 } from "./schema-dict";
 import {
-  getComponentSchema,
+  getNamedValidates,
+  parsePropertyModel,
   pipeTypeToDocType,
+  setComponentModelSchema,
   setModelSchema,
-  typeToApiType,
 } from "./utils";
 
 const jsonTypes = ["application/json"];
@@ -113,7 +113,7 @@ export class Parser {
     };
     pathItem[method] = operation;
     const actionCassRules = this.getActionRules(action);
-    setActionValue(lib, operation, actionCassRules);
+    setActionValue(lib, this.builder, operation, actionCassRules);
 
     const pipeReqRecords = getPipeRecords(action);
     const rules = getRules(action);
@@ -148,7 +148,7 @@ export class Parser {
       return false;
     });
 
-    setRequestBodyValue(lib, requestBody, bodyRules);
+    setRequestBodyValue(lib, this.builder, requestBody, bodyRules);
 
     const mediaTypes: string[] = [];
     if (
@@ -186,17 +186,15 @@ export class Parser {
         typeof mediaSchema.properties,
         undefined
       >;
-      const propertyCls = Reflect.getMetadata(
-        "design:type",
-        action,
-        record.property
-      );
-      const propertySchema = {
-        type: typeToApiType(propertyCls),
-      } as SchemaObject;
-      properties[record.property] = propertySchema;
 
-      setSchemaValue(lib, propertySchema, rules);
+      parsePropertyModel(
+        lib,
+        this.builder,
+        properties,
+        action,
+        record.property,
+        rules
+      );
 
       mediaSchema.required = Object.keys(properties).filter(
         (property) => (properties[property] as SchemaObject).nullable == false
@@ -204,16 +202,17 @@ export class Parser {
     } else {
       const modelType = this.getPipeRecordModelType(action, record);
       if (isClass(modelType)) {
-        setModelSchema(
-          lib,
-          modelType,
-          getComponentSchema(this.builder, modelType.name)
-        );
+        setComponentModelSchema(lib, this.builder, modelType);
         mediaObj.schema = mediaObj.schema ?? {
           type: "object",
           properties: {},
         };
-        setModelSchema(lib, modelType, mediaObj.schema as SchemaObject);
+        setModelSchema(
+          lib,
+          this.builder,
+          modelType,
+          mediaObj.schema as SchemaObject
+        );
       }
     }
   }
@@ -245,11 +244,7 @@ export class Parser {
       const modelType = this.getPipeRecordModelType(action, record);
       if (!modelType) return;
 
-      setModelSchema(
-        lib,
-        modelType,
-        getComponentSchema(this.builder, modelType.name)
-      );
+      setComponentModelSchema(lib, this.builder, modelType);
       this.parseModelParam(optObj, record, modelType);
     }
   }
@@ -293,8 +288,8 @@ export class Parser {
       },
     };
 
-    setParamValue(lib, parameter, rules);
-    setSchemaValue(lib, parameter.schema as SchemaObject, rules);
+    setParamValue(lib, this.builder, parameter, rules);
+    setSchemaValue(lib, this.builder, parameter.schema as SchemaObject, rules);
 
     return parameter;
   }

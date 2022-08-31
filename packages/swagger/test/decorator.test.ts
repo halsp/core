@@ -19,7 +19,7 @@ test("decorators", async () => {
     process.chdir("../..");
   }
   const doc = builder.getSpec();
-  writeFileSync("./test.json", JSON.stringify(doc));
+  // writeFileSync("./test1.json", JSON.stringify(doc));
   expect(
     Object.prototype.hasOwnProperty.call(doc["paths"]["/test"], "post")
   ).toBeTruthy();

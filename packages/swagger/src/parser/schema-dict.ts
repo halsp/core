@@ -1,11 +1,7 @@
 import { isClass } from "@ipare/core";
-import {
-  RuleRecord,
-  ValidateItem,
-  ValidatorDecoratorReturnType,
-} from "@ipare/validator";
-import { SchemaObject } from "openapi3-ts";
-import { setModelSchema } from "./utils";
+import { RuleRecord, ValidatorDecoratorReturnType } from "@ipare/validator";
+import { OpenApiBuilder, ReferenceObject, SchemaObject } from "openapi3-ts";
+import { getNamedValidates, setComponentModelSchema } from "./utils";
 
 type SchemaDictOptionType = {
   optName?: string;
@@ -20,6 +16,7 @@ export type SchemaDictType =
 
 function dynamicSetValue(
   lib: ValidatorDecoratorReturnType,
+  builder: OpenApiBuilder,
   target: object,
   rules: RuleRecord[],
   ...args: SchemaDictType[]
@@ -53,11 +50,10 @@ function dynamicSetValue(
       } else if (options.type == "schema") {
         const schemaValue = args[0];
         if (isClass(schemaValue)) {
+          setComponentModelSchema(lib, builder, schemaValue);
           target[optName] = {
-            type: "object",
-            properties: {},
-          } as SchemaObject;
-          setModelSchema(lib, schemaValue, target[optName]);
+            $ref: `#/components/schemas/${schemaValue.name}`,
+          } as ReferenceObject;
         } else {
           target[optName] = schemaValue;
         }
@@ -72,11 +68,13 @@ function dynamicSetValue(
 
 export function setActionValue(
   lib: ValidatorDecoratorReturnType,
+  builder: OpenApiBuilder,
   target: object,
   rules: RuleRecord[]
 ) {
   dynamicSetValue(
     lib,
+    builder,
     target,
     rules,
     {
@@ -106,11 +104,13 @@ export function setActionValue(
 
 export function setSchemaValue(
   lib: ValidatorDecoratorReturnType,
+  builder: OpenApiBuilder,
   target: SchemaObject,
   rules: RuleRecord[]
 ) {
   dynamicSetValue(
     lib,
+    builder,
     target,
     rules,
     {
@@ -203,11 +203,13 @@ export function setSchemaValue(
 
 export function setParamValue(
   lib: ValidatorDecoratorReturnType,
+  builder: OpenApiBuilder,
   target: object,
   rules: RuleRecord[]
 ) {
   dynamicSetValue(
     lib,
+    builder,
     target,
     rules,
     lib.Description,
@@ -244,19 +246,12 @@ export function setParamValue(
 
 export function setRequestBodyValue(
   lib: ValidatorDecoratorReturnType,
+  builder: OpenApiBuilder,
   target: object,
   rules: RuleRecord[]
 ) {
-  dynamicSetValue(lib, target, rules, lib.Description, {
+  dynamicSetValue(lib, builder, target, rules, lib.Description, {
     func: lib.Required,
     type: "true",
   });
-}
-
-export function getNamedValidates(rules: RuleRecord[], name: string) {
-  const validates: ValidateItem[] = [];
-  rules.forEach((r) => {
-    validates.push(...r.validates.filter((v) => v.name == name));
-  });
-  return validates;
 }
