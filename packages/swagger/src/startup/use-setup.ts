@@ -1,6 +1,6 @@
 import { isUndefined, Startup } from "@ipare/core";
 import { OpenApiBuilder } from "openapi3-ts";
-import { Parser } from "./parser";
+import { Parser } from "../parser";
 import { getSwaggerBody } from "./swagger-body";
 import { SwaggerOptions } from "./swagger-options";
 

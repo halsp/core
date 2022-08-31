@@ -33,6 +33,7 @@
     "@ipare/inject": "^1.8.14",
     "@ipare/pipe": "^1.8.14",
     "@ipare/router": "^1.8.14",
+    "@ipare/validator": "^1.8.14",
     "openapi3-ts": "^3.0.2",
     "reflect-metadata": "^0.1.13"
   },
@@ -55,7 +56,8 @@
     "@ipare/core": "~1",
     "@ipare/inject": "~1",
     "@ipare/pipe": "~1",
-    "@ipare/router": "~1"
+    "@ipare/router": "~1",
+    "@ipare/validator": "~1"
   },
   "peerDependenciesMeta": {
     "@ipare/core": {
@@ -68,6 +70,9 @@
       "optional": true
     },
     "@ipare/pipe": {
+      "optional": true
+    },
+    "@ipare/validator": {
       "optional": true
     }
   },

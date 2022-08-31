@@ -2,8 +2,9 @@ import "@ipare/core";
 import "@ipare/router";
 import { Startup } from "@ipare/core";
 import { USED } from "./constant";
-import { SwaggerOptions } from "./swagger-options";
-import { useSetup } from "./use-setup";
+import { SwaggerOptions } from "./startup/swagger-options";
+import { useSetup } from "./startup/use-setup";
+import "./validator.decorator";
 
 declare module "@ipare/core" {
   interface Startup {
@@ -25,37 +26,4 @@ Startup.prototype.useSwagger = function (
   return useSetup(this, options);
 };
 
-export {
-  ApiTags,
-  ApiSummary,
-  ApiCallback,
-  ApiDeprecated,
-  ApiDescription,
-  ApiExternalDocs,
-  ApiOperationId,
-  ApiResponses,
-  ApiSecurity,
-  ApiServers,
-  DtoDescription,
-  DtoAllowEmptyValue,
-  DtoDeprecated,
-  DtoIgnore,
-  DtoRequired,
-  DtoArrayType,
-  DtoExample,
-  DtoSchema,
-  DtoParameterStyle,
-  DtoDefault,
-  DtoNumRange,
-  DtoLengthRange,
-  DtoPattern,
-  DtoPropertiesRange,
-  DtoReadOnly,
-  DtoTitle,
-  DtoWriteOnly,
-  DtoEnum,
-  DtoFormat,
-  DtoXml,
-  DtoExamples,
-  DtoType,
-} from "./decorators";
+export { S } from "./validator.decorator";

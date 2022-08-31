@@ -1,30 +1,24 @@
 import { Body, Header, Param, Query } from "@ipare/pipe";
 import { Action, HttpPost } from "@ipare/router";
-import {
-  ApiSummary,
-  ApiTags,
-  DtoDeprecated,
-  DtoDescription,
-  DtoRequired,
-} from "../../src";
+import { S } from "../../src";
 
 export class BodyDto {
-  @DtoDescription("sum")
+  @S().Description("sum")
   b1?: string;
   b2?: number;
 }
 
 export class HeaderDto {
-  @DtoDescription("sum")
-  @DtoRequired()
+  @S().Description("sum")
+  @S().Required()
   h1?: string;
 
-  @DtoDeprecated()
+  @S().Deprecated()
   h2?: number;
 }
 
-@ApiSummary("login test")
-@ApiTags("test")
+@S().Summary("login test")
+@S().Tags("test")
 @HttpPost("test/^p")
 export default class extends Action {
   @Header

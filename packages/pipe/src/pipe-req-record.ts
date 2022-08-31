@@ -15,7 +15,7 @@ function getProptotype(target: any) {
   return isClass(target) ? target.prototype : target;
 }
 
-export function getPipeRecords(target: any) {
+export function getPipeRecords(target: any): PipeReqRecord[] {
   target = getProptotype(target);
   return Reflect.getMetadata(PIPE_RECORDS_METADATA, target) ?? [];
 }

@@ -1,43 +1,36 @@
 import { Inject } from "@ipare/inject";
 import { Body, Header } from "@ipare/pipe";
 import { Action } from "@ipare/router";
-import {
-  ApiSummary,
-  ApiTags,
-  DtoDeprecated,
-  DtoDescription,
-  DtoRequired,
-} from "../../src";
+import { S } from "../../src";
 
 export class TestEmptyDto {}
 
 export class TestBodyDto {
-  @DtoDescription("sum")
+  @S().Description("sum")
   b1?: string;
-  @DtoRequired()
+  @S().Required()
   b2?: number;
-  @DtoRequired()
+  @S().Required()
   bigint?: bigint;
-  @DtoRequired()
+  @S().Required()
   bool?: boolean;
-  @DtoRequired()
+  @S().Required()
   arr?: string[];
-  @DtoRequired()
+  @S().Required()
   any?: any;
-  @DtoRequired()
+  @S().Required()
   date?: Date;
 }
 
 export class TestHeaderDto {
-  @DtoDescription("sum")
-  @DtoRequired()
+  @S().Required().Description("sum")
   h1?: string;
 
-  @DtoDeprecated()
+  @S().Deprecated()
   h2?: number;
 }
 
-@ApiTags("test")
+@S().Tags("test")
 @Inject
 export class TestPost extends Action {
   constructor(@Header readonly header: TestHeaderDto) {
@@ -51,7 +44,7 @@ export class TestPost extends Action {
   @Body
   private readonly b!: TestBodyDto;
   @Body("bbb")
-  @DtoRequired()
+  @S().Required()
   private readonly bbb!: string;
 
   async invoke(): Promise<void> {
@@ -59,8 +52,8 @@ export class TestPost extends Action {
   }
 }
 
-@ApiTags("test")
-@ApiSummary("summary")
+@S().Tags("test")
+@S().Summary("summary")
 export class TestGet extends Action {
   @Header
   private readonly h!: TestHeaderDto;
