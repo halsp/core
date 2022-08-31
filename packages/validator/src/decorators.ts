@@ -61,8 +61,11 @@ export function getRules(
   let rules: RuleRecord[] = Reflect.getMetadata(METADATA, target) ?? [];
   rules = rules.filter((rule) => {
     if (isUndefined(propertyOrIndex)) return true;
-    if (isNumber(propertyOrIndex)) return rule.paramIndex == propertyOrIndex;
-    else return rule.propertyKey == propertyOrIndex;
+    if (isNumber(propertyOrIndex)) {
+      return rule.parameterIndex == propertyOrIndex;
+    } else {
+      return rule.propertyKey == propertyOrIndex;
+    }
   });
   return rules;
 }

@@ -15,7 +15,7 @@ export type RuleRecord = {
   validates: ValidateItem[];
   target: any;
   propertyKey?: symbol | string;
-  paramIndex?: number;
+  parameterIndex?: number;
 };
 
 export function createClassValidatorDecorator(
@@ -55,7 +55,7 @@ function createDecorator(lib: ValidatorDecoratorReturnType) {
   const decorator = function (
     target: any,
     propertyKey?: symbol | string,
-    paramIndex?: number
+    parameterIndex?: number
   ) {
     target = target.prototype ?? target;
 
@@ -64,7 +64,7 @@ function createDecorator(lib: ValidatorDecoratorReturnType) {
       validates: lib.validates,
       target,
       propertyKey,
-      paramIndex,
+      parameterIndex,
     });
     Reflect.defineMetadata(METADATA, rules, target);
   };

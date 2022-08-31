@@ -185,14 +185,19 @@ export function createLib(): ValidatorDecoratorReturnType {
   });
 
   customValidator.forEach((validator) => {
-    lib[validator.name] = (...args: any[]) =>
+    const func = (...args: any[]) =>
       createCustomValidatorDecorator(lib, validator, args);
+    Object.defineProperty(func, "name", {
+      get: () => validator.name,
+    });
+
+    lib[validator.name] = func;
   });
-  lib.Is = (
+  lib.Is = function Is(
     validate: CustomValidatorFunc,
     errorMessage: string | CustomValidatorMessageFunc
-  ) =>
-    createCustomValidatorDecorator(
+  ) {
+    return createCustomValidatorDecorator(
       lib,
       {
         validate,
@@ -201,6 +206,7 @@ export function createLib(): ValidatorDecoratorReturnType {
       },
       []
     );
+  };
 
   return libToProxy(lib);
 }
@@ -211,7 +217,7 @@ export function libToProxy(lib: ValidatorDecoratorReturnType) {
       if (p in target) {
         return target[p];
       } else {
-        return (...args: any[]) =>
+        const func = (...args: any[]) =>
           createCustomValidatorDecorator(
             target,
             {
@@ -221,6 +227,10 @@ export function libToProxy(lib: ValidatorDecoratorReturnType) {
             },
             args
           );
+        Object.defineProperty(func, "name", {
+          get: () => p,
+        });
+        return func;
       }
     },
   });
