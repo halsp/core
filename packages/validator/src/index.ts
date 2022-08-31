@@ -22,6 +22,7 @@ export {
   CustomValidatorItem,
   ValidatorDecoratorReturnType,
   addCustomValidator,
+  getCustomValidators,
 } from "./validator-lib";
 
 declare module "@ipare/core" {

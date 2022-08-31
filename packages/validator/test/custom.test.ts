@@ -2,6 +2,7 @@ import { Middleware } from "@ipare/core";
 import { TestStartup } from "@ipare/testing";
 import {
   addCustomValidator,
+  getCustomValidators,
   V,
   ValidatorDecoratorReturnType,
   validatorMethods,
@@ -22,6 +23,18 @@ declare module "../src" {
 }
 
 describe("custom", () => {
+  it("should add custom validator", async () => {
+    addCustomValidator({
+      validate: () => false,
+      errorMessage: "",
+      name: "testname",
+    });
+    const validators = getCustomValidators();
+    expect(
+      validators.filter((item) => item.name == "testname").length > 0
+    ).toBeTruthy();
+  });
+
   it("should validate custom validation", async () => {
     addCustomValidator({
       validate: () => false,

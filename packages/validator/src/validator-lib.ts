@@ -136,6 +136,7 @@ type ValidatorDecorators = {
 
 export type ValidatorDecoratorReturnType = PropertyDecorator &
   ParameterDecorator &
+  ClassDecorator &
   ValidatorDecorators &
   ValidatorLib;
 
@@ -157,8 +158,13 @@ export type CustomValidatorItem = {
 };
 const customValidator: CustomValidatorItem[] = [];
 
+export function getCustomValidators() {
+  return customValidator;
+}
 export function addCustomValidator(validator: CustomValidatorItem) {
-  customValidator.push(validator);
+  if (!customValidator.filter((v) => v.name == validator.name).length) {
+    customValidator.push(validator);
+  }
 }
 
 export function createLib(): ValidatorDecoratorReturnType {
