@@ -30,8 +30,6 @@ declare module "@ipare/validator" {
     Responses: (value: ResponsesObject) => RT;
     OperationId: (value: string) => RT;
 
-    Required: () => RT;
-    AllowEmptyValue: () => RT;
     Style: (value: ParameterStyle) => RT;
     Explode: () => RT;
     AllowReserved: () => RT;
@@ -39,7 +37,6 @@ declare module "@ipare/validator" {
     Example: (value: any) => RT;
     // Content: (value: ContentObject) => RT;
 
-    Nullable: () => RT;
     Discriminator: (value: DiscriminatorObject) => RT;
     ReadOnly: () => RT;
     WriteOnly: () => RT;

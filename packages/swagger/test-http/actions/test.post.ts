@@ -2,19 +2,19 @@ import { Body, Header, Param, Query } from "@ipare/pipe";
 import { Action, HttpPost } from "@ipare/router";
 import { S } from "../../src";
 
-export class BodyDto {
-  @S().Description("sum")
-  b1?: string;
-  b2?: number;
-}
-
 export class HeaderDto {
-  @S().Description("sum")
+  @S().Description("header-h1")
   @S().Required()
   h1?: string;
 
   @S().Deprecated()
   h2?: number;
+}
+
+export class BodyDto {
+  @S().Description("body-b1").Required().Items(HeaderDto)
+  b1?: string;
+  b2?: number;
 }
 
 @S().Summary("login test")

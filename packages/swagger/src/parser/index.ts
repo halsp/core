@@ -1,12 +1,11 @@
 import { isClass, isUndefined, ObjectConstructor } from "@ipare/core";
-import { getPipeRecords, PipeReqRecord, PipeReqType } from "@ipare/pipe";
+import { getPipeRecords, PipeReqRecord } from "@ipare/pipe";
 import { Action, MapItem, RouterOptions } from "@ipare/router";
 import { getRules, RuleRecord, V } from "@ipare/validator";
 import {
   ComponentsObject,
   OpenApiBuilder,
   OperationObject,
-  ParameterLocation,
   ParameterObject,
   PathItemObject,
   RequestBodyObject,
@@ -20,14 +19,11 @@ import {
   setSchemaValue,
   setParamValue,
   setRequestBodyValue,
+  typeToApiType,
+  pipeTypeToDocType,
 } from "./schema-dict";
 
-const jsonTypes = [
-  "application/json-patch+json",
-  "application/json",
-  "text/json",
-  "application/*+json",
-];
+const jsonTypes = ["application/json"];
 
 const lib = V();
 
@@ -194,11 +190,14 @@ export class Parser {
       );
       const propertySchema = {
         type: typeToApiType(propertyCls),
-        nullable: true,
       } as SchemaObject;
       properties[record.property] = propertySchema;
 
       setSchemaValue(lib, propertySchema, rules);
+
+      mediaSchema.required = Object.keys(properties).filter(
+        (property) => (properties[property] as SchemaObject).nullable == false
+      );
     } else {
       const modelType = this.getPipeRecordModelType(action, record);
       if (isClass(modelType)) {
@@ -235,8 +234,7 @@ export class Parser {
 
       const propertySchema = {
         type: typeToApiType(propertyCls),
-        nullable: true,
-      };
+      } as SchemaObject;
       propertiesObject[property] = propertySchema;
 
       const propertyRules = properties[property];
@@ -349,46 +347,5 @@ export class Parser {
       );
     }
     return result;
-  }
-}
-
-function typeToApiType(
-  type?: any
-):
-  | "string"
-  | "number"
-  | "boolean"
-  | "object"
-  | "integer"
-  | "null"
-  | "array"
-  | undefined {
-  if (type == String) {
-    return "string";
-  } else if (type == Number) {
-    return "number";
-  } else if (type == BigInt) {
-    return "integer";
-  } else if (type == Boolean) {
-    return "boolean";
-  } else if (type == Array) {
-    return "array";
-  } else {
-    return "object";
-  }
-}
-
-export function pipeTypeToDocType(pipeType: PipeReqType): ParameterLocation {
-  if (pipeType == "body") {
-    throw new Error();
-  }
-
-  switch (pipeType) {
-    case "header":
-      return "header";
-    case "query":
-      return "query";
-    default:
-      return "path";
   }
 }
