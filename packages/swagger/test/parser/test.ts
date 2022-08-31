@@ -41,6 +41,8 @@ export class TestPost extends Action {
   private readonly h!: TestHeaderDto;
   @Header("h1")
   private readonly h1!: any;
+  @Header
+  private readonly h2!: any;
   @Body
   private readonly b!: TestBodyDto;
   @Body("bbb")

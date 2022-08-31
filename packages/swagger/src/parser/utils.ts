@@ -73,46 +73,54 @@ export function setModelSchema(
       prev[cur.propertyKey as string] || []).push(cur);
     return prev;
   }, {});
-  for (const property in propertiesObject) {
-    const propertyRules = propertiesRules[property];
-    if (existIgnore(rules)) {
+  for (const propertyKey in propertiesRules) {
+    const propertyRules = propertiesRules[propertyKey];
+    if (existIgnore(propertyRules)) {
       continue;
     }
 
-    parsePropertyModel(
+    parseModelProperty(
       builder,
       propertiesObject,
       modelType,
-      property,
+      propertyKey,
       propertyRules
     );
 
-    if ((propertiesObject[property] as SchemaObject).nullable == false) {
-      requiredProperties.push(property);
+    if ((propertiesObject[propertyKey] as SchemaObject).nullable == false) {
+      requiredProperties.push(propertyKey);
     }
   }
 }
 
-export function parsePropertyModel(
+export function parseModelProperty(
   builder: OpenApiBuilder,
   propertiesObject: Record<string, SchemaObject | ReferenceObject>,
   modelType: ObjectConstructor,
-  property: string,
+  propertyKey: string,
   rules: RuleRecord[]
 ) {
-  const propertyCls = Reflect.getMetadata("design:type", modelType, property);
+  const propertyCls = Reflect.getMetadata(
+    "design:type",
+    modelType.prototype,
+    propertyKey
+  );
 
   if (isClass(propertyCls)) {
-    propertiesObject[property] = {
+    propertiesObject[propertyKey] = {
       $ref: `#/components/schemas/${propertyCls.name}`,
     } as ReferenceObject;
-    setSchemaValue(builder, propertiesObject[property] as SchemaObject, rules);
+    setSchemaValue(
+      builder,
+      propertiesObject[propertyKey] as SchemaObject,
+      rules
+    );
     setComponentModelSchema(builder, propertyCls);
   } else {
     const propertySchema = {
       type: typeToApiType(propertyCls),
     } as SchemaObject;
-    propertiesObject[property] = propertySchema;
+    propertiesObject[propertyKey] = propertySchema;
     setSchemaValue(builder, propertySchema, rules);
   }
 }

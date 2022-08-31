@@ -22,7 +22,7 @@ import {
   existIgnore,
   getNamedValidates,
   lib,
-  parsePropertyModel,
+  parseModelProperty,
   pipeTypeToDocType,
   setComponentModelSchema,
   setModelSchema,
@@ -52,7 +52,7 @@ export class Parser {
       if (isIgnore) continue;
 
       getNamedValidates(rules, lib.Tags.name).forEach((v) => {
-        (v.args ?? []).forEach((arg) => {
+        v.args.forEach((arg) => {
           if (!tags.some((t) => t.name == arg)) {
             this.builder.addTag({
               name: arg,
@@ -156,13 +156,17 @@ export class Parser {
     setRequestBodyValue(this.builder, requestBody, bodyRules);
 
     const mediaTypes: string[] = [];
+    const actionRules = rules.filter(
+      (r) => isUndefined(r.propertyKey) && isUndefined(r.parameterIndex)
+    );
     if (
-      !getNamedValidates(bodyRules, lib.RemoveDefaultMediaTypes.name).length
+      !getNamedValidates(actionRules, lib.RemoveDefaultMediaTypes.name).length
     ) {
       mediaTypes.push(...jsonTypes);
     }
-    getNamedValidates(bodyRules, lib.MediaTypes.name).forEach((validate) => {
-      mediaTypes.push(...(validate.args ?? []));
+
+    getNamedValidates(actionRules, lib.MediaTypes.name).forEach((validate) => {
+      mediaTypes.push(...validate.args);
     });
 
     for (const media of mediaTypes) {
@@ -192,7 +196,7 @@ export class Parser {
         undefined
       >;
 
-      parsePropertyModel(
+      parseModelProperty(
         this.builder,
         properties,
         action,
@@ -227,6 +231,7 @@ export class Parser {
     rules: RuleRecord[]
   ) {
     const propertyRules = rules.filter((rule) => {
+      console.log("propertiesRules", rule.propertyKey, rule.parameterIndex);
       if (!isUndefined(record.propertyKey)) {
         return rule.propertyKey == record.propertyKey;
       }
@@ -249,7 +254,7 @@ export class Parser {
       parameters.push(parameter);
     } else {
       const modelType = this.getPipeRecordModelType(action, record);
-      if (!modelType) return;
+      if (!isClass(modelType)) return;
 
       setComponentModelSchema(this.builder, modelType);
       this.parseModelParam(optObj, record, modelType);

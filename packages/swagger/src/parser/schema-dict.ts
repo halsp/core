@@ -39,15 +39,14 @@ function dynamicSetValue(
     }
 
     getNamedValidates(rules, options.func.name).forEach((v) => {
-      const args = v.args ?? [];
       if (options.type == "true") {
         target[optName] = true;
       } else if (options.type == "false") {
         target[optName] = false;
       } else if (options.type == "array") {
-        target[optName] = args;
+        target[optName] = v.args;
       } else if (options.type == "schema") {
-        const schemaValue = args[0];
+        const schemaValue = v.args[0];
         if (isClass(schemaValue)) {
           setComponentModelSchema(builder, schemaValue);
           target[optName] = {
@@ -59,7 +58,7 @@ function dynamicSetValue(
       } else if (options.type == "custom") {
         target[optName] = options.customValue;
       } else {
-        target[optName] = args[0];
+        target[optName] = v.args[0];
       }
     });
   });

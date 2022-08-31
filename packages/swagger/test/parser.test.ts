@@ -16,27 +16,64 @@ function runParserTest(routerMap?: readonly MapItem[]) {
   return apiDoc;
 }
 
-test("parser", async () => {
-  const doc = runParserTest();
-  expect(doc["openapi"]).toBe("3.0.0");
+describe("parser", () => {
+  it("should parse", async () => {
+    const doc = runParserTest();
+    expect(doc["openapi"]).toBe("3.0.0");
+  });
+
+  it("should parse map", async () => {
+    const mapItems = [
+      new MapItem("test.ts", "TestPost", "test1", ["post"]),
+      new MapItem("test.ts", "TestGet", "test1", ["get"]),
+      new MapItem("test.ts", "TestPost", "test2", ["post"]),
+      new MapItem("test.ts", "TestGet", "test2", ["get"]),
+    ];
+    const doc = runParserTest(mapItems);
+    expect(
+      Object.prototype.hasOwnProperty.call(doc["paths"]["/test1"], "post")
+    ).toBeTruthy();
+  });
+
+  it("shoude parse default", async () => {
+    const mapItems = [new MapItem("default.get.ts", "default", "def", ["get"])];
+    const doc = runParserTest(mapItems);
+    expect(
+      Object.prototype.hasOwnProperty.call(doc["paths"]["/def"], "get")
+    ).toBeTruthy();
+  });
+
+  it("shoult parse not-action", async () => {
+    const mapItems = [new MapItem("not-action.ts", "func", "err", ["get"])];
+    const doc = runParserTest(mapItems);
+    expect(doc["paths"]["/err"]["get"]["tags"]).toBeUndefined();
+  });
+
+  // it("should throw error when get pipe records", async () => {
+  //   const mapItems = [
+  //     new MapItem("not-action.ts", "TestClass", "err", ["get"]),
+  //   ];
+  //   const doc = runParserTest(mapItems);
+  //   expect(doc["paths"]["/err"]["get"]["tags"]).toBeUndefined();
+  // });
 });
 
-test("default", async () => {
-  const mapItems = [new MapItem("default.get.ts", "default", "def", ["get"])];
-  const doc = runParserTest(mapItems);
-  expect(
-    Object.prototype.hasOwnProperty.call(doc["paths"]["/def"], "get")
-  ).toBeTruthy();
-});
+describe("media type", () => {
+  it("should add media types", () => {
+    const mapItems = [new MapItem("media.ts", "Add", "add", ["post"])];
+    const doc = runParserTest(mapItems);
 
-test("not action func", async () => {
-  const mapItems = [new MapItem("not-action.ts", "func", "err", ["get"])];
-  const doc = runParserTest(mapItems);
-  expect(doc["paths"]["/err"]["get"]["tags"]).toBeUndefined();
-});
+    expect(
+      Object.keys(doc["paths"]["/add"]["post"]["requestBody"]["content"])
+    ).toEqual(["application/json", "mt"]);
+  });
 
-test("error pipe records", async () => {
-  const mapItems = [new MapItem("not-action.ts", "TestClass", "err", ["get"])];
-  const doc = runParserTest(mapItems);
-  expect(doc["paths"]["/err"]["get"]["tags"]).toBeUndefined();
+  it("should remove default media types", () => {
+    const mapItems = [new MapItem("media.ts", "Remove", "remove", ["post"])];
+    const doc = runParserTest(mapItems);
+
+    expect(
+      Object.keys(doc["paths"]["/remove"]["post"]["requestBody"]["content"])
+    ).toEqual([]);
+  });
 });

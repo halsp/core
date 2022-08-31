@@ -8,7 +8,7 @@ import {
 export type ValidateItem = {
   createTempObj?: (property: string, value: any) => object;
   name: string;
-  args?: any[]; // not be undefined if it is custom validator
+  args: any[];
 } & Partial<CustomValidatorItem>;
 
 export type RuleRecord = {
@@ -33,6 +33,7 @@ export function createClassValidatorDecorator(
       return new TestClass();
     },
     name: methodName,
+    args: [],
   });
 
   return createDecorator(lib);

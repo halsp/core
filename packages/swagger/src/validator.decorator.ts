@@ -71,7 +71,7 @@ declare module "@ipare/validator" {
     MinProperties: (value: number) => RT;
     Enum: (...value: any[]) => RT;
     MediaTypes: (...value: string[]) => RT;
-    RemoveDefaultMediaTypes: (value: string) => RT;
+    RemoveDefaultMediaTypes: () => RT;
   }
 }
 
