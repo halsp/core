@@ -209,3 +209,30 @@ describe("proxy", () => {
     expect(res.status).toEqual(200);
   });
 });
+
+describe("extend", () => {
+  it("should validated by extend decorator", async () => {
+    class TestMiddleware extends Middleware {
+      @V().Required()
+      @Body("abc")
+      private readonly prop!: string;
+
+      invoke(): void | Promise<void> {
+        this.ok();
+      }
+    }
+
+    const res = await new TestStartup()
+      .skipThrow()
+      .useInject()
+      .useValidator()
+      .add(TestMiddleware)
+      .run();
+
+    expect(res.status).toEqual(400);
+    expect(res.body).toEqual({
+      message: "abc should not be empty",
+      status: 400,
+    });
+  });
+});

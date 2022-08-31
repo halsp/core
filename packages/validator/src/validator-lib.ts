@@ -119,6 +119,10 @@ export const validatorMethods = [
   "Allow",
 ] as const;
 
+const extendMap = {
+  Required: "IsNotEmpty",
+} as const;
+
 export interface ValidatorLib {
   validates: ValidateItem[];
   Is: (
@@ -129,9 +133,14 @@ export interface ValidatorLib {
 
 type ValidatorDecorators = {
   [K in typeof validatorMethods[number]]: ((
-    ...args: any[]
+    ...args: Parameters<typeof cv[K]>
   ) => ValidatorDecoratorReturnType) &
     typeof cv[K];
+} & {
+  [K in keyof typeof extendMap]: ((
+    ...args: Parameters<typeof cv[typeof extendMap[K]]>
+  ) => ValidatorDecoratorReturnType) &
+    typeof cv[typeof extendMap[K]];
 };
 
 export type ValidatorDecoratorReturnType = PropertyDecorator &
@@ -181,8 +190,28 @@ export function createLib(): ValidatorDecoratorReturnType {
         methodName
       );
     };
+    Object.defineProperty(method, "name", {
+      get: () => methodName,
+    });
     lib[methodName] = method;
   });
+
+  for (const key in extendMap) {
+    const cvName = extendMap[key];
+    const extendName = key;
+    const cvMethod = cv[cvName] as (...args: any[]) => PropertyDecorator;
+    const method = (...args: []) => {
+      return createClassValidatorDecorator(
+        lib,
+        () => cvMethod(...args),
+        extendName
+      );
+    };
+    Object.defineProperty(method, "name", {
+      get: () => extendName,
+    });
+    lib[extendName] = method;
+  }
 
   customValidator.forEach((validator) => {
     const func = (...args: any[]) =>
@@ -191,8 +220,11 @@ export function createLib(): ValidatorDecoratorReturnType {
       get: () => validator.name,
     });
 
-    lib[validator.name] = func;
+    if (!(validator.name in lib)) {
+      lib[validator.name] = func;
+    }
   });
+
   lib.Is = function Is(
     validate: CustomValidatorFunc,
     errorMessage: string | CustomValidatorMessageFunc
