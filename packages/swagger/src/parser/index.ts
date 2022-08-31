@@ -1,7 +1,7 @@
 import { isClass, isUndefined, ObjectConstructor } from "@ipare/core";
 import { getPipeRecords, PipeReqRecord } from "@ipare/pipe";
 import { Action, MapItem, RouterOptions } from "@ipare/router";
-import { getRules, RuleRecord, V } from "@ipare/validator";
+import { getRules, RuleRecord } from "@ipare/validator";
 import {
   OpenApiBuilder,
   OperationObject,
@@ -19,7 +19,9 @@ import {
   setRequestBodyValue,
 } from "./schema-dict";
 import {
+  existIgnore,
   getNamedValidates,
+  lib,
   parsePropertyModel,
   pipeTypeToDocType,
   setComponentModelSchema,
@@ -27,8 +29,6 @@ import {
 } from "./utils";
 
 const jsonTypes = ["application/json"];
-
-const lib = V();
 
 export class Parser {
   constructor(
@@ -48,9 +48,7 @@ export class Parser {
     for (const mapItem of this.routerMap) {
       const action = mapItem.getAction(this.routerOptions.dir);
       const rules = this.getActionRules(action);
-      const isIgnore = rules.some((rule) =>
-        rule.validates.some((v) => v.name == lib.Ignore.name)
-      );
+      const isIgnore = existIgnore(rules);
       if (isIgnore) continue;
 
       getNamedValidates(rules, lib.Tags.name).forEach((v) => {
@@ -107,13 +105,18 @@ export class Parser {
     method: string,
     action: ObjectConstructor<Action>
   ) {
+    const actionClassRules = this.getActionRules(action);
+    if (existIgnore(actionClassRules)) {
+      return;
+    }
+
     const operation = {
       responses: {},
       parameters: [],
     };
     pathItem[method] = operation;
-    const actionCassRules = this.getActionRules(action);
-    setActionValue(lib, this.builder, operation, actionCassRules);
+
+    setActionValue(this.builder, operation, actionClassRules);
 
     const pipeReqRecords = getPipeRecords(action);
     const rules = getRules(action);
@@ -133,11 +136,6 @@ export class Parser {
     record: PipeReqRecord,
     rules: RuleRecord[]
   ) {
-    const requestBody = (optObj.requestBody as RequestBodyObject) ?? {
-      content: {},
-    };
-    optObj.requestBody = requestBody;
-
     const bodyRules = rules.filter((rule) => {
       if (!isUndefined(record.propertyKey)) {
         return rule.propertyKey == record.propertyKey;
@@ -147,8 +145,15 @@ export class Parser {
       }
       return false;
     });
+    if (existIgnore(bodyRules)) {
+      return;
+    }
 
-    setRequestBodyValue(lib, this.builder, requestBody, bodyRules);
+    const requestBody = (optObj.requestBody as RequestBodyObject) ?? {
+      content: {},
+    };
+    optObj.requestBody = requestBody;
+    setRequestBodyValue(this.builder, requestBody, bodyRules);
 
     const mediaTypes: string[] = [];
     if (
@@ -188,7 +193,6 @@ export class Parser {
       >;
 
       parsePropertyModel(
-        lib,
         this.builder,
         properties,
         action,
@@ -202,13 +206,12 @@ export class Parser {
     } else {
       const modelType = this.getPipeRecordModelType(action, record);
       if (isClass(modelType)) {
-        setComponentModelSchema(lib, this.builder, modelType);
+        setComponentModelSchema(this.builder, modelType);
         mediaObj.schema = mediaObj.schema ?? {
           type: "object",
           properties: {},
         };
         setModelSchema(
-          lib,
           this.builder,
           modelType,
           mediaObj.schema as SchemaObject
@@ -223,28 +226,32 @@ export class Parser {
     record: PipeReqRecord,
     rules: RuleRecord[]
   ) {
+    const propertyRules = rules.filter((rule) => {
+      if (!isUndefined(record.propertyKey)) {
+        return rule.propertyKey == record.propertyKey;
+      }
+      if (!isUndefined(record.parameterIndex)) {
+        return rule.parameterIndex == record.parameterIndex;
+      }
+      return false;
+    });
+    if (existIgnore(propertyRules)) {
+      return;
+    }
+
     if (record.property) {
       const parameters = optObj.parameters as ParameterObject[];
-      const paramterRules = rules.filter((rule) => {
-        if (!isUndefined(record.propertyKey)) {
-          return rule.propertyKey == record.propertyKey;
-        }
-        if (!isUndefined(record.parameterIndex)) {
-          return rule.parameterIndex == record.parameterIndex;
-        }
-        return false;
-      });
       const parameter = this.createParameter(
         record.property,
         record,
-        paramterRules
+        propertyRules
       );
       parameters.push(parameter);
     } else {
       const modelType = this.getPipeRecordModelType(action, record);
       if (!modelType) return;
 
-      setComponentModelSchema(lib, this.builder, modelType);
+      setComponentModelSchema(this.builder, modelType);
       this.parseModelParam(optObj, record, modelType);
     }
   }
@@ -259,19 +266,23 @@ export class Parser {
     const rules = getRules(modelType).filter(
       (rule) => !isUndefined(rule.propertyKey)
     );
-    const properties = rules.reduce((prev, cur) => {
+    const propertiesRules = rules.reduce((prev, cur) => {
       (prev[cur.propertyKey as string] =
         prev[cur.propertyKey as string] || []).push(cur);
       return prev;
     }, {});
-    Object.keys(properties).forEach((property) => {
+    for (const property in propertiesRules) {
+      if (existIgnore(propertiesRules[property])) {
+        continue;
+      }
+
       const parameter = this.createParameter(
         property,
         record,
-        properties[property]
+        propertiesRules[property]
       );
       parameters.push(parameter);
-    });
+    }
   }
 
   private createParameter(
@@ -288,8 +299,8 @@ export class Parser {
       },
     };
 
-    setParamValue(lib, this.builder, parameter, rules);
-    setSchemaValue(lib, this.builder, parameter.schema as SchemaObject, rules);
+    setParamValue(this.builder, parameter, rules);
+    setSchemaValue(this.builder, parameter.schema as SchemaObject, rules);
 
     return parameter;
   }

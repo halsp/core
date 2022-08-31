@@ -1,11 +1,6 @@
 import { isClass, isUndefined, ObjectConstructor } from "@ipare/core";
 import { PipeReqType } from "@ipare/pipe";
-import {
-  getRules,
-  RuleRecord,
-  ValidateItem,
-  ValidatorDecoratorReturnType,
-} from "@ipare/validator";
+import { getRules, RuleRecord, V, ValidateItem } from "@ipare/validator";
 import {
   ComponentsObject,
   OpenApiBuilder,
@@ -14,6 +9,8 @@ import {
   SchemaObject,
 } from "openapi3-ts";
 import { setSchemaValue } from "./schema-dict";
+
+export const lib = V();
 
 export function typeToApiType(
   type?: any
@@ -57,7 +54,6 @@ export function pipeTypeToDocType(pipeType: PipeReqType): ParameterLocation {
 }
 
 export function setModelSchema(
-  lib: ValidatorDecoratorReturnType,
   builder: OpenApiBuilder,
   modelType: ObjectConstructor,
   schema: SchemaObject
@@ -72,29 +68,32 @@ export function setModelSchema(
   const rules = getRules(modelType).filter(
     (rule) => !isUndefined(rule.propertyKey)
   );
-  const properties = rules.reduce((prev, cur) => {
+  const propertiesRules = rules.reduce((prev, cur) => {
     (prev[cur.propertyKey as string] =
       prev[cur.propertyKey as string] || []).push(cur);
     return prev;
   }, {});
-  Object.keys(properties).forEach((property) => {
+  for (const property in propertiesObject) {
+    const propertyRules = propertiesRules[property];
+    if (existIgnore(rules)) {
+      continue;
+    }
+
     parsePropertyModel(
-      lib,
       builder,
       propertiesObject,
       modelType,
       property,
-      properties[property]
+      propertyRules
     );
 
     if ((propertiesObject[property] as SchemaObject).nullable == false) {
       requiredProperties.push(property);
     }
-  });
+  }
 }
 
 export function parsePropertyModel(
-  lib: ValidatorDecoratorReturnType,
   builder: OpenApiBuilder,
   propertiesObject: Record<string, SchemaObject | ReferenceObject>,
   modelType: ObjectConstructor,
@@ -107,31 +106,25 @@ export function parsePropertyModel(
     propertiesObject[property] = {
       $ref: `#/components/schemas/${propertyCls.name}`,
     } as ReferenceObject;
-    setSchemaValue(
-      lib,
-      builder,
-      propertiesObject[property] as SchemaObject,
-      rules
-    );
-    setComponentModelSchema(lib, builder, propertyCls);
+    setSchemaValue(builder, propertiesObject[property] as SchemaObject, rules);
+    setComponentModelSchema(builder, propertyCls);
   } else {
     const propertySchema = {
       type: typeToApiType(propertyCls),
     } as SchemaObject;
     propertiesObject[property] = propertySchema;
-    setSchemaValue(lib, builder, propertySchema, rules);
+    setSchemaValue(builder, propertySchema, rules);
   }
 }
 
 export function setComponentModelSchema(
-  lib: ValidatorDecoratorReturnType,
   builder: OpenApiBuilder,
   modelType: ObjectConstructor
 ) {
   let schema = tryGetComponentSchema(builder, modelType.name);
   if (!schema) {
     schema = getComponentSchema(builder, modelType.name);
-    setModelSchema(lib, builder, modelType, schema);
+    setModelSchema(builder, modelType, schema);
   }
 }
 
@@ -165,4 +158,8 @@ export function getNamedValidates(rules: RuleRecord[], name: string) {
     validates.push(...r.validates.filter((v) => v.name == name));
   });
   return validates;
+}
+
+export function existIgnore(rules: RuleRecord[]) {
+  return rules.some((r) => r.validates.some((v) => v.name == lib.Ignore.name));
 }

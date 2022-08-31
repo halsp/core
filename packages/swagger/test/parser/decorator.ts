@@ -11,7 +11,7 @@ export class TestDecoratorHeaderDto {
     .ReadOnly()
     .Matches("^[a-z]$")
     .Example("def")
-    .AllowEmptyValue()
+    .IsOptional()
   p1!: string;
 
   @S().Examples({

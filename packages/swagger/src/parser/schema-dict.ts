@@ -1,7 +1,7 @@
 import { isClass } from "@ipare/core";
 import { RuleRecord, ValidatorDecoratorReturnType } from "@ipare/validator";
 import { OpenApiBuilder, ReferenceObject, SchemaObject } from "openapi3-ts";
-import { getNamedValidates, setComponentModelSchema } from "./utils";
+import { getNamedValidates, lib, setComponentModelSchema } from "./utils";
 
 type SchemaDictOptionType = {
   optName?: string;
@@ -15,7 +15,6 @@ export type SchemaDictType =
   | ((...args: any[]) => ValidatorDecoratorReturnType);
 
 function dynamicSetValue(
-  lib: ValidatorDecoratorReturnType,
   builder: OpenApiBuilder,
   target: object,
   rules: RuleRecord[],
@@ -50,7 +49,7 @@ function dynamicSetValue(
       } else if (options.type == "schema") {
         const schemaValue = args[0];
         if (isClass(schemaValue)) {
-          setComponentModelSchema(lib, builder, schemaValue);
+          setComponentModelSchema(builder, schemaValue);
           target[optName] = {
             $ref: `#/components/schemas/${schemaValue.name}`,
           } as ReferenceObject;
@@ -67,13 +66,11 @@ function dynamicSetValue(
 }
 
 export function setActionValue(
-  lib: ValidatorDecoratorReturnType,
   builder: OpenApiBuilder,
   target: object,
   rules: RuleRecord[]
 ) {
   dynamicSetValue(
-    lib,
     builder,
     target,
     rules,
@@ -103,13 +100,11 @@ export function setActionValue(
 }
 
 export function setSchemaValue(
-  lib: ValidatorDecoratorReturnType,
   builder: OpenApiBuilder,
   target: SchemaObject,
   rules: RuleRecord[]
 ) {
   dynamicSetValue(
-    lib,
     builder,
     target,
     rules,
@@ -202,13 +197,11 @@ export function setSchemaValue(
 }
 
 export function setParamValue(
-  lib: ValidatorDecoratorReturnType,
   builder: OpenApiBuilder,
   target: object,
   rules: RuleRecord[]
 ) {
   dynamicSetValue(
-    lib,
     builder,
     target,
     rules,
@@ -245,12 +238,11 @@ export function setParamValue(
 }
 
 export function setRequestBodyValue(
-  lib: ValidatorDecoratorReturnType,
   builder: OpenApiBuilder,
   target: object,
   rules: RuleRecord[]
 ) {
-  dynamicSetValue(lib, builder, target, rules, lib.Description, {
+  dynamicSetValue(builder, target, rules, lib.Description, {
     func: lib.Required,
     type: "true",
   });
