@@ -3,7 +3,6 @@ import { getPipeRecords, PipeReqRecord } from "@ipare/pipe";
 import { Action, MapItem, RouterOptions } from "@ipare/router";
 import { getRules, RuleRecord, V } from "@ipare/validator";
 import {
-  ComponentsObject,
   OpenApiBuilder,
   OperationObject,
   ParameterObject,
@@ -19,9 +18,13 @@ import {
   setSchemaValue,
   setParamValue,
   setRequestBodyValue,
-  typeToApiType,
-  pipeTypeToDocType,
 } from "./schema-dict";
+import {
+  getComponentSchema,
+  pipeTypeToDocType,
+  setModelSchema,
+  typeToApiType,
+} from "./utils";
 
 const jsonTypes = ["application/json"];
 
@@ -201,59 +204,18 @@ export class Parser {
     } else {
       const modelType = this.getPipeRecordModelType(action, record);
       if (isClass(modelType)) {
-        this.setModelSchema(modelType, this.getComponentSchema(modelType.name));
+        setModelSchema(
+          lib,
+          modelType,
+          getComponentSchema(this.builder, modelType.name)
+        );
         mediaObj.schema = mediaObj.schema ?? {
           type: "object",
           properties: {},
         };
-        this.setModelSchema(modelType, mediaObj.schema as SchemaObject);
+        setModelSchema(lib, modelType, mediaObj.schema as SchemaObject);
       }
     }
-  }
-
-  private setModelSchema(modelType: ObjectConstructor, schema: SchemaObject) {
-    const propertiesObject = schema.properties as Exclude<
-      typeof schema.properties,
-      undefined
-    >;
-
-    const rules = getRules(modelType).filter(
-      (rule) => !isUndefined(rule.propertyKey)
-    );
-    const properties = rules.reduce((prev, cur) => {
-      (prev[cur.propertyKey as string] =
-        prev[cur.propertyKey as string] || []).push(cur);
-      return prev;
-    }, {});
-    Object.keys(properties).forEach((property) => {
-      const propertyCls = Reflect.getMetadata(
-        "design:type",
-        modelType,
-        property
-      );
-
-      const propertySchema = {
-        type: typeToApiType(propertyCls),
-      } as SchemaObject;
-      propertiesObject[property] = propertySchema;
-
-      const propertyRules = properties[property];
-      setSchemaValue(lib, propertySchema, propertyRules);
-    });
-  }
-
-  private getComponentSchema(name: string) {
-    const components = this.builder.getSpec().components as ComponentsObject;
-    const schemas = components.schemas as Record<string, SchemaObject>;
-    let schema = schemas[name] as SchemaObject;
-    if (!schema) {
-      schema = {
-        type: "object",
-        properties: {},
-      };
-      this.builder.addSchema(name, schema);
-    }
-    return schema;
   }
 
   private parseParam(
@@ -282,6 +244,12 @@ export class Parser {
     } else {
       const modelType = this.getPipeRecordModelType(action, record);
       if (!modelType) return;
+
+      setModelSchema(
+        lib,
+        modelType,
+        getComponentSchema(this.builder, modelType.name)
+      );
       this.parseModelParam(optObj, record, modelType);
     }
   }
