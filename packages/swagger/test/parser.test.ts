@@ -77,3 +77,69 @@ describe("media type", () => {
     ).toEqual([]);
   });
 });
+
+describe("ignore", () => {
+  it("should ignore action", async () => {
+    const mapItems = [
+      new MapItem("ignore.ts", "IgnoreAction", "ignore", ["post"]),
+    ];
+    const doc = runParserTest(mapItems);
+
+    expect(doc["paths"]["/ignore"]).toEqual({});
+  });
+
+  it("should ignore property", async () => {
+    const mapItems = [
+      new MapItem("ignore.ts", "IgnoreProperty", "ignore", ["post"]),
+    ];
+    const doc = runParserTest(mapItems);
+
+    expect(doc["paths"]["/ignore"]["post"]["parameters"]).toEqual([]);
+  });
+
+  it("should ignore param", async () => {
+    const mapItems = [
+      new MapItem("ignore.ts", "IgnoreParam", "ignore", ["post"]),
+    ];
+    const doc = runParserTest(mapItems);
+
+    expect(doc["paths"]["/ignore"]["post"]["parameters"]).toEqual([]);
+  });
+
+  it("should ignore body model property", async () => {
+    const mapItems = [
+      new MapItem("ignore.ts", "IgnoreBodyModel", "ignore", ["post"]),
+    ];
+    const doc = runParserTest(mapItems);
+
+    expect(
+      doc["paths"]["/ignore"]["post"]["requestBody"]["content"][
+        "application/json"
+      ]["schema"]["properties"]
+    ).toEqual({
+      b1: {
+        nullable: false,
+        type: "string",
+      },
+    });
+  });
+
+  it("should ignore param model property", async () => {
+    const mapItems = [
+      new MapItem("ignore.ts", "IgnoreParamModel", "ignore", ["post"]),
+    ];
+    const doc = runParserTest(mapItems);
+
+    expect(doc["paths"]["/ignore"]["post"]["parameters"]).toEqual([
+      {
+        name: "b1",
+        in: "header",
+        required: true,
+        schema: {
+          nullable: false,
+          type: "string",
+        },
+      },
+    ]);
+  });
+});

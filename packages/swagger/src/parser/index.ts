@@ -139,11 +139,9 @@ export class Parser {
     const bodyRules = rules.filter((rule) => {
       if (!isUndefined(record.propertyKey)) {
         return rule.propertyKey == record.propertyKey;
-      }
-      if (!isUndefined(record.parameterIndex)) {
+      } else {
         return rule.parameterIndex == record.parameterIndex;
       }
-      return false;
     });
     if (existIgnore(bodyRules)) {
       return;
@@ -190,7 +188,6 @@ export class Parser {
         properties: {},
       };
       const mediaSchema = mediaObj.schema as SchemaObject;
-      mediaSchema.properties = mediaSchema.properties ?? {};
       const properties = mediaSchema.properties as Exclude<
         typeof mediaSchema.properties,
         undefined
@@ -231,14 +228,11 @@ export class Parser {
     rules: RuleRecord[]
   ) {
     const propertyRules = rules.filter((rule) => {
-      console.log("propertiesRules", rule.propertyKey, rule.parameterIndex);
       if (!isUndefined(record.propertyKey)) {
         return rule.propertyKey == record.propertyKey;
-      }
-      if (!isUndefined(record.parameterIndex)) {
+      } else {
         return rule.parameterIndex == record.parameterIndex;
       }
-      return false;
     });
     if (existIgnore(propertyRules)) {
       return;
