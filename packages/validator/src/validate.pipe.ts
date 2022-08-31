@@ -148,20 +148,18 @@ export class ValidatePipe<T extends object = any, R extends T = any>
   ) {
     const result: ValidationError[] = [];
     for (const rule of rules) {
-      for (const validateItem of rule.validates.filter(
-        (item) => !!item.createTempObj
-      )) {
-        const obj = (
-          validateItem.createTempObj as (property: string, value: any) => object
-        )(property, value);
+      for (const validateItem of rule.validates) {
+        if (validateItem.createTempObj) {
+          const obj = validateItem.createTempObj(property, value);
 
-        let msgs: ValidationError[];
-        if (schemaName) {
-          msgs = await validate(schemaName, obj, options);
-        } else {
-          msgs = await validate(obj, options);
+          let msgs: ValidationError[];
+          if (schemaName) {
+            msgs = await validate(schemaName, obj, options);
+          } else {
+            msgs = await validate(obj, options);
+          }
+          result.push(...msgs);
         }
-        result.push(...msgs);
       }
     }
     return result;

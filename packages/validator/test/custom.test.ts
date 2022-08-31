@@ -3,6 +3,7 @@ import { TestStartup } from "@ipare/testing";
 import {
   addCustomValidator,
   getCustomValidators,
+  getRules,
   V,
   ValidatorDecoratorReturnType,
   validatorMethods,
@@ -19,6 +20,7 @@ declare module "../src" {
       arg1: string,
       arg2: number
     ) => ValidatorDecoratorReturnType;
+    NotExist: () => ValidatorDecoratorReturnType;
   }
 }
 
@@ -172,5 +174,38 @@ describe("Is", () => {
       message: ["error1", "abc Is error2"],
       status: 400,
     });
+  });
+});
+
+describe("proxy", () => {
+  it("should create not-existed decorator", () => {
+    class TestClass {
+      @V().NotExist().IsString().NotExist()
+      private readonly prop!: string;
+    }
+
+    expect(getRules(TestClass).length).toBe(1);
+    expect(getRules(TestClass)[0].validates.length).toBe(3);
+  });
+
+  it("should not validate when use not-existed decorator", async () => {
+    class TestMiddleware extends Middleware {
+      @V().NotExist()
+      @Body("abc")
+      private readonly prop!: string;
+
+      invoke(): void | Promise<void> {
+        this.ok();
+      }
+    }
+
+    const res = await new TestStartup()
+      .skipThrow()
+      .useInject()
+      .useValidator()
+      .add(TestMiddleware)
+      .run();
+
+    expect(res.status).toEqual(200);
   });
 });

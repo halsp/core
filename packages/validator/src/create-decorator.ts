@@ -1,6 +1,7 @@
 import { METADATA } from "./constant";
 import {
   CustomValidatorItem,
+  libToProxy,
   ValidatorDecoratorReturnType,
 } from "./validator-lib";
 
@@ -68,5 +69,5 @@ function createDecorator(lib: ValidatorDecoratorReturnType) {
     Reflect.defineMetadata(METADATA, rules, target);
   };
   Object.assign(decorator, lib);
-  return decorator as any;
+  return libToProxy(decorator as any);
 }

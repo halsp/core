@@ -6,7 +6,11 @@ import {
   OPTIONS_METADATA,
   SCHAME_METADATA,
 } from "./constant";
-import { createLib, ValidatorDecoratorReturnType } from "./validator-lib";
+import {
+  createLib,
+  libToProxy,
+  ValidatorDecoratorReturnType,
+} from "./validator-lib";
 import { RuleRecord } from "./create-decorator";
 import { isNumber, ValidatorOptions } from "class-validator";
 
@@ -44,7 +48,7 @@ export function ValidatorEnable(
 export const V = (): ValidatorDecoratorReturnType => {
   const decorator = () => undefined;
   Object.assign(decorator, createLib());
-  return decorator as any;
+  return libToProxy(decorator as any);
 };
 
 export function getRules(

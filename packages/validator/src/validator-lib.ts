@@ -202,5 +202,26 @@ export function createLib(): ValidatorDecoratorReturnType {
       []
     );
 
-  return lib;
+  return libToProxy(lib);
+}
+
+export function libToProxy(lib: ValidatorDecoratorReturnType) {
+  return new Proxy(lib, {
+    get: (target, p) => {
+      if (p in target) {
+        return target[p];
+      } else {
+        return (...args: any[]) =>
+          createCustomValidatorDecorator(
+            target,
+            {
+              validate: () => true,
+              name: p as string,
+              errorMessage: "",
+            },
+            args
+          );
+      }
+    },
+  });
 }
