@@ -31,7 +31,7 @@ export class IgnoreParam extends Action {
 
 class TestDto {
   @S().Required()
-  b1!: string;
+  b1!: Date;
 
   @S().Required().Ignore()
   b2!: string;

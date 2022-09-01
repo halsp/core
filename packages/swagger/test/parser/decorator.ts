@@ -64,8 +64,11 @@ class TestDecoratorBodyDto {
   @S().Items(TestClassDto)
   p2!: number[];
 
+  @S().Items(Number)
+  p3!: number[];
+
   @S().Required().Description("abc")
-  p3!: TestClassDto;
+  p4!: TestClassDto;
 }
 
 export class TestDecoratorQueryDto {

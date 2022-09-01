@@ -18,9 +18,9 @@ export class BodyDto {
 }
 
 export class ResultDto {
-  @S().Description("result-b1").Required()
+  @S().Description("result-b1").Required().Items(String)
   b1?: string;
-  @S().Property()
+  @S()
   b2?: number;
   @S().Deprecated()
   b3?: BodyDto;

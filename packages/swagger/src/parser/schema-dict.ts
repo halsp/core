@@ -17,7 +17,9 @@ import {
   getNamedValidates,
   jsonTypes,
   lib,
+  typeToApiType,
   setComponentModelSchema,
+  typeToFormatType,
 } from "./utils";
 
 type SchemaDictOptionType = {
@@ -33,7 +35,7 @@ export type SchemaDictType =
 
 function dynamicSetValue(
   builder: OpenApiBuilder,
-  target: object,
+  target: any,
   rules: RuleRecord[],
   ...args: SchemaDictType[]
 ) {
@@ -64,13 +66,21 @@ function dynamicSetValue(
         target[optName] = v.args;
       } else if (options.type == "schema") {
         const schemaValue = v.args[0];
-        if (isClass(schemaValue)) {
-          setComponentModelSchema(builder, schemaValue);
-          target[optName] = {
-            $ref: `#/components/schemas/${schemaValue.name}`,
-          } as ReferenceObject;
+        const type = typeToApiType(schemaValue);
+        if (type == "object") {
+          if (isClass(schemaValue)) {
+            setComponentModelSchema(builder, schemaValue);
+            target[optName] = {
+              $ref: `#/components/schemas/${schemaValue.name}`,
+            } as ReferenceObject;
+          } else {
+            target[optName] = schemaValue;
+          }
         } else {
-          target[optName] = schemaValue;
+          target[optName] = {
+            type: type,
+            format: typeToFormatType(schemaValue),
+          };
         }
       } else if (options.type == "custom") {
         target[optName] = options.customValue;

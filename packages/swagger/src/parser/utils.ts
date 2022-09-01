@@ -22,14 +22,28 @@ export function typeToApiType(
     return "string";
   } else if (type == Number) {
     return "number";
-  } else if (type == BigInt) {
-    return "integer";
   } else if (type == Boolean) {
     return "boolean";
   } else if (type == Array) {
     return "array";
+  } else if (type == Date) {
+    return "string";
   } else {
     return "object";
+  }
+}
+
+export function typeToFormatType(type?: any) {
+  if (!type) {
+    return undefined;
+  } else if (type == String) {
+    return "string";
+  } else if (type == Number) {
+    return "int32";
+  } else if (type == Date) {
+    return "date";
+  } else {
+    return undefined;
   }
 }
 
@@ -114,6 +128,7 @@ export function parseModelProperty(
   } else {
     const propertySchema = {
       type: typeToApiType(propertyCls),
+      format: typeToFormatType(propertyCls),
     } as SchemaObject;
     propertiesObject[propertyKey] = propertySchema;
     setSchemaValue(builder, propertySchema, rules);

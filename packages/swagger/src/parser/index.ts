@@ -28,6 +28,7 @@ import {
   setComponentModelSchema,
   setModelSchema,
   typeToApiType,
+  typeToFormatType,
 } from "./utils";
 
 export class Parser {
@@ -303,6 +304,7 @@ export class Parser {
       required: record.type == "param",
       schema: {
         type: typeToApiType(paramType),
+        format: typeToFormatType(paramType),
       },
     };
 

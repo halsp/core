@@ -132,6 +132,7 @@ describe("ignore", () => {
       ]["schema"]["properties"]
     ).toEqual({
       b1: {
+        format: "date",
         nullable: false,
         type: "string",
       },
@@ -150,6 +151,7 @@ describe("ignore", () => {
         in: "header",
         required: true,
         schema: {
+          format: "date",
           nullable: false,
           type: "string",
         },

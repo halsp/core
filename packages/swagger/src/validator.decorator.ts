@@ -67,8 +67,6 @@ declare module "@ipare/validator" {
     ResponseDescription: ((description: string) => RT) &
       ((status: number, description: string) => RT);
     ResponseMediaTypes: (...value: string[]) => RT;
-
-    Property: () => RT;
   }
 }
 
