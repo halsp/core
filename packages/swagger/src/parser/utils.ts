@@ -11,6 +11,7 @@ import {
 import { setSchemaValue } from "./schema-dict";
 
 export const lib = V();
+export const jsonTypes = ["application/json"];
 
 export function typeToApiType(
   type?: any

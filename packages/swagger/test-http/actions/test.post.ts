@@ -17,8 +17,17 @@ export class BodyDto {
   b2?: number;
 }
 
+export class ResultDto {
+  @S().Description("result-b1").Required().Type("string")
+  b1?: string;
+  @S().Type("number")
+  b2?: number;
+  @S().Deprecated()
+  b3?: BodyDto;
+}
+
 @S().Summary("login test")
-@S().Tags("test")
+@S().Tags("test").Response(ResultDto)
 @HttpPost("test/^p")
 export default class extends Action {
   @Header

@@ -1,7 +1,24 @@
 import { isClass } from "@ipare/core";
-import { RuleRecord, ValidatorDecoratorReturnType } from "@ipare/validator";
-import { OpenApiBuilder, ReferenceObject, SchemaObject } from "openapi3-ts";
-import { getNamedValidates, lib, setComponentModelSchema } from "./utils";
+import {
+  RuleRecord,
+  ValidateItem,
+  ValidatorDecoratorReturnType,
+} from "@ipare/validator";
+import {
+  ContentObject,
+  MediaTypeObject,
+  OpenApiBuilder,
+  OperationObject,
+  ReferenceObject,
+  ResponseObject,
+  SchemaObject,
+} from "openapi3-ts";
+import {
+  getNamedValidates,
+  jsonTypes,
+  lib,
+  setComponentModelSchema,
+} from "./utils";
 
 type SchemaDictOptionType = {
   optName?: string;
@@ -66,12 +83,12 @@ function dynamicSetValue(
 
 export function setActionValue(
   builder: OpenApiBuilder,
-  target: object,
+  operation: OperationObject,
   rules: RuleRecord[]
 ) {
   dynamicSetValue(
     builder,
-    target,
+    operation,
     rules,
     {
       func: lib.Tags,
@@ -81,7 +98,6 @@ export function setActionValue(
     lib.Summary,
     lib.ExternalDocs,
     lib.OperationId,
-    lib.Callbacks,
     lib.Deprecated,
     {
       func: lib.Deprecated,
@@ -96,6 +112,134 @@ export function setActionValue(
       type: "array",
     }
   );
+
+  parseResponse(builder, operation, rules);
+}
+
+function parseResponse(
+  builder: OpenApiBuilder,
+  operation: OperationObject,
+  rules: RuleRecord[]
+) {
+  const descriptionValidates = getNamedValidates(
+    rules,
+    lib.ResponseDescription.name
+  );
+  const descriptionDefValidates = descriptionValidates.filter(
+    (item) => typeof item.args[0] != "number"
+  );
+  const headersValidates = getNamedValidates(rules, lib.ResponseHeaders.name);
+  const headersDefValidates = headersValidates.filter(
+    (item) => typeof item.args[0] != "number"
+  );
+  const contentValidates = getNamedValidates(rules, lib.Response.name);
+  const contentDefValidates = contentValidates.filter(
+    (item) => typeof item.args[0] != "number"
+  );
+
+  const responses = operation.responses;
+  if (
+    descriptionDefValidates.length ||
+    headersDefValidates.length ||
+    contentDefValidates.length
+  ) {
+    responses.default = createResponseObject(
+      builder,
+      rules,
+      descriptionDefValidates,
+      headersDefValidates,
+      contentDefValidates
+    );
+  }
+
+  const status: number[] = [];
+  [...descriptionValidates, ...headersValidates, ...contentValidates].forEach(
+    (v) => {
+      const code = v.args[0];
+      if (typeof code == "number" && !status.includes(code)) {
+        status.push(code);
+      }
+    }
+  );
+
+  status.forEach((code) => {
+    const descriptionCodeValidates = descriptionValidates.filter(
+      (v) => v.args[0] == code
+    );
+    const headersCodeValidates = headersValidates.filter(
+      (v) => v.args[0] == code
+    );
+    const contentCodeValidates = contentValidates.filter(
+      (v) => v.args[0] == code
+    );
+    responses[code.toString()] = createResponseObject(
+      builder,
+      rules,
+      descriptionCodeValidates,
+      headersCodeValidates,
+      contentCodeValidates
+    );
+  });
+}
+
+function createResponseObject(
+  builder: OpenApiBuilder,
+  rules: RuleRecord[],
+  descriptionValidates: ValidateItem[],
+  headersValidates: ValidateItem[],
+  contentValidates: ValidateItem[]
+) {
+  const responseObject: ResponseObject = {
+    description: "",
+  };
+  descriptionValidates.forEach((v) => {
+    responseObject.description =
+      typeof v.args[0] == "number" ? v.args[1] : v.args[0];
+  });
+  headersValidates.forEach((v) => {
+    responseObject.headers =
+      typeof v.args[0] == "number" ? v.args[1] : v.args[0];
+  });
+  contentValidates.forEach((v) => {
+    responseObject.content = createContentObject(builder, rules, v);
+  });
+  return responseObject;
+}
+
+function createContentObject(
+  builder: OpenApiBuilder,
+  rules: RuleRecord[],
+  validate: ValidateItem
+) {
+  const mediaValidates = getNamedValidates(rules, lib.ResponseMediaTypes.name);
+  const mediaTypes: string[] = [];
+  if (mediaValidates.length) {
+    mediaValidates.forEach((validate) => {
+      mediaTypes.push(...validate.args);
+    });
+  }
+  if (!mediaTypes.length) {
+    mediaTypes.push(...jsonTypes);
+  }
+
+  const schemaValue: ObjectConstructor | SchemaObject =
+    typeof validate.args[0] == "number" ? validate.args[1] : validate.args[0];
+  const contentObject: ContentObject = {};
+  for (const media of mediaTypes) {
+    contentObject[media] = {};
+    const mediaObj = contentObject[media] as MediaTypeObject;
+
+    if (isClass(schemaValue)) {
+      setComponentModelSchema(builder, schemaValue);
+      mediaObj.schema = {
+        $ref: `#/components/schemas/${schemaValue.name}`,
+      } as ReferenceObject;
+    } else {
+      mediaObj.schema = schemaValue;
+    }
+  }
+
+  return contentObject;
 }
 
 export function setSchemaValue(

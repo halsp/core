@@ -75,9 +75,7 @@ export class TestDecoratorQueryDto {
 }
 
 @HttpPost("test")
-@S().Tags("test").Callbacks({
-  cb: {},
-})
+@S().Tags("test")
 @S()
   .ExternalDocs({
     url: "https://ipare.org",
@@ -86,11 +84,6 @@ export class TestDecoratorQueryDto {
   .OperationId("opt-id")
   .Summary("test summary")
   .Security({ jwt: ["123", "456"] })
-  .Responses({
-    "200": {
-      a: 1,
-    },
-  })
 @S().Servers({
   url: "https://ipare.org",
   description: "servers",

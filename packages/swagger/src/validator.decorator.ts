@@ -1,12 +1,11 @@
 import { ObjectConstructor } from "@ipare/core";
 import { V, ValidatorDecoratorReturnType } from "@ipare/validator";
 import {
-  CallbacksObject,
   DiscriminatorObject,
   ExampleObject,
   ExternalDocumentationObject,
+  HeaderObject,
   ParameterStyle,
-  ResponsesObject,
   SchemaObject,
   SecurityRequirementObject,
   ServerObject,
@@ -26,8 +25,6 @@ declare module "@ipare/validator" {
     Deprecated: () => RT;
     Servers: (...value: ServerObject[]) => RT;
     Security: (...value: SecurityRequirementObject[]) => RT;
-    Callbacks: (value: CallbacksObject) => RT;
-    Responses: (value: ResponsesObject) => RT;
     OperationId: (value: string) => RT;
 
     Style: (value: ParameterStyle) => RT;
@@ -72,6 +69,14 @@ declare module "@ipare/validator" {
     Enum: (...value: any[]) => RT;
 
     MediaTypes: (...value: string[]) => RT;
+
+    Response: ((body: ObjectConstructor | SchemaObject) => RT) &
+      ((status: number, body: ObjectConstructor | SchemaObject) => RT);
+    ResponseHeaders: ((headers: Record<string, HeaderObject>) => RT) &
+      ((status: number, value: Record<string, HeaderObject>) => RT);
+    ResponseDescription: ((description: string) => RT) &
+      ((status: number, description: string) => RT);
+    ResponseMediaTypes: (...value: string[]) => RT;
   }
 }
 

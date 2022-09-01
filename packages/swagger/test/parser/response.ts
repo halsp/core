@@ -1,0 +1,143 @@
+import { Action } from "@ipare/router";
+import { S } from "../../src";
+
+export class TestDto {
+  @S().Description("test-b1").Required()
+  b1?: string;
+  b2?: number;
+}
+
+export class ResultDto {
+  @S().Description("result-b1").Required().Type("string")
+  b1?: string;
+  @S().Type("number")
+  b2?: number;
+  @S().Deprecated()
+  b3?: TestDto;
+}
+
+@S().Tags("test").Response(ResultDto)
+export class ResponseBody extends Action {
+  async invoke(): Promise<void> {
+    this.ok();
+  }
+}
+
+@S()
+  .Tags("test")
+  .Response({
+    properties: {
+      p1: {
+        type: "number",
+        nullable: true,
+      },
+    },
+  })
+export class ResponseSchema extends Action {
+  async invoke(): Promise<void> {
+    this.ok();
+  }
+}
+
+@S().Tags("test").Response(200, ResultDto)
+export class StatusResponseBody extends Action {
+  async invoke(): Promise<void> {
+    this.ok();
+  }
+}
+
+@S().Tags("test").Response(ResultDto).Response(200, ResultDto)
+export class StatusAndDefaultResponseBody extends Action {
+  async invoke(): Promise<void> {
+    this.ok();
+  }
+}
+
+@S().Tags("test").ResponseDescription("desc")
+export class ResponseDescription extends Action {
+  async invoke(): Promise<void> {
+    this.ok();
+  }
+}
+
+@S().Tags("test").ResponseDescription(200, "desc")
+export class ResponseStatusDescription extends Action {
+  async invoke(): Promise<void> {
+    this.ok();
+  }
+}
+
+@S().Tags("test").ResponseDescription("desc").ResponseDescription(200, "desc")
+export class ResponseStatusAndDefaultDescription extends Action {
+  async invoke(): Promise<void> {
+    this.ok();
+  }
+}
+
+@S()
+  .Tags("test")
+  .ResponseHeaders({
+    h1: {
+      required: true,
+    },
+    h2: {
+      description: "h-2",
+    },
+  })
+export class ResponseHeaders extends Action {
+  async invoke(): Promise<void> {
+    this.ok();
+  }
+}
+
+@S()
+  .Tags("test")
+  .ResponseHeaders(200, {
+    h1: {
+      required: true,
+    },
+  })
+export class ResponseStatusHeaders extends Action {
+  async invoke(): Promise<void> {
+    this.ok();
+  }
+}
+
+@S()
+  .Tags("test")
+  .ResponseHeaders(200, {
+    h1: {
+      required: true,
+    },
+  })
+  .ResponseHeaders({
+    h1: {
+      required: true,
+    },
+    h2: {
+      description: "h-2",
+    },
+  })
+export class ResponseStatusAndDefaultHeaders extends Action {
+  async invoke(): Promise<void> {
+    this.ok();
+  }
+}
+
+@S().Tags("test").Response(TestDto).ResponseMediaTypes("mt1", "mt2")
+export class ResponseMediaTypes extends Action {
+  async invoke(): Promise<void> {
+    this.ok();
+  }
+}
+
+@S()
+  .Tags("test")
+  .Response(TestDto)
+  .Response(200, ResultDto)
+  .ResponseMediaTypes("mt1", "mt2")
+export class ResponseStatusMediaTypes extends Action {
+  async invoke(): Promise<void> {
+    this.ok();
+  }
+}

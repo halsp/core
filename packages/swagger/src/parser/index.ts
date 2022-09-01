@@ -21,14 +21,13 @@ import {
 import {
   existIgnore,
   getNamedValidates,
+  jsonTypes,
   lib,
   parseModelProperty,
   pipeTypeToDocType,
   setComponentModelSchema,
   setModelSchema,
 } from "./utils";
-
-const jsonTypes = ["application/json"];
 
 export class Parser {
   constructor(
@@ -113,7 +112,7 @@ export class Parser {
     const operation = {
       responses: {},
       parameters: [],
-    };
+    } as OperationObject;
     pathItem[method] = operation;
 
     setActionValue(this.builder, operation, actionClassRules);

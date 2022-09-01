@@ -157,3 +157,212 @@ describe("ignore", () => {
     ]);
   });
 });
+
+describe("response", () => {
+  function getDoc(actionName: string) {
+    const mapItems = [new MapItem("response.ts", actionName, "test", ["post"])];
+    return runParserTest(mapItems) as any;
+  }
+  function getResponses(doc: any) {
+    return doc["paths"]["/test"]["post"]["responses"];
+  }
+
+  it("should set response body", async () => {
+    const doc = getDoc("ResponseBody");
+    expect(doc["components"]["schemas"]["ResultDto"]).not.toBeUndefined();
+    expect(doc["components"]["schemas"]["TestDto"]).not.toBeUndefined();
+    expect(getResponses(doc)).toEqual({
+      default: {
+        content: {
+          "application/json": {
+            schema: { $ref: "#/components/schemas/ResultDto" },
+          },
+        },
+        description: "",
+      },
+    });
+  });
+
+  it("should set response body by schema", async () => {
+    const doc = getDoc("ResponseSchema");
+    expect(getResponses(doc)).toEqual({
+      default: {
+        content: {
+          "application/json": {
+            schema: {
+              properties: {
+                p1: {
+                  type: "number",
+                  nullable: true,
+                },
+              },
+            },
+          },
+        },
+        description: "",
+      },
+    });
+  });
+
+  it("should set response body with status 200", async () => {
+    const doc = getDoc("StatusResponseBody");
+    expect(getResponses(doc)).toEqual({
+      "200": {
+        content: {
+          "application/json": {
+            schema: { $ref: "#/components/schemas/ResultDto" },
+          },
+        },
+        description: "",
+      },
+    });
+  });
+
+  it("should set response body with status 200 and default", async () => {
+    const doc = getDoc("StatusAndDefaultResponseBody");
+
+    const content = {
+      content: {
+        "application/json": {
+          schema: { $ref: "#/components/schemas/ResultDto" },
+        },
+      },
+      description: "",
+    };
+    expect(getResponses(doc)).toEqual({
+      default: content,
+      "200": content,
+    });
+  });
+
+  it("should set response description", async () => {
+    const doc = getDoc("ResponseDescription");
+    expect(getResponses(doc)).toEqual({
+      default: {
+        description: "desc",
+      },
+    });
+  });
+
+  it("should set response description with status 200", async () => {
+    const doc = getDoc("ResponseStatusDescription");
+    expect(getResponses(doc)).toEqual({
+      "200": {
+        description: "desc",
+      },
+    });
+  });
+
+  it("should set response description with status 200", async () => {
+    const doc = getDoc("ResponseStatusAndDefaultDescription");
+    expect(getResponses(doc)).toEqual({
+      default: {
+        description: "desc",
+      },
+      "200": {
+        description: "desc",
+      },
+    });
+  });
+
+  it("should set response headers", async () => {
+    const doc = getDoc("ResponseHeaders");
+    expect(getResponses(doc)).toEqual({
+      default: {
+        description: "",
+        headers: {
+          h1: {
+            required: true,
+          },
+          h2: {
+            description: "h-2",
+          },
+        },
+      },
+    });
+  });
+
+  it("should set response headers with status", async () => {
+    const doc = getDoc("ResponseStatusHeaders");
+    expect(getResponses(doc)).toEqual({
+      "200": {
+        description: "",
+        headers: {
+          h1: {
+            required: true,
+          },
+        },
+      },
+    });
+  });
+
+  it("should set response headers with status and default", async () => {
+    const doc = getDoc("ResponseStatusAndDefaultHeaders");
+    expect(getResponses(doc)).toEqual({
+      default: {
+        description: "",
+        headers: {
+          h1: {
+            required: true,
+          },
+          h2: {
+            description: "h-2",
+          },
+        },
+      },
+      "200": {
+        description: "",
+        headers: {
+          h1: {
+            required: true,
+          },
+        },
+      },
+    });
+  });
+
+  it("should set response media types", async () => {
+    const doc = getDoc("ResponseMediaTypes");
+    expect(getResponses(doc)).toEqual({
+      default: {
+        content: {
+          mt1: {
+            schema: { $ref: "#/components/schemas/TestDto" },
+          },
+          mt2: {
+            schema: { $ref: "#/components/schemas/TestDto" },
+          },
+        },
+        description: "",
+      },
+    });
+  });
+
+  it("should set response media types", async () => {
+    const doc = getDoc("ResponseStatusMediaTypes");
+    expect(getResponses(doc)).toEqual({
+      default: {
+        content: {
+          mt1: {
+            schema: { $ref: "#/components/schemas/TestDto" },
+          },
+          mt2: {
+            schema: { $ref: "#/components/schemas/TestDto" },
+          },
+        },
+        description: "",
+      },
+      "200": {
+        content: {
+          mt1: {
+            schema: { $ref: "#/components/schemas/ResultDto" },
+          },
+          mt2: {
+            schema: { $ref: "#/components/schemas/ResultDto" },
+          },
+        },
+        description: "",
+      },
+    });
+  });
+});
