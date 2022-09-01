@@ -15,16 +15,10 @@ export const jsonTypes = ["application/json"];
 
 export function typeToApiType(
   type?: any
-):
-  | "string"
-  | "number"
-  | "boolean"
-  | "object"
-  | "integer"
-  | "null"
-  | "array"
-  | undefined {
-  if (type == String) {
+): "string" | "number" | "boolean" | "object" | "integer" | "null" | "array" {
+  if (!type) {
+    return "null";
+  } else if (type == String) {
     return "string";
   } else if (type == Number) {
     return "number";

@@ -38,16 +38,6 @@ declare module "@ipare/validator" {
     ReadOnly: () => RT;
     WriteOnly: () => RT;
     Xml: (value: XmlObject) => RT;
-    Type: (
-      value:
-        | "integer"
-        | "number"
-        | "string"
-        | "boolean"
-        | "object"
-        | "null"
-        | "array"
-    ) => RT;
     Format: (
       value:
         | "int32"
@@ -77,6 +67,8 @@ declare module "@ipare/validator" {
     ResponseDescription: ((description: string) => RT) &
       ((status: number, description: string) => RT);
     ResponseMediaTypes: (...value: string[]) => RT;
+
+    Property: () => RT;
   }
 }
 

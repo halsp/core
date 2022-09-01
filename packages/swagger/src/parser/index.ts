@@ -27,6 +27,7 @@ import {
   pipeTypeToDocType,
   setComponentModelSchema,
   setModelSchema,
+  typeToApiType,
 } from "./utils";
 
 export class Parser {
@@ -237,16 +238,17 @@ export class Parser {
       return;
     }
 
+    const modelType = this.getPipeRecordModelType(action, record);
     if (record.property) {
       const parameters = optObj.parameters as ParameterObject[];
       const parameter = this.createParameter(
         record.property,
         record,
-        propertyRules
+        propertyRules,
+        modelType
       );
       parameters.push(parameter);
     } else {
-      const modelType = this.getPipeRecordModelType(action, record);
       if (!isClass(modelType)) return;
 
       setComponentModelSchema(this.builder, modelType);
@@ -274,10 +276,16 @@ export class Parser {
         continue;
       }
 
+      const propertyType = Reflect.getMetadata(
+        "design:type",
+        modelType.prototype,
+        property
+      );
       const parameter = this.createParameter(
         property,
         record,
-        propertiesRules[property]
+        propertiesRules[property],
+        propertyType
       );
       parameters.push(parameter);
     }
@@ -286,14 +294,15 @@ export class Parser {
   private createParameter(
     property: string,
     record: PipeReqRecord,
-    rules: RuleRecord[]
+    rules: RuleRecord[],
+    paramType?: ObjectConstructor
   ) {
     const parameter: ParameterObject = {
       name: property,
       in: pipeTypeToDocType(record.type),
       required: record.type == "param",
       schema: {
-        type: "string",
+        type: typeToApiType(paramType),
       },
     };
 

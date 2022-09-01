@@ -41,7 +41,7 @@ export class TestDecoratorHeaderDto {
   @S().Xml({})
   p8!: string;
 
-  @S().Format("int64").Type("number")
+  @S().IsInt()
   p9!: string;
 
   @S().Enum("abc", "def")
