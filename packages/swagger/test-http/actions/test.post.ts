@@ -5,27 +5,27 @@ import { S } from "../../src";
 export class HeaderDto {
   @S().Description("header-h1")
   @S().Required()
-  h1?: string;
+  hd1?: string;
 
   @S().Deprecated()
-  h2?: number;
+  hd2?: number;
 }
 
 export class BodyDto {
   @S().Description("body-b1").Required().Items(HeaderDto)
-  b1?: string;
-  b2?: number;
+  bd1?: HeaderDto[];
+  bd2?: number;
 }
 
 export class ResultDto {
   @S().Description("result-b1").Required().Items(String)
-  b1?: string;
+  rd1?: string;
   @S()
-  b2?: number;
+  rd2?: number;
   @S()
     .Deprecated()
     .Items([[BodyDto]])
-  b3?: BodyDto;
+  rd3?: BodyDto;
 }
 
 @S().Summary("login test")

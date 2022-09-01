@@ -321,18 +321,6 @@ export function setSchemaValue(
       optName: "type",
       customValue: "null",
     },
-    {
-      func: lib.IsArray,
-      type: "custom",
-      optName: "type",
-      customValue: "array",
-    },
-    {
-      func: lib.Items,
-      optName: "type",
-      type: "custom",
-      customValue: "array",
-    },
     lib.Description,
     lib.Default,
     lib.Title,

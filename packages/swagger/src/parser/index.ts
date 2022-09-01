@@ -212,6 +212,7 @@ export class Parser {
       if (type == "array") {
         mediaObj.schema = {
           type,
+          items: {},
         };
         getNamedValidates(rules, lib.Items.name).forEach((v) => {
           parseArraySchema(
@@ -331,6 +332,7 @@ export class Parser {
 
     const schema = parameter.schema as SchemaObject;
     if (type == "array") {
+      schema.items = {};
       getNamedValidates(rules, lib.Items.name).forEach((v) => {
         parseArraySchema(this.builder, schema, lib, v.args[0] as ArrayItemType);
       });
