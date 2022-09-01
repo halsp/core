@@ -8,7 +8,6 @@ import {
   isUndefined,
 } from "@ipare/core";
 import {
-  CLASS_METADATA,
   CUSTOM_METADATA,
   SCOPED_BAG,
   KEY_METADATA,
@@ -346,7 +345,7 @@ class InjectDecoratorParser<T extends object = any> {
   private getConstructorArgsTypes<T extends object>(
     target: ObjectConstructor<T>
   ): ObjectConstructor[] {
-    return Reflect.getMetadata(CLASS_METADATA, target.prototype) ?? [];
+    return Reflect.getMetadata("design:paramtypes", target) ?? [];
   }
 
   private getExistKeyMap(key: string) {
@@ -365,7 +364,7 @@ class InjectDecoratorParser<T extends object = any> {
 }
 
 export function isInjectClass<T extends object>(target: ObjectConstructor<T>) {
-  return !!Reflect.getMetadata(CLASS_METADATA, target.prototype);
+  return !!Reflect.getMetadata("design:paramtypes", target);
 }
 
 export async function parseInject<T extends object = any>(

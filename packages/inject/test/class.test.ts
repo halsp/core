@@ -23,9 +23,23 @@ export class Service2 extends Object {
   public count = 0;
 }
 
+export class Service3 extends Object {
+  constructor(
+    @Inject private readonly service1: Service1,
+    private readonly service2: Service2
+  ) {
+    super();
+  }
+
+  public invoke(): string {
+    return "service3." + this.service2.invoke() + "." + this.service1.invoke();
+  }
+  public count = 0;
+}
+
 class TestMiddleware extends Middleware {
   @Inject
-  private readonly service!: Service2;
+  private readonly service!: Service3;
 
   async invoke(): Promise<void> {
     this.ok({
@@ -38,7 +52,7 @@ test(`class`, async function () {
   const res = await new TestStartup().useInject().add(TestMiddleware).run();
 
   expect(res.body).toEqual({
-    service: "service2.service1",
+    service: "service3.service2.service1.service1",
   });
   expect(res.status).toBe(200);
 });

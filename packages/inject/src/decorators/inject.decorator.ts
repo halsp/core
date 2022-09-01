@@ -1,5 +1,5 @@
-import { HttpContext, isClass, ObjectConstructor } from "@ipare/core";
-import { PROPERTY_METADATA, CLASS_METADATA, KEY_METADATA } from "../constant";
+import { HttpContext, isClass } from "@ipare/core";
+import { PROPERTY_METADATA, KEY_METADATA } from "../constant";
 import { InjectType } from "../inject-type";
 import { InjectKey } from "../interfaces";
 import { createInject } from "./create-inject";
@@ -17,16 +17,25 @@ export function Inject<T = any>(
 export function Inject(key: string): PropertyDecorator & ParameterDecorator;
 export function Inject(target: any): void;
 export function Inject(target: any, propertyKey: string | symbol): void;
+export function Inject(
+  target: any,
+  propertyKey: string | symbol,
+  parameterIndex: number
+): void;
 
 export function Inject(
   ...args: any[]
 ): void | PropertyDecorator | ParameterDecorator {
   if (typeof args[0] == "string") {
     return injectKey(args[0]);
+  } else if (typeof args[2] == "number") {
+    // just placehold
+    return;
   } else if (typeof args[0] == "object") {
     injectProperty(args[0], args[1]);
   } else if (isClass(args[0])) {
-    injectClass(args[0]);
+    // just placehold
+    return;
   } else {
     return injectCustom(args[0], args[1]);
   }
@@ -57,14 +66,6 @@ function injectKey(key: string) {
     });
     Reflect.defineMetadata(KEY_METADATA, args, target);
   };
-}
-
-function injectClass(target: ObjectConstructor) {
-  const providers: ObjectConstructor[] = Reflect.getMetadata(
-    "design:paramtypes",
-    target
-  );
-  Reflect.defineMetadata(CLASS_METADATA, providers, target.prototype);
 }
 
 function injectCustom<T>(
