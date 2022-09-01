@@ -153,19 +153,19 @@ export class Parser {
     optObj.requestBody = requestBody;
     setRequestBodyValue(this.builder, requestBody, bodyRules);
 
-    const mediaTypes: string[] = [];
     const actionRules = rules.filter(
       (r) => isUndefined(r.propertyKey) && isUndefined(r.parameterIndex)
     );
-    if (
-      !getNamedValidates(actionRules, lib.RemoveDefaultMediaTypes.name).length
-    ) {
+    const mediaTypes: string[] = [];
+    const mediaValidates = getNamedValidates(actionRules, lib.MediaTypes.name);
+    if (mediaValidates.length) {
+      mediaValidates.forEach((validate) => {
+        mediaTypes.push(...validate.args);
+      });
+    }
+    if (!mediaTypes.length) {
       mediaTypes.push(...jsonTypes);
     }
-
-    getNamedValidates(actionRules, lib.MediaTypes.name).forEach((validate) => {
-      mediaTypes.push(...validate.args);
-    });
 
     for (const media of mediaTypes) {
       this.parseBodyMediaSchema(requestBody, media, action, record, bodyRules);
@@ -185,9 +185,9 @@ export class Parser {
     if (!!record.property) {
       mediaObj.schema = mediaObj.schema ?? {
         type: "object",
-        properties: {},
       };
       const mediaSchema = mediaObj.schema as SchemaObject;
+      mediaSchema.properties = mediaSchema.properties ?? {};
       const properties = mediaSchema.properties as Exclude<
         typeof mediaSchema.properties,
         undefined
@@ -207,11 +207,11 @@ export class Parser {
     } else {
       const modelType = this.getPipeRecordModelType(action, record);
       if (isClass(modelType)) {
-        setComponentModelSchema(this.builder, modelType);
         mediaObj.schema = mediaObj.schema ?? {
           type: "object",
           properties: {},
         };
+        setComponentModelSchema(this.builder, modelType);
         setModelSchema(
           this.builder,
           modelType,
@@ -310,7 +310,7 @@ export class Parser {
   ): ObjectConstructor | undefined {
     let result: ObjectConstructor;
     if (!isUndefined(record.parameterIndex)) {
-      const paramTypes = Reflect.getMetadata("design:paramtypes", cls) ?? [];
+      const paramTypes = Reflect.getMetadata("design:paramtypes", cls);
       result = paramTypes[record.parameterIndex];
     } else {
       result = Reflect.getMetadata(

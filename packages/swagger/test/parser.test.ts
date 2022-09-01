@@ -48,33 +48,47 @@ describe("parser", () => {
     const doc = runParserTest(mapItems);
     expect(doc["paths"]["/err"]["get"]["tags"]).toBeUndefined();
   });
-
-  // it("should throw error when get pipe records", async () => {
-  //   const mapItems = [
-  //     new MapItem("not-action.ts", "TestClass", "err", ["get"]),
-  //   ];
-  //   const doc = runParserTest(mapItems);
-  //   expect(doc["paths"]["/err"]["get"]["tags"]).toBeUndefined();
-  // });
 });
 
 describe("media type", () => {
-  it("should add media types", () => {
-    const mapItems = [new MapItem("media.ts", "Add", "add", ["post"])];
+  it("should set default media types", () => {
+    const mapItems = [
+      new MapItem("media.ts", "DefaultAction", "test", ["post"]),
+    ];
     const doc = runParserTest(mapItems);
 
     expect(
-      Object.keys(doc["paths"]["/add"]["post"]["requestBody"]["content"])
-    ).toEqual(["application/json", "mt"]);
+      Object.keys(doc["paths"]["/test"]["post"]["requestBody"]["content"])
+    ).toEqual(["application/json"]);
   });
 
-  it("should remove default media types", () => {
-    const mapItems = [new MapItem("media.ts", "Remove", "remove", ["post"])];
+  it("should set default media types when @MediaTypes value is empty array", () => {
+    const mapItems = [new MapItem("media.ts", "EmptyAction", "test", ["post"])];
     const doc = runParserTest(mapItems);
 
     expect(
-      Object.keys(doc["paths"]["/remove"]["post"]["requestBody"]["content"])
-    ).toEqual([]);
+      Object.keys(doc["paths"]["/test"]["post"]["requestBody"]["content"])
+    ).toEqual(["application/json"]);
+  });
+
+  it("should set custom media types", () => {
+    const mapItems = [new MapItem("media.ts", "AddAction", "test", ["post"])];
+    const doc = runParserTest(mapItems);
+
+    expect(
+      Object.keys(doc["paths"]["/test"]["post"]["requestBody"]["content"])
+    ).toEqual(["mt"]);
+  });
+
+  it("should set multiple custom media types", () => {
+    const mapItems = [
+      new MapItem("media.ts", "MultipleAction", "test", ["post"]),
+    ];
+    const doc = runParserTest(mapItems);
+
+    expect(
+      Object.keys(doc["paths"]["/test"]["post"]["requestBody"]["content"])
+    ).toEqual(["mt1", "mt2", "mt3"]);
   });
 });
 

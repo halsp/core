@@ -45,6 +45,8 @@ export class TestPost extends Action {
   private readonly h2!: any;
   @Body
   private readonly b!: TestBodyDto;
+  @Body
+  private readonly b1!: TestBodyDto;
   @Body("bbb")
   @S().Required()
   private readonly bbb!: string;
