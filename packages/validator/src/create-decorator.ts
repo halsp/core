@@ -52,7 +52,7 @@ export function createCustomValidatorDecorator(
   return createDecorator(lib);
 }
 
-function createDecorator(lib: ValidatorDecoratorReturnType) {
+export function createDecorator(lib: ValidatorDecoratorReturnType) {
   const decorator = function (
     target: any,
     propertyKey?: symbol | string,

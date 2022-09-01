@@ -6,12 +6,8 @@ import {
   OPTIONS_METADATA,
   SCHAME_METADATA,
 } from "./constant";
-import {
-  createLib,
-  libToProxy,
-  ValidatorDecoratorReturnType,
-} from "./validator-lib";
-import { RuleRecord } from "./create-decorator";
+import { createLib, ValidatorDecoratorReturnType } from "./validator-lib";
+import { createDecorator, RuleRecord } from "./create-decorator";
 import { isNumber, ValidatorOptions } from "class-validator";
 
 export function UseValidatorOptions(
@@ -45,12 +41,6 @@ export function ValidatorEnable(
   };
 }
 
-export const V = (): ValidatorDecoratorReturnType => {
-  const decorator = () => undefined;
-  Object.assign(decorator, createLib());
-  return libToProxy(decorator as any);
-};
-
 export function getRules(
   target: any,
   propertyOrIndex?: string | symbol | number
@@ -68,4 +58,9 @@ export function getRules(
     }
   });
   return rules;
+}
+
+export function V(): ValidatorDecoratorReturnType {
+  const lib = createLib();
+  return createDecorator(lib);
 }
