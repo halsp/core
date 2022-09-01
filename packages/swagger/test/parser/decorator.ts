@@ -27,7 +27,7 @@ export class TestDecoratorHeaderDto {
   @S().WriteOnly().Min(10).Max(20)
   p2!: string;
 
-  @S().Ignore()
+  @S().Ignore().Format("date")
   p3!: string;
 
   @S().MinProperties(1).MaxProperties(10).Min(1).Max(10)

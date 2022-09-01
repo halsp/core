@@ -1,4 +1,4 @@
-import { isClass } from "@ipare/core";
+import { isClass, ObjectConstructor } from "@ipare/core";
 import {
   RuleRecord,
   ValidateItem,
@@ -17,15 +17,18 @@ import {
   getNamedValidates,
   jsonTypes,
   lib,
-  typeToApiType,
   setComponentModelSchema,
-  typeToFormatType,
 } from "./utils";
+
+export type ArrayItemType =
+  | ObjectConstructor
+  | SchemaObject
+  | [ArrayItemType | ObjectConstructor | SchemaObject];
 
 type SchemaDictOptionType = {
   optName?: string;
   func: (...args: any[]) => ValidatorDecoratorReturnType;
-  type?: "true" | "false" | "array" | "value" | "schema" | "custom";
+  type?: "true" | "false" | "array" | "value" | "custom";
   customValue?: any;
 };
 
@@ -64,24 +67,6 @@ function dynamicSetValue(
         target[optName] = false;
       } else if (options.type == "array") {
         target[optName] = v.args;
-      } else if (options.type == "schema") {
-        const schemaValue = v.args[0];
-        const type = typeToApiType(schemaValue);
-        if (type == "object") {
-          if (isClass(schemaValue)) {
-            setComponentModelSchema(builder, schemaValue);
-            target[optName] = {
-              $ref: `#/components/schemas/${schemaValue.name}`,
-            } as ReferenceObject;
-          } else {
-            target[optName] = schemaValue;
-          }
-        } else {
-          target[optName] = {
-            type: type,
-            format: typeToFormatType(schemaValue),
-          };
-        }
       } else if (options.type == "custom") {
         target[optName] = options.customValue;
       } else {
@@ -344,10 +329,6 @@ export function setSchemaValue(
     },
     {
       func: lib.Items,
-      type: "schema",
-    },
-    {
-      func: lib.Items,
       optName: "type",
       type: "custom",
       customValue: "array",
@@ -397,7 +378,8 @@ export function setSchemaValue(
     {
       func: lib.Enum,
       type: "array",
-    }
+    },
+    lib.Format
   );
 }
 

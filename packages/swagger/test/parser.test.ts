@@ -50,6 +50,58 @@ describe("parser", () => {
   });
 });
 
+describe("body", () => {
+  function getDoc(actionName: string) {
+    const mapItems = [new MapItem("body.ts", actionName, "test", ["post"])];
+    return runParserTest(mapItems) as any;
+  }
+  function getRequestContent(doc: any) {
+    return doc["paths"]["/test"]["post"]["requestBody"]["content"][
+      "application/json"
+    ];
+  }
+
+  it("should parse string body", async () => {
+    const doc = getDoc("StringBody");
+    expect(getRequestContent(doc)).toEqual({
+      schema: {
+        type: "string",
+        description: "abc",
+      },
+    });
+  });
+
+  it("should compose partial body and model body", async () => {
+    const doc = getDoc("PartialBody");
+    expect(getRequestContent(doc)).toEqual({
+      schema: {
+        properties: {
+          b: {
+            description: "abc",
+            type: "string",
+          },
+          test: {
+            description: "test",
+            type: "string",
+          },
+        },
+        required: [],
+        type: "object",
+      },
+    });
+  });
+
+  it("should parse string body twice", async () => {
+    const doc = getDoc("StringBodyTwice");
+    expect(getRequestContent(doc)).toEqual({
+      schema: {
+        type: "string",
+        description: "def",
+      },
+    });
+  });
+});
+
 describe("media type", () => {
   it("should set default media types", () => {
     const mapItems = [
@@ -132,7 +184,6 @@ describe("ignore", () => {
       ]["schema"]["properties"]
     ).toEqual({
       b1: {
-        format: "date",
         nullable: false,
         type: "string",
       },
@@ -151,7 +202,6 @@ describe("ignore", () => {
         in: "header",
         required: true,
         schema: {
-          format: "date",
           nullable: false,
           type: "string",
         },
@@ -364,6 +414,145 @@ describe("response", () => {
           },
         },
         description: "",
+      },
+    });
+  });
+});
+
+describe("array", () => {
+  function getDoc(actionName: string) {
+    const mapItems = [new MapItem("array.ts", actionName, "test", ["post"])];
+    return runParserTest(mapItems) as any;
+  }
+  function getRequestContent(doc: any) {
+    return doc["paths"]["/test"]["post"]["requestBody"]["content"][
+      "application/json"
+    ];
+  }
+  function getRequestParameters(doc: any) {
+    return doc["paths"]["/test"]["post"]["parameters"];
+  }
+
+  it("should parse dto item", async () => {
+    const doc = getDoc("NotArray");
+    expect(getRequestContent(doc)).toEqual({
+      schema: {
+        properties: {
+          b1: {
+            description: "desc",
+            type: "string",
+          },
+        },
+        required: [],
+        type: "object",
+      },
+    });
+  });
+
+  it("should parse array dto", async () => {
+    const doc = getDoc("ArrayModel");
+    expect(getRequestContent(doc)).toEqual({
+      schema: {
+        type: "array",
+        items: {
+          $ref: "#/components/schemas/TestDto",
+        },
+      },
+    });
+  });
+
+  it("should parse two-dimensional array dto", async () => {
+    const doc = getDoc("TwoDimensionalArray");
+    expect(getRequestContent(doc)).toEqual({
+      schema: {
+        type: "array",
+        items: {
+          type: "array",
+          items: {
+            $ref: "#/components/schemas/TestDto",
+          },
+        },
+      },
+    });
+  });
+
+  it("should parse string array body", async () => {
+    const doc = getDoc("StringArrayBody");
+    expect(getRequestContent(doc)).toEqual({
+      schema: {
+        type: "array",
+        items: {
+          type: "string",
+        },
+      },
+    });
+  });
+
+  it("should be ignore when parse string array header", async () => {
+    const doc = getDoc("StringArrayParam");
+    expect(getRequestParameters(doc)).toEqual([]);
+  });
+
+  it("should be ignore when parse string array header", async () => {
+    const doc = getDoc("ModelArrayParam");
+    expect(getRequestParameters(doc)).toEqual([]);
+  });
+
+  it("should parse model header with array string property", async () => {
+    const doc = getDoc("ParamStringArrayProperty");
+    expect(getRequestParameters(doc)).toEqual([
+      {
+        description: "desc",
+        in: "header",
+        name: "b1",
+        required: false,
+        schema: {
+          items: {
+            type: "string",
+          },
+          type: "array",
+        },
+      },
+      {
+        in: "header",
+        name: "b2",
+        required: false,
+        schema: {
+          $ref: "#/components/schemas/TestDto",
+        },
+      },
+    ]);
+  });
+
+  it("should parse model body with array model property", async () => {
+    const doc = getDoc("BodyModelArrayProperty");
+    expect(getRequestContent(doc)).toEqual({
+      schema: {
+        properties: {
+          b1: {
+            items: {
+              $ref: "#/components/schemas/TestDto",
+            },
+            type: "array",
+          },
+          b2: {
+            $ref: "#/components/schemas/TestDto",
+          },
+        },
+        required: [],
+        type: "object",
+      },
+    });
+  });
+
+  it("should parse array model body with array model property", async () => {
+    const doc = getDoc("ArrayBodyModelArrayProperty");
+    expect(getRequestContent(doc)).toEqual({
+      schema: {
+        type: "array",
+        items: {
+          $ref: "#/components/schemas/ModelArrayPropertyDto",
+        },
       },
     });
   });

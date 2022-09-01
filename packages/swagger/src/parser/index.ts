@@ -17,18 +17,19 @@ import {
   setSchemaValue,
   setParamValue,
   setRequestBodyValue,
+  ArrayItemType,
 } from "./schema-dict";
 import {
   existIgnore,
   getNamedValidates,
   jsonTypes,
   lib,
+  parseArraySchema,
   parseModelProperty,
   pipeTypeToDocType,
   setComponentModelSchema,
   setModelSchema,
   typeToApiType,
-  typeToFormatType,
 } from "./utils";
 
 export class Parser {
@@ -207,17 +208,36 @@ export class Parser {
       );
     } else {
       const modelType = this.getPipeRecordModelType(action, record);
-      if (isClass(modelType)) {
+      const type = typeToApiType(modelType);
+      if (type == "array") {
+        mediaObj.schema = {
+          type,
+        };
+        getNamedValidates(rules, lib.Items.name).forEach((v) => {
+          parseArraySchema(
+            this.builder,
+            mediaObj.schema as SchemaObject,
+            lib,
+            v.args[0] as ArrayItemType
+          );
+        });
+      } else if (isClass(modelType)) {
         mediaObj.schema = mediaObj.schema ?? {
-          type: "object",
+          type,
           properties: {},
         };
+
         setComponentModelSchema(this.builder, modelType);
         setModelSchema(
           this.builder,
           modelType,
           mediaObj.schema as SchemaObject
         );
+      } else {
+        mediaObj.schema = mediaObj.schema ?? {
+          type,
+        };
+        setSchemaValue(this.builder, mediaObj.schema as SchemaObject, rules);
       }
     }
   }
@@ -298,18 +318,30 @@ export class Parser {
     rules: RuleRecord[],
     paramType?: ObjectConstructor
   ) {
+    const type = typeToApiType(paramType);
     const parameter: ParameterObject = {
       name: property,
       in: pipeTypeToDocType(record.type),
       required: record.type == "param",
       schema: {
-        type: typeToApiType(paramType),
-        format: typeToFormatType(paramType),
+        type,
       },
     };
-
     setParamValue(this.builder, parameter, rules);
-    setSchemaValue(this.builder, parameter.schema as SchemaObject, rules);
+
+    const schema = parameter.schema as SchemaObject;
+    if (type == "array") {
+      getNamedValidates(rules, lib.Items.name).forEach((v) => {
+        parseArraySchema(this.builder, schema, lib, v.args[0] as ArrayItemType);
+      });
+    } else if (isClass(paramType)) {
+      setComponentModelSchema(this.builder, paramType);
+      parameter.schema = {
+        $ref: `#/components/schemas/${paramType.name}`,
+      };
+    } else {
+      setSchemaValue(this.builder, schema, rules);
+    }
 
     return parameter;
   }

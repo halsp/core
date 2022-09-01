@@ -11,6 +11,7 @@ import {
   ServerObject,
   XmlObject,
 } from "openapi3-ts";
+import { ArrayItemType } from "./parser/schema-dict";
 
 type RT = ValidatorDecoratorReturnType;
 
@@ -38,7 +39,7 @@ declare module "@ipare/validator" {
     ReadOnly: () => RT;
     WriteOnly: () => RT;
     Xml: (value: XmlObject) => RT;
-    Format: (
+    Format: ((
       value:
         | "int32"
         | "int64"
@@ -49,9 +50,9 @@ declare module "@ipare/validator" {
         | "date"
         | "date-time"
         | "password"
-        | string
-    ) => RT;
-    Items: (value: ObjectConstructor | SchemaObject) => RT;
+    ) => RT) &
+      ((value: string) => RT);
+    Items: (type: ArrayItemType) => RT;
     Default: (value: any) => RT;
     Title: (value: string) => RT;
     MaxProperties: (value: number) => RT;

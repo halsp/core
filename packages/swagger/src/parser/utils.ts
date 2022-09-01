@@ -1,6 +1,12 @@
 import { isClass, isUndefined, ObjectConstructor } from "@ipare/core";
 import { PipeReqType } from "@ipare/pipe";
-import { getRules, RuleRecord, V, ValidateItem } from "@ipare/validator";
+import {
+  getRules,
+  RuleRecord,
+  V,
+  ValidateItem,
+  ValidatorDecoratorReturnType,
+} from "@ipare/validator";
 import {
   ComponentsObject,
   OpenApiBuilder,
@@ -8,7 +14,7 @@ import {
   ReferenceObject,
   SchemaObject,
 } from "openapi3-ts";
-import { setSchemaValue } from "./schema-dict";
+import { ArrayItemType, setSchemaValue } from "./schema-dict";
 
 export const lib = V();
 export const jsonTypes = ["application/json"];
@@ -30,20 +36,6 @@ export function typeToApiType(
     return "string";
   } else {
     return "object";
-  }
-}
-
-export function typeToFormatType(type?: any) {
-  if (!type) {
-    return undefined;
-  } else if (type == String) {
-    return "string";
-  } else if (type == Number) {
-    return "int32";
-  } else if (type == Date) {
-    return "date";
-  } else {
-    return undefined;
   }
 }
 
@@ -115,23 +107,34 @@ export function parseModelProperty(
     propertyKey
   );
 
-  if (isClass(propertyCls)) {
+  const type = typeToApiType(propertyCls);
+  if (type == "array") {
+    propertiesObject[propertyKey] = {
+      type: type,
+      items: {},
+    };
+    getNamedValidates(rules, lib.Items.name).forEach((v) => {
+      parseArraySchema(
+        builder,
+        propertiesObject[propertyKey] as SchemaObject,
+        lib,
+        v.args[0] as ArrayItemType
+      );
+    });
+  } else if (isClass(propertyCls)) {
     propertiesObject[propertyKey] = {
       $ref: `#/components/schemas/${propertyCls.name}`,
     } as ReferenceObject;
+    setComponentModelSchema(builder, propertyCls);
+  } else {
+    propertiesObject[propertyKey] = {
+      type: typeToApiType(propertyCls),
+    };
     setSchemaValue(
       builder,
       propertiesObject[propertyKey] as SchemaObject,
       rules
     );
-    setComponentModelSchema(builder, propertyCls);
-  } else {
-    const propertySchema = {
-      type: typeToApiType(propertyCls),
-      format: typeToFormatType(propertyCls),
-    } as SchemaObject;
-    propertiesObject[propertyKey] = propertySchema;
-    setSchemaValue(builder, propertySchema, rules);
   }
 }
 
@@ -180,4 +183,35 @@ export function getNamedValidates(rules: RuleRecord[], name: string) {
 
 export function existIgnore(rules: RuleRecord[]) {
   return rules.some((r) => r.validates.some((v) => v.name == lib.Ignore.name));
+}
+
+export function parseArraySchema(
+  builder: OpenApiBuilder,
+  target: SchemaObject,
+  lib: ValidatorDecoratorReturnType,
+  schemaValue: ArrayItemType
+) {
+  const type = typeToApiType(schemaValue);
+  if (Array.isArray(schemaValue)) {
+    delete target["$ref"];
+    target.items = {
+      type: "array",
+    };
+    schemaValue.forEach((sv) => {
+      parseArraySchema(builder, target.items as SchemaObject, lib, sv);
+    });
+  } else if (type == "object") {
+    if (isClass(schemaValue)) {
+      setComponentModelSchema(builder, schemaValue);
+      target.items = {
+        $ref: `#/components/schemas/${schemaValue.name}`,
+      } as ReferenceObject;
+    } else {
+      target.items = schemaValue;
+    }
+  } else {
+    target.items = {
+      type: type,
+    };
+  }
 }

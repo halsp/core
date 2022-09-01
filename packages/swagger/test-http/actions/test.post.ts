@@ -22,7 +22,9 @@ export class ResultDto {
   b1?: string;
   @S()
   b2?: number;
-  @S().Deprecated()
+  @S()
+    .Deprecated()
+    .Items([[BodyDto]])
   b3?: BodyDto;
 }
 
