@@ -40,7 +40,8 @@ export const normalizePath = (path?: string | null, leading = false) => {
       ?.replace(/\\/g, "/")
       ?.replace(/^\/+/, "")
       ?.replace(/\/+$/, "")
-      ?.replace(/\/+/g, "/") ?? "";
+      ?.replace(/\/+/g, "/")
+      ?.replace(/\.{2,}/g, ".") ?? "";
   return leading ? addLeadingSlash(result) : result;
 };
 

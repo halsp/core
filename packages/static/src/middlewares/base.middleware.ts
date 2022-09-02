@@ -5,7 +5,7 @@ import { FileOptions, DirectoryOptions } from "../options";
 export abstract class BaseMiddleware extends Middleware {
   readonly options!: FileOptions | DirectoryOptions;
 
-  private get isMethodValid(): boolean {
+  protected get isMethodValid(): boolean {
     if (!this.options.method) {
       return this.ctx.req.method == HttpMethod.get;
     }
@@ -20,18 +20,6 @@ export abstract class BaseMiddleware extends Middleware {
       if (this.ctx.req.method == this.options.method.toUpperCase()) return true;
       return false;
     }
-  }
-
-  private get isPathValidated(): boolean {
-    if (this.ctx.req.path.includes("..")) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  protected get isReqValidated(): boolean {
-    return this.isMethodValid && this.isPathValidated;
   }
 
   protected setBagFile(file: string, is404 = false): void {

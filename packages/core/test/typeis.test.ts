@@ -175,6 +175,7 @@ test("normalizePath ", async () => {
   expect(normalizePath("///path/")).toBe("path");
   expect(normalizePath("///")).toBe("");
   expect(normalizePath("///p///path///")).toBe("p/path");
+  expect(normalizePath("a/../b/..")).toBe("a/./b/.");
 
   expect(normalizePath("")).toBe("");
   expect(normalizePath("", true)).toBe("/");

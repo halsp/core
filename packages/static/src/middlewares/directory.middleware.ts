@@ -11,7 +11,7 @@ export class DirectoryMiddleware extends BaseMiddleware {
   }
 
   async invoke(): Promise<void> {
-    if (!this.isReqValidated) {
+    if (!this.isMethodValid) {
       await this.next();
       return;
     }
