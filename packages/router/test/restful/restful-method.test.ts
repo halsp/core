@@ -8,7 +8,6 @@ const methods = [
   HttpMethod.connect,
   HttpMethod.delete,
   HttpMethod.post,
-  HttpMethod.head,
   HttpMethod.options,
   HttpMethod.patch,
   HttpMethod.put,

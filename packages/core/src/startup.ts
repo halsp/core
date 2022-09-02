@@ -128,7 +128,13 @@ export abstract class Startup {
       ctx.catchError(err);
     }
 
-    return this.#setType(ctx.res);
+    this.#setType(ctx.res);
+
+    if (ctx.req.isHeadMethod) {
+      ctx.res.body = undefined;
+    }
+
+    return ctx.res;
   }
 
   #setType(res: Response): Response {

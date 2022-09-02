@@ -11,7 +11,11 @@ function runTest(method: string, success: boolean) {
       .run();
 
     if (success) {
-      expect(res.body).toBe("method");
+      if (method == HttpMethod.head) {
+        expect(res.body).toBeUndefined();
+      } else {
+        expect(res.body).toBe("method");
+      }
     }
     expect(res.status).toBe(success ? 200 : StatusCodes.METHOD_NOT_ALLOWED);
   });

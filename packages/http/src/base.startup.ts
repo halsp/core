@@ -158,10 +158,6 @@ export abstract class BaseStartup<
 
   #writeBody(ipareRes: Response, httpRes: http.ServerResponse) {
     if (!ipareRes.body) {
-      if (!httpRes.headersSent) {
-        httpRes.removeHeader("Content-Type");
-        httpRes.removeHeader("Content-Length");
-      }
       httpRes.end();
       return;
     }

@@ -59,21 +59,21 @@ test("single method", async () => {
 test("custom method", async () => {
   {
     const result = await new TestStartup()
-      .setRequest(new Request().setMethod("head").setPath("ind"))
+      .setRequest(new Request().setMethod("put").setPath("ind"))
       .useStatic({
         file: "test/static/index.html",
         reqPath: "ind",
-        method: "HEAD",
+        method: "PUT",
       })
       .run();
     expect(result.status).toBe(200);
   }
   {
     const result = await new TestStartup()
-      .setRequest(new Request().setMethod("HEAD"))
+      .setRequest(new Request().setMethod("PUT"))
       .useStatic({
         dir: "test/static",
-        method: "HEAD",
+        method: "PUT",
         fileIndex: true,
       })
       .run();
@@ -84,21 +84,21 @@ test("custom method", async () => {
 test("array method", async () => {
   {
     const result = await new TestStartup()
-      .setRequest(new Request().setMethod("head").setPath("ind"))
+      .setRequest(new Request().setMethod("put").setPath("ind"))
       .useStatic({
         file: "test/static/index.html",
         reqPath: "ind",
-        method: ["HEAD"],
+        method: ["PUT"],
       })
       .run();
     expect(result.status).toBe(200);
   }
   {
     const result = await new TestStartup()
-      .setRequest(new Request().setMethod("HEAD"))
+      .setRequest(new Request().setMethod("PUT"))
       .useStatic({
         dir: "test/static",
-        method: ["HEAD"],
+        method: ["PUT"],
         fileIndex: true,
       })
       .run();
@@ -109,7 +109,7 @@ test("array method", async () => {
 test("any method", async () => {
   {
     const result = await new TestStartup()
-      .setRequest(new Request().setMethod("HEAD"))
+      .setRequest(new Request().setMethod("PUT"))
       .useStatic({
         dir: "test/static",
         method: ["ANY"],
@@ -120,7 +120,7 @@ test("any method", async () => {
   }
   {
     const result = await new TestStartup()
-      .setRequest(new Request().setMethod("HEAD"))
+      .setRequest(new Request().setMethod("PUT"))
       .useStatic({
         dir: "test/static",
         method: "ANY",
