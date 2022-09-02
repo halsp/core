@@ -52,10 +52,8 @@ export class SwaggerMiddlware extends Middleware {
 
     let openApiVersion = "3.0.0";
     const openApiPkgPath = path.join(getAbsoluteFSPath(), "package.json");
-    if (fs.existsSync(openApiPkgPath)) {
-      const openApiPkg = JSON.parse(fs.readFileSync(openApiPkgPath, "utf-8"));
-      openApiVersion = openApiVersion ?? openApiPkg.version;
-    }
+    const openApiPkg = JSON.parse(fs.readFileSync(openApiPkgPath, "utf-8"));
+    openApiVersion = openApiPkg.version;
 
     return new OpenApiBuilder()
       .addTitle("Swagger UI")
