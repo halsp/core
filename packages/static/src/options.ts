@@ -7,6 +7,7 @@ export interface DirectoryOptions extends Options {
   dir: string;
   prefix?: string;
   file404?: string | true;
+  fileIndex?: string | true;
 }
 
 export interface FileOptions extends Options {

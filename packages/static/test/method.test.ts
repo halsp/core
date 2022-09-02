@@ -8,6 +8,7 @@ test("method", async () => {
       .setRequest(new Request().setMethod("GET"))
       .useStatic({
         dir: "test/static",
+        fileIndex: true,
       })
       .run();
     expect(result.status).toBe(200);
@@ -73,6 +74,7 @@ test("custom method", async () => {
       .useStatic({
         dir: "test/static",
         method: "HEAD",
+        fileIndex: true,
       })
       .run();
     expect(result.status).toBe(200);
@@ -97,6 +99,7 @@ test("array method", async () => {
       .useStatic({
         dir: "test/static",
         method: ["HEAD"],
+        fileIndex: true,
       })
       .run();
     expect(result.status).toBe(200);
@@ -110,6 +113,7 @@ test("any method", async () => {
       .useStatic({
         dir: "test/static",
         method: ["ANY"],
+        fileIndex: true,
       })
       .run();
     expect(result.status).toBe(200);
@@ -120,6 +124,7 @@ test("any method", async () => {
       .useStatic({
         dir: "test/static",
         method: "ANY",
+        fileIndex: true,
       })
       .run();
     expect(result.status).toBe(200);

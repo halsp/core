@@ -59,9 +59,16 @@ export class DirectoryMiddleware extends BaseMiddleware {
       return filePath;
     }
 
-    filePath = path.join(reqFilePath, "index.html");
-    if (fs.existsSync(filePath) && fs.lstatSync(filePath).isFile()) {
-      return filePath;
+    if (this.options.fileIndex) {
+      filePath = path.join(
+        reqFilePath,
+        typeof this.options.fileIndex == "string"
+          ? this.options.fileIndex
+          : "index.html"
+      );
+      if (fs.existsSync(filePath) && fs.lstatSync(filePath).isFile()) {
+        return filePath;
+      }
     }
 
     return;
