@@ -10,6 +10,11 @@ test("http methods", async () => {
   expect(HttpMethod.head.toUpperCase()).toBe("HEAD");
   expect(HttpMethod.options.toUpperCase()).toBe("OPTIONS");
   expect(HttpMethod.put.toUpperCase()).toBe("PUT");
+  expect(HttpMethod.move.toUpperCase()).toBe("MOVE");
+  expect(HttpMethod.copy.toUpperCase()).toBe("COPY");
+  expect(HttpMethod.link.toUpperCase()).toBe("LINK");
+  expect(HttpMethod.unlink.toUpperCase()).toBe("UNLINK");
+  expect(HttpMethod.wrapped.toUpperCase()).toBe("WRAPPED");
 });
 
 test("http methods matched", async () => {
@@ -24,6 +29,11 @@ test("http methods matched", async () => {
   expect(HttpMethod.matched("OPTIONS")).toBe("OPTIONS");
   expect(HttpMethod.matched("TRACE")).toBe("TRACE");
   expect(HttpMethod.matched("CONNECT")).toBe("CONNECT");
+  expect(HttpMethod.matched("MOVE")).toBe("MOVE");
+  expect(HttpMethod.matched("COPY")).toBe("COPY");
+  expect(HttpMethod.matched("LINK")).toBe("LINK");
+  expect(HttpMethod.matched("UNLINK")).toBe("UNLINK");
+  expect(HttpMethod.matched("WRAPPED")).toBe("WRAPPED");
 });
 
 test("custom methods", async () => {

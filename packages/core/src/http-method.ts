@@ -9,6 +9,11 @@ export class HttpMethod {
   static readonly options = "OPTIONS";
   static readonly trace = "TRACE";
   static readonly connect = "CONNECT";
+  static readonly move = "MOVE";
+  static readonly copy = "COPY";
+  static readonly link = "LINK";
+  static readonly unlink = "UNLINK";
+  static readonly wrapped = "WRAPPED";
 
   static matched(
     method: string,
@@ -16,6 +21,7 @@ export class HttpMethod {
   ): string | undefined {
     if (!method) return undefined;
     switch (method.toUpperCase()) {
+      case this.any:
       case this.get:
       case this.post:
       case this.put:
@@ -25,7 +31,11 @@ export class HttpMethod {
       case this.options:
       case this.trace:
       case this.connect:
-      case this.any:
+      case this.move:
+      case this.copy:
+      case this.link:
+      case this.unlink:
+      case this.wrapped:
         return method.toUpperCase();
       default: {
         return customMethods.filter((item) => this.equal(item, method))[0];
