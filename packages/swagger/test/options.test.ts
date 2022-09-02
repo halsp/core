@@ -1,4 +1,4 @@
-import { Request, Response } from "@ipare/core";
+import { HttpMethod, Request, Response } from "@ipare/core";
 import { TestStartup } from "@ipare/testing";
 import "../src";
 import { TEST_ACTION_DIR } from "@ipare/router/dist/constant";
@@ -17,11 +17,16 @@ TestStartup.prototype.setTestDir = function (dir: string) {
 function baseExpect(res: Response) {
   expect(res.status).toBe(200);
   expect(res.getHeader("content-type")).toBe("text/html");
-  expect((res.body as string).startsWith("<!DOCTYPE html>")).toBeTruthy();
+  expect(
+    (res.body as string).startsWith(
+      "<!-- HTML for static distribution bundle build -->"
+    )
+  ).toBeTruthy();
 }
 
 test("builder", async () => {
   const res = await new TestStartup()
+    .setRequest(new Request().setMethod(HttpMethod.get).setPath("swagger"))
     .use(async (ctx, next) => {
       await next();
       expect(typeof ctx.swaggerOptions.builder).toBe("function");
@@ -39,33 +44,9 @@ test("builder", async () => {
   baseExpect(res);
 });
 
-test("other router", async () => {
-  const res = await new TestStartup()
-    .setRequest(new Request().setPath("/test").setMethod("post"))
-    .useSwagger()
-    .setTestDir("test/parser")
-    .useRouter()
-    .run();
-
-  expect(res.status).toBe(200);
-});
-
-test("custom html", async () => {
-  const res = await new TestStartup()
-    .useSwagger({
-      customHtml: () => "abc",
-    })
-    .setTestDir("test/parser")
-    .useRouter()
-    .run();
-
-  expect(res.status).toBe(200);
-  expect(res.getHeader("content-type")).toBe("text/html");
-  expect(res.body).toBe("abc");
-});
-
 test("use again", async () => {
   const res = await new TestStartup()
+    .setRequest(new Request().setMethod(HttpMethod.get).setPath("swagger"))
     .useSwagger({})
     .useSwagger({})
     .setTestDir("test/parser")

@@ -9,7 +9,4 @@ type SwaggerBuilder = (
 export interface SwaggerOptions {
   path?: string;
   builder?: SwaggerBuilder;
-  customHtml?:
-    | ((jsonStr: string) => Promise<string>)
-    | ((jsonStr: string) => string);
 }

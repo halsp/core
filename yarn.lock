@@ -2211,6 +2211,11 @@
   dependencies:
     "@types/superagent" "*"
 
+"@types/swagger-ui-dist@^3.30.1":
+  version "3.30.1"
+  resolved "https://registry.npmjs.org/@types/swagger-ui-dist/-/swagger-ui-dist-3.30.1.tgz#8ad3370dfce23bf73144bd9c5560afe2b5ccbd18"
+  integrity sha512-wWojDensMF33dSrhak4iWSPOsWBbvf+rSJ6VWQ7ohQbGdKAiT2IwUexrDZkMvf3+vVAPVnNFDRDtxADFszbh+Q==
+
 "@types/type-is@^1.6.3":
   version "1.6.3"
   resolved "https://registry.npmmirror.com/@types/type-is/-/type-is-1.6.3.tgz#45285b3be846a4afc9d488910a8e4b7bc2e8a169"
@@ -7590,6 +7595,11 @@ supports-preserve-symlinks-flag@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmmirror.com/supports-preserve-symlinks-flag/-/supports-preserve-symlinks-flag-1.0.0.tgz#6eda4bd344a3c94aea376d4cc31bc77311039e09"
   integrity sha512-ot0WnXS9fgdkgIcePe6RHNk1WA8+muPa6cSjeR3V8K27q9BB1rTE3R1p7Hv0z1ZyAc8s6Vvv8DIyWf681MAt0w==
+
+swagger-ui-dist@^4.14.0:
+  version "4.14.0"
+  resolved "https://registry.npmjs.org/swagger-ui-dist/-/swagger-ui-dist-4.14.0.tgz#e34d807464eb84578c43902e393084a1a6fbda52"
+  integrity sha512-TBzhheU15s+o54Cgk9qxuYcZMiqSm/SkvKnapoGHOF66kz0Y5aGjpzj5BT/vpBbn6rTPJ9tUYXQxuDWfsjiGMw==
 
 tar-stream@~2.2.0:
   version "2.2.0"
