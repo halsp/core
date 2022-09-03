@@ -212,31 +212,34 @@ function createContentObject(
   rules: RuleRecord[],
   validate: ValidateItem
 ) {
-  const mediaValidates = getNamedValidates(rules, lib.ResponseMediaTypes.name);
-  const mediaTypes: string[] = [];
-  if (mediaValidates.length) {
-    mediaValidates.forEach((validate) => {
-      mediaTypes.push(...validate.args);
+  const contentTypeValidates = getNamedValidates(
+    rules,
+    lib.ResponseContentTypes.name
+  );
+  const contentTypes: string[] = [];
+  if (contentTypeValidates.length) {
+    contentTypeValidates.forEach((validate) => {
+      contentTypes.push(...validate.args);
     });
   }
-  if (!mediaTypes.length) {
-    mediaTypes.push(...jsonTypes);
+  if (!contentTypes.length) {
+    contentTypes.push(...jsonTypes);
   }
 
   const schemaValue: ObjectConstructor | SchemaObject =
     typeof validate.args[0] == "number" ? validate.args[1] : validate.args[0];
   const contentObject: ContentObject = {};
-  for (const media of mediaTypes) {
-    contentObject[media] = {};
-    const mediaObj = contentObject[media] as MediaTypeObject;
+  for (const contentType of contentTypes) {
+    contentObject[contentType] = {};
+    const contentTypeObj = contentObject[contentType] as MediaTypeObject;
 
     if (isClass(schemaValue)) {
       setComponentModelSchema(builder, schemaValue);
-      mediaObj.schema = {
+      contentTypeObj.schema = {
         $ref: `#/components/schemas/${schemaValue.name}`,
       } as ReferenceObject;
     } else {
-      mediaObj.schema = schemaValue;
+      contentTypeObj.schema = schemaValue;
     }
   }
 

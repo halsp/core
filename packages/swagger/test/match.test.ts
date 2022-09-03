@@ -28,7 +28,7 @@ describe("match path", () => {
 
   it("should matched when method is get", async () => {
     const res = await new TestStartup()
-      .setRequest(new Request().setPath("swagger").setMethod("get"))
+      .setRequest(new Request().setPath("swagger/index.html").setMethod("get"))
       .useSwagger()
       .setTestDir("test/parser")
       .useRouter()
@@ -39,7 +39,7 @@ describe("match path", () => {
 
   it("should matched when method is any", async () => {
     const res = await new TestStartup()
-      .setRequest(new Request().setPath("swagger").setMethod("get"))
+      .setRequest(new Request().setPath("swagger/index.html").setMethod("get"))
       .useSwagger()
       .setTestDir("test/parser")
       .useRouter()

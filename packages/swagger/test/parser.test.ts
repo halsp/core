@@ -101,10 +101,10 @@ describe("body", () => {
   });
 });
 
-describe("media type", () => {
-  it("should set default media types", () => {
+describe("content type", () => {
+  it("should set default content types", () => {
     const mapItems = [
-      new MapItem("media.ts", "DefaultAction", "test", ["post"]),
+      new MapItem("content-type.ts", "DefaultAction", "test", ["post"]),
     ];
     const doc = runParserTest(mapItems);
 
@@ -113,8 +113,10 @@ describe("media type", () => {
     ).toEqual(["application/json"]);
   });
 
-  it("should set default media types when @MediaTypes value is empty array", () => {
-    const mapItems = [new MapItem("media.ts", "EmptyAction", "test", ["post"])];
+  it("should set default content types when @ContentTypes value is empty array", () => {
+    const mapItems = [
+      new MapItem("content-type.ts", "EmptyAction", "test", ["post"]),
+    ];
     const doc = runParserTest(mapItems);
 
     expect(
@@ -122,8 +124,10 @@ describe("media type", () => {
     ).toEqual(["application/json"]);
   });
 
-  it("should set custom media types", () => {
-    const mapItems = [new MapItem("media.ts", "AddAction", "test", ["post"])];
+  it("should set custom content types", () => {
+    const mapItems = [
+      new MapItem("content-type.ts", "AddAction", "test", ["post"]),
+    ];
     const doc = runParserTest(mapItems);
 
     expect(
@@ -131,9 +135,9 @@ describe("media type", () => {
     ).toEqual(["mt"]);
   });
 
-  it("should set multiple custom media types", () => {
+  it("should set multiple custom content types", () => {
     const mapItems = [
-      new MapItem("media.ts", "MultipleAction", "test", ["post"]),
+      new MapItem("content-type.ts", "MultipleAction", "test", ["post"]),
     ];
     const doc = runParserTest(mapItems);
 
@@ -372,8 +376,8 @@ describe("response", () => {
     });
   });
 
-  it("should set response media types", async () => {
-    const doc = getDoc("ResponseMediaTypes");
+  it("should set response content types", async () => {
+    const doc = getDoc("ResponseContentTypes");
     expect(getResponses(doc)).toEqual({
       default: {
         content: {
@@ -389,8 +393,8 @@ describe("response", () => {
     });
   });
 
-  it("should set response media types", async () => {
-    const doc = getDoc("ResponseStatusMediaTypes");
+  it("should set response content types", async () => {
+    const doc = getDoc("ResponseStatusContentTypes");
     expect(getResponses(doc)).toEqual({
       default: {
         content: {

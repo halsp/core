@@ -59,7 +59,7 @@ declare module "@ipare/validator" {
     MinProperties: (value: number) => RT;
     Enum: (...value: any[]) => RT;
 
-    MediaTypes: (...value: string[]) => RT;
+    ContentTypes: (...value: string[]) => RT;
 
     Response: ((body: ObjectConstructor | SchemaObject) => RT) &
       ((status: number, body: ObjectConstructor | SchemaObject) => RT);
@@ -67,7 +67,7 @@ declare module "@ipare/validator" {
       ((status: number, value: Record<string, HeaderObject>) => RT);
     ResponseDescription: ((description: string) => RT) &
       ((status: number, description: string) => RT);
-    ResponseMediaTypes: (...value: string[]) => RT;
+    ResponseContentTypes: (...value: string[]) => RT;
   }
 }
 

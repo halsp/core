@@ -158,40 +158,49 @@ export class Parser {
     const actionRules = rules.filter(
       (r) => isUndefined(r.propertyKey) && isUndefined(r.parameterIndex)
     );
-    const mediaTypes: string[] = [];
-    const mediaValidates = getNamedValidates(actionRules, lib.MediaTypes.name);
-    if (mediaValidates.length) {
-      mediaValidates.forEach((validate) => {
-        mediaTypes.push(...validate.args);
+    const contentTypes: string[] = [];
+    const contentTypeValidates = getNamedValidates(
+      actionRules,
+      lib.ContentTypes.name
+    );
+    if (contentTypeValidates.length) {
+      contentTypeValidates.forEach((validate) => {
+        contentTypes.push(...validate.args);
       });
     }
-    if (!mediaTypes.length) {
-      mediaTypes.push(...jsonTypes);
+    if (!contentTypes.length) {
+      contentTypes.push(...jsonTypes);
     }
 
-    for (const media of mediaTypes) {
-      this.parseBodyMediaSchema(requestBody, media, action, record, bodyRules);
+    for (const contentType of contentTypes) {
+      this.parseBodyContentTypeSchema(
+        requestBody,
+        contentType,
+        action,
+        record,
+        bodyRules
+      );
     }
   }
 
-  private parseBodyMediaSchema(
+  private parseBodyContentTypeSchema(
     requestBody: RequestBodyObject,
-    media: string,
+    contentType: string,
     action: ObjectConstructor<Action>,
     record: PipeReqRecord,
     rules: RuleRecord[]
   ) {
-    const mediaObj = requestBody.content[media] ?? {};
-    requestBody.content[media] = mediaObj;
+    const contentTypeObj = requestBody.content[contentType] ?? {};
+    requestBody.content[contentType] = contentTypeObj;
 
     if (!!record.property) {
-      mediaObj.schema = mediaObj.schema ?? {
+      contentTypeObj.schema = contentTypeObj.schema ?? {
         type: "object",
       };
-      const mediaSchema = mediaObj.schema as SchemaObject;
-      mediaSchema.properties = mediaSchema.properties ?? {};
-      const properties = mediaSchema.properties as Exclude<
-        typeof mediaSchema.properties,
+      const contentTypeSchema = contentTypeObj.schema as SchemaObject;
+      contentTypeSchema.properties = contentTypeSchema.properties ?? {};
+      const properties = contentTypeSchema.properties as Exclude<
+        typeof contentTypeSchema.properties,
         undefined
       >;
 
@@ -203,30 +212,30 @@ export class Parser {
         rules
       );
 
-      mediaSchema.required = Object.keys(properties).filter(
+      contentTypeSchema.required = Object.keys(properties).filter(
         (property) => (properties[property] as SchemaObject).nullable == false
       );
-      if (!mediaSchema.required.length) {
-        delete mediaSchema.required;
+      if (!contentTypeSchema.required.length) {
+        delete contentTypeSchema.required;
       }
     } else {
       const modelType = this.getPipeRecordModelType(action, record);
       const type = typeToApiType(modelType);
       if (type == "array") {
-        mediaObj.schema = {
+        contentTypeObj.schema = {
           type,
           items: {},
         };
         getNamedValidates(rules, lib.Items.name).forEach((v) => {
           parseArraySchema(
             this.builder,
-            mediaObj.schema as SchemaObject,
+            contentTypeObj.schema as SchemaObject,
             lib,
             v.args[0] as ArrayItemType
           );
         });
       } else if (isClass(modelType)) {
-        mediaObj.schema = mediaObj.schema ?? {
+        contentTypeObj.schema = contentTypeObj.schema ?? {
           type,
           properties: {},
         };
@@ -235,13 +244,17 @@ export class Parser {
         setModelSchema(
           this.builder,
           modelType,
-          mediaObj.schema as SchemaObject
+          contentTypeObj.schema as SchemaObject
         );
       } else {
-        mediaObj.schema = mediaObj.schema ?? {
+        contentTypeObj.schema = contentTypeObj.schema ?? {
           type,
         };
-        setSchemaValue(this.builder, mediaObj.schema as SchemaObject, rules);
+        setSchemaValue(
+          this.builder,
+          contentTypeObj.schema as SchemaObject,
+          rules
+        );
       }
     }
   }

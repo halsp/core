@@ -124,8 +124,8 @@ export class ResponseStatusAndDefaultHeaders extends Action {
   }
 }
 
-@S().Tags("test").Response(TestDto).ResponseMediaTypes("mt1", "mt2")
-export class ResponseMediaTypes extends Action {
+@S().Tags("test").Response(TestDto).ResponseContentTypes("mt1", "mt2")
+export class ResponseContentTypes extends Action {
   async invoke(): Promise<void> {
     this.ok();
   }
@@ -135,8 +135,8 @@ export class ResponseMediaTypes extends Action {
   .Tags("test")
   .Response(TestDto)
   .Response(200, ResultDto)
-  .ResponseMediaTypes("mt1", "mt2")
-export class ResponseStatusMediaTypes extends Action {
+  .ResponseContentTypes("mt1", "mt2")
+export class ResponseStatusContentTypes extends Action {
   async invoke(): Promise<void> {
     this.ok();
   }

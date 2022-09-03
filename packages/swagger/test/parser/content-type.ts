@@ -12,7 +12,7 @@ export class DefaultAction extends Action {
   }
 }
 
-@S().Tags("test").MediaTypes()
+@S().Tags("test").ContentTypes()
 export class EmptyAction extends Action {
   @Body("abc")
   private readonly abc!: number;
@@ -22,7 +22,7 @@ export class EmptyAction extends Action {
   }
 }
 
-@S().Tags("test").MediaTypes("mt")
+@S().Tags("test").ContentTypes("mt")
 export class AddAction extends Action {
   @Body("abc")
   private readonly abc!: number;
@@ -32,7 +32,7 @@ export class AddAction extends Action {
   }
 }
 
-@S().Tags("test").MediaTypes("mt1", "mt2").MediaTypes().MediaTypes("mt3")
+@S().Tags("test").ContentTypes("mt1", "mt2").ContentTypes().ContentTypes("mt3")
 export class MultipleAction extends Action {
   @Body("abc")
   private readonly abc!: number;

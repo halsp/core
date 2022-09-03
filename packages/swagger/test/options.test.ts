@@ -26,7 +26,9 @@ function baseExpect(res: Response) {
 
 test("builder", async () => {
   const res = await new TestStartup()
-    .setRequest(new Request().setMethod(HttpMethod.get).setPath("swagger"))
+    .setRequest(
+      new Request().setMethod(HttpMethod.get).setPath("swagger/index.html")
+    )
     .use(async (ctx, next) => {
       await next();
       expect(typeof ctx.swaggerOptions.builder).toBe("function");
@@ -46,7 +48,9 @@ test("builder", async () => {
 
 test("use again", async () => {
   const res = await new TestStartup()
-    .setRequest(new Request().setMethod(HttpMethod.get).setPath("swagger"))
+    .setRequest(
+      new Request().setMethod(HttpMethod.get).setPath("swagger/index.html")
+    )
     .useSwagger({})
     .useSwagger({})
     .setTestDir("test/parser")
