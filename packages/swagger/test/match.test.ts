@@ -203,3 +203,57 @@ describe("match path", () => {
     }
   });
 });
+
+describe("redirect", () => {
+  it("should redirect to ./index.html when path is root", async () => {
+    const res = await new TestStartup()
+      .setRequest(new Request().setPath("swagger").setMethod("get"))
+      .useSwagger()
+      .setTestDir("test/parser")
+      .useRouter()
+      .run();
+
+    expect(res.status).toBe(308);
+    expect(res.get("location")).toBe("./index.html");
+  });
+
+  it("should redirect to ./index.html when path is swagger/", async () => {
+    const res = await new TestStartup()
+      .setRequest(new Request().setPath("swagger/").setMethod("get"))
+      .useSwagger()
+      .setTestDir("test/parser")
+      .useRouter()
+      .run();
+
+    expect(res.status).toBe(308);
+    expect(res.get("location")).toBe("./index.html");
+  });
+
+  it("should redirect to ./index.html when path is swagger/abc/", async () => {
+    const res = await new TestStartup()
+      .setRequest(new Request().setPath("swagger/abc/").setMethod("get"))
+      .useSwagger({
+        path: "swagger/abc",
+      })
+      .setTestDir("test/parser")
+      .useRouter()
+      .run();
+
+    expect(res.status).toBe(308);
+    expect(res.get("location")).toBe("./index.html");
+  });
+
+  it("should redirect to ./abc/index.html when path is swagger/abc", async () => {
+    const res = await new TestStartup()
+      .setRequest(new Request().setPath("swagger/abc").setMethod("get"))
+      .useSwagger({
+        path: "swagger/abc",
+      })
+      .setTestDir("test/parser")
+      .useRouter()
+      .run();
+
+    expect(res.status).toBe(308);
+    expect(res.get("location")).toBe("./abc/index.html");
+  });
+});
