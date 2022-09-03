@@ -16,3 +16,10 @@ test("error path", async () => {
   const req2 = new Request().setPath("user");
   expect(req2.path).toBe("user");
 });
+
+test("originalPath", async () => {
+  const req = new Request().setPath("/abc/");
+
+  expect(req.path).toBe("abc");
+  expect(req.originalPath).toBe("/abc/");
+});
