@@ -46,18 +46,6 @@
     "rimraf": "^3.0.2",
     "ts-jest": "^28.0.8"
   },
-  "peerDependencies": {
-    "@ipare/core": "~1",
-    "@ipare/inject": "~1"
-  },
-  "peerDependenciesMeta": {
-    "@ipare/core": {
-      "optional": true
-    },
-    "@ipare/inject": {
-      "optional": true
-    }
-  },
   "files": [
     "/dist/*",
     "/src/*",

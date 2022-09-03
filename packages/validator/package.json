@@ -49,20 +49,9 @@
     "ts-jest": "^28.0.8"
   },
   "peerDependencies": {
-    "@ipare/core": "~1",
-    "@ipare/inject": "~1",
-    "@ipare/pipe": "~1"
+    "class-validator": "*"
   },
   "peerDependenciesMeta": {
-    "@ipare/core": {
-      "optional": true
-    },
-    "@ipare/inject": {
-      "optional": true
-    },
-    "@ipare/pipe": {
-      "optional": true
-    },
     "class-validator": {
       "optional": true
     }

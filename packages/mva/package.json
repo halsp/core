@@ -52,26 +52,6 @@
     "shelljs": "^0.8.5",
     "ts-jest": "^28.0.8"
   },
-  "peerDependencies": {
-    "@ipare/core": "~1",
-    "@ipare/filter": "~1",
-    "@ipare/router": "~1",
-    "@ipare/view": "~1"
-  },
-  "peerDependenciesMeta": {
-    "@ipare/core": {
-      "optional": true
-    },
-    "@ipare/filter": {
-      "optional": true
-    },
-    "@ipare/router": {
-      "optional": true
-    },
-    "@ipare/view": {
-      "optional": true
-    }
-  },
   "files": [
     "/dist/*",
     "/src/*",

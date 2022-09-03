@@ -55,30 +55,6 @@
     "prettier": "^2.7.1",
     "ts-jest": "^28.0.8"
   },
-  "peerDependencies": {
-    "@ipare/core": "~1",
-    "@ipare/inject": "~1",
-    "@ipare/pipe": "~1",
-    "@ipare/router": "~1",
-    "@ipare/validator": "~1"
-  },
-  "peerDependenciesMeta": {
-    "@ipare/core": {
-      "optional": true
-    },
-    "@ipare/inject": {
-      "optional": true
-    },
-    "@ipare/router": {
-      "optional": true
-    },
-    "@ipare/pipe": {
-      "optional": true
-    },
-    "@ipare/validator": {
-      "optional": true
-    }
-  },
   "files": [
     "/dist/*",
     "/src/*",
