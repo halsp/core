@@ -109,23 +109,6 @@ describe("match path", () => {
     expect(res.status).toBe(200);
   });
 
-  it("should replace default json", async () => {
-    const res = await new TestStartup()
-      .setRequest(
-        new Request().setPath("swagger/swagger-initializer.js").setMethod("get")
-      )
-      .useSwagger()
-      .setTestDir("test/parser")
-      .useRouter()
-      .run();
-
-    expect(
-      (res.body as string).includes(
-        "https://petstore.swagger.io/v2/swagger.json"
-      )
-    ).toBeFalsy();
-  });
-
   it("should not replace body when status is not 200", async () => {
     const res = await new TestStartup()
       .setRequest(new Request().setPath("swagger/not-exist").setMethod("get"))

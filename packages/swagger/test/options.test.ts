@@ -361,3 +361,107 @@ describe("options", () => {
     );
   });
 });
+
+describe("swagger-initializer.js", () => {
+  it("should set default swagger config", async () => {
+    const res = await new TestStartup()
+      .setRequest(
+        new Request()
+          .setMethod(HttpMethod.get)
+          .setPath("swagger/swagger-initializer.js")
+      )
+      .useSwagger()
+      .setTestDir("test/parser")
+      .useRouter()
+      .run();
+
+    expect(res.status).toBe(200);
+
+    const json = JSON.stringify({
+      url: `./index.json`,
+      dom_id: "#swagger-ui",
+      presets: [
+        "%SwaggerUIBundle.presets.apis%",
+        "%SwaggerUIStandalonePreset%",
+      ],
+      plugins: ["%SwaggerUIBundle.plugins.DownloadUrl%"],
+    })
+      .replace(/"%/g, "")
+      .replace(/%"/g, "");
+    expect(res.body).toBe(`window.onload = function() {
+  const ui = SwaggerUIBundle(${json});
+  
+  window.ui = ui;
+  };`);
+  });
+
+  it("should set custom swagger config", async () => {
+    const res = await new TestStartup()
+      .setRequest(
+        new Request()
+          .setMethod(HttpMethod.get)
+          .setPath("swagger/swagger-initializer.js")
+      )
+      .useSwagger({
+        uiBundleOptions: {
+          url: "swagger.json",
+          deepLinking: true,
+          presets: [],
+          plugins: [],
+        },
+      })
+      .setTestDir("test/parser")
+      .useRouter()
+      .run();
+
+    expect(res.status).toBe(200);
+
+    const json = JSON.stringify({
+      url: `swagger.json`,
+      dom_id: "#swagger-ui",
+      presets: [],
+      plugins: [],
+      deepLinking: true,
+    });
+    expect(res.body).toBe(`window.onload = function() {
+  const ui = SwaggerUIBundle(${json});
+  
+  window.ui = ui;
+  };`);
+  });
+
+  it("should initOAuth when set options.initOAuth = true", async () => {
+    const res = await new TestStartup()
+      .setRequest(
+        new Request()
+          .setMethod(HttpMethod.get)
+          .setPath("swagger/swagger-initializer.js")
+      )
+      .useSwagger({
+        uiBundleOptions: {
+          url: "swagger.json",
+          presets: [],
+          plugins: [],
+        },
+        initOAuth: true,
+      })
+      .setTestDir("test/parser")
+      .useRouter()
+      .run();
+
+    expect(res.status).toBe(200);
+
+    const json = JSON.stringify({
+      url: `swagger.json`,
+      dom_id: "#swagger-ui",
+      presets: [],
+      plugins: [],
+    });
+    expect(res.body).toBe(`window.onload = function() {
+  const ui = SwaggerUIBundle(${json});
+  ui.initOAuth(true);
+
+  window.ui = ui;
+  };`);
+  });
+});

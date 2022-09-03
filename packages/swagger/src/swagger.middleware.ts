@@ -8,10 +8,9 @@ import {
 } from "@ipare/core";
 import { Parser } from "./parser";
 import { SwaggerOptions } from "./options";
-import { OpenApiBuilder, OpenAPIObject } from "openapi3-ts";
+import { OpenApiBuilder } from "openapi3-ts";
 import path from "path";
 import * as fs from "fs";
-import { DOC_RECORD } from "./constant";
 
 export class SwaggerMiddlware extends Middleware {
   constructor(private readonly options: SwaggerOptions) {
@@ -46,8 +45,17 @@ export class SwaggerMiddlware extends Middleware {
 
     const extendPath = normalizePath(reqPath.replace(optPath, ""));
     if (extendPath == "index.json") {
-      const apiDoc = await this.createApiDoc();
+      const openApiBuilder = await this.createBuilder();
+      const apiDoc = new Parser(
+        this.ctx.startup.routerMap,
+        openApiBuilder,
+        this.ctx.startup.routerOptions
+      ).parse();
       this.ctx.set("content-type", "text/json").ok(apiDoc);
+      return;
+    } else if (extendPath == "swagger-initializer.js") {
+      const js = await this.createInitializer();
+      this.ctx.set("content-type", "application/javascript").ok(js);
       return;
     }
 
@@ -79,17 +87,29 @@ export class SwaggerMiddlware extends Middleware {
     return openApiBuilder;
   }
 
-  private async createApiDoc(): Promise<OpenAPIObject> {
-    if (!this.ctx.startup[DOC_RECORD]) {
-      const openApiBuilder = await this.createBuilder();
-      this.ctx.startup[DOC_RECORD] = new Parser(
-        this.ctx.startup.routerMap,
-        openApiBuilder,
-        this.ctx.startup.routerOptions
-      ).parse();
-    }
+  private async createInitializer() {
+    const uiBundleOptions = {
+      url: `./index.json`,
+      dom_id: "#swagger-ui",
+      presets: [
+        "%SwaggerUIBundle.presets.apis%",
+        "%SwaggerUIStandalonePreset%",
+      ],
+      plugins: ["%SwaggerUIBundle.plugins.DownloadUrl%"],
+      ...this.options.uiBundleOptions,
+    };
 
-    return this.ctx.startup[DOC_RECORD];
+    const initOAuthJson = JSON.stringify(this.options.initOAuth ?? {});
+
+    const optionsJson = JSON.stringify(uiBundleOptions)
+      .replace(/"%/g, "")
+      .replace(/%"/g, "");
+
+    return `window.onload = function() {
+  const ui = SwaggerUIBundle(${optionsJson});
+  ${this.options.initOAuth ? `ui.initOAuth(${initOAuthJson});\n` : ``}
+  window.ui = ui;
+  };`;
   }
 
   private async replaceBody(extendPath: string) {
@@ -97,22 +117,9 @@ export class SwaggerMiddlware extends Middleware {
     if (isUndefined(this.res.body)) return;
     if (!isString(this.res.body)) return;
 
-    if (extendPath == "swagger-initializer.js") {
-      await this.replaceInitializer();
-    }
-
     if (extendPath == "index.html") {
       await this.replaceIndexContent();
     }
-  }
-
-  private async replaceInitializer() {
-    let content = this.res.body;
-    content = content.replace(
-      `https://petstore.swagger.io/v2/swagger.json`,
-      `./index.json`
-    );
-    this.res.body = content;
   }
 
   private async replaceIndexContent() {

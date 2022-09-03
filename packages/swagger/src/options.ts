@@ -1,5 +1,6 @@
 import { HttpContext } from "@ipare/core";
 import { OpenApiBuilder } from "openapi3-ts";
+import type swaggerUi from "swagger-ui-dist";
 
 type SwaggerBuilder = (
   builder: OpenApiBuilder,
@@ -17,8 +18,15 @@ export interface SwaggerHtmlOptions {
   script?: string | string[];
 }
 
+export type SwaggerUIBundleConfig = Omit<
+  Omit<swaggerUi.SwaggerConfigs, "url">,
+  "dom_id"
+>;
+
 export interface SwaggerOptions {
   path?: string;
   builder?: SwaggerBuilder;
   html?: SwaggerHtmlOptions;
+  initOAuth?: any;
+  uiBundleOptions?: SwaggerUIBundleConfig;
 }
