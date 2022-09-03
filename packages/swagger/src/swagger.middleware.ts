@@ -6,7 +6,7 @@ import {
   normalizePath,
 } from "@ipare/core";
 import { Parser } from "./parser";
-import { SwaggerOptions } from "./swagger-options";
+import { SwaggerOptions } from "./options";
 import { OpenApiBuilder, OpenAPIObject } from "openapi3-ts";
 import path from "path";
 import * as fs from "fs";

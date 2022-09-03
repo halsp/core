@@ -3,7 +3,7 @@ import "@ipare/router";
 import "@ipare/static";
 import { normalizePath, Startup } from "@ipare/core";
 import { USED } from "./constant";
-import { SwaggerOptions } from "./swagger-options";
+import { SwaggerOptions } from "./options";
 import "./validator.decorator";
 import { SwaggerMiddlware } from "./swagger.middleware";
 import { getAbsoluteFSPath } from "swagger-ui-dist";
