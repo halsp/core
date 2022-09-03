@@ -85,7 +85,6 @@ describe("body", () => {
             type: "string",
           },
         },
-        required: [],
         type: "object",
       },
     });
@@ -443,7 +442,6 @@ describe("array", () => {
             type: "string",
           },
         },
-        required: [],
         type: "object",
       },
     });
@@ -539,7 +537,6 @@ describe("array", () => {
             $ref: "#/components/schemas/TestDto",
           },
         },
-        required: [],
         type: "object",
       },
     });

@@ -175,6 +175,12 @@ function parseResponse(
       contentCodeValidates
     );
   });
+
+  if (!Object.keys(responses).length) {
+    responses.default = {
+      description: "",
+    };
+  }
 }
 
 function createResponseObject(
