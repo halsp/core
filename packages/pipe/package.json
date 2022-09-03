@@ -1,6 +1,6 @@
 {
   "name": "@ipare/pipe",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Ipare 的管道插件，用于校验、转换、格式化请求参数",
   "engines": {
     "node": ">=12.16.0"
@@ -28,8 +28,8 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^2.0.0",
-    "@ipare/inject": "^2.0.0",
+    "@ipare/core": "^2.0.1",
+    "@ipare/inject": "^2.0.1",
     "class-transformer": "^0.5.1",
     "reflect-metadata": "^0.1.13"
   },
