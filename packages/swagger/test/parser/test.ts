@@ -1,36 +1,36 @@
 import { Inject } from "@ipare/inject";
 import { Body, Header } from "@ipare/pipe";
 import { Action } from "@ipare/router";
-import { S } from "../../src";
+import { V } from "@ipare/validator";
 
 export class TestEmptyDto {}
 
 export class TestBodyDto {
-  @S().Description("sum")
+  @V().Description("sum")
   b1?: string;
-  @S().Required()
+  @V().Required()
   b2?: number;
-  @S().Required()
+  @V().Required()
   bigint?: bigint;
-  @S().Required()
+  @V().Required()
   bool?: boolean;
-  @S().Required()
+  @V().Required()
   arr?: string[];
-  @S().Required()
+  @V().Required()
   any?: any;
-  @S().Required()
+  @V().Required()
   date?: Date;
 }
 
 export class TestHeaderDto {
-  @S().Required().Description("sum")
+  @V().Required().Description("sum")
   h1?: string;
 
-  @S().Deprecated()
+  @V().Deprecated()
   h2?: number;
 }
 
-@S().Tags("test")
+@V().Tags("test")
 @Inject
 export class TestPost extends Action {
   constructor(@Header readonly header: TestHeaderDto) {
@@ -48,7 +48,7 @@ export class TestPost extends Action {
   @Body
   private readonly b1!: TestBodyDto;
   @Body("bbb")
-  @S().Required()
+  @V().Required()
   private readonly bbb!: string;
 
   async invoke(): Promise<void> {
@@ -56,8 +56,8 @@ export class TestPost extends Action {
   }
 }
 
-@S().Tags("test")
-@S().Summary("summary")
+@V().Tags("test")
+@V().Summary("summary")
 export class TestGet extends Action {
   @Header
   private readonly h!: TestHeaderDto;

@@ -1,35 +1,35 @@
 import { Body, Header, Param, Query } from "@ipare/pipe";
 import { Action, HttpPost } from "@ipare/router";
-import { S } from "../../src";
+import { V } from "@ipare/validator";
 
 export class HeaderDto {
-  @S().Description("header-h1")
-  @S().Required()
+  @V().Description("header-h1")
+  @V().Required()
   hd1?: string;
 
-  @S().Deprecated()
+  @V().Deprecated()
   hd2?: number;
 }
 
 export class BodyDto {
-  @S().Description("body-b1").Required().Items(HeaderDto)
+  @V().Description("body-b1").Required().Items(HeaderDto)
   bd1?: HeaderDto[];
   bd2?: number;
 }
 
 export class ResultDto {
-  @S().Description("result-b1").Required().Items(String)
+  @V().Description("result-b1").Required().Items(String)
   rd1?: string;
-  @S()
+  @V()
   rd2?: number;
-  @S()
+  @V()
     .Deprecated()
     .Items([[BodyDto]])
   rd3?: BodyDto;
 }
 
-@S().Summary("login test")
-@S().Tags("test").Response(ResultDto)
+@V().Summary("login test")
+@V().Tags("test").Response(ResultDto)
 @HttpPost("test/^p")
 export default class extends Action {
   @Header

@@ -1,11 +1,11 @@
 import { Body, Header, Query } from "@ipare/pipe";
 import { Action, HttpDelete, HttpPost, HttpPut } from "@ipare/router";
-import { S } from "../../src";
+import { V } from "@ipare/validator";
 
 class TestClassDto {}
 
 export class TestDecoratorHeaderDto {
-  @S()
+  @V()
     .Default("abc")
     .Title("title")
     .ReadOnly()
@@ -14,7 +14,7 @@ export class TestDecoratorHeaderDto {
     .IsOptional()
   p1!: string;
 
-  @S().Examples({
+  @V().Examples({
     abc: {
       description: "abc",
       value: "123",
@@ -24,62 +24,62 @@ export class TestDecoratorHeaderDto {
       value: 456,
     },
   })
-  @S().WriteOnly().Min(10).Max(20)
+  @V().WriteOnly().Min(10).Max(20)
   p2!: string;
 
-  @S().Ignore().Format("date")
+  @V().Ignore().Format("date")
   p3!: string;
 
-  @S().MinProperties(1).MaxProperties(10).Min(1).Max(10)
+  @V().MinProperties(1).MaxProperties(10).Min(1).Max(10)
   p4!: number;
 
-  @S().Style("form")
+  @V().Style("form")
   p5!: number;
 
   p7!: string;
 
-  @S().Xml({})
+  @V().Xml({})
   p8!: string;
 
-  @S().IsInt()
+  @V().IsInt()
   p9!: string;
 
-  @S().Enum("abc", "def")
+  @V().Enum("abc", "def")
   p10!: string;
 }
 
-@S().Description("dto")
+@V().Description("dto")
 class TestDecoratorBodyDto {
   constructor(
-    @S().Description("invalid")
+    @V().Description("invalid")
     readonly invalid: string
   ) {}
 
-  @S().Items({
+  @V().Items({
     type: "number",
   })
-  @S().Description("def")
+  @V().Description("def")
   p1!: number[];
 
-  @S().Items(TestClassDto)
+  @V().Items(TestClassDto)
   p2!: number[];
 
-  @S().Items(Number)
+  @V().Items(Number)
   p3!: number[];
 
-  @S().Required().Description("abc")
+  @V().Required().Description("abc")
   p4!: TestClassDto;
 }
 
 export class TestDecoratorQueryDto {
-  @S().Ignore()
-  @S().Default("qqq")
+  @V().Ignore()
+  @V().Default("qqq")
   q1!: string;
 }
 
 @HttpPost("test")
-@S().Tags("test")
-@S()
+@V().Tags("test")
+@V()
   .ExternalDocs({
     url: "https://ipare.org",
   })
@@ -87,7 +87,7 @@ export class TestDecoratorQueryDto {
   .OperationId("opt-id")
   .Summary("test summary")
   .Security({ jwt: ["123", "456"] })
-@S().Servers({
+@V().Servers({
   url: "https://ipare.org",
   description: "servers",
 })
@@ -105,22 +105,22 @@ export class TestDecorator extends Action {
 }
 
 @HttpPut("test")
-@S().Tags("test")
+@V().Tags("test")
 export class ParameterDecoratorTest extends Action {
   constructor(
-    @S().Required().Description("header constructor")
+    @V().Required().Description("header constructor")
     @Header("hc")
     readonly hc: string,
 
-    @S().Description("body constructor 1")
+    @V().Description("body constructor 1")
     @Body("bc1")
     readonly bc1: string,
 
-    @S().Required().Description("body constructor 2")
+    @V().Required().Description("body constructor 2")
     @Body("bc2")
     readonly bc2: string,
 
-    @S().Description("body constructor 3").Ignore()
+    @V().Description("body constructor 3").Ignore()
     @Body("bc3")
     readonly bc3: string
   ) {
@@ -131,14 +131,14 @@ export class ParameterDecoratorTest extends Action {
   }
 }
 
-@S().Ignore()
+@V().Ignore()
 class TestIgnoreTest {
-  @S().Default("p1")
+  @V().Default("p1")
   p1!: string;
 }
 
 @HttpDelete("test")
-@S().Tags("test").Deprecated()
+@V().Tags("test").Deprecated()
 export class IgnoreBodyTest extends Action {
   @Body
   private readonly b!: TestIgnoreTest;

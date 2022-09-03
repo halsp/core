@@ -1,16 +1,16 @@
 import { Body } from "@ipare/pipe";
 import { Action } from "@ipare/router";
-import { S } from "../../src";
+import { V } from "@ipare/validator";
 
 class TestDto {
-  @S().Description("test")
+  @V().Description("test")
   test?: string;
 }
 
-@S().Tags("test").Summary("summary")
+@V().Tags("test").Summary("summary")
 export class StringBody extends Action {
   @Body
-  @S().Description("abc")
+  @V().Description("abc")
   private readonly b!: string;
 
   async invoke(): Promise<void> {
@@ -18,10 +18,10 @@ export class StringBody extends Action {
   }
 }
 
-@S().Tags("test").Summary("summary")
+@V().Tags("test").Summary("summary")
 export class PartialBody extends Action {
   @Body("b")
-  @S().Description("abc")
+  @V().Description("abc")
   private readonly b!: string;
   @Body
   private readonly body!: TestDto;
@@ -31,13 +31,13 @@ export class PartialBody extends Action {
   }
 }
 
-@S().Tags("test").Summary("summary")
+@V().Tags("test").Summary("summary")
 export class StringBodyTwice extends Action {
   @Body
-  @S().Description("abc")
+  @V().Description("abc")
   private readonly b1!: string;
   @Body
-  @S().Description("def")
+  @V().Description("def")
   private readonly b2!: number;
 
   async invoke(): Promise<void> {

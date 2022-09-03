@@ -1,29 +1,29 @@
 import { Body, Header } from "@ipare/pipe";
 import { Action } from "@ipare/router";
-import { S } from "../../src";
+import { V } from "@ipare/validator";
 
 class TestDto {
-  @S().Description("desc")
+  @V().Description("desc")
   b1?: string;
 }
 
 class StringArrayPropertyDto {
-  @S().Description("desc").Items(String)
+  @V().Description("desc").Items(String)
   b1?: string[];
 
-  @S()
+  @V()
   b2?: TestDto;
 }
 
 class ModelArrayPropertyDto {
-  @S().Description("desc").Items(TestDto)
+  @V().Description("desc").Items(TestDto)
   b1?: TestDto[];
 
-  @S()
+  @V()
   b2?: TestDto;
 }
 
-@S().Tags("test").Summary("summary")
+@V().Tags("test").Summary("summary")
 export class NotArray extends Action {
   @Body
   private readonly b1!: TestDto;
@@ -33,10 +33,10 @@ export class NotArray extends Action {
   }
 }
 
-@S().Tags("test").Summary("summary")
+@V().Tags("test").Summary("summary")
 export class ArrayModel extends Action {
   @Body
-  @S().Items(TestDto)
+  @V().Items(TestDto)
   private readonly b1!: TestDto[];
 
   async invoke(): Promise<void> {
@@ -44,10 +44,10 @@ export class ArrayModel extends Action {
   }
 }
 
-@S().Tags("test").Summary("summary")
+@V().Tags("test").Summary("summary")
 export class TwoDimensionalArray extends Action {
   @Body
-  @S().Items([TestDto])
+  @V().Items([TestDto])
   private readonly b1!: TestDto[][];
 
   async invoke(): Promise<void> {
@@ -55,10 +55,10 @@ export class TwoDimensionalArray extends Action {
   }
 }
 
-@S().Tags("test").Summary("summary")
+@V().Tags("test").Summary("summary")
 export class StringArrayBody extends Action {
   @Body
-  @S().Items(String)
+  @V().Items(String)
   private readonly b1!: string[];
 
   async invoke(): Promise<void> {
@@ -66,10 +66,10 @@ export class StringArrayBody extends Action {
   }
 }
 
-@S().Tags("test").Summary("summary")
+@V().Tags("test").Summary("summary")
 export class StringArrayParam extends Action {
   @Header
-  @S().Items(String)
+  @V().Items(String)
   private readonly h1!: string[];
 
   async invoke(): Promise<void> {
@@ -77,10 +77,10 @@ export class StringArrayParam extends Action {
   }
 }
 
-@S().Tags("test").Summary("summary")
+@V().Tags("test").Summary("summary")
 export class ModelArrayParam extends Action {
   @Header
-  @S().Items(String)
+  @V().Items(String)
   private readonly h1!: TestDto[];
 
   async invoke(): Promise<void> {
@@ -88,7 +88,7 @@ export class ModelArrayParam extends Action {
   }
 }
 
-@S().Tags("test").Summary("summary")
+@V().Tags("test").Summary("summary")
 export class ParamStringArrayProperty extends Action {
   @Header
   private readonly h1!: StringArrayPropertyDto;
@@ -98,7 +98,7 @@ export class ParamStringArrayProperty extends Action {
   }
 }
 
-@S().Tags("test").Summary("summary")
+@V().Tags("test").Summary("summary")
 export class BodyModelArrayProperty extends Action {
   @Body
   private readonly b1!: ModelArrayPropertyDto;
@@ -108,10 +108,10 @@ export class BodyModelArrayProperty extends Action {
   }
 }
 
-@S().Tags("test").Summary("summary")
+@V().Tags("test").Summary("summary")
 export class ArrayBodyModelArrayProperty extends Action {
   @Body
-  @S().Items(ModelArrayPropertyDto)
+  @V().Items(ModelArrayPropertyDto)
   private readonly b1!: ModelArrayPropertyDto[];
 
   async invoke(): Promise<void> {

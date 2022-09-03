@@ -1,26 +1,26 @@
 import { Body, Header } from "@ipare/pipe";
 import { Action } from "@ipare/router";
-import { S } from "../../src";
+import { V } from "@ipare/validator";
 
-@S().Tags("test").Ignore()
+@V().Tags("test").Ignore()
 export class IgnoreAction extends Action {
   async invoke(): Promise<void> {
     this.ok();
   }
 }
 
-@S().Tags("test")
+@V().Tags("test")
 export class IgnoreProperty extends Action {
-  @Header @S().Ignore() private readonly h1!: string;
+  @Header @V().Ignore() private readonly h1!: string;
 
   async invoke(): Promise<void> {
     this.ok(this.h1);
   }
 }
 
-@S().Tags("test")
+@V().Tags("test")
 export class IgnoreParam extends Action {
-  constructor(@Header @S().Ignore() private readonly h1: string) {
+  constructor(@Header @V().Ignore() private readonly h1: string) {
     super();
   }
 
@@ -30,17 +30,17 @@ export class IgnoreParam extends Action {
 }
 
 class TestDto {
-  @S().Required()
+  @V().Required()
   b1!: Date;
 
-  @S().Required().Ignore()
+  @V().Required().Ignore()
   b2!: string;
 
-  @S().Ignore().Required()
+  @V().Ignore().Required()
   b3!: number;
 }
 
-@S().Tags("test")
+@V().Tags("test")
 export class IgnoreBodyModel extends Action {
   @Body private readonly body!: TestDto;
 
@@ -49,7 +49,7 @@ export class IgnoreBodyModel extends Action {
   }
 }
 
-@S().Tags("test")
+@V().Tags("test")
 export class IgnoreParamModel extends Action {
   @Header private readonly body!: TestDto;
 

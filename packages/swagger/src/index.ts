@@ -48,5 +48,3 @@ Startup.prototype.useSwagger = function (
       fileIndex: true,
     });
 };
-
-export { S } from "./validator.decorator";

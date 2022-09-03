@@ -1,8 +1,8 @@
 import { Body } from "@ipare/pipe";
 import { Action } from "@ipare/router";
-import { S } from "../../src";
+import { V } from "@ipare/validator";
 
-@S().Tags("test")
+@V().Tags("test")
 export class DefaultAction extends Action {
   @Body("abc")
   private readonly abc!: number;
@@ -12,7 +12,7 @@ export class DefaultAction extends Action {
   }
 }
 
-@S().Tags("test").ContentTypes()
+@V().Tags("test").ContentTypes()
 export class EmptyAction extends Action {
   @Body("abc")
   private readonly abc!: number;
@@ -22,7 +22,7 @@ export class EmptyAction extends Action {
   }
 }
 
-@S().Tags("test").ContentTypes("mt")
+@V().Tags("test").ContentTypes("mt")
 export class AddAction extends Action {
   @Body("abc")
   private readonly abc!: number;
@@ -32,7 +32,7 @@ export class AddAction extends Action {
   }
 }
 
-@S().Tags("test").ContentTypes("mt1", "mt2").ContentTypes().ContentTypes("mt3")
+@V().Tags("test").ContentTypes("mt1", "mt2").ContentTypes().ContentTypes("mt3")
 export class MultipleAction extends Action {
   @Body("abc")
   private readonly abc!: number;

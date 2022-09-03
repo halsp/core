@@ -1,5 +1,5 @@
 import { ObjectConstructor } from "@ipare/core";
-import { V, ValidatorDecoratorReturnType } from "@ipare/validator";
+import { ValidatorDecoratorReturnType } from "@ipare/validator";
 import {
   DiscriminatorObject,
   ExampleObject,
@@ -71,4 +71,4 @@ declare module "@ipare/validator" {
   }
 }
 
-export const S = V;
+export {};

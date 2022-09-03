@@ -1,29 +1,29 @@
 import { Action } from "@ipare/router";
-import { S } from "../../src";
+import { V } from "@ipare/validator";
 
 export class TestDto {
-  @S().Description("test-b1").Required()
+  @V().Description("test-b1").Required()
   b1?: string;
   b2?: number;
 }
 
 export class ResultDto {
-  @S().Description("result-b1").Required()
+  @V().Description("result-b1").Required()
   b1?: string;
-  @S()
+  @V()
   b2?: number;
-  @S().Deprecated()
+  @V().Deprecated()
   b3?: TestDto;
 }
 
-@S().Tags("test").Response(ResultDto)
+@V().Tags("test").Response(ResultDto)
 export class ResponseBody extends Action {
   async invoke(): Promise<void> {
     this.ok();
   }
 }
 
-@S()
+@V()
   .Tags("test")
   .Response({
     properties: {
@@ -39,42 +39,42 @@ export class ResponseSchema extends Action {
   }
 }
 
-@S().Tags("test").Response(200, ResultDto)
+@V().Tags("test").Response(200, ResultDto)
 export class StatusResponseBody extends Action {
   async invoke(): Promise<void> {
     this.ok();
   }
 }
 
-@S().Tags("test").Response(ResultDto).Response(200, ResultDto)
+@V().Tags("test").Response(ResultDto).Response(200, ResultDto)
 export class StatusAndDefaultResponseBody extends Action {
   async invoke(): Promise<void> {
     this.ok();
   }
 }
 
-@S().Tags("test").ResponseDescription("desc")
+@V().Tags("test").ResponseDescription("desc")
 export class ResponseDescription extends Action {
   async invoke(): Promise<void> {
     this.ok();
   }
 }
 
-@S().Tags("test").ResponseDescription(200, "desc")
+@V().Tags("test").ResponseDescription(200, "desc")
 export class ResponseStatusDescription extends Action {
   async invoke(): Promise<void> {
     this.ok();
   }
 }
 
-@S().Tags("test").ResponseDescription("desc").ResponseDescription(200, "desc")
+@V().Tags("test").ResponseDescription("desc").ResponseDescription(200, "desc")
 export class ResponseStatusAndDefaultDescription extends Action {
   async invoke(): Promise<void> {
     this.ok();
   }
 }
 
-@S()
+@V()
   .Tags("test")
   .ResponseHeaders({
     h1: {
@@ -90,7 +90,7 @@ export class ResponseHeaders extends Action {
   }
 }
 
-@S()
+@V()
   .Tags("test")
   .ResponseHeaders(200, {
     h1: {
@@ -103,7 +103,7 @@ export class ResponseStatusHeaders extends Action {
   }
 }
 
-@S()
+@V()
   .Tags("test")
   .ResponseHeaders(200, {
     h1: {
@@ -124,14 +124,14 @@ export class ResponseStatusAndDefaultHeaders extends Action {
   }
 }
 
-@S().Tags("test").Response(TestDto).ResponseContentTypes("mt1", "mt2")
+@V().Tags("test").Response(TestDto).ResponseContentTypes("mt1", "mt2")
 export class ResponseContentTypes extends Action {
   async invoke(): Promise<void> {
     this.ok();
   }
 }
 
-@S()
+@V()
   .Tags("test")
   .Response(TestDto)
   .Response(200, ResultDto)
