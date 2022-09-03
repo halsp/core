@@ -73,7 +73,8 @@ export class SwaggerMiddlware extends Middleware {
   private async createBuilder() {
     let openApiBuilder = this.defaultBuilder;
     if (this.options.builder) {
-      openApiBuilder = await this.options.builder(openApiBuilder, this.ctx);
+      const builder = await this.options.builder(openApiBuilder, this.ctx);
+      openApiBuilder = builder ?? openApiBuilder;
     }
     return openApiBuilder;
   }
@@ -96,26 +97,107 @@ export class SwaggerMiddlware extends Middleware {
     if (isUndefined(this.res.body)) return;
     if (!isString(this.res.body)) return;
 
+    if (extendPath == "swagger-initializer.js") {
+      await this.replaceInitializer();
+    }
+
+    if (extendPath == "index.html") {
+      await this.replaceIndexContent();
+    }
+  }
+
+  private async replaceInitializer() {
+    let content = this.res.body;
+    content = content.replace(
+      `https://petstore.swagger.io/v2/swagger.json`,
+      `./index.json`
+    );
+    this.res.body = content;
+  }
+
+  private async replaceIndexContent() {
     const builder = await this.createBuilder();
     const doc = builder.getSpec();
 
     let content = this.res.body;
-    if (extendPath == "swagger-initializer.js") {
+    content = content.replace(
+      `<title>Swagger UI</title>`,
+      `<title>${this.options.html?.title ?? doc.info.title}</title>`
+    );
+    content = content.replace(/<link\srel="icon"[\s\S]+\/>/g, "");
+
+    if (this.options.html?.removeDefaultStyle) {
       content = content.replace(
-        `https://petstore.swagger.io/v2/swagger.json`,
-        `./index.json`
+        /<link\srel="stylesheet" type="text\/css"[\s\S]+\/>/g,
+        ""
       );
     }
 
-    if (extendPath == "index.html") {
-      content = content.replace(
-        `<title>Swagger UI</title>`,
-        `<title>${doc.info.title}</title>`
-      );
+    const lang = this.options.html?.lang;
+    if (!isUndefined(lang)) {
+      content = content.replace(/<html lang="(.+?)">/, `<html lang="${lang}">`);
     }
+
+    content = addDocumentItems(
+      "head",
+      content,
+      (val) => `<link rel="icon" type="image/png" href="${val}" />`,
+      this.options.html?.favicon
+    );
+    content = addDocumentItems(
+      "head",
+      content,
+      (val) => `<link rel="stylesheet" type="text/css" href="${val}" />`,
+      this.options.html?.css
+    );
+    content = addDocumentItems(
+      "head",
+      content,
+      (val) => `<style>
+    ${val}
+    </style>`,
+      this.options.html?.style
+    );
+
+    content = addDocumentItems(
+      "body",
+      content,
+      (val) => `<script src="${val}" charset="UTF-8"> </script>`,
+      this.options.html?.js
+    );
+
+    content = addDocumentItems(
+      "body",
+      content,
+      (val) => `<script>
+    ${val}
+    </script>`,
+      this.options.html?.script
+    );
 
     this.res.body = content;
   }
+}
+
+function addDocumentItems(
+  tag: string,
+  html: string,
+  builder: (val: any) => string,
+  options?: string | string[]
+) {
+  if (!options) return html;
+  if (!Array.isArray(options)) {
+    options = [options];
+  }
+
+  options.forEach((v) => {
+    html = html.replace(
+      new RegExp(`\\s*<\\/${tag}>`),
+      `\n    ${builder(v)}
+  <\/${tag}>`
+    );
+  });
+  return html;
 }
 
 function getPackage(): string | undefined {
