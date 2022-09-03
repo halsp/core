@@ -4,6 +4,7 @@ import {
   isUndefined,
   Middleware,
   normalizePath,
+  StatusCodes,
 } from "@ipare/core";
 import { Parser } from "./parser";
 import { SwaggerOptions } from "./options";
@@ -27,9 +28,23 @@ export class SwaggerMiddlware extends Middleware {
       return await this.next();
     }
 
-    const extendPath = normalizePath(
-      reqPath.replace(optPath, "") || "index.html"
-    );
+    if (reqPath == optPath) {
+      let location: string;
+      if (this.ctx.req.originalPath.endsWith("/")) {
+        location = "./index.html";
+      } else {
+        if (!/[^\/]\/{1}[^\/]/.test(this.ctx.req.path)) {
+          location = "./index.html";
+        } else {
+          const lastPart = this.ctx.req.path.replace(/^.+\/([^\/]+)$/, "$1");
+          location = `./${lastPart}/index.html`;
+        }
+      }
+      this.redirect(location, StatusCodes.PERMANENT_REDIRECT);
+      return;
+    }
+
+    const extendPath = normalizePath(reqPath.replace(optPath, ""));
     if (extendPath == "index.json") {
       const apiDoc = await this.createApiDoc();
       this.ctx.set("content-type", "text/json").ok(apiDoc);
@@ -81,7 +96,6 @@ export class SwaggerMiddlware extends Middleware {
     if (isUndefined(this.res.body)) return;
     if (!isString(this.res.body)) return;
 
-    const optPath = this.options.path as string;
     const builder = await this.createBuilder();
     const doc = builder.getSpec();
 
@@ -89,17 +103,11 @@ export class SwaggerMiddlware extends Middleware {
     if (extendPath == "swagger-initializer.js") {
       content = content.replace(
         `https://petstore.swagger.io/v2/swagger.json`,
-        `./${optPath}/index.json`
+        `./index.json`
       );
     }
 
     if (extendPath == "index.html") {
-      const prefixPath = optPath ? `./${optPath}/` : `./`;
-      content = content.replace(/(href|src)="\.\//g, `$1="${prefixPath}`);
-      content = content.replace(
-        'href="index.css"',
-        `href="${prefixPath}index.css"`
-      );
       content = content.replace(
         `<title>Swagger UI</title>`,
         `<title>${doc.info.title}</title>`

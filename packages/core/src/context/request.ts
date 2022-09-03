@@ -34,7 +34,12 @@ export class Request extends HeaderHandler {
   public get path(): string {
     return this.#path;
   }
+  #originalPath = "";
+  public get originalPath(): string {
+    return this.#originalPath;
+  }
   setPath(path: string): this {
+    this.#originalPath = path;
     this.#path = normalizePath(path);
     return this;
   }

@@ -15,7 +15,7 @@ async function bootstrap() {
   const startup = new HttpStartup()
     .useHttpJsonBody()
     .useSwagger({
-      path: "swg",
+      path: "test/swg",
     })
     .useRouter();
   startup[TEST_ACTION_DIR] = "test/parser";
