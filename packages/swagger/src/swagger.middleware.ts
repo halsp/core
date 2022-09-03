@@ -7,10 +7,9 @@ import {
 } from "@ipare/core";
 import { Parser } from "./parser";
 import { SwaggerOptions } from "./swagger-options";
-import { OpenApiBuilder } from "openapi3-ts";
+import { OpenApiBuilder, OpenAPIObject } from "openapi3-ts";
 import path from "path";
 import * as fs from "fs";
-import { getAbsoluteFSPath } from "swagger-ui-dist";
 import { DOC_RECORD } from "./constant";
 
 export class SwaggerMiddlware extends Middleware {
@@ -50,15 +49,10 @@ export class SwaggerMiddlware extends Middleware {
       version = pkg.version ?? version;
     }
 
-    let openApiVersion = "3.0.0";
-    const openApiPkgPath = path.join(getAbsoluteFSPath(), "package.json");
-    const openApiPkg = JSON.parse(fs.readFileSync(openApiPkgPath, "utf-8"));
-    openApiVersion = openApiPkg.version;
-
     return new OpenApiBuilder()
       .addTitle("Swagger UI")
       .addVersion(version)
-      .addOpenApiVersion(openApiVersion);
+      .addOpenApiVersion("3.0.0");
   }
 
   private async createBuilder() {
@@ -69,7 +63,7 @@ export class SwaggerMiddlware extends Middleware {
     return openApiBuilder;
   }
 
-  private async createApiDoc() {
+  private async createApiDoc(): Promise<OpenAPIObject> {
     if (!this.ctx.startup[DOC_RECORD]) {
       const openApiBuilder = await this.createBuilder();
       this.ctx.startup[DOC_RECORD] = new Parser(
@@ -77,9 +71,9 @@ export class SwaggerMiddlware extends Middleware {
         openApiBuilder,
         this.ctx.startup.routerOptions
       ).parse();
-
-      return this.ctx.startup[DOC_RECORD];
     }
+
+    return this.ctx.startup[DOC_RECORD];
   }
 
   private async replaceBody(extendPath: string) {

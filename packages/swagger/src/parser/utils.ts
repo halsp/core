@@ -92,6 +92,9 @@ export function setModelSchema(
       requiredProperties.push(propertyKey);
     }
   }
+  if (!requiredProperties.length) {
+    delete schema.required;
+  }
 }
 
 export function parseModelProperty(

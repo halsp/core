@@ -206,6 +206,9 @@ export class Parser {
       mediaSchema.required = Object.keys(properties).filter(
         (property) => (properties[property] as SchemaObject).nullable == false
       );
+      if (!mediaSchema.required.length) {
+        delete mediaSchema.required;
+      }
     } else {
       const modelType = this.getPipeRecordModelType(action, record);
       const type = typeToApiType(modelType);
