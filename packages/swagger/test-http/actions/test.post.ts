@@ -11,12 +11,14 @@ export class HeaderDto {
   hd2?: number;
 }
 
+@V().Description("body dto")
 export class BodyDto {
   @V().Description("body-b1").Required().Items(HeaderDto)
   bd1?: HeaderDto[];
   bd2?: number;
 }
 
+@V().Description("result dto")
 export class ResultDto {
   @V().Description("result-b1").Required().Items(String)
   rd1?: string;

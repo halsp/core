@@ -63,17 +63,26 @@ export function setModelSchema(
     typeof schema.properties,
     undefined
   >;
+
+  const rules = getRules(modelType);
+  setSchemaValue(
+    builder,
+    schema,
+    rules.filter(
+      (r) => isUndefined(r.propertyKey) && isUndefined(r.parameterIndex)
+    )
+  );
+
   const requiredProperties: string[] = [];
   schema.required = requiredProperties;
 
-  const rules = getRules(modelType).filter(
-    (rule) => !isUndefined(rule.propertyKey)
-  );
-  const propertiesRules = rules.reduce((prev, cur) => {
-    (prev[cur.propertyKey as string] =
-      prev[cur.propertyKey as string] || []).push(cur);
-    return prev;
-  }, {});
+  const propertiesRules = rules
+    .filter((rule) => !isUndefined(rule.propertyKey))
+    .reduce((prev, cur) => {
+      (prev[cur.propertyKey as string] =
+        prev[cur.propertyKey as string] || []).push(cur);
+      return prev;
+    }, {});
   for (const propertyKey in propertiesRules) {
     const propertyRules = propertiesRules[propertyKey];
     if (existIgnore(propertyRules)) {
@@ -143,11 +152,16 @@ export function parseModelProperty(
 
 export function setComponentModelSchema(
   builder: OpenApiBuilder,
-  modelType: ObjectConstructor
+  modelType: ObjectConstructor,
+  extendRules?: RuleRecord[]
 ) {
   let schema = tryGetComponentSchema(builder, modelType.name);
   if (!schema) {
     schema = getComponentSchema(builder, modelType.name);
+
+    if (extendRules) {
+      setSchemaValue(builder, schema, extendRules);
+    }
     setModelSchema(builder, modelType, schema);
   }
 }

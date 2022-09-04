@@ -226,6 +226,12 @@ export class Parser {
           type,
           items: {},
         };
+        setSchemaValue(
+          this.builder,
+          contentTypeObj.schema as SchemaObject,
+          rules
+        );
+
         getNamedValidates(rules, lib.Items.name).forEach((v) => {
           parseArraySchema(
             this.builder,
@@ -239,8 +245,13 @@ export class Parser {
           type,
           properties: {},
         };
+        setSchemaValue(
+          this.builder,
+          contentTypeObj.schema as SchemaObject,
+          rules
+        );
 
-        setComponentModelSchema(this.builder, modelType);
+        setComponentModelSchema(this.builder, modelType, rules);
         setModelSchema(
           this.builder,
           modelType,
@@ -348,12 +359,13 @@ export class Parser {
 
     const schema = parameter.schema as SchemaObject;
     if (type == "array") {
+      setSchemaValue(this.builder, schema, rules);
       schema.items = {};
       getNamedValidates(rules, lib.Items.name).forEach((v) => {
         parseArraySchema(this.builder, schema, lib, v.args[0] as ArrayItemType);
       });
     } else if (isClass(paramType)) {
-      setComponentModelSchema(this.builder, paramType);
+      setComponentModelSchema(this.builder, paramType, rules);
       parameter.schema = {
         $ref: `#/components/schemas/${paramType.name}`,
       };

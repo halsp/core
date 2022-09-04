@@ -44,3 +44,30 @@ export class StringBodyTwice extends Action {
     this.ok();
   }
 }
+
+class TestSchemaDto {}
+
+@V().Tags("test").Summary("summary")
+export class DtoSchema extends Action {
+  @Body
+  @V().Description("desc")
+  private readonly b1!: TestSchemaDto;
+
+  async invoke(): Promise<void> {
+    this.ok();
+  }
+}
+
+@V().Description("desc2")
+class TestSchemaOverrideDto {}
+
+@V().Tags("test").Summary("summary")
+export class DtoSchemaOverride extends Action {
+  @Body
+  @V().Description("desc2")
+  private readonly b1!: TestSchemaOverrideDto;
+
+  async invoke(): Promise<void> {
+    this.ok();
+  }
+}

@@ -99,6 +99,28 @@ describe("body", () => {
       },
     });
   });
+
+  it("should set schema from pipe", async () => {
+    const doc = getDoc("DtoSchema");
+    expect(getRequestContent(doc)).toEqual({
+      schema: {
+        type: "object",
+        description: "desc",
+        properties: {},
+      },
+    });
+  });
+
+  it("should override schema when dto class has decorators", async () => {
+    const doc = getDoc("DtoSchemaOverride");
+    expect(getRequestContent(doc)).toEqual({
+      schema: {
+        type: "object",
+        description: "desc2",
+        properties: {},
+      },
+    });
+  });
 });
 
 describe("content type", () => {
@@ -509,6 +531,7 @@ describe("array", () => {
         name: "b1",
         required: false,
         schema: {
+          description: "desc",
           items: {
             type: "string",
           },
