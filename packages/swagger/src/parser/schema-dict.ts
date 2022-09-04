@@ -17,6 +17,7 @@ import {
   getNamedValidates,
   jsonTypes,
   lib,
+  parseArraySchema,
   setComponentModelSchema,
 } from "./utils";
 
@@ -226,20 +227,35 @@ function createContentObject(
     contentTypes.push(...jsonTypes);
   }
 
-  const schemaValue: ObjectConstructor | SchemaObject =
+  const schemaValue: ArrayItemType =
     typeof validate.args[0] == "number" ? validate.args[1] : validate.args[0];
   const contentObject: ContentObject = {};
   for (const contentType of contentTypes) {
     contentObject[contentType] = {};
     const contentTypeObj = contentObject[contentType] as MediaTypeObject;
 
-    if (isClass(schemaValue)) {
-      setComponentModelSchema(builder, schemaValue);
+    if (Array.isArray(schemaValue)) {
       contentTypeObj.schema = {
-        $ref: `#/components/schemas/${schemaValue.name}`,
-      } as ReferenceObject;
+        type: "array",
+        items: {},
+      };
+      schemaValue.forEach((sv) => {
+        parseArraySchema(
+          builder,
+          contentTypeObj.schema as SchemaObject,
+          lib,
+          sv
+        );
+      });
     } else {
-      contentTypeObj.schema = schemaValue;
+      if (isClass(schemaValue)) {
+        setComponentModelSchema(builder, schemaValue);
+        contentTypeObj.schema = {
+          $ref: `#/components/schemas/${schemaValue.name}`,
+        } as ReferenceObject;
+      } else {
+        contentTypeObj.schema = schemaValue;
+      }
     }
   }
 

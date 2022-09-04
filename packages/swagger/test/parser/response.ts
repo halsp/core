@@ -23,6 +23,13 @@ export class ResponseBody extends Action {
   }
 }
 
+@V().Tags("test").Response([ResultDto])
+export class ResponseArrayBody extends Action {
+  async invoke(): Promise<void> {
+    this.ok();
+  }
+}
+
 @V()
   .Tags("test")
   .Response({

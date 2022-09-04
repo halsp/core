@@ -260,6 +260,27 @@ describe("response", () => {
     });
   });
 
+  it("should set response array body", async () => {
+    const doc = getDoc("ResponseArrayBody");
+    expect(doc["components"]["schemas"]["ResultDto"]).not.toBeUndefined();
+    expect(doc["components"]["schemas"]["TestDto"]).not.toBeUndefined();
+    expect(getResponses(doc)).toEqual({
+      default: {
+        content: {
+          "application/json": {
+            schema: {
+              type: "array",
+              items: {
+                $ref: "#/components/schemas/ResultDto",
+              },
+            },
+          },
+        },
+        description: "",
+      },
+    });
+  });
+
   it("should set response body by schema", async () => {
     const doc = getDoc("ResponseSchema");
     expect(getResponses(doc)).toEqual({

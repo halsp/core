@@ -1,4 +1,3 @@
-import { ObjectConstructor } from "@ipare/core";
 import { ValidatorDecoratorReturnType } from "@ipare/validator";
 import {
   DiscriminatorObject,
@@ -6,7 +5,6 @@ import {
   ExternalDocumentationObject,
   HeaderObject,
   ParameterStyle,
-  SchemaObject,
   SecurityRequirementObject,
   ServerObject,
   XmlObject,
@@ -61,8 +59,8 @@ declare module "@ipare/validator" {
 
     ContentTypes: (...value: string[]) => RT;
 
-    Response: ((body: ObjectConstructor | SchemaObject) => RT) &
-      ((status: number, body: ObjectConstructor | SchemaObject) => RT);
+    Response: ((body: ArrayItemType) => RT) &
+      ((status: number, body: ArrayItemType) => RT);
     ResponseHeaders: ((headers: Record<string, HeaderObject>) => RT) &
       ((status: number, value: Record<string, HeaderObject>) => RT);
     ResponseDescription: ((description: string) => RT) &
