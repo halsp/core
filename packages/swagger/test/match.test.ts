@@ -188,6 +188,34 @@ describe("match path", () => {
 });
 
 describe("redirect", () => {
+  it("should redirect to ./index.html when path is empty", async () => {
+    const res = await new TestStartup()
+      .setRequest(new Request().setPath("").setMethod("get"))
+      .useSwagger({
+        path: "",
+      })
+      .setTestDir("test/parser")
+      .useRouter()
+      .run();
+
+    expect(res.status).toBe(307);
+    expect(res.get("location")).toBe("./index.html");
+  });
+
+  it("should redirect to ./index.html when path is /", async () => {
+    const res = await new TestStartup()
+      .setRequest(new Request().setPath("/").setMethod("get"))
+      .useSwagger({
+        path: "",
+      })
+      .setTestDir("test/parser")
+      .useRouter()
+      .run();
+
+    expect(res.status).toBe(307);
+    expect(res.get("location")).toBe("./index.html");
+  });
+
   it("should redirect to ./index.html when path is root", async () => {
     const res = await new TestStartup()
       .setRequest(new Request().setPath("swagger").setMethod("get"))
@@ -196,8 +224,8 @@ describe("redirect", () => {
       .useRouter()
       .run();
 
-    expect(res.status).toBe(308);
-    expect(res.get("location")).toBe("./index.html");
+    expect(res.status).toBe(307);
+    expect(res.get("location")).toBe("./swagger/index.html");
   });
 
   it("should redirect to ./index.html when path is swagger/", async () => {
@@ -208,7 +236,7 @@ describe("redirect", () => {
       .useRouter()
       .run();
 
-    expect(res.status).toBe(308);
+    expect(res.status).toBe(307);
     expect(res.get("location")).toBe("./index.html");
   });
 
@@ -222,7 +250,7 @@ describe("redirect", () => {
       .useRouter()
       .run();
 
-    expect(res.status).toBe(308);
+    expect(res.status).toBe(307);
     expect(res.get("location")).toBe("./index.html");
   });
 
@@ -236,7 +264,7 @@ describe("redirect", () => {
       .useRouter()
       .run();
 
-    expect(res.status).toBe(308);
+    expect(res.status).toBe(307);
     expect(res.get("location")).toBe("./abc/index.html");
   });
 });

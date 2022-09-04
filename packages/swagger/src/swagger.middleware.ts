@@ -32,14 +32,11 @@ export class SwaggerMiddlware extends Middleware {
       if (this.ctx.req.originalPath.endsWith("/")) {
         location = "./index.html";
       } else {
-        if (!/[^\/]\/{1}[^\/]/.test(this.ctx.req.path)) {
-          location = "./index.html";
-        } else {
-          const lastPart = this.ctx.req.path.replace(/^.+\/([^\/]+)$/, "$1");
-          location = `./${lastPart}/index.html`;
-        }
+        const lastPart = this.ctx.req.path.replace(/^.+\/([^\/]+)$/, "$1");
+        location = `${lastPart}/index.html`;
+        location = "./" + normalizePath(location);
       }
-      this.redirect(location, StatusCodes.PERMANENT_REDIRECT);
+      this.redirect(location, StatusCodes.TEMPORARY_REDIRECT);
       return;
     }
 
