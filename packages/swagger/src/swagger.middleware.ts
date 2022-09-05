@@ -8,7 +8,7 @@ import {
 } from "@ipare/core";
 import { Parser } from "./parser";
 import { SwaggerOptions } from "./options";
-import { OpenApiBuilder } from "openapi3-ts";
+import { OpenApiBuilder } from "openapi3-ts-remove-yaml";
 import path from "path";
 import * as fs from "fs";
 

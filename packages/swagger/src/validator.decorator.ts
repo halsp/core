@@ -8,7 +8,7 @@ import {
   SecurityRequirementObject,
   ServerObject,
   XmlObject,
-} from "openapi3-ts";
+} from "openapi3-ts-remove-yaml";
 import { ArrayItemType } from "./parser/schema-dict";
 
 type RT = ValidatorDecoratorReturnType;

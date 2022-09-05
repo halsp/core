@@ -10,7 +10,7 @@ import {
   RequestBodyObject,
   SchemaObject,
   TagObject,
-} from "openapi3-ts";
+} from "openapi3-ts-remove-yaml";
 import "../validator.decorator";
 import {
   setActionValue,

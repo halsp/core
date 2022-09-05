@@ -2,7 +2,7 @@ import { HttpMethod, Request } from "@ipare/core";
 import { TestStartup } from "@ipare/testing";
 import "../src";
 import { TEST_ACTION_DIR } from "@ipare/router/dist/constant";
-import { OpenApiBuilder } from "openapi3-ts";
+import { OpenApiBuilder } from "openapi3-ts-remove-yaml";
 
 declare module "@ipare/core" {
   interface Startup {

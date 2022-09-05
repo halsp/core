@@ -13,7 +13,7 @@ import {
   ParameterLocation,
   ReferenceObject,
   SchemaObject,
-} from "openapi3-ts";
+} from "openapi3-ts-remove-yaml";
 import { ArrayItemType, setSchemaValue } from "./schema-dict";
 
 export const lib = V();

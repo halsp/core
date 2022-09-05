@@ -12,7 +12,7 @@ import {
   ReferenceObject,
   ResponseObject,
   SchemaObject,
-} from "openapi3-ts";
+} from "openapi3-ts-remove-yaml";
 import {
   getNamedValidates,
   jsonTypes,

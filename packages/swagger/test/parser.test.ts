@@ -1,5 +1,5 @@
 import { MapItem } from "@ipare/router";
-import { OpenApiBuilder } from "openapi3-ts";
+import { OpenApiBuilder } from "openapi3-ts-remove-yaml";
 import { Parser } from "../src/parser";
 
 function runParserTest(routerMap?: readonly MapItem[]) {

@@ -1,5 +1,5 @@
 import { HttpContext } from "@ipare/core";
-import { OpenApiBuilder } from "openapi3-ts";
+import { OpenApiBuilder } from "openapi3-ts-remove-yaml";
 import type swaggerUi from "swagger-ui-dist";
 
 type SwaggerBuilder = (
