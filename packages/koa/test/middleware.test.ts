@@ -1,18 +1,19 @@
 import "../src";
-import { Request, Response } from "@ipare/core";
+import { HttpMethod, Request, Response } from "@ipare/core";
 import Koa from "koa";
-import cors from "koa-cors";
+import cors from "@koa/cors";
 import Router from "@koa/router";
 import { TestStartup } from "@ipare/testing";
 
-test("koa-cors", async function () {
+test("@koa/cors", async function () {
   const res = await new TestStartup()
-    .setRequest(new Request().setMethod("POST"))
+    .setRequest(
+      new Request().setMethod(HttpMethod.get).set("origin", "https://ipare.org")
+    )
     .useKoa(
       new Koa().use(
         cors({
-          methods: "GET,POST",
-          origin: "http://localhost",
+          allowMethods: "GET,POST",
         })
       )
     )
@@ -23,8 +24,9 @@ test("koa-cors", async function () {
 
   expect(res.status).toBe(200);
   expect(res.body).toBe("ipare");
-  expect(res.getHeader("Access-Control-Allow-Methods")).toBe("GET,POST");
-  expect(res.getHeader("Access-Control-Allow-Origin")).toBe("http://localhost");
+  expect(res.getHeader("Access-Control-Allow-Origin")).toBe(
+    "https://ipare.org"
+  );
 });
 
 test("@koa/router", async function () {

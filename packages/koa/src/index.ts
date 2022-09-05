@@ -2,7 +2,6 @@ import "@ipare/core";
 import { Startup } from "@ipare/core";
 import Koa from "koa";
 import compose from "koa-compose";
-import { UseKoaOptions } from "./use-koa-options";
 import {
   createContext,
   koaResToIpareRes,
@@ -11,15 +10,12 @@ import {
 
 declare module "@ipare/core" {
   interface Startup {
-    useKoa(app: Koa, options?: UseKoaOptions): this;
+    useKoa(app: Koa): this;
   }
 }
 
 // step: ipare -> koa -> ipare ->koa ->ipare
-Startup.prototype.useKoa = function (
-  app: Koa,
-  options: UseKoaOptions = {}
-): Startup {
+Startup.prototype.useKoa = function (app: Koa): Startup {
   app.middleware.splice(0, 0, async (koaCtx, next) => {
     koaCtx.status = koaCtx.ipareInStatus;
     await next();
@@ -34,7 +30,7 @@ Startup.prototype.useKoa = function (
   });
 
   this.use(async (ipareCtx, next) => {
-    const koaCtx = await createContext(app, ipareCtx, options); // step 1. ipare-> koa
+    const koaCtx = await createContext(app, ipareCtx); // step 1. ipare-> koa
     koaCtx.ipareNext = next;
     koaCtx.ipareCtx = ipareCtx;
 
@@ -46,5 +42,5 @@ Startup.prototype.useKoa = function (
   return this;
 };
 
-export { UseKoaOptions, Koa };
+export { Koa };
 export { koaIpare } from "./koa-ipare";

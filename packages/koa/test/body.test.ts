@@ -26,6 +26,22 @@ test("text", async function () {
   expect(res.getHeader("content-type")).toBe("text/plain; charset=utf-8");
 });
 
+test("boolean", async function () {
+  const res = await new TestStartup()
+    .useKoa(
+      new Koa().use(async (ctx, next) => {
+        ctx.body = true;
+        ctx.status = 201;
+        await next();
+      })
+    )
+    .run();
+
+  expect(res.status).toBe(201);
+  expect(res.body).toBe(true);
+  expect(res.getHeader("content-type")).toBe("application/json; charset=utf-8");
+});
+
 test("json", async function () {
   const koaApp = new Koa().use(async (ctx, next) => {
     ctx.body = {

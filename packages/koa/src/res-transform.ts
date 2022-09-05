@@ -1,9 +1,8 @@
-import { HttpContext, Response } from "@ipare/core";
 import Koa from "koa";
-import { UseKoaOptions } from "./use-koa-options";
 import http from "http";
-import { TransResponse } from "./trans-response";
 import net from "net";
+import { HttpContext, isPlainObject, Response } from "@ipare/core";
+import { TransResponse } from "./trans-response";
 import queryString from "query-string";
 
 export async function koaResToIpareRes(
@@ -43,10 +42,9 @@ export async function ipareResToKoaRes(
 
 export async function createContext(
   koaApp: Koa,
-  ipareCtx: HttpContext,
-  options: UseKoaOptions
+  ipareCtx: HttpContext
 ): Promise<Koa.ParameterizedContext> {
-  const httpReq = await getHttpReq(ipareCtx, options);
+  const httpReq = await getHttpReq(ipareCtx);
   const httpRes = new TransResponse(httpReq);
 
   const koaCtx = koaApp.createContext(httpReq, httpRes);
@@ -55,15 +53,25 @@ export async function createContext(
 }
 
 async function getHttpReq(
-  ipareCtx: HttpContext,
-  options: UseKoaOptions
+  ipareCtx: HttpContext
 ): Promise<http.IncomingMessage> {
   let httpReq: http.IncomingMessage;
-  if (options.streamingBody) {
-    httpReq = <http.IncomingMessage>options.streamingBody(ipareCtx);
+  if ("httpReq" in ipareCtx) {
+    httpReq = ipareCtx["httpReq"];
   } else {
     httpReq = new http.IncomingMessage(new net.Socket());
+    const body = ipareCtx.req.body;
+    if (Buffer.isBuffer(body)) {
+      httpReq.push(body);
+    } else if (typeof body == "string") {
+      httpReq.push(body);
+    } else if (isPlainObject(body)) {
+      httpReq.push(JSON.stringify(body));
+    } else {
+      httpReq.push(body);
+    }
   }
+
   httpReq.headers = Object.assign({}, ipareCtx.req.headers);
   httpReq.url =
     "/" +
@@ -76,21 +84,6 @@ async function getHttpReq(
   httpReq.httpVersion = "1.1";
   httpReq.httpVersionMajor = 1;
   httpReq.httpVersionMinor = 1;
-
-  if (!options.streamingBody) {
-    const body = ipareCtx.req.body;
-    if (Buffer.isBuffer(body)) {
-      httpReq.push(body);
-    } else if (typeof body == "string") {
-      httpReq.push(Buffer.from(body));
-    } else if (
-      Object.prototype.toString.call(body).toLowerCase() == "[object object]" &&
-      (!Object.getPrototypeOf(body) ||
-        Object.getPrototypeOf(body) == Object.prototype)
-    ) {
-      httpReq.push(JSON.stringify(body));
-    }
-  }
 
   return httpReq;
 }

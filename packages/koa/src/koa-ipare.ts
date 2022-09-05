@@ -22,6 +22,14 @@ class KoaStartup extends Startup {
         .setHeaders(this.koaCtx.req.headers as NumericalHeadersDict)
         .setBody(this.koaCtx.body)
     );
+
+    if (!("httpReq" in ctx)) {
+      Object.defineProperty(ctx, "httpReq", {
+        configurable: false,
+        enumerable: false,
+        get: () => this.koaCtx.req,
+      });
+    }
     await koaResToIpareRes(this.koaCtx, ctx.res);
     const res = await super.invoke(ctx);
     await ipareResToKoaRes(res, this.koaCtx);
