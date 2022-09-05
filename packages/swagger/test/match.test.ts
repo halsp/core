@@ -2,6 +2,7 @@ import { Request } from "@ipare/core";
 import { TEST_ACTION_DIR } from "@ipare/router/dist/constant";
 import { TestStartup } from "@ipare/testing";
 import "../src";
+import { SwaggerOptions } from "../src";
 
 declare module "@ipare/core" {
   interface Startup {
@@ -188,83 +189,101 @@ describe("match path", () => {
 });
 
 describe("redirect", () => {
-  it("should redirect to ./index.html when path is empty", async () => {
-    const res = await new TestStartup()
-      .setRequest(new Request().setPath("").setMethod("get"))
-      .useSwagger({
-        path: "",
-      })
-      .setTestDir("test/parser")
-      .useRouter()
-      .run();
+  function test(
+    name: string,
+    path: string,
+    options: SwaggerOptions | undefined,
+    location: string
+  ) {
+    it(name.replace("$location", location), async () => {
+      const res = await new TestStartup()
+        .setRequest(new Request().setPath(path).setMethod("get"))
+        .useSwagger(options)
+        .setTestDir("test/parser")
+        .useRouter()
+        .run();
 
-    expect(res.status).toBe(307);
-    expect(res.get("location")).toBe("./index.html");
-  });
+      expect(res.status).toBe(307);
+      expect(res.get("location")).toBe(location);
+    });
+  }
 
-  it("should redirect to ./index.html when path is /", async () => {
-    const res = await new TestStartup()
-      .setRequest(new Request().setPath("/").setMethod("get"))
-      .useSwagger({
-        path: "",
-      })
-      .setTestDir("test/parser")
-      .useRouter()
-      .run();
+  test(
+    "should redirect to $location when path is empty",
+    "",
+    {
+      path: "",
+    },
+    "./index.html"
+  );
 
-    expect(res.status).toBe(307);
-    expect(res.get("location")).toBe("./index.html");
-  });
+  test(
+    "should redirect to $location when path is /",
+    "/",
+    {
+      path: "",
+    },
+    "./index.html"
+  );
 
-  it("should redirect to ./index.html when path is root", async () => {
-    const res = await new TestStartup()
-      .setRequest(new Request().setPath("swagger").setMethod("get"))
-      .useSwagger()
-      .setTestDir("test/parser")
-      .useRouter()
-      .run();
+  test(
+    "should redirect to $location when path is root",
+    "swagger",
+    undefined,
+    "./swagger/index.html"
+  );
 
-    expect(res.status).toBe(307);
-    expect(res.get("location")).toBe("./swagger/index.html");
-  });
+  test(
+    "should redirect to $location when path is swagger/",
+    "swagger/",
+    undefined,
+    "./index.html"
+  );
 
-  it("should redirect to ./index.html when path is swagger/", async () => {
-    const res = await new TestStartup()
-      .setRequest(new Request().setPath("swagger/").setMethod("get"))
-      .useSwagger()
-      .setTestDir("test/parser")
-      .useRouter()
-      .run();
+  test(
+    "should redirect to $location when path is swagger/abc/",
+    "swagger/abc/",
+    {
+      path: "swagger/abc",
+    },
+    "./index.html"
+  );
 
-    expect(res.status).toBe(307);
-    expect(res.get("location")).toBe("./index.html");
-  });
+  test(
+    "should redirect to $location when path is swagger/abc",
+    "swagger/abc",
+    {
+      path: "swagger/abc",
+    },
+    "./abc/index.html"
+  );
 
-  it("should redirect to ./index.html when path is swagger/abc/", async () => {
-    const res = await new TestStartup()
-      .setRequest(new Request().setPath("swagger/abc/").setMethod("get"))
-      .useSwagger({
-        path: "swagger/abc",
-      })
-      .setTestDir("test/parser")
-      .useRouter()
-      .run();
+  test(
+    "should redirect to $location when path is default ant basePath is v3",
+    "swagger",
+    {
+      basePath: "v3",
+    },
+    "./swagger/index.html"
+  );
 
-    expect(res.status).toBe(307);
-    expect(res.get("location")).toBe("./index.html");
-  });
+  test(
+    "should redirect to $location when path is empty ant basePath is v3",
+    "",
+    {
+      basePath: "v3",
+      path: "",
+    },
+    "./v3/index.html"
+  );
 
-  it("should redirect to ./abc/index.html when path is swagger/abc", async () => {
-    const res = await new TestStartup()
-      .setRequest(new Request().setPath("swagger/abc").setMethod("get"))
-      .useSwagger({
-        path: "swagger/abc",
-      })
-      .setTestDir("test/parser")
-      .useRouter()
-      .run();
-
-    expect(res.status).toBe(307);
-    expect(res.get("location")).toBe("./abc/index.html");
-  });
+  test(
+    "should redirect to $location when path is empty ant basePath is v3",
+    "/",
+    {
+      basePath: "v3",
+      path: "",
+    },
+    "./v3/index.html"
+  );
 });

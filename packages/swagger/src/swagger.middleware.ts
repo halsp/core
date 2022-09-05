@@ -29,8 +29,15 @@ export class SwaggerMiddlware extends Middleware {
 
     if (reqPath == optPath) {
       let location: string;
-      if (this.ctx.req.originalPath.endsWith("/")) {
-        location = "./index.html";
+      if (
+        !this.ctx.req.originalPath ||
+        this.ctx.req.originalPath.endsWith("/")
+      ) {
+        if (this.options.basePath) {
+          location = `./${this.options.basePath}/index.html`;
+        } else {
+          location = "./index.html";
+        }
       } else {
         const lastPart = this.ctx.req.path.replace(/^.+\/([^\/]+)$/, "$1");
         location = `${lastPart}/index.html`;

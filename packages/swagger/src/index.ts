@@ -7,6 +7,7 @@ import { SwaggerOptions } from "./options";
 import "./validator.decorator";
 import { SwaggerMiddlware } from "./swagger.middleware";
 import { getAbsoluteFSPath } from "swagger-ui-dist";
+import { ArrayItemType } from "./parser/schema-dict";
 
 declare module "@ipare/core" {
   interface Startup {
@@ -28,6 +29,7 @@ Startup.prototype.useSwagger = function (
   const opt = {
     ...options,
     path: normalizePath(options.path ?? "swagger"),
+    basePath: normalizePath(options.basePath ?? ""),
   };
 
   return this.use(async (ctx, next) => {
@@ -48,3 +50,5 @@ Startup.prototype.useSwagger = function (
       fileIndex: true,
     });
 };
+
+export { SwaggerOptions, ArrayItemType };

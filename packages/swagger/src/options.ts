@@ -24,6 +24,7 @@ export type SwaggerUIBundleConfig = Omit<
 >;
 
 export interface SwaggerOptions {
+  basePath?: string;
   path?: string;
   builder?: SwaggerBuilder;
   html?: SwaggerHtmlOptions;
