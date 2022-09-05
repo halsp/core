@@ -1,5 +1,6 @@
 import { HttpContext, Request, Response, ResultHandler } from "../context";
 import { HttpException } from "../exceptions";
+import { isClass, ObjectConstructor } from "../utils";
 import { execHooks, HookType } from "./hook.middleware";
 import { LambdaMiddleware } from "./lambda.middleware";
 
@@ -60,6 +61,34 @@ export abstract class Middleware extends ResultHandler {
   }
   public get response(): Response {
     return this.res;
+  }
+
+  public isPrevInstanceOf<T extends object = any>(
+    target: ObjectConstructor<T>
+  ): target is ObjectConstructor<T> {
+    const prevMd = this.#mds[this.#index - 1];
+    return this.#isInstanceOf(prevMd, target);
+  }
+
+  public isNextInstanceOf<T extends object = any>(
+    target: ObjectConstructor<T>
+  ): target is ObjectConstructor<T> {
+    const nextMd = this.#mds[this.#index + 1];
+    return this.#isInstanceOf(nextMd, target);
+  }
+
+  #isInstanceOf<T extends object = any>(
+    md: MiddlewareItem | undefined,
+    target: ObjectConstructor<T>
+  ) {
+    if (!md) return false;
+    if (md == target) return true;
+
+    if (isClass(md)) {
+      return md.prototype instanceof target;
+    } else {
+      return md instanceof target;
+    }
   }
 
   abstract invoke(): void | Promise<void>;
