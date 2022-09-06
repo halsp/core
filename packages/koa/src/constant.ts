@@ -1,3 +1,3 @@
-export const KOA_MIDDLEWARES_BAG = "@ipare/validator/koaMiddlewaresBag";
-export const KOA_CTX = "@ipare/validator/koaCtx";
-export const KOA_NEXT = "@ipare/validator/koaNext";
+export const KOA_MIDDLEWARES_BAG = "@ipare/koa/koaMiddlewaresBag";
+export const KOA_CTX = "@ipare/koa/koaCtx";
+export const KOA_NEXT = "@ipare/koa/koaNext";
