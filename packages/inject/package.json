@@ -1,6 +1,6 @@
 {
   "name": "@ipare/inject",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "engines": {
     "node": ">=12.16.0"
   },
@@ -30,7 +30,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^2.2.1",
+    "@ipare/core": "^2.2.2",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
