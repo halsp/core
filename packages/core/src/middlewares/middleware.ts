@@ -15,8 +15,11 @@ export type MiddlewareConstructor = {
 export type MiddlewareItem =
   | LambdaMiddleware
   | ((ctx: HttpContext) => Middleware)
+  | [(ctx: HttpContext) => Middleware, MiddlewareConstructor]
   | ((ctx: HttpContext) => Promise<Middleware>)
+  | [(ctx: HttpContext) => Promise<Middleware>, MiddlewareConstructor]
   | ((ctx: HttpContext) => MiddlewareConstructor)
+  | [(ctx: HttpContext) => MiddlewareConstructor, MiddlewareConstructor]
   | ((ctx: HttpContext) => Promise<MiddlewareConstructor>)
   | Middleware
   | MiddlewareConstructor;
@@ -29,6 +32,8 @@ export async function createMiddleware(
     return middleware;
   } else if (isMiddlewareConstructor(middleware)) {
     return await execHooks(ctx, middleware, HookType.Constructor);
+  } else if (Array.isArray(middleware)) {
+    return createMiddleware(ctx, await middleware[0](ctx));
   } else {
     return createMiddleware(ctx, await middleware(ctx));
   }
@@ -83,8 +88,9 @@ export abstract class Middleware extends ResultHandler {
   ) {
     if (!md) return false;
     if (md == target) return true;
-
-    if (isClass(md)) {
+    if (Array.isArray(md)) {
+      return md[1].prototype instanceof target;
+    } else if (isClass(md)) {
       return md.prototype instanceof target;
     } else {
       return md instanceof target;

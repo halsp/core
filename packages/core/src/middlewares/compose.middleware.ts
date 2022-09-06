@@ -44,10 +44,22 @@ export class ComposeMiddleware extends Middleware {
     return this;
   }
 
-  add(builder: (ctx: HttpContext) => Middleware): this;
-  add(builder: (ctx: HttpContext) => Promise<Middleware>): this;
-  add(builder: (ctx: HttpContext) => MiddlewareConstructor): this;
-  add(builder: (ctx: HttpContext) => Promise<MiddlewareConstructor>): this;
+  add(
+    builder: (ctx: HttpContext) => Middleware,
+    type?: MiddlewareConstructor
+  ): this;
+  add(
+    builder: (ctx: HttpContext) => Promise<Middleware>,
+    type?: MiddlewareConstructor
+  ): this;
+  add(
+    builder: (ctx: HttpContext) => MiddlewareConstructor,
+    type?: MiddlewareConstructor
+  ): this;
+  add(
+    builder: (ctx: HttpContext) => Promise<MiddlewareConstructor>,
+    type?: MiddlewareConstructor
+  ): this;
   add(md: Middleware): this;
   add(md: MiddlewareConstructor): this;
   add(
@@ -57,9 +69,14 @@ export class ComposeMiddleware extends Middleware {
       | ((ctx: HttpContext) => MiddlewareConstructor)
       | ((ctx: HttpContext) => Promise<MiddlewareConstructor>)
       | Middleware
-      | MiddlewareConstructor
+      | MiddlewareConstructor,
+    type?: MiddlewareConstructor
   ): this {
-    this.#mds.push(md);
+    if (type) {
+      this.#mds.push([md as any, type]);
+    } else {
+      this.#mds.push(md);
+    }
     return this;
   }
 }

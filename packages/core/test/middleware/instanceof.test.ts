@@ -1,4 +1,4 @@
-import { Middleware } from "../../src";
+import { ComposeMiddleware, Middleware } from "../../src";
 import { TestStartup } from "../test-startup";
 
 describe("middleware instanceof", () => {
@@ -134,6 +134,49 @@ describe("middleware instanceof", () => {
     const res = await new TestStartup()
       .add(ParentMiddleware)
       .add(new ChildMiddleware())
+      .run();
+    expect(res.body).toBeFalsy();
+  });
+
+  it("should return true when add middleware with type", async () => {
+    class ParentMiddleware extends Middleware {
+      async invoke(): Promise<void> {
+        this.ok(this.isNextInstanceOf(ParentMiddleware));
+        await this.next();
+      }
+    }
+    class ChildMiddleware extends Middleware {
+      async invoke(): Promise<void> {
+        await this.next();
+      }
+    }
+
+    const res = await new TestStartup()
+      .add(ParentMiddleware)
+      .add(() => new ParentMiddleware(), ChildMiddleware)
+      .run();
+    expect(res.body).toBeFalsy();
+  });
+
+  it("should return true when add middleware in ComposeMiddleware with type", async () => {
+    class ParentMiddleware extends Middleware {
+      async invoke(): Promise<void> {
+        this.ok(this.isNextInstanceOf(ParentMiddleware));
+        await this.next();
+      }
+    }
+    class ChildMiddleware extends Middleware {
+      async invoke(): Promise<void> {
+        await this.next();
+      }
+    }
+
+    const res = await new TestStartup()
+      .add(() =>
+        new ComposeMiddleware()
+          .add(ParentMiddleware)
+          .add(() => new ParentMiddleware(), ChildMiddleware)
+      )
       .run();
     expect(res.body).toBeFalsy();
   });
