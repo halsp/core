@@ -159,23 +159,11 @@ describe("middleware instanceof", () => {
   });
 
   it("should return true when add middleware in ComposeMiddleware with type", async () => {
-    class ParentMiddleware extends Middleware {
-      async invoke(): Promise<void> {
-        this.ok(this.isNextInstanceOf(ParentMiddleware));
-        await this.next();
-      }
-    }
-    class ChildMiddleware extends Middleware {
-      async invoke(): Promise<void> {
-        await this.next();
-      }
-    }
-
     const res = await new TestStartup()
       .add(() =>
         new ComposeMiddleware()
-          .add(ParentMiddleware)
-          .add(() => new ParentMiddleware(), ChildMiddleware)
+          .add(Middleware1)
+          .add(() => new Middleware1(), Middleware1)
       )
       .run();
     expect(res.body).toBeFalsy();

@@ -2,6 +2,7 @@ import Koa from "koa";
 import request from "supertest";
 import { koaIpare } from "../src";
 import path from "path";
+import { TestStartup } from "@ipare/testing";
 
 describe("koa-ipare", () => {
   it("should connect middlewares", async () => {
@@ -55,15 +56,13 @@ describe("koa-ipare", () => {
       .use(
         koaIpare((startup) => {
           startup
-            .useKoa(
-              new Koa().use(async (ctx, next) => {
-                ctx.body = ctx.req.read(100);
-                ctx.status = 200;
-                ctx.set("h1", ctx.req.headers.h1 as string);
-                ctx.set("h2", ctx.req.headers.h2 as string);
-                await next();
-              })
-            )
+            .koa(async (ctx, next) => {
+              ctx.body = ctx.req.read(100);
+              ctx.status = 200;
+              ctx.set("h1", ctx.req.headers.h1 as string);
+              ctx.set("h2", ctx.req.headers.h2 as string);
+              await next();
+            })
             .use(async (ctx, next) => {
               const res = ctx.res;
               expect(!!res).toBeTruthy();
@@ -108,5 +107,24 @@ describe("koa-ipare", () => {
     } finally {
       expect(working).toBeTruthy();
     }
+  });
+
+  it("should add multiple koa middlewares", async () => {
+    const res = await new TestStartup()
+      .koa(async (ctx, next) => {
+        ctx.count = 1;
+        await next();
+      })
+      .koa(async (ctx, next) => {
+        ctx.count += 1;
+        await next();
+      })
+      .koa(async (ctx, next) => {
+        ctx.set("count", ctx.count + 1);
+        await next();
+      })
+      .run();
+
+    expect(res.get("count")).toBe("3");
   });
 });

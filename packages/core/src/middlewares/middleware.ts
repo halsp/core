@@ -89,7 +89,7 @@ export abstract class Middleware extends ResultHandler {
     if (!md) return false;
     if (md == target) return true;
     if (Array.isArray(md)) {
-      return md[1].prototype instanceof target;
+      return md[1] == target || md[1].prototype instanceof target;
     } else if (isClass(md)) {
       return md.prototype instanceof target;
     } else {

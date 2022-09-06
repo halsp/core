@@ -1,15 +1,12 @@
 import "../src";
 import { TestStartup } from "@ipare/testing";
-import Koa from "koa";
 
 test("writeHead", async function () {
   const res = await new TestStartup()
-    .useKoa(
-      new Koa().use(async (ctx, next) => {
-        ctx.res.writeHead(200);
-        await next();
-      })
-    )
+    .koa(async (ctx, next) => {
+      ctx.res.writeHead(200);
+      await next();
+    })
     .run();
 
   expect(res.status).toBe(200);
@@ -18,14 +15,12 @@ test("writeHead", async function () {
 
 test("writeHead2", async function () {
   const res = await new TestStartup()
-    .useKoa(
-      new Koa().use(async (ctx, next) => {
-        ctx.res.writeHead(200, "", {
-          h1: 1,
-        });
-        await next();
-      })
-    )
+    .koa(async (ctx, next) => {
+      ctx.res.writeHead(200, "", {
+        h1: 1,
+      });
+      await next();
+    })
     .run();
 
   expect(res.status).toBe(200);
@@ -34,16 +29,14 @@ test("writeHead2", async function () {
 
 test("removeHeader", async function () {
   const res = await new TestStartup()
-    .useKoa(
-      new Koa().use(async (ctx, next) => {
-        ctx.res.setHeader("h1", 1);
-        ctx.res.writeHead(200, "", {
-          h2: 2,
-        });
-        ctx.res.removeHeader("h1");
-        await next();
-      })
-    )
+    .koa(async (ctx, next) => {
+      ctx.res.setHeader("h1", 1);
+      ctx.res.writeHead(200, "", {
+        h2: 2,
+      });
+      ctx.res.removeHeader("h1");
+      await next();
+    })
     .use(async (ctx) => {
       ctx.res.setHeader("h3", "");
     })

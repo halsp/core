@@ -1,5 +1,4 @@
 import "../src";
-import Koa from "koa";
 import { TestStartup } from "@ipare/testing";
 import { Request } from "@ipare/core";
 
@@ -7,13 +6,11 @@ describe("request body", () => {
   it("should parse text body", async function () {
     const res = await new TestStartup()
       .setRequest(new Request().setBody("ipare"))
-      .useKoa(
-        new Koa().use(async (ctx, next) => {
-          ctx.body = ctx.ipareCtx.req.body;
-          ctx.status = 200;
-          await next();
-        })
-      )
+      .koa(async (ctx, next) => {
+        ctx.body = ctx.ipareCtx.req.body;
+        ctx.status = 200;
+        await next();
+      })
       .run();
 
     expect(res.status).toBe(200);
@@ -28,13 +25,11 @@ describe("request body", () => {
           ipare: "koa",
         })
       )
-      .useKoa(
-        new Koa().use(async (ctx, next) => {
-          ctx.body = ctx.ipareCtx.req.body;
-          ctx.status = 200;
-          await next();
-        })
-      )
+      .koa(async (ctx, next) => {
+        ctx.body = ctx.ipareCtx.req.body;
+        ctx.status = 200;
+        await next();
+      })
       .run();
 
     expect(res.status).toBe(200);
@@ -49,13 +44,11 @@ describe("request body", () => {
   it("should parse buffer body", async function () {
     const res = await new TestStartup()
       .setRequest(new Request().setBody(Buffer.from("ipare", "utf-8")))
-      .useKoa(
-        new Koa().use(async (ctx, next) => {
-          ctx.body = ctx.ipareCtx.req.body;
-          ctx.status = 200;
-          await next();
-        })
-      )
+      .koa(async (ctx, next) => {
+        ctx.body = ctx.ipareCtx.req.body;
+        ctx.status = 200;
+        await next();
+      })
       .run();
 
     expect(res.status).toBe(200);

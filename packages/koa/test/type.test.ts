@@ -1,17 +1,14 @@
 import "../src";
 import { TestStartup } from "@ipare/testing";
-import Koa from "koa";
 
 test("arr header type", async function () {
   const res = await new TestStartup()
-    .useKoa(
-      new Koa().use(async (ctx, next) => {
-        ctx.body = "ipare";
-        ctx.status = 200;
-        ctx.set("Content-Type", ["text/plain", "charset=utf-8"]);
-        await next();
-      })
-    )
+    .koa(async (ctx, next) => {
+      ctx.body = "ipare";
+      ctx.status = 200;
+      ctx.set("Content-Type", ["text/plain", "charset=utf-8"]);
+      await next();
+    })
     .run();
 
   expect(res.status).toBe(200);
@@ -24,14 +21,12 @@ test("arr header type", async function () {
 
 test("without type", async function () {
   const res = await new TestStartup()
-    .useKoa(
-      new Koa().use(async (ctx, next) => {
-        ctx.body = "ipare";
-        ctx.status = 200;
-        ctx.set("Content-Type", "");
-        await next();
-      })
-    )
+    .koa(async (ctx, next) => {
+      ctx.body = "ipare";
+      ctx.status = 200;
+      ctx.set("Content-Type", "");
+      await next();
+    })
     .run();
 
   expect(res.status).toBe(200);

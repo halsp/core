@@ -1,9 +1,8 @@
 import "../src";
 import { TestStartup } from "@ipare/testing";
-import Koa from "koa";
 
 test("default", async function () {
-  const res = await new TestStartup().useKoa(new Koa()).run();
+  const res = await new TestStartup().koa(() => undefined).run();
 
   expect(res.status).toBe(404);
   expect(res.body).toBeUndefined();
@@ -12,13 +11,11 @@ test("default", async function () {
 
 test("text", async function () {
   const res = await new TestStartup()
-    .useKoa(
-      new Koa().use(async (ctx, next) => {
-        ctx.body = "ipare";
-        ctx.status = 201;
-        await next();
-      })
-    )
+    .koa(async (ctx, next) => {
+      ctx.body = "ipare";
+      ctx.status = 201;
+      await next();
+    })
     .run();
 
   expect(res.status).toBe(201);
@@ -28,13 +25,11 @@ test("text", async function () {
 
 test("boolean", async function () {
   const res = await new TestStartup()
-    .useKoa(
-      new Koa().use(async (ctx, next) => {
-        ctx.body = true;
-        ctx.status = 201;
-        await next();
-      })
-    )
+    .koa(async (ctx, next) => {
+      ctx.body = true;
+      ctx.status = 201;
+      await next();
+    })
     .run();
 
   expect(res.status).toBe(201);
@@ -43,15 +38,15 @@ test("boolean", async function () {
 });
 
 test("json", async function () {
-  const koaApp = new Koa().use(async (ctx, next) => {
-    ctx.body = {
-      ipare: "koa",
-    };
-    ctx.status = 200;
-    await next();
-  });
-  koaApp.on("error", () => void 0);
-  const res = await new TestStartup().useKoa(koaApp).run();
+  const res = await new TestStartup()
+    .koa(async (ctx, next) => {
+      ctx.body = {
+        ipare: "koa",
+      };
+      ctx.status = 200;
+      await next();
+    })
+    .run();
 
   expect(res.status).toBe(200);
   expect(res.body).toEqual({
@@ -62,13 +57,11 @@ test("json", async function () {
 
 test("buffer", async function () {
   const res = await new TestStartup()
-    .useKoa(
-      new Koa().use(async (ctx, next) => {
-        ctx.body = Buffer.from("ipare", "utf-8");
-        ctx.status = 200;
-        await next();
-      })
-    )
+    .koa(async (ctx, next) => {
+      ctx.body = Buffer.from("ipare", "utf-8");
+      ctx.status = 200;
+      await next();
+    })
     .run();
 
   expect(res.status).toBe(200);
