@@ -1,4 +1,4 @@
-import { HttpMethod, Request } from "../../src";
+import { Request } from "../../src";
 import { TestStartup } from "../test-startup";
 
 describe("method override", () => {
@@ -69,26 +69,5 @@ describe("method override", () => {
     expect(req.method).toBe("POST");
     expect(req.method).not.toBe("PATCH");
     expect(req.overrideMethod).toBeUndefined();
-  });
-});
-
-describe("HEAD method", () => {
-  it("should replace to get when method is HEAD", async () => {
-    const req = new Request().setMethod("head");
-    expect(req.method).toBe(HttpMethod.get);
-    expect(req.isHeadMethod).toBeTruthy();
-  });
-
-  it("should remove body when method is HEAD", async () => {
-    const res = await new TestStartup(new Request().setMethod("HEAD"))
-      .use(async (ctx, next) => {
-        ctx.ok("<xml></xml>");
-        await next();
-      })
-      .run();
-
-    expect(res.get("content-type")).toBe("text/html; charset=utf-8");
-    expect(res.status).toBe(200);
-    expect(res.body).toBeUndefined();
   });
 });

@@ -7,7 +7,6 @@ import {
 } from "../utils";
 import { HttpContext } from "./http-context";
 import { HeaderHandler } from "./header-handler";
-import { HttpMethod } from "../http-method";
 
 export class Request extends HeaderHandler {
   constructor() {
@@ -53,10 +52,6 @@ export class Request extends HeaderHandler {
       return this.#method;
     }
   }
-  #isHeadMethod = false;
-  public get isHeadMethod(): boolean {
-    return this.#isHeadMethod;
-  }
   public get method(): string {
     const ovrdHeader = this.getHeader("X-HTTP-Method-Override");
     if (ovrdHeader) {
@@ -70,12 +65,6 @@ export class Request extends HeaderHandler {
   }
   setMethod(method: string): this {
     this.#method = method?.toUpperCase();
-
-    this.#isHeadMethod = this.#method == HttpMethod.head;
-    if (this.#isHeadMethod) {
-      this.#method = HttpMethod.get;
-    }
-
     return this;
   }
 
