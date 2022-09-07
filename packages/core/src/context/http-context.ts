@@ -67,10 +67,10 @@ export class HttpContext extends ResultHandler {
       this.#bag[key] = arg1;
       return this;
     } else {
-      if (Object.prototype.hasOwnProperty.call(this.#singletonBag, key)) {
+      if (key in this.#singletonBag) {
         return this.#getBagValue(key, this.#singletonBag[key]);
       }
-      if (Object.prototype.hasOwnProperty.call(this.#scopedBag, key)) {
+      if (key in this.#scopedBag) {
         return this.#getBagValue(key, this.#scopedBag[key]);
       }
       const result: BuilderBagItem<T> | T = this.#bag[key];
@@ -90,8 +90,7 @@ export class HttpContext extends ResultHandler {
           dict = this.#scopedBag;
         }
 
-        const exist = Object.prototype.hasOwnProperty.call(dict, key);
-        if (!exist) {
+        if (!(key in dict)) {
           dict[key] = result.builder();
         }
         return dict[key];

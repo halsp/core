@@ -30,17 +30,13 @@ describe("parser", () => {
       new MapItem("test.ts", "TestGet", "test2", ["get"]),
     ];
     const doc = runParserTest(mapItems);
-    expect(
-      Object.prototype.hasOwnProperty.call(doc["paths"]["/test1"], "post")
-    ).toBeTruthy();
+    expect("post" in doc["paths"]["/test1"]).toBeTruthy();
   });
 
   it("shoude parse default", async () => {
     const mapItems = [new MapItem("default.get.ts", "default", "def", ["get"])];
     const doc = runParserTest(mapItems);
-    expect(
-      Object.prototype.hasOwnProperty.call(doc["paths"]["/def"], "get")
-    ).toBeTruthy();
+    expect("get" in doc["paths"]["/def"]).toBeTruthy();
   });
 
   it("shoult parse not-action", async () => {
