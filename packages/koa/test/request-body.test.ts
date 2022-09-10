@@ -55,4 +55,21 @@ describe("request body", () => {
     expect(res.body).toEqual(Buffer.from("ipare", "utf-8"));
     expect(res.getHeader("content-type")).toBe("application/octet-stream");
   });
+
+  it("should parse aliReq", async function () {
+    let working = 0;
+    await new TestStartup()
+      .use(async (ctx, next) => {
+        ctx["aliReq"] = { a: 1 };
+        await next();
+      })
+      .koa(async (ctx, next) => {
+        expect(ctx.req["a"]).toBe(1);
+        working++;
+        await next();
+      })
+      .run();
+
+    expect(working).toBe(1);
+  });
 });

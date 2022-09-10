@@ -58,6 +58,8 @@ async function getHttpReq(
   let httpReq: http.IncomingMessage;
   if ("httpReq" in ipareCtx) {
     httpReq = ipareCtx["httpReq"];
+  } else if ("aliReq" in ipareCtx) {
+    httpReq = ipareCtx["aliReq"];
   } else {
     httpReq = new http.IncomingMessage(new net.Socket());
     const body = ipareCtx.req.body;
