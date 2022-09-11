@@ -5,7 +5,7 @@ import { TestStartup } from "@ipare/testing";
 it("should get mongoose by ctx", async () => {
   await new TestStartup()
     .use(async (ctx, next) => {
-      mongoose.Mongoose.prototype.createConnection = async () => {
+      (mongoose as any).createConnection = async () => {
         return {
           close: () => undefined,
         } as any;

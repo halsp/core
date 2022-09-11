@@ -7,7 +7,7 @@ import { OPTIONS_IDENTITY } from "../src/constant";
 test("connected connection should be destroy", async () => {
   const res = await new TestStartup()
     .use(async (ctx, next) => {
-      mongoose.Mongoose.prototype.createConnection = async () => {
+      (mongoose as any).createConnection = async () => {
         ctx.setHeader("connect", "1");
         return {
           destroy: () => {
@@ -37,7 +37,7 @@ test("connected connection should be destroy", async () => {
 it("disconnected connection should not be destroy", async () => {
   const res = await new TestStartup()
     .use(async (ctx, next) => {
-      mongoose.Mongoose.prototype.createConnection = async () => {
+      (mongoose as any).createConnection = async () => {
         ctx.setHeader("connect", "1");
         return {
           destroy: () => {

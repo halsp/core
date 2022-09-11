@@ -23,7 +23,11 @@ Startup.prototype.useMongoose = function (options: Options): Startup {
   return this.useInject().inject(
     injectKey,
     async () => {
-      const connection = await mongoose.createConnection(options.url, options);
+      const opt = { ...options } as Partial<Options>;
+      delete opt.url;
+      delete opt.injectType;
+      delete opt.identity;
+      const connection = await mongoose.createConnection(options.url, opt);
       const disposedClient = connection as IService & typeof connection;
       disposedClient.dispose = async () => {
         if (
