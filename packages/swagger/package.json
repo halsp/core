@@ -1,6 +1,6 @@
 {
   "name": "@ipare/swagger",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "description": "使用 swagger 自动生成你的 Ipare 文档",
   "engines": {
     "node": ">=12.16.0"
@@ -29,18 +29,18 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^2.2.3",
-    "@ipare/inject": "^2.2.3",
-    "@ipare/pipe": "^2.2.3",
-    "@ipare/router": "^2.2.3",
-    "@ipare/static": "^2.2.3",
-    "@ipare/validator": "^2.2.3",
+    "@ipare/core": "^2.2.4",
+    "@ipare/inject": "^2.2.4",
+    "@ipare/pipe": "^2.2.4",
+    "@ipare/router": "^2.2.4",
+    "@ipare/static": "^2.2.4",
+    "@ipare/validator": "^2.2.4",
     "openapi3-ts-remove-yaml": "^3.0.2",
     "reflect-metadata": "^0.1.13",
     "swagger-ui-dist": "^4.14.0"
   },
   "devDependencies": {
-    "@ipare/http": "^2.2.3",
+    "@ipare/http": "^2.2.4",
     "@types/jest": "^29.0.0",
     "@types/node": "^18.7.16",
     "@types/swagger-ui-dist": "^3.30.1",

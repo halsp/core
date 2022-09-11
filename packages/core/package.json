@@ -1,6 +1,6 @@
 {
   "name": "@ipare/core",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "description": "面向云的现代渐进式轻量 Node.js 框架",
   "engines": {
     "node": ">=12.16.0"
