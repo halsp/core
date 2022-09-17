@@ -2,7 +2,7 @@
   "name": "@ipare/router",
   "version": "2.2.4",
   "engines": {
-    "node": ">=12.16.0"
+    "node": ">=12.14.0"
   },
   "description": "Ipare 的路由插件",
   "homepage": "https://ipare.org",

@@ -3,7 +3,7 @@
   "version": "2.2.4",
   "description": "Ipare 的测试插件，用于单元测试、本地测试等",
   "engines": {
-    "node": ">=12.16.0"
+    "node": ">=12.14.0"
   },
   "homepage": "https://ipare.org",
   "repository": {
