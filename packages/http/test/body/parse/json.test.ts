@@ -22,15 +22,9 @@ test("useHttpJsonBody", async () => {
 
 test("parse json error", async () => {
   const server = new HttpStartup()
-    .useHttpJsonBody(
-      undefined,
-      undefined,
-      undefined,
-      undefined,
-      async (ctx) => {
-        ctx.badRequestMsg({ message: "ERROR" });
-      }
-    )
+    .useHttpJsonBody(undefined, async (ctx) => {
+      ctx.badRequestMsg({ message: "ERROR" });
+    })
     .use(async (ctx) => {
       ctx.ok(ctx.req.body);
     })

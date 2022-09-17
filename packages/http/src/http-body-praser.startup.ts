@@ -1,11 +1,12 @@
 import { HttpContext, Startup, StatusCodes } from "@ipare/core";
 import typeis from "type-is";
 import cobody from "co-body";
-import { IParseOptions } from "qs";
-import { Fields, Files, Options, File, IncomingForm } from "formidable";
+import formidable from "formidable";
 import http from "http";
 
-export type MultipartBody = { fields: Fields; files: Files } | undefined;
+export type MultipartBody =
+  | { fields: formidable.Fields; files: formidable.Files }
+  | undefined;
 
 export abstract class HttpBodyPraserStartup extends Startup {
   constructor(
@@ -17,20 +18,11 @@ export abstract class HttpBodyPraserStartup extends Startup {
   }
 
   public useHttpJsonBody(
-    strict = true,
-    limit = "1mb",
-    encoding: BufferEncoding = "utf-8",
-    returnRawBody = false,
+    options?: cobody.Options,
     onError?: (ctx: HttpContext, err: unknown) => Promise<void>
   ): this {
     this.#useBodyPraser(
-      async (ctx) =>
-        await cobody.json(this.sourceReqBuilder(ctx), {
-          encoding: encoding,
-          limit: limit,
-          strict: strict,
-          returnRawBody: returnRawBody,
-        }),
+      async (ctx) => await cobody.json(this.sourceReqBuilder(ctx), options),
       [
         "application/json",
         "application/json-patch+json",
@@ -45,18 +37,11 @@ export abstract class HttpBodyPraserStartup extends Startup {
   }
 
   public useHttpTextBody(
-    limit = "56kb",
-    encoding: BufferEncoding = "utf-8",
-    returnRawBody = false,
+    options?: cobody.Options,
     onError?: (ctx: HttpContext, err: unknown) => Promise<void>
   ): this {
     this.#useBodyPraser(
-      async (ctx) =>
-        await cobody.text(this.sourceReqBuilder(ctx), {
-          encoding: encoding,
-          limit: limit,
-          returnRawBody: returnRawBody,
-        }),
+      async (ctx) => await cobody.text(this.sourceReqBuilder(ctx), options),
       ["text/*"],
       onError
     );
@@ -64,20 +49,11 @@ export abstract class HttpBodyPraserStartup extends Startup {
   }
 
   public useHttpUrlencodedBody(
-    queryString?: IParseOptions,
-    limit = "56kb",
-    encoding: BufferEncoding = "utf-8",
-    returnRawBody = false,
+    options?: cobody.Options,
     onError?: (ctx: HttpContext, err: Error) => Promise<void>
   ): this {
     this.#useBodyPraser(
-      async (ctx) =>
-        await cobody.form(this.sourceReqBuilder(ctx), {
-          encoding: encoding,
-          limit: limit,
-          returnRawBody: returnRawBody,
-          queryString: queryString,
-        }),
+      async (ctx) => await cobody.form(this.sourceReqBuilder(ctx), options),
       ["urlencoded"],
       onError
     );
@@ -85,13 +61,17 @@ export abstract class HttpBodyPraserStartup extends Startup {
   }
 
   public useHttpMultipartBody(
-    opts?: Partial<Options | undefined>,
-    onFileBegin?: (ctx: HttpContext, formName: string, file: File) => void,
+    options?: formidable.Options,
+    onFileBegin?: (
+      ctx: HttpContext,
+      formName: string,
+      file: formidable.File
+    ) => void,
     onError?: (ctx: HttpContext, err: Error) => Promise<void>
   ): this {
     this.#useBodyPraser(
       async (ctx) =>
-        await this.#parseMultipart(ctx, opts, onFileBegin, onError),
+        await this.#parseMultipart(ctx, options, onFileBegin, onError),
       ["multipart"],
       onError
     );
@@ -100,12 +80,16 @@ export abstract class HttpBodyPraserStartup extends Startup {
 
   #parseMultipart(
     ctx: HttpContext,
-    opts?: Partial<Options | undefined>,
-    onFileBegin?: (ctx: HttpContext, formName: string, file: File) => void,
+    options?: formidable.Options,
+    onFileBegin?: (
+      ctx: HttpContext,
+      formName: string,
+      file: formidable.File
+    ) => void,
     onError?: (ctx: HttpContext, err: Error) => Promise<void>
   ): Promise<MultipartBody> {
     return new Promise<MultipartBody>((resolve) => {
-      const form = new IncomingForm(opts);
+      const form = new formidable.IncomingForm(options);
       if (onFileBegin) {
         form.on("fileBegin", (formName, file) => {
           onFileBegin(ctx, formName, file);
@@ -113,7 +97,7 @@ export abstract class HttpBodyPraserStartup extends Startup {
       }
       form.parse(
         this.sourceReqBuilder(ctx),
-        async (err, fields: Fields, files: Files) => {
+        async (err, fields: formidable.Fields, files: formidable.Files) => {
           if (err) {
             ctx.res.status = StatusCodes.BAD_REQUEST;
             if (onError) await onError(ctx, err);
@@ -139,7 +123,7 @@ export abstract class HttpBodyPraserStartup extends Startup {
         return await next();
       }
 
-      let body;
+      let body: any;
       try {
         body = await bodyBuilder(ctx);
       } catch (err) {
