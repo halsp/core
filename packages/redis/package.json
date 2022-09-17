@@ -1,6 +1,6 @@
 {
   "name": "@ipare/redis",
-  "version": "2.2.4",
+  "version": "2.2.5",
   "description": "Ipare Redis 插件",
   "engines": {
     "node": ">=12.14.0"
@@ -28,8 +28,8 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^2.2.4",
-    "@ipare/inject": "^2.2.4",
+    "@ipare/core": "^2.2.5",
+    "@ipare/inject": "^2.2.5",
     "redis": "^4.3.1",
     "reflect-metadata": "^0.1.13"
   },

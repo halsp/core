@@ -1,6 +1,6 @@
 {
   "name": "@ipare/router",
-  "version": "2.2.4",
+  "version": "2.2.5",
   "engines": {
     "node": ">=12.14.0"
   },
@@ -30,7 +30,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^2.2.4",
+    "@ipare/core": "^2.2.5",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {

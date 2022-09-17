@@ -1,6 +1,6 @@
 {
   "name": "@ipare/alifc",
-  "version": "2.2.4",
+  "version": "2.2.5",
   "description": "将 Ipare 托管到阿里云函数计算",
   "engines": {
     "node": ">=12.14.0"
@@ -31,8 +31,8 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^2.2.4",
-    "@ipare/http": "^2.2.4"
+    "@ipare/core": "^2.2.5",
+    "@ipare/http": "^2.2.5"
   },
   "devDependencies": {
     "@types/jest": "^29.0.3",
