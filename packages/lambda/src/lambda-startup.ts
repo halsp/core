@@ -5,6 +5,7 @@ import {
   Dict,
   HeadersDict,
   HttpMethod,
+  isObject,
 } from "@ipare/core";
 import { ResponseStruct } from "./response-struct";
 import { Readable } from "stream";
@@ -72,6 +73,8 @@ export class LambdaStartup extends Startup {
     } else if (body instanceof Readable) {
       isBase64Encoded = true;
       body = await this.#readSteram(body);
+    } else if (isObject(body)) {
+      body = JSON.stringify(body);
     }
 
     return {

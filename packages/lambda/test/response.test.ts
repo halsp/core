@@ -51,8 +51,10 @@ test("set json type", async () => {
 
   expect(res.headers["content-type"]).toBe("application/json");
   expect(res.headers["content-length"]).toBe("10");
-  expect(res.body).toEqual({
-    body: "BODY",
-  });
+  expect(res.body).toBe(
+    JSON.stringify({
+      body: "BODY",
+    })
+  );
   expect(res.statusCode).toBe(200);
 });

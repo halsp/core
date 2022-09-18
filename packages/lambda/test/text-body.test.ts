@@ -17,7 +17,7 @@ test("string body", async () => {
       {}
     );
 
-  expect(result.body).toEqual({ test: "ipare" });
+  expect(result.body).toBe(JSON.stringify({ test: "ipare" }));
 });
 
 test("string body without conent-type", async () => {

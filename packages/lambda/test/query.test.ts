@@ -17,8 +17,10 @@ test("query", async () => {
     );
 
   expect(res.statusCode).toBe(200);
-  expect(res.body).toEqual({
-    a: "1",
-    b: "2",
-  });
+  expect(res.body).toBe(
+    JSON.stringify({
+      a: "1",
+      b: "2",
+    })
+  );
 });
