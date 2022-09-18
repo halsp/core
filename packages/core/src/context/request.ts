@@ -38,8 +38,10 @@ export class Request extends HeaderHandler {
     return this.#originalPath;
   }
   setPath(path: string): this {
-    this.#originalPath = path;
-    this.#path = normalizePath(path);
+    this.#originalPath = path
+      ?.replace(/\?.*$/, "")
+      ?.replace(/^https?:\/{1,2}[^\/]+\//, "");
+    this.#path = normalizePath(this.#originalPath);
     return this;
   }
 
