@@ -1,5 +1,5 @@
 import * as net from "net";
-import { HttpBodyPraserStartup } from "./http-body-praser.startup";
+import { BodyPraserStartup } from "./http-body-praser.startup";
 import * as http from "http";
 import {
   HttpContext,
@@ -14,7 +14,7 @@ import { Stream } from "stream";
 
 export abstract class BaseStartup<
   T extends net.Server = net.Server
-> extends HttpBodyPraserStartup {
+> extends BodyPraserStartup {
   constructor() {
     super((ctx) => ctx.httpReq);
   }

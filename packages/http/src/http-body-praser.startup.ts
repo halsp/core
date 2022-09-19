@@ -8,7 +8,7 @@ export type MultipartBody =
   | { fields: formidable.Fields; files: formidable.Files }
   | undefined;
 
-export abstract class HttpBodyPraserStartup extends Startup {
+export abstract class BodyPraserStartup extends Startup {
   constructor(
     private readonly sourceReqBuilder: (
       ctx: HttpContext

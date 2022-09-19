@@ -3,10 +3,7 @@ import "@ipare/core";
 
 export { HttpStartup } from "./http.startup";
 export { HttpsStartup } from "./https.startup";
-export {
-  HttpBodyPraserStartup,
-  MultipartBody,
-} from "./http-body-praser.startup";
+export { BodyPraserStartup, MultipartBody } from "./http-body-praser.startup";
 
 declare module "@ipare/core" {
   interface HttpContext {

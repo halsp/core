@@ -1,10 +1,10 @@
-import { HttpBodyPraserStartup } from "../../../src";
+import { BodyPraserStartup } from "../../../src";
 import * as http from "http";
 import { HttpContext, Request, Dict, NumericalHeadersDict } from "@ipare/core";
 import urlParse from "url-parse";
 import request from "supertest";
 
-class TestHttpStartup extends HttpBodyPraserStartup {
+class TestHttpStartup extends BodyPraserStartup {
   constructor() {
     super((ctx) => ctx.httpReq);
   }
