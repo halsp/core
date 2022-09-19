@@ -1,4 +1,4 @@
-import { Response, Context } from "./context";
+import { Context } from "./context";
 import {
   Middleware,
   MdHook,
@@ -9,10 +9,7 @@ import {
   MiddlewareConstructor,
   LambdaMiddleware,
 } from "./middlewares";
-import { Stream } from "stream";
-import * as mime from "mime-types";
-import { isString, ObjectConstructor } from "./utils";
-import { HttpException } from "./exceptions";
+import { ObjectConstructor } from "./utils";
 
 export abstract class Startup {
   readonly #mds: MiddlewareItem[] = [];
@@ -78,11 +75,11 @@ export abstract class Startup {
     ) => Promise<T | undefined>
   ): this;
 
-  hook<T extends Error = HttpException>(
+  hook<T extends Error = Error>(
     type: HookType.Exception,
     mh: (ctx: Context, middleware: Middleware, exception: T) => boolean
   ): this;
-  hook<T extends Error = HttpException>(
+  hook<T extends Error = Error>(
     type: HookType.Exception,
     mh: (ctx: Context, middleware: Middleware, exception: T) => Promise<boolean>
   ): this;
@@ -127,10 +124,10 @@ export abstract class Startup {
     return this;
   }
 
-  protected async invoke(ctx: Context): Promise<Response> {
+  protected async invoke(ctx: Context): Promise<Context> {
     (ctx as any).startup = this;
     if (!this.#mds.length) {
-      return ctx.res;
+      return ctx;
     }
 
     try {
@@ -138,53 +135,6 @@ export abstract class Startup {
     } catch (err) {
       ctx.catchError(err);
     }
-
-    return this.#setType(ctx.res);
-  }
-
-  #setType(res: Response): Response {
-    const body = res.body;
-
-    if (!body) {
-      res.removeHeader("content-type");
-      res.removeHeader("content-length");
-      return res;
-    }
-
-    const writeType = !res.hasHeader("content-type");
-    const writeLength = !res.hasHeader("content-length");
-
-    if (Buffer.isBuffer(body)) {
-      if (writeLength) {
-        res.setHeader("content-length", body.byteLength);
-      }
-      if (writeType) {
-        res.setHeader("content-type", mime.contentType("bin") as string);
-      }
-    } else if (body instanceof Stream) {
-      if (writeType) {
-        res.setHeader("content-type", mime.contentType("bin") as string);
-      }
-    } else if (isString(body)) {
-      if (writeLength) {
-        res.setHeader("content-length", Buffer.byteLength(body));
-      }
-      if (writeType) {
-        const type = /^\s*</.test(body) ? "html" : "text";
-        res.setHeader("content-type", mime.contentType(type) as string);
-      }
-    } else {
-      if (writeLength) {
-        res.setHeader(
-          "content-length",
-          Buffer.byteLength(JSON.stringify(body))
-        );
-      }
-      if (writeType) {
-        res.setHeader("content-type", mime.contentType("json") as string);
-      }
-    }
-
-    return res;
+    return ctx;
   }
 }

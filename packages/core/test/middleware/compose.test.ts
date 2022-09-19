@@ -8,94 +8,94 @@ test("compose middleware", async () => {
     return index;
   }
 
-  const res = await new TestStartup()
+  const ctx = await new TestStartup()
     .use(async (ctx, next) => {
-      ctx.res.setHeader("h11", getIndex());
+      ctx.bag("h11", getIndex());
       await next();
-      ctx.res.setHeader("h12", getIndex());
+      ctx.bag("h12", getIndex());
     })
     .add(() =>
       new ComposeMiddleware()
         .use(async (ctx, next) => {
-          ctx.res.setHeader("h21", getIndex());
+          ctx.bag("h21", getIndex());
           await next();
-          ctx.res.setHeader("h22", getIndex());
+          ctx.bag("h22", getIndex());
         })
         .add(() =>
           new ComposeMiddleware()
             .use(async (ctx, next) => {
-              ctx.res.setHeader("h31", getIndex());
+              ctx.bag("h31", getIndex());
               await next();
-              ctx.res.setHeader("h32", getIndex());
+              ctx.bag("h32", getIndex());
             })
             .add(() =>
               new ComposeMiddleware()
                 .use(async (ctx, next) => {
-                  ctx.res.setHeader("h41", getIndex());
+                  ctx.bag("h41", getIndex());
                   await next();
-                  ctx.res.setHeader("h42", getIndex());
+                  ctx.bag("h42", getIndex());
                 })
                 .use(async (ctx, next) => {
-                  ctx.res.setHeader("h51", getIndex());
+                  ctx.bag("h51", getIndex());
                   await next();
-                  ctx.res.setHeader("h52", getIndex());
+                  ctx.bag("h52", getIndex());
                 })
             )
             .use(async (ctx, next) => {
-              ctx.res.setHeader("h61", getIndex());
+              ctx.bag("h61", getIndex());
               await next();
-              ctx.res.setHeader("h62", getIndex());
+              ctx.bag("h62", getIndex());
             })
         )
         .use(async (ctx, next) => {
-          ctx.res.setHeader("h71", getIndex());
+          ctx.bag("h71", getIndex());
           await next();
-          ctx.res.setHeader("h72", getIndex());
+          ctx.bag("h72", getIndex());
         })
     )
     .use(async (ctx, next) => {
-      ctx.res.setHeader("h81", getIndex());
+      ctx.bag("h81", getIndex());
       await next();
-      ctx.res.setHeader("h82", getIndex());
+      ctx.bag("h82", getIndex());
     })
     .run();
 
-  expect(res.getHeader("h11")).toBe("1");
-  expect(res.getHeader("h21")).toBe("2");
-  expect(res.getHeader("h31")).toBe("3");
-  expect(res.getHeader("h41")).toBe("4");
-  expect(res.getHeader("h51")).toBe("5");
-  expect(res.getHeader("h61")).toBe("6");
-  expect(res.getHeader("h71")).toBe("7");
-  expect(res.getHeader("h81")).toBe("8");
-  expect(res.getHeader("h82")).toBe("9");
-  expect(res.getHeader("h72")).toBe("10");
-  expect(res.getHeader("h62")).toBe("11");
-  expect(res.getHeader("h52")).toBe("12");
-  expect(res.getHeader("h42")).toBe("13");
-  expect(res.getHeader("h32")).toBe("14");
-  expect(res.getHeader("h22")).toBe("15");
-  expect(res.getHeader("h12")).toBe("16");
+  expect(ctx.bag("h11")).toBe(1);
+  expect(ctx.bag("h21")).toBe(2);
+  expect(ctx.bag("h31")).toBe(3);
+  expect(ctx.bag("h41")).toBe(4);
+  expect(ctx.bag("h51")).toBe(5);
+  expect(ctx.bag("h61")).toBe(6);
+  expect(ctx.bag("h71")).toBe(7);
+  expect(ctx.bag("h81")).toBe(8);
+  expect(ctx.bag("h82")).toBe(9);
+  expect(ctx.bag("h72")).toBe(10);
+  expect(ctx.bag("h62")).toBe(11);
+  expect(ctx.bag("h52")).toBe(12);
+  expect(ctx.bag("h42")).toBe(13);
+  expect(ctx.bag("h32")).toBe(14);
+  expect(ctx.bag("h22")).toBe(15);
+  expect(ctx.bag("h12")).toBe(16);
 });
 
 test("compose enable = true", async () => {
-  const res = await new TestStartup()
+  const ctx = await new TestStartup()
     .add(() =>
       new ComposeMiddleware(() => true).use(async (ctx) => {
-        ctx.res.setHeader("h", 1);
+        ctx.bag("h", 1);
       })
     )
     .run();
-  expect(res.getHeader("h")).toBe("1");
+  expect(ctx.bag("h")).toBe(1);
 });
 
 test("compose enable = false", async () => {
-  const res = await new TestStartup()
+  const ctx = await new TestStartup()
     .add(() =>
       new ComposeMiddleware(() => false).use(async (ctx) => {
-        ctx.res.setHeader("h", 1);
+        ctx.bag("h", 1);
       })
     )
     .run();
-  expect(res.getHeader("h")).toBeUndefined();
+  expect(ctx.bag("h")).toBeUndefined();
 });

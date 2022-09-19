@@ -6,16 +6,15 @@ test("middleware success", async () => {
     step: 0,
   };
 
-  const res = await new TestStartup()
+  const ctx = await new TestStartup()
     .add(() => new Mdw1(stepResult))
     .add(() => new Mdw2(stepResult))
     .add(() => new Mdw3(stepResult))
     .add(() => new Mdw4(stepResult))
     .run();
 
-  expect(res.status).toBe(200);
   expect(stepResult.step).toBe(111);
-  expect(res.body).toBe("middleware-success");
+  expect(ctx.bag("result")).toBe("middleware-success");
 });
 
 class Mdw1 extends Middleware {
@@ -47,7 +46,7 @@ class Mdw3 extends Middleware {
 
   async invoke(): Promise<void> {
     this.stepResult.step += 100;
-    this.ok("middleware-success");
+    this.ctx.bag("result", "middleware-success");
   }
 }
 

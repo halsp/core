@@ -4,12 +4,12 @@ import { TestStartup } from "../test-startup";
 test("middleware pipeline", async () => {
   const startup = new TestStartup().add(new Md());
 
-  let res = await startup.run();
-  expect(res.getHeader("num")).toBe("1");
-  res = await startup.run();
-  expect(res.getHeader("num")).toBe("2");
-  res = await startup.run();
-  expect(res.getHeader("num")).toBe("3");
+  let ctx = await startup.run();
+  expect(ctx.bag("num")).toBe(1);
+  ctx = await startup.run();
+  expect(ctx.bag("num")).toBe(2);
+  ctx = await startup.run();
+  expect(ctx.bag("num")).toBe(3);
 });
 
 class Md extends Middleware {
@@ -17,7 +17,7 @@ class Md extends Middleware {
 
   async invoke(): Promise<void> {
     this.#number++;
-    this.ctx.res.setHeader("num", this.#number.toString());
+    this.ctx.bag("num", this.#number);
     await this.next();
   }
 }

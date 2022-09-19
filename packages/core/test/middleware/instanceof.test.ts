@@ -9,7 +9,7 @@ describe("middleware instanceof", () => {
   }
   class Middleware2 extends Middleware {
     async invoke() {
-      this.ok({
+      this.ctx.bag("result", {
         prev: this.isPrevInstanceOf(Middleware1),
         next: this.isNextInstanceOf(Middleware3),
       });
@@ -23,36 +23,36 @@ describe("middleware instanceof", () => {
   }
 
   it("should return true when middleware is class", async () => {
-    const res = await new TestStartup()
+    const ctx = await new TestStartup()
       .add(Middleware1)
       .add(Middleware2)
       .add(Middleware3)
       .run();
-    expect(res.body).toEqual({
+    expect(ctx.bag("result")).toEqual({
       prev: true,
       next: true,
     });
   });
 
   it("should return false when the prev middleware is not exist", async () => {
-    const res = await new TestStartup()
+    const ctx = await new TestStartup()
       .add(Middleware2)
       .add(Middleware1)
       .add(Middleware3)
       .run();
-    expect(res.body).toEqual({
+    expect(ctx.bag("result")).toEqual({
       prev: false,
       next: false,
     });
   });
 
   it("should return false when the next middleware is not exist", async () => {
-    const res = await new TestStartup()
+    const ctx = await new TestStartup()
       .add(Middleware1)
       .add(Middleware3)
       .add(Middleware2)
       .run();
-    expect(res.body).toEqual({
+    expect(ctx.bag("result")).toEqual({
       prev: false,
       next: false,
     });
@@ -61,7 +61,7 @@ describe("middleware instanceof", () => {
   it("should return true when the next middleware extends current", async () => {
     class ParentMiddleware extends Middleware {
       async invoke(): Promise<void> {
-        this.ok(this.isNextInstanceOf(ParentMiddleware));
+        this.ctx.bag("result", this.isNextInstanceOf(ParentMiddleware));
         await this.next();
       }
     }
@@ -71,17 +71,17 @@ describe("middleware instanceof", () => {
       }
     }
 
-    const res = await new TestStartup()
+    const ctx = await new TestStartup()
       .add(ParentMiddleware)
       .add(ChildMiddleware)
       .run();
-    expect(res.body).toBeTruthy();
+    expect(ctx.bag("result")).toBeTruthy();
   });
 
   it("should return true when the next middleware instance extends current", async () => {
     class ParentMiddleware extends Middleware {
       async invoke(): Promise<void> {
-        this.ok(this.isNextInstanceOf(ParentMiddleware));
+        this.ctx.bag("result", this.isNextInstanceOf(ParentMiddleware));
         await this.next();
       }
     }
@@ -91,17 +91,17 @@ describe("middleware instanceof", () => {
       }
     }
 
-    const res = await new TestStartup()
+    const ctx = await new TestStartup()
       .add(ParentMiddleware)
       .add(new ChildMiddleware())
       .run();
-    expect(res.body).toBeTruthy();
+    expect(ctx.bag("result")).toBeTruthy();
   });
 
   it("should return false when the next middleware independence with current", async () => {
     class ParentMiddleware extends Middleware {
       async invoke(): Promise<void> {
-        this.ok(this.isNextInstanceOf(ParentMiddleware));
+        this.ctx.bag("result", this.isNextInstanceOf(ParentMiddleware));
         await this.next();
       }
     }
@@ -111,17 +111,17 @@ describe("middleware instanceof", () => {
       }
     }
 
-    const res = await new TestStartup()
+    const ctx = await new TestStartup()
       .add(ParentMiddleware)
       .add(ChildMiddleware)
       .run();
-    expect(res.body).toBeFalsy();
+    expect(ctx.bag("result")).toBeFalsy();
   });
 
   it("should return false when the next middleware instance independence with current", async () => {
     class ParentMiddleware extends Middleware {
       async invoke(): Promise<void> {
-        this.ok(this.isNextInstanceOf(ParentMiddleware));
+        this.ctx.bag("result", this.isNextInstanceOf(ParentMiddleware));
         await this.next();
       }
     }
@@ -131,17 +131,17 @@ describe("middleware instanceof", () => {
       }
     }
 
-    const res = await new TestStartup()
+    const ctx = await new TestStartup()
       .add(ParentMiddleware)
       .add(new ChildMiddleware())
       .run();
-    expect(res.body).toBeFalsy();
+    expect(ctx.bag("result")).toBeFalsy();
   });
 
   it("should return true when add middleware with type", async () => {
     class ParentMiddleware extends Middleware {
       async invoke(): Promise<void> {
-        this.ok(this.isNextInstanceOf(ParentMiddleware));
+        this.ctx.bag("result", this.isNextInstanceOf(ParentMiddleware));
         await this.next();
       }
     }
@@ -151,21 +151,21 @@ describe("middleware instanceof", () => {
       }
     }
 
-    const res = await new TestStartup()
+    const ctx = await new TestStartup()
       .add(ParentMiddleware)
       .add(() => new ParentMiddleware(), ChildMiddleware)
       .run();
-    expect(res.body).toBeFalsy();
+    expect(ctx.bag("result")).toBeFalsy();
   });
 
   it("should return true when add middleware in ComposeMiddleware with type", async () => {
-    const res = await new TestStartup()
+    const ctx = await new TestStartup()
       .add(() =>
         new ComposeMiddleware()
           .add(Middleware1)
           .add(() => new Middleware1(), Middleware1)
       )
       .run();
-    expect(res.body).toBeFalsy();
+    expect(ctx.bag("result")).toBeFalsy();
   });
 });

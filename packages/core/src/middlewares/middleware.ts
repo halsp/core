@@ -1,5 +1,4 @@
-import { Context, Request, Response, ResultHandler } from "../context";
-import { HttpException } from "../exceptions";
+import { Context } from "../context";
 import { isClass, ObjectConstructor } from "../utils";
 import { execHooks, HookType } from "./hook.middleware";
 import { LambdaMiddleware } from "./lambda.middleware";
@@ -39,33 +38,13 @@ export async function createMiddleware(
   }
 }
 
-export abstract class Middleware extends ResultHandler {
-  constructor() {
-    super(
-      () => this.ctx.res,
-      () => this.ctx.req.headers
-    );
-  }
-
+export abstract class Middleware {
   #index!: number;
   #mds!: readonly MiddlewareItem[];
 
   #ctx!: Context;
   public get ctx(): Context {
     return this.#ctx;
-  }
-
-  public get req(): Request {
-    return this.#ctx.req;
-  }
-  public get request(): Request {
-    return this.req;
-  }
-  public get res(): Response {
-    return this.#ctx.res;
-  }
-  public get response(): Response {
-    return this.res;
   }
 
   public isPrevInstanceOf<T extends object = any>(
@@ -113,14 +92,15 @@ export abstract class Middleware extends ResultHandler {
       await nextMd.invoke();
       await execHooks(this.ctx, nextMd, HookType.AfterInvoke);
     } catch (err) {
-      if (err instanceof HttpException && err.breakthrough) {
+      const error = err as Error & { breakthrough: boolean };
+      if ("breakthrough" in error && error.breakthrough) {
         throw err;
       } else {
         const hookResult = await execHooks(
           this.ctx,
           nextMd ?? this,
           HookType.Exception,
-          err as Error
+          error
         );
         if (!hookResult) {
           this.ctx.catchError(err);

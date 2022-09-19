@@ -7,7 +7,7 @@ class TestMiddleware1 extends Middleware {
   }
 
   async invoke(): Promise<void> {
-    this.setHeader(`h1`, this.num);
+    this.ctx.bag(`h1`, this.num);
     await this.next();
   }
 }
@@ -18,13 +18,13 @@ class TestMiddleware2 extends Middleware {
   }
 
   async invoke(): Promise<void> {
-    this.setHeader(`h2`, this.num);
+    this.ctx.bag(`h2`, this.num);
     await this.next();
   }
 }
 
 test("constructor hook", async () => {
-  const res = await new TestStartup()
+  const ctx = await new TestStartup()
     .hook<TestMiddleware1>(HookType.Constructor, (ctx, md) => {
       if (md == TestMiddleware1) {
         return new md(1);
@@ -33,7 +33,7 @@ test("constructor hook", async () => {
     .hook<TestMiddleware1>(HookType.Constructor, (ctx, md) => {
       // usless
       if (md == TestMiddleware1) {
-        ctx.setHeader("h3", 3);
+        ctx.bag("h3", 3);
         return new md(3);
       }
     })
@@ -44,21 +44,15 @@ test("constructor hook", async () => {
     })
     .add(TestMiddleware1)
     .add(TestMiddleware2)
-    .use((ctx) => ctx.ok())
     .run();
 
-  expect(res.getHeader("h1")).toBe("1");
-  expect(res.getHeader("h2")).toBe("2");
-  expect(res.getHeader("h3")).toBeUndefined();
-  expect(res.status).toBe(200);
+  expect(ctx.bag("h1")).toBe(1);
+  expect(ctx.bag("h2")).toBe(2);
+  expect(ctx.bag("h3")).toBeUndefined();
 });
 
 test("constructor hook error", async () => {
-  const res = await new TestStartup()
-    .add(TestMiddleware1)
-    .use((ctx) => ctx.ok())
-    .run();
+  const ctx = await new TestStartup().add(TestMiddleware1).run();
 
-  expect(res.getHeader("h1")).toBeUndefined();
-  expect(res.status).toBe(200);
+  expect(ctx.bag("h1")).toBeUndefined();
 });

@@ -1,22 +1,21 @@
-import { Request } from "../../src";
 import { TestStartup } from "../test-startup";
 
 test("invoke multiple", async () => {
-  const startup = new TestStartup(new Request())
+  const startup = new TestStartup()
     .use(async (ctx, next) => {
-      if (!ctx.res.body) {
-        ctx.res.body = 0;
+      if (!ctx.bag("result")) {
+        ctx.bag("result", 0);
       }
-      (ctx.res.body as number)++;
+      ctx.bag("result", ctx.bag<number>("result") + 1);
       await next();
     })
     .use(async (ctx) => {
-      (ctx.res.body as number)++;
+      ctx.bag("result", ctx.bag<number>("result") + 1);
     });
-  let res = await startup.run();
-  expect(res.body).toBe(2);
-  res = await startup.run();
-  expect(res.body).toBe(2);
-  res = await startup.run();
-  expect(res.body).toBe(2);
+  let ctx = await startup.run();
+  expect(ctx.bag("result")).toBe(2);
+  ctx = await startup.run();
+  expect(ctx.bag("result")).toBe(2);
+  ctx = await startup.run();
+  expect(ctx.bag("result")).toBe(2);
 });

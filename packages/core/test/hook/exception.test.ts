@@ -1,21 +1,19 @@
-import {
-  NotFoundException,
-  getReasonPhrase,
-  HookType,
-  Middleware,
-  BadRequestException,
-} from "../../src";
+import { HookType, Middleware } from "../../src";
 import { TestStartup } from "../test-startup";
 
 function runSimpleTest(handle: boolean, afterNext: boolean) {
   class TestMiddleware extends Middleware {
     async invoke(): Promise<void> {
       if (!afterNext) {
-        throw new NotFoundException();
+        const err = new Error();
+        err.message = "err";
+        throw err;
       }
       await this.next();
       if (afterNext) {
-        throw new NotFoundException();
+        const err = new Error();
+        err.message = "err";
+        throw err;
       }
     }
   }
@@ -23,32 +21,35 @@ function runSimpleTest(handle: boolean, afterNext: boolean) {
   test(`exception hook ${handle} ${afterNext}`, async () => {
     let errorMiddleware!: Middleware;
     const res = await new TestStartup()
+      .use(async (ctx, next) => {
+        ctx.catchError = (err) => {
+          ctx.bag("result", err.message);
+          return ctx;
+        };
+        await next();
+      })
       .hook(HookType.Exception, (ctx, middleware, exception) => {
         errorMiddleware = middleware;
-        ctx.ok({
+        ctx.bag("result", {
           message: exception.message,
         });
         return handle;
       })
       .add(TestMiddleware)
       .use((ctx) => {
-        ctx.setHeader("h", 1);
+        ctx.bag("h", 1);
       })
       .add(TestMiddleware)
       .run();
 
-    expect(res.status).toBe(handle ? 200 : 404);
-    expect(res.body).toEqual(
+    expect(res.bag("result")).toEqual(
       handle
         ? {
-            message: getReasonPhrase(404),
+            message: "err",
           }
-        : {
-            message: getReasonPhrase(404),
-            status: 404,
-          }
+        : "err"
     );
-    expect(res.getHeader("h")).toBe(afterNext ? "1" : undefined);
+    expect(res.bag("h")).toBe(afterNext ? 1 : undefined);
     expect(errorMiddleware.constructor).toBe(TestMiddleware);
   });
 }
@@ -68,37 +69,42 @@ function runBeforeNextTest(handle: boolean) {
   test(`exception hook ${handle}`, async () => {
     let errorMiddleware!: Middleware;
     const res = await new TestStartup()
+      .use(async (ctx, next) => {
+        ctx.catchError = (err) => {
+          ctx.bag("result", err.message);
+          return ctx;
+        };
+        await next();
+      })
       .hook(HookType.BeforeNext, (ctx, middleware) => {
         if (middleware instanceof TestMiddleware) {
-          throw new BadRequestException();
+          const err = new Error();
+          err.message = "err";
+          throw err;
         }
       })
       .hook(HookType.Exception, (ctx, middleware, exception) => {
         errorMiddleware = middleware;
-        ctx.ok({
+        ctx.bag("result", {
           message: exception.message,
         });
         return handle;
       })
       .add(TestMiddleware)
       .use((ctx) => {
-        ctx.setHeader("h", 1);
+        ctx.bag("h", 1);
       })
       .add(TestMiddleware)
       .run();
 
-    expect(res.status).toBe(handle ? 200 : 400);
-    expect(res.body).toEqual(
+    expect(res.bag("result")).toEqual(
       handle
         ? {
-            message: getReasonPhrase(400),
+            message: "err",
           }
-        : {
-            message: getReasonPhrase(400),
-            status: 400,
-          }
+        : "err"
     );
-    expect(res.getHeader("h")).toBe(undefined);
+    expect(res.bag("h")).toBe(undefined);
     expect(errorMiddleware.constructor).toBe(TestMiddleware);
   });
 }

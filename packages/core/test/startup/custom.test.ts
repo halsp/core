@@ -1,22 +1,21 @@
-import { Context, Request, Response, Startup } from "../../src";
+import { Context, Startup } from "../../src";
 
 class CustomStartup extends Startup {
-  async run(): Promise<Response> {
-    return await super.invoke(new Context(new Request()));
+  async run(): Promise<Context> {
+    return await super.invoke(new Context());
   }
 }
 
 test("custom result handler", async () => {
-  const res = await new CustomStartup()
+  const ctx = await new CustomStartup()
     .use((ctx) => {
-      ctx.ok({
+      ctx.bag("result", {
         msg: "ok",
       });
     })
     .run();
 
-  expect(res.body).toEqual({
+  expect(ctx.bag("result")).toEqual({
     msg: "ok",
   });
-  expect(res.status).toBe(200);
 });

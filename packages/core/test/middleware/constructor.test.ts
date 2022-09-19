@@ -3,7 +3,7 @@ import { TestStartup } from "../test-startup";
 
 class TestMiddleware extends Middleware {
   async invoke(): Promise<void> {
-    this.ok("test");
+    this.ctx.bag("result", "test");
   }
 }
 
@@ -11,16 +11,14 @@ test("add middleware constructor", async () => {
   const startup = new TestStartup().add(TestMiddleware);
 
   const result = await startup.run();
-  expect(result.status).toBe(200);
-  expect(result.body).toBe("test");
+  expect(result.bag("result")).toBe("test");
 });
 
 test("add function middleware constructor", async () => {
   const startup = new TestStartup().add(() => TestMiddleware);
 
   const result = await startup.run();
-  expect(result.status).toBe(200);
-  expect(result.body).toBe("test");
+  expect(result.bag("result")).toBe("test");
 });
 
 test("add async function middleware constructor", async () => {
@@ -32,6 +30,5 @@ test("add async function middleware constructor", async () => {
   });
 
   const result = await startup.run();
-  expect(result.status).toBe(200);
-  expect(result.body).toBe("test");
+  expect(result.bag("result")).toBe("test");
 });
