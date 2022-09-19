@@ -5,8 +5,7 @@ import { V } from "@ipare/validator";
 class TestClassDto {}
 
 export class TestDecoratorHeaderDto {
-  @V()
-    .Default("abc")
+  @V.Default("abc")
     .Title("title")
     .ReadOnly()
     .Matches("^[a-z]$")
@@ -14,7 +13,7 @@ export class TestDecoratorHeaderDto {
     .IsOptional()
   p1!: string;
 
-  @V().Examples({
+  @V.Examples({
     abc: {
       description: "abc",
       value: "123",
@@ -24,70 +23,69 @@ export class TestDecoratorHeaderDto {
       value: 456,
     },
   })
-  @V().WriteOnly().Min(10).Max(20)
+  @V.WriteOnly().Min(10).Max(20)
   p2!: string;
 
-  @V().Ignore().Format("date")
+  @V.Ignore().Format("date")
   p3!: string;
 
-  @V().MinProperties(1).MaxProperties(10).Min(1).Max(10)
+  @V.MinProperties(1).MaxProperties(10).Min(1).Max(10)
   p4!: number;
 
-  @V().Style("form")
+  @V.Style("form")
   p5!: number;
 
   p7!: string;
 
-  @V().Xml({})
+  @V.Xml({})
   p8!: string;
 
-  @V().IsInt()
+  @V.IsInt()
   p9!: string;
 
-  @V().Enum("abc", "def")
+  @V.Enum("abc", "def")
   p10!: string;
 }
 
-@V().Description("dto")
+@V.Description("dto")
 class TestDecoratorBodyDto {
   constructor(
-    @V().Description("invalid")
+    @V.Description("invalid")
     readonly invalid: string
   ) {}
 
-  @V().Items({
+  @V.Items({
     type: "number",
   })
-  @V().Description("def")
+  @V.Description("def")
   p1!: number[];
 
-  @V().Items(TestClassDto)
+  @V.Items(TestClassDto)
   p2!: number[];
 
-  @V().Items(Number)
+  @V.Items(Number)
   p3!: number[];
 
-  @V().Required().Description("abc")
+  @V.Required().Description("abc")
   p4!: TestClassDto;
 }
 
 export class TestDecoratorQueryDto {
-  @V().Ignore()
-  @V().Default("qqq")
+  @V.Ignore()
+  @V.Default("qqq")
   q1!: string;
 }
 
 @HttpPost("test")
-@V().Tags("test")
-@V()
-  .ExternalDocs({
-    url: "https://ipare.org",
-  })
+@V.Tags("test")
+@V.ExternalDocs({
+  url: "https://ipare.org",
+})
   .Description("desc")
   .OperationId("opt-id")
   .Summary("test summary")
   .Security({ jwt: ["123", "456"] })
-@V().Servers({
+@V.Servers({
   url: "https://ipare.org",
   description: "servers",
 })
@@ -105,22 +103,22 @@ export class TestDecorator extends Action {
 }
 
 @HttpPut("test")
-@V().Tags("test")
+@V.Tags("test")
 export class ParameterDecoratorTest extends Action {
   constructor(
-    @V().Required().Description("header constructor")
+    @V.Required().Description("header constructor")
     @Header("hc")
     readonly hc: string,
 
-    @V().Description("body constructor 1")
+    @V.Description("body constructor 1")
     @Body("bc1")
     readonly bc1: string,
 
-    @V().Required().Description("body constructor 2")
+    @V.Required().Description("body constructor 2")
     @Body("bc2")
     readonly bc2: string,
 
-    @V().Description("body constructor 3").Ignore()
+    @V.Description("body constructor 3").Ignore()
     @Body("bc3")
     readonly bc3: string
   ) {
@@ -131,14 +129,14 @@ export class ParameterDecoratorTest extends Action {
   }
 }
 
-@V().Ignore()
+@V.Ignore()
 class TestIgnoreTest {
-  @V().Default("p1")
+  @V.Default("p1")
   p1!: string;
 }
 
 @HttpDelete("test")
-@V().Tags("test").Deprecated()
+@V.Tags("test").Deprecated()
 export class IgnoreBodyTest extends Action {
   @Body
   private readonly b!: TestIgnoreTest;
