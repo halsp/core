@@ -1,15 +1,15 @@
-import { HttpContext, Request } from "@ipare/core";
+import { Context, Request } from "@ipare/core";
 import "../src";
 import { ActionFilter, ResourceFilter, UseFilters } from "../src";
 import { Action } from "@ipare/router";
 import { TestStartup } from "@ipare/testing";
 
 class TestResourceFilter implements ResourceFilter {
-  onResourceExecuted(ctx: HttpContext): void | Promise<void> {
+  onResourceExecuted(ctx: Context): void | Promise<void> {
     ctx.res.setHeader("resource2", 2);
   }
   onResourceExecuting(
-    ctx: HttpContext
+    ctx: Context
   ): boolean | void | Promise<void> | Promise<boolean> {
     ctx.res.setHeader("resource1", 1);
     return ctx.req.body["resource-executing"];
@@ -17,11 +17,11 @@ class TestResourceFilter implements ResourceFilter {
 }
 
 class TestActionFilter implements ActionFilter {
-  onActionExecuted(ctx: HttpContext): void | Promise<void> {
+  onActionExecuted(ctx: Context): void | Promise<void> {
     ctx.res.setHeader("action2", 2);
   }
   onActionExecuting(
-    ctx: HttpContext
+    ctx: Context
   ): boolean | void | Promise<void> | Promise<boolean> {
     ctx.res.setHeader("action1", 1);
     return ctx.req.body["action-executing"];

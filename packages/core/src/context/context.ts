@@ -13,7 +13,7 @@ type BuilderBagItem<T> = {
   isBuilderBag: true;
 };
 
-export class HttpContext extends ResultHandler {
+export class Context extends ResultHandler {
   constructor(req: Request) {
     super(
       () => this.#res,

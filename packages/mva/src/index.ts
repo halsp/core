@@ -1,5 +1,5 @@
 import "@ipare/core";
-import { HttpContext, HttpException, Startup, HookType } from "@ipare/core";
+import { Context, HttpException, Startup, HookType } from "@ipare/core";
 import "@ipare/view";
 import "@ipare/router";
 import { MvaOptions, CodeType } from "./mva-options";
@@ -101,7 +101,7 @@ Startup.prototype.useMva = function (options: MvaOptions = {}): Startup {
     .useRouter(options.routerOptions);
 };
 
-async function errorView(ctx: HttpContext, codes: CodeType[]) {
+async function errorView(ctx: Context, codes: CodeType[]) {
   const replaceCode = getCode(codes, ctx.res.status);
   if (replaceCode) {
     await ctx.view(replaceCode.path, ctx.res.body);

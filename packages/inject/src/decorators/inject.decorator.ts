@@ -1,4 +1,4 @@
-import { HttpContext, isClass } from "@ipare/core";
+import { Context, isClass } from "@ipare/core";
 import { PROPERTY_METADATA, KEY_METADATA } from "../constant";
 import { InjectType } from "../inject-type";
 import { InjectKey } from "../interfaces";
@@ -10,7 +10,7 @@ export function Inject<T = any>(
   type: InjectType.Singleton
 ): PropertyDecorator & ParameterDecorator;
 export function Inject<T = any>(
-  handler: (ctx: HttpContext, parent: any) => T | Promise<T>,
+  handler: (ctx: Context, parent: any) => T | Promise<T>,
   type?: InjectType.Scoped | InjectType.Transient
 ): PropertyDecorator & ParameterDecorator;
 

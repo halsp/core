@@ -1,17 +1,17 @@
 import {
   Dict,
-  HttpContext,
+  Context,
   NumericalHeadersDict,
   Request,
   Startup,
 } from "@ipare/core";
-import { Context, Next } from "koa";
+import { Context as KoaContext, Next } from "koa";
 import { KOA_CTX, KOA_NEXT } from "./constant";
 import { koaResToIpareRes, ipareResToKoaRes } from "./res-transform";
 
 class KoaStartup extends Startup {
-  public async run(koaCtx: Context, koaNext: Next): Promise<void> {
-    const ctx = new HttpContext(
+  public async run(koaCtx: KoaContext, koaNext: Next): Promise<void> {
+    const ctx = new Context(
       new Request()
         .setPath(koaCtx.path)
         .setMethod(koaCtx.method)
@@ -40,14 +40,14 @@ export function koaIpare(useMiddlewares: (startup: Startup) => void) {
   const startup = new KoaStartup();
   useMiddlewares(startup);
   startup.use(async (ipareCtx) => {
-    const koeCtx: Context = ipareCtx[KOA_CTX];
+    const koaCtx: KoaContext = ipareCtx[KOA_CTX];
     const koaNext: Next = ipareCtx[KOA_NEXT];
-    await ipareResToKoaRes(ipareCtx.res, koeCtx);
+    await ipareResToKoaRes(ipareCtx.res, koaCtx);
     await koaNext();
-    await koaResToIpareRes(koeCtx, ipareCtx.res);
+    await koaResToIpareRes(koaCtx, ipareCtx.res);
   });
 
-  return async function (koaCtx: Context, koaNext: Next) {
+  return async function (koaCtx: KoaContext, koaNext: Next) {
     await startup.run(koaCtx, koaNext);
   };
 }

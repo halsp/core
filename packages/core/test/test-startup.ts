@@ -1,5 +1,5 @@
 import { Startup } from "../src/startup";
-import { HttpContext, Request, Response } from "../src/context";
+import { Context, Request, Response } from "../src/context";
 
 export class TestStartup extends Startup {
   readonly #req?: Request;
@@ -9,7 +9,7 @@ export class TestStartup extends Startup {
   }
 
   async run(): Promise<Response> {
-    const ctx = new HttpContext(this.#req ?? new Request());
+    const ctx = new Context(this.#req ?? new Request());
     return await super.invoke(ctx);
   }
 }

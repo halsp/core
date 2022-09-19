@@ -1,15 +1,15 @@
-import { HttpContext } from "@ipare/core";
+import { Context } from "@ipare/core";
 import { parseInject } from "@ipare/inject";
 import { TestStartup } from "@ipare/testing";
 import "../src";
-import { Context } from "../src";
+import { InjectContext } from "../src";
 import { expectBody, getTestRequest } from "./TestMiddleware";
 
 class TestService {
-  @Context
-  private readonly ctx1!: HttpContext;
-  @Context
-  private readonly ctx2!: HttpContext;
+  @InjectContext
+  private readonly ctx1!: Context;
+  @InjectContext
+  private readonly ctx2!: Context;
 
   invoke() {
     return {

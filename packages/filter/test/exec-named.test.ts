@@ -1,10 +1,10 @@
-import { HttpContext } from "@ipare/core";
+import { Context } from "@ipare/core";
 import { Action } from "@ipare/router";
 import { TestStartup } from "@ipare/testing";
 import { execFilters, Filter, UseFilters } from "../src";
 
 class CustomFilter implements Filter {
-  execute(ctx: HttpContext) {
+  execute(ctx: Context) {
     ctx.setHeader("custom", 1);
   }
 }

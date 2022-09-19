@@ -1,4 +1,4 @@
-import { HttpContext, Request } from "@ipare/core";
+import { Context, Request } from "@ipare/core";
 import "../src";
 import { ActionFilter, UseFilters } from "../src";
 import "@ipare/inject";
@@ -6,12 +6,12 @@ import { Action } from "@ipare/router";
 import { TestStartup } from "@ipare/testing";
 
 export class TestActionFilter1 implements ActionFilter {
-  onActionExecuted(ctx: HttpContext): void | Promise<void> {
+  onActionExecuted(ctx: Context): void | Promise<void> {
     ctx.res.body++;
     ctx.res.setHeader(`order12`, ctx.res.body);
   }
   onActionExecuting(
-    ctx: HttpContext
+    ctx: Context
   ): boolean | void | Promise<void> | Promise<boolean> {
     ctx.res.body++;
     ctx.res.setHeader(`order11`, ctx.res.body);
@@ -19,12 +19,12 @@ export class TestActionFilter1 implements ActionFilter {
 }
 
 export class TestActionFilter2 implements ActionFilter {
-  onActionExecuted(ctx: HttpContext): void | Promise<void> {
+  onActionExecuted(ctx: Context): void | Promise<void> {
     ctx.res.body++;
     ctx.res.setHeader(`order22`, ctx.res.body);
   }
   onActionExecuting(
-    ctx: HttpContext
+    ctx: Context
   ): boolean | void | Promise<void> | Promise<boolean> {
     ctx.res.body++;
     ctx.res.setHeader(`order21`, ctx.res.body);
@@ -32,12 +32,12 @@ export class TestActionFilter2 implements ActionFilter {
 }
 
 export class TestActionFilter3 implements ActionFilter {
-  onActionExecuted(ctx: HttpContext): void | Promise<void> {
+  onActionExecuted(ctx: Context): void | Promise<void> {
     ctx.res.body++;
     ctx.res.setHeader(`order32`, ctx.res.body);
   }
   onActionExecuting(
-    ctx: HttpContext
+    ctx: Context
   ): boolean | void | Promise<void> | Promise<boolean> {
     ctx.res.body++;
     ctx.res.setHeader(`order31`, ctx.res.body);
@@ -45,12 +45,12 @@ export class TestActionFilter3 implements ActionFilter {
 }
 
 class TestActionFilter4 implements ActionFilter {
-  onActionExecuted(ctx: HttpContext): void | Promise<void> {
+  onActionExecuted(ctx: Context): void | Promise<void> {
     ctx.res.body++;
     ctx.res.setHeader(`order42`, ctx.res.body);
   }
   onActionExecuting(
-    ctx: HttpContext
+    ctx: Context
   ): boolean | void | Promise<void> | Promise<boolean> {
     ctx.res.body++;
     ctx.res.setHeader(`order41`, ctx.res.body);
@@ -58,12 +58,12 @@ class TestActionFilter4 implements ActionFilter {
 }
 
 class TestActionFilter5 implements ActionFilter {
-  onActionExecuted(ctx: HttpContext): void | Promise<void> {
+  onActionExecuted(ctx: Context): void | Promise<void> {
     ctx.res.body++;
     ctx.res.setHeader(`order52`, ctx.res.body);
   }
   onActionExecuting(
-    ctx: HttpContext
+    ctx: Context
   ): boolean | void | Promise<void> | Promise<boolean> {
     ctx.res.body++;
     ctx.res.setHeader(`order51`, ctx.res.body);
@@ -71,12 +71,12 @@ class TestActionFilter5 implements ActionFilter {
 }
 
 class TestActionFilter6 implements ActionFilter {
-  onActionExecuted(ctx: HttpContext): void | Promise<void> {
+  onActionExecuted(ctx: Context): void | Promise<void> {
     ctx.res.body++;
     ctx.res.setHeader(`order62`, ctx.res.body);
   }
   onActionExecuting(
-    ctx: HttpContext
+    ctx: Context
   ): boolean | void | Promise<void> | Promise<boolean> {
     ctx.res.body++;
     ctx.res.setHeader(`order61`, ctx.res.body);

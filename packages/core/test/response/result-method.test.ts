@@ -1,4 +1,4 @@
-import { Middleware, HttpContext, Request, getReasonPhrase } from "../../src";
+import { Middleware, Context, Request, getReasonPhrase } from "../../src";
 import { TestStartup } from "../test-startup";
 
 const normalMethod = [
@@ -225,7 +225,7 @@ for (let i = 0; i < msgMethods.length; i++) {
     }
     constructor(private existMsg: boolean) {
       super();
-      (this as any).init(new HttpContext(new Request()), 0);
+      (this as any).init(new Context(new Request()), 0);
     }
   }
 
@@ -268,7 +268,7 @@ class RedirectMd extends Middleware {
   constructor(readonly code: number | undefined, readonly location: string) {
     super();
 
-    (this as any).init(new HttpContext(new Request()), 0);
+    (this as any).init(new Context(new Request()), 0);
   }
 
   async invoke(): Promise<void> {

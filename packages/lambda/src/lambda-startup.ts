@@ -1,5 +1,5 @@
 import {
-  HttpContext,
+  Context,
   Request,
   Startup,
   Dict,
@@ -17,8 +17,8 @@ export class LambdaStartup extends Startup {
     return await this.#getStruct(ctx);
   }
 
-  private createContext(event: Dict, context: Dict): HttpContext {
-    const ctx = new HttpContext(
+  private createContext(event: Dict, context: Dict): Context {
+    const ctx = new Context(
       new Request()
         .setBody(this.#getBody(event))
         .setMethod(
@@ -38,7 +38,7 @@ export class LambdaStartup extends Startup {
     return ctx;
   }
 
-  #defineCtxProperty(ctx: HttpContext, event: Dict, context: Dict) {
+  #defineCtxProperty(ctx: Context, event: Dict, context: Dict) {
     Object.defineProperty(ctx.req, "lambdaContext", {
       configurable: false,
       enumerable: false,
@@ -64,7 +64,7 @@ export class LambdaStartup extends Startup {
     });
   }
 
-  async #getStruct(ctx: HttpContext): Promise<ResponseStruct> {
+  async #getStruct(ctx: Context): Promise<ResponseStruct> {
     let body = ctx.res.body;
     let isBase64Encoded = false;
     if (Buffer.isBuffer(body)) {

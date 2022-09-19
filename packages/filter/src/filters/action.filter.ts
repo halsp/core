@@ -1,9 +1,9 @@
-import { HttpContext } from "@ipare/core";
+import { Context } from "@ipare/core";
 import { Filter } from "./filter";
 
 export interface ActionFilter extends Filter {
-  onActionExecuted(ctx: HttpContext): void | Promise<void>;
+  onActionExecuted(ctx: Context): void | Promise<void>;
   onActionExecuting(
-    ctx: HttpContext
+    ctx: Context
   ): boolean | Promise<boolean> | void | Promise<void>;
 }

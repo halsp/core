@@ -5,7 +5,7 @@ import {
   ReadonlyHeadersDict,
   normalizePath,
 } from "../utils";
-import { HttpContext } from "./http-context";
+import { Context } from "./context";
 import { HeaderHandler } from "./header-handler";
 
 export class Request extends HeaderHandler {
@@ -13,7 +13,7 @@ export class Request extends HeaderHandler {
     super(() => this.#headers);
   }
 
-  public readonly ctx!: HttpContext;
+  public readonly ctx!: Context;
 
   readonly #headers: HeadersDict = {};
   get headers(): ReadonlyHeadersDict {

@@ -8,7 +8,7 @@ declare module "@ipare/core" {
     useView(options?: ViewOptions): this;
   }
 
-  interface HttpContext {
+  interface Context {
     state: Record<string, unknown>;
   }
 

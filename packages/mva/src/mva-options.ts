@@ -1,4 +1,4 @@
-import { HttpContext } from "@ipare/core";
+import { Context } from "@ipare/core";
 import { RouterOptions } from "@ipare/router";
 import { ViewOptions } from "@ipare/view";
 
@@ -10,5 +10,5 @@ export interface MvaOptions {
   viewOptions?: ViewOptions;
   routerOptions?: RouterOptions;
   renderMethods?: string | string[];
-  randerEnable?: (ctx: HttpContext) => Promise<boolean> | boolean;
+  randerEnable?: (ctx: Context) => Promise<boolean> | boolean;
 }

@@ -1,9 +1,9 @@
-import { HttpContext, ObjectConstructor } from "@ipare/core";
+import { Context, ObjectConstructor } from "@ipare/core";
 import { PipeItem } from "./pipe";
 
 export interface TransformArgs<T = any, U extends object = any> {
   value: T;
-  ctx: HttpContext;
+  ctx: Context;
   propertyType: any;
   target: ObjectConstructor<U>;
   parent: U;

@@ -1,5 +1,5 @@
 import "@ipare/core";
-import { HttpContext, Startup } from "@ipare/core";
+import { Context, Startup } from "@ipare/core";
 import { IService, parseInject } from "@ipare/inject";
 import path from "path";
 import * as typeorm from "typeorm";
@@ -13,7 +13,7 @@ declare module "@ipare/core" {
     useTypeorm(options: Options): this;
   }
 
-  interface HttpContext {
+  interface Context {
     getTypeorm(identity?: string): Promise<TypeormConnection>;
   }
 }
@@ -54,7 +54,7 @@ Startup.prototype.useTypeorm = function (options: Options): Startup {
   );
 };
 
-HttpContext.prototype.getTypeorm = async function (
+Context.prototype.getTypeorm = async function (
   identity?: string
 ): Promise<TypeormConnection> {
   const injectKey = OPTIONS_IDENTITY + (identity ?? "");

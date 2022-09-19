@@ -1,6 +1,6 @@
 import "@ipare/core";
 import "@ipare/inject";
-import { HttpContext, Startup } from "@ipare/core";
+import { Context, Startup } from "@ipare/core";
 import { OPTIONS, USED } from "./constant";
 import { JwtOptions } from "./jwt-options";
 import { JwtService } from "./jwt.service";
@@ -20,24 +20,19 @@ declare module "@ipare/core" {
   interface Startup {
     useJwt(options: JwtOptions): this;
     useJwtVerify(
-      skip?: (ctx: HttpContext) => boolean | Promise<boolean>,
-      onError?: (
-        ctx: HttpContext,
-        err: jwt.VerifyErrors
-      ) => void | Promise<void>
+      skip?: (ctx: Context) => boolean | Promise<boolean>,
+      onError?: (ctx: Context, err: jwt.VerifyErrors) => void | Promise<void>
     ): this;
-    useJwtExtraAuth(
-      access: (ctx: HttpContext) => boolean | Promise<boolean>
-    ): this;
+    useJwtExtraAuth(access: (ctx: Context) => boolean | Promise<boolean>): this;
   }
-  interface HttpContext {
+  interface Context {
     get jwtToken(): string;
   }
 }
 
 Startup.prototype.useJwtVerify = function (
-  skip?: (ctx: HttpContext) => boolean | Promise<boolean>,
-  onError?: (ctx: HttpContext, err: jwt.VerifyErrors) => void | Promise<void>
+  skip?: (ctx: Context) => boolean | Promise<boolean>,
+  onError?: (ctx: Context, err: jwt.VerifyErrors) => void | Promise<void>
 ): Startup {
   return this.use(async (ctx, next) => {
     if (skip && (await skip(ctx))) {
@@ -61,7 +56,7 @@ Startup.prototype.useJwtVerify = function (
 };
 
 Startup.prototype.useJwtExtraAuth = function (
-  access: (ctx: HttpContext) => boolean | Promise<boolean>
+  access: (ctx: Context) => boolean | Promise<boolean>
 ): Startup {
   return this.use(async (ctx, next) => {
     if (await access(ctx)) {

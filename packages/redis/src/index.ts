@@ -1,5 +1,5 @@
 import "@ipare/core";
-import { HttpContext, Startup } from "@ipare/core";
+import { Context, Startup } from "@ipare/core";
 import { IService, parseInject } from "@ipare/inject";
 import * as redis from "redis";
 import { OPTIONS_IDENTITY } from "./constant";
@@ -12,7 +12,7 @@ declare module "@ipare/core" {
     useRedis(options?: Options): this;
   }
 
-  interface HttpContext {
+  interface Context {
     getRedis(identity?: string): Promise<RedisConnection>;
   }
 }
@@ -39,7 +39,7 @@ Startup.prototype.useRedis = function (options: Options = {}): Startup {
   );
 };
 
-HttpContext.prototype.getRedis = async function (
+Context.prototype.getRedis = async function (
   identity?: string
 ): Promise<RedisConnection> {
   const injectKey = OPTIONS_IDENTITY + (identity ?? "");

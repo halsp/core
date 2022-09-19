@@ -1,8 +1,8 @@
-import { HttpContext } from "../../src";
+import { Context } from "../../src";
 import { TestStartup } from "../test-startup";
 
 test("simple startup", async () => {
-  let context!: HttpContext;
+  let context!: Context;
   await new TestStartup()
     .use(async (ctx) => {
       context = ctx;

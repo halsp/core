@@ -1,10 +1,5 @@
 import "@ipare/core";
-import {
-  Startup,
-  ObjectConstructor,
-  HttpContext,
-  isFunction,
-} from "@ipare/core";
+import { Startup, ObjectConstructor, Context, isFunction } from "@ipare/core";
 import { HookType } from "@ipare/core/dist/middlewares";
 import { USED, MAP_BAG, SINGLETON_BAG } from "./constant";
 import { KeyTargetType, InjectMap } from "./interfaces";
@@ -24,7 +19,7 @@ declare module "@ipare/core" {
     inject<T extends KeyTargetType>(key: string, target: T): this;
     inject<T extends KeyTargetType>(
       key: string,
-      target: (ctx: HttpContext) => T | Promise<T>,
+      target: (ctx: Context) => T | Promise<T>,
       type?: InjectType
     ): this;
     inject<TTarget extends object>(
@@ -43,7 +38,7 @@ declare module "@ipare/core" {
     ): this;
     inject<TAnestor extends object, TTarget extends TAnestor>(
       anestor: ObjectConstructor<TAnestor>,
-      target: (ctx: HttpContext) => TTarget | Promise<TTarget>,
+      target: (ctx: Context) => TTarget | Promise<TTarget>,
       type?: InjectType
     ): this;
     inject<TAnestor extends object, TTarget extends TAnestor>(
@@ -77,7 +72,7 @@ Startup.prototype.useInject = function (): Startup {
 
 Startup.prototype.inject = function (...args: any[]): Startup {
   let anestor: ObjectConstructor | string;
-  let target: ObjectConstructor | any | ((ctx: HttpContext) => any);
+  let target: ObjectConstructor | any | ((ctx: Context) => any);
   let type: InjectType | undefined;
   if (typeof args[0] == "string") {
     anestor = args[0];
@@ -118,7 +113,7 @@ Startup.prototype.inject = function (...args: any[]): Startup {
 };
 
 async function dispose<T extends object = any>(
-  ctx: HttpContext,
+  ctx: Context,
   injectType: InjectType,
   target: ObjectConstructor<T> | string
 ) {

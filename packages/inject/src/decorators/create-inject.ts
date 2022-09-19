@@ -1,4 +1,4 @@
-import { HttpContext } from "@ipare/core";
+import { Context } from "@ipare/core";
 import { CUSTOM_METADATA } from "../constant";
 import { InjectType } from "../inject-type";
 import { InjectCustom } from "../interfaces";
@@ -12,7 +12,7 @@ export function createInject<T = any>(
   type: InjectType.Singleton
 ): void;
 export function createInject<T = any>(
-  handler: (ctx: HttpContext, parent: any) => T | Promise<T>,
+  handler: (ctx: Context, parent: any) => T | Promise<T>,
   target: any,
   propertyKey: string | symbol,
   parameterIndex?: number,

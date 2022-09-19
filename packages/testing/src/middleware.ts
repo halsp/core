@@ -1,7 +1,7 @@
 import "@ipare/core";
 import {
   HookType,
-  HttpContext,
+  Context,
   Middleware,
   ObjectConstructor,
   Startup,
@@ -9,7 +9,7 @@ import {
 
 export type TestMiddlewareFn<T extends Middleware> = (
   md: T,
-  ctx: HttpContext
+  ctx: Context
 ) => void | Promise<void>;
 
 export type ExpectMiddlewareType =

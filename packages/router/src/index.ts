@@ -52,7 +52,7 @@ declare module "@ipare/core" {
     get params(): ReadonlyQueryDict;
   }
 
-  interface HttpContext {
+  interface Context {
     get actionMetadata(): MapItem;
     get routerMap(): MapItem[];
     get routerOptions(): RouterInitedOptions;

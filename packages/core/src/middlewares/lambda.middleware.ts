@@ -1,9 +1,9 @@
-import { HttpContext } from "../context";
+import { Context } from "../context";
 import { Middleware } from "./middleware";
 
 type builderType =
-  | ((ctx: HttpContext, next: () => Promise<void>) => void)
-  | ((ctx: HttpContext, next: () => Promise<void>) => Promise<void>);
+  | ((ctx: Context, next: () => Promise<void>) => void)
+  | ((ctx: Context, next: () => Promise<void>) => Promise<void>);
 
 export class LambdaMiddleware extends Middleware {
   constructor(builder: builderType) {

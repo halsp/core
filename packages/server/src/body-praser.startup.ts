@@ -1,4 +1,4 @@
-import { HttpContext, Startup, StatusCodes } from "@ipare/core";
+import { Context, Startup, StatusCodes } from "@ipare/core";
 import typeis from "type-is";
 import cobody from "co-body";
 import formidable from "formidable";
@@ -10,16 +10,14 @@ export type MultipartBody =
 
 export abstract class BodyPraserStartup extends Startup {
   constructor(
-    private readonly sourceReqBuilder: (
-      ctx: HttpContext
-    ) => http.IncomingMessage
+    private readonly sourceReqBuilder: (ctx: Context) => http.IncomingMessage
   ) {
     super();
   }
 
   public useHttpJsonBody(
     options?: cobody.Options,
-    onError?: (ctx: HttpContext, err: unknown) => Promise<void>
+    onError?: (ctx: Context, err: unknown) => Promise<void>
   ): this {
     this.#useBodyPraser(
       async (ctx) => await cobody.json(this.sourceReqBuilder(ctx), options),
@@ -38,7 +36,7 @@ export abstract class BodyPraserStartup extends Startup {
 
   public useHttpTextBody(
     options?: cobody.Options,
-    onError?: (ctx: HttpContext, err: unknown) => Promise<void>
+    onError?: (ctx: Context, err: unknown) => Promise<void>
   ): this {
     this.#useBodyPraser(
       async (ctx) => await cobody.text(this.sourceReqBuilder(ctx), options),
@@ -50,7 +48,7 @@ export abstract class BodyPraserStartup extends Startup {
 
   public useHttpUrlencodedBody(
     options?: cobody.Options,
-    onError?: (ctx: HttpContext, err: Error) => Promise<void>
+    onError?: (ctx: Context, err: Error) => Promise<void>
   ): this {
     this.#useBodyPraser(
       async (ctx) => await cobody.form(this.sourceReqBuilder(ctx), options),
@@ -63,11 +61,11 @@ export abstract class BodyPraserStartup extends Startup {
   public useHttpMultipartBody(
     options?: formidable.Options,
     onFileBegin?: (
-      ctx: HttpContext,
+      ctx: Context,
       formName: string,
       file: formidable.File
     ) => void,
-    onError?: (ctx: HttpContext, err: Error) => Promise<void>
+    onError?: (ctx: Context, err: Error) => Promise<void>
   ): this {
     this.#useBodyPraser(
       async (ctx) =>
@@ -79,14 +77,14 @@ export abstract class BodyPraserStartup extends Startup {
   }
 
   #parseMultipart(
-    ctx: HttpContext,
+    ctx: Context,
     options?: formidable.Options,
     onFileBegin?: (
-      ctx: HttpContext,
+      ctx: Context,
       formName: string,
       file: formidable.File
     ) => void,
-    onError?: (ctx: HttpContext, err: Error) => Promise<void>
+    onError?: (ctx: Context, err: Error) => Promise<void>
   ): Promise<MultipartBody> {
     return new Promise<MultipartBody>((resolve) => {
       const form = new formidable.IncomingForm(options);
@@ -114,9 +112,9 @@ export abstract class BodyPraserStartup extends Startup {
   }
 
   #useBodyPraser(
-    bodyBuilder: (ctx: HttpContext) => Promise<unknown>,
+    bodyBuilder: (ctx: Context) => Promise<unknown>,
     types: string[],
-    onError?: (ctx: HttpContext, err: Error) => Promise<void>
+    onError?: (ctx: Context, err: Error) => Promise<void>
   ): void {
     this.use(async (ctx, next) => {
       if (!typeis(this.sourceReqBuilder(ctx), types)) {

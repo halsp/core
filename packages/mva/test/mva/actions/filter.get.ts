@@ -1,14 +1,14 @@
-import { HttpContext } from "@ipare/core";
+import { Context } from "@ipare/core";
 import { UseFilters } from "@ipare/filter";
 import { Action } from "@ipare/router";
 import { ResultFilter } from "../../../src";
 
 class TestFilter implements ResultFilter {
-  onResultExecuted(ctx: HttpContext): void | Promise<void> {
+  onResultExecuted(ctx: Context): void | Promise<void> {
     ctx.res.setHeader("result2", 2);
   }
   onResultExecuting(
-    ctx: HttpContext
+    ctx: Context
   ): boolean | void | Promise<void> | Promise<boolean> {
     ctx.res.setHeader("result1", 1);
     return ctx.req.body["executing"];

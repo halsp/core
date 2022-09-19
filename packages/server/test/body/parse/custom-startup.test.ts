@@ -1,6 +1,6 @@
 import { BodyPraserStartup } from "../../../src";
 import * as http from "http";
-import { HttpContext, Request, Dict, NumericalHeadersDict } from "@ipare/core";
+import { Context, Request, Dict, NumericalHeadersDict } from "@ipare/core";
 import urlParse from "url-parse";
 import request from "supertest";
 
@@ -19,7 +19,7 @@ class TestServerStartup extends BodyPraserStartup {
     httpRes: http.ServerResponse
   ): Promise<void> => {
     const url = urlParse(httpReq.url as string, true);
-    const ctx = new HttpContext(
+    const ctx = new Context(
       new Request()
         .setPath(url.pathname)
         .setMethod(httpReq.method as string)

@@ -1,4 +1,4 @@
-import { HttpContext, Startup, Request, Response } from "@ipare/core";
+import { Context, Startup, Request, Response } from "@ipare/core";
 
 export class TestStartup extends Startup {
   #skipThrow?: boolean;
@@ -15,7 +15,7 @@ export class TestStartup extends Startup {
   }
 
   async run(): Promise<Response> {
-    const res = await super.invoke(new HttpContext(this.#req ?? new Request()));
+    const res = await super.invoke(new Context(this.#req ?? new Request()));
 
     if (!this.#skipThrow && res.ctx.errorStack.length) {
       throw res.ctx.errorStack[0];

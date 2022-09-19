@@ -1,10 +1,4 @@
-import {
-  Dict,
-  HttpContext,
-  isObject,
-  ReadonlyDict,
-  Startup,
-} from "@ipare/core";
+import { Dict, Context, isObject, ReadonlyDict, Startup } from "@ipare/core";
 import cookie from "cookie";
 import setCookieParser from "set-cookie-parser";
 import { REQUEST_HEADER_NAME, RESPONSE_HEADER_NAME, USED } from "./constant";
@@ -34,7 +28,7 @@ declare module "@ipare/core" {
     set cookies(val: Dict<SetCookieValue>);
   }
 
-  interface HttpContext {
+  interface Context {
     get cookies(): ReadonlyDict<string>;
     set cookies(val: Dict<SetCookieValue>);
   }
@@ -139,7 +133,7 @@ Startup.prototype.useCookie = function (options: Options = {}) {
 };
 
 function serializeCookie(
-  ctx: HttpContext,
+  ctx: Context,
   cookies: Dict<SetCookieValue>,
   options?: cookie.CookieSerializeOptions
 ) {

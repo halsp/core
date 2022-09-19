@@ -1,7 +1,7 @@
 import { Dict } from "@ipare/core";
 
 declare module "@ipare/core" {
-  interface HttpContext {
+  interface Context {
     get lambdaContext(): Dict;
     get lambdaEvent(): Dict;
   }

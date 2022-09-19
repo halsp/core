@@ -1,4 +1,4 @@
-import { HttpContext, Request, Response, ResultHandler } from "../context";
+import { Context, Request, Response, ResultHandler } from "../context";
 import { HttpException } from "../exceptions";
 import { isClass, ObjectConstructor } from "../utils";
 import { execHooks, HookType } from "./hook.middleware";
@@ -14,18 +14,18 @@ export type MiddlewareConstructor = {
 
 export type MiddlewareItem =
   | LambdaMiddleware
-  | ((ctx: HttpContext) => Middleware)
-  | [(ctx: HttpContext) => Middleware, MiddlewareConstructor]
-  | ((ctx: HttpContext) => Promise<Middleware>)
-  | [(ctx: HttpContext) => Promise<Middleware>, MiddlewareConstructor]
-  | ((ctx: HttpContext) => MiddlewareConstructor)
-  | [(ctx: HttpContext) => MiddlewareConstructor, MiddlewareConstructor]
-  | ((ctx: HttpContext) => Promise<MiddlewareConstructor>)
+  | ((ctx: Context) => Middleware)
+  | [(ctx: Context) => Middleware, MiddlewareConstructor]
+  | ((ctx: Context) => Promise<Middleware>)
+  | [(ctx: Context) => Promise<Middleware>, MiddlewareConstructor]
+  | ((ctx: Context) => MiddlewareConstructor)
+  | [(ctx: Context) => MiddlewareConstructor, MiddlewareConstructor]
+  | ((ctx: Context) => Promise<MiddlewareConstructor>)
   | Middleware
   | MiddlewareConstructor;
 
 export async function createMiddleware(
-  ctx: HttpContext,
+  ctx: Context,
   middleware: MiddlewareItem
 ): Promise<Middleware> {
   if (middleware instanceof Middleware) {
@@ -50,8 +50,8 @@ export abstract class Middleware extends ResultHandler {
   #index!: number;
   #mds!: readonly MiddlewareItem[];
 
-  #ctx!: HttpContext;
-  public get ctx(): HttpContext {
+  #ctx!: Context;
+  public get ctx(): Context {
     return this.#ctx;
   }
 
@@ -135,7 +135,7 @@ export abstract class Middleware extends ResultHandler {
   };
 
   private init(
-    ctx: HttpContext,
+    ctx: Context,
     index: number,
     mds: readonly MiddlewareItem[]
   ): this {
@@ -146,10 +146,7 @@ export abstract class Middleware extends ResultHandler {
   }
 }
 
-export async function invokeMiddlewares(
-  ctx: HttpContext,
-  mds: MiddlewareItem[]
-) {
+export async function invokeMiddlewares(ctx: Context, mds: MiddlewareItem[]) {
   const md = await createMiddleware(ctx, mds[0]);
   await (md as any).init(ctx, 0, mds).invoke();
 }

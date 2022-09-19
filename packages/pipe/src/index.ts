@@ -3,7 +3,7 @@ import { GLOBAL_PIPE_BAG } from "./constant";
 import { GlobalPipeType } from "./global-pipe-type";
 import { GlobalPipeItem, PipeItem } from "./pipes";
 
-export { Query, Body, Param, Header, Context } from "./decorators";
+export { Query, Body, Param, Header, InjectContext } from "./decorators";
 export {
   PipeTransform,
   PipeItem,

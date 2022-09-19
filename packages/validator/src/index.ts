@@ -1,4 +1,4 @@
-import { HttpContext, Startup } from "@ipare/core";
+import { Context, Startup } from "@ipare/core";
 import "@ipare/pipe";
 import { GlobalPipeType } from "@ipare/pipe/dist/global-pipe-type";
 import {
@@ -31,7 +31,7 @@ declare module "@ipare/core" {
     useValidator(validatorOptions: ValidatorOptions): this;
     useValidator(
       validatorOptions: (args: {
-        ctx: HttpContext;
+        ctx: Context;
         val: any;
         propertyType: any;
       }) => ValidatorOptions | Promise<ValidatorOptions>
@@ -45,7 +45,7 @@ Startup.prototype.useValidator = function (
   options?:
     | ValidatorOptions
     | ((args: {
-        ctx: HttpContext;
+        ctx: Context;
         val: any;
         propertyType: any;
       }) => ValidatorOptions | Promise<ValidatorOptions>)

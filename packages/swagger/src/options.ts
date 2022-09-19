@@ -1,10 +1,10 @@
-import { HttpContext } from "@ipare/core";
+import { Context } from "@ipare/core";
 import { OpenApiBuilder } from "openapi3-ts-remove-yaml";
 import type swaggerUi from "swagger-ui-dist";
 
 type SwaggerBuilder = (
   builder: OpenApiBuilder,
-  ctx: HttpContext
+  ctx: Context
 ) => void | Promise<void> | OpenApiBuilder | Promise<OpenApiBuilder>;
 
 export interface SwaggerHtmlOptions {

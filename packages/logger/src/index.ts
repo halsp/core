@@ -1,4 +1,4 @@
-import { HttpContext, Startup } from "@ipare/core";
+import { Context, Startup } from "@ipare/core";
 import { IService, parseInject } from "@ipare/inject";
 import winston from "winston";
 import Transport from "winston-transport";
@@ -19,7 +19,7 @@ declare module "@ipare/core" {
     ): this;
   }
 
-  interface HttpContext {
+  interface Context {
     getLogger(identity?: string): Promise<Logger>;
   }
 }
@@ -43,7 +43,7 @@ Startup.prototype.useLogger = function (options?: Options): Startup {
   );
 };
 
-HttpContext.prototype.getLogger = async function (
+Context.prototype.getLogger = async function (
   identity?: string
 ): Promise<Logger> {
   const injectKey = OPTIONS_IDENTITY + (identity ?? "");

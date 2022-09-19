@@ -3,7 +3,7 @@ import { AliReq } from "./ali-req";
 import { AliRes } from "./ali-res";
 
 declare module "@ipare/core" {
-  interface HttpContext {
+  interface Context {
     get aliContext(): any;
     get aliReq(): AliReq;
     get aliRes(): AliRes;

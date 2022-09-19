@@ -1,7 +1,7 @@
 import Koa from "koa";
 import http from "http";
 import net from "net";
-import { HttpContext, isPlainObject, Response } from "@ipare/core";
+import { Context, isPlainObject, Response } from "@ipare/core";
 import { TransResponse } from "./trans-response";
 import queryString from "query-string";
 
@@ -42,7 +42,7 @@ export async function ipareResToKoaRes(
 
 export async function createContext(
   koaApp: Koa,
-  ipareCtx: HttpContext
+  ipareCtx: Context
 ): Promise<Koa.ParameterizedContext> {
   const httpReq = await getHttpReq(ipareCtx);
   const httpRes = new TransResponse(httpReq);
@@ -52,9 +52,7 @@ export async function createContext(
   return koaCtx;
 }
 
-async function getHttpReq(
-  ipareCtx: HttpContext
-): Promise<http.IncomingMessage> {
+async function getHttpReq(ipareCtx: Context): Promise<http.IncomingMessage> {
   let httpReq: http.IncomingMessage;
   if ("httpReq" in ipareCtx) {
     httpReq = ipareCtx["httpReq"];

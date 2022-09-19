@@ -1,5 +1,5 @@
 import "@ipare/core";
-import { HttpContext, Startup } from "@ipare/core";
+import { Context, Startup } from "@ipare/core";
 import { IService, parseInject } from "@ipare/inject";
 import mongoose from "mongoose";
 import { OPTIONS_IDENTITY } from "./constant";
@@ -12,7 +12,7 @@ declare module "@ipare/core" {
     useMongoose(options: Options): this;
   }
 
-  interface HttpContext {
+  interface Context {
     getMongoose(identity?: string): Promise<MongooseConnection>;
   }
 }
@@ -43,7 +43,7 @@ Startup.prototype.useMongoose = function (options: Options): Startup {
   );
 };
 
-HttpContext.prototype.getMongoose = async function (
+Context.prototype.getMongoose = async function (
   identity?: string
 ): Promise<MongooseConnection> {
   const injectKey = OPTIONS_IDENTITY + (identity ?? "");

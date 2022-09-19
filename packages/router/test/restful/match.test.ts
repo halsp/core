@@ -1,5 +1,5 @@
 import "../../src";
-import { Request, HttpContext, HttpMethod } from "@ipare/core";
+import { Request, Context, HttpMethod } from "@ipare/core";
 import { TestStartup } from "@ipare/testing";
 import "../global";
 
@@ -87,7 +87,7 @@ test(`find miss next 4`, async () => {
 });
 
 test(`mostLikePathParts`, async () => {
-  let context!: HttpContext;
+  let context!: Context;
   const result = await new TestStartup()
     .setRequest(
       new Request()

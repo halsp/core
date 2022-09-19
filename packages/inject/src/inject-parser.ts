@@ -1,5 +1,5 @@
 import {
-  HttpContext,
+  Context,
   isFunction,
   isObject,
   isString,
@@ -30,7 +30,7 @@ type InjectDecoratorRecordItem<T = any> = {
 };
 
 class InjectDecoratorParser<T extends object = any> {
-  constructor(private readonly ctx: HttpContext) {}
+  constructor(private readonly ctx: Context) {}
 
   private injectConstructor!: ObjectConstructor<T>;
   private obj!: any;
@@ -234,7 +234,7 @@ class InjectDecoratorParser<T extends object = any> {
     injectKey:
       | ObjectConstructor
       | string
-      | ((ctx: HttpContext) => any | Promise<any>)
+      | ((ctx: Context) => any | Promise<any>)
   ) {
     const { record, records } = this.getExistInjectRecord(type, injectKey);
 
@@ -289,7 +289,7 @@ class InjectDecoratorParser<T extends object = any> {
   }
 
   private async createObject<T extends object>(
-    target: ObjectConstructor<T> | T | ((ctx: HttpContext) => T | Promise<T>)
+    target: ObjectConstructor<T> | T | ((ctx: Context) => T | Promise<T>)
   ): Promise<T> {
     if (isClass<T>(target)) {
       const argTypes = this.getConstructorArgsTypes(target);
@@ -368,15 +368,15 @@ export function isInjectClass<T extends object>(target: ObjectConstructor<T>) {
 }
 
 export async function parseInject<T extends object = any>(
-  ctx: HttpContext,
+  ctx: Context,
   key: string
 ): Promise<T | undefined>;
 export async function parseInject<T extends object = any>(
-  ctx: HttpContext,
+  ctx: Context,
   target: InjectTarget<T>
 ): Promise<T>;
 export async function parseInject<T extends object = any>(
-  ctx: HttpContext,
+  ctx: Context,
   target: InjectTarget<T> | string
 ): Promise<T | undefined> {
   if (isString(target)) {
@@ -387,14 +387,14 @@ export async function parseInject<T extends object = any>(
 }
 
 export function tryParseInject<T extends object = any>(
-  ctx: HttpContext,
+  ctx: Context,
   target: ObjectConstructor<T> | string
 ): T | undefined {
   return new InjectDecoratorParser<T>(ctx).tryParseInject(target);
 }
 
 export function getTransientInstances<T extends object = any>(
-  ctx: HttpContext,
+  ctx: Context,
   target: ObjectConstructor<T> | string
 ): T[] {
   return new InjectDecoratorParser<T>(ctx).getTransientInstances(target);

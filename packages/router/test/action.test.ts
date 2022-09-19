@@ -1,10 +1,4 @@
-import {
-  StatusCodes,
-  Request,
-  HttpContext,
-  Dict,
-  HttpMethod,
-} from "@ipare/core";
+import { StatusCodes, Request, Context, Dict, HttpMethod } from "@ipare/core";
 import { TestStartup } from "@ipare/testing";
 import { Action } from "../src";
 import "./global";
@@ -28,7 +22,7 @@ class Login extends Action {
 
 test("action test", async () => {
   const loginAction = new Login();
-  const ctx = new HttpContext(
+  const ctx = new Context(
     new Request().setBody({
       account: "abc",
       password: "123456",

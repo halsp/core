@@ -1,11 +1,11 @@
-import { HttpContext } from "../context";
+import { Context } from "../context";
 import { Middleware, MiddlewareConstructor } from "./middleware";
 
 const MIDDLEWARE_HOOK_BAG = "@ipare/core/middlewareHooksBag";
 
 export type MdHook<T extends Middleware | MiddlewareConstructor | Error = any> =
   (
-    ctx: HttpContext,
+    ctx: Context,
     md: T,
     error?: Error
   ) =>
@@ -49,28 +49,28 @@ export class HookMiddleware extends Middleware {
 }
 
 export async function execHooks(
-  ctx: HttpContext,
+  ctx: Context,
   middleware: Middleware,
   type: HookType.Exception,
   exception: Error
 ): Promise<boolean>;
 export async function execHooks(
-  ctx: HttpContext,
+  ctx: Context,
   middleware: MiddlewareConstructor,
   type: HookType.Constructor
 ): Promise<Middleware>;
 export async function execHooks(
-  ctx: HttpContext,
+  ctx: Context,
   middleware: Middleware,
   type: HookType.BeforeInvoke | HookType.BeforeNext
 ): Promise<boolean | void>;
 export async function execHooks(
-  ctx: HttpContext,
+  ctx: Context,
   middleware: Middleware,
   type: HookType.AfterInvoke
 ): Promise<void>;
 export async function execHooks(
-  ctx: HttpContext,
+  ctx: Context,
   middleware: Middleware | MiddlewareConstructor,
   type: HookType,
   error?: Error
@@ -95,7 +95,7 @@ export async function execHooks(
 }
 
 async function execExceptionHooks(
-  ctx: HttpContext,
+  ctx: Context,
   middleware: Middleware,
   error: Error
 ): Promise<boolean> {
@@ -109,7 +109,7 @@ async function execExceptionHooks(
 }
 
 async function execConstructorHooks(
-  ctx: HttpContext,
+  ctx: Context,
   middleware: MiddlewareConstructor
 ): Promise<Middleware | undefined> {
   const hooks = ctx.bag<HookItem[]>(MIDDLEWARE_HOOK_BAG) ?? [];

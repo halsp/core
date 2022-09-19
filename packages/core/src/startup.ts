@@ -1,4 +1,4 @@
-import { Response, HttpContext } from "./context";
+import { Response, Context } from "./context";
 import {
   Middleware,
   MdHook,
@@ -16,43 +16,41 @@ import { HttpException } from "./exceptions";
 
 export abstract class Startup {
   readonly #mds: MiddlewareItem[] = [];
-  use(
-    lambda: (ctx: HttpContext, next: () => Promise<void>) => Promise<void>
-  ): this;
-  use(lambda: (ctx: HttpContext, next: () => Promise<void>) => void): this;
+  use(lambda: (ctx: Context, next: () => Promise<void>) => Promise<void>): this;
+  use(lambda: (ctx: Context, next: () => Promise<void>) => void): this;
   use(
     lambda:
-      | ((ctx: HttpContext, next: () => Promise<void>) => void)
-      | ((ctx: HttpContext, next: () => Promise<void>) => Promise<void>)
+      | ((ctx: Context, next: () => Promise<void>) => void)
+      | ((ctx: Context, next: () => Promise<void>) => Promise<void>)
   ): this {
     this.#mds.push(() => new LambdaMiddleware(lambda));
     return this;
   }
 
   add(
-    builder: (ctx: HttpContext) => Middleware,
+    builder: (ctx: Context) => Middleware,
     type?: MiddlewareConstructor
   ): this;
   add(
-    builder: (ctx: HttpContext) => Promise<Middleware>,
+    builder: (ctx: Context) => Promise<Middleware>,
     type?: MiddlewareConstructor
   ): this;
   add(
-    builder: (ctx: HttpContext) => MiddlewareConstructor,
+    builder: (ctx: Context) => MiddlewareConstructor,
     type?: MiddlewareConstructor
   ): this;
   add(
-    builder: (ctx: HttpContext) => Promise<MiddlewareConstructor>,
+    builder: (ctx: Context) => Promise<MiddlewareConstructor>,
     type?: MiddlewareConstructor
   ): this;
   add(md: Middleware): this;
   add(md: MiddlewareConstructor): this;
   add(
     md:
-      | ((ctx: HttpContext) => Middleware)
-      | ((ctx: HttpContext) => Promise<Middleware>)
-      | ((ctx: HttpContext) => MiddlewareConstructor)
-      | ((ctx: HttpContext) => Promise<MiddlewareConstructor>)
+      | ((ctx: Context) => Middleware)
+      | ((ctx: Context) => Promise<Middleware>)
+      | ((ctx: Context) => MiddlewareConstructor)
+      | ((ctx: Context) => Promise<MiddlewareConstructor>)
       | Middleware
       | MiddlewareConstructor,
     type?: MiddlewareConstructor
@@ -68,54 +66,50 @@ export abstract class Startup {
   hook<T extends Middleware = Middleware>(
     type: HookType.Constructor,
     mh: (
-      ctx: HttpContext,
+      ctx: Context,
       middlewareConstructor: ObjectConstructor<T>
     ) => T | undefined
   ): this;
   hook<T extends Middleware = Middleware>(
     type: HookType.Constructor,
     mh: (
-      ctx: HttpContext,
+      ctx: Context,
       middlewareConstructor: ObjectConstructor<T>
     ) => Promise<T | undefined>
   ): this;
 
   hook<T extends Error = HttpException>(
     type: HookType.Exception,
-    mh: (ctx: HttpContext, middleware: Middleware, exception: T) => boolean
+    mh: (ctx: Context, middleware: Middleware, exception: T) => boolean
   ): this;
   hook<T extends Error = HttpException>(
     type: HookType.Exception,
-    mh: (
-      ctx: HttpContext,
-      middleware: Middleware,
-      exception: T
-    ) => Promise<boolean>
+    mh: (ctx: Context, middleware: Middleware, exception: T) => Promise<boolean>
   ): this;
 
   hook<T extends Middleware = Middleware>(
     type: HookType.BeforeInvoke | HookType.BeforeNext,
-    mh: (ctx: HttpContext, middleware: T) => boolean | void
+    mh: (ctx: Context, middleware: T) => boolean | void
   ): this;
   hook<T extends Middleware = Middleware>(
     type: HookType.BeforeInvoke | HookType.BeforeNext,
-    mh: (ctx: HttpContext, middleware: T) => Promise<boolean | void>
+    mh: (ctx: Context, middleware: T) => Promise<boolean | void>
   ): this;
 
   hook<T extends Middleware = Middleware>(
     type: HookType.AfterInvoke,
-    mh: (ctx: HttpContext, middleware: T) => void
+    mh: (ctx: Context, middleware: T) => void
   ): this;
   hook<T extends Middleware = Middleware>(
     type: HookType.AfterInvoke,
-    mh: (ctx: HttpContext, middleware: T) => Promise<void>
+    mh: (ctx: Context, middleware: T) => Promise<void>
   ): this;
 
   hook<T extends Middleware = Middleware>(
-    mh: (ctx: HttpContext, middleware: T) => void
+    mh: (ctx: Context, middleware: T) => void
   ): this;
   hook<T extends Middleware = Middleware>(
-    mh: (ctx: HttpContext, middleware: T) => Promise<void>
+    mh: (ctx: Context, middleware: T) => Promise<void>
   ): this;
 
   hook(arg1: MdHook | HookType, arg2?: MdHook | HookType): this {
@@ -133,7 +127,7 @@ export abstract class Startup {
     return this;
   }
 
-  protected async invoke(ctx: HttpContext): Promise<Response> {
+  protected async invoke(ctx: Context): Promise<Response> {
     (ctx as any).startup = this;
     if (!this.#mds.length) {
       return ctx.res;

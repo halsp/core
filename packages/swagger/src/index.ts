@@ -13,7 +13,7 @@ declare module "@ipare/core" {
   interface Startup {
     useSwagger(options?: SwaggerOptions): this;
   }
-  interface HttpContext {
+  interface Context {
     get swaggerOptions(): SwaggerOptions;
   }
 }

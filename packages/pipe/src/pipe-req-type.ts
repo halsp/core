@@ -1,8 +1,8 @@
-import { Dict, HttpContext } from "@ipare/core";
+import { Dict, Context } from "@ipare/core";
 
 export type PipeReqType = "query" | "param" | "header" | "body";
 
-export function getReqHandler(type: PipeReqType): (ctx: HttpContext) => Dict {
+export function getReqHandler(type: PipeReqType): (ctx: Context) => Dict {
   switch (type) {
     case "header":
       return (ctx) => ctx.req.headers;

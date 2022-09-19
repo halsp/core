@@ -2,7 +2,7 @@ import "reflect-metadata";
 import { createInject, parseInject } from "@ipare/inject";
 import {
   Dict,
-  HttpContext,
+  Context,
   isClass,
   isUndefined,
   ObjectConstructor,
@@ -15,7 +15,7 @@ import { plainToClass } from "class-transformer";
 import { addPipeRecord } from "../pipe-req-record";
 
 async function execPipes<T extends object = any>(
-  ctx: HttpContext,
+  ctx: Context,
   parent: T,
   target: ObjectConstructor<T>,
   property: string | undefined,

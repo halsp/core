@@ -1,4 +1,4 @@
-import { HttpContext, Request } from "@ipare/core";
+import { Context, Request } from "@ipare/core";
 import { parseInject } from "@ipare/inject";
 import { JwtOptions, JwtService } from "../src";
 import "../src";
@@ -18,7 +18,7 @@ export async function createIpareReqeust(
 }
 
 export async function runJwtServiceTest(
-  test: (jwtService: JwtService, ctx: HttpContext) => Promise<void>,
+  test: (jwtService: JwtService, ctx: Context) => Promise<void>,
   options: JwtOptions = {}
 ) {
   await new TestStartup()

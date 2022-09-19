@@ -1,4 +1,4 @@
 import "reflect-metadata";
 import { Inject } from "@ipare/inject";
 
-export const Context = Inject((ctx) => ctx);
+export const InjectContext = Inject((ctx) => ctx);

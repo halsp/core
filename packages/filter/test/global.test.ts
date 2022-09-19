@@ -1,4 +1,4 @@
-import { HttpContext, Request } from "@ipare/core";
+import { Context, Request } from "@ipare/core";
 import "../src";
 import { ActionFilter } from "../src";
 import "@ipare/inject";
@@ -12,11 +12,11 @@ class TestAction extends Action {
 }
 
 class TestActionFilter implements ActionFilter {
-  onActionExecuted(ctx: HttpContext): void | Promise<void> {
+  onActionExecuted(ctx: Context): void | Promise<void> {
     ctx.res.setHeader(`action2`, 2);
   }
   onActionExecuting(
-    ctx: HttpContext
+    ctx: Context
   ): boolean | void | Promise<void> | Promise<boolean> {
     ctx.res.setHeader(`action1`, 1);
     return ctx.req.body["executing"];

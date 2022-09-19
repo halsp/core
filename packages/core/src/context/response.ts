@@ -4,7 +4,7 @@ import {
   NumericalHeadersDict,
   ReadonlyHeadersDict,
 } from "../utils";
-import { HttpContext } from "./http-context";
+import { Context } from "./context";
 import { ResultHandler } from "./result-handler";
 
 export class Response extends ResultHandler {
@@ -17,7 +17,7 @@ export class Response extends ResultHandler {
     if (headers) this.setHeaders(headers);
   }
 
-  public readonly ctx!: HttpContext;
+  public readonly ctx!: Context;
 
   readonly #headers: HeadersDict = {};
 

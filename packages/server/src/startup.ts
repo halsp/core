@@ -3,7 +3,7 @@ import { BodyPraserStartup } from "./body-praser.startup";
 import * as http from "http";
 import * as https from "https";
 import {
-  HttpContext,
+  Context,
   Request,
   Response,
   Dict,
@@ -157,7 +157,7 @@ export class ServerStartup<
     httpRes: http.ServerResponse
   ): Promise<void> => {
     const url = urlParse(httpReq.url as string, true);
-    const ctx = new HttpContext(
+    const ctx = new Context(
       new Request()
         .setPath(url.pathname)
         .setMethod(httpReq.method as string)

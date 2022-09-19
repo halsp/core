@@ -1,9 +1,9 @@
-import { HttpContext } from "@ipare/core";
+import { Context } from "@ipare/core";
 import { Filter } from "./filter";
 
 export interface ResourceFilter extends Filter {
-  onResourceExecuted(ctx: HttpContext): void | Promise<void>;
+  onResourceExecuted(ctx: Context): void | Promise<void>;
   onResourceExecuting(
-    ctx: HttpContext
+    ctx: Context
   ): boolean | Promise<boolean> | void | Promise<void>;
 }

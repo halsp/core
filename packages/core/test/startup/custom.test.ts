@@ -1,8 +1,8 @@
-import { HttpContext, Request, Response, Startup } from "../../src";
+import { Context, Request, Response, Startup } from "../../src";
 
 class CustomStartup extends Startup {
   async run(): Promise<Response> {
-    return await super.invoke(new HttpContext(new Request()));
+    return await super.invoke(new Context(new Request()));
   }
 }
 

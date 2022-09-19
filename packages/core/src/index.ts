@@ -65,7 +65,7 @@ export {
 
 export {
   Response,
-  HttpContext,
+  Context,
   Request,
   ResultHandler,
   HeaderHandler,

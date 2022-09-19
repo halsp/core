@@ -1,6 +1,6 @@
 import {
   BadRequestException,
-  HttpContext,
+  Context,
   isObject,
   isUndefined,
 } from "@ipare/core";
@@ -17,7 +17,7 @@ export class ValidatePipe<T extends object = any, R extends T = any>
     private readonly options?:
       | ValidatorOptions
       | ((args: {
-          ctx: HttpContext;
+          ctx: Context;
           val: any;
           propertyType: any;
         }) => ValidatorOptions | Promise<ValidatorOptions>)
@@ -203,7 +203,7 @@ export class ValidatePipe<T extends object = any, R extends T = any>
 
   private async getOptions(
     value: T,
-    ctx: HttpContext,
+    ctx: Context,
     propertyType: any
   ): Promise<ValidatorOptions | undefined> {
     let opts = this.options;
@@ -235,7 +235,7 @@ export class ValidatePipe<T extends object = any, R extends T = any>
   }
 
   private async getMetadata<T>(
-    ctx: HttpContext,
+    ctx: Context,
     value: any,
     key: string,
     def: T

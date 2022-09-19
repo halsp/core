@@ -1,6 +1,6 @@
 import {
   BadRequestException,
-  HttpContext,
+  Context,
   HttpException,
   Request,
 } from "@ipare/core";
@@ -26,10 +26,7 @@ test(`empty exception filter`, async () => {
 });
 
 class TestExceptionFilter implements ExceptionFilter {
-  onException(
-    ctx: HttpContext,
-    error: HttpException
-  ): boolean | Promise<boolean> {
+  onException(ctx: Context, error: HttpException): boolean | Promise<boolean> {
     ctx.res.setHeader("ex", error.message);
     return ctx.req.body["executing"];
   }

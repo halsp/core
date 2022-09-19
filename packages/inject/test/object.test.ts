@@ -1,4 +1,4 @@
-import { HttpContext } from "@ipare/core";
+import { Context } from "@ipare/core";
 import { InjectType, parseInject } from "../src";
 import "../src";
 import { TestStartup } from "@ipare/testing";
@@ -31,7 +31,7 @@ test(`object`, async function () {
 });
 
 export class BuilderService {
-  constructor(readonly ctx: HttpContext) {}
+  constructor(readonly ctx: Context) {}
   public count = 0;
 }
 function runBuilderTest(type?: InjectType.Scoped | InjectType.Transient) {
@@ -74,8 +74,8 @@ runBuilderTest(InjectType.Transient);
 runBuilderTest();
 
 export class PromiseBuilderService {
-  constructor(readonly ctx: HttpContext) {}
-  public static createService(ctx: HttpContext) {
+  constructor(readonly ctx: Context) {}
+  public static createService(ctx: Context) {
     return new Promise<PromiseBuilderService>((resolve) => {
       setTimeout(() => {
         resolve(new PromiseBuilderService(ctx));

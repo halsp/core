@@ -1,4 +1,4 @@
-import { HttpContext, ResultHandler, Startup } from "@ipare/core";
+import { Context, ResultHandler, Startup } from "@ipare/core";
 import { RENDERED } from "./constant";
 import {
   consolidate,
@@ -14,11 +14,11 @@ export function useView(startup: Startup, options: ViewOptions) {
     tmpPath,
     locals: Record<string, unknown> = {}
   ) {
-    let ctx: HttpContext;
+    let ctx: Context;
     if (this["ctx"]) {
       ctx = this["ctx"];
     } else {
-      ctx = this as HttpContext;
+      ctx = this as Context;
     }
 
     if (ctx[RENDERED]) return this;
@@ -35,7 +35,7 @@ export function useView(startup: Startup, options: ViewOptions) {
 }
 
 async function render(
-  ctx: HttpContext,
+  ctx: Context,
   options: ViewOptions,
   tmpPath: string,
   locals: Record<string, unknown>

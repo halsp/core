@@ -1,11 +1,11 @@
 import { users } from "./mock";
-import { HttpContext } from "@ipare/core";
+import { Context } from "@ipare/core";
 import "../../src";
 import "@ipare/router";
 import { AuthorizationFilter } from "@ipare/filter";
 
 export class AutFilter implements AuthorizationFilter {
-  async onAuthorization(ctx: HttpContext): Promise<boolean> {
+  async onAuthorization(ctx: Context): Promise<boolean> {
     if (
       !ctx.actionMetadata ||
       !ctx.actionMetadata.roles ||
@@ -31,13 +31,13 @@ export class AutFilter implements AuthorizationFilter {
     return true;
   }
 
-  private async headerLoginAuth(ctx: HttpContext): Promise<boolean> {
+  private async headerLoginAuth(ctx: Context): Promise<boolean> {
     const { email, password } = ctx.req.headers;
     if (!email || !password) return false;
     return await this.loginAuth(email as string, password as string);
   }
 
-  private async paramsLoginAuth(ctx: HttpContext): Promise<boolean> {
+  private async paramsLoginAuth(ctx: Context): Promise<boolean> {
     const { email } = ctx.req.params;
     const { password } = ctx.req.headers;
     if (!email || !password) return false;

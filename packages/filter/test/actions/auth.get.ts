@@ -1,11 +1,11 @@
-import { HttpContext } from "@ipare/core";
+import { Context } from "@ipare/core";
 import { Action, SetActionMetadata } from "@ipare/router";
 import { AuthorizationFilter, UseFilters } from "../../src";
 
 const Admin = SetActionMetadata("admin", "true");
 
 class TestAuthorizationFilter implements AuthorizationFilter {
-  onAuthorization(ctx: HttpContext): boolean | Promise<boolean> {
+  onAuthorization(ctx: Context): boolean | Promise<boolean> {
     ctx.setHeader("admin", ctx.actionMetadata.admin);
     const executing: boolean = ctx.req.body["executing"];
     if (!executing) {

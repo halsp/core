@@ -4,13 +4,13 @@ import {
   JwtVerifyOptions,
 } from "./jwt-options";
 import * as jwt from "jsonwebtoken";
-import { HttpContext } from "@ipare/core";
+import { Context } from "@ipare/core";
 import { OPTIONS } from "./constant";
 import { Inject } from "@ipare/inject";
 
 export class JwtService {
   @Inject((ctx) => ctx)
-  private readonly ctx!: HttpContext;
+  private readonly ctx!: Context;
 
   get #options() {
     return this.ctx[OPTIONS];
