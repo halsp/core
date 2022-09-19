@@ -1,8 +1,8 @@
-import { TestHttpStartup } from "../src";
+import { TestServerStartup } from "../src";
 
 describe("default", () => {
   it("should set body", async () => {
-    await new TestHttpStartup()
+    await new TestServerStartup()
       .use((ctx) => {
         ctx.ok({
           method: ctx.req.method,
@@ -20,7 +20,7 @@ describe("default", () => {
 
 describe("skipThrow", () => {
   it("status shound be 500 if skip throw error", async () => {
-    await new TestHttpStartup()
+    await new TestServerStartup()
       .use(() => {
         throw new Error("err");
       })
@@ -36,7 +36,7 @@ describe("skipThrow", () => {
   it("shound throw error", async () => {
     let errMsg: string | undefined;
     try {
-      await new TestHttpStartup()
+      await new TestServerStartup()
         .use(() => {
           throw new Error("err");
         })

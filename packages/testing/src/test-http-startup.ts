@@ -3,7 +3,7 @@ import supertest from "supertest";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { Test } = require("supertest");
 
-export class TestHttpStartup extends ServerStartup {
+export class TestServerStartup extends ServerStartup {
   #skipThrow?: boolean;
   #errorStack?: Error[];
 

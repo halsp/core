@@ -4,7 +4,7 @@ import { HttpContext, Request, Dict, NumericalHeadersDict } from "@ipare/core";
 import urlParse from "url-parse";
 import request from "supertest";
 
-class TestHttpStartup extends BodyPraserStartup {
+class TestServerStartup extends BodyPraserStartup {
   constructor() {
     super((ctx) => ctx.httpReq);
   }
@@ -34,7 +34,7 @@ class TestHttpStartup extends BodyPraserStartup {
 }
 
 test("custom startup", async () => {
-  const server = new TestHttpStartup().listen();
+  const server = new TestServerStartup().listen();
   const res = await request(server).post("");
   server.close();
 
