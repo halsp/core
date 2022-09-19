@@ -31,7 +31,7 @@
 
 Ipare 是一个面向云的现代渐进式轻量 <a href="http://nodejs.org" target="_blank">Node.js</a> 框架
 
-可以运行于原生 http 服务，也可以运行于 serverless
+可以运行于原生 NodeJS 服务，也可以运行于 serverless
 
 ### 渐进式
 

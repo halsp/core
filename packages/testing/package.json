@@ -30,7 +30,7 @@
   "license": "MIT",
   "dependencies": {
     "@ipare/core": "^2.2.5",
-    "@ipare/http": "^2.2.5",
+    "@ipare/server": "^2.2.5",
     "@types/supertest": "^2.0.12",
     "reflect-metadata": "^0.1.13",
     "supertest": "^6.2.4"

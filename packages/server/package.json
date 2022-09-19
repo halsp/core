@@ -1,7 +1,7 @@
 {
-  "name": "@ipare/http",
+  "name": "@ipare/server",
   "version": "2.2.5",
-  "description": "Ipare 的 Http 托管环境",
+  "description": "Ipare 的 NodeJS 原生环境",
   "engines": {
     "node": ">=12.14.0"
   },
@@ -12,7 +12,7 @@
   },
   "keywords": [
     "ipare",
-    "nodejs-server",
+    "nodejs",
     "http",
     "https"
   ],

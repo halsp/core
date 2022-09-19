@@ -18,7 +18,7 @@ type HttpsServerOptions = https.ServerOptions & { https: true };
 type ServerType<T extends HttpServerOptions | HttpsServerOptions> =
   T extends HttpServerOptions ? http.Server : https.Server;
 
-export class HttpStartup<
+export class ServerStartup<
   T extends HttpServerOptions | HttpsServerOptions =
     | HttpServerOptions
     | HttpsServerOptions

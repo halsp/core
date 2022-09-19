@@ -1,5 +1,5 @@
 import { HttpContext, isString, Request, Response } from "@ipare/core";
-import { BodyPraserStartup } from "@ipare/http";
+import { BodyPraserStartup } from "@ipare/server";
 import { Stream } from "stream";
 import { AliReq } from "./ali-req";
 import { AliRes } from "./ali-res";

@@ -1,7 +1,7 @@
 import * as http from "http";
 import "@ipare/core";
 
-export { HttpStartup } from "./http.startup";
+export { ServerStartup } from "./startup";
 export { BodyPraserStartup, MultipartBody } from "./body-praser.startup";
 
 declare module "@ipare/core" {

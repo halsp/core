@@ -1,10 +1,10 @@
-import { MultipartBody, HttpStartup } from "../../../src";
+import { MultipartBody, ServerStartup } from "../../../src";
 import request from "supertest";
 import { File } from "formidable";
 import { readFileSync } from "fs";
 
 test("useHttpMultipartBody", async () => {
-  const server = new HttpStartup()
+  const server = new ServerStartup()
     .useHttpMultipartBody()
     .use(async (ctx) => {
       const multipartBody = ctx.req.body as MultipartBody;
@@ -38,7 +38,7 @@ test("useHttpMultipartBody", async () => {
 });
 
 test("on file begin", async () => {
-  const server = new HttpStartup()
+  const server = new ServerStartup()
     .useHttpMultipartBody(undefined, (ctx, formName, file) => {
       ctx.res.setHeader("file-name", file.originalFilename ?? "");
       expect(formName).toBe("file");
@@ -64,7 +64,7 @@ test("on file begin", async () => {
 });
 
 test("prase file error without callback", async () => {
-  const server = new HttpStartup()
+  const server = new ServerStartup()
     .useHttpMultipartBody()
     .use(async (ctx) => {
       ctx.noContent();
@@ -91,7 +91,7 @@ test("prase file error without callback", async () => {
 });
 
 test("prase file error", async () => {
-  const server = new HttpStartup()
+  const server = new ServerStartup()
     .useHttpMultipartBody(undefined, undefined, async (ctx, err) => {
       ctx.res.setHeader("prase-err", err.message);
     })

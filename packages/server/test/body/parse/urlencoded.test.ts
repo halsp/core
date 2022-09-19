@@ -1,8 +1,8 @@
-import { HttpStartup } from "../../../src";
+import { ServerStartup } from "../../../src";
 import request from "supertest";
 
 test("useHttpUrlencodedBody", async () => {
-  const server = new HttpStartup()
+  const server = new ServerStartup()
     .useHttpUrlencodedBody()
     .use(async (ctx) => {
       ctx.ok({

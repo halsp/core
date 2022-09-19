@@ -1,8 +1,8 @@
-import { HttpStartup } from "../../../src";
+import { ServerStartup } from "../../../src";
 import request from "supertest";
 
 test("useHttpTextBody", async () => {
-  const server = new HttpStartup()
+  const server = new ServerStartup()
     .useHttpTextBody()
     .use(async (ctx) => {
       ctx.ok(ctx.req.body);
@@ -20,7 +20,7 @@ test("useHttpTextBody", async () => {
 });
 
 test("error type", async () => {
-  const server = new HttpStartup()
+  const server = new ServerStartup()
     .useHttpTextBody()
     .use(async (ctx) => {
       ctx.ok({

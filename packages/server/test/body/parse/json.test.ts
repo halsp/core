@@ -1,8 +1,8 @@
-import { HttpStartup } from "../../../src";
+import { ServerStartup } from "../../../src";
 import request from "supertest";
 
 test("useHttpJsonBody", async () => {
-  const server = new HttpStartup()
+  const server = new ServerStartup()
     .useHttpJsonBody()
     .use(async (ctx) => {
       ctx.ok(ctx.req.body);
@@ -21,7 +21,7 @@ test("useHttpJsonBody", async () => {
 });
 
 test("parse json error", async () => {
-  const server = new HttpStartup()
+  const server = new ServerStartup()
     .useHttpJsonBody(undefined, async (ctx) => {
       ctx.badRequestMsg({ message: "ERROR" });
     })
@@ -40,7 +40,7 @@ test("parse json error", async () => {
 });
 
 test("parse json error default", async () => {
-  const server = new HttpStartup()
+  const server = new ServerStartup()
     .useHttpJsonBody()
     .use((ctx) => {
       ctx.ok(ctx.req.body);
