@@ -60,7 +60,10 @@ export function getRules(
   return rules;
 }
 
-export function V(): ValidatorDecoratorReturnType {
-  const lib = createLib();
-  return createDecorator(lib);
-}
+export const V = {} as ValidatorDecoratorReturnType &
+  (() => ValidatorDecoratorReturnType);
+Object.defineProperty(exports, "V", {
+  get: () => {
+    return createDecorator(createLib());
+  },
+});

@@ -58,6 +58,11 @@ export function createDecorator(lib: ValidatorDecoratorReturnType) {
     propertyKey?: symbol | string,
     parameterIndex?: number
   ) {
+    if (!target) {
+      // for @V()
+      return createDecorator(lib);
+    }
+
     target = target.prototype ?? target;
 
     const rules: RuleRecord[] = Reflect.getMetadata(METADATA, target) ?? [];
