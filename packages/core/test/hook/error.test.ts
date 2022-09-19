@@ -18,7 +18,7 @@ function runSimpleTest(handle: boolean, afterNext: boolean) {
     }
   }
 
-  test(`exception hook ${handle} ${afterNext}`, async () => {
+  test(`error hook ${handle} ${afterNext}`, async () => {
     let errorMiddleware!: Middleware;
     const res = await new TestStartup()
       .use(async (ctx, next) => {
@@ -28,10 +28,10 @@ function runSimpleTest(handle: boolean, afterNext: boolean) {
         };
         await next();
       })
-      .hook(HookType.Exception, (ctx, middleware, exception) => {
+      .hook(HookType.Error, (ctx, middleware, error) => {
         errorMiddleware = middleware;
         ctx.bag("result", {
-          message: exception.message,
+          message: error.message,
         });
         return handle;
       })
@@ -66,7 +66,7 @@ function runBeforeNextTest(handle: boolean) {
     }
   }
 
-  test(`exception hook ${handle}`, async () => {
+  test(`error hook ${handle}`, async () => {
     let errorMiddleware!: Middleware;
     const res = await new TestStartup()
       .use(async (ctx, next) => {
@@ -83,10 +83,10 @@ function runBeforeNextTest(handle: boolean) {
           throw err;
         }
       })
-      .hook(HookType.Exception, (ctx, middleware, exception) => {
+      .hook(HookType.Error, (ctx, middleware, error) => {
         errorMiddleware = middleware;
         ctx.bag("result", {
-          message: exception.message,
+          message: error.message,
         });
         return handle;
       })

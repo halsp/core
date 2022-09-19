@@ -22,7 +22,7 @@ export enum HookType {
   AfterInvoke,
   BeforeNext,
   Constructor,
-  Exception,
+  Error,
 }
 
 export interface HookItem {
@@ -51,8 +51,8 @@ export class HookMiddleware extends Middleware {
 export async function execHooks(
   ctx: Context,
   middleware: Middleware,
-  type: HookType.Exception,
-  exception: Error
+  type: HookType.Error,
+  error: Error
 ): Promise<boolean>;
 export async function execHooks(
   ctx: Context,
@@ -77,12 +77,8 @@ export async function execHooks(
 ): Promise<Middleware | void | boolean> {
   if (type == HookType.Constructor) {
     return await execConstructorHooks(ctx, middleware as MiddlewareConstructor);
-  } else if (type == HookType.Exception) {
-    return await execExceptionHooks(
-      ctx,
-      middleware as Middleware,
-      error as Error
-    );
+  } else if (type == HookType.Error) {
+    return await execErrorHooks(ctx, middleware as Middleware, error as Error);
   }
 
   const hooks = ctx.bag<HookItem[]>(MIDDLEWARE_HOOK_BAG) ?? [];
@@ -94,14 +90,14 @@ export async function execHooks(
   }
 }
 
-async function execExceptionHooks(
+async function execErrorHooks(
   ctx: Context,
   middleware: Middleware,
   error: Error
 ): Promise<boolean> {
   const hooks = ctx.bag<HookItem[]>(MIDDLEWARE_HOOK_BAG) ?? [];
   let result = false;
-  for (const hookItem of hooks.filter((h) => h.type == HookType.Exception)) {
+  for (const hookItem of hooks.filter((h) => h.type == HookType.Error)) {
     result = (await hookItem.hook(ctx, middleware, error)) as boolean;
     if (result) break;
   }

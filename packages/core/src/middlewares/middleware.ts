@@ -99,7 +99,7 @@ export abstract class Middleware {
         const hookResult = await execHooks(
           this.ctx,
           nextMd ?? this,
-          HookType.Exception,
+          HookType.Error,
           error
         );
         if (!hookResult) {

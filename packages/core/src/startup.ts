@@ -76,12 +76,12 @@ export abstract class Startup {
   ): this;
 
   hook<T extends Error = Error>(
-    type: HookType.Exception,
-    mh: (ctx: Context, middleware: Middleware, exception: T) => boolean
+    type: HookType.Error,
+    mh: (ctx: Context, middleware: Middleware, error: T) => boolean
   ): this;
   hook<T extends Error = Error>(
-    type: HookType.Exception,
-    mh: (ctx: Context, middleware: Middleware, exception: T) => Promise<boolean>
+    type: HookType.Error,
+    mh: (ctx: Context, middleware: Middleware, error: T) => Promise<boolean>
   ): this;
 
   hook<T extends Middleware = Middleware>(
