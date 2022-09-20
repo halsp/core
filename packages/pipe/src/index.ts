@@ -1,4 +1,4 @@
-import { Startup } from "@ipare/core";
+import { HttpStartup } from "@ipare/http";
 import { GLOBAL_PIPE_BAG } from "./constant";
 import { GlobalPipeType } from "./global-pipe-type";
 import { GlobalPipeItem, PipeItem } from "./pipes";
@@ -21,8 +21,10 @@ export {
 export { PipeReqRecord, getPipeRecords } from "./pipe-req-record";
 export { PipeReqType } from "./pipe-req-type";
 
-declare module "@ipare/core" {
-  interface Startup {
+declare module "@ipare/http" {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  interface HttpStartup {
     useGlobalPipe<T = any, R = any>(
       type: GlobalPipeType,
       pipe: PipeItem<T, R>
@@ -30,10 +32,10 @@ declare module "@ipare/core" {
   }
 }
 
-Startup.prototype.useGlobalPipe = function <T = any, R = any>(
+HttpStartup.prototype.useGlobalPipe = function <T = any, R = any>(
   type: GlobalPipeType,
   pipe: PipeItem<T, R>
-): Startup {
+): HttpStartup {
   return this.use(async (ctx, next) => {
     const pipes = ctx.bag<GlobalPipeItem<T, R>[]>(GLOBAL_PIPE_BAG) ?? [];
     pipes.push({

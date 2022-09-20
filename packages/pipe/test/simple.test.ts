@@ -1,11 +1,13 @@
-import { TestStartup } from "@ipare/testing";
+import { TestHttpStartup } from "@ipare/testing";
 import "@ipare/inject";
 import "../src";
 import { expectBody, getTestRequest, TestMiddleware } from "./TestMiddleware";
 
 function runTest(isConstructor: boolean) {
   test("simple test", async () => {
-    const startup = new TestStartup().setRequest(getTestRequest()).useInject();
+    const startup = new TestHttpStartup()
+      .setRequest(getTestRequest())
+      .useInject();
     if (isConstructor) {
       startup.add(TestMiddleware);
     } else {

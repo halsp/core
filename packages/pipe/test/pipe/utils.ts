@@ -1,6 +1,7 @@
-import { Middleware, Request } from "@ipare/core";
-import { TestStartup } from "@ipare/testing";
+import { Middleware } from "@ipare/core";
+import { TestHttpStartup } from "@ipare/testing";
 import { Body, PipeItem } from "../../src";
+import { Request } from "@ipare/http";
 
 function runPipeTest(
   pipes: PipeItem[],
@@ -20,7 +21,7 @@ function runPipeTest(
   }
 
   test(`parse: ${success} ${source}, ${target}`, async () => {
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .skipThrow()
       .setRequest(
         new Request().setBody({

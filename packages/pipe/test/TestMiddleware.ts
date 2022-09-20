@@ -1,4 +1,5 @@
-import { Middleware, ReadonlyDict, Request } from "@ipare/core";
+import { Middleware, ReadonlyDict } from "@ipare/core";
+import { Request } from "@ipare/http";
 import { Header, Query, Param, Body } from "../src";
 
 export class TestMiddleware extends Middleware {

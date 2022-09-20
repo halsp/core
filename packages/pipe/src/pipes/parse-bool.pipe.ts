@@ -1,4 +1,4 @@
-import { BadRequestException } from "@ipare/core";
+import { BadRequestException } from "@ipare/http";
 import { PipeTransform } from "./pipe-transform";
 
 export interface ParseBoolPipeOptions {
