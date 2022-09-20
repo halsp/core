@@ -1,14 +1,15 @@
-import { Context, Startup, StatusCodes } from "@ipare/core";
+import { Context } from "@ipare/core";
 import typeis from "type-is";
 import cobody from "co-body";
 import formidable from "formidable";
 import http from "http";
+import { HttpStartup, StatusCodes } from "@ipare/http";
 
 export type MultipartBody =
   | { fields: formidable.Fields; files: formidable.Files }
   | undefined;
 
-export abstract class BodyPraserStartup extends Startup {
+export abstract class BodyPraserStartup extends HttpStartup {
   constructor(
     private readonly sourceReqBuilder: (ctx: Context) => http.IncomingMessage
   ) {

@@ -2,14 +2,13 @@ import * as net from "net";
 import { BodyPraserStartup } from "./body-praser.startup";
 import * as http from "http";
 import * as https from "https";
+import { Dict, isString } from "@ipare/core";
 import {
-  Context,
   Request,
   Response,
-  Dict,
   NumericalHeadersDict,
-  isString,
-} from "@ipare/core";
+  createContext,
+} from "@ipare/http";
 import urlParse from "url-parse";
 import { Stream } from "stream";
 
@@ -157,7 +156,7 @@ export class ServerStartup<
     httpRes: http.ServerResponse
   ): Promise<void> => {
     const url = urlParse(httpReq.url as string, true);
-    const ctx = new Context(
+    const ctx = createContext(
       new Request()
         .setPath(url.pathname)
         .setMethod(httpReq.method as string)
@@ -178,12 +177,12 @@ export class ServerStartup<
       get: () => httpReq,
     });
 
-    const ipareRes = await this.invoke(ctx);
+    const res = await this.invoke(ctx);
 
     if (!httpRes.writableEnded) {
-      httpRes.statusCode = ipareRes.status;
-      this.#writeHead(ipareRes, httpRes);
-      this.#writeBody(ipareRes, httpRes);
+      httpRes.statusCode = res.status;
+      this.#writeHead(res, httpRes);
+      this.#writeBody(res, httpRes);
     }
   };
 
