@@ -1,8 +1,7 @@
-import { Context, isNil, isObject, Middleware } from "@ipare/core";
+import { Context, Middleware } from "@ipare/core";
 import { Request } from "./context/request";
 import { Response } from "./context/response";
 import { ResultHandler } from "./context/result-handler";
-import { HttpException, InternalServerErrorException } from "./exceptions";
 
 declare module "@ipare/core" {
   interface Context extends ResultHandler {
@@ -33,27 +32,6 @@ if (!("request" in Context.prototype)) {
       return (this as Context).res;
     },
   });
-
-  Context.prototype.catchError = function (err: Error | any): Context {
-    if (err instanceof HttpException) {
-      this.errorStack.push(err);
-      this.setHeaders(err.header.headers)
-        .res.setStatus(err.status)
-        .setBody(err.toPlainObject());
-    } else if (err instanceof Error) {
-      this.errorStack.push(err);
-      const msg = err.message || undefined;
-      this.catchError(new InternalServerErrorException(msg));
-    } else if (isObject(err)) {
-      this.errorStack.push(err);
-      this.catchError(new InternalServerErrorException(err));
-    } else {
-      this.errorStack.push(err);
-      const error = (!isNil(err) && String(err)) || undefined;
-      this.catchError(new InternalServerErrorException(error));
-    }
-    return this;
-  };
 
   initHandler(Context.prototype);
 }
