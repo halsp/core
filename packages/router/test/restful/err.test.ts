@@ -1,10 +1,10 @@
 import "../../src";
-import { Request, HttpMethod } from "@ipare/core";
-import { TestStartup } from "@ipare/testing";
+import { Request, HttpMethod } from "@ipare/http";
+import { TestHttpStartup } from "@ipare/testing";
 import "../global";
 
 test(`action name error`, async () => {
-  const result = await new TestStartup()
+  const result = await new TestHttpStartup()
     .setRequest(new Request().setPath("/err").setMethod(HttpMethod.post))
     .useTestRouter()
     .run();
@@ -13,7 +13,7 @@ test(`action name error`, async () => {
 });
 
 test(`without method`, async () => {
-  const result = await new TestStartup()
+  const result = await new TestHttpStartup()
     .setRequest(new Request().setPath("/restful").setMethod(""))
     .useTestRouter()
     .run();

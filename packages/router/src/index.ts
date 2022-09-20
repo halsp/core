@@ -1,5 +1,5 @@
 import "@ipare/core";
-import { QueryDict, ReadonlyQueryDict, Startup } from "@ipare/core";
+import { QueryDict, ReadonlyQueryDict, HttpStartup } from "@ipare/http";
 import { Action } from "./action";
 import MapParser from "./map/map-parser";
 import path = require("path");
@@ -41,7 +41,17 @@ export { postbuild } from "./postbuild";
 import MapMatcher from "./map/map-matcher";
 
 declare module "@ipare/core" {
-  interface Startup {
+  interface Context {
+    get actionMetadata(): MapItem;
+    get routerMap(): MapItem[];
+    get routerOptions(): RouterInitedOptions;
+  }
+}
+
+declare module "@ipare/http" {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  interface HttpStartup {
     useRouter(options?: RouterOptions): this;
     useRouterParser(options?: RouterOptions): this;
     get routerMap(): MapItem[];
@@ -51,15 +61,11 @@ declare module "@ipare/core" {
   interface Request {
     get params(): ReadonlyQueryDict;
   }
-
-  interface Context {
-    get actionMetadata(): MapItem;
-    get routerMap(): MapItem[];
-    get routerOptions(): RouterInitedOptions;
-  }
 }
 
-Startup.prototype.useRouter = function (options?: RouterOptions): Startup {
+HttpStartup.prototype.useRouter = function (
+  options?: RouterOptions
+): HttpStartup {
   if (this[USED]) {
     return this;
   }
@@ -74,9 +80,9 @@ Startup.prototype.useRouter = function (options?: RouterOptions): Startup {
   });
 };
 
-Startup.prototype.useRouterParser = function (
+HttpStartup.prototype.useRouterParser = function (
   options?: RouterOptions
-): Startup {
+): HttpStartup {
   if (this[PARSER_USED]) {
     return this;
   }

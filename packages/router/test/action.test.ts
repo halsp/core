@@ -1,5 +1,6 @@
-import { StatusCodes, Request, Context, Dict, HttpMethod } from "@ipare/core";
-import { TestStartup } from "@ipare/testing";
+import { Dict } from "@ipare/core";
+import { createContext, StatusCodes, Request, HttpMethod } from "@ipare/http";
+import { TestHttpStartup } from "@ipare/testing";
 import { Action } from "../src";
 import "./global";
 
@@ -22,7 +23,7 @@ class Login extends Action {
 
 test("action test", async () => {
   const loginAction = new Login();
-  const ctx = new Context(
+  const ctx = createContext(
     new Request().setBody({
       account: "abc",
       password: "123456",
@@ -50,7 +51,7 @@ function runMultipleTest(
   body?: string
 ) {
   test(`multiple`, async () => {
-    const result = await new TestStartup()
+    const result = await new TestHttpStartup()
       .setRequest(new Request().setPath(path).setMethod(method))
       .useTestRouter()
       .run();

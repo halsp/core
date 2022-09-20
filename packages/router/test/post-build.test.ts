@@ -1,8 +1,8 @@
 import { postbuild } from "../src";
 import * as fs from "fs";
-import { Request } from "@ipare/core";
+import { Request } from "@ipare/http";
 import { CONFIG_FILE_NAME } from "../src/constant";
-import { TestStartup } from "@ipare/testing";
+import { TestHttpStartup } from "@ipare/testing";
 
 test("empty config", async () => {
   let count = 0;
@@ -43,7 +43,7 @@ test("build and run", async () => {
     cacheDir: "",
   });
 
-  const res = await new TestStartup()
+  const res = await new TestHttpStartup()
     .setRequest(new Request().setMethod("get"))
     .useRouter()
     .run();

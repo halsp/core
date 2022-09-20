@@ -1,4 +1,4 @@
-import { TestStartup } from "@ipare/testing";
+import { TestHttpStartup } from "@ipare/testing";
 import MapCreater from "../src/map/map-creater";
 import "./global";
 
@@ -9,11 +9,13 @@ test("MapCreater: router dir not exist", async () => {
 });
 
 test("router map", async () => {
-  const result = await new TestStartup()
+  const result = await new TestHttpStartup()
     .use(async (ctx, next) => {
       await next();
       expect(ctx.routerMap).not.toBeUndefined();
-      expect(ctx.routerMap).toBe(ctx.startup.routerMap);
+      expect(ctx.routerMap).toBe(
+        (ctx.startup as any as TestHttpStartup).routerMap
+      );
     })
     .useTestRouter()
     .run();

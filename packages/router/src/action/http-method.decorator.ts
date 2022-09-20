@@ -1,4 +1,4 @@
-import { HttpMethod } from "@ipare/core";
+import { HttpMethod } from "@ipare/http";
 import "reflect-metadata";
 import { MethodItem } from "./method-item";
 import { ACTION_METHOD_METADATA } from "../constant";

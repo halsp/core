@@ -1,10 +1,10 @@
-import { Request, HttpMethod } from "@ipare/core";
-import { TestStartup } from "@ipare/testing";
+import { Request, HttpMethod } from "@ipare/http";
+import { TestHttpStartup } from "@ipare/testing";
 import "../../src";
 import "../global";
 
 test(`restful params test1`, async () => {
-  const res = await new TestStartup()
+  const res = await new TestHttpStartup()
     .setRequest(new Request().setPath("/restful/45").setMethod(HttpMethod.get))
     .useTestRouter()
     .run();
@@ -17,7 +17,7 @@ test(`restful params test1`, async () => {
 });
 
 test(`restful params test2`, async () => {
-  const res = await new TestStartup()
+  const res = await new TestHttpStartup()
     .setRequest(
       new Request().setPath("/restful/11/animals").setMethod(HttpMethod.get)
     )
@@ -32,7 +32,7 @@ test(`restful params test2`, async () => {
 });
 
 test(`get params one object`, async () => {
-  const res = await new TestStartup()
+  const res = await new TestHttpStartup()
     .setRequest(new Request().setPath("/restful/45").setMethod(HttpMethod.get))
     .use(async (ctx, next) => {
       expect(ctx.req.params).toBe(ctx.req.params);

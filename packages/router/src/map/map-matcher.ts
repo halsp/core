@@ -1,5 +1,6 @@
 import MapItem from "./map-item";
-import { Context, HttpMethod } from "@ipare/core";
+import { Context } from "@ipare/core";
+import { HttpMethod } from "@ipare/http";
 
 export default class MapMatcher {
   constructor(private readonly ctx: Context) {

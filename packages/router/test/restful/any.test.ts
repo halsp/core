@@ -1,13 +1,13 @@
 import "../../src";
-import { Request, HttpMethod } from "@ipare/core";
-import { TestStartup } from "@ipare/testing";
+import { Request, HttpMethod } from "@ipare/http";
+import { TestHttpStartup } from "@ipare/testing";
 import "../global";
 
 const methods = ["test", "aaa", "NO"];
 
 methods.forEach((method) => {
   test(`${method} -> any restful test`, async () => {
-    const result = await new TestStartup()
+    const result = await new TestHttpStartup()
       .setRequest(new Request().setPath("/restful").setMethod(method))
       .useTestRouter()
       .run();
