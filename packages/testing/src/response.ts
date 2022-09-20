@@ -1,7 +1,7 @@
-import "@ipare/core";
-import { isFunction, isNumber, Response } from "@ipare/core";
+import { isFunction, isNumber } from "@ipare/core";
+import { Response } from "@ipare/http";
 
-declare module "@ipare/core" {
+declare module "@ipare/http" {
   interface Response {
     expect(status: number): this;
     expect(status: number, body: any): this;
@@ -10,7 +10,7 @@ declare module "@ipare/core" {
   }
 }
 
-Response.prototype.expect = function (...args: any[]) {
+Response.prototype.expect = function customExpect(...args: any[]) {
   const arg0 = args[0];
   const arg1 = args[1];
   if (isFunction(arg0)) {

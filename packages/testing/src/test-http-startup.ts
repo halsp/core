@@ -1,22 +1,12 @@
-import { ServerStartup } from "@ipare/server";
-import supertest from "supertest";
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { Test } = require("supertest");
+import { HttpStartup, Request, Response } from "@ipare/http";
 
-export class TestServerStartup extends ServerStartup {
+export class TestHttpStartup extends HttpStartup {
   #skipThrow?: boolean;
-  #errorStack?: Error[];
+  #req?: Request;
 
-  constructor() {
-    super();
-
-    this.use(async (ctx, next) => {
-      await next();
-
-      if (!this.#skipThrow && ctx.errorStack.length) {
-        this.#errorStack = ctx.errorStack;
-      }
-    });
+  setRequest(req: Request): this {
+    this.#req = req;
+    return this;
   }
 
   skipThrow(): this {
@@ -24,24 +14,27 @@ export class TestServerStartup extends ServerStartup {
     return this;
   }
 
-  create(): supertest.SuperTest<supertest.Test> {
-    const test = supertest(this.server);
+  async run(): Promise<Response> {
+    const res = await super.invoke(this.#req ?? new Request());
 
-    const getError = () => {
-      if (!this.#skipThrow && this.#errorStack) {
-        return this.#errorStack[0];
-      }
-    };
-    const callback: any = Test.prototype.callback;
-    Test.prototype.callback = function (err: any, res: any) {
-      if (this.constructor == Test && !err) {
-        const stackErr = getError();
-        if (stackErr) {
-          err = stackErr;
-        }
-      }
-      return callback.bind(this)(err, res);
-    };
-    return test;
+    if (!this.#skipThrow && res.ctx.errorStack.length) {
+      throw res.ctx.errorStack[0];
+    }
+    return res;
+  }
+
+  it(
+    name: string,
+    fn?: (res: Response) => void | Promise<void>,
+    timeout?: number
+  ): void {
+    it(
+      name,
+      async () => {
+        const res = await this.run();
+        if (fn) await fn(res);
+      },
+      timeout
+    );
   }
 }

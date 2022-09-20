@@ -1,4 +1,3 @@
-import "@ipare/core";
 import {
   HookType,
   Context,

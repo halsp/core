@@ -1,4 +1,4 @@
-import { Middleware } from "@ipare/core";
+import { HookType, Middleware } from "@ipare/core";
 import { TestStartup } from "../src";
 
 class TestMiddleware extends Middleware {
@@ -7,7 +7,7 @@ class TestMiddleware extends Middleware {
   }
 
   invoke(): void | Promise<void> {
-    this.ok();
+    this.ctx.bag("result", "OK");
   }
 }
 
@@ -18,4 +18,22 @@ describe("middleware", () => {
     })
     .add(TestMiddleware)
     .it("should expect middleware");
+
+  new TestStartup()
+    .expectMiddleware(TestMiddleware, (md) => {
+      expect(md.ctx.bag("result")).toBeUndefined();
+    })
+    .add(TestMiddleware)
+    .it("should expect before invoke");
+
+  new TestStartup()
+    .expectMiddleware(
+      TestMiddleware,
+      (md) => {
+        expect(md.fn()).toBe(1);
+      },
+      HookType.AfterInvoke
+    )
+    .add(TestMiddleware)
+    .it("should expect after invoke");
 });

@@ -1,11 +1,11 @@
-import { Context, Startup, Request, Response } from "@ipare/core";
+import { Context, Startup } from "@ipare/core";
 
 export class TestStartup extends Startup {
   #skipThrow?: boolean;
-  #req?: Request;
+  #ctx?: Context;
 
-  setRequest(req: Request): this {
-    this.#req = req;
+  setContext(ctx: Context): this {
+    this.#ctx = ctx;
     return this;
   }
 
@@ -14,25 +14,25 @@ export class TestStartup extends Startup {
     return this;
   }
 
-  async run(): Promise<Response> {
-    const res = await super.invoke(new Context(this.#req ?? new Request()));
+  async run(): Promise<Context> {
+    const ctx = await super.invoke(this.#ctx ?? new Context());
 
-    if (!this.#skipThrow && res.ctx.errorStack.length) {
-      throw res.ctx.errorStack[0];
+    if (!this.#skipThrow && ctx.errorStack.length) {
+      throw ctx.errorStack[0];
     }
-    return res;
+    return ctx;
   }
 
   it(
     name: string,
-    fn?: (res: Response) => void | Promise<void>,
+    fn?: (res: Context) => void | Promise<void>,
     timeout?: number
   ): void {
     it(
       name,
       async () => {
-        const res = await this.run();
-        if (fn) await fn(res);
+        const ctx = await this.run();
+        if (fn) await fn(ctx);
       },
       timeout
     );
