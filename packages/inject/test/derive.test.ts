@@ -11,7 +11,7 @@ class TestMiddleware extends Middleware {
   private readonly service3!: Service3;
 
   async invoke(): Promise<void> {
-    this.ok({
+    this.ctx.bag("result", {
       service2: this.service2.invoke(),
       service3: this.service3.invoke(),
     });
@@ -19,14 +19,13 @@ class TestMiddleware extends Middleware {
 }
 
 test(`derive`, async function () {
-  const res = await new TestStartup()
+  const ctx = await new TestStartup()
     .useInject()
     .inject(Service2, Service3)
     .add(TestMiddleware)
     .run();
 
-  expect(res.status).toBe(200);
-  expect(res.body).toEqual({
+  expect(ctx.bag("result")).toEqual({
     service2: "service3.service2.service1",
     service3: "service3.service2.service1",
   });

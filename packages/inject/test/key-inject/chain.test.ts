@@ -23,7 +23,6 @@ it("key chain inject", async () => {
       if (!service3) {
         throw new Error();
       }
-      console.log("abc", service3.service2);
       expect(service3.constructor).toBe(TestService3);
       expect(service3.service2.constructor).toBe(TestService2);
       expect(service3.service1.constructor).toBe(TestService1);

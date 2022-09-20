@@ -19,7 +19,7 @@ class TestService {
 }
 
 it("scoped instance should be dispose", async () => {
-  const res = await new TestStartup()
+  const ctx = await new TestStartup()
     .use(async (ctx, next) => {
       await next();
       const instance = await parseInject(ctx, TestService);
@@ -33,11 +33,11 @@ it("scoped instance should be dispose", async () => {
       await next();
     })
     .run();
-  expect(res.status).toBe(404);
+  expect(ctx).not.toBeUndefined();
 });
 
 it("transient instance should be dispose", async () => {
-  const res = await new TestStartup()
+  const ctx = await new TestStartup()
     .use(async (ctx, next) => {
       await next();
       const instance = getTransientInstances(ctx, TestService);
@@ -57,11 +57,11 @@ it("transient instance should be dispose", async () => {
       await next();
     })
     .run();
-  expect(res.status).toBe(404);
+  expect(ctx).not.toBeUndefined();
 });
 
 it("singleton instance should not be dispose", async () => {
-  const res = await new TestStartup()
+  const ctx = await new TestStartup()
     .use(async (ctx, next) => {
       await next();
       const instance = await parseInject(ctx, TestService);
@@ -75,11 +75,11 @@ it("singleton instance should not be dispose", async () => {
       await next();
     })
     .run();
-  expect(res.status).toBe(404);
+  expect(ctx).not.toBeUndefined();
 });
 
 it("instance should be undefined", async () => {
-  const res = await new TestStartup()
+  const ctx = await new TestStartup()
     .use(async (ctx, next) => {
       await next();
       const instance = tryParseInject(ctx, TestService);
@@ -88,5 +88,5 @@ it("instance should be undefined", async () => {
     .useInject()
     .inject(TestService)
     .run();
-  expect(res.status).toBe(404);
+  expect(ctx).not.toBeUndefined();
 });

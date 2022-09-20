@@ -42,23 +42,22 @@ class TestMiddleware extends Middleware {
   private readonly service!: Service3;
 
   async invoke(): Promise<void> {
-    this.ok({
+    this.ctx.bag("result", {
       service: this.service.invoke(),
     });
   }
 }
 
 test(`class`, async function () {
-  const res = await new TestStartup().useInject().add(TestMiddleware).run();
+  const ctx = await new TestStartup().useInject().add(TestMiddleware).run();
 
-  expect(res.body).toEqual({
+  expect(ctx.bag("result")).toEqual({
     service: "service3.service2.service1.service1",
   });
-  expect(res.status).toBe(200);
 });
 
 test(`class singleton`, async function () {
-  const res = await new TestStartup()
+  const ctx = await new TestStartup()
     .useInject()
     .inject(Service2, InjectType.Singleton)
     .use(async (ctx) => {
@@ -66,10 +65,9 @@ test(`class singleton`, async function () {
       service1.count += 1;
       const service2 = await parseInject(ctx, Service2);
       service2.count += 2;
-      ctx.ok(service2.count);
+      ctx.bag("result", service2.count);
     })
     .run();
 
-  expect(res.body).toBe(3);
-  expect(res.status).toBe(200);
+  expect(ctx.bag("result")).toBe(3);
 });

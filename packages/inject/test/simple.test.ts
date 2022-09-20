@@ -13,7 +13,7 @@ class TestMiddleware extends Middleware {
   private readonly service2!: Service2;
 
   async invoke(): Promise<void> {
-    this.ok({
+    this.ctx.bag("result", {
       service1: this.service1?.invoke(),
       service11: this.service11?.invoke(),
       service2: this.service2?.invoke(),
@@ -23,13 +23,12 @@ class TestMiddleware extends Middleware {
 }
 
 test(`inject decorators`, async function () {
-  const res = await new TestStartup()
+  const ctx = await new TestStartup()
     .useInject()
     .useInject()
     .add(TestMiddleware)
     .run();
-  expect(res.status).toBe(200);
-  expect(res.body).toEqual({
+  expect(ctx.bag("result")).toEqual({
     service1: "service1",
     service11: "service1",
     service2: "service2.service1",

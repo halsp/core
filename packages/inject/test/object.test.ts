@@ -8,7 +8,7 @@ export class Service extends Object {
 }
 
 test(`object`, async function () {
-  const res = await new TestStartup()
+  const ctx = await new TestStartup()
     .useInject()
     .inject(Service, new Service())
     .use(async (ctx) => {
@@ -16,18 +16,17 @@ test(`object`, async function () {
       service1.count++;
       const service2 = await parseInject(ctx, Service);
       service2.count++;
-      ctx.ok({
+      ctx.bag("result", {
         count1: service1.count,
         count2: service2.count,
       });
     })
     .run();
 
-  expect(res.body).toEqual({
+  expect(ctx.bag("result")).toEqual({
     count1: 2,
     count2: 2,
   });
-  expect(res.status).toBe(200);
 });
 
 export class BuilderService {
@@ -36,7 +35,7 @@ export class BuilderService {
 }
 function runBuilderTest(type?: InjectType.Scoped | InjectType.Transient) {
   test(`object builder ${type}`, async function () {
-    const res = await new TestStartup()
+    const ctx = await new TestStartup()
       .useInject()
       .inject(BuilderService, (ctx) => new BuilderService(ctx), type)
       .use(async (ctx) => {
@@ -44,7 +43,7 @@ function runBuilderTest(type?: InjectType.Scoped | InjectType.Transient) {
         service1.count++;
         const service2 = await parseInject(ctx, BuilderService);
         service2.count++;
-        ctx.ok({
+        ctx.bag("result", {
           ctx: service1.ctx == service2.ctx,
           count1: service1.count,
           count2: service2.count,
@@ -53,19 +52,18 @@ function runBuilderTest(type?: InjectType.Scoped | InjectType.Transient) {
       .run();
 
     if (type == InjectType.Transient) {
-      expect(res.body).toEqual({
+      expect(ctx.bag("result")).toEqual({
         ctx: true,
         count1: 1,
         count2: 1,
       });
     } else {
-      expect(res.body).toEqual({
+      expect(ctx.bag("result")).toEqual({
         ctx: true,
         count1: 2,
         count2: 2,
       });
     }
-    expect(res.status).toBe(200);
   });
 }
 
@@ -87,7 +85,7 @@ export class PromiseBuilderService {
 
 function runPrimiseBuilderTest(type?: InjectType) {
   test(`object primise builder ${type}`, async function () {
-    const res = await new TestStartup()
+    const ctx = await new TestStartup()
       .useInject()
       .inject(
         PromiseBuilderService,
@@ -99,7 +97,7 @@ function runPrimiseBuilderTest(type?: InjectType) {
         service1.count++;
         const service2 = await parseInject(ctx, PromiseBuilderService);
         service2.count++;
-        ctx.ok({
+        ctx.bag("result", {
           ctx: service1.ctx == service2.ctx,
           count1: service1.count,
           count2: service2.count,
@@ -108,19 +106,18 @@ function runPrimiseBuilderTest(type?: InjectType) {
       .run();
 
     if (type == InjectType.Transient) {
-      expect(res.body).toEqual({
+      expect(ctx.bag("result")).toEqual({
         ctx: true,
         count1: 1,
         count2: 1,
       });
     } else {
-      expect(res.body).toEqual({
+      expect(ctx.bag("result")).toEqual({
         ctx: true,
         count1: 2,
         count2: 2,
       });
     }
-    expect(res.status).toBe(200);
   });
 }
 

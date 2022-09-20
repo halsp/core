@@ -13,7 +13,7 @@ class TestMiddleware extends Middleware {
   async invoke(): Promise<void> {
     this.service1.count++;
     this.service2.count += 2;
-    this.ok({
+    this.ctx.bag("result", {
       service1: this.service1.count,
       service2: this.service2.count,
     });
@@ -22,16 +22,15 @@ class TestMiddleware extends Middleware {
 
 function runTest(type?: InjectType) {
   test(`only cons ${type}`, async function () {
-    const res = await new TestStartup()
+    const ctx = await new TestStartup()
       .useInject()
       .inject(Service1, type)
       .add(TestMiddleware)
       .run();
-    expect(res.body).toEqual({
+    expect(ctx.bag("result")).toEqual({
       service1: type == InjectType.Singleton || type == undefined ? 3 : 1,
       service2: type == InjectType.Singleton || type == undefined ? 3 : 2,
     });
-    expect(res.status).toBe(200);
   });
 }
 

@@ -33,7 +33,7 @@ class TestMiddleware extends Middleware {
   async invoke(): Promise<void> {
     this.service1.count++;
     this.service3.count++;
-    this.ok({
+    this.ctx.bag("result", {
       service1: this.service1.invoke(), // add 1
       service2: this.service2.invoke(), // add 1
       service3: this.service1.invoke(), // add 1
@@ -43,18 +43,17 @@ class TestMiddleware extends Middleware {
 }
 
 test(`class`, async function () {
-  const res = await new TestStartup()
+  const ctx = await new TestStartup()
     .useInject()
     .inject(Service1, InjectType.Singleton)
     .inject(Service2, InjectType.Singleton)
     .add(TestMiddleware)
     .run();
 
-  expect(res.body).toEqual({
+  expect(ctx.bag("result")).toEqual({
     service1: "service1",
     service2: "service2.service1",
     service3: "service1",
     count: 5,
   });
-  expect(res.status).toBe(200);
 });

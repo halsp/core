@@ -24,7 +24,7 @@ class TestMiddleware extends Middleware {
   private readonly service2!: TestService2;
 
   async invoke(): Promise<void> {
-    this.ok({
+    this.ctx.bag("result", {
       key1: this.key1,
       key2: this.key2,
       key3: this.key3,
@@ -36,7 +36,7 @@ class TestMiddleware extends Middleware {
 }
 
 test(`inject key`, async function () {
-  const res = await new TestStartup()
+  const ctx = await new TestStartup()
     .useInject()
     .inject("KEY1", 1)
     .inject("KEY2", "2")
@@ -45,7 +45,7 @@ test(`inject key`, async function () {
     .add(TestMiddleware)
     .run();
 
-  expect(res.body).toEqual({
+  expect(ctx.bag("result")).toEqual({
     key1: 1,
     key2: "2",
     key3: true,
@@ -53,13 +53,12 @@ test(`inject key`, async function () {
     service1: TestService1.name,
     service2: TestService1.name,
   });
-  expect(res.status).toBe(200);
 });
 
 test(`inject key empty`, async function () {
-  const res = await new TestStartup().useInject().add(TestMiddleware).run();
+  const ctx = await new TestStartup().useInject().add(TestMiddleware).run();
 
-  expect(res.body).toEqual({
+  expect(ctx.bag("result")).toEqual({
     key1: undefined,
     key2: undefined,
     key3: undefined,
@@ -67,5 +66,4 @@ test(`inject key empty`, async function () {
     service1: undefined,
     service2: TestService1.name,
   });
-  expect(res.status).toBe(200);
 });

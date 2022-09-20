@@ -14,7 +14,7 @@ class TestMiddleware extends Middleware {
     this.singletonService1.count++;
     this.singletonService2.count += 3;
 
-    this.ok({
+    this.ctx.bag("result", {
       singleton1: this.singletonService1.count,
       singleton2: this.singletonService2.count,
     });
@@ -29,28 +29,26 @@ function runTest(type: InjectType) {
       .inject(Service2)
       .add(TestMiddleware);
 
-    let res = await startup.run();
+    let ctx = await startup.run();
 
-    expect(res.status).toBe(200);
-    expect(res.body).toEqual({
+    expect(ctx.bag("result")).toEqual({
       singleton1: type == InjectType.Transient ? 1 : 4,
       singleton2: type == InjectType.Transient ? 3 : 4,
     });
 
-    res = await startup.run();
-    expect(res.status).toBe(200);
+    ctx = await startup.run();
     if (type == InjectType.Transient) {
-      expect(res.body).toEqual({
+      expect(ctx.bag("result")).toEqual({
         singleton1: 1,
         singleton2: 3,
       });
     } else if (type == InjectType.Scoped) {
-      expect(res.body).toEqual({
+      expect(ctx.bag("result")).toEqual({
         singleton1: 4,
         singleton2: 4,
       });
     } else if (type == InjectType.Singleton) {
-      expect(res.body).toEqual({
+      expect(ctx.bag("result")).toEqual({
         singleton1: 8,
         singleton2: 8,
       });
