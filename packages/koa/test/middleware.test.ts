@@ -1,11 +1,11 @@
 import "../src";
-import { HttpMethod, Request, Response } from "@ipare/core";
+import { HttpMethod, Request, Response } from "@ipare/http";
 import cors from "@koa/cors";
 import Router from "@koa/router";
-import { TestStartup } from "@ipare/testing";
+import { TestHttpStartup } from "@ipare/testing";
 
 test("@koa/cors", async function () {
-  const res = await new TestStartup()
+  const res = await new TestHttpStartup()
     .setRequest(
       new Request().setMethod(HttpMethod.get).set("origin", "https://ipare.org")
     )
@@ -39,7 +39,7 @@ test("@koa/router", async function () {
     });
 
   async function request(method: string, path: string): Promise<Response> {
-    return await new TestStartup()
+    return await new TestHttpStartup()
       .setRequest(new Request().setMethod(method).setPath(path))
       .use(async (ctx, next) => {
         await next();

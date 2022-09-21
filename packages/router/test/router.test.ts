@@ -93,7 +93,7 @@ describe("useRouterParser", () => {
       .use(async (ctx, next) => {
         await next();
         expect(ctx.routerOptions).toBe(
-          (ctx.startup as any as HttpStartup).routerOptions
+          (ctx.startup as HttpStartup).routerOptions
         );
         expect(ctx.routerOptions.customMethods).toEqual(["CUSTOM1"]);
       })

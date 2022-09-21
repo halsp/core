@@ -1,8 +1,8 @@
 import { Context } from "@ipare/core";
-import { Action, SetActionMetadata } from "@ipare/router";
+import { Action, ActionMetadata } from "@ipare/router";
 import { AuthorizationFilter, UseFilters } from "../../src";
 
-const Admin = SetActionMetadata("admin", "true");
+const Admin = ActionMetadata("admin", "true");
 
 class TestAuthorizationFilter implements AuthorizationFilter {
   onAuthorization(ctx: Context): boolean | Promise<boolean> {

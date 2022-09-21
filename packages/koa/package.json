@@ -31,6 +31,7 @@
   "license": "MIT",
   "dependencies": {
     "@ipare/core": "^2.2.5",
+    "@ipare/http": "^2.2.5",
     "koa": "^2.13.4",
     "koa-compose": "^4.1.0",
     "query-string": "^7.1.1"

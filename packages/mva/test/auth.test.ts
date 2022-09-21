@@ -1,12 +1,12 @@
-import { Request } from "@ipare/core";
-import { TestStartup } from "@ipare/testing";
+import { Request } from "@ipare/http";
+import { TestHttpStartup } from "@ipare/testing";
 import "../src";
 import { runMva } from "./global";
 import { AutFilter } from "./mva/auth.middleware";
 
 test("auth access", async function () {
   await runMva(async () => {
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .setRequest(
         new Request()
           .setPath("user/test1@hal.wang")
@@ -25,7 +25,7 @@ test("auth access", async function () {
 
 test("auth failed", async function () {
   await runMva(async () => {
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .setRequest(
         new Request()
           .setPath("user/test1@hal.wang")

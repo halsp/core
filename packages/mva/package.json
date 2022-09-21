@@ -32,6 +32,7 @@
   "license": "MIT",
   "dependencies": {
     "@ipare/core": "^2.2.5",
+    "@ipare/http": "^2.2.5",
     "@ipare/filter": "^2.2.5",
     "@ipare/router": "^2.2.5",
     "@ipare/view": "^2.2.5"

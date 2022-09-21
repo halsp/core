@@ -3,7 +3,7 @@ import "../src";
 import { consolidate } from "../src";
 
 test("str engine", async () => {
-  const res = await new TestStartup()
+  await new TestStartup()
     .useView({
       dir: "test/views",
       engines: [
@@ -12,36 +12,33 @@ test("str engine", async () => {
       ],
     })
     .use(async (ctx) => {
-      await ctx.view("ejs/index.ejs", {
-        name: "test ejs",
-      });
+      expect(
+        await ctx.view("ejs/index.ejs", {
+          name: "test ejs",
+        })
+      ).toBe("<p>test ejs</p>");
     })
     .run();
-
-  expect(res.getHeader("content-type")).toBe("text/html");
-  expect(res.status).toBe(200);
-  expect(res.body).toBe("<p>test ejs</p>");
 });
 
 test("func engine", async () => {
-  const res = await new TestStartup()
+  await new TestStartup()
     .useView({
       dir: "test/views",
       engines: { ext: "ejs", render: consolidate.ejs },
     })
     .use(async (ctx) => {
-      await ctx.view("ejs/index.ejs", {
-        name: "test ejs",
-      });
+      expect(
+        await ctx.view("ejs/index.ejs", {
+          name: "test ejs",
+        })
+      ).toBe("<p>test ejs</p>");
     })
     .run();
-
-  expect(res.status).toBe(200);
-  expect(res.body).toBe("<p>test ejs</p>");
 });
 
 test("empty engine", async () => {
-  const res = await new TestStartup()
+  await new TestStartup()
     .useView({
       dir: "test/views",
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -50,12 +47,11 @@ test("empty engine", async () => {
       options: null as any,
     })
     .use(async (ctx) => {
-      await ctx.view("ejs/index.ejs", {
-        name: "test ejs",
-      });
+      expect(
+        await ctx.view("ejs/index.ejs", {
+          name: "test ejs",
+        })
+      ).toBe("<p>test ejs</p>");
     })
     .run();
-
-  expect(res.status).toBe(200);
-  expect(res.body).toBe("<p>test ejs</p>");
 });

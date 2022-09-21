@@ -1,5 +1,5 @@
 import { Middleware } from "@ipare/core";
-import { TestStartup } from "@ipare/testing";
+import { TestHttpStartup } from "@ipare/testing";
 import {
   addCustomValidator,
   getCustomValidators,
@@ -54,7 +54,7 @@ describe("custom", () => {
       }
     }
 
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .skipThrow()
       .useInject()
       .useValidator()
@@ -89,7 +89,7 @@ describe("custom", () => {
       }
     }
 
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .skipThrow()
       .useInject()
       .useValidator()
@@ -121,7 +121,7 @@ describe("custom", () => {
       }
     }
 
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .skipThrow()
       .useInject()
       .useValidator()
@@ -162,7 +162,7 @@ describe("Is", () => {
       }
     }
 
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .skipThrow()
       .useInject()
       .useValidator()
@@ -199,7 +199,7 @@ describe("proxy", () => {
       }
     }
 
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .skipThrow()
       .useInject()
       .useValidator()
@@ -222,7 +222,7 @@ describe("extend", () => {
       }
     }
 
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .skipThrow()
       .useInject()
       .useValidator()

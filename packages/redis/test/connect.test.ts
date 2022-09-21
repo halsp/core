@@ -9,10 +9,10 @@ test("connect failed", async () => {
   const res = await new TestStartup()
     .use(async (ctx, next) => {
       RedisClient.prototype.connect = async () => {
-        ctx.setHeader("connect", "1");
+        ctx.bag("connect", "1");
       };
       RedisClient.prototype.disconnect = async () => {
-        ctx.setHeader("disconnect", "1");
+        ctx.bag("disconnect", "1");
       };
       await next();
     })
@@ -32,6 +32,6 @@ test("connect failed", async () => {
     })
     .run();
 
-  expect(res.getHeader("connect")).toBe("1");
-  expect(res.getHeader("disconnect")).toBe("1");
+  expect(res.bag("connect")).toBe("1");
+  expect(res.bag("disconnect")).toBe("1");
 });

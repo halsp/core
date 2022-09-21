@@ -1,8 +1,8 @@
 import "../src";
-import { TestStartup } from "@ipare/testing";
+import { TestHttpStartup } from "@ipare/testing";
 
 test("writeHead", async function () {
-  const res = await new TestStartup()
+  const res = await new TestHttpStartup()
     .koa(async (ctx, next) => {
       ctx.res.writeHead(200);
       await next();
@@ -14,7 +14,7 @@ test("writeHead", async function () {
 });
 
 test("writeHead2", async function () {
-  const res = await new TestStartup()
+  const res = await new TestHttpStartup()
     .koa(async (ctx, next) => {
       ctx.res.writeHead(200, "", {
         h1: 1,
@@ -28,7 +28,7 @@ test("writeHead2", async function () {
 });
 
 test("removeHeader", async function () {
-  const res = await new TestStartup()
+  const res = await new TestHttpStartup()
     .koa(async (ctx, next) => {
       ctx.res.setHeader("h1", 1);
       ctx.res.writeHead(200, "", {

@@ -11,7 +11,7 @@ class TestMiddleware extends Middleware {
   private readonly coreConnection!: RedisConnection;
 
   async invoke(): Promise<void> {
-    this.ok({
+    this.ctx.bag("result", {
       app: !!this.appConnection,
       core: !!this.coreConnection,
       eq: this.appConnection == this.coreConnection,
@@ -23,10 +23,10 @@ test("identity", async () => {
   const res = await new TestStartup()
     .use(async (ctx, next) => {
       RC.prototype.connect = async () => {
-        ctx.setHeader("connect", "1");
+        ctx.bag("connect", "1");
       };
       RC.prototype.disconnect = async () => {
-        ctx.setHeader("disconnect", "1");
+        ctx.bag("disconnect", "1");
       };
       await next();
     })
@@ -37,7 +37,7 @@ test("identity", async () => {
     .add(TestMiddleware)
     .run();
 
-  expect(res.body).toEqual({
+  expect(res.bag("result")).toEqual({
     app: true,
     core: true,
     eq: false,

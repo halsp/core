@@ -8,21 +8,24 @@ class TestMiddleware extends Middleware {
   private readonly logger!: Logger;
 
   async invoke(): Promise<void> {
-    this.ctx.res["RESULT"] = this.logger.transports;
+    this.ctx.bag("RESULT", this.logger.transports);
   }
 }
 
 test("useConsoleLogger", async () => {
-  const res = await new TestStartup()
+  const ctx = await new TestStartup()
     .useConsoleLogger()
     .add(TestMiddleware)
     .run();
 
-  expect(res["RESULT"][0] instanceof winston.transports.Console).toBeTruthy();
+  expect(
+    ctx.bag<winston.transport[]>("RESULT")[0] instanceof
+      winston.transports.Console
+  ).toBeTruthy();
 });
 
 test("useFileLogger", async () => {
-  const res = await new TestStartup()
+  const ctx = await new TestStartup()
     .useFileLogger({
       fileTransportOptions: {
         filename: "node_modules/test.logger.log",
@@ -31,5 +34,7 @@ test("useFileLogger", async () => {
     .add(TestMiddleware)
     .run();
 
-  expect(res["RESULT"][0] instanceof winston.transports.File).toBeTruthy();
+  expect(
+    ctx.bag<winston.transport[]>("RESULT")[0] instanceof winston.transports.File
+  ).toBeTruthy();
 });

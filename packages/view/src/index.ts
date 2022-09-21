@@ -10,10 +10,10 @@ declare module "@ipare/core" {
 
   interface Context {
     state: Record<string, unknown>;
-  }
-
-  interface ResultHandler {
-    view(tmpPath: string, locals?: Record<string, unknown>): Promise<this>;
+    view(
+      tmpPath: string,
+      locals?: Record<string, unknown>
+    ): Promise<string | undefined>;
   }
 }
 

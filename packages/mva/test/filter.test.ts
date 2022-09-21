@@ -1,13 +1,13 @@
-import { Request } from "@ipare/core";
+import { Request } from "@ipare/http";
 import "../src";
 import { runMva } from "./global";
 import "@ipare/filter";
-import { TestStartup } from "@ipare/testing";
+import { TestHttpStartup } from "@ipare/testing";
 
 function runTest(executing: boolean) {
   test(`filter ${executing}`, async () => {
     await runMva(async () => {
-      const res = await new TestStartup()
+      const res = await new TestHttpStartup()
         .setRequest(
           new Request().setPath("filter").setMethod("GET").setBody({
             executing,

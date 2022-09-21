@@ -1,11 +1,11 @@
-import { TestStartup } from "@ipare/testing";
+import { TestHttpStartup } from "@ipare/testing";
 import { createIpareReqeust } from "./utils";
 import "../src";
 
 function testErrorSecret(isError: boolean) {
   function runTest(customError: boolean) {
     test(`error secret ${isError}`, async function () {
-      const result = await new TestStartup()
+      const result = await new TestHttpStartup()
         .setRequest(
           await createIpareReqeust({
             secret: isError ? "secret1" : "secret",

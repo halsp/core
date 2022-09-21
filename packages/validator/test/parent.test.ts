@@ -1,5 +1,6 @@
-import { Middleware, Request } from "@ipare/core";
-import { TestStartup } from "@ipare/testing";
+import { Request } from "@ipare/http";
+import { Middleware } from "@ipare/core";
+import { TestHttpStartup } from "@ipare/testing";
 import { Body } from "@ipare/pipe";
 import "@ipare/inject";
 import "../src";
@@ -25,7 +26,7 @@ describe("parent validate", () => {
       }
     }
 
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .skipThrow()
       .setRequest(
         new Request().setBody({
@@ -56,7 +57,7 @@ describe("parent validate", () => {
       }
     }
 
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .skipThrow()
       .setRequest(
         new Request().setBody({

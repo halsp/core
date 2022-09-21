@@ -1,6 +1,6 @@
 import { Context } from "@ipare/core";
 import { Action } from "@ipare/router";
-import { TestStartup } from "@ipare/testing";
+import { TestHttpStartup } from "@ipare/testing";
 import { execFilters, Filter, UseFilters } from "../src";
 
 class CustomFilter implements Filter {
@@ -17,7 +17,7 @@ class TestAction extends Action {
 }
 
 test(`execFilters`, async () => {
-  const res = await new TestStartup()
+  const res = await new TestHttpStartup()
     .use(async (ctx, next) => {
       ctx.res.body = 0;
       await next();

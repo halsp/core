@@ -1,4 +1,5 @@
-import { Dict, Context, isObject, ReadonlyDict, Startup } from "@ipare/core";
+import { Dict, Context, isObject, ReadonlyDict } from "@ipare/core";
+import { HttpStartup } from "@ipare/http";
 import cookie from "cookie";
 import setCookieParser from "set-cookie-parser";
 import { REQUEST_HEADER_NAME, RESPONSE_HEADER_NAME, USED } from "./constant";
@@ -20,14 +21,6 @@ export type SetCookieValue = SetCookieValueWithArgs | string;
 export { Options };
 
 declare module "@ipare/core" {
-  interface Request {
-    get cookies(): ReadonlyDict<string>;
-  }
-  interface Response {
-    get cookies(): Dict<SetCookieValue>;
-    set cookies(val: Dict<SetCookieValue>);
-  }
-
   interface Context {
     get cookies(): ReadonlyDict<string>;
     set cookies(val: Dict<SetCookieValue>);
@@ -38,7 +31,17 @@ declare module "@ipare/core" {
   }
 }
 
-Startup.prototype.useCookie = function (options: Options = {}) {
+declare module "@ipare/http" {
+  interface Request {
+    get cookies(): ReadonlyDict<string>;
+  }
+  interface Response {
+    get cookies(): Dict<SetCookieValue>;
+    set cookies(val: Dict<SetCookieValue>);
+  }
+}
+
+HttpStartup.prototype.useCookie = function (options: Options = {}) {
   if (this[USED]) {
     return this;
   }

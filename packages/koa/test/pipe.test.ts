@@ -1,9 +1,9 @@
 import "../src";
-import { TestStartup } from "@ipare/testing";
+import { TestHttpStartup } from "@ipare/testing";
 import { TransResponse } from "../src/trans-response";
 
 test("middleware pipe", async function () {
-  const res = await new TestStartup()
+  const res = await new TestHttpStartup()
     .use(async (ctx, next) => {
       ctx.res.status = 201;
       await next();
@@ -37,7 +37,7 @@ test("middleware pipe", async function () {
 });
 
 test("koa break", async function () {
-  const res = await new TestStartup()
+  const res = await new TestHttpStartup()
     .use(async (ctx, next) => {
       await next();
     })

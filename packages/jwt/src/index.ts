@@ -1,6 +1,6 @@
-import "@ipare/core";
 import "@ipare/inject";
-import { Context, Startup } from "@ipare/core";
+import { HttpStartup } from "@ipare/http";
+import { Context } from "@ipare/core";
 import { OPTIONS, USED } from "./constant";
 import { JwtOptions } from "./jwt-options";
 import { JwtService } from "./jwt.service";
@@ -17,7 +17,12 @@ export {
 export { JwtService };
 
 declare module "@ipare/core" {
-  interface Startup {
+  interface Context {
+    get jwtToken(): string;
+  }
+}
+declare module "@ipare/http" {
+  interface HttpStartup {
     useJwt(options: JwtOptions): this;
     useJwtVerify(
       skip?: (ctx: Context) => boolean | Promise<boolean>,
@@ -25,15 +30,12 @@ declare module "@ipare/core" {
     ): this;
     useJwtExtraAuth(access: (ctx: Context) => boolean | Promise<boolean>): this;
   }
-  interface Context {
-    get jwtToken(): string;
-  }
 }
 
-Startup.prototype.useJwtVerify = function (
+HttpStartup.prototype.useJwtVerify = function (
   skip?: (ctx: Context) => boolean | Promise<boolean>,
   onError?: (ctx: Context, err: jwt.VerifyErrors) => void | Promise<void>
-): Startup {
+) {
   return this.use(async (ctx, next) => {
     if (skip && (await skip(ctx))) {
       await next();
@@ -55,9 +57,9 @@ Startup.prototype.useJwtVerify = function (
   });
 };
 
-Startup.prototype.useJwtExtraAuth = function (
+HttpStartup.prototype.useJwtExtraAuth = function (
   access: (ctx: Context) => boolean | Promise<boolean>
-): Startup {
+) {
   return this.use(async (ctx, next) => {
     if (await access(ctx)) {
       await next();
@@ -69,7 +71,7 @@ Startup.prototype.useJwtExtraAuth = function (
   });
 };
 
-Startup.prototype.useJwt = function (options: JwtOptions): Startup {
+HttpStartup.prototype.useJwt = function (options: JwtOptions) {
   if (this[USED]) {
     return this;
   }

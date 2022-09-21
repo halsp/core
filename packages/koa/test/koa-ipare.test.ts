@@ -2,7 +2,7 @@ import Koa from "koa";
 import request from "supertest";
 import { koaIpare } from "../src";
 import path from "path";
-import { TestStartup } from "@ipare/testing";
+import { TestHttpStartup } from "@ipare/testing";
 
 describe("koa-ipare", () => {
   it("should connect middlewares", async () => {
@@ -110,7 +110,7 @@ describe("koa-ipare", () => {
   });
 
   it("should add multiple koa middlewares", async () => {
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .koa(async (ctx, next) => {
         ctx.count = 1;
         await next();

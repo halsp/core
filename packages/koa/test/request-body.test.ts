@@ -1,10 +1,10 @@
 import "../src";
-import { TestStartup } from "@ipare/testing";
-import { Request } from "@ipare/core";
+import { TestHttpStartup } from "@ipare/testing";
+import { Request } from "@ipare/http";
 
 describe("request body", () => {
   it("should parse text body", async function () {
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .setRequest(new Request().setBody("ipare"))
       .koa(async (ctx, next) => {
         ctx.body = ctx.ipareCtx.req.body;
@@ -19,7 +19,7 @@ describe("request body", () => {
   });
 
   it("should parse json body", async function () {
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .setRequest(
         new Request().setBody({
           ipare: "koa",
@@ -42,7 +42,7 @@ describe("request body", () => {
   });
 
   it("should parse buffer body", async function () {
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .setRequest(new Request().setBody(Buffer.from("ipare", "utf-8")))
       .koa(async (ctx, next) => {
         ctx.body = ctx.ipareCtx.req.body;
@@ -58,7 +58,7 @@ describe("request body", () => {
 
   it("should parse aliReq", async function () {
     let working = 0;
-    await new TestStartup()
+    await new TestHttpStartup()
       .use(async (ctx, next) => {
         ctx["aliReq"] = { a: 1 };
         await next();

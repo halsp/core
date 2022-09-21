@@ -1,4 +1,5 @@
-import { Context, HttpException } from "@ipare/core";
+import { Context } from "@ipare/core";
+import { HttpException } from "@ipare/http";
 import { Filter } from "./filter";
 
 export interface ExceptionFilter<T extends Error = HttpException>

@@ -1,5 +1,6 @@
-import { Middleware, Request } from "@ipare/core";
-import { TestStartup } from "@ipare/testing";
+import { Request } from "@ipare/http";
+import { Middleware } from "@ipare/core";
+import { TestHttpStartup } from "@ipare/testing";
 import { Body } from "@ipare/pipe";
 import "@ipare/inject";
 import "../src";
@@ -27,7 +28,7 @@ function runTest(validate: boolean) {
       }
     }
 
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .skipThrow()
       .setRequest(
         new Request().setBody({
@@ -79,7 +80,7 @@ test("array message", async () => {
     }
   }
 
-  const res = await new TestStartup()
+  const res = await new TestHttpStartup()
     .skipThrow()
     .setRequest(
       new Request().setBody({
@@ -110,7 +111,7 @@ test("validate disabled", async () => {
     }
   }
 
-  const res = await new TestStartup()
+  const res = await new TestHttpStartup()
     .setRequest(
       new Request().setBody({
         b1: 1,

@@ -1,9 +1,9 @@
-import { TestStartup } from "@ipare/testing";
+import { TestHttpStartup } from "@ipare/testing";
 import { createIpareReqeust } from "./utils";
 import "../src";
 
 test("prefix", async function () {
-  const result = await new TestStartup()
+  const result = await new TestHttpStartup()
     .setRequest(
       await createIpareReqeust(
         {

@@ -1,11 +1,6 @@
 import { execFilters, Filter, FilterItem, OrderRecord } from "./filters";
-import {
-  HookType,
-  isClass,
-  isUndefined,
-  ObjectConstructor,
-  Startup,
-} from "@ipare/core";
+import { HookType, isClass, isUndefined, ObjectConstructor } from "@ipare/core";
+import { HttpStartup } from "@ipare/http";
 import { FILTERS_ORDER_BAG, GLOBAL_FILTERS_BAG, USE_FILTER } from "./constant";
 import { Action } from "@ipare/router";
 
@@ -20,8 +15,8 @@ export {
 } from "./filters";
 export { UseFilters } from "./use-filters.decorator";
 
-declare module "@ipare/core" {
-  interface Startup {
+declare module "@ipare/http" {
+  interface HttpStartup {
     useFilter(): this;
     useGlobalFilter<T extends Filter = Filter>(
       filter: FilterItem<T>,
@@ -34,10 +29,10 @@ declare module "@ipare/core" {
   }
 }
 
-Startup.prototype.useFilterOrder = function <T extends Filter = Filter>(
+HttpStartup.prototype.useFilterOrder = function <T extends Filter = Filter>(
   filter: ObjectConstructor<T>,
   order: number
-): Startup {
+) {
   return this.useFilter().use(async (ctx, next) => {
     const existOrders = ctx.bag<OrderRecord<T>[]>(FILTERS_ORDER_BAG) ?? [];
     const orders = existOrders.filter((item) => item.filter != filter);
@@ -50,10 +45,10 @@ Startup.prototype.useFilterOrder = function <T extends Filter = Filter>(
   });
 };
 
-Startup.prototype.useGlobalFilter = function <T extends Filter = Filter>(
+HttpStartup.prototype.useGlobalFilter = function <T extends Filter = Filter>(
   filter: FilterItem<T>,
   order?: number
-): Startup {
+) {
   this.useFilter();
 
   if (order != undefined) {
@@ -71,14 +66,14 @@ Startup.prototype.useGlobalFilter = function <T extends Filter = Filter>(
   });
 };
 
-Startup.prototype.useFilter = function (): Startup {
+HttpStartup.prototype.useFilter = function () {
   if (this[USE_FILTER]) {
     return this;
   }
   this[USE_FILTER] = true;
 
   return this.useInject()
-    .hook(HookType.Exception, async (ctx, md, err) => {
+    .hook(HookType.Error, async (ctx, md, err) => {
       if (!(md instanceof Action)) return false;
 
       const execResult = await execFilters(md, true, "onException", err);

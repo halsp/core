@@ -6,7 +6,7 @@ import { OPTIONS_IDENTITY } from "../src/constant";
 
 it("default entities should endswith *.js", async () => {
   delete process.env.TS_JEST;
-  const res = await new TestStartup()
+  await new TestStartup()
     .useTypeorm({
       type: "sqlite",
       database: "test/sqlite.db",
@@ -23,13 +23,11 @@ it("default entities should endswith *.js", async () => {
       expect(entity.endsWith("*.js")).toBeTruthy();
     })
     .run();
-
-  expect(res.status).toBe(404);
 });
 
 it("test entities should endswith *.ts", async () => {
   process.env.TS_JEST = "1";
-  const res = await new TestStartup()
+  await new TestStartup()
     .useTypeorm({
       type: "sqlite",
       database: "test/sqlite.db",
@@ -46,6 +44,4 @@ it("test entities should endswith *.ts", async () => {
       expect(entity.endsWith("*.ts")).toBeTruthy();
     })
     .run();
-
-  expect(res.status).toBe(404);
 });

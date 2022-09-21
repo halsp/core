@@ -7,7 +7,7 @@ import { OPTIONS_IDENTITY } from "../src/constant";
 import { TestEntity } from "./entities/TestEntity";
 
 it("should insert entity to sqlite", async () => {
-  const res = await new TestStartup()
+  await new TestStartup()
     .useTypeorm({
       type: "sqlite",
       database: "test/sqlite.db",
@@ -32,6 +32,4 @@ it("should insert entity to sqlite", async () => {
       expect(!!findResult).toBeTruthy();
     })
     .run();
-
-  expect(res.status).toBe(404);
 });

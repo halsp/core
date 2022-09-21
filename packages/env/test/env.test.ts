@@ -10,17 +10,17 @@ test("empty options", async () => {
 });
 
 test("cwd", async () => {
-  const res = await new TestStartup()
+  const ctx = await new TestStartup()
     .useEnv({
       mode: "production",
       cwd: "test/envs",
       override: true,
     })
     .use((ctx) => {
-      ctx.ok(process.env);
+      ctx.bag("env", process.env);
     })
     .run();
-  const env = res.body;
+  const env = ctx.bag<typeof process.env>("env");
 
   expect(env.BNAME).toBe("PRODUCTION");
   expect(env.NAME).toBe("PRODUCTION");

@@ -1,24 +1,24 @@
-import "@ipare/core";
-import { Context, HttpException, Startup, HookType } from "@ipare/core";
+import { Context, HookType } from "@ipare/core";
 import "@ipare/view";
 import "@ipare/router";
 import { MvaOptions, CodeType } from "./mva-options";
 import { ERROR_CODES, USED } from "./constant";
 import { execFilters } from "@ipare/filter";
 import { Action } from "@ipare/router";
+import { HttpException, HttpStartup } from "@ipare/http";
 
 export { MvaOptions };
 export { ResultFilter } from "./result.filter";
 
-declare module "@ipare/core" {
-  interface Startup {
+declare module "@ipare/http" {
+  interface HttpStartup {
     useMva(options?: MvaOptions): this;
     useErrorPage(...codes: CodeType[]): this;
     useErrorPage(codes: CodeType[]): this;
   }
 }
 
-Startup.prototype.useErrorPage = function (...codes: any[]): Startup {
+HttpStartup.prototype.useErrorPage = function (...codes: any[]) {
   if (this[ERROR_CODES]) return this;
   if (this[USED]) return this;
 
@@ -29,7 +29,7 @@ Startup.prototype.useErrorPage = function (...codes: any[]): Startup {
 
   this[ERROR_CODES] = codes;
 
-  return this.hook(HookType.Exception, async (ctx, md, ex) => {
+  return this.hook(HookType.Error, async (ctx, md, ex) => {
     if (!(ex instanceof HttpException)) {
       return false;
     }
@@ -39,7 +39,7 @@ Startup.prototype.useErrorPage = function (...codes: any[]): Startup {
       return false;
     }
 
-    await ctx.view(replaceCode.path, ctx.res.body);
+    await render(ctx, replaceCode.path);
     ctx.res.status = replaceCode.replace;
     return true;
   }).use(async (ctx, next) => {
@@ -50,7 +50,7 @@ Startup.prototype.useErrorPage = function (...codes: any[]): Startup {
   });
 };
 
-Startup.prototype.useMva = function (options: MvaOptions = {}): Startup {
+HttpStartup.prototype.useMva = function (options: MvaOptions = {}) {
   if (this[USED]) return this;
   this[USED] = true;
 
@@ -91,7 +91,7 @@ Startup.prototype.useMva = function (options: MvaOptions = {}): Startup {
         }
       }
 
-      await ctx.view(ctx.actionMetadata.url, ctx.res.body);
+      await render(ctx, ctx.actionMetadata.url);
 
       if (action) {
         await execFilters(action, false, "onResultExecuted");
@@ -104,11 +104,18 @@ Startup.prototype.useMva = function (options: MvaOptions = {}): Startup {
 async function errorView(ctx: Context, codes: CodeType[]) {
   const replaceCode = getCode(codes, ctx.res.status);
   if (replaceCode) {
-    await ctx.view(replaceCode.path, ctx.res.body);
+    await render(ctx, replaceCode.path);
     ctx.res.status = replaceCode.replace;
     return true;
   } else {
     return false;
+  }
+}
+
+async function render(ctx: Context, url: string) {
+  const html = await ctx.view(url, ctx.res.body);
+  if (html) {
+    ctx.ok(html).set("content-type", "text/html");
   }
 }
 

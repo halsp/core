@@ -1,4 +1,5 @@
-import { Context, isString, Request, Response } from "@ipare/core";
+import { isString } from "@ipare/core";
+import { createContext, Request, Response } from "@ipare/http";
 import { BodyPraserStartup } from "@ipare/server";
 import { Stream } from "stream";
 import { AliReq } from "./ali-req";
@@ -10,7 +11,7 @@ export class AlifcStartup extends BodyPraserStartup {
   }
 
   async run(aliReq: AliReq, aliRes: AliRes, aliContext: any): Promise<void> {
-    const ctx = new Context(
+    const ctx = createContext(
       new Request()
         .setPath(aliReq.path)
         .setHeaders(aliReq.headers)

@@ -1,8 +1,8 @@
 import "../src";
-import { TestStartup } from "@ipare/testing";
+import { TestHttpStartup } from "@ipare/testing";
 
 test("arr header type", async function () {
-  const res = await new TestStartup()
+  const res = await new TestHttpStartup()
     .koa(async (ctx, next) => {
       ctx.body = "ipare";
       ctx.status = 200;
@@ -20,7 +20,7 @@ test("arr header type", async function () {
 });
 
 test("without type", async function () {
-  const res = await new TestStartup()
+  const res = await new TestHttpStartup()
     .koa(async (ctx, next) => {
       ctx.body = "ipare";
       ctx.status = 200;

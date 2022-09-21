@@ -1,12 +1,12 @@
-import { Request } from "@ipare/core";
-import { TestStartup } from "@ipare/testing";
+import { Request } from "@ipare/http";
+import { TestHttpStartup } from "@ipare/testing";
 import "../src";
 
 function runTest(executing: boolean) {
   test(`authorization filter ${executing}`, async () => {
     process.chdir(__dirname);
     try {
-      const res = await new TestStartup()
+      const res = await new TestHttpStartup()
         .setRequest(
           new Request().setMethod("get").setPath("auth").setBody({
             executing,

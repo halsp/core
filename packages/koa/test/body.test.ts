@@ -1,8 +1,8 @@
 import "../src";
-import { TestStartup } from "@ipare/testing";
+import { TestHttpStartup } from "@ipare/testing";
 
 test("default", async function () {
-  const res = await new TestStartup().koa(() => undefined).run();
+  const res = await new TestHttpStartup().koa(() => undefined).run();
 
   expect(res.status).toBe(404);
   expect(res.body).toBeUndefined();
@@ -10,7 +10,7 @@ test("default", async function () {
 });
 
 test("text", async function () {
-  const res = await new TestStartup()
+  const res = await new TestHttpStartup()
     .koa(async (ctx, next) => {
       ctx.body = "ipare";
       ctx.status = 201;
@@ -24,7 +24,7 @@ test("text", async function () {
 });
 
 test("boolean", async function () {
-  const res = await new TestStartup()
+  const res = await new TestHttpStartup()
     .koa(async (ctx, next) => {
       ctx.body = true;
       ctx.status = 201;
@@ -38,7 +38,7 @@ test("boolean", async function () {
 });
 
 test("json", async function () {
-  const res = await new TestStartup()
+  const res = await new TestHttpStartup()
     .koa(async (ctx, next) => {
       ctx.body = {
         ipare: "koa",
@@ -56,7 +56,7 @@ test("json", async function () {
 });
 
 test("buffer", async function () {
-  const res = await new TestStartup()
+  const res = await new TestHttpStartup()
     .koa(async (ctx, next) => {
       ctx.body = Buffer.from("ipare", "utf-8");
       ctx.status = 200;

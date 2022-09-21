@@ -1,16 +1,10 @@
-import {
-  HttpMethod,
-  isString,
-  isUndefined,
-  Middleware,
-  normalizePath,
-  StatusCodes,
-} from "@ipare/core";
+import { isString, isUndefined, Middleware, normalizePath } from "@ipare/core";
 import { Parser } from "./parser";
 import { SwaggerOptions } from "./options";
 import { OpenApiBuilder } from "openapi3-ts-remove-yaml";
 import path from "path";
 import * as fs from "fs";
+import { HttpMethod, HttpStartup, StatusCodes } from "@ipare/http";
 
 export class SwaggerMiddlware extends Middleware {
   constructor(private readonly options: SwaggerOptions) {
@@ -50,10 +44,11 @@ export class SwaggerMiddlware extends Middleware {
     const extendPath = normalizePath(reqPath.replace(optPath, ""));
     if (extendPath == "index.json") {
       const openApiBuilder = await this.createBuilder();
+      const startup = this.ctx.startup as HttpStartup;
       const apiDoc = new Parser(
-        this.ctx.startup.routerMap,
+        startup.routerMap,
         openApiBuilder,
-        this.ctx.startup.routerOptions
+        startup.routerOptions
       ).parse();
       this.ctx.set("content-type", "text/json").ok(apiDoc);
       return;

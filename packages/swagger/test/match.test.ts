@@ -1,6 +1,6 @@
-import { Request } from "@ipare/core";
+import { Request } from "@ipare/http";
 import { TEST_ACTION_DIR } from "@ipare/router/dist/constant";
-import { TestStartup } from "@ipare/testing";
+import { TestHttpStartup } from "@ipare/testing";
 import "../src";
 import { SwaggerOptions } from "../src";
 
@@ -10,14 +10,14 @@ declare module "@ipare/core" {
   }
 }
 
-TestStartup.prototype.setTestDir = function (dir: string) {
+TestHttpStartup.prototype.setTestDir = function (dir: string) {
   this[TEST_ACTION_DIR] = dir;
   return this;
 };
 
 describe("match path", () => {
   it("should unmatched when path unmatched", async () => {
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .setRequest(new Request().setPath("/test"))
       .useSwagger()
       .setTestDir("test/parser")
@@ -28,7 +28,7 @@ describe("match path", () => {
   });
 
   it("should matched when method is get", async () => {
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .setRequest(new Request().setPath("swagger/index.html").setMethod("get"))
       .useSwagger()
       .setTestDir("test/parser")
@@ -39,7 +39,7 @@ describe("match path", () => {
   });
 
   it("should matched when method is any", async () => {
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .setRequest(new Request().setPath("swagger/index.html").setMethod("get"))
       .useSwagger()
       .setTestDir("test/parser")
@@ -50,7 +50,7 @@ describe("match path", () => {
   });
 
   it("should not matched when method is post", async () => {
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .setRequest(new Request().setPath("swagger").setMethod("post"))
       .useSwagger()
       .setTestDir("test/parser")
@@ -61,7 +61,7 @@ describe("match path", () => {
   });
 
   it("should create doc when extend path is index.json", async () => {
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .setRequest(new Request().setPath("swagger/index.json").setMethod("get"))
       .useSwagger()
       .setTestDir("test/parser")
@@ -72,7 +72,7 @@ describe("match path", () => {
   });
 
   it("should create doc when extend path is /index.json and prefix path is empty", async () => {
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .setRequest(new Request().setPath("/index.json").setMethod("get"))
       .useSwagger({
         path: "",
@@ -85,7 +85,7 @@ describe("match path", () => {
   });
 
   it("should return html when extend path is index.html", async () => {
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .setRequest(new Request().setPath("index.html").setMethod("get"))
       .useSwagger({
         path: "",
@@ -98,7 +98,7 @@ describe("match path", () => {
   });
 
   it("should create doc when extend path is index.json and prefix path is empty", async () => {
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .setRequest(new Request().setPath("index.json").setMethod("get"))
       .useSwagger({
         path: "",
@@ -111,7 +111,7 @@ describe("match path", () => {
   });
 
   it("should not replace body when status is not 200", async () => {
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .setRequest(new Request().setPath("swagger/not-exist").setMethod("get"))
       .useSwagger()
       .use(async (ctx) => {
@@ -124,7 +124,7 @@ describe("match path", () => {
   });
 
   it("should not replace body when body is empay", async () => {
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .setRequest(new Request().setPath("swagger/not-exist").setMethod("get"))
       .useSwagger()
       .use(async (ctx) => {
@@ -137,7 +137,7 @@ describe("match path", () => {
   });
 
   it("should not replace body when body is not string", async () => {
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .setRequest(new Request().setPath("swagger/not-exist").setMethod("get"))
       .useSwagger()
       .use(async (ctx) => {
@@ -153,7 +153,7 @@ describe("match path", () => {
     const current = process.cwd();
     process.chdir("../../..");
     try {
-      const res = await new TestStartup()
+      const res = await new TestHttpStartup()
         .setRequest(
           new Request().setPath("swagger/index.json").setMethod("get")
         )
@@ -172,7 +172,7 @@ describe("match path", () => {
     const current = process.cwd();
     process.chdir("test/empty-version");
     try {
-      const res = await new TestStartup()
+      const res = await new TestHttpStartup()
         .setRequest(
           new Request().setPath("swagger/index.json").setMethod("get")
         )
@@ -196,7 +196,7 @@ describe("redirect", () => {
     location: string
   ) {
     it(name.replace("$location", location), async () => {
-      const res = await new TestStartup()
+      const res = await new TestHttpStartup()
         .setRequest(new Request().setPath(path).setMethod("get"))
         .useSwagger(options)
         .setTestDir("test/parser")

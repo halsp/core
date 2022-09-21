@@ -1,5 +1,4 @@
-import { Context, ResultHandler, Startup } from "@ipare/core";
-import { RENDERED } from "./constant";
+import { Context, Startup } from "@ipare/core";
 import {
   consolidate,
   Engine,
@@ -10,22 +9,11 @@ import * as path from "path";
 import * as fs from "fs";
 
 export function useView(startup: Startup, options: ViewOptions) {
-  ResultHandler.prototype.view = async function (
+  Context.prototype.view = async function (
     tmpPath,
     locals: Record<string, unknown> = {}
   ) {
-    let ctx: Context;
-    if (this["ctx"]) {
-      ctx = this["ctx"];
-    } else {
-      ctx = this as Context;
-    }
-
-    if (ctx[RENDERED]) return this;
-    ctx[RENDERED] = true;
-
-    await render(ctx, options, tmpPath, locals);
-    return this;
+    return await render(this, options, tmpPath, locals);
   };
 
   return startup.use(async (ctx, next) => {
@@ -39,7 +27,7 @@ async function render(
   options: ViewOptions,
   tmpPath: string,
   locals: Record<string, unknown>
-): Promise<void> {
+): Promise<string | undefined> {
   tmpPath = path.join(options.dir ?? "views", tmpPath ?? "");
   options.options = Object.assign(
     options.options ?? {},
@@ -52,17 +40,13 @@ async function render(
   }
 
   const file = getFile(tmpPath, engines);
-  if (!file) return;
-
-  if (file.ext == "html") {
-    ctx.ok(fs.readFileSync(file.filePath, "utf-8"));
-    ctx.res.setHeader("content-type", "text/html");
-  }
+  if (!file) return undefined;
 
   const engine = getEngine(file.ext, engines);
   if (engine) {
-    ctx.ok(await engine(file.filePath, options.options));
-    ctx.res.setHeader("content-type", "text/html");
+    return await engine(file.filePath, options.options);
+  } else if (file.ext == "html") {
+    return await fs.promises.readFile(file.filePath, "utf-8");
   }
   return;
 }

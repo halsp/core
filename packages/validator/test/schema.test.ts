@@ -1,5 +1,6 @@
-import { Middleware, Request } from "@ipare/core";
-import { TestStartup } from "@ipare/testing";
+import { Request } from "@ipare/http";
+import { Middleware } from "@ipare/core";
+import { TestHttpStartup } from "@ipare/testing";
 import { Body } from "@ipare/pipe";
 import { ValidationSchema } from "class-validator";
 import "@ipare/inject";
@@ -44,7 +45,7 @@ function testSchema(useSchema: boolean) {
         },
       };
 
-      const startup = new TestStartup()
+      const startup = new TestHttpStartup()
         .skipThrow()
         .setRequest(
           new Request().setBody({

@@ -5,52 +5,53 @@ import "../src";
 test("default", async () => {
   class Md extends Middleware {
     async invoke(): Promise<void> {
-      await this.view("");
+      this.ctx.bag("view", await this.ctx.view(""));
     }
   }
 
-  const res = await new TestStartup()
+  const ctx = await new TestStartup()
     .useView()
     .add(() => new Md())
     .run();
 
-  expect(res.status).toBe(404);
+  expect(ctx.bag("view")).toBeUndefined();
 });
 
 test("middleware class", async () => {
   class Md extends Middleware {
     async invoke(): Promise<void> {
-      await this.view("ejs", {
-        name: "test ejs",
-      });
+      this.ctx.bag(
+        "view",
+        await this.ctx.view("ejs", {
+          name: "test ejs",
+        })
+      );
     }
   }
 
-  const res = await new TestStartup()
+  const ctx = await new TestStartup()
     .useView({
       dir: "test/views",
     })
     .add(() => new Md())
     .run();
 
-  expect(res.getHeader("content-type")).toBe("text/html");
-  expect(res.status).toBe(200);
-  expect(res.body).toBe("<p>test ejs</p>");
+  expect(ctx.bag("view")).toBe("<p>test ejs</p>");
 });
 
 test("middleware class default", async () => {
   class Md extends Middleware {
     async invoke(): Promise<void> {
-      await this.view("");
+      this.ctx.bag("view", await this.ctx.view(""));
     }
   }
 
-  const res = await new TestStartup()
+  const ctx = await new TestStartup()
     .useView({
       dir: "test/views",
     })
     .add(() => new Md())
     .run();
 
-  expect(res.status).toBe(404);
+  expect(ctx.bag("view")).toBeUndefined();
 });

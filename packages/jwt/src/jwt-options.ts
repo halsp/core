@@ -1,4 +1,4 @@
-import { Request } from "@ipare/core";
+import { Request } from "@ipare/http";
 import * as jwt from "jsonwebtoken";
 
 export enum JwtSecretRequestType {

@@ -1,11 +1,11 @@
-import { Request } from "@ipare/core";
+import { Request } from "@ipare/http";
 import { runMva } from "./global";
 import "../src";
-import { TestStartup } from "@ipare/testing";
+import { TestHttpStartup } from "@ipare/testing";
 
 test("not allowed method", async function () {
   await runMva(async () => {
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .setRequest(new Request().setMethod("post"))
       .useMva()
       .run();
@@ -20,7 +20,7 @@ test("not allowed method", async function () {
 function testRanderEnable(enable: boolean) {
   test(`randerEnable ${enable}`, async function () {
     await runMva(async () => {
-      const res = await new TestStartup()
+      const res = await new TestHttpStartup()
         .setRequest(new Request().setMethod("post"))
         .useMva({
           renderMethods: "any",

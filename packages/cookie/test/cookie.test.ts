@@ -1,11 +1,11 @@
-import { Request } from "@ipare/core";
+import { Request } from "@ipare/http";
 import "../src";
 import { REQUEST_HEADER_NAME, RESPONSE_HEADER_NAME } from "../src/constant";
-import { TestStartup } from "@ipare/testing";
+import { TestHttpStartup } from "@ipare/testing";
 
 describe("get cookie", () => {
   it("should get cookies from request", async () => {
-    await new TestStartup()
+    await new TestHttpStartup()
       .setRequest(
         new Request().setHeader(REQUEST_HEADER_NAME, "str=abc;num=123")
       )
@@ -22,7 +22,7 @@ describe("get cookie", () => {
   });
 
   it("should be empty object if there is no cookie", async () => {
-    await new TestStartup()
+    await new TestHttpStartup()
       .useCookie()
       .useCookie()
       .use(async (ctx) => {
@@ -34,7 +34,7 @@ describe("get cookie", () => {
 
 describe("set cookie", () => {
   it("should set cookies to response", async () => {
-    await new TestStartup()
+    await new TestHttpStartup()
       .use(async (ctx, next) => {
         await next();
         expect(ctx.res.cookies).toEqual({
@@ -61,7 +61,7 @@ describe("set cookie", () => {
   });
 
   it("should set cookies to response by ctx", async () => {
-    await new TestStartup()
+    await new TestHttpStartup()
       .use(async (ctx, next) => {
         await next();
         expect(ctx.res.getHeader(RESPONSE_HEADER_NAME)).toBe("str=abc");
@@ -76,7 +76,7 @@ describe("set cookie", () => {
   });
 
   it("should set cookies properties", async () => {
-    await new TestStartup()
+    await new TestHttpStartup()
       .use(async (ctx, next) => {
         await next();
         expect(ctx.res.cookies).toEqual({
@@ -111,7 +111,7 @@ describe("set cookie", () => {
   });
 
   it("should log error if set request cookies", async () => {
-    await new TestStartup()
+    await new TestHttpStartup()
       .useCookie()
       .use(async (ctx) => {
         const errLog = console.error;
@@ -141,7 +141,7 @@ describe("set cookie", () => {
 
 describe("options", () => {
   it("should serialize with useCookie options", async () => {
-    await new TestStartup()
+    await new TestHttpStartup()
       .use(async (ctx, next) => {
         await next();
         expect(ctx.res.getHeader(RESPONSE_HEADER_NAME)).toBe(
@@ -162,7 +162,7 @@ describe("options", () => {
   });
 
   it("should serialize with value options", async () => {
-    await new TestStartup()
+    await new TestHttpStartup()
       .use(async (ctx, next) => {
         await next();
         expect(ctx.res.getHeader(RESPONSE_HEADER_NAME)).toBe(
@@ -182,7 +182,7 @@ describe("options", () => {
   });
 
   it("should replace serialize", async () => {
-    await new TestStartup()
+    await new TestHttpStartup()
       .use(async (ctx, next) => {
         await next();
         expect(ctx.res.getHeader(RESPONSE_HEADER_NAME)).toBe(

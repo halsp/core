@@ -1,8 +1,8 @@
-import { NotFoundException, Request, Response } from "@ipare/core";
+import { NotFoundException, Request, Response } from "@ipare/http";
 import "../src";
 import { AutFilter } from "./mva/auth.middleware";
 import { runMva } from "./global";
-import { TestStartup } from "@ipare/testing";
+import { TestHttpStartup } from "@ipare/testing";
 
 function expect404(res: Response, isPage: boolean, replaceCode = 404) {
   expect(res.status).toBe(replaceCode);
@@ -24,10 +24,10 @@ function expect404(res: Response, isPage: boolean, replaceCode = 404) {
 function run404(isNumber: boolean) {
   function runUseAgain(useAgain: boolean) {
     function runError(throwError: boolean) {
-      test(`useErrorPage ${isNumber}`, async function () {
+      test(`useErrorPage ${isNumber} ${useAgain} ${throwError}`, async function () {
         const codes = [isNumber ? 404 : { code: 404 }];
         await runMva(async () => {
-          const startup = new TestStartup()
+          const startup = new TestHttpStartup()
             .skipThrow()
             .setRequest(new Request().setPath("not-exist").setMethod("GET"))
             .useErrorPage(codes)
@@ -43,7 +43,6 @@ function run404(isNumber: boolean) {
           }
 
           const res = await startup.run();
-
           expect404(res, true);
         });
       });
@@ -59,7 +58,7 @@ run404(false);
 
 test("403", async function () {
   await runMva(async () => {
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .setRequest(
         new Request()
           .setPath("user/test1@hal.wang")
@@ -78,7 +77,7 @@ test("403", async function () {
 
 test("replace", async function () {
   await runMva(async () => {
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .setRequest(new Request().setPath("not-exist").setMethod("GET"))
       .useErrorPage({ code: 404, replace: 204 })
       .useMva()
@@ -90,7 +89,7 @@ test("replace", async function () {
 
 test("404 without error page", async function () {
   await runMva(async () => {
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .setRequest(new Request().setPath("not-exist").setMethod("GET"))
       .useMva()
       .run();
@@ -101,7 +100,7 @@ test("404 without error page", async function () {
 
 test("string error", async function () {
   await runMva(async () => {
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .skipThrow()
       .setRequest(new Request().setMethod("GET"))
       .useErrorPage([{ code: 404 }])
@@ -117,7 +116,7 @@ test("string error", async function () {
 function runEmptyCode(isArray: boolean) {
   test(`without error code ${isArray}`, async function () {
     await runMva(async () => {
-      const startup = new TestStartup().setRequest(
+      const startup = new TestHttpStartup().setRequest(
         new Request().setPath("not-exist").setMethod("GET")
       );
       if (isArray) {
@@ -137,7 +136,7 @@ runEmptyCode(false);
 
 test(`useMva before useErrorPage`, async function () {
   await runMva(async () => {
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .setRequest(new Request().setPath("not-exist").setMethod("GET"))
       .useMva()
       .useErrorPage(404)
@@ -149,7 +148,7 @@ test(`useMva before useErrorPage`, async function () {
 
 test(`404 default`, async function () {
   await runMva(async () => {
-    const startup = new TestStartup()
+    const startup = new TestHttpStartup()
       .skipThrow()
       .setRequest(new Request().setPath("not-exist").setMethod("GET"))
       .useErrorPage()

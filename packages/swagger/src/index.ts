@@ -1,7 +1,7 @@
-import "@ipare/core";
 import "@ipare/router";
 import "@ipare/static";
-import { normalizePath, Startup } from "@ipare/core";
+import { normalizePath } from "@ipare/core";
+import { HttpStartup } from "@ipare/http";
 import { USED } from "./constant";
 import { SwaggerOptions } from "./options";
 import "./validator.decorator";
@@ -10,17 +10,17 @@ import { getAbsoluteFSPath } from "swagger-ui-dist";
 import { ArrayItemType } from "./parser/schema-dict";
 
 declare module "@ipare/core" {
-  interface Startup {
-    useSwagger(options?: SwaggerOptions): this;
-  }
   interface Context {
     get swaggerOptions(): SwaggerOptions;
   }
 }
+declare module "@ipare/http" {
+  interface HttpStartup {
+    useSwagger(options?: SwaggerOptions): this;
+  }
+}
 
-Startup.prototype.useSwagger = function (
-  options: SwaggerOptions = {}
-): Startup {
+HttpStartup.prototype.useSwagger = function (options: SwaggerOptions = {}) {
   if (!!this[USED]) {
     return this;
   }

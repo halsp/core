@@ -1,17 +1,17 @@
+import { Dict } from "@ipare/core";
 import {
-  Dict,
-  Context,
+  createContext,
+  HttpStartup,
   NumericalHeadersDict,
   Request,
-  Startup,
-} from "@ipare/core";
+} from "@ipare/http";
 import { Context as KoaContext, Next } from "koa";
 import { KOA_CTX, KOA_NEXT } from "./constant";
 import { koaResToIpareRes, ipareResToKoaRes } from "./res-transform";
 
-class KoaStartup extends Startup {
+class KoaStartup extends HttpStartup {
   public async run(koaCtx: KoaContext, koaNext: Next): Promise<void> {
-    const ctx = new Context(
+    const ctx = createContext(
       new Request()
         .setPath(koaCtx.path)
         .setMethod(koaCtx.method)
@@ -36,7 +36,7 @@ class KoaStartup extends Startup {
   }
 }
 
-export function koaIpare(useMiddlewares: (startup: Startup) => void) {
+export function koaIpare(useMiddlewares: (startup: HttpStartup) => void) {
   const startup = new KoaStartup();
   useMiddlewares(startup);
   startup.use(async (ipareCtx) => {

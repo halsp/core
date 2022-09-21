@@ -1,13 +1,9 @@
-import {
-  BadRequestException,
-  Context,
-  HttpException,
-  Request,
-} from "@ipare/core";
+import { Context } from "@ipare/core";
+import { BadRequestException, HttpException, Request } from "@ipare/http";
 import "../src";
 import { Action } from "@ipare/router";
 import { ExceptionFilter, UseFilters } from "../src";
-import { TestStartup } from "@ipare/testing";
+import { TestHttpStartup } from "@ipare/testing";
 
 test(`empty exception filter`, async () => {
   class TestAction extends Action {
@@ -16,7 +12,7 @@ test(`empty exception filter`, async () => {
     }
   }
 
-  const res = await new TestStartup()
+  const res = await new TestHttpStartup()
     .skipThrow()
     .useFilter()
     .add(TestAction)
@@ -46,7 +42,7 @@ class TestAction extends Action {
 function runTest(executing: boolean) {
   function run(bad: boolean) {
     test(`exception filter ${executing} ${bad}`, async () => {
-      const res = await new TestStartup()
+      const res = await new TestHttpStartup()
         .skipThrow()
         .setRequest(
           new Request().setPath("/filters/exception").setMethod("GET").setBody({
@@ -90,7 +86,7 @@ runTest(true);
 runTest(false);
 
 test(`other error`, async () => {
-  const res = await new TestStartup()
+  const res = await new TestHttpStartup()
     .setRequest(new Request().setPath("/filters/exception").setMethod("GET"))
     .skipThrow()
     .useFilter()

@@ -3,7 +3,7 @@ import * as jwt from "jsonwebtoken";
 import { JwtObject, JwtPayload, JwtToken } from "../src";
 import "../src";
 import { createIpareReqeust } from "./utils";
-import { TestStartup } from "@ipare/testing";
+import { TestHttpStartup } from "@ipare/testing";
 
 class TestMiddleware extends Middleware {
   @JwtObject
@@ -27,7 +27,7 @@ class TestMiddleware extends Middleware {
 
 test("decorator", async function () {
   let jwt = "";
-  const res = await new TestStartup()
+  const res = await new TestHttpStartup()
     .setRequest(
       await createIpareReqeust({
         secret: "secret",
@@ -59,7 +59,7 @@ test("decorator", async function () {
 
 function testGetToken(skip: boolean) {
   test("tokenProvider option", async function () {
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .setRequest(
         await createIpareReqeust({
           secret: "secret",

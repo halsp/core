@@ -1,9 +1,10 @@
-import { Context, Request } from "@ipare/core";
+import { Context } from "@ipare/core";
+import { Request } from "@ipare/http";
 import "../src";
 import { ActionFilter } from "../src";
 import "@ipare/inject";
 import { Action } from "@ipare/router";
-import { TestStartup } from "@ipare/testing";
+import { TestHttpStartup } from "@ipare/testing";
 
 class TestAction extends Action {
   async invoke(): Promise<void> {
@@ -25,7 +26,7 @@ class TestActionFilter implements ActionFilter {
 
 function runTest(executing: boolean) {
   test(`global filter ${executing}`, async () => {
-    const res = await new TestStartup()
+    const res = await new TestHttpStartup()
       .setRequest(
         new Request().setPath("").setMethod("GET").setBody({
           executing,

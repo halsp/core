@@ -8,10 +8,10 @@ export async function getEnv(options?: EnvOptions | string) {
     const res = await new TestStartup()
       .useEnv(options as any)
       .use((ctx) => {
-        ctx.ok(process.env);
+        ctx.bag("env", process.env);
       })
       .run();
-    return res.body;
+    return res.bag<typeof process.env>("env");
   } finally {
     process.chdir("../..");
   }

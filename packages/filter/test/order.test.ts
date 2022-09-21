@@ -1,9 +1,10 @@
-import { Context, Request } from "@ipare/core";
+import { Context } from "@ipare/core";
+import { Request } from "@ipare/http";
 import "../src";
 import { ActionFilter, UseFilters } from "../src";
 import "@ipare/inject";
 import { Action } from "@ipare/router";
-import { TestStartup } from "@ipare/testing";
+import { TestHttpStartup } from "@ipare/testing";
 
 export class TestActionFilter1 implements ActionFilter {
   onActionExecuted(ctx: Context): void | Promise<void> {
@@ -91,7 +92,7 @@ class TestAction extends Action {
 }
 
 test(`filter order`, async () => {
-  const res = await new TestStartup()
+  const res = await new TestHttpStartup()
     .setRequest(new Request().setPath("filters/order").setMethod("GET"))
     .use(async (ctx, next) => {
       ctx.res.body = 0;

@@ -1,9 +1,10 @@
-import { Middleware, Request } from "@ipare/core";
+import { Request } from "@ipare/http";
+import { Middleware } from "@ipare/core";
 import { Body } from "@ipare/pipe";
 import "@ipare/inject";
 import "../src";
 import { UseValidatorOptions, V } from "../src";
-import { TestStartup } from "@ipare/testing";
+import { TestHttpStartup } from "@ipare/testing";
 
 function testOptions(useOptions: any, decOptions: any, result: boolean) {
   test(`options test ${!!useOptions} ${!!decOptions} ${result}`, async () => {
@@ -26,7 +27,7 @@ function testOptions(useOptions: any, decOptions: any, result: boolean) {
       }
     }
 
-    const startup = new TestStartup()
+    const startup = new TestHttpStartup()
       .skipThrow()
       .setRequest(
         new Request().setBody({
