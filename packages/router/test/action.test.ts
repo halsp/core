@@ -6,6 +6,7 @@ import "./global";
 
 class Login extends Action {
   async invoke(): Promise<void> {
+    new TestHttpStartup(); // for extends
     const { account, password } = <Dict>this.ctx.req.body;
 
     if (account != "abc") {

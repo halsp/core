@@ -217,6 +217,7 @@ for (let i = 0; i < msgMethods.length; i++) {
 
   class Md extends Middleware {
     async invoke(): Promise<void> {
+      new TestStartup();
       (this as any)[methodItem.method](
         this.existMsg
           ? {

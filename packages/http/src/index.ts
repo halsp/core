@@ -51,5 +51,3 @@ export {
 } from "./context";
 
 export { HttpStartup } from "./startup";
-
-import "./set-extends";

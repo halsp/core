@@ -25,8 +25,10 @@ import {
   UnsupportedMediaTypeException,
   createContext,
 } from "../../src";
+import { TestStartup } from "../test-startup";
 
 test("base http exception", () => {
+  new TestStartup();
   const ex = new HttpException(StatusCodes.BAD_REQUEST).setHeaders((header) =>
     header.setHeader("h1", "1").setHeader("h2", "2")
   );
@@ -44,6 +46,7 @@ test("base http exception", () => {
 });
 
 test("http exception string error", () => {
+  new TestStartup();
   const ex = new HttpException(StatusCodes.BAD_REQUEST, "err");
   expect(ex.error).toBe("err");
   expect(ex.message).toBe("err");
@@ -56,6 +59,7 @@ test("http exception string error", () => {
 });
 
 test("http exception object error", () => {
+  new TestStartup();
   const ex = new HttpException(StatusCodes.BAD_REQUEST, {
     a: 1,
   });
@@ -71,6 +75,7 @@ test("http exception object error", () => {
 });
 
 test("http exception object error with message", () => {
+  new TestStartup();
   const ex = new HttpException(StatusCodes.BAD_REQUEST, {
     message: "err",
   });
