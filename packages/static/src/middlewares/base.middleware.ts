@@ -1,4 +1,5 @@
-import { Middleware, HttpMethod } from "@ipare/core";
+import { Middleware } from "@ipare/core";
+import { HttpMethod } from "@ipare/http";
 import { FILE_404_BAG, FILE_BAG } from "../constant";
 import { FileOptions, DirectoryOptions } from "../options";
 

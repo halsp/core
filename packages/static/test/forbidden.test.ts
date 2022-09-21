@@ -1,9 +1,9 @@
-import { Request } from "@ipare/core";
-import { TestStartup } from "@ipare/testing";
+import { Request } from "@ipare/http";
+import { TestHttpStartup } from "@ipare/testing";
 import "../src";
 
 test("forbidden path", async () => {
-  const result = await new TestStartup()
+  const result = await new TestHttpStartup()
     .setRequest(new Request().setMethod("get").setPath("f/../b"))
     .useStatic({
       dir: "test/static",

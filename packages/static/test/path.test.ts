@@ -1,11 +1,11 @@
-import { Request } from "@ipare/core";
-import { TestStartup } from "@ipare/testing";
+import { Request } from "@ipare/http";
+import { TestHttpStartup } from "@ipare/testing";
 import "../src";
 import { FILE_BAG } from "../src/constant";
 
 describe("index.html", () => {
   it("should return status 404", async () => {
-    const result = await new TestStartup()
+    const result = await new TestHttpStartup()
       .setRequest(new Request().setMethod("get"))
       .useStatic({
         dir: "test/static",
@@ -16,7 +16,7 @@ describe("index.html", () => {
   });
 
   it("should match index.html from path", async () => {
-    const result = await new TestStartup()
+    const result = await new TestHttpStartup()
       .setRequest(new Request().setMethod("get").setPath("index.html"))
       .use(async (ctx, next) => {
         await next();
@@ -32,7 +32,7 @@ describe("index.html", () => {
   });
 
   it("should find index.html when options.fileIndex is true", async () => {
-    const result = await new TestStartup()
+    const result = await new TestHttpStartup()
       .setRequest(new Request().setMethod("get"))
       .use(async (ctx, next) => {
         await next();
@@ -49,7 +49,7 @@ describe("index.html", () => {
   });
 
   it("should find custom index file when options.fileIndex is string", async () => {
-    const result = await new TestStartup()
+    const result = await new TestHttpStartup()
       .setRequest(new Request().setMethod("get"))
       .use(async (ctx, next) => {
         await next();
@@ -66,7 +66,7 @@ describe("index.html", () => {
   });
 
   it("should match prefix", async () => {
-    const result = await new TestStartup()
+    const result = await new TestHttpStartup()
       .setRequest(new Request().setMethod("get").setPath(null as any))
       .useStatic({
         dir: "test/static",
@@ -78,7 +78,7 @@ describe("index.html", () => {
 });
 
 test("default static dir", async () => {
-  const result = await new TestStartup()
+  const result = await new TestHttpStartup()
     .setRequest(new Request().setMethod("get"))
     .use(async (ctx, next) => {
       await next();

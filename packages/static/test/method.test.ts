@@ -1,10 +1,10 @@
-import { Request } from "@ipare/core";
-import { TestStartup } from "@ipare/testing";
+import { Request } from "@ipare/http";
+import { TestHttpStartup } from "@ipare/testing";
 import "../src";
 
 test("method", async () => {
   {
-    const result = await new TestStartup()
+    const result = await new TestHttpStartup()
       .setRequest(new Request().setMethod("GET"))
       .useStatic({
         dir: "test/static",
@@ -14,7 +14,7 @@ test("method", async () => {
     expect(result.status).toBe(200);
   }
   {
-    const result = await new TestStartup()
+    const result = await new TestHttpStartup()
       .setRequest(new Request().setMethod("POST"))
       .useStatic({
         dir: "test/static",
@@ -24,7 +24,7 @@ test("method", async () => {
     expect(result.status).toBe(404);
   }
   {
-    const result = await new TestStartup()
+    const result = await new TestHttpStartup()
       .useStatic({
         dir: "test/static",
       })
@@ -35,7 +35,7 @@ test("method", async () => {
 
 test("single method", async () => {
   {
-    const result = await new TestStartup()
+    const result = await new TestHttpStartup()
       .setRequest(new Request().setMethod("get").setPath("ind"))
       .useStatic({
         file: "test/static/index.html",
@@ -45,7 +45,7 @@ test("single method", async () => {
     expect(result.status).toBe(200);
   }
   {
-    const result = await new TestStartup()
+    const result = await new TestHttpStartup()
       .setRequest(new Request().setPath("ind"))
       .useStatic({
         file: "test/static/index.html",
@@ -58,7 +58,7 @@ test("single method", async () => {
 
 test("custom method", async () => {
   {
-    const result = await new TestStartup()
+    const result = await new TestHttpStartup()
       .setRequest(new Request().setMethod("put").setPath("ind"))
       .useStatic({
         file: "test/static/index.html",
@@ -69,7 +69,7 @@ test("custom method", async () => {
     expect(result.status).toBe(200);
   }
   {
-    const result = await new TestStartup()
+    const result = await new TestHttpStartup()
       .setRequest(new Request().setMethod("PUT"))
       .useStatic({
         dir: "test/static",
@@ -83,7 +83,7 @@ test("custom method", async () => {
 
 test("array method", async () => {
   {
-    const result = await new TestStartup()
+    const result = await new TestHttpStartup()
       .setRequest(new Request().setMethod("put").setPath("ind"))
       .useStatic({
         file: "test/static/index.html",
@@ -94,7 +94,7 @@ test("array method", async () => {
     expect(result.status).toBe(200);
   }
   {
-    const result = await new TestStartup()
+    const result = await new TestHttpStartup()
       .setRequest(new Request().setMethod("PUT"))
       .useStatic({
         dir: "test/static",
@@ -108,7 +108,7 @@ test("array method", async () => {
 
 test("any method", async () => {
   {
-    const result = await new TestStartup()
+    const result = await new TestHttpStartup()
       .setRequest(new Request().setMethod("PUT"))
       .useStatic({
         dir: "test/static",
@@ -119,7 +119,7 @@ test("any method", async () => {
     expect(result.status).toBe(200);
   }
   {
-    const result = await new TestStartup()
+    const result = await new TestHttpStartup()
       .setRequest(new Request().setMethod("PUT"))
       .useStatic({
         dir: "test/static",

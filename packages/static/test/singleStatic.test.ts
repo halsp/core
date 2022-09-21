@@ -1,11 +1,11 @@
-import { Request } from "@ipare/core";
-import { TestStartup } from "@ipare/testing";
+import { Request } from "@ipare/http";
+import { TestHttpStartup } from "@ipare/testing";
 import "../src";
 import { FILE_BAG } from "../src/constant";
 
 test("match", async () => {
   {
-    const result = await new TestStartup()
+    const result = await new TestHttpStartup()
       .setRequest(new Request().setMethod("get").setPath("ind"))
       .use(async (ctx, next) => {
         await next();
@@ -21,7 +21,7 @@ test("match", async () => {
     expect(result.body).toBe("TEST");
   }
   {
-    const result = await new TestStartup()
+    const result = await new TestHttpStartup()
       .setRequest(new Request().setMethod("get").setPath("/ind/"))
       .useStatic({
         file: "test/static/index.html",
@@ -33,7 +33,7 @@ test("match", async () => {
     expect(result.body).toBe("TEST");
   }
   {
-    const result = await new TestStartup()
+    const result = await new TestHttpStartup()
       .setRequest(new Request().setMethod("get").setPath("ind"))
       .useStatic({
         file: "test/static/index.html",
@@ -47,7 +47,7 @@ test("match", async () => {
 });
 
 test("not found path", async () => {
-  const result = await new TestStartup()
+  const result = await new TestHttpStartup()
     .setRequest(new Request().setMethod("get").setPath("ind1"))
     .use(async (ctx, next) => {
       await next();
@@ -63,7 +63,7 @@ test("not found path", async () => {
 });
 
 test("not found file", async () => {
-  const result = await new TestStartup()
+  const result = await new TestHttpStartup()
     .setRequest(new Request().setMethod("get").setPath("ind"))
     .useStatic({
       file: "test/static/index1.html",
@@ -75,7 +75,7 @@ test("not found file", async () => {
 });
 
 test("found dir instead of file", async () => {
-  const result = await new TestStartup()
+  const result = await new TestHttpStartup()
     .setRequest(new Request().setMethod("get").setPath("sta"))
     .useStatic({
       file: "test/static",
@@ -88,7 +88,7 @@ test("found dir instead of file", async () => {
 
 test("empty req path", async () => {
   {
-    const result = await new TestStartup()
+    const result = await new TestHttpStartup()
       .setRequest(new Request().setMethod("get").setPath(""))
       .useStatic({
         file: "test/static/index.html",
@@ -99,7 +99,7 @@ test("empty req path", async () => {
   }
 
   {
-    const result = await new TestStartup()
+    const result = await new TestHttpStartup()
       .setRequest(new Request().setMethod("get").setPath("/"))
       .useStatic({
         file: "test/static/index.html",
@@ -110,7 +110,7 @@ test("empty req path", async () => {
   }
 
   {
-    const result = await new TestStartup()
+    const result = await new TestHttpStartup()
       .setRequest(new Request().setMethod("get").setPath("ind"))
       .useStatic({
         file: "test/static/index.html",

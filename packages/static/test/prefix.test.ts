@@ -1,9 +1,9 @@
-import { Request } from "@ipare/core";
-import { TestStartup } from "@ipare/testing";
+import { Request } from "@ipare/http";
+import { TestHttpStartup } from "@ipare/testing";
 import "../src";
 
 test("prefix", async () => {
-  const result = await new TestStartup()
+  const result = await new TestHttpStartup()
     .setRequest(new Request().setMethod("get").setPath("static/index.un"))
     .useStatic({
       dir: "test/static",
@@ -16,7 +16,7 @@ test("prefix", async () => {
 });
 
 test("prefix with /", async () => {
-  const result = await new TestStartup()
+  const result = await new TestHttpStartup()
     .setRequest(new Request().setMethod("get").setPath("/static/index.un/"))
     .useStatic({
       dir: "test/static",
@@ -29,7 +29,7 @@ test("prefix with /", async () => {
 });
 
 test("prefix not found", async () => {
-  const result = await new TestStartup()
+  const result = await new TestHttpStartup()
     .setRequest(new Request().setMethod("get").setPath("/static/index.un/"))
     .useStatic({
       dir: "test/static",

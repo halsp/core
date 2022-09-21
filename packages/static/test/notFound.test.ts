@@ -1,10 +1,10 @@
-import { Request } from "@ipare/core";
-import { TestStartup } from "@ipare/testing";
+import { Request } from "@ipare/http";
+import { TestHttpStartup } from "@ipare/testing";
 import "../src";
 import { FILE_404_BAG, FILE_BAG } from "../src/constant";
 
 test("not found", async () => {
-  const result = await new TestStartup()
+  const result = await new TestHttpStartup()
     .setRequest(new Request().setMethod("get").setPath("not-exist"))
     .useStatic({
       dir: "test/static",
@@ -16,7 +16,7 @@ test("not found", async () => {
 
 test("404 page", async () => {
   {
-    const result = await new TestStartup()
+    const result = await new TestHttpStartup()
       .setRequest(new Request().setMethod("get").setPath("not-exist"))
       .use(async (ctx, next) => {
         await next();
@@ -33,7 +33,7 @@ test("404 page", async () => {
     expect(result.body).toBe("404 page");
   }
   {
-    const result = await new TestStartup()
+    const result = await new TestHttpStartup()
       .setRequest(new Request().setMethod("get").setPath("not-exist"))
       .useStatic({
         dir: "test/static",
@@ -47,7 +47,7 @@ test("404 page", async () => {
 });
 
 test("404 page not found", async () => {
-  const result = await new TestStartup()
+  const result = await new TestHttpStartup()
     .setRequest(new Request().setMethod("get").setPath("not-exist"))
     .useStatic({
       dir: "test/static",

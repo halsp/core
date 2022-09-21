@@ -1,24 +1,25 @@
-import "@ipare/core";
-import { Startup } from "@ipare/core";
+import { HttpStartup } from "@ipare/http";
 import { FileMiddleware, DirectoryMiddleware } from "./middlewares";
 import { FileOptions, DirectoryOptions } from "./options";
 
 export { FileOptions, DirectoryOptions };
 export { cliConfigHook } from "./cli-config";
 
-declare module "@ipare/core" {
-  interface Startup {
+declare module "@ipare/http" {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  interface HttpStartup {
     useStatic(): this;
     useStatic(options: DirectoryOptions): this;
     useStatic(options: FileOptions): this;
   }
 }
 
-Startup.prototype.useStatic = function (
+HttpStartup.prototype.useStatic = function (
   options: FileOptions | DirectoryOptions = {
     dir: "static",
   }
-): Startup {
+): HttpStartup {
   if (options.hasOwnProperty("file")) {
     this.add(() => new FileMiddleware(options as FileOptions));
   } else {
