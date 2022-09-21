@@ -22,8 +22,6 @@ export { PipeReqRecord, getPipeRecords } from "./pipe-req-record";
 export { PipeReqType } from "./pipe-req-type";
 
 declare module "@ipare/http" {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   interface HttpStartup {
     useGlobalPipe<T = any, R = any>(
       type: GlobalPipeType,

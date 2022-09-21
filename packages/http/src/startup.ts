@@ -4,11 +4,9 @@ import * as mime from "mime-types";
 import { Context, isString, Startup } from "@ipare/core";
 
 export abstract class HttpStartup extends Startup {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   protected async invoke(req: Request | Context): Promise<Response> {
     const ctx = req instanceof Context ? req : createContext(req);
-    await super["invoke"](ctx);
+    await super.invoke(ctx);
 
     this.#setType(ctx.res);
     return ctx.res;

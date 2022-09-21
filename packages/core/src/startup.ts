@@ -124,7 +124,7 @@ export abstract class Startup {
     return this;
   }
 
-  protected async invoke(ctx: Context): Promise<Context> {
+  protected async invoke(ctx: any): Promise<any> {
     (ctx as any).startup = this;
     if (!this.#mds.length) {
       return ctx;

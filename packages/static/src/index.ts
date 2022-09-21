@@ -6,8 +6,6 @@ export { FileOptions, DirectoryOptions };
 export { cliConfigHook } from "./cli-config";
 
 declare module "@ipare/http" {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   interface HttpStartup {
     useStatic(): this;
     useStatic(options: DirectoryOptions): this;

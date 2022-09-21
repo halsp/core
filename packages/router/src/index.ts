@@ -49,8 +49,6 @@ declare module "@ipare/core" {
 }
 
 declare module "@ipare/http" {
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   interface HttpStartup {
     useRouter(options?: RouterOptions): this;
     useRouterParser(options?: RouterOptions): this;
