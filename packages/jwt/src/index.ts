@@ -1,6 +1,5 @@
 import "@ipare/inject";
-import { HttpStartup } from "@ipare/http";
-import { Context } from "@ipare/core";
+import { Startup, Context } from "@ipare/core";
 import { OPTIONS, USED } from "./constant";
 import { JwtOptions } from "./jwt-options";
 import { JwtService } from "./jwt.service";
@@ -21,8 +20,8 @@ declare module "@ipare/core" {
     get jwtToken(): string;
   }
 }
-declare module "@ipare/http" {
-  interface HttpStartup {
+declare module "@ipare/core" {
+  interface Startup {
     useJwt(options: JwtOptions): this;
     useJwtVerify(
       skip?: (ctx: Context) => boolean | Promise<boolean>,
@@ -32,7 +31,7 @@ declare module "@ipare/http" {
   }
 }
 
-HttpStartup.prototype.useJwtVerify = function (
+Startup.prototype.useJwtVerify = function (
   skip?: (ctx: Context) => boolean | Promise<boolean>,
   onError?: (ctx: Context, err: jwt.VerifyErrors) => void | Promise<void>
 ) {
@@ -50,28 +49,33 @@ HttpStartup.prototype.useJwtVerify = function (
       const error = err as jwt.VerifyErrors;
       if (onError) {
         await onError(ctx, error);
+      } else if ("unauthorizedMsg" in ctx) {
+        ctx["unauthorizedMsg"](error.message);
       } else {
-        ctx.unauthorizedMsg(error.message);
+        throw err;
       }
     }
   });
 };
 
-HttpStartup.prototype.useJwtExtraAuth = function (
+Startup.prototype.useJwtExtraAuth = function (
   access: (ctx: Context) => boolean | Promise<boolean>
 ) {
   return this.use(async (ctx, next) => {
     if (await access(ctx)) {
       await next();
-    } else {
-      if (ctx.res.status == 404 && ctx.res.body == undefined) {
-        ctx.unauthorizedMsg("JWT validation failed");
-      }
+    } else if (
+      "unauthorizedMsg" in ctx &&
+      "res" in ctx &&
+      ctx["res"].status == 404 &&
+      ctx["res"].body == undefined
+    ) {
+      ctx["unauthorizedMsg"]("JWT validation failed");
     }
   });
 };
 
-HttpStartup.prototype.useJwt = function (options: JwtOptions) {
+Startup.prototype.useJwt = function (options: JwtOptions) {
   if (this[USED]) {
     return this;
   }
@@ -87,9 +91,9 @@ HttpStartup.prototype.useJwt = function (options: JwtOptions) {
         enumerable: false,
         get: () => {
           if (options.tokenProvider) {
-            return options.tokenProvider(ctx.req);
-          } else {
-            return ctx.req.getHeader("Authorization");
+            return options.tokenProvider(ctx);
+          } else if ("req" in ctx) {
+            return ctx["req"].get("Authorization");
           }
         },
       });

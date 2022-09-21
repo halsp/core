@@ -2,8 +2,8 @@ import { Middleware } from "@ipare/core";
 import * as jwt from "jsonwebtoken";
 import { JwtObject, JwtPayload, JwtToken } from "../src";
 import "../src";
-import { createIpareReqeust } from "./utils";
-import { TestHttpStartup } from "@ipare/testing";
+import { createTestContext } from "./utils";
+import { TestStartup } from "@ipare/testing";
 
 class TestMiddleware extends Middleware {
   @JwtObject
@@ -16,20 +16,18 @@ class TestMiddleware extends Middleware {
   private readonly str2!: any;
 
   async invoke(): Promise<void> {
-    this.ok({
-      jwt: this.jwt,
-      payload: this.payload,
-      str1: this.str1,
-      str2: this.str2,
-    });
+    this.ctx.bag("jwt", this.jwt);
+    this.ctx.bag("payload", this.payload);
+    this.ctx.bag("str1", this.str1);
+    this.ctx.bag("str2", this.str2);
   }
 }
 
 test("decorator", async function () {
   let jwt = "";
-  const res = await new TestHttpStartup()
-    .setRequest(
-      await createIpareReqeust({
+  const ctx = await new TestStartup()
+    .setContext(
+      await createTestContext({
         secret: "secret",
       })
     )
@@ -45,23 +43,22 @@ test("decorator", async function () {
     })
     .add(TestMiddleware)
     .run();
-  expect(Object.keys(res.body["jwt"])).toEqual([
+  expect(Object.keys(ctx.bag("jwt"))).toEqual([
     "header",
     "payload",
     "signature",
   ]);
-  expect(Object.keys(res.body["payload"])).toEqual(["iat"]);
-  expect(res.body["payload"]).toEqual(res.body["jwt"]["payload"]);
-  expect(res.body["str1"]).toBe(jwt);
-  expect(res.body["str2"]).toBe(jwt);
-  expect(res.status).toBe(200);
+  expect(Object.keys(ctx.bag("payload"))).toEqual(["iat"]);
+  expect(ctx.bag("payload")).toEqual(ctx.bag<jwt.Jwt>("jwt")["payload"]);
+  expect(ctx.bag("str1")).toBe(jwt);
+  expect(ctx.bag("str2")).toBe(jwt);
 });
 
 function testGetToken(skip: boolean) {
   test("tokenProvider option", async function () {
-    const res = await new TestHttpStartup()
-      .setRequest(
-        await createIpareReqeust({
+    const startup = new TestStartup()
+      .setContext(
+        await createTestContext({
           secret: "secret",
         })
       )
@@ -70,9 +67,15 @@ function testGetToken(skip: boolean) {
         tokenProvider: () => "test",
       })
       .useJwtVerify(() => skip)
-      .add(TestMiddleware)
-      .run();
-    expect(res.status).toBe(skip ? 200 : 401);
+      .add(TestMiddleware);
+
+    let error = false;
+    try {
+      await startup.run();
+    } catch {
+      error = true;
+    }
+    expect(error).toBe(!skip);
   });
 }
 

@@ -1,4 +1,4 @@
-import { Request } from "@ipare/http";
+import { Context } from "@ipare/core";
 import * as jwt from "jsonwebtoken";
 
 export enum JwtSecretRequestType {
@@ -17,7 +17,7 @@ export interface JwtOptions {
     options?: jwt.VerifyOptions | jwt.SignOptions
   ) => jwt.Secret;
   verifyOptions?: jwt.VerifyOptions;
-  tokenProvider?: (req: Request) => string;
+  tokenProvider?: (ctx: Context) => string;
   prefix?: string;
 }
 

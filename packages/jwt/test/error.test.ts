@@ -1,13 +1,14 @@
-import { TestHttpStartup } from "@ipare/testing";
-import { createIpareReqeust } from "./utils";
+import { TestStartup } from "@ipare/testing";
+import { createTestContext } from "./utils";
 import "../src";
+import { Context } from "@ipare/core";
 
 function testErrorSecret(isError: boolean) {
   function runTest(customError: boolean) {
-    test(`error secret ${isError}`, async function () {
-      const result = await new TestHttpStartup()
-        .setRequest(
-          await createIpareReqeust({
+    test(`error secret ${isError} ${customError}`, async function () {
+      const startup = new TestStartup()
+        .setContext(
+          await createTestContext({
             secret: isError ? "secret1" : "secret",
           })
         )
@@ -18,18 +19,37 @@ function testErrorSecret(isError: boolean) {
           undefined,
           customError
             ? (ctx, err) => {
-                ctx.res.setHeader("err", err.message);
+                ctx.bag("result", err.message);
               }
             : undefined
         )
         .use((ctx) => {
-          ctx.ok();
-        })
-        .run();
-      expect(result.status).toBe(isError ? (customError ? 404 : 401) : 200);
-      expect(result.getHeader("err")).toBe(
-        isError && customError ? "invalid signature" : undefined
-      );
+          ctx.bag("result", true);
+        });
+
+      let ctx: Context | undefined;
+      let error = false;
+      try {
+        ctx = await startup.run();
+      } catch (err) {
+        console.log(err);
+        error = true;
+      }
+
+      if (isError && !customError) {
+        expect(error).toBeTruthy();
+      } else {
+        expect(error).toBeFalsy();
+        if (!ctx) throw new Error();
+
+        if (!isError) {
+          expect(ctx.bag("result")).toBeTruthy();
+        } else {
+          if (customError) {
+            expect(ctx.bag("result")).toBe("invalid signature");
+          }
+        }
+      }
     });
   }
 
