@@ -1,9 +1,16 @@
-import { HttpStartup } from "@ipare/http";
+import { Startup } from "@ipare/core";
 import { GLOBAL_PIPE_BAG } from "./constant";
 import { GlobalPipeType } from "./global-pipe-type";
 import { GlobalPipeItem, PipeItem } from "./pipes";
 
-export { Query, Body, Param, Header, InjectContext } from "./decorators";
+export {
+  Query,
+  Body,
+  Param,
+  Header,
+  Payload,
+  InjectContext,
+} from "./decorators";
 export {
   PipeTransform,
   PipeItem,
@@ -21,8 +28,8 @@ export {
 export { PipeReqRecord, getPipeRecords } from "./pipe-req-record";
 export { PipeReqType } from "./pipe-req-type";
 
-declare module "@ipare/http" {
-  interface HttpStartup {
+declare module "@ipare/core" {
+  interface Startup {
     useGlobalPipe<T = any, R = any>(
       type: GlobalPipeType,
       pipe: PipeItem<T, R>
@@ -30,10 +37,10 @@ declare module "@ipare/http" {
   }
 }
 
-HttpStartup.prototype.useGlobalPipe = function <T = any, R = any>(
+Startup.prototype.useGlobalPipe = function <T = any, R = any>(
   type: GlobalPipeType,
   pipe: PipeItem<T, R>
-): HttpStartup {
+) {
   return this.use(async (ctx, next) => {
     const pipes = ctx.bag<GlobalPipeItem<T, R>[]>(GLOBAL_PIPE_BAG) ?? [];
     pipes.push({

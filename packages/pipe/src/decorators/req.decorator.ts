@@ -68,3 +68,20 @@ export function Header(
 export function Header(...args: any[]): any {
   return createDecorator("header", args);
 }
+
+export function Payload(
+  property: string,
+  ...pipes: PipeItem[]
+): PropertyDecorator & ParameterDecorator;
+export function Payload(
+  ...pipes: PipeItem[]
+): PropertyDecorator & ParameterDecorator;
+export function Payload(target: any, propertyKey: string | symbol): void;
+export function Payload(
+  target: any,
+  propertyKey: string | symbol,
+  parameterIndex: number
+): void;
+export function Payload(...args: any[]): any {
+  return createDecorator("payload", args);
+}

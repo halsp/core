@@ -1,4 +1,4 @@
-import { BadRequestException } from "@ipare/http";
+import { createBadRequestError } from "./error";
 import { PipeTransform } from "./pipe-transform";
 
 export interface TrimPipeOptions {
@@ -19,13 +19,16 @@ export class TrimPipe implements PipeTransform<string, string> {
   }
   readonly #options: TrimPipeOptions;
 
-  transform({ value }) {
+  transform({ ctx, value }) {
     if (typeof value != "string" && !!this.#options.notString) {
       return this.#options.notString(value);
     }
 
     if (typeof value != "string") {
-      throw new BadRequestException("Validation failed (string is expected)");
+      throw createBadRequestError(
+        ctx,
+        "Validation failed (string is expected)"
+      );
     }
 
     if (this.#options.start && this.#options.end) {

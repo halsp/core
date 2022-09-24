@@ -1,8 +1,8 @@
-import { BadRequestException } from "@ipare/http";
+import { createBadRequestError } from "./error";
 import { PipeTransform } from "./pipe-transform";
 
 export class ParseFloatPipe implements PipeTransform<string | number, number> {
-  transform({ value }) {
+  transform({ ctx, value }) {
     if (typeof value == "string") {
       value = parseFloat(value);
     }
@@ -11,7 +11,8 @@ export class ParseFloatPipe implements PipeTransform<string | number, number> {
       return value;
     }
 
-    throw new BadRequestException(
+    throw createBadRequestError(
+      ctx,
       "Validation failed (numeric string is expected)"
     );
   }
