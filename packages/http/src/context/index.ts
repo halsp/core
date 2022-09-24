@@ -26,24 +26,23 @@ export function createContext(req?: Request) {
     get: () => ctx,
   });
 
+  const catchError = ctx.catchError;
   ctx.catchError = function (err: Error | any): Context {
     if (err instanceof HttpException) {
-      this.errorStack.push(err);
       this.setHeaders(err.header.headers)
         .res.setStatus(err.status)
         .setBody(err.toPlainObject());
     } else if (err instanceof Error) {
-      this.errorStack.push(err);
       const msg = err.message || undefined;
       this.catchError(new InternalServerErrorException(msg));
     } else if (isObject(err)) {
-      this.errorStack.push(err);
       this.catchError(new InternalServerErrorException(err));
     } else {
-      this.errorStack.push(err);
       const error = (!isNil(err) && String(err)) || undefined;
       this.catchError(new InternalServerErrorException(error));
     }
+
+    catchError.call(ctx, err);
     return this;
   };
 
