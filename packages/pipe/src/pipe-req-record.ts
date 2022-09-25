@@ -1,5 +1,4 @@
-import { PipeItem } from "./pipes";
-import { PipeReqType } from "./pipe-req-type";
+import { PipeItem, PipeReqType } from "./pipes";
 import { PIPE_RECORDS_METADATA } from "./constant";
 import { isClass } from "@ipare/core";
 

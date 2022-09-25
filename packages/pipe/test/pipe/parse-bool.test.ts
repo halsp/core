@@ -1,5 +1,8 @@
-import { ParseBoolPipe, ParseBoolPipeOptions } from "../../src";
+import { Middleware } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
+import { ParseBoolPipe, ParseBoolPipeOptions, Payload } from "../../src";
 import { runFieldPipeTest, runSuccessPipeTest } from "./utils";
+import { createContext } from "@ipare/micro/dist/context";
 
 function runSuccessTest(
   source: any,
@@ -40,3 +43,53 @@ runSuccessTest("3", true, {
 runSuccessTest("2", false, {
   falseValues: ["1", "2"],
 });
+
+function testPayload(success: boolean) {
+  function run(payload: boolean) {
+    test(`parse bool payload property ${success} ${payload}`, async () => {
+      class TestMiddleware extends Middleware {
+        @Payload("p1", ParseBoolPipe)
+        readonly p1!: any;
+
+        invoke(): void {
+          this.ctx.bag("p1", this.p1);
+        }
+      }
+
+      const ctx = createContext({
+        p1: success ? "true" : "abc",
+      });
+      if (!payload) {
+        delete ctx["payload"];
+      }
+      await new TestStartup()
+        .skipThrow()
+        .setContext(ctx)
+        .useInject()
+        .add(new TestMiddleware())
+        .run();
+      if (success) {
+        if (payload) {
+          expect(ctx["result"]).toBeUndefined();
+          expect(ctx.bag("p1")).toBeTruthy();
+        } else {
+          expect(ctx.bag("p1")).toBeUndefined();
+          expect(ctx["result"]).toEqual({
+            status: "error",
+            message: "Parse bool failed",
+          });
+        }
+      } else {
+        expect(ctx.bag("p1")).toBeUndefined();
+        expect(ctx["result"]).toEqual({
+          status: "error",
+          message: "Parse bool failed",
+        });
+      }
+    });
+  }
+  run(true);
+  run(false);
+}
+testPayload(true);
+testPayload(false);

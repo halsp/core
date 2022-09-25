@@ -23,10 +23,10 @@ export {
   TrimPipe,
   TrimPipeOptions,
   TransformArgs,
+  PipeReqType,
 } from "./pipes";
 
 export { PipeReqRecord, getPipeRecords } from "./pipe-req-record";
-export { PipeReqType } from "./pipe-req-type";
 
 declare module "@ipare/core" {
   interface Startup {

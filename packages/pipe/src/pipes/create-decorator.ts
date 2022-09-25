@@ -8,11 +8,12 @@ import {
   ObjectConstructor,
 } from "@ipare/core";
 import { GlobalPipeItem, LambdaPipe, PipeItem } from ".";
-import { getReqHandler, PipeReqType } from "../pipe-req-type";
 import { GLOBAL_PIPE_BAG } from "../constant";
 import { GlobalPipeType } from "../global-pipe-type";
 import { plainToClass } from "class-transformer";
 import { addPipeRecord } from "../pipe-req-record";
+
+export type PipeReqType = "query" | "param" | "header" | "body" | "payload";
 
 async function execPipes<T extends object = any>(
   ctx: Context,
@@ -163,5 +164,20 @@ export function createDecorator(type: PipeReqType, args: any[]) {
         parameterIndex
       );
     };
+  }
+}
+
+export function getReqHandler(type: PipeReqType): (ctx: Context) => Dict {
+  switch (type) {
+    case "header":
+      return (ctx) => (ctx as any).req.headers;
+    case "query":
+      return (ctx) => (ctx as any).req.query;
+    case "param":
+      return (ctx) => (ctx as any).req.params ?? (ctx as any).req.param;
+    case "payload":
+      return (ctx) => (ctx as any).payload;
+    default:
+      return (ctx) => (ctx as any).req.body;
   }
 }
