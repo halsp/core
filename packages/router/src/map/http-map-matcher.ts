@@ -2,7 +2,7 @@ import MapItem from "./map-item";
 import { Context } from "@ipare/core";
 import { HttpMethod } from "@ipare/http";
 
-export default class MapMatcher {
+export class MapMatcher {
   constructor(private readonly ctx: Context) {
     const mapItem = this.getMapItem();
     if (mapItem) {

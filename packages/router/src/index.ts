@@ -1,5 +1,5 @@
-import "@ipare/core";
-import { QueryDict, ReadonlyQueryDict, HttpStartup } from "@ipare/http";
+import { Startup } from "@ipare/core";
+import type { QueryDict, ReadonlyQueryDict } from "@ipare/http";
 import { Action } from "./action";
 import MapParser from "./map/map-parser";
 import path = require("path");
@@ -43,9 +43,15 @@ export {
   getActionMetadata,
 } from "./action";
 export { postbuild } from "./postbuild";
-import MapMatcher from "./map/map-matcher";
 
 declare module "@ipare/core" {
+  interface Startup {
+    useRouter(options?: RouterOptions): this;
+    useRouterParser(options?: RouterOptions): this;
+    get routerMap(): MapItem[];
+    get routerOptions(): RouterInitedOptions;
+  }
+
   interface Context {
     get actionMetadata(): MapItem;
     get routerMap(): MapItem[];
@@ -54,21 +60,12 @@ declare module "@ipare/core" {
 }
 
 declare module "@ipare/http" {
-  interface HttpStartup {
-    useRouter(options?: RouterOptions): this;
-    useRouterParser(options?: RouterOptions): this;
-    get routerMap(): MapItem[];
-    get routerOptions(): RouterInitedOptions;
-  }
-
   interface Request {
     get params(): ReadonlyQueryDict;
   }
 }
 
-HttpStartup.prototype.useRouter = function (
-  options?: RouterOptions
-): HttpStartup {
+Startup.prototype.useRouter = function (options?: RouterOptions) {
   if (this[USED]) {
     return this;
   }
@@ -83,9 +80,7 @@ HttpStartup.prototype.useRouter = function (
   });
 };
 
-HttpStartup.prototype.useRouterParser = function (
-  options?: RouterOptions
-): HttpStartup {
+Startup.prototype.useRouterParser = function (options?: RouterOptions) {
   if (this[PARSER_USED]) {
     return this;
   }
@@ -101,7 +96,7 @@ HttpStartup.prototype.useRouterParser = function (
 
   const routerMap = new MapParser(opts).getMap();
   Object.defineProperty(this, "routerMap", {
-    configurable: false,
+    configurable: true,
     enumerable: false,
     get: () => {
       return routerMap;
@@ -109,7 +104,7 @@ HttpStartup.prototype.useRouterParser = function (
   });
 
   Object.defineProperty(this, "routerOptions", {
-    configurable: false,
+    configurable: true,
     enumerable: false,
     get: () => {
       return opts;
@@ -118,7 +113,7 @@ HttpStartup.prototype.useRouterParser = function (
 
   return this.use(async (ctx, next) => {
     Object.defineProperty(ctx, "routerMap", {
-      configurable: false,
+      configurable: true,
       enumerable: false,
       get: () => {
         return routerMap;
@@ -126,7 +121,7 @@ HttpStartup.prototype.useRouterParser = function (
     });
 
     Object.defineProperty(ctx, "routerOptions", {
-      configurable: false,
+      configurable: true,
       enumerable: false,
       get: () => {
         return opts;
@@ -136,6 +131,37 @@ HttpStartup.prototype.useRouterParser = function (
     await next();
   })
     .use(async (ctx, next) => {
+      if (!ctx.msg) {
+        return await next();
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { MapMatcher } = require("./map/micro-map-matcher");
+      const mapMatcher = new MapMatcher(ctx);
+      if (mapMatcher.notFound) {
+        ctx["result"] = {
+          status: "error",
+          message: `Can't find the pattern: ${JSON.stringify(ctx["pattern"])}`,
+        };
+      } else {
+        const mapItem = mapMatcher.mapItem;
+        Object.defineProperty(ctx, "actionMetadata", {
+          configurable: true,
+          enumerable: false,
+          get: () => {
+            return mapItem;
+          },
+        });
+      }
+      await next();
+    })
+    .use(async (ctx, next) => {
+      if (!ctx.req) {
+        return await next();
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { MapMatcher } = require("./map/http-map-matcher");
       const mapMatcher = new MapMatcher(ctx);
       if (mapMatcher.notFound) {
         ctx.notFoundMsg({
@@ -151,7 +177,7 @@ HttpStartup.prototype.useRouterParser = function (
       } else {
         const mapItem = mapMatcher.mapItem;
         Object.defineProperty(ctx, "actionMetadata", {
-          configurable: false,
+          configurable: true,
           enumerable: false,
           get: () => {
             return mapItem;
@@ -161,7 +187,7 @@ HttpStartup.prototype.useRouterParser = function (
       await next();
     })
     .use(async (ctx, next) => {
-      if (!ctx.actionMetadata) {
+      if (!ctx.req || !ctx.actionMetadata) {
         return await next();
       }
 
@@ -187,14 +213,14 @@ HttpStartup.prototype.useRouterParser = function (
       }
 
       Object.defineProperty(ctx.req, "params", {
-        configurable: false,
+        configurable: true,
         enumerable: false,
         get: () => {
           return params;
         },
       });
       Object.defineProperty(ctx.req, "param", {
-        configurable: false,
+        configurable: true,
         enumerable: false,
         get: () => {
           return params;
