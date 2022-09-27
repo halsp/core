@@ -1,8 +1,10 @@
 import { Middleware } from "@ipare/core";
+import { createContext as createHttpContext } from "@ipare/http";
 import { TestStartup } from "@ipare/testing";
-import { ParseBoolPipe, ParseBoolPipeOptions, Payload } from "../../src";
+import { Body, ParseBoolPipe, ParseBoolPipeOptions } from "../../src";
 import { runFieldPipeTest, runSuccessPipeTest } from "./utils";
-import { createContext } from "@ipare/micro/dist/context";
+import { createContext as createMicroContext } from "@ipare/micro";
+import { MessageItem } from "@ipare/micro/dist/message-item";
 
 function runSuccessTest(
   source: any,
@@ -44,52 +46,113 @@ runSuccessTest("2", false, {
   falseValues: ["1", "2"],
 });
 
-function testPayload(success: boolean) {
-  function run(payload: boolean) {
-    test(`parse bool payload property ${success} ${payload}`, async () => {
-      class TestMiddleware extends Middleware {
-        @Payload("p1", ParseBoolPipe)
-        readonly p1!: any;
+describe("parse bool with micro", () => {
+  it(`should parse bool body property when value is 'true'`, async () => {
+    class TestMiddleware extends Middleware {
+      @Body("p1", ParseBoolPipe)
+      readonly p1!: any;
 
-        invoke(): void {
-          this.ctx.bag("p1", this.p1);
-        }
+      invoke(): void {
+        this.ctx.bag("p1", this.p1);
       }
+    }
 
-      const ctx = createContext({
-        p1: success ? "true" : "abc",
-      });
-      if (!payload) {
-        delete ctx["payload"];
+    const ctx = createMicroContext(
+      new MessageItem().setData({
+        p1: "true",
+      })
+    );
+
+    await new TestStartup()
+      .skipThrow()
+      .setContext(ctx)
+      .useInject()
+      .add(new TestMiddleware())
+      .run();
+
+    expect(ctx.bag("p1")).toBeTruthy();
+    expect(ctx["result"]).toBeUndefined();
+  });
+
+  it(`should not parse bool body property when value is 'abc'`, async () => {
+    class TestMiddleware extends Middleware {
+      @Body("p1", ParseBoolPipe)
+      readonly p1!: any;
+
+      invoke(): void {
+        this.ctx.bag("p1", this.p1);
       }
-      await new TestStartup()
-        .skipThrow()
-        .setContext(ctx)
-        .useInject()
-        .add(new TestMiddleware())
-        .run();
-      if (success) {
-        if (payload) {
-          expect(ctx["result"]).toBeUndefined();
-          expect(ctx.bag("p1")).toBeTruthy();
-        } else {
-          expect(ctx.bag("p1")).toBeUndefined();
-          expect(ctx["result"]).toEqual({
-            status: "error",
-            message: "Parse bool failed",
-          });
-        }
-      } else {
-        expect(ctx.bag("p1")).toBeUndefined();
-        expect(ctx["result"]).toEqual({
-          status: "error",
-          message: "Parse bool failed",
-        });
-      }
+    }
+
+    const ctx = createMicroContext(
+      new MessageItem().setData({
+        p1: "abc",
+      })
+    );
+
+    await new TestStartup()
+      .skipThrow()
+      .setContext(ctx)
+      .useInject()
+      .add(new TestMiddleware())
+      .run();
+
+    expect(ctx.bag("p1")).toBeUndefined();
+    expect(ctx["result"]).toEqual({
+      message: "Parse bool failed",
+      status: "error",
     });
-  }
-  run(true);
-  run(false);
-}
-testPayload(true);
-testPayload(false);
+  });
+
+  it(`should not parse bool body property when ctx from http`, async () => {
+    class TestMiddleware extends Middleware {
+      @Body("p1", ParseBoolPipe)
+      readonly p1!: any;
+
+      invoke(): void {
+        this.ctx.bag("p1", this.p1);
+      }
+    }
+
+    const ctx = createHttpContext();
+
+    await new TestStartup()
+      .skipThrow()
+      .setContext(ctx)
+      .useInject()
+      .add(new TestMiddleware())
+      .run();
+
+    expect(ctx.bag("p1")).toBeUndefined();
+    expect(ctx["result"]).toBeUndefined();
+  });
+
+  it(`should throw error when msg is undefined`, async () => {
+    class TestMiddleware extends Middleware {
+      @Body("p1", ParseBoolPipe)
+      readonly p1!: any;
+
+      invoke(): void {
+        this.ctx.bag("p1", this.p1);
+      }
+    }
+
+    const ctx = createMicroContext(new MessageItem());
+    Object.defineProperty(ctx, "msg", {
+      get: () => undefined,
+    });
+
+    await new TestStartup()
+      .skipThrow()
+      .setContext(ctx)
+      .useInject()
+      .add(new TestMiddleware())
+      .run();
+
+    expect(ctx.bag("p1")).toBeUndefined();
+    expect(ctx["result"]).toEqual({
+      message: "Parse bool failed",
+      status: "error",
+    });
+  });
+});

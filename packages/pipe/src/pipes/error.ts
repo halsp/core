@@ -1,11 +1,11 @@
 import { Context } from "@ipare/core";
 
 export function createBadRequestError(ctx: Context, message: string) {
-  if ("res" in ctx) {
+  if (ctx["res"]) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { BadRequestException } = require("@ipare/http");
     return new BadRequestException(message);
-  } else if ("payload" in ctx) {
+  } else if (ctx["msg"]) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { MicroException } = require("@ipare/micro");
     return new MicroException(message);

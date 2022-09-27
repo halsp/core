@@ -13,7 +13,7 @@ import { GlobalPipeType } from "../global-pipe-type";
 import { plainToClass } from "class-transformer";
 import { addPipeRecord } from "../pipe-req-record";
 
-export type PipeReqType = "query" | "param" | "header" | "body" | "payload";
+export type PipeReqType = "query" | "param" | "header" | "body";
 
 async function execPipes<T extends object = any>(
   ctx: Context,
@@ -175,9 +175,15 @@ export function getReqHandler(type: PipeReqType): (ctx: Context) => Dict {
       return (ctx) => (ctx as any).req.query;
     case "param":
       return (ctx) => (ctx as any).req.params ?? (ctx as any).req.param;
-    case "payload":
-      return (ctx) => (ctx as any).payload;
     default:
-      return (ctx) => (ctx as any).req.body;
+      return (ctx) => {
+        if (ctx["msg"]) {
+          return ctx["msg"].data;
+        } else if (ctx["req"]) {
+          return ctx["req"].body;
+        } else {
+          return {};
+        }
+      };
   }
 }
