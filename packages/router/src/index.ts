@@ -34,6 +34,11 @@ export {
   HttpPost,
   HttpPut,
   HttpTrace,
+  HttpCopy,
+  HttpLink,
+  HttpMove,
+  HttpUnlink,
+  HttpWrapped,
   setActionMetadata,
   getActionMetadata,
 } from "./action";
