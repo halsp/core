@@ -21,9 +21,19 @@ declare module "@ipare/core" {
   }
 }
 
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace NodeJS {
+    export interface ProcessEnv {
+      IS_IPARE_HTTP: "true";
+    }
+  }
+}
+
 export abstract class HttpStartup extends Startup {
   constructor() {
     super();
+    process.env.IS_IPARE_MICRO = "true";
     initExtends();
   }
 
