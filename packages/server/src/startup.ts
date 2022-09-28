@@ -22,20 +22,20 @@ export class ServerStartup<
     | HttpServerOptions
     | HttpsServerOptions
 > extends BodyPraserStartup {
-  readonly server: ServerType<T>;
+  readonly #server: ServerType<T>;
 
   constructor(serverOptions?: T) {
     super((ctx) => ctx.httpReq);
 
     if (isHttpsOptions(serverOptions)) {
-      this.server = https.createServer(serverOptions, this.#requestListener);
+      this.#server = https.createServer(serverOptions, this.#requestListener);
     } else if (serverOptions) {
-      this.server = http.createServer(
+      this.#server = http.createServer(
         serverOptions,
         this.#requestListener
       ) as ServerType<T>;
     } else {
-      this.server = http.createServer(this.#requestListener) as ServerType<T>;
+      this.#server = http.createServer(this.#requestListener) as ServerType<T>;
     }
   }
 
@@ -73,7 +73,7 @@ export class ServerStartup<
   ): ServerType<T>;
   listen(handle: any, listeningListener?: () => void): ServerType<T>;
   listen(...args: any[]): ServerType<T> {
-    return this.server.listen(...args);
+    return this.#server.listen(...args);
   }
 
   dynamicListen(
@@ -123,7 +123,7 @@ export class ServerStartup<
       (resolve, reject) => {
         let error = false;
         let listen = false;
-        const server = this.server.listen(arg0, ...args);
+        const server = this.#server.listen(arg0, ...args);
         server.once("listening", () => {
           listen = true;
           if (error) return;
