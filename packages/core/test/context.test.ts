@@ -1,3 +1,4 @@
+import { Context, Request } from "../src";
 import { TestStartup } from "./test-startup";
 
 async function getContext() {
@@ -56,5 +57,22 @@ describe("context.bag", () => {
       expect(context.bag<any>("BAG4").bag4).toBe("BAG4");
       expect(context.bag<any>("BAG4")).toBe(context.bag<any>("BAG4"));
     }
+  });
+});
+
+describe("req", () => {
+  it("should init req", async () => {
+    const req = new Request();
+    const ctx = new Context(req);
+    expect(ctx.req).toBe(req);
+    expect(ctx.req).toBe(ctx.request);
+    expect(req.ctx).toBe(ctx);
+  });
+
+  it("should init res", async () => {
+    const ctx = new Context();
+    expect(ctx.res).toBe(ctx.response);
+    expect(ctx.res).not.toBeUndefined();
+    expect(ctx.res.ctx).toBe(ctx);
   });
 });

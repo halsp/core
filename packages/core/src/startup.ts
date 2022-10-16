@@ -125,7 +125,10 @@ export abstract class Startup {
   }
 
   protected async invoke(ctx: any): Promise<any> {
-    (ctx as any).startup = this;
+    Object.defineProperty(ctx, "startup", {
+      configurable: true,
+      get: () => this,
+    });
     if (!this.#mds.length) {
       return ctx;
     }

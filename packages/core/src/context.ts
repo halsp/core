@@ -9,7 +9,44 @@ type BuilderBagItem<T> = {
   isBuilderBag: true;
 };
 
+export class Request {
+  readonly ctx!: Context;
+}
+export class Response {
+  readonly ctx!: Context;
+}
+
 export class Context {
+  constructor(req: Request = new Request()) {
+    this.#req = req;
+    this.#res = new Response();
+
+    Object.defineProperty(this.#req, "ctx", {
+      configurable: true,
+      get: () => this,
+    });
+    Object.defineProperty(this.#res, "ctx", {
+      configurable: true,
+      get: () => this,
+    });
+  }
+
+  #req!: Request;
+  get req() {
+    return this.#req;
+  }
+  get request() {
+    return this.#req;
+  }
+
+  #res!: Response;
+  get res() {
+    return this.#res;
+  }
+  get response() {
+    return this.#res;
+  }
+
   readonly startup!: Startup;
 
   get #singletonBag() {
