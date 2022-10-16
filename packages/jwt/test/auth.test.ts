@@ -51,6 +51,7 @@ describe("auth", () => {
   });
 
   it("should set 401 when use useJwtExtraAuth in http", async () => {
+    process.env.IS_IPARE_HTTP = "true";
     const ctx = await new TestStartup()
       .setContext(
         await createTestContext({
@@ -58,7 +59,7 @@ describe("auth", () => {
         })
       )
       .use(async (ctx, next) => {
-        (ctx as any).unauthorizedMsg = (msg) => {
+        (ctx as any).unauthorizedMsg = (msg: string) => {
           ctx.bag("msg", msg);
         };
         (ctx as any).res = {
@@ -75,6 +76,8 @@ describe("auth", () => {
   });
 
   it(`should auth failed with custom status`, async function () {
+    process.env.IS_IPARE_HTTP = "" as any;
+    process.env.IS_IPARE_MICRO = "true";
     const ctx = await new TestStartup()
       .setContext(
         await createTestContext({

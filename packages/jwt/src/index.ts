@@ -63,14 +63,16 @@ Startup.prototype.useJwtExtraAuth = function (
 ) {
   return this.use(async (ctx, next) => {
     if (await access(ctx)) {
-      await next();
-    } else if (
-      "unauthorizedMsg" in ctx &&
-      "res" in ctx &&
-      ctx["res"].status == 404 &&
-      ctx["res"].body == undefined
-    ) {
+      return await next();
+    }
+
+    if (process.env.IS_IPARE_HTTP) {
       ctx["unauthorizedMsg"]("JWT validation failed");
+    } else if (process.env.IS_IPARE_MICRO) {
+      ctx["result"] = {
+        status: "error",
+        message: "JWT validation failed",
+      };
     }
   });
 };
