@@ -1,4 +1,4 @@
-import { Context } from "./context";
+import { Context, Request, Response } from "./context";
 import {
   Middleware,
   MdHook,
@@ -124,13 +124,15 @@ export abstract class Startup {
     return this;
   }
 
-  protected async invoke(ctx: any): Promise<any> {
+  protected async invoke(ctx?: Request | Context): Promise<Response> {
+    ctx = ctx instanceof Context ? ctx : new Context(ctx);
+
     Object.defineProperty(ctx, "startup", {
       configurable: true,
       get: () => this,
     });
     if (!this.#mds.length) {
-      return ctx;
+      return ctx.res;
     }
 
     try {
@@ -138,6 +140,6 @@ export abstract class Startup {
     } catch (err) {
       ctx.catchError(err);
     }
-    return ctx;
+    return ctx.res;
   }
 }

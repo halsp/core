@@ -1,4 +1,4 @@
-import { Context, Startup } from "../src";
+import { Context, Response, Startup } from "../src";
 import { TestStartup } from "./test-startup";
 
 describe("invoke", () => {
@@ -14,24 +14,25 @@ describe("invoke", () => {
       .use(async (ctx) => {
         ctx.bag("result", ctx.bag<number>("result") + 1);
       });
-    let ctx = await startup.run();
-    expect(ctx.bag("result")).toBe(2);
-    ctx = await startup.run();
-    expect(ctx.bag("result")).toBe(2);
-    ctx = await startup.run();
-    expect(ctx.bag("result")).toBe(2);
+
+    let res = await startup.run();
+    expect(res.ctx.bag("result")).toBe(2);
+    res = await startup.run();
+    expect(res.ctx.bag("result")).toBe(2);
+    res = await startup.run();
+    expect(res.ctx.bag("result")).toBe(2);
   });
 });
 
 describe("custom", () => {
   class CustomStartup extends Startup {
-    async run(): Promise<Context> {
+    async run(): Promise<Response> {
       return await super.invoke(new Context());
     }
   }
 
   it("should run with custom startup", async () => {
-    const ctx = await new CustomStartup()
+    const { ctx } = await new CustomStartup()
       .use((ctx) => {
         ctx.bag("result", {
           msg: "ok",

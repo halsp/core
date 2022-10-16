@@ -6,7 +6,7 @@ test("middleware success", async () => {
     step: 0,
   };
 
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .add(() => new Mdw1(stepResult))
     .add(() => new Mdw2(stepResult))
     .add(() => new Mdw3(stepResult))

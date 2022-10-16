@@ -24,16 +24,16 @@ test("simpple middleware", async () => {
       await next();
     })
     .use(async (ctx, next) => {
-      ctx.bag("result", "OK");
+      ctx.bag("ctx", "OK");
       await next();
     });
 
-  const result = await startup.run();
-  expect(result.bag("result")).toBe("OK");
-  expect(result.bag("mdw1")).toBe("mdw1");
-  expect(result.bag("mdw2")).toBe("mdw2");
-  expect(result.bag("mdw3")).toBe("mdw3");
-  expect(result.bag("mdw4")).toBe("mdw4->2");
-  expect(result.bag("mdw5")).toBe("mdw5");
-  expect(result.bag("mdw6")).toBeUndefined();
+  const { ctx } = await startup.run();
+  expect(ctx.bag("ctx")).toBe("OK");
+  expect(ctx.bag("mdw1")).toBe("mdw1");
+  expect(ctx.bag("mdw2")).toBe("mdw2");
+  expect(ctx.bag("mdw3")).toBe("mdw3");
+  expect(ctx.bag("mdw4")).toBe("mdw4->2");
+  expect(ctx.bag("mdw5")).toBe("mdw5");
+  expect(ctx.bag("mdw6")).toBeUndefined();
 });

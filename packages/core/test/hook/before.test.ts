@@ -39,12 +39,12 @@ test("simple hook", async () => {
     }) // 3 hooks
     .add(TestMiddleware);
 
-  const result = await startup.run();
-  expect(result.bag("h1")).toBe(1);
-  expect(result.bag("h2")).toBe(2);
-  expect(result.bag("h3")).toBe(3);
-  expect(result.bag("h4")).toBeUndefined();
-  expect(result.bag("after")).toBe(1);
+  const { ctx } = await startup.run();
+  expect(ctx.bag("h1")).toBe(1);
+  expect(ctx.bag("h2")).toBe(2);
+  expect(ctx.bag("h3")).toBe(3);
+  expect(ctx.bag("h4")).toBeUndefined();
+  expect(ctx.bag("after")).toBe(1);
 });
 
 function runReturnFalse(type: HookType.BeforeInvoke | HookType.BeforeNext) {
@@ -84,21 +84,21 @@ function runReturnFalse(type: HookType.BeforeInvoke | HookType.BeforeNext) {
       })
       .add(TestMiddleware);
 
-    const result = await startup.run();
+    const { ctx } = await startup.run();
     if (type == HookType.BeforeInvoke) {
-      expect(result.bag("h1")).toBe(1);
-      expect(result.bag("hn1")).toBe(1);
-      expect(result.bag("h2")).toBeUndefined();
-      expect(result.bag("hn2")).toBeUndefined();
-      expect(result.bag("h3")).toBeUndefined();
-      expect(result.bag("hn3")).toBeUndefined();
+      expect(ctx.bag("h1")).toBe(1);
+      expect(ctx.bag("hn1")).toBe(1);
+      expect(ctx.bag("h2")).toBeUndefined();
+      expect(ctx.bag("hn2")).toBeUndefined();
+      expect(ctx.bag("h3")).toBeUndefined();
+      expect(ctx.bag("hn3")).toBeUndefined();
     } else if (type == HookType.BeforeNext) {
-      expect(result.bag("h1")).toBe(0);
-      expect(result.bag("hn1")).toBe(1);
-      expect(result.bag("h2")).toBe(0); // 为什么是0：BeforeNext 作用于下一个中间件，而当前中间件的 count 在赋值后才 +1
-      expect(result.bag("hn2")).toBe(2);
-      expect(result.bag("h3")).toBeUndefined();
-      expect(result.bag("hn3")).toBeUndefined();
+      expect(ctx.bag("h1")).toBe(0);
+      expect(ctx.bag("hn1")).toBe(1);
+      expect(ctx.bag("h2")).toBe(0); // 为什么是0：BeforeNext 作用于下一个中间件，而当前中间件的 count 在赋值后才 +1
+      expect(ctx.bag("hn2")).toBe(2);
+      expect(ctx.bag("h3")).toBeUndefined();
+      expect(ctx.bag("hn3")).toBeUndefined();
     }
   });
 }

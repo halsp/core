@@ -8,7 +8,7 @@ test("compose middleware", async () => {
     return index;
   }
 
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .use(async (ctx, next) => {
       ctx.bag("h11", getIndex());
       await next();
@@ -79,7 +79,7 @@ test("compose middleware", async () => {
 });
 
 test("compose enable = true", async () => {
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .add(() =>
       new ComposeMiddleware(() => true).use(async (ctx) => {
         ctx.bag("h", 1);
@@ -90,7 +90,7 @@ test("compose enable = true", async () => {
 });
 
 test("compose enable = false", async () => {
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .add(() =>
       new ComposeMiddleware(() => false).use(async (ctx) => {
         ctx.bag("h", 1);

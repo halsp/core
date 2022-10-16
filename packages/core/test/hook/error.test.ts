@@ -20,7 +20,7 @@ function runSimpleTest(handle: boolean, afterNext: boolean) {
 
   test(`error hook ${handle} ${afterNext}`, async () => {
     let errorMiddleware!: Middleware;
-    const res = await new TestStartup()
+    const { ctx } = await new TestStartup()
       .use(async (ctx, next) => {
         ctx.catchError = (err) => {
           ctx.bag("result", err.message);
@@ -42,14 +42,14 @@ function runSimpleTest(handle: boolean, afterNext: boolean) {
       .add(TestMiddleware)
       .run();
 
-    expect(res.bag("result")).toEqual(
+    expect(ctx.bag("result")).toEqual(
       handle
         ? {
             message: "err",
           }
         : "err"
     );
-    expect(res.bag("h")).toBe(afterNext ? 1 : undefined);
+    expect(ctx.bag("h")).toBe(afterNext ? 1 : undefined);
     expect(errorMiddleware.constructor).toBe(TestMiddleware);
   });
 }
@@ -68,7 +68,7 @@ function runBeforeNextTest(handle: boolean) {
 
   test(`error hook ${handle}`, async () => {
     let errorMiddleware!: Middleware;
-    const res = await new TestStartup()
+    const { ctx } = await new TestStartup()
       .use(async (ctx, next) => {
         ctx.catchError = (err) => {
           ctx.bag("result", err.message);
@@ -97,14 +97,14 @@ function runBeforeNextTest(handle: boolean) {
       .add(TestMiddleware)
       .run();
 
-    expect(res.bag("result")).toEqual(
+    expect(ctx.bag("result")).toEqual(
       handle
         ? {
             message: "err",
           }
         : "err"
     );
-    expect(res.bag("h")).toBe(undefined);
+    expect(ctx.bag("h")).toBe(undefined);
     expect(errorMiddleware.constructor).toBe(TestMiddleware);
   });
 }

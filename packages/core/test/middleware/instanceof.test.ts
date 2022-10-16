@@ -23,7 +23,7 @@ describe("middleware instanceof", () => {
   }
 
   it("should return true when middleware is class", async () => {
-    const ctx = await new TestStartup()
+    const { ctx } = await new TestStartup()
       .add(Middleware1)
       .add(Middleware2)
       .add(Middleware3)
@@ -35,7 +35,7 @@ describe("middleware instanceof", () => {
   });
 
   it("should return false when the prev middleware is not exist", async () => {
-    const ctx = await new TestStartup()
+    const { ctx } = await new TestStartup()
       .add(Middleware2)
       .add(Middleware1)
       .add(Middleware3)
@@ -47,7 +47,7 @@ describe("middleware instanceof", () => {
   });
 
   it("should return false when the next middleware is not exist", async () => {
-    const ctx = await new TestStartup()
+    const { ctx } = await new TestStartup()
       .add(Middleware1)
       .add(Middleware3)
       .add(Middleware2)
@@ -71,7 +71,7 @@ describe("middleware instanceof", () => {
       }
     }
 
-    const ctx = await new TestStartup()
+    const { ctx } = await new TestStartup()
       .add(ParentMiddleware)
       .add(ChildMiddleware)
       .run();
@@ -91,7 +91,7 @@ describe("middleware instanceof", () => {
       }
     }
 
-    const ctx = await new TestStartup()
+    const { ctx } = await new TestStartup()
       .add(ParentMiddleware)
       .add(new ChildMiddleware())
       .run();
@@ -111,7 +111,7 @@ describe("middleware instanceof", () => {
       }
     }
 
-    const ctx = await new TestStartup()
+    const { ctx } = await new TestStartup()
       .add(ParentMiddleware)
       .add(ChildMiddleware)
       .run();
@@ -131,7 +131,7 @@ describe("middleware instanceof", () => {
       }
     }
 
-    const ctx = await new TestStartup()
+    const { ctx } = await new TestStartup()
       .add(ParentMiddleware)
       .add(new ChildMiddleware())
       .run();
@@ -151,7 +151,7 @@ describe("middleware instanceof", () => {
       }
     }
 
-    const ctx = await new TestStartup()
+    const { ctx } = await new TestStartup()
       .add(ParentMiddleware)
       .add(() => new ParentMiddleware(), ChildMiddleware)
       .run();
@@ -159,7 +159,7 @@ describe("middleware instanceof", () => {
   });
 
   it("should return true when add middleware in ComposeMiddleware with type", async () => {
-    const ctx = await new TestStartup()
+    const { ctx } = await new TestStartup()
       .add(() =>
         new ComposeMiddleware()
           .add(Middleware1)

@@ -24,7 +24,7 @@ class TestMiddleware2 extends Middleware {
 }
 
 test("constructor hook", async () => {
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .hook<TestMiddleware1>(HookType.Constructor, (ctx, md) => {
       if (md == TestMiddleware1) {
         return new md(1);
@@ -52,7 +52,7 @@ test("constructor hook", async () => {
 });
 
 test("constructor hook error", async () => {
-  const ctx = await new TestStartup().add(TestMiddleware1).run();
+  const { ctx } = await new TestStartup().add(TestMiddleware1).run();
 
   expect(ctx.bag("h1")).toBeUndefined();
 });

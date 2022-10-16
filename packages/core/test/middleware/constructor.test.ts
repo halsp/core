@@ -10,15 +10,15 @@ class TestMiddleware extends Middleware {
 test("add middleware constructor", async () => {
   const startup = new TestStartup().add(TestMiddleware);
 
-  const result = await startup.run();
-  expect(result.bag("result")).toBe("test");
+  const { ctx } = await startup.run();
+  expect(ctx.bag("result")).toBe("test");
 });
 
 test("add function middleware constructor", async () => {
   const startup = new TestStartup().add(() => TestMiddleware);
 
-  const result = await startup.run();
-  expect(result.bag("result")).toBe("test");
+  const { ctx } = await startup.run();
+  expect(ctx.bag("result")).toBe("test");
 });
 
 test("add async function middleware constructor", async () => {
@@ -29,6 +29,6 @@ test("add async function middleware constructor", async () => {
     return TestMiddleware;
   });
 
-  const result = await startup.run();
-  expect(result.bag("result")).toBe("test");
+  const { ctx } = await startup.run();
+  expect(ctx.bag("result")).toBe("test");
 });

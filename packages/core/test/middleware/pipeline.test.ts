@@ -8,13 +8,13 @@ test("middleware pipeline", async () => {
     .add(() => new Mdw3())
     .add(() => new Mdw4());
 
-  const result = await startup.run();
-  expect(result.bag("result")).toBe("OK");
-  expect(result.bag("mdw1")).toBe("mdw1");
-  expect(result.bag("mdw2")).toBe("mdw2");
-  expect(!!result.bag("mdw2")).toBeTruthy();
-  expect(!!result.bag("mdw3")).toBeFalsy();
-  expect(!!result.bag("mdw4")).toBeFalsy();
+  const { ctx } = await startup.run();
+  expect(ctx.bag("ctx")).toBe("OK");
+  expect(ctx.bag("mdw1")).toBe("mdw1");
+  expect(ctx.bag("mdw2")).toBe("mdw2");
+  expect(!!ctx.bag("mdw2")).toBeTruthy();
+  expect(!!ctx.bag("mdw3")).toBeFalsy();
+  expect(!!ctx.bag("mdw4")).toBeFalsy();
 });
 
 class Mdw1 extends Middleware {
@@ -33,7 +33,7 @@ class Mdw2 extends Middleware {
 
 class Mdw3 extends Middleware {
   async invoke(): Promise<void> {
-    this.ctx.bag("result", "OK");
+    this.ctx.bag("ctx", "OK");
   }
 }
 

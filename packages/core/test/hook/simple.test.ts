@@ -51,14 +51,14 @@ test("simple hook", async () => {
     })
     .add(TestMiddleware);
 
-  const result = await startup.run();
-  expect(result.bag("h11")).toBe(1);
-  expect(result.bag("h12")).toBe(2);
-  expect(result.bag("h13")).toBe(3);
-  expect(result.bag("h14")).toBeUndefined();
-  expect(result.bag("after")).toBe(1);
+  const { ctx } = await startup.run();
+  expect(ctx.bag("h11")).toBe(1);
+  expect(ctx.bag("h12")).toBe(2);
+  expect(ctx.bag("h13")).toBe(3);
+  expect(ctx.bag("h14")).toBeUndefined();
+  expect(ctx.bag("after")).toBe(1);
 
-  expect(result.bag("h21")).toBe(1);
-  expect(result.bag("h22")).toBe(2);
-  expect(result.bag("h23")).toBe(4);
+  expect(ctx.bag("h21")).toBe(1);
+  expect(ctx.bag("h22")).toBe(2);
+  expect(ctx.bag("h23")).toBe(4);
 });
