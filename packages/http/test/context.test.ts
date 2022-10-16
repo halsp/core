@@ -1,20 +1,18 @@
 import { Context } from "@ipare/core";
-import { createContext } from "../src";
-
 describe("context", () => {
   it("default instance", async () => {
     const ctx = new Context();
-    expect(ctx.req).toBeUndefined();
-    expect(ctx.res).toBeUndefined();
+    expect(ctx.req).not.toBeUndefined();
+    expect(ctx.res).not.toBeUndefined();
   });
 
   it("should set req", async () => {
-    const ctx = createContext();
+    const ctx = new Context();
     expect(ctx).toBe(ctx.req.ctx);
   });
 
   it("should set res", async () => {
-    const ctx = createContext();
+    const ctx = new Context();
     expect(ctx).toBe(ctx.res.ctx);
   });
 });

@@ -1,50 +1,75 @@
-import { Context, isNil, isObject } from "@ipare/core";
+import {
+  Context,
+  isNil,
+  isObject,
+  Middleware,
+  Request,
+  Response,
+} from "@ipare/core";
+import { CTX_INITED } from "../constant";
 import { HttpException, InternalServerErrorException } from "../exceptions";
-import { Request } from "./request";
-import { Response } from "./response";
+import { initRequest } from "./request";
+import { initResponse } from "./response";
+import { initResultHandler } from "./result-handler";
 
-export * from "./response";
-export * from "./request";
-export * from "./result-handler";
-export * from "./header-handler";
+export { ResultHandler, initResultHandler } from "./result-handler";
+export { HeaderHandler, initHeaderHandler } from "./header-handler";
 
-export function createContext(req?: Request) {
-  const ctx = new Context();
-  const res = new Response();
-  req = req ?? new Request();
+export function initContext() {
+  if (Context.prototype[CTX_INITED]) {
+    return;
+  }
+  Context.prototype[CTX_INITED] = true;
 
-  Object.defineProperty(ctx, "req", {
-    get: () => req,
-  });
-  Object.defineProperty(ctx, "res", {
-    get: () => res,
-  });
-  Object.defineProperty(ctx.req, "ctx", {
-    get: () => ctx,
-  });
-  Object.defineProperty(ctx.res, "ctx", {
-    get: () => ctx,
-  });
+  initRequest(Request.prototype);
+  initResponse(Response.prototype);
 
+  initResultHandler(
+    Context.prototype,
+    function () {
+      return this.res;
+    },
+    function () {
+      return this.req.headers;
+    },
+    function () {
+      return this.res.headers;
+    }
+  );
+
+  initResultHandler(
+    Middleware.prototype,
+    function () {
+      return this.res;
+    },
+    function () {
+      return this.req.headers;
+    },
+    function () {
+      return this.res.headers;
+    }
+  );
+}
+
+export function initCatchError(ctx: Context) {
   const catchError = ctx.catchError;
   ctx.catchError = function (err: Error | any): Context {
     if (err instanceof HttpException) {
-      this.setHeaders(err.header.headers)
+      ctx
+        .setHeaders(err.headers)
         .res.setStatus(err.status)
         .setBody(err.toPlainObject());
     } else if (err instanceof Error) {
       const msg = err.message || undefined;
-      this.catchError(new InternalServerErrorException(msg));
+      ctx.catchError(new InternalServerErrorException(msg));
     } else if (isObject(err)) {
-      this.catchError(new InternalServerErrorException(err));
+      ctx.catchError(new InternalServerErrorException(err));
     } else {
       const error = (!isNil(err) && String(err)) || undefined;
-      this.catchError(new InternalServerErrorException(error));
+      ctx.catchError(new InternalServerErrorException(error));
     }
 
     catchError.call(ctx, err);
     return this;
   };
-
-  return ctx;
 }

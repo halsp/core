@@ -1,3 +1,4 @@
+import { Context } from "@ipare/core";
 import {
   HttpException,
   StatusCodes,
@@ -23,19 +24,18 @@ import {
   UnauthorizedException,
   UnprocessableEntityException,
   UnsupportedMediaTypeException,
-  createContext,
 } from "../../src";
 import { TestStartup } from "../test-startup";
 
 test("base http exception", () => {
   new TestStartup();
-  const ex = new HttpException(StatusCodes.BAD_REQUEST).setHeaders((header) =>
-    header.setHeader("h1", "1").setHeader("h2", "2")
-  );
+  const ex = new HttpException(StatusCodes.BAD_REQUEST)
+    .setHeader("h1", "1")
+    .setHeader("h2", "2");
   expect(ex.error).toBeUndefined();
   expect(ex.message).toBe(getReasonPhrase(StatusCodes.BAD_REQUEST));
 
-  const ctx = createContext().catchError(ex);
+  const ctx = new Context().initCatchError().catchError(ex);
   expect(ctx.res.headers["h1"]).toBe("1");
   expect(ctx.res.headers["h2"]).toBe("2");
   expect(ctx.res.status).toBe(StatusCodes.BAD_REQUEST);
@@ -51,7 +51,7 @@ test("http exception string error", () => {
   expect(ex.error).toBe("err");
   expect(ex.message).toBe("err");
 
-  const ctx = createContext().catchError(ex);
+  const ctx = new Context().initCatchError().catchError(ex);
   expect(ctx.res.body).toEqual({
     message: "err",
     status: StatusCodes.BAD_REQUEST,
@@ -66,7 +66,7 @@ test("http exception object error", () => {
   expect(ex.error).toEqual({ a: 1 });
   expect(ex.message).toBe(getReasonPhrase(StatusCodes.BAD_REQUEST));
 
-  const ctx = createContext().catchError(ex);
+  const ctx = new Context().initCatchError().catchError(ex);
   expect(ctx.res.body).toEqual({
     message: getReasonPhrase(StatusCodes.BAD_REQUEST),
     status: StatusCodes.BAD_REQUEST,

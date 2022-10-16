@@ -1,12 +1,18 @@
-import { HeadersDict, HeaderHandler } from "../../src";
+import { HeadersDict, HeaderHandler, initHeaderHandler } from "../../src";
 
-class CustomHeader extends HeaderHandler {
+class CustomHeader {
   constructor() {
-    super(() => this.headers);
+    initHeaderHandler(
+      this,
+      () => this.headers,
+      () => this.headers
+    );
   }
 
   readonly headers: HeadersDict = {};
 }
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface CustomHeader extends HeaderHandler {}
 
 test("custom ipare headers", async () => {
   const header = new CustomHeader()

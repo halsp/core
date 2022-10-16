@@ -1,78 +1,131 @@
-import { HeadersDict, ReadonlyHeadersDict } from "../types";
-import { Dict, ReadonlyDict, normalizePath, Context } from "@ipare/core";
-import { HeaderHandler } from "./header-handler";
+import { ReadonlyHeadersDict } from "../types";
+import { Dict, ReadonlyDict, normalizePath, Request } from "@ipare/core";
+import { HeaderHandler, initHeaderHandler } from "./header-handler";
+import { HttpMethod } from "../http-method";
+import {
+  REQUEST_BODY,
+  REQUEST_HEADERS,
+  REQUEST_METHOD,
+  REQUEST_ORIGINAL_PATH,
+  REQUEST_PATH,
+  REQUEST_QUERY,
+} from "../constant";
 
-export class Request extends HeaderHandler {
-  constructor() {
-    super(() => this.#headers);
+declare module "@ipare/core" {
+  interface Request extends HeaderHandler {
+    get headers(): ReadonlyHeadersDict;
+
+    get body(): any;
+    setBody(body: unknown): this;
+
+    get path(): string;
+    get originalPath(): string;
+    setPath(path: string): this;
+
+    get overrideMethod(): string | undefined;
+    get method(): string;
+    setMethod(method: string): this;
+
+    get query(): ReadonlyDict<string>;
+    setQuery(key: string, value: string): this;
+    setQuery(query: Dict<string>): this;
   }
+}
 
-  public readonly ctx!: Context;
+export function initRequest(req: typeof Request.prototype) {
+  Object.defineProperty(req, "headers", {
+    get: function () {
+      if (!(REQUEST_HEADERS in this)) {
+        this[REQUEST_HEADERS] = {};
+      }
+      return this[REQUEST_HEADERS];
+    },
+  });
 
-  readonly #headers: HeadersDict = {};
-  get headers(): ReadonlyHeadersDict {
-    return this.#headers;
-  }
-
-  #body: unknown;
-  public get body(): any {
-    return this.#body;
-  }
-  setBody(body: unknown): this {
-    this.#body = body;
+  Object.defineProperty(req, "body", {
+    get: function () {
+      if (!(REQUEST_BODY in this)) {
+        this[REQUEST_BODY] = undefined;
+      }
+      return this[REQUEST_BODY];
+    },
+  });
+  req.setBody = function (val: unknown) {
+    this[REQUEST_BODY] = val;
     return this;
-  }
+  };
 
-  #path = "";
-  public get path(): string {
-    return this.#path;
-  }
-  #originalPath = "";
-  public get originalPath(): string {
-    return this.#originalPath;
-  }
-  setPath(path: string): this {
-    this.#originalPath = path
+  Object.defineProperty(req, "path", {
+    get: function () {
+      if (!(REQUEST_PATH in this)) {
+        this[REQUEST_PATH] = "";
+      }
+      return this[REQUEST_PATH];
+    },
+  });
+  Object.defineProperty(req, "originalPath", {
+    get: function () {
+      if (!(REQUEST_ORIGINAL_PATH in this)) {
+        this[REQUEST_ORIGINAL_PATH] = undefined;
+      }
+      return this[REQUEST_ORIGINAL_PATH];
+    },
+  });
+  req.setPath = function (val: string): Request {
+    this[REQUEST_ORIGINAL_PATH] = val
       ?.replace(/\?.*$/, "")
       ?.replace(/^https?:\/{1,2}[^\/]+\//, "");
-    this.#path = normalizePath(this.#originalPath);
+    this[REQUEST_PATH] = normalizePath(this[REQUEST_ORIGINAL_PATH]);
     return this;
-  }
+  };
 
-  #method = "ANY";
-  public get overrideMethod(): string | undefined {
-    if (
-      this.#method &&
-      this.#method.toUpperCase() != this.method.toUpperCase()
-    ) {
-      return this.#method;
-    }
-  }
-  public get method(): string {
-    const ovrdHeader = this.getHeader("X-HTTP-Method-Override");
-    if (ovrdHeader) {
-      if (Array.isArray(ovrdHeader)) {
-        return ovrdHeader[0].toUpperCase();
-      } else {
-        return ovrdHeader.toUpperCase();
+  Object.defineProperty(req, "overrideMethod", {
+    get: function () {
+      const method = this[REQUEST_METHOD] as string;
+
+      if (method && method.toUpperCase() != this.method.toUpperCase()) {
+        return method;
       }
-    }
-    return this.#method;
-  }
-  setMethod(method: string): this {
-    this.#method = method?.toUpperCase();
-    return this;
-  }
+    },
+  });
 
-  #query: Dict<string> = {};
-  get query(): ReadonlyDict<string> {
-    return this.#query;
-  }
-  setQuery(key: string, value: string): this;
-  setQuery(query: Dict<string>): this;
-  setQuery(key: string | Dict<string>, value?: string): this {
+  Object.defineProperty(req, "method", {
+    get: function () {
+      if (!(REQUEST_METHOD in this)) {
+        this[REQUEST_METHOD] = HttpMethod.any;
+      }
+
+      const ovrdHeader = this.getHeader("X-HTTP-Method-Override");
+      if (ovrdHeader) {
+        if (Array.isArray(ovrdHeader)) {
+          return ovrdHeader[0].toUpperCase();
+        } else {
+          return ovrdHeader.toUpperCase();
+        }
+      }
+      return this[REQUEST_METHOD];
+    },
+  });
+  req.setMethod = function (val: string) {
+    this[REQUEST_METHOD] = val?.toUpperCase();
+    return this;
+  };
+
+  Object.defineProperty(req, "query", {
+    get: function () {
+      if (!(REQUEST_QUERY in this)) {
+        this[REQUEST_QUERY] = {};
+      }
+      return this[REQUEST_QUERY];
+    },
+  });
+  req.setQuery = function (
+    key: string | Dict<string>,
+    value?: string
+  ): Request {
+    const query = this.query as Dict<string>;
     if (typeof key == "string") {
-      this.#query[key] = value ?? "";
+      query[key] = value ?? "";
     } else {
       const query = key;
       Object.keys(query).forEach((key) => {
@@ -81,5 +134,15 @@ export class Request extends HeaderHandler {
       });
     }
     return this;
-  }
+  };
+
+  initHeaderHandler(
+    req,
+    function () {
+      return this.headers;
+    },
+    function () {
+      return this.headers;
+    }
+  );
 }

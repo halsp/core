@@ -1,4 +1,5 @@
-import { Request } from "../../src";
+import { Request } from "@ipare/core";
+import "../../src";
 
 describe("request path", () => {
   it("should set illegal path", async () => {

@@ -1,34 +1,81 @@
 import { StatusCodes } from "http-status-codes";
-import { HeadersDict, ReadonlyHeadersDict } from "../types";
-import { Context } from "@ipare/core";
-import { ResultHandler } from "./result-handler";
+import { ReadonlyHeadersDict } from "../types";
+import { Response } from "@ipare/core";
+import { initResultHandler, ResultHandler } from "./result-handler";
+import { RESPONSE_BODY, RESPONSE_HEADERS, RESPONSE_STATUS } from "../constant";
 
-export class Response extends ResultHandler {
-  constructor() {
-    super(() => this);
+declare module "@ipare/core" {
+  interface Response extends ResultHandler {
+    get isSuccess(): boolean;
+    get headers(): ReadonlyHeadersDict;
+
+    get body(): any;
+    set body(val: any);
+    setBody(body: unknown): this;
+
+    get status(): number;
+    set status(val: number);
+    setStatus(status: StatusCodes): this;
   }
+}
 
-  public readonly ctx!: Context;
+export function initResponse(res: typeof Response.prototype) {
+  Object.defineProperty(res, "isSuccess", {
+    get: function () {
+      return this.status >= 200 && this.status < 300;
+    },
+  });
+  Object.defineProperty(res, "headers", {
+    get: function () {
+      if (!(RESPONSE_HEADERS in this)) {
+        this[RESPONSE_HEADERS] = {};
+      }
+      return this[RESPONSE_HEADERS];
+    },
+  });
 
-  readonly #headers: HeadersDict = {};
-
-  get isSuccess(): boolean {
-    return this.status >= 200 && this.status < 300;
-  }
-
-  get headers(): ReadonlyHeadersDict {
-    return this.#headers;
-  }
-
-  public body: any;
-  setBody(body: unknown): this {
+  Object.defineProperty(res, "body", {
+    get: function () {
+      if (!(RESPONSE_BODY in this)) {
+        this[RESPONSE_BODY] = undefined;
+      }
+      return this[RESPONSE_BODY];
+    },
+    set: function (val) {
+      this[RESPONSE_BODY] = val;
+    },
+  });
+  res.setBody = function (body: unknown) {
     this.body = body;
     return this;
-  }
+  };
 
-  public status = StatusCodes.NOT_FOUND;
-  setStatus(status: StatusCodes): this {
+  Object.defineProperty(res, "status", {
+    get: function () {
+      if (!(RESPONSE_STATUS in this)) {
+        this[RESPONSE_STATUS] = StatusCodes.NOT_FOUND;
+      }
+      return this[RESPONSE_STATUS];
+    },
+    set: function (val) {
+      this[RESPONSE_STATUS] = val;
+    },
+  });
+  res.setStatus = function (status: number) {
     this.status = status;
     return this;
-  }
+  };
+
+  initResultHandler(
+    res,
+    function () {
+      return this;
+    },
+    function () {
+      return this.headers;
+    },
+    function () {
+      return this.headers;
+    }
+  );
 }

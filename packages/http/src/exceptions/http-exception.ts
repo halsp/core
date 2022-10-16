@@ -1,7 +1,7 @@
 import { getReasonPhrase, StatusCodes } from "http-status-codes";
-import { HeaderHandler } from "../context/header-handler";
+import { HeaderHandler, initHeaderHandler } from "../context/header-handler";
 import { Dict, isObject, isString } from "@ipare/core";
-import { HttpExceptionHeader } from "./http-exception-header";
+import { HeadersDict } from "../types";
 
 export class HttpException extends Error {
   constructor(
@@ -11,6 +11,11 @@ export class HttpException extends Error {
     super();
     this.name = this.constructor.name;
     this.#initMessage();
+    initHeaderHandler(
+      this,
+      () => this.headers,
+      () => this.headers
+    );
   }
 
   #breakthrough = false;
@@ -22,13 +27,9 @@ export class HttpException extends Error {
     return this;
   }
 
-  #header = new HttpExceptionHeader();
-  public get header() {
-    return this.#header;
-  }
-  public setHeaders(funcs: (header: HeaderHandler) => void): this {
-    funcs(this.#header);
-    return this;
+  readonly #headers: HeadersDict = {};
+  public get headers(): HeadersDict {
+    return this.#headers;
   }
 
   #initMessage() {
@@ -55,3 +56,6 @@ export class HttpException extends Error {
     }
   }
 }
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface HttpException extends HeaderHandler {}

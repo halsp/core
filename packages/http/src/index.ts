@@ -1,3 +1,5 @@
+import { ResultHandler, initContext } from "./context";
+
 export {
   StatusCodes,
   getStatusCode,
@@ -42,12 +44,29 @@ export {
   NumericalHeaderValue,
 } from "./types";
 
+export { HttpStartup } from "./startup";
+
 export {
-  Response,
-  Request,
-  ResultHandler,
+  initHeaderHandler,
+  initResultHandler,
   HeaderHandler,
-  createContext,
+  ResultHandler,
 } from "./context";
 
-export { HttpStartup } from "./startup";
+declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
+  namespace NodeJS {
+    export interface ProcessEnv {
+      IS_IPARE_HTTP: "true";
+    }
+  }
+}
+
+declare module "@ipare/core" {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface Context extends ResultHandler {}
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface Middleware extends ResultHandler {}
+}
+
+initContext();

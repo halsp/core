@@ -1,4 +1,5 @@
-import { Request } from "../../src";
+import { Request } from "@ipare/core";
+import "../../src";
 
 test("str body", async () => {
   const req = new Request().setBody("test body");

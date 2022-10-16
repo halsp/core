@@ -46,6 +46,18 @@ export abstract class Middleware {
   public get ctx(): Context {
     return this.#ctx;
   }
+  get req() {
+    return this.#ctx.req;
+  }
+  get request() {
+    return this.#ctx.req;
+  }
+  get res() {
+    return this.#ctx.res;
+  }
+  get response() {
+    return this.#ctx.response;
+  }
 
   public isPrevInstanceOf<T extends object = any>(
     target: ObjectConstructor<T>

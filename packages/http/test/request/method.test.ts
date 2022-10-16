@@ -1,4 +1,4 @@
-import { Request } from "../../src";
+import { Request } from "@ipare/core";
 import { TestStartup } from "../test-startup";
 
 describe("method override", () => {

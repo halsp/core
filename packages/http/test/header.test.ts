@@ -1,11 +1,9 @@
-import { Middleware } from "@ipare/core";
+import { Context, Middleware, Response } from "@ipare/core";
 import {
-  createContext,
   getReasonPhrase,
   getStatusCode,
   HeadersDict,
   ReasonPhrases,
-  Response,
   StatusCodes,
 } from "../src";
 import { TestStartup } from "./test-startup";
@@ -92,7 +90,7 @@ it("should get from md.req and set to md.res", async () => {
 });
 
 it("should append to ctx.res", async () => {
-  const ctx = createContext();
+  const ctx = new Context();
   ctx.append("h1", 1);
   ctx.append("h1", 2);
 
@@ -101,7 +99,7 @@ it("should append to ctx.res", async () => {
 });
 
 it("should remove to ctx.res", async () => {
-  const ctx = createContext();
+  const ctx = new Context();
   ctx.res.set("h1", 1);
   expect(ctx.response.get("h1")).toBe("1");
   ctx.remove("h1");
@@ -109,7 +107,7 @@ it("should remove to ctx.res", async () => {
 });
 
 it("should has from ctx.req", async () => {
-  const ctx = createContext();
+  const ctx = new Context();
   ctx.set("h1", 1);
   ctx.request.set("h2", 2);
 

@@ -1,6 +1,5 @@
-import { Middleware } from "@ipare/core";
-import "../../src";
-import { getReasonPhrase, createContext } from "../../src";
+import { Context, Middleware } from "@ipare/core";
+import { getReasonPhrase } from "../../src";
 import { TestStartup } from "../test-startup";
 
 const normalMethod = [
@@ -228,7 +227,7 @@ for (let i = 0; i < msgMethods.length; i++) {
     }
     constructor(private existMsg: boolean) {
       super();
-      (this as any).init(createContext(), 0);
+      (this as any).init(new Context(), 0);
     }
   }
 
@@ -271,7 +270,7 @@ class RedirectMd extends Middleware {
   constructor(readonly code: number | undefined, readonly location: string) {
     super();
 
-    (this as any).init(createContext(), 0);
+    (this as any).init(new Context(), 0);
   }
 
   async invoke(): Promise<void> {
