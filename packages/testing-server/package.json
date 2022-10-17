@@ -1,7 +1,7 @@
 {
-  "name": "@ipare/testing",
+  "name": "@ipare/testing-server",
   "version": "2.2.5",
-  "description": "Ipare 的测试插件，用于单元测试、本地测试等",
+  "description": "Ipare 的 Server 环境测试插件，用于单元测试、本地测试等",
   "engines": {
     "node": ">=12.14.0"
   },
@@ -29,7 +29,11 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^2.2.5"
+    "@ipare/core": "^2.2.5",
+    "@ipare/http": "^2.2.5",
+    "@ipare/server": "^2.2.5",
+    "@types/supertest": "^2.0.12",
+    "supertest": "^6.2.4"
   },
   "devDependencies": {
     "@types/jest": "^29.0.3",
