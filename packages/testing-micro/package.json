@@ -1,0 +1,60 @@
+{
+  "name": "@ipare/testing-micro",
+  "version": "2.2.5",
+  "description": "Ipare 的微服务环境测试插件，用于单元测试、本地测试等",
+  "engines": {
+    "node": ">=12.14.0"
+  },
+  "homepage": "https://ipare.org",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ipare/ipare"
+  },
+  "keywords": [
+    "ipare",
+    "test"
+  ],
+  "bugs": {
+    "url": "https://github.com/ipare/ipare/issues",
+    "email": "support@hal.wang"
+  },
+  "main": "dist/index.js",
+  "scripts": {
+    "prebuild": "npm run lint",
+    "build": "rimraf ./dist/* && tsc",
+    "lint": "eslint src test --ext .ts",
+    "pretest": "npm run build",
+    "test": "jest"
+  },
+  "author": "hal-wang",
+  "license": "MIT",
+  "dependencies": {
+    "@ipare/core": "^2.2.5",
+    "@ipare/micro": "^2.2.5"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.0.3",
+    "@types/node": "^18.7.18",
+    "@typescript-eslint/eslint-plugin": "^5.37.0",
+    "@typescript-eslint/parser": "^5.37.0",
+    "eslint": "^8.23.1",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "jest": "^29.0.3",
+    "prettier": "^2.7.1",
+    "rimraf": "^3.0.2",
+    "ts-jest": "^29.0.1"
+  },
+  "files": [
+    "/dist/*",
+    "/src/*",
+    "/test/*",
+    ".eslintignore",
+    ".eslintrc.js",
+    ".gitignore",
+    "LICENSE",
+    "package.json",
+    "README.md",
+    "tsconfig.json"
+  ]
+}
