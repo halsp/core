@@ -6,7 +6,7 @@ import { initCatchError } from "./context";
 export abstract class HttpStartup extends Startup {
   constructor() {
     super();
-    process.env.IS_IPARE_MICRO = "true";
+    process.env.IS_IPARE_HTTP = "true";
   }
 
   protected async invoke(ctx: Context | Request): Promise<Response> {

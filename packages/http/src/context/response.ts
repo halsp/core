@@ -5,11 +5,15 @@ import { RESPONSE_BODY, RESPONSE_HEADERS, RESPONSE_STATUS } from "../constant";
 
 export function initResponse(res: typeof Response.prototype) {
   Object.defineProperty(res, "isSuccess", {
+    configurable: true,
+    enumerable: true,
     get: function () {
       return this.status >= 200 && this.status < 300;
     },
   });
   Object.defineProperty(res, "headers", {
+    configurable: true,
+    enumerable: true,
     get: function () {
       if (!(RESPONSE_HEADERS in this)) {
         this[RESPONSE_HEADERS] = {};
@@ -19,6 +23,8 @@ export function initResponse(res: typeof Response.prototype) {
   });
 
   Object.defineProperty(res, "body", {
+    configurable: true,
+    enumerable: true,
     get: function () {
       if (!(RESPONSE_BODY in this)) {
         this[RESPONSE_BODY] = undefined;
@@ -35,6 +41,8 @@ export function initResponse(res: typeof Response.prototype) {
   };
 
   Object.defineProperty(res, "status", {
+    configurable: true,
+    enumerable: true,
     get: function () {
       if (!(RESPONSE_STATUS in this)) {
         this[RESPONSE_STATUS] = StatusCodes.NOT_FOUND;

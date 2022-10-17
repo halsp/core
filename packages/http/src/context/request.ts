@@ -12,6 +12,8 @@ import {
 
 export function initRequest(req: typeof Request.prototype) {
   Object.defineProperty(req, "headers", {
+    configurable: true,
+    enumerable: true,
     get: function () {
       if (!(REQUEST_HEADERS in this)) {
         this[REQUEST_HEADERS] = {};
@@ -21,6 +23,8 @@ export function initRequest(req: typeof Request.prototype) {
   });
 
   Object.defineProperty(req, "body", {
+    configurable: true,
+    enumerable: true,
     get: function () {
       if (!(REQUEST_BODY in this)) {
         this[REQUEST_BODY] = undefined;
@@ -34,6 +38,8 @@ export function initRequest(req: typeof Request.prototype) {
   };
 
   Object.defineProperty(req, "path", {
+    configurable: true,
+    enumerable: true,
     get: function () {
       if (!(REQUEST_PATH in this)) {
         this[REQUEST_PATH] = "";
@@ -42,6 +48,8 @@ export function initRequest(req: typeof Request.prototype) {
     },
   });
   Object.defineProperty(req, "originalPath", {
+    configurable: true,
+    enumerable: true,
     get: function () {
       if (!(REQUEST_ORIGINAL_PATH in this)) {
         this[REQUEST_ORIGINAL_PATH] = undefined;
@@ -58,6 +66,8 @@ export function initRequest(req: typeof Request.prototype) {
   };
 
   Object.defineProperty(req, "overrideMethod", {
+    configurable: true,
+    enumerable: true,
     get: function () {
       const method = this[REQUEST_METHOD] as string;
 
@@ -68,6 +78,8 @@ export function initRequest(req: typeof Request.prototype) {
   });
 
   Object.defineProperty(req, "method", {
+    configurable: true,
+    enumerable: true,
     get: function () {
       if (!(REQUEST_METHOD in this)) {
         this[REQUEST_METHOD] = HttpMethod.any;
@@ -90,6 +102,8 @@ export function initRequest(req: typeof Request.prototype) {
   };
 
   Object.defineProperty(req, "query", {
+    configurable: true,
+    enumerable: true,
     get: function () {
       if (!(REQUEST_QUERY in this)) {
         this[REQUEST_QUERY] = {};

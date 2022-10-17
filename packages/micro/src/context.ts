@@ -9,6 +9,8 @@ export function initContext() {
   Context.prototype[CTX_INITED] = true;
 
   Object.defineProperty(Request.prototype, "body", {
+    configurable: true,
+    enumerable: true,
     get: function () {
       if (!(REQUEST_BODY in this)) {
         this[REQUEST_BODY] = undefined;
@@ -22,6 +24,8 @@ export function initContext() {
   };
 
   Object.defineProperty(Request.prototype, "pattern", {
+    configurable: true,
+    enumerable: true,
     get: function () {
       if (!(REQUEST_PATTERN in this)) {
         this[REQUEST_PATTERN] = "";
@@ -35,6 +39,8 @@ export function initContext() {
   };
 
   Object.defineProperty(Response.prototype, "body", {
+    configurable: true,
+    enumerable: true,
     get: function () {
       if (!(REQUEST_BODY in this)) {
         this[REQUEST_BODY] = undefined;
