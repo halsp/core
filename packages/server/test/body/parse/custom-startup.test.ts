@@ -7,7 +7,7 @@ import { NumericalHeadersDict } from "@ipare/http";
 
 class TestServerStartup extends BodyPraserStartup {
   constructor() {
-    super((ctx) => ctx.httpReq);
+    super((ctx) => ctx.serverReq);
   }
 
   public get listen() {
@@ -16,19 +16,19 @@ class TestServerStartup extends BodyPraserStartup {
   }
 
   protected requestListener = async (
-    httpReq: http.IncomingMessage,
-    httpRes: http.ServerResponse
+    serverReq: http.IncomingMessage,
+    serverRes: http.ServerResponse
   ): Promise<void> => {
-    const url = urlParse(httpReq.url as string, true);
+    const url = urlParse(serverReq.url as string, true);
     await this.invoke(
       new Request()
         .setPath(url.pathname)
-        .setMethod(httpReq.method as string)
+        .setMethod(serverReq.method as string)
         .setQuery(url.query as Dict<string>)
-        .setHeaders(httpReq.headers as NumericalHeadersDict)
+        .setHeaders(serverReq.headers as NumericalHeadersDict)
     );
-    httpRes.statusCode = 401;
-    httpRes.end();
+    serverRes.statusCode = 401;
+    serverRes.end();
   };
 }
 

@@ -20,7 +20,7 @@ export class ServerStartup<
   readonly #server: ServerType<T>;
 
   constructor(serverOptions?: T) {
-    super((ctx) => ctx.httpReq);
+    super((ctx) => ctx.serverReq);
 
     if (isHttpsOptions(serverOptions)) {
       this.#server = https.createServer(serverOptions, this.#requestListener);
@@ -147,63 +147,59 @@ export class ServerStartup<
   }
 
   #requestListener = async (
-    httpReq: http.IncomingMessage,
-    httpRes: http.ServerResponse
+    serverReq: http.IncomingMessage,
+    serverRes: http.ServerResponse
   ): Promise<void> => {
-    const url = urlParse(httpReq.url as string, true);
+    const url = urlParse(serverReq.url as string, true);
     const ctx = new Context(
       new Request()
         .setPath(url.pathname)
-        .setMethod(httpReq.method as string)
+        .setMethod(serverReq.method as string)
         .setQuery(url.query as Dict<string>)
-        .setHeaders(httpReq.headers as NumericalHeadersDict)
+        .setHeaders(serverReq.headers as NumericalHeadersDict)
     );
 
-    httpRes.statusCode = 404;
+    serverRes.statusCode = 404;
 
-    Object.defineProperty(ctx, "httpRes", {
-      configurable: false,
-      enumerable: false,
-      get: () => httpRes,
+    Object.defineProperty(ctx, "serverRes", {
+      get: () => serverRes,
     });
-    Object.defineProperty(ctx, "httpReq", {
-      configurable: false,
-      enumerable: false,
-      get: () => httpReq,
+    Object.defineProperty(ctx, "serverReq", {
+      get: () => serverReq,
     });
 
     const res = await this.invoke(ctx);
 
-    if (!httpRes.writableEnded) {
-      httpRes.statusCode = res.status;
-      this.#writeHead(res, httpRes);
-      this.#writeBody(res, httpRes);
+    if (!serverRes.writableEnded) {
+      serverRes.statusCode = res.status;
+      this.#writeHead(res, serverRes);
+      this.#writeBody(res, serverRes);
     }
   };
 
-  #writeHead(ipareRes: Response, httpRes: http.ServerResponse) {
-    if (httpRes.headersSent) return;
+  #writeHead(ipareRes: Response, serverRes: http.ServerResponse) {
+    if (serverRes.headersSent) return;
     Object.keys(ipareRes.headers)
       .filter((key) => !!ipareRes.headers[key])
       .forEach((key) => {
-        httpRes.setHeader(key, ipareRes.headers[key] as string | string[]);
+        serverRes.setHeader(key, ipareRes.headers[key] as string | string[]);
       });
   }
 
-  #writeBody(ipareRes: Response, httpRes: http.ServerResponse) {
+  #writeBody(ipareRes: Response, serverRes: http.ServerResponse) {
     if (!ipareRes.body) {
-      httpRes.end();
+      serverRes.end();
       return;
     }
 
     if (ipareRes.body instanceof Stream) {
-      ipareRes.body.pipe(httpRes);
+      ipareRes.body.pipe(serverRes);
     } else if (Buffer.isBuffer(ipareRes.body)) {
-      httpRes.end(ipareRes.body);
+      serverRes.end(ipareRes.body);
     } else if (isString(ipareRes.body)) {
-      httpRes.end(ipareRes.body);
+      serverRes.end(ipareRes.body);
     } else {
-      httpRes.end(JSON.stringify(ipareRes.body));
+      serverRes.end(JSON.stringify(ipareRes.body));
     }
   }
 }

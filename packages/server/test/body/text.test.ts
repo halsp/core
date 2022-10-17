@@ -50,7 +50,7 @@ function runTextReturn(headersSent: boolean) {
     const server = new ServerStartup()
       .use(async (ctx) => {
         if (headersSent) {
-          ctx.httpRes.flushHeaders();
+          ctx.serverRes.flushHeaders();
         }
         ctx.ok("BODY");
       })

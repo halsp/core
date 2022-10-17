@@ -5,7 +5,7 @@ export { BodyPraserStartup, MultipartBody } from "./body-praser.startup";
 
 declare module "@ipare/core" {
   interface Context {
-    get httpReq(): http.IncomingMessage;
-    get httpRes(): http.ServerResponse;
+    get serverReq(): http.IncomingMessage;
+    get serverRes(): http.ServerResponse;
   }
 }

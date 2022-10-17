@@ -4,7 +4,7 @@ import request from "supertest";
 test("end ahead", async () => {
   const server = new ServerStartup()
     .use(async (ctx, next) => {
-      ctx.httpRes.end();
+      ctx.serverRes.end();
       await next();
     })
     .use(async (ctx) => {
@@ -21,7 +21,7 @@ test("end ahead", async () => {
 test("writeHead", async () => {
   const server = new ServerStartup()
     .use(async (ctx, next) => {
-      ctx.httpRes.writeHead(200);
+      ctx.serverRes.writeHead(200);
       await next();
     })
     .use(async (ctx) => {
