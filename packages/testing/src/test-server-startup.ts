@@ -40,7 +40,7 @@ export class TestServerStartup extends ServerStartup {
           err = stackErr;
         }
       }
-      return callback.bind(this)(err, res);
+      return callback.bind(this)(err, err ? undefined : res);
     };
     return test;
   }

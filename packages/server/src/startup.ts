@@ -19,6 +19,10 @@ export class ServerStartup<
 > extends BodyPraserStartup {
   readonly #server: ServerType<T>;
 
+  public get server() {
+    return this.#server;
+  }
+
   constructor(serverOptions?: T) {
     super((ctx) => ctx.serverReq);
 

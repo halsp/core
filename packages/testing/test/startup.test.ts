@@ -1,5 +1,4 @@
-import { Context } from "@ipare/core";
-import { Request } from "@ipare/http";
+import { Context, Request } from "@ipare/core";
 import { TestHttpStartup, TestServerStartup, TestStartup } from "../src";
 
 describe("default", () => {
@@ -52,8 +51,8 @@ describe("skipThrow", () => {
     .use(() => {
       throw new Error("err");
     })
-    .it("should add error to stack if skip throw error", (ctx) => {
-      expect(ctx.errorStack.length).toBe(1);
+    .it("should add error to stack if skip throw error", (res) => {
+      expect(res.ctx.errorStack.length).toBe(1);
     });
 
   it("error shound be throw", async () => {

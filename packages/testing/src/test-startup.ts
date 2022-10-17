@@ -1,4 +1,4 @@
-import { Context, Startup } from "@ipare/core";
+import { Context, Response, Startup } from "@ipare/core";
 
 export class TestStartup extends Startup {
   #skipThrow?: boolean;
@@ -14,25 +14,26 @@ export class TestStartup extends Startup {
     return this;
   }
 
-  async run(): Promise<Context> {
-    const ctx = await super.invoke(this.#ctx ?? new Context());
+  async run(): Promise<Response> {
+    const res = await super.invoke(this.#ctx ?? new Context());
+    const ctx = res.ctx;
 
     if (!this.#skipThrow && ctx.errorStack.length) {
       throw ctx.errorStack[0];
     }
-    return ctx;
+    return res;
   }
 
   it(
     name: string,
-    fn?: (res: Context) => void | Promise<void>,
+    fn?: (res: Response) => void | Promise<void>,
     timeout?: number
   ): void {
     it(
       name,
       async () => {
-        const ctx = await this.run();
-        if (fn) await fn(ctx);
+        const res = await this.run();
+        if (fn) await fn(res);
       },
       timeout
     );

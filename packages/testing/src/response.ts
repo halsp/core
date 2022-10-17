@@ -1,7 +1,6 @@
-import { isFunction, isNumber } from "@ipare/core";
-import { Response } from "@ipare/http";
+import { isFunction, isNumber, Response } from "@ipare/core";
 
-declare module "@ipare/http" {
+declare module "@ipare/core" {
   interface Response {
     expect(status: number): this;
     expect(status: number, body: any): this;

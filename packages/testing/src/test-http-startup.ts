@@ -1,4 +1,5 @@
-import { HttpStartup, Request, Response } from "@ipare/http";
+import { HttpStartup } from "@ipare/http";
+import { Request, Response } from "@ipare/core";
 
 export class TestHttpStartup extends HttpStartup {
   #skipThrow?: boolean;

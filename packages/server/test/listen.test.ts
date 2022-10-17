@@ -2,7 +2,8 @@ import { ServerStartup } from "../src";
 import request from "supertest";
 
 test("dynamicListen", async () => {
-  const { server, port } = await new ServerStartup()
+  const startup = new ServerStartup();
+  const { server, port } = await startup
     .use(async (ctx) => {
       const { server, port } = await new ServerStartup().dynamicListen(2333);
       server.close();
@@ -10,6 +11,7 @@ test("dynamicListen", async () => {
     })
     .dynamicListen(2333);
 
+  expect(startup.server).toBe(server);
   const res = await request(server).get("");
   expect(res.status).toBe(200);
   expect((port as number) + 1).toBe(res.body);
