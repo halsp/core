@@ -35,7 +35,7 @@ class TestMiddleware extends Middleware {
 }
 
 test(`inject key`, async function () {
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .useInject()
     .inject("KEY1", 1)
     .inject("KEY2", "2")
@@ -55,7 +55,7 @@ test(`inject key`, async function () {
 });
 
 test(`inject key empty`, async function () {
-  const ctx = await new TestStartup().useInject().add(TestMiddleware).run();
+  const { ctx } = await new TestStartup().useInject().add(TestMiddleware).run();
 
   expect(ctx.bag("result")).toEqual({
     key1: undefined,

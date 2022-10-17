@@ -9,7 +9,7 @@ import {
 } from "../src";
 
 test(`inject decorators object`, async function () {
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .use(async (ctx) => {
       const obj = await parseInject(ctx, Service2);
       return ctx.bag("result", obj.invoke());
@@ -19,7 +19,7 @@ test(`inject decorators object`, async function () {
 });
 
 test(`inject decorators`, async function () {
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .use(async (ctx) => {
       const obj = await parseInject(ctx, Service2);
       return ctx.bag("result", obj.invoke());
@@ -29,7 +29,7 @@ test(`inject decorators`, async function () {
 });
 
 test(`try parse`, async function () {
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .useInject()
     .use(async (ctx) => {
       const obj1 = tryParseInject(ctx, Service2);
@@ -50,7 +50,7 @@ test(`try parse`, async function () {
 });
 
 test(`try parse`, async function () {
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .useInject()
     .inject(Service2, InjectType.Transient)
     .use(async (ctx) => {

@@ -31,7 +31,7 @@ export class Service2 extends Object {
 }
 
 test(`inject params`, async function () {
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .useInject()
     .inject("KEY1", 1)
     .use(async (ctx) => {

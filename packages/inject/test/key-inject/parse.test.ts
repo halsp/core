@@ -21,7 +21,7 @@ class TestMiddleware extends Middleware {
 }
 
 test(`inject key`, async function () {
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .useInject()
     .inject("KEY", 1)
     .inject("SERVICE1", TestService1)
@@ -38,7 +38,7 @@ test(`inject key`, async function () {
 });
 
 test(`try parse`, async function () {
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .useInject()
     .inject("SERVICE1", TestService1)
     .use(async (ctx) => {

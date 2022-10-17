@@ -23,7 +23,7 @@ class TestMiddleware extends Middleware {
 }
 
 test(`inject decorators`, async function () {
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .useInject()
     .useInject()
     .add(TestMiddleware)

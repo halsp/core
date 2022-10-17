@@ -19,7 +19,7 @@ class TestMiddleware extends Middleware {
 }
 
 test(`derive`, async function () {
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .useInject()
     .inject(Service2, Service3)
     .add(TestMiddleware)

@@ -22,7 +22,7 @@ class TestMiddleware extends Middleware {
 
 function runTest(type?: InjectType) {
   test(`only cons ${type}`, async function () {
-    const ctx = await new TestStartup()
+    const { ctx } = await new TestStartup()
       .useInject()
       .inject(Service1, type)
       .add(TestMiddleware)

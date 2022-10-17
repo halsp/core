@@ -43,7 +43,7 @@ class TestMiddleware extends Middleware {
 }
 
 test(`class`, async function () {
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .useInject()
     .inject(Service1, InjectType.Singleton)
     .inject(Service2, InjectType.Singleton)

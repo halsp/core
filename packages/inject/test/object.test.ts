@@ -8,7 +8,7 @@ export class Service extends Object {
 }
 
 test(`object`, async function () {
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .useInject()
     .inject(Service, new Service())
     .use(async (ctx) => {
@@ -35,7 +35,7 @@ export class BuilderService {
 }
 function runBuilderTest(type?: InjectType.Scoped | InjectType.Transient) {
   test(`object builder ${type}`, async function () {
-    const ctx = await new TestStartup()
+    const { ctx } = await new TestStartup()
       .useInject()
       .inject(BuilderService, (ctx) => new BuilderService(ctx), type)
       .use(async (ctx) => {
@@ -85,7 +85,7 @@ export class PromiseBuilderService {
 
 function runPrimiseBuilderTest(type?: InjectType) {
   test(`object primise builder ${type}`, async function () {
-    const ctx = await new TestStartup()
+    const { ctx } = await new TestStartup()
       .useInject()
       .inject(
         PromiseBuilderService,

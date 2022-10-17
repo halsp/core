@@ -29,14 +29,16 @@ function runTest(type: InjectType) {
       .inject(Service2)
       .add(TestMiddleware);
 
-    let ctx = await startup.run();
+    let res = await startup.run();
+    let ctx = res.ctx;
 
     expect(ctx.bag("result")).toEqual({
       singleton1: type == InjectType.Transient ? 1 : 4,
       singleton2: type == InjectType.Transient ? 3 : 4,
     });
 
-    ctx = await startup.run();
+    res = await startup.run();
+    ctx = res.ctx;
     if (type == InjectType.Transient) {
       expect(ctx.bag("result")).toEqual({
         singleton1: 1,

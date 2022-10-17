@@ -23,9 +23,9 @@ class TestMiddleware extends Middleware {
 }
 
 test(`middleware constructor`, async () => {
-  const bag = await new TestStartup().useInject().add(TestMiddleware).run();
+  const { ctx } = await new TestStartup().useInject().add(TestMiddleware).run();
 
-  expect(bag.bag("result")).toEqual({
+  expect(ctx.bag("result")).toEqual({
     md: "md.service2.service1",
     num: undefined,
     str: undefined,
@@ -33,7 +33,7 @@ test(`middleware constructor`, async () => {
 });
 
 test(`function middleware constructor`, async () => {
-  const bag = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .useInject()
     .inject("KEY_INJ", 3)
     .add((ctx) => {
@@ -42,16 +42,16 @@ test(`function middleware constructor`, async () => {
     })
     .run();
 
-  expect(bag.bag("result")).toEqual({
+  expect(ctx.bag("result")).toEqual({
     md: "md.service2.service1",
     num: 3,
     str: undefined,
   });
-  expect(bag.bag("h")).toBe("1");
+  expect(ctx.bag("h")).toBe("1");
 });
 
 test(`async function middleware constructor`, async () => {
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .useInject()
     .add(async (ctx) => {
       await new Promise<void>((resolve) => {

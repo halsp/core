@@ -49,7 +49,7 @@ class TestMiddleware extends Middleware {
 }
 
 test(`class`, async function () {
-  const ctx = await new TestStartup().useInject().add(TestMiddleware).run();
+  const { ctx } = await new TestStartup().useInject().add(TestMiddleware).run();
 
   expect(ctx.bag("result")).toEqual({
     service: "service3.service2.service1.service1",
@@ -57,7 +57,7 @@ test(`class`, async function () {
 });
 
 test(`class singleton`, async function () {
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .useInject()
     .inject(Service2, InjectType.Singleton)
     .use(async (ctx) => {
