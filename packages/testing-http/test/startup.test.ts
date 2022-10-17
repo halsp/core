@@ -16,7 +16,7 @@ describe("startup", () => {
 
   new TestHttpStartup()
     .skipThrow()
-    .setRequest(new Request())
+    .setContext(new Request())
     .use(() => {
       throw new Error("err");
     })

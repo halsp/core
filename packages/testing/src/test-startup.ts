@@ -1,10 +1,10 @@
-import { Context, Response, Startup } from "@ipare/core";
+import { Context, Request, Response, Startup } from "@ipare/core";
 
 export class TestStartup extends Startup {
   #skipThrow?: boolean;
-  #ctx?: Context;
+  #ctx?: Context | Request;
 
-  setContext(ctx: Context): this {
+  setContext(ctx: Context | Request): this {
     this.#ctx = ctx;
     return this;
   }
@@ -16,10 +16,8 @@ export class TestStartup extends Startup {
 
   async run(): Promise<Response> {
     const res = await super.invoke(this.#ctx ?? new Context());
-    const ctx = res.ctx;
-
-    if (!this.#skipThrow && ctx.errorStack.length) {
-      throw ctx.errorStack[0];
+    if (!this.#skipThrow && res.ctx.errorStack.length) {
+      throw res.ctx.errorStack[0];
     }
     return res;
   }

@@ -1,5 +1,5 @@
 import { MicroStartup } from "@ipare/micro";
-import { Request, Response } from "@ipare/core";
+import { Context, Request, Response } from "@ipare/core";
 
 export class TestMicroStartup extends MicroStartup {
   listen() {
@@ -10,10 +10,10 @@ export class TestMicroStartup extends MicroStartup {
   }
 
   #skipThrow?: boolean;
-  #req?: Request;
+  #ctx?: Context | Request;
 
-  setRequest(req: Request): this {
-    this.#req = req;
+  setContext(ctx: Context | Request): this {
+    this.#ctx = ctx;
     return this;
   }
 
@@ -23,8 +23,7 @@ export class TestMicroStartup extends MicroStartup {
   }
 
   async run(): Promise<Response> {
-    const res = await super.invoke(this.#req ?? new Request());
-
+    const res = await super.invoke(this.#ctx ?? new Context());
     if (!this.#skipThrow && res.ctx.errorStack.length) {
       throw res.ctx.errorStack[0];
     }

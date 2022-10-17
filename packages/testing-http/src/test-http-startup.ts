@@ -1,12 +1,12 @@
 import { HttpStartup } from "@ipare/http";
-import { Request, Response } from "@ipare/core";
+import { Context, Request, Response } from "@ipare/core";
 
 export class TestHttpStartup extends HttpStartup {
   #skipThrow?: boolean;
-  #req?: Request;
+  #ctx?: Context | Request;
 
-  setRequest(req: Request): this {
-    this.#req = req;
+  setContext(ctx: Context | Request): this {
+    this.#ctx = ctx;
     return this;
   }
 
@@ -16,8 +16,7 @@ export class TestHttpStartup extends HttpStartup {
   }
 
   async run(): Promise<Response> {
-    const res = await super.invoke(this.#req ?? new Request());
-
+    const res = await super.invoke(this.#ctx ?? new Context());
     if (!this.#skipThrow && res.ctx.errorStack.length) {
       throw res.ctx.errorStack[0];
     }

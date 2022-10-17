@@ -1,7 +1,6 @@
-import { Middleware } from "@ipare/core";
-import { TestHttpStartup } from "@ipare/testing";
+import { Middleware, Request } from "@ipare/core";
+import { TestHttpStartup } from "@ipare/testing-http";
 import { Body, PipeItem } from "../../src";
-import { Request } from "@ipare/http";
 
 function runPipeTest(
   pipes: PipeItem[],
@@ -31,6 +30,7 @@ function runPipeTest(
       .useInject()
       .add(new TestMiddleware())
       .run();
+    console.log("body", res.body);
     expect(res.status).toBe(success ? 200 : 400);
     if (success) {
       expect(res.body).toEqual({

@@ -16,7 +16,7 @@ describe("startup", () => {
 
   new TestMicroStartup()
     .skipThrow()
-    .setRequest(new Request())
+    .setContext(new Request())
     .use(() => {
       throw new Error("err");
     })
