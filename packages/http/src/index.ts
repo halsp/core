@@ -1,4 +1,7 @@
-import { ResultHandler, initContext } from "./context";
+import { Dict, ReadonlyDict } from "@ipare/core";
+import { StatusCodes } from "http-status-codes";
+import { ResultHandler, initContext, HeaderHandler } from "./context";
+import { ReadonlyHeadersDict } from "./types";
 
 export {
   StatusCodes,
@@ -67,6 +70,38 @@ declare module "@ipare/core" {
   interface Context extends ResultHandler {}
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface Middleware extends ResultHandler {}
+
+  interface Request extends HeaderHandler {
+    get headers(): ReadonlyHeadersDict;
+
+    get body(): any;
+    setBody(body: unknown): this;
+
+    get path(): string;
+    get originalPath(): string;
+    setPath(path: string): this;
+
+    get overrideMethod(): string | undefined;
+    get method(): string;
+    setMethod(method: string): this;
+
+    get query(): ReadonlyDict<string>;
+    setQuery(key: string, value: string): this;
+    setQuery(query: Dict<string>): this;
+  }
+
+  interface Response extends ResultHandler {
+    get isSuccess(): boolean;
+    get headers(): ReadonlyHeadersDict;
+
+    get body(): any;
+    set body(val: any);
+    setBody(body: unknown): this;
+
+    get status(): number;
+    set status(val: number);
+    setStatus(status: StatusCodes): this;
+  }
 }
 
 initContext();

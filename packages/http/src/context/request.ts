@@ -1,6 +1,5 @@
-import { ReadonlyHeadersDict } from "../types";
-import { Dict, ReadonlyDict, normalizePath, Request } from "@ipare/core";
-import { HeaderHandler, initHeaderHandler } from "./header-handler";
+import { Dict, normalizePath, Request } from "@ipare/core";
+import { initHeaderHandler } from "./header-handler";
 import { HttpMethod } from "../http-method";
 import {
   REQUEST_BODY,
@@ -10,27 +9,6 @@ import {
   REQUEST_PATH,
   REQUEST_QUERY,
 } from "../constant";
-
-declare module "@ipare/core" {
-  interface Request extends HeaderHandler {
-    get headers(): ReadonlyHeadersDict;
-
-    get body(): any;
-    setBody(body: unknown): this;
-
-    get path(): string;
-    get originalPath(): string;
-    setPath(path: string): this;
-
-    get overrideMethod(): string | undefined;
-    get method(): string;
-    setMethod(method: string): this;
-
-    get query(): ReadonlyDict<string>;
-    setQuery(key: string, value: string): this;
-    setQuery(query: Dict<string>): this;
-  }
-}
 
 export function initRequest(req: typeof Request.prototype) {
   Object.defineProperty(req, "headers", {

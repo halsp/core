@@ -21,6 +21,6 @@ export class TestStartup extends HttpStartup {
   }
 
   async run(): Promise<Response> {
-    return await super.invoke(this.#req ?? new Request());
+    return await super.invoke(this.#req ?? new Context());
   }
 }

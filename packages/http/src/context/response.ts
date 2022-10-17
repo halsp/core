@@ -1,23 +1,7 @@
 import { StatusCodes } from "http-status-codes";
-import { ReadonlyHeadersDict } from "../types";
 import { Response } from "@ipare/core";
-import { initResultHandler, ResultHandler } from "./result-handler";
+import { initResultHandler } from "./result-handler";
 import { RESPONSE_BODY, RESPONSE_HEADERS, RESPONSE_STATUS } from "../constant";
-
-declare module "@ipare/core" {
-  interface Response extends ResultHandler {
-    get isSuccess(): boolean;
-    get headers(): ReadonlyHeadersDict;
-
-    get body(): any;
-    set body(val: any);
-    setBody(body: unknown): this;
-
-    get status(): number;
-    set status(val: number);
-    setStatus(status: StatusCodes): this;
-  }
-}
 
 export function initResponse(res: typeof Response.prototype) {
   Object.defineProperty(res, "isSuccess", {

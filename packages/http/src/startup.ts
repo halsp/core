@@ -9,8 +9,8 @@ export abstract class HttpStartup extends Startup {
     process.env.IS_IPARE_MICRO = "true";
   }
 
-  protected async invoke(req: Request): Promise<Response> {
-    const ctx = new Context(req);
+  protected async invoke(ctx: Context | Request): Promise<Response> {
+    ctx = ctx instanceof Request ? new Context(ctx) : ctx;
     initCatchError(ctx);
 
     const res = await super.invoke(ctx);
