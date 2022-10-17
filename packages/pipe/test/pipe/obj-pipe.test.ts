@@ -1,7 +1,6 @@
-import { Middleware } from "@ipare/core";
-import { TestHttpStartup } from "@ipare/testing";
+import { Middleware, Request } from "@ipare/core";
+import { TestHttpStartup } from "@ipare/testing-http";
 import { Body } from "../../src";
-import { Request } from "@ipare/http";
 
 class TestMiddleware extends Middleware {
   @Body(({ value }) => JSON.stringify(value))
@@ -14,7 +13,7 @@ class TestMiddleware extends Middleware {
 
 test("simple test", async () => {
   const res = await new TestHttpStartup()
-    .setRequest(
+    .setContext(
       new Request().setBody({
         b1: 1,
       })

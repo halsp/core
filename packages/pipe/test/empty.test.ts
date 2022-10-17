@@ -1,7 +1,6 @@
-import { Middleware } from "@ipare/core";
-import { TestHttpStartup } from "@ipare/testing";
+import { Middleware, Request } from "@ipare/core";
+import { TestHttpStartup } from "@ipare/testing-http";
 import { Body, Param } from "../src";
-import { Request } from "@ipare/http";
 
 test("null body", async () => {
   class TestMiddleware extends Middleware {
@@ -22,7 +21,7 @@ test("null body", async () => {
   }
 
   const res = await new TestHttpStartup()
-    .setRequest(new Request().setBody(null))
+    .setContext(new Request().setBody(null))
     .useInject()
     .add(TestMiddleware)
     .run();

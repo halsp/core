@@ -170,20 +170,12 @@ export function createDecorator(type: PipeReqType, args: any[]) {
 export function getReqHandler(type: PipeReqType): (ctx: Context) => Dict {
   switch (type) {
     case "header":
-      return (ctx) => (ctx as any).req.headers;
+      return (ctx) => ctx.req["headers"];
     case "query":
-      return (ctx) => (ctx as any).req.query;
+      return (ctx) => ctx.req["query"];
     case "param":
-      return (ctx) => (ctx as any).req.params ?? (ctx as any).req.param;
+      return (ctx) => ctx.req["params"] ?? ctx.req["param"];
     default:
-      return (ctx) => {
-        if (ctx["msg"]) {
-          return ctx["msg"].data;
-        } else if (ctx["req"]) {
-          return ctx["req"].body;
-        } else {
-          return {};
-        }
-      };
+      return (ctx) => ctx.req["body"];
   }
 }

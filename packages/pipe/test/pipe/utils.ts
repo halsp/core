@@ -22,7 +22,7 @@ function runPipeTest(
   test(`parse: ${success} ${source}, ${target}`, async () => {
     const res = await new TestHttpStartup()
       .skipThrow()
-      .setRequest(
+      .setContext(
         new Request().setBody({
           b1: source,
         })
@@ -30,7 +30,6 @@ function runPipeTest(
       .useInject()
       .add(new TestMiddleware())
       .run();
-    console.log("body", res.body);
     expect(res.status).toBe(success ? 200 : 400);
     if (success) {
       expect(res.body).toEqual({

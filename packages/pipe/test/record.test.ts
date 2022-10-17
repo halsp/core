@@ -1,12 +1,12 @@
 import { HookType } from "@ipare/core";
-import { TestHttpStartup } from "@ipare/testing";
+import { TestHttpStartup } from "@ipare/testing-http";
 import { getPipeRecords } from "../src";
 import { expectBody, getTestRequest, TestMiddleware } from "./TestMiddleware";
 
 test("record test", async () => {
   let done = false;
   const startup = new TestHttpStartup()
-    .setRequest(getTestRequest())
+    .setContext(getTestRequest())
     .useInject();
   startup.hook(HookType.BeforeInvoke, (ctx, md) => {
     const fn = (cls: any, empty: boolean) => {

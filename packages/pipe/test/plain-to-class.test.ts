@@ -1,7 +1,6 @@
-import { Middleware } from "@ipare/core";
-import { TestHttpStartup } from "@ipare/testing";
+import { Middleware, Request } from "@ipare/core";
+import { TestHttpStartup } from "@ipare/testing-http";
 import { Body } from "../src";
-import { Request } from "@ipare/http";
 
 test("plain to class", async () => {
   class TestDto {
@@ -22,7 +21,7 @@ test("plain to class", async () => {
   }
 
   const res = await new TestHttpStartup()
-    .setRequest(
+    .setContext(
       new Request().setBody({
         h1: "a",
         h2: 1,
