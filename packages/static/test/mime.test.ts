@@ -1,11 +1,11 @@
-import { Request } from "@ipare/http";
-import { TestHttpStartup } from "@ipare/testing";
+import { Request } from "@ipare/core";
+import { TestHttpStartup } from "@ipare/testing-http";
 import "../src";
 
 test("unknown mime", async () => {
   {
     const result = await new TestHttpStartup()
-      .setRequest(new Request().setMethod("get").setPath("index.un"))
+      .setContext(new Request().setMethod("get").setPath("index.un"))
       .useStatic({
         dir: "test/static",
         encoding: "utf-8",
@@ -17,7 +17,7 @@ test("unknown mime", async () => {
   }
   {
     const result = await new TestHttpStartup()
-      .setRequest(new Request().setMethod("get").setPath("not-exist"))
+      .setContext(new Request().setMethod("get").setPath("not-exist"))
       .useStatic({
         dir: "test/static",
         encoding: "utf-8",
@@ -32,7 +32,7 @@ test("unknown mime", async () => {
 
 test("single unknown mime", async () => {
   const result = await new TestHttpStartup()
-    .setRequest(new Request().setMethod("get").setPath("ind"))
+    .setContext(new Request().setMethod("get").setPath("ind"))
     .useStatic({
       file: "test/static/index.un",
       reqPath: "ind",

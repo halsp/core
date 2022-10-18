@@ -1,10 +1,10 @@
-import { Request } from "@ipare/http";
-import { TestHttpStartup } from "@ipare/testing";
+import { Request } from "@ipare/core";
+import { TestHttpStartup } from "@ipare/testing-http";
 import "../src";
 
 test("default req path not found", async () => {
   const result = await new TestHttpStartup()
-    .setRequest(new Request().setMethod("get").setPath("ind"))
+    .setContext(new Request().setMethod("get").setPath("ind"))
     .useStatic({
       file: "test/static/index.html",
     })
@@ -15,7 +15,7 @@ test("default req path not found", async () => {
 test("default req path found", async () => {
   {
     const result = await new TestHttpStartup()
-      .setRequest(
+      .setContext(
         new Request().setMethod("get").setPath("test/static/index.html")
       )
       .useStatic({
@@ -26,7 +26,7 @@ test("default req path found", async () => {
   }
   {
     const result = await new TestHttpStartup()
-      .setRequest(
+      .setContext(
         new Request().setMethod("get").setPath("test/static/index.html/")
       )
       .useStatic({

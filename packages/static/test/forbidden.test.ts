@@ -1,10 +1,10 @@
-import { Request } from "@ipare/http";
-import { TestHttpStartup } from "@ipare/testing";
+import { Request } from "@ipare/core";
+import { TestHttpStartup } from "@ipare/testing-http";
 import "../src";
 
 test("forbidden path", async () => {
   const result = await new TestHttpStartup()
-    .setRequest(new Request().setMethod("get").setPath("f/../b"))
+    .setContext(new Request().setMethod("get").setPath("f/../b"))
     .useStatic({
       dir: "test/static",
       encoding: "utf-8",

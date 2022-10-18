@@ -29,7 +29,6 @@
   "license": "MIT",
   "dependencies": {
     "@ipare/core": "^2.2.5",
-    "@ipare/http": "^2.2.5",
     "@ipare/inject": "^2.2.5",
     "@ipare/router": "^2.2.5",
     "reflect-metadata": "^0.1.13"

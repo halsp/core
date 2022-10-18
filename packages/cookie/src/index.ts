@@ -29,9 +29,7 @@ declare module "@ipare/core" {
   interface Startup {
     useCookie(options?: Options): this;
   }
-}
 
-declare module "@ipare/http" {
   interface Request {
     get cookies(): ReadonlyDict<string>;
   }

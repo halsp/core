@@ -1,5 +1,6 @@
-import { HttpMethod, Request } from "@ipare/http";
-import { TestHttpStartup } from "@ipare/testing";
+import { HttpMethod } from "@ipare/http";
+import { Request } from "@ipare/core";
+import { TestHttpStartup } from "@ipare/testing-http";
 import "../src";
 
 it("default options", async () => {
@@ -11,7 +12,7 @@ it("default options", async () => {
 
 it("should set 'Access-Control-Allow-Origin'", async () => {
   const res = await new TestHttpStartup()
-    .setRequest(new Request().setHeader("Origin", "https://ipare.org"))
+    .setContext(new Request().setHeader("Origin", "https://ipare.org"))
     .useCors()
     .run();
 
@@ -22,7 +23,7 @@ it("should set 'Access-Control-Allow-Origin'", async () => {
 
 it("should not set 'Access-Control-Allow-Origin' when method is OPTIONS and no 'Access-Control-Request-Metho'", async () => {
   const res = await new TestHttpStartup()
-    .setRequest(
+    .setContext(
       new Request()
         .setHeader("Origin", "https://ipare.org")
         .setMethod(HttpMethod.options)
@@ -35,7 +36,7 @@ it("should not set 'Access-Control-Allow-Origin' when method is OPTIONS and no '
 
 it("should set status to 204 when method is OPTIONS", async () => {
   const res = await new TestHttpStartup()
-    .setRequest(
+    .setContext(
       new Request()
         .setHeader("Origin", "https://ipare.org")
         .setHeader("Access-Control-Request-Method", "POST")

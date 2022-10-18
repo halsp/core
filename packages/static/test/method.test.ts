@@ -1,11 +1,11 @@
-import { Request } from "@ipare/http";
-import { TestHttpStartup } from "@ipare/testing";
+import { Request } from "@ipare/core";
+import { TestHttpStartup } from "@ipare/testing-http";
 import "../src";
 
 test("method", async () => {
   {
     const result = await new TestHttpStartup()
-      .setRequest(new Request().setMethod("GET"))
+      .setContext(new Request().setMethod("GET"))
       .useStatic({
         dir: "test/static",
         fileIndex: true,
@@ -15,7 +15,7 @@ test("method", async () => {
   }
   {
     const result = await new TestHttpStartup()
-      .setRequest(new Request().setMethod("POST"))
+      .setContext(new Request().setMethod("POST"))
       .useStatic({
         dir: "test/static",
         method: "GET",
@@ -36,7 +36,7 @@ test("method", async () => {
 test("single method", async () => {
   {
     const result = await new TestHttpStartup()
-      .setRequest(new Request().setMethod("get").setPath("ind"))
+      .setContext(new Request().setMethod("get").setPath("ind"))
       .useStatic({
         file: "test/static/index.html",
         reqPath: "ind",
@@ -46,7 +46,7 @@ test("single method", async () => {
   }
   {
     const result = await new TestHttpStartup()
-      .setRequest(new Request().setPath("ind"))
+      .setContext(new Request().setPath("ind"))
       .useStatic({
         file: "test/static/index.html",
         reqPath: "ind",
@@ -59,7 +59,7 @@ test("single method", async () => {
 test("custom method", async () => {
   {
     const result = await new TestHttpStartup()
-      .setRequest(new Request().setMethod("put").setPath("ind"))
+      .setContext(new Request().setMethod("put").setPath("ind"))
       .useStatic({
         file: "test/static/index.html",
         reqPath: "ind",
@@ -70,7 +70,7 @@ test("custom method", async () => {
   }
   {
     const result = await new TestHttpStartup()
-      .setRequest(new Request().setMethod("PUT"))
+      .setContext(new Request().setMethod("PUT"))
       .useStatic({
         dir: "test/static",
         method: "PUT",
@@ -84,7 +84,7 @@ test("custom method", async () => {
 test("array method", async () => {
   {
     const result = await new TestHttpStartup()
-      .setRequest(new Request().setMethod("put").setPath("ind"))
+      .setContext(new Request().setMethod("put").setPath("ind"))
       .useStatic({
         file: "test/static/index.html",
         reqPath: "ind",
@@ -95,7 +95,7 @@ test("array method", async () => {
   }
   {
     const result = await new TestHttpStartup()
-      .setRequest(new Request().setMethod("PUT"))
+      .setContext(new Request().setMethod("PUT"))
       .useStatic({
         dir: "test/static",
         method: ["PUT"],
@@ -109,7 +109,7 @@ test("array method", async () => {
 test("any method", async () => {
   {
     const result = await new TestHttpStartup()
-      .setRequest(new Request().setMethod("PUT"))
+      .setContext(new Request().setMethod("PUT"))
       .useStatic({
         dir: "test/static",
         method: ["ANY"],
@@ -120,7 +120,7 @@ test("any method", async () => {
   }
   {
     const result = await new TestHttpStartup()
-      .setRequest(new Request().setMethod("PUT"))
+      .setContext(new Request().setMethod("PUT"))
       .useStatic({
         dir: "test/static",
         method: "ANY",
