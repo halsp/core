@@ -1,10 +1,10 @@
 import { Context, isObject, isUndefined } from "@ipare/core";
-import { BadRequestException } from "@ipare/http";
 import { PipeTransform, TransformArgs } from "@ipare/pipe";
 import { validate, ValidationError, ValidatorOptions } from "class-validator";
 import { ENABLE_METADATA, OPTIONS_METADATA, SCHAME_METADATA } from "./constant";
 import { RuleRecord } from "./create-decorator";
 import { getRules } from "./decorators";
+import { createBadRequestError } from "./error";
 
 export class ValidatePipe<T extends object = any, R extends T = any>
   implements PipeTransform<T, T | R>
@@ -129,9 +129,7 @@ export class ValidatePipe<T extends object = any, R extends T = any>
     }
 
     if (list.length) {
-      throw new BadRequestException({
-        message: list.length == 1 ? list[0] : list,
-      });
+      throw createBadRequestError(list.length == 1 ? list[0] : list);
     }
   }
 

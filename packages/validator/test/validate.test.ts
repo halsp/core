@@ -1,6 +1,5 @@
-import { Request } from "@ipare/http";
-import { Middleware } from "@ipare/core";
-import { TestHttpStartup } from "@ipare/testing";
+import { Middleware, Request } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import { Body } from "@ipare/pipe";
 import "@ipare/inject";
 import "../src";
@@ -24,33 +23,30 @@ function runTest(validate: boolean) {
       private readonly body!: TestDto;
 
       async invoke(): Promise<void> {
-        this.ok(this.body);
+        this.ctx.bag("body", this.body);
       }
     }
 
-    const res = await new TestHttpStartup()
+    const req = new Request();
+    req["body"] = {
+      b1: "a",
+      b2: validate ? 1 : "1",
+    };
+    const { ctx } = await new TestStartup()
       .skipThrow()
-      .setRequest(
-        new Request().setBody({
-          b1: "a",
-          b2: validate ? 1 : "1",
-        })
-      )
+      .setContext(req)
       .useInject()
       .useValidator()
       .add(TestMiddleware)
       .run();
 
-    const body = res.body as TestDto;
+    const body = ctx.bag<TestDto>("body");
     if (validate) {
       expect(body.b).toBe("a1");
-      expect(res.status).toBe(200);
+      expect(ctx.errorStack.length).toBe(0);
     } else {
-      expect(res.status).toBe(400);
-      expect(body).toEqual({
-        status: 400,
-        message: "b2 must be an integer number",
-      });
+      expect(body).toBeUndefined();
+      expect(ctx.errorStack[0].message).toBe("b2 must be an integer number");
     }
   });
 }
@@ -76,29 +72,27 @@ test("array message", async () => {
     private readonly body!: TestDto;
 
     async invoke(): Promise<void> {
-      this.ok(this.body);
+      this.ctx.bag("body", this.body);
     }
   }
 
-  const res = await new TestHttpStartup()
+  const req = new Request();
+  req["body"] = {
+    b1: 1,
+    b2: "1",
+  };
+  const { ctx } = await new TestStartup()
     .skipThrow()
-    .setRequest(
-      new Request().setBody({
-        b1: 1,
-        b2: "1",
-      })
-    )
+    .setContext(req)
     .useInject()
     .useValidator()
     .add(TestMiddleware)
     .run();
 
-  const body = res.body as TestDto;
-  expect(res.status).toBe(400);
-  expect(body).toEqual({
-    status: 400,
-    message: ["b1 must be a string", "b2 must be an integer number"],
-  });
+  expect(ctx.bag("body")).toBeUndefined();
+  expect(ctx.errorStack[0].message).toBe(
+    "b1 must be a string, b2 must be an integer number"
+  );
 });
 
 test("validate disabled", async () => {
@@ -107,22 +101,22 @@ test("validate disabled", async () => {
     b!: Record<string, any>;
 
     async invoke(): Promise<void> {
-      this.ok();
+      this.ctx.bag("ok", 1);
     }
   }
 
-  const res = await new TestHttpStartup()
-    .setRequest(
-      new Request().setBody({
-        b1: 1,
-      })
-    )
+  const req = new Request();
+  req["body"] = {
+    b1: 1,
+  };
+  const { ctx } = await new TestStartup()
+    .setContext(req)
     .useInject()
     .useValidator()
     .add(TestMiddleware)
     .run();
 
-  expect(res.status).toBe(200);
+  expect(ctx.bag("ok")).toBe(1);
 });
 
 it("should be undefined when exec V()()", async () => {

@@ -1,5 +1,5 @@
 import "../src";
-import { TestHttpStartup } from "@ipare/testing";
+import { TestHttpStartup } from "@ipare/testing-http";
 
 test("writeHead", async function () {
   const res = await new TestHttpStartup()

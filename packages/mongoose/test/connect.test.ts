@@ -5,7 +5,7 @@ import { mongoose, MongooseConnection } from "../src";
 import { OPTIONS_IDENTITY } from "../src/constant";
 
 test("connected connection should be destroy", async () => {
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .use(async (ctx, next) => {
       (mongoose as any).createConnection = async () => {
         ctx.bag("connect", "1");
@@ -35,7 +35,7 @@ test("connected connection should be destroy", async () => {
 });
 
 it("disconnected connection should not be destroy", async () => {
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .use(async (ctx, next) => {
       (mongoose as any).createConnection = async () => {
         ctx.bag("connect", "1");

@@ -1,8 +1,8 @@
-import { Request, HeadersDict, HttpMethod } from "@ipare/http";
+import { HeadersDict, HttpMethod } from "@ipare/http";
 import { ResponseStruct } from "./response-struct";
 import { Readable } from "stream";
-import { createContext, HttpStartup } from "@ipare/http";
-import { Context, Dict, isObject } from "@ipare/core";
+import { HttpStartup } from "@ipare/http";
+import { Context, Dict, isObject, Request } from "@ipare/core";
 
 export class LambdaStartup extends HttpStartup {
   async run(event: Dict, context: Dict): Promise<ResponseStruct> {
@@ -12,7 +12,7 @@ export class LambdaStartup extends HttpStartup {
   }
 
   private createContext(event: Dict, context: Dict): Context {
-    const ctx = createContext(
+    const ctx = new Context(
       new Request()
         .setBody(this.#getBody(event))
         .setMethod(

@@ -2,7 +2,7 @@ import { TestStartup } from "@ipare/testing";
 import "../src";
 
 test("pug", async () => {
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .useView({
       dir: "test/views",
     })

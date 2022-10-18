@@ -1,8 +1,7 @@
 import Koa from "koa";
 import http from "http";
 import net from "net";
-import { Context, isPlainObject } from "@ipare/core";
-import { Response } from "@ipare/http";
+import { Context, isPlainObject, Response } from "@ipare/core";
 import { TransResponse } from "./trans-response";
 import queryString from "query-string";
 

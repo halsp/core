@@ -19,7 +19,7 @@ class TestMiddleware extends Middleware {
 }
 
 test("identity", async () => {
-  const res = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .useTypeorm({
       identity: "app",
       type: "sqlite",
@@ -32,7 +32,7 @@ test("identity", async () => {
     .add(TestMiddleware)
     .run();
 
-  expect(res.bag("result")).toEqual({
+  expect(ctx.bag("result")).toEqual({
     app: true,
     core: true,
     eq: false,

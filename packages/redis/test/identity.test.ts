@@ -20,7 +20,7 @@ class TestMiddleware extends Middleware {
 }
 
 test("identity", async () => {
-  const res = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .use(async (ctx, next) => {
       RC.prototype.connect = async () => {
         ctx.bag("connect", "1");
@@ -37,7 +37,7 @@ test("identity", async () => {
     .add(TestMiddleware)
     .run();
 
-  expect(res.bag("result")).toEqual({
+  expect(ctx.bag("result")).toEqual({
     app: true,
     core: true,
     eq: false,

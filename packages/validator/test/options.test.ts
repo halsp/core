@@ -1,10 +1,9 @@
-import { Request } from "@ipare/http";
-import { Middleware } from "@ipare/core";
+import { Middleware, Request } from "@ipare/core";
 import { Body } from "@ipare/pipe";
 import "@ipare/inject";
 import "../src";
 import { UseValidatorOptions, V } from "../src";
-import { TestHttpStartup } from "@ipare/testing";
+import { TestStartup } from "@ipare/testing";
 
 function testOptions(useOptions: any, decOptions: any, result: boolean) {
   test(`options test ${!!useOptions} ${!!decOptions} ${result}`, async () => {
@@ -23,31 +22,27 @@ function testOptions(useOptions: any, decOptions: any, result: boolean) {
       private readonly body!: TestDto;
 
       async invoke(): Promise<void> {
-        this.ok(this.body);
+        this.ctx.bag("result", this.body);
       }
     }
 
-    const startup = new TestHttpStartup()
+    const req = new Request();
+    req["body"] = {
+      b1: null,
+    };
+    const startup = new TestStartup()
       .skipThrow()
-      .setRequest(
-        new Request().setBody({
-          b1: null,
-        })
-      )
+      .setContext(req)
       .useInject()
       .useValidator(useOptions);
-    const res = await startup.add(TestMiddleware).run();
+    const { ctx } = await startup.add(TestMiddleware).run();
 
-    expect(res);
     if (result) {
-      expect(res.status).toBe(200);
-      expect(res.body.b).toBeNull();
+      expect(ctx.bag<TestDto>("result").b).toBeNull();
+      expect(ctx.errorStack.length).toBe(0);
     } else {
-      expect(res.status).toBe(400);
-      expect(res.body).toEqual({
-        message: "b1 must be an integer number",
-        status: 400,
-      });
+      expect(ctx.bag("result")).toBeUndefined();
+      expect(ctx.errorStack[0].message).toBe("b1 must be an integer number");
     }
   });
 }

@@ -9,7 +9,7 @@ test("default", async () => {
     }
   }
 
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .useView()
     .add(() => new Md())
     .run();
@@ -29,7 +29,7 @@ test("middleware class", async () => {
     }
   }
 
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .useView({
       dir: "test/views",
     })
@@ -46,7 +46,7 @@ test("middleware class default", async () => {
     }
   }
 
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .useView({
       dir: "test/views",
     })

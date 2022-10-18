@@ -1,6 +1,5 @@
-import { Request } from "@ipare/http";
-import { Middleware } from "@ipare/core";
-import { TestHttpStartup } from "@ipare/testing";
+import { Middleware, Request } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import { Body } from "@ipare/pipe";
 import { ValidationSchema } from "class-validator";
 import "@ipare/inject";
@@ -29,8 +28,8 @@ function testSchema(useSchema: boolean) {
         private readonly b1!: string;
 
         async invoke(): Promise<void> {
-          this.setHeader("b1", this.b1);
-          this.ok(this.body);
+          this.ctx.bag("b1", this.b1);
+          this.ctx.bag("body", this.body);
         }
       }
 
@@ -45,36 +44,28 @@ function testSchema(useSchema: boolean) {
         },
       };
 
-      const startup = new TestHttpStartup()
+      const req = new Request();
+      req["body"] = {
+        b1: "1",
+      };
+      const startup = new TestStartup()
         .skipThrow()
-        .setRequest(
-          new Request().setBody({
-            b1: "1",
-          })
-        )
+        .setContext(req)
         .useInject()
         .useValidator();
       if (useSchema) {
         startup.useValidationSchema(testSchema);
       }
-      const res = await startup.add(TestMiddleware).run();
+      const { ctx } = await startup.add(TestMiddleware).run();
 
-      if (res.status == 500) {
-        res.ctx.errorStack.forEach((er) => {
-          console.error("errorStack", er);
-        });
-      }
       if (useSchema) {
-        expect(res.status).toBe(400);
-        expect(res.body).toEqual({
-          message: "b1 must be an integer number",
-          status: 400,
-        });
-        expect(res.getHeader("b1")).toBeUndefined();
+        expect(ctx.bag("b1")).toBeUndefined();
+        expect(ctx.bag("body")).toBeUndefined();
+        expect(ctx.errorStack[0].message).toBe("b1 must be an integer number");
       } else {
-        expect(res.status).toBe(200);
-        expect(res.body.b).toBe("1");
-        expect(res.getHeader("b1")).toBe("1");
+        expect(ctx.bag("b1")).toBe("1");
+        expect(ctx.bag<TestDto>("body")["b"]).toBe("1");
+        expect(ctx.errorStack.length).toBe(0);
       }
     });
   }

@@ -15,15 +15,15 @@ test("run multiple", async () => {
       );
     });
 
-  const ctx1 = await startup.run();
+  const { ctx: ctx1 } = await startup.run();
   expect(ctx1.bag("view")).toBe("<p>test ejs</p>");
 
-  const ctx2 = await startup.run();
+  const { ctx: ctx2 } = await startup.run();
   expect(ctx2.bag("view")).toBe("<p>test ejs</p>");
 });
 
 test("default index", async () => {
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .useView({
       dir: "test/views",
     })
@@ -41,7 +41,7 @@ test("default index", async () => {
 });
 
 test("without ext", async () => {
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .useView({
       dir: "test/views",
     })
@@ -59,7 +59,7 @@ test("without ext", async () => {
 });
 
 test("default dir", async () => {
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .useView()
     .use(async (ctx) => {
       ctx.bag(
@@ -75,7 +75,7 @@ test("default dir", async () => {
 });
 
 test("null", async () => {
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .useView()
     .use(async (ctx) => {

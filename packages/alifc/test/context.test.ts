@@ -1,4 +1,4 @@
-import { Response } from "@ipare/http";
+import { Response } from "@ipare/core";
 import { AlifcStartup } from "../src";
 
 const req: any = {

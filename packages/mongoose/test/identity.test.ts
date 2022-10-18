@@ -19,7 +19,7 @@ class TestMiddleware extends Middleware {
 }
 
 test("identity", async () => {
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .use(async (ctx, next) => {
       (mongoose as any).createConnection = async () => {
         ctx.bag("connect", "1");

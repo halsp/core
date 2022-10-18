@@ -1,6 +1,5 @@
-import { Request } from "@ipare/http";
-import { Middleware } from "@ipare/core";
-import { TestHttpStartup } from "@ipare/testing";
+import { Middleware, Request } from "@ipare/core";
+import { TestStartup } from "@ipare/testing";
 import { Body } from "@ipare/pipe";
 import "@ipare/inject";
 import "../src";
@@ -20,29 +19,24 @@ describe("parent validate", () => {
       b1!: string;
 
       async invoke(): Promise<void> {
-        this.ok({
-          b1: this.b1,
-        });
+        this.ctx.bag("b1", this.b1);
       }
     }
 
-    const res = await new TestHttpStartup()
+    const req = new Request();
+    req["body"] = {
+      b1: "1",
+    };
+    const { ctx } = await new TestStartup()
       .skipThrow()
-      .setRequest(
-        new Request().setBody({
-          b1: "1",
-        })
-      )
+      .setContext(req)
       .useInject()
       .useValidator()
       .add(TestMiddleware)
       .run();
 
-    expect(res.status).toBe(400);
-    expect(res.body).toEqual({
-      status: 400,
-      message: "b1 must be base64 encoded",
-    });
+    expect(ctx.bag("b1")).toBeUndefined();
+    expect(ctx.errorStack[0].message).toBe("b1 must be base64 encoded");
   });
 
   it("should validate parameter pipe", async () => {
@@ -53,26 +47,24 @@ describe("parent validate", () => {
       }
 
       async invoke(): Promise<void> {
-        this.ok();
+        //
       }
     }
 
-    const res = await new TestHttpStartup()
+    const req = new Request();
+    req["body"] = {
+      arg: "1",
+    };
+    const { ctx } = await new TestStartup()
       .skipThrow()
-      .setRequest(
-        new Request().setBody({
-          arg: "1",
-        })
-      )
+      .setContext(req)
       .useInject()
       .useValidator()
       .add(TestMiddleware)
       .run();
 
-    expect(res.body).toEqual({
-      status: 400,
-      message: "arg must be a number conforming to the specified constraints",
-    });
-    expect(res.status).toBe(400);
+    expect(ctx.errorStack[0].message).toBe(
+      "arg must be a number conforming to the specified constraints"
+    );
   });
 });

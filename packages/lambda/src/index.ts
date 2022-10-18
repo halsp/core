@@ -5,9 +5,6 @@ declare module "@ipare/core" {
     get lambdaContext(): Dict;
     get lambdaEvent(): Dict;
   }
-}
-
-declare module "@ipare/http" {
   interface Request {
     get lambdaContext(): Dict;
     get lambdaEvent(): Dict;

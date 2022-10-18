@@ -1,5 +1,5 @@
 import { Middleware } from "@ipare/core";
-import { TestHttpStartup } from "@ipare/testing";
+import { TestStartup } from "@ipare/testing";
 import {
   addCustomValidator,
   getCustomValidators,
@@ -50,22 +50,18 @@ describe("custom", () => {
       private readonly prop!: string;
 
       invoke(): void | Promise<void> {
-        this.ok();
+        //
       }
     }
 
-    const res = await new TestHttpStartup()
+    const { ctx } = await new TestStartup()
       .skipThrow()
       .useInject()
       .useValidator()
       .add(TestMiddleware)
       .run();
 
-    expect(res.status).toEqual(400);
-    expect(res.body).toEqual({
-      message: ["abc must be a string", "error msg"],
-      status: 400,
-    });
+    expect(ctx.errorStack[0].message).toBe("abc must be a string, error msg");
   });
 
   it("should validate custom validation for dto", async () => {
@@ -85,22 +81,19 @@ describe("custom", () => {
       private readonly body!: TestDto;
 
       invoke(): void | Promise<void> {
-        this.ok(this.body);
+        this.ctx.bag("body", this.body);
       }
     }
 
-    const res = await new TestHttpStartup()
+    const { ctx } = await new TestStartup()
       .skipThrow()
       .useInject()
       .useValidator()
       .add(TestMiddleware)
       .run();
 
-    expect(res.body).toEqual({
-      message: "prop: error",
-      status: 400,
-    });
-    expect(res.status).toEqual(400);
+    expect(ctx.errorStack[0].message).toBe("prop: error");
+    expect(ctx.bag("body")).toBeUndefined();
   });
 
   it("should validate custom validation with args", async () => {
@@ -117,22 +110,18 @@ describe("custom", () => {
       private readonly prop!: string;
 
       invoke(): void | Promise<void> {
-        this.ok();
+        //
       }
     }
 
-    const res = await new TestHttpStartup()
+    const { ctx } = await new TestStartup()
       .skipThrow()
       .useInject()
       .useValidator()
       .add(TestMiddleware)
       .run();
 
-    expect(res.status).toEqual(400);
-    expect(res.body).toEqual({
-      message: "abc undefined arg11,22",
-      status: 400,
-    });
+    expect(ctx.errorStack[0].message).toBe("abc undefined arg11,22");
   });
 });
 
@@ -158,22 +147,18 @@ describe("Is", () => {
       private readonly prop!: string;
 
       invoke(): void | Promise<void> {
-        this.ok();
+        //
       }
     }
 
-    const res = await new TestHttpStartup()
+    const { ctx } = await new TestStartup()
       .skipThrow()
       .useInject()
       .useValidator()
       .add(TestMiddleware)
       .run();
 
-    expect(res.status).toEqual(400);
-    expect(res.body).toEqual({
-      message: ["error1", "abc Is error2"],
-      status: 400,
-    });
+    expect(ctx.errorStack[0].message).toBe("error1, abc Is error2");
   });
 });
 
@@ -195,18 +180,18 @@ describe("proxy", () => {
       private readonly prop!: string;
 
       invoke(): void | Promise<void> {
-        this.ok();
+        //
       }
     }
 
-    const res = await new TestHttpStartup()
+    const { ctx } = await new TestStartup()
       .skipThrow()
       .useInject()
       .useValidator()
       .add(TestMiddleware)
       .run();
 
-    expect(res.status).toEqual(200);
+    expect(ctx.errorStack.length).toBe(0);
   });
 });
 
@@ -218,21 +203,17 @@ describe("extend", () => {
       private readonly prop!: string;
 
       invoke(): void | Promise<void> {
-        this.ok();
+        //
       }
     }
 
-    const res = await new TestHttpStartup()
+    const { ctx } = await new TestStartup()
       .skipThrow()
       .useInject()
       .useValidator()
       .add(TestMiddleware)
       .run();
 
-    expect(res.status).toEqual(400);
-    expect(res.body).toEqual({
-      message: "abc should not be empty",
-      status: 400,
-    });
+    expect(ctx.errorStack[0].message).toBe("abc should not be empty");
   });
 });

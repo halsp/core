@@ -9,9 +9,6 @@ declare module "@ipare/core" {
     get aliReq(): AliReq;
     get aliRes(): AliRes;
   }
-}
-
-declare module "@ipare/http" {
   interface Request {
     get aliReq(): AliReq;
   }

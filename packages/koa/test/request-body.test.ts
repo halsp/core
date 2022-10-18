@@ -1,11 +1,11 @@
 import "../src";
-import { TestHttpStartup } from "@ipare/testing";
-import { Request } from "@ipare/http";
+import { TestHttpStartup } from "@ipare/testing-http";
+import { Request } from "@ipare/core";
 
 describe("request body", () => {
   it("should parse text body", async function () {
     const res = await new TestHttpStartup()
-      .setRequest(new Request().setBody("ipare"))
+      .setContext(new Request().setBody("ipare"))
       .koa(async (ctx, next) => {
         ctx.body = ctx.ipareCtx.req.body;
         ctx.status = 200;
@@ -20,7 +20,7 @@ describe("request body", () => {
 
   it("should parse json body", async function () {
     const res = await new TestHttpStartup()
-      .setRequest(
+      .setContext(
         new Request().setBody({
           ipare: "koa",
         })
@@ -43,7 +43,7 @@ describe("request body", () => {
 
   it("should parse buffer body", async function () {
     const res = await new TestHttpStartup()
-      .setRequest(new Request().setBody(Buffer.from("ipare", "utf-8")))
+      .setContext(new Request().setBody(Buffer.from("ipare", "utf-8")))
       .koa(async (ctx, next) => {
         ctx.body = ctx.ipareCtx.req.body;
         ctx.status = 200;

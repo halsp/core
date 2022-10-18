@@ -1,5 +1,4 @@
-import { Context } from "@ipare/core";
-import { HttpStartup } from "@ipare/http";
+import { Context, Startup } from "@ipare/core";
 import "@ipare/pipe";
 import { GlobalPipeType } from "@ipare/pipe/dist/global-pipe-type";
 import {
@@ -26,8 +25,8 @@ export {
   getCustomValidators,
 } from "./validator-lib";
 
-declare module "@ipare/http" {
-  interface HttpStartup {
+declare module "@ipare/core" {
+  interface Startup {
     useValidator(): this;
     useValidator(validatorOptions: ValidatorOptions): this;
     useValidator(
@@ -42,7 +41,7 @@ declare module "@ipare/http" {
   }
 }
 
-HttpStartup.prototype.useValidator = function (
+Startup.prototype.useValidator = function (
   options?:
     | ValidatorOptions
     | ((args: {
@@ -54,9 +53,7 @@ HttpStartup.prototype.useValidator = function (
   return this.useGlobalPipe(GlobalPipeType.after, new ValidatePipe(options));
 };
 
-HttpStartup.prototype.useValidationSchema = function (
-  schema: ValidationSchema
-) {
+Startup.prototype.useValidationSchema = function (schema: ValidationSchema) {
   registerSchema(schema);
   return this;
 };
