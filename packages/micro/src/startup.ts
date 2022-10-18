@@ -1,5 +1,5 @@
 import { Context, Request, Response, Startup } from "@ipare/core";
-import { initCatchError } from "./context";
+import { initCatchError, initContext } from "./context";
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -14,6 +14,7 @@ export abstract class MicroStartup extends Startup {
   constructor() {
     super();
     process.env.IS_IPARE_MICRO = "true";
+    initContext();
   }
 
   protected async invoke(ctx: Context | Request): Promise<Response> {

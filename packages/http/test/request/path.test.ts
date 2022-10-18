@@ -1,5 +1,10 @@
 import { Request } from "@ipare/core";
 import "../../src";
+import { TestStartup } from "../test-startup";
+
+beforeAll(() => {
+  new TestStartup();
+});
 
 describe("request path", () => {
   it("should set illegal path", async () => {

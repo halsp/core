@@ -1,5 +1,10 @@
 import { Request } from "@ipare/core";
 import "../../src";
+import { TestStartup } from "../test-startup";
+
+beforeAll(() => {
+  new TestStartup();
+});
 
 test("str body", async () => {
   const req = new Request().setBody("test body");

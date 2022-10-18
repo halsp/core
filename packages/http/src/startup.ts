@@ -1,12 +1,13 @@
 import { Stream } from "stream";
 import * as mime from "mime-types";
 import { Context, isString, Request, Response, Startup } from "@ipare/core";
-import { initCatchError } from "./context";
+import { initCatchError, initContext } from "./context";
 
 export abstract class HttpStartup extends Startup {
   constructor() {
     super();
     process.env.IS_IPARE_HTTP = "true";
+    initContext();
   }
 
   protected async invoke(ctx: Context | Request): Promise<Response> {

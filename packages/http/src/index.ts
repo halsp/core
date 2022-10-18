@@ -1,6 +1,6 @@
 import { Dict, ReadonlyDict } from "@ipare/core";
 import { StatusCodes } from "http-status-codes";
-import { ResultHandler, initContext, HeaderHandler } from "./context";
+import { ResultHandler, HeaderHandler } from "./context";
 import { ReadonlyHeadersDict } from "./types";
 
 export {
@@ -103,5 +103,3 @@ declare module "@ipare/core" {
     setStatus(status: StatusCodes): this;
   }
 }
-
-initContext();

@@ -1,6 +1,10 @@
 import { Request } from "@ipare/core";
 import { TestStartup } from "../test-startup";
 
+beforeAll(() => {
+  new TestStartup();
+});
+
 describe("method override", () => {
   test("method override", async () => {
     const req = new Request()

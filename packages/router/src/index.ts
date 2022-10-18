@@ -131,7 +131,7 @@ Startup.prototype.useRouterParser = function (options?: RouterOptions) {
     await next();
   })
     .use(async (ctx, next) => {
-      if (!ctx.msg) {
+      if (!process.env.IS_IPARE_MICRO) {
         return await next();
       }
 
@@ -139,10 +139,10 @@ Startup.prototype.useRouterParser = function (options?: RouterOptions) {
       const { MapMatcher } = require("./map/micro-map-matcher");
       const mapMatcher = new MapMatcher(ctx);
       if (mapMatcher.notFound) {
-        ctx["result"] = {
+        ctx.res.setBody({
           status: "error",
           message: `Can't find the pattern: ${JSON.stringify(ctx["pattern"])}`,
-        };
+        });
       } else {
         const mapItem = mapMatcher.mapItem;
         Object.defineProperty(ctx, "actionMetadata", {
@@ -156,7 +156,7 @@ Startup.prototype.useRouterParser = function (options?: RouterOptions) {
       await next();
     })
     .use(async (ctx, next) => {
-      if (!ctx.req) {
+      if (!process.env.IS_IPARE_HTTP) {
         return await next();
       }
 

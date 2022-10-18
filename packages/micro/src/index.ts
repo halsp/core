@@ -1,5 +1,4 @@
 import { Dict } from "@ipare/core";
-import { initContext } from "./context";
 
 export { MicroException } from "./exception";
 export { MicroStartup } from "./startup";
@@ -16,5 +15,3 @@ declare module "@ipare/core" {
     setBody(body: unknown): this;
   }
 }
-
-initContext();

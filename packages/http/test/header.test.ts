@@ -8,6 +8,10 @@ import {
 } from "../src";
 import { TestStartup } from "./test-startup";
 
+beforeAll(() => {
+  new TestStartup();
+});
+
 test("setHeader", async () => {
   const req = new Response()
     .setHeader("h1", "1")

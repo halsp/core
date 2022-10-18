@@ -1,5 +1,10 @@
 import { Context, ReadonlyDict } from "@ipare/core";
 import "../../src";
+import { TestStartup } from "../test-startup";
+
+beforeAll(() => {
+  new TestStartup();
+});
 
 test("request setQuery", async () => {
   const req = new Context().req
