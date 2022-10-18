@@ -1,11 +1,11 @@
 import "../../src";
-import { Request } from "@ipare/http";
-import { TestHttpStartup } from "@ipare/testing";
+import { Request } from "@ipare/core";
+import { TestHttpStartup } from "@ipare/testing-http";
 import "../global";
 
 test(`method not allowed`, async () => {
   const result = await new TestHttpStartup()
-    .setRequest(new Request().setPath("/restful/1").setMethod("NO"))
+    .setContext(new Request().setPath("/restful/1").setMethod("NO"))
     .useTestRouter()
     .run();
   expect(result.status).toBe(405);

@@ -1,11 +1,12 @@
-import { Request, HttpMethod } from "@ipare/http";
-import { TestHttpStartup } from "@ipare/testing";
+import { HttpMethod } from "@ipare/http";
+import { Request } from "@ipare/core";
+import { TestHttpStartup } from "@ipare/testing-http";
 import "../../src";
 import "../global";
 
 test("restful root get", async () => {
   const result = await new TestHttpStartup()
-    .setRequest(
+    .setContext(
       new Request().setPath("/").setMethod(HttpMethod.get.toUpperCase())
     )
     .useTestRouter()

@@ -1,4 +1,4 @@
-import { TestHttpStartup } from "@ipare/testing";
+import { TestHttpStartup } from "@ipare/testing-http";
 import MapCreater from "../src/map/map-creater";
 import "./global";
 

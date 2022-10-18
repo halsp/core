@@ -1,12 +1,13 @@
-import { HttpMethod, Request, StatusCodes } from "@ipare/http";
-import { TestHttpStartup } from "@ipare/testing";
+import { HttpMethod, StatusCodes } from "@ipare/http";
+import { TestHttpStartup } from "@ipare/testing-http";
 import "../src";
 import "./global";
+import { Request } from "@ipare/core";
 
 function runTest(method: string, success: boolean) {
   test(`${method} ${success}`, async () => {
     const res = await new TestHttpStartup()
-      .setRequest(new Request().setPath("/decorator/method").setMethod(method))
+      .setContext(new Request().setPath("/decorator/method").setMethod(method))
       .useTestRouter()
       .run();
 
@@ -29,7 +30,7 @@ runTest(HttpMethod.any, false);
 
 test(`custom url`, async () => {
   const res = await new TestHttpStartup()
-    .setRequest(new Request().setPath("/mu").setMethod(HttpMethod.put))
+    .setContext(new Request().setPath("/mu").setMethod(HttpMethod.put))
     .useTestRouter()
     .run();
 
@@ -39,7 +40,7 @@ test(`custom url`, async () => {
 
 test(`base path`, async () => {
   const res = await new TestHttpStartup()
-    .setRequest(
+    .setContext(
       new Request()
         .setPath("decorator/method-base-path/mup")
         .setMethod(HttpMethod.get)

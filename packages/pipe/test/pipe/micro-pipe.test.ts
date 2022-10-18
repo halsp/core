@@ -2,6 +2,10 @@ import { Context, Middleware, Request } from "@ipare/core";
 import { TestMicroStartup } from "@ipare/testing-micro";
 import { Body, ParseBoolPipe } from "../../src";
 
+beforeAll(() => {
+  new TestMicroStartup();
+});
+
 describe("parse bool with micro", () => {
   it(`should parse bool body property when value is 'true'`, async () => {
     class TestMiddleware extends Middleware {

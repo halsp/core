@@ -57,9 +57,7 @@ declare module "@ipare/core" {
     get routerMap(): MapItem[];
     get routerOptions(): RouterInitedOptions;
   }
-}
 
-declare module "@ipare/http" {
   interface Request {
     get params(): ReadonlyQueryDict;
   }

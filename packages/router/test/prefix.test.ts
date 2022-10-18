@@ -1,11 +1,11 @@
-import { Request } from "@ipare/http";
-import { TestHttpStartup } from "@ipare/testing";
+import { Request } from "@ipare/core";
+import { TestHttpStartup } from "@ipare/testing-http";
 import "../src";
 import "./global";
 
 test("prefix", async () => {
   const result = await new TestHttpStartup()
-    .setRequest(new Request().setPath("/api2/simple/router").setMethod("POST"))
+    .setContext(new Request().setPath("/api2/simple/router").setMethod("POST"))
     .useTestRouter({
       prefix: "api2",
     })
@@ -15,7 +15,7 @@ test("prefix", async () => {
 
 test("error prefix", async () => {
   const result = await new TestHttpStartup()
-    .setRequest(new Request().setPath("/api2/simple/router").setMethod("POST"))
+    .setContext(new Request().setPath("/api2/simple/router").setMethod("POST"))
     .useTestRouter({
       prefix: "error",
     })

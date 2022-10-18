@@ -18,8 +18,9 @@ export class MapMatcher {
   public notFound = false;
 
   private getMapItem(): MapItem | undefined {
+    // TODO
     const mapItem = this.ctx.routerMap.filter(
-      (m) => m.path == this.ctx.msg.pattern
+      (m) => m.path == this.ctx.req.pattern
     )[0];
     if (mapItem) return mapItem;
 

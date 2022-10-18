@@ -1,8 +1,8 @@
 import { postbuild } from "../src";
 import * as fs from "fs";
-import { Request } from "@ipare/http";
+import { Request } from "@ipare/core";
 import { CONFIG_FILE_NAME } from "../src/constant";
-import { TestHttpStartup } from "@ipare/testing";
+import { TestHttpStartup } from "@ipare/testing-http";
 
 test("empty config", async () => {
   let count = 0;
@@ -44,7 +44,7 @@ test("build and run", async () => {
   });
 
   const res = await new TestHttpStartup()
-    .setRequest(new Request().setMethod("get"))
+    .setContext(new Request().setMethod("get"))
     .useRouter()
     .run();
 

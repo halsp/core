@@ -1,12 +1,12 @@
 import { RouterOptions } from "../src";
 import "@ipare/core";
-import { TestHttpStartup } from "@ipare/testing";
+import { TestHttpStartup } from "@ipare/testing-http";
 import "../src";
 import { TEST_ACTION_DIR } from "../src/constant";
 
 export const testDir = "test/actions";
 
-declare module "@ipare/testing" {
+declare module "@ipare/testing-http" {
   interface TestHttpStartup {
     useTestRouter(config?: RouterOptions): this;
     useTestRouterParser(config?: RouterOptions): this;
