@@ -1,5 +1,5 @@
-import { Request } from "@ipare/http";
-import { TestHttpStartup } from "@ipare/testing";
+import { Request } from "@ipare/core";
+import { TestHttpStartup } from "@ipare/testing-http";
 import "../src";
 
 function runTest(executing: boolean) {
@@ -7,7 +7,7 @@ function runTest(executing: boolean) {
     process.chdir(__dirname);
     try {
       const res = await new TestHttpStartup()
-        .setRequest(
+        .setContext(
           new Request().setMethod("get").setPath("auth").setBody({
             executing,
           })

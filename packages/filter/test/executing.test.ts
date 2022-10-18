@@ -1,9 +1,9 @@
 import { Context } from "@ipare/core";
-import { Request } from "@ipare/http";
+import { Request } from "@ipare/core";
 import "../src";
 import { ActionFilter, ResourceFilter, UseFilters } from "../src";
 import { Action } from "@ipare/router";
-import { TestHttpStartup } from "@ipare/testing";
+import { TestHttpStartup } from "@ipare/testing-http";
 
 class TestResourceFilter implements ResourceFilter {
   onResourceExecuted(ctx: Context): void | Promise<void> {
@@ -44,7 +44,7 @@ function runExecuting(type: string) {
       body[`${type}-executing`] = executing;
 
       const res = await new TestHttpStartup()
-        .setRequest(
+        .setContext(
           new Request()
             .setPath("/filters/executing")
             .setMethod("GET")

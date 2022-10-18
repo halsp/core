@@ -1,6 +1,11 @@
 import { execFilters, Filter, FilterItem, OrderRecord } from "./filters";
-import { HookType, isClass, isUndefined, ObjectConstructor } from "@ipare/core";
-import { HttpStartup } from "@ipare/http";
+import {
+  HookType,
+  isClass,
+  isUndefined,
+  ObjectConstructor,
+  Startup,
+} from "@ipare/core";
 import { FILTERS_ORDER_BAG, GLOBAL_FILTERS_BAG, USE_FILTER } from "./constant";
 import { Action } from "@ipare/router";
 
@@ -15,8 +20,8 @@ export {
 } from "./filters";
 export { UseFilters } from "./use-filters.decorator";
 
-declare module "@ipare/http" {
-  interface HttpStartup {
+declare module "@ipare/core" {
+  interface Startup {
     useFilter(): this;
     useGlobalFilter<T extends Filter = Filter>(
       filter: FilterItem<T>,
@@ -29,7 +34,7 @@ declare module "@ipare/http" {
   }
 }
 
-HttpStartup.prototype.useFilterOrder = function <T extends Filter = Filter>(
+Startup.prototype.useFilterOrder = function <T extends Filter = Filter>(
   filter: ObjectConstructor<T>,
   order: number
 ) {
@@ -45,7 +50,7 @@ HttpStartup.prototype.useFilterOrder = function <T extends Filter = Filter>(
   });
 };
 
-HttpStartup.prototype.useGlobalFilter = function <T extends Filter = Filter>(
+Startup.prototype.useGlobalFilter = function <T extends Filter = Filter>(
   filter: FilterItem<T>,
   order?: number
 ) {
@@ -66,7 +71,7 @@ HttpStartup.prototype.useGlobalFilter = function <T extends Filter = Filter>(
   });
 };
 
-HttpStartup.prototype.useFilter = function () {
+Startup.prototype.useFilter = function () {
   if (this[USE_FILTER]) {
     return this;
   }

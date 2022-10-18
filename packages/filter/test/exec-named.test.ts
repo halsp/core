@@ -1,6 +1,6 @@
 import { Context } from "@ipare/core";
 import { Action } from "@ipare/router";
-import { TestHttpStartup } from "@ipare/testing";
+import { TestHttpStartup } from "@ipare/testing-http";
 import { execFilters, Filter, UseFilters } from "../src";
 
 class CustomFilter implements Filter {
