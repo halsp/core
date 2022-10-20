@@ -10,7 +10,7 @@ test("empty options", async () => {
 });
 
 test("cwd", async () => {
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .useEnv({
       mode: "production",
       cwd: "test/envs",

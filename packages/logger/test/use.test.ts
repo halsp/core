@@ -13,7 +13,7 @@ class TestMiddleware extends Middleware {
 }
 
 test("useConsoleLogger", async () => {
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .useConsoleLogger()
     .add(TestMiddleware)
     .run();
@@ -25,7 +25,7 @@ test("useConsoleLogger", async () => {
 });
 
 test("useFileLogger", async () => {
-  const ctx = await new TestStartup()
+  const { ctx } = await new TestStartup()
     .useFileLogger({
       fileTransportOptions: {
         filename: "node_modules/test.logger.log",

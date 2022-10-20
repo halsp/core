@@ -1,5 +1,7 @@
 import { Response } from "@ipare/core";
 import "../src";
+import { TestHttpStartup } from "../src";
+new TestHttpStartup();
 
 describe("response.expect", () => {
   it("should expect status 200", async () => {
