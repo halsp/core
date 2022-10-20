@@ -1,5 +1,10 @@
 import { Context, isNil, isObject, Request, Response } from "@ipare/core";
-import { CTX_INITED, REQUEST_BODY, REQUEST_PATTERN } from "./constant";
+import {
+  CTX_INITED,
+  REQUEST_ID,
+  REQUEST_PATTERN,
+  RESPONSE_STATUS,
+} from "./constant";
 import { MicroException } from "./exception";
 
 export function initContext() {
@@ -7,21 +12,6 @@ export function initContext() {
     return;
   }
   Context.prototype[CTX_INITED] = true;
-
-  Object.defineProperty(Request.prototype, "body", {
-    configurable: true,
-    enumerable: true,
-    get: function () {
-      if (!(REQUEST_BODY in this)) {
-        this[REQUEST_BODY] = undefined;
-      }
-      return this[REQUEST_BODY];
-    },
-  });
-  Request.prototype.setBody = function (val: unknown) {
-    this[REQUEST_BODY] = val;
-    return this;
-  };
 
   Object.defineProperty(Request.prototype, "pattern", {
     configurable: true,
@@ -38,21 +28,36 @@ export function initContext() {
     return this;
   };
 
-  Object.defineProperty(Response.prototype, "body", {
+  Object.defineProperty(Request.prototype, "id", {
     configurable: true,
     enumerable: true,
     get: function () {
-      if (!(REQUEST_BODY in this)) {
-        this[REQUEST_BODY] = undefined;
+      if (!(REQUEST_ID in this)) {
+        this[REQUEST_ID] = "";
       }
-      return this[REQUEST_BODY];
-    },
-    set: function (val) {
-      this[REQUEST_BODY] = val;
+      return this[REQUEST_ID];
     },
   });
-  Response.prototype.setBody = function (val: unknown) {
-    this[REQUEST_BODY] = val;
+  Request.prototype.setId = function (id: string) {
+    this[REQUEST_ID] = id;
+    return this;
+  };
+
+  Object.defineProperty(Response.prototype, "status", {
+    configurable: true,
+    enumerable: true,
+    get: function () {
+      if (!(RESPONSE_STATUS in this)) {
+        this[RESPONSE_STATUS] = undefined;
+      }
+      return this[RESPONSE_STATUS];
+    },
+    set: function (val) {
+      this[RESPONSE_STATUS] = val;
+    },
+  });
+  Response.prototype.setStatus = function (status?: string) {
+    this.status = status;
     return this;
   };
 }

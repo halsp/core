@@ -2,7 +2,6 @@ import { Dict, normalizePath, Request } from "@ipare/core";
 import { initHeaderHandler } from "./header-handler";
 import { HttpMethod } from "../http-method";
 import {
-  REQUEST_BODY,
   REQUEST_HEADERS,
   REQUEST_METHOD,
   REQUEST_ORIGINAL_PATH,
@@ -21,21 +20,6 @@ export function initRequest(req: typeof Request.prototype) {
       return this[REQUEST_HEADERS];
     },
   });
-
-  Object.defineProperty(req, "body", {
-    configurable: true,
-    enumerable: true,
-    get: function () {
-      if (!(REQUEST_BODY in this)) {
-        this[REQUEST_BODY] = undefined;
-      }
-      return this[REQUEST_BODY];
-    },
-  });
-  req.setBody = function (val: unknown) {
-    this[REQUEST_BODY] = val;
-    return this;
-  };
 
   Object.defineProperty(req, "path", {
     configurable: true,

@@ -7,11 +7,17 @@ declare module "@ipare/core" {
   interface Request {
     get pattern(): string | Dict<any>;
     setPattern(pattern: string | Dict<any>): this;
-    get body(): any;
-    setBody(body: unknown): this;
+
+    id: string;
+    setId(id: string): this;
   }
   interface Response {
-    body: any;
-    setBody(body: unknown): this;
+    get status(): string | undefined;
+    set status(status: string | undefined);
+    setStatus(status: string): this;
+
+    get error(): string | undefined;
+    set error(err: string | undefined);
+    setError(err: string | undefined): this;
   }
 }

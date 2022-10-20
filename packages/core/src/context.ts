@@ -11,9 +11,21 @@ type BuilderBagItem<T> = {
 
 export class Request {
   readonly ctx!: Context;
+
+  public body?: any;
+  public setBody(body?: any) {
+    this.body = body;
+    return this;
+  }
 }
 export class Response {
   readonly ctx!: Context;
+
+  public body?: any;
+  public setBody(body?: any) {
+    this.body = body;
+    return this;
+  }
 }
 
 export class Context {

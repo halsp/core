@@ -77,3 +77,15 @@ describe("req", () => {
     expect(ctx.res.ctx).toBe(ctx);
   });
 });
+
+describe("body", () => {
+  it("should set req.body", async () => {
+    const req = new Request().setBody("abc");
+    expect(req.body).toBe("abc");
+  });
+
+  it("should set res.body", async () => {
+    const req = new Response().setBody("abc");
+    expect(req.body).toBe("abc");
+  });
+});

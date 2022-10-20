@@ -71,8 +71,8 @@ function getPropertyType(
   }
 }
 
-function getObjectFromDict(cls: any, dict: Dict) {
-  if (isClass(cls)) {
+function getObjectFromDict(cls: any, dict?: Dict) {
+  if (dict && isClass(cls)) {
     return plainToClass(cls, dict);
   } else {
     return dict;
@@ -96,9 +96,10 @@ export function createDecorator(type: PipeReqType, args: any[]) {
         async (ctx, parent) => {
           const property = args[0];
           const dict = handler(ctx);
-          const val = getObjectFromDict(propertyType, dict)
-            ? dict[property]
-            : undefined;
+          const val =
+            dict && getObjectFromDict(propertyType, dict)
+              ? dict[property]
+              : undefined;
           return await execPipes(
             ctx,
             parent,
@@ -167,7 +168,7 @@ export function createDecorator(type: PipeReqType, args: any[]) {
   }
 }
 
-export function getReqHandler(type: PipeReqType): (ctx: Context) => Dict {
+function getReqHandler(type: PipeReqType): (ctx: Context) => Dict | undefined {
   switch (type) {
     case "header":
       return (ctx) => ctx.req["headers"];
@@ -176,6 +177,6 @@ export function getReqHandler(type: PipeReqType): (ctx: Context) => Dict {
     case "param":
       return (ctx) => ctx.req["params"] ?? ctx.req["param"];
     default:
-      return (ctx) => ctx.req["body"];
+      return (ctx) => ctx.req.body;
   }
 }

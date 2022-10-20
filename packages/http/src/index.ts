@@ -74,9 +74,6 @@ declare module "@ipare/core" {
   interface Request extends HeaderHandler {
     get headers(): ReadonlyHeadersDict;
 
-    get body(): any;
-    setBody(body: unknown): this;
-
     get path(): string;
     get originalPath(): string;
     setPath(path: string): this;
@@ -93,10 +90,6 @@ declare module "@ipare/core" {
   interface Response extends ResultHandler {
     get isSuccess(): boolean;
     get headers(): ReadonlyHeadersDict;
-
-    get body(): any;
-    set body(val: any);
-    setBody(body: unknown): this;
 
     get status(): number;
     set status(val: number);

@@ -4,3 +4,4 @@ coverage
 *debug.log
 .husky/_
 yarn-error.log
+temp-test

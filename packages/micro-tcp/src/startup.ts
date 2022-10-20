@@ -1,18 +1,12 @@
 import { MicroException, MicroStartup } from "@ipare/micro";
 import { MicroTcpOptions } from "./options";
 import * as net from "net";
-import { createContext, Message } from "./context";
+import { Request } from "@ipare/core";
 
 export class MicroTcpStartup extends MicroStartup {
   constructor(readonly options: MicroTcpOptions = {}) {
     super();
     this.#server = net.createServer(this.#handler.bind(this));
-  }
-
-  protected async invoke(msg: Message): Promise<any> {
-    const ctx = createContext(msg);
-    await super.invoke(ctx);
-    return ctx.result;
   }
 
   readonly #server: net.Server;
@@ -56,20 +50,32 @@ export class MicroTcpStartup extends MicroStartup {
         }
       }
     });
+
+    socket.on("close", () => {
+      console.log("close " + socket.remoteAddress);
+    });
+    socket.on("error", (err) => {
+      if (err["code"] == "ECONNRESET") return;
+
+      console.error(err);
+    });
   }
 
   async #invokeMessage(socket: net.Socket, text: string) {
     const json = JSON.parse(text);
-    const msg = new Message()
-      .setId(json.id)
+    const req = new Request()
       .setPattern(json.pattern)
-      .setData(json.data);
-    const result = (await this.invoke(msg)) ?? {};
-    const resultJson = JSON.stringify(result);
-    result.id = json.id;
+      .setBody(json.data)
+      .setId(json.id);
+    const res = await this.invoke(req);
+    const resultJson = JSON.stringify({
+      id: req.id,
+      body: res.body,
+    });
     const data = `${resultJson.length}#${resultJson}`;
-    console.log("\ndata", data);
+    console.log("data", data);
     socket.write(data, "utf-8");
+    socket.end();
   }
 
   listen(): net.Server {
