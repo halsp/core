@@ -15,12 +15,10 @@ export async function createTestContext(
     token = await jwtService.sign(payload);
   }, options);
   const ctx = new Context();
-  (ctx as any).req = {
-    headers: {
-      Authorization: prefix + token,
-    },
-    get: (key: string) => ctx["req"].headers[key],
+  ctx.req["headers"] = {
+    Authorization: prefix + token,
   };
+  ctx.req["get"] = (key: string) => ctx.req["headers"][key];
   return ctx;
 }
 

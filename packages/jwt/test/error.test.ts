@@ -6,6 +6,7 @@ import { Context } from "@ipare/core";
 function testErrorSecret(isError: boolean) {
   function runTest(customError: boolean) {
     test(`error secret ${isError} ${customError}`, async function () {
+      process.env.IS_IPARE_HTTP = "true";
       const startup = new TestStartup()
         .setContext(
           await createTestContext({
@@ -30,7 +31,8 @@ function testErrorSecret(isError: boolean) {
       let ctx: Context | undefined;
       let error = false;
       try {
-        ctx = await startup.run();
+        const res = await startup.run();
+        ctx = res.ctx;
       } catch (err) {
         console.log(err);
         error = true;

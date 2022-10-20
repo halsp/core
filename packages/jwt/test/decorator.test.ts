@@ -25,7 +25,8 @@ class TestMiddleware extends Middleware {
 
 test("decorator", async function () {
   let jwt = "";
-  const ctx = await new TestStartup()
+  process.env.IS_IPARE_HTTP = "true";
+  const { ctx } = await new TestStartup()
     .setContext(
       await createTestContext({
         secret: "secret",

@@ -4,10 +4,15 @@ import "../src";
 import { JwtService } from "../src";
 import { createTestContext } from "./utils";
 
+beforeEach(() => {
+  process.env.IS_IPARE_HTTP = "";
+  process.env.IS_IPARE_MICRO = "";
+});
+
 describe("auth", () => {
   function runAuthTest(auth: boolean) {
     it(`should auth ${auth}`, async function () {
-      const ctx = await new TestStartup()
+      const { ctx } = await new TestStartup()
         .use(async (ctx, next) => {
           ctx.bag("result", false);
           await next();
@@ -30,14 +35,15 @@ describe("auth", () => {
   runAuthTest(false);
 
   it("should set 401 when use useJwtVerify in http", async () => {
-    const ctx = await new TestStartup()
+    process.env.IS_IPARE_HTTP = "true";
+    const { ctx } = await new TestStartup()
       .setContext(
         await createTestContext({
           secret: "secret",
         })
       )
       .use(async (ctx, next) => {
-        (ctx as any).unauthorizedMsg = (msg) => {
+        ctx["unauthorizedMsg"] = (msg) => {
           ctx.bag("msg", msg);
         };
         await next();
@@ -52,19 +58,17 @@ describe("auth", () => {
 
   it("should set 401 when use useJwtExtraAuth in http", async () => {
     process.env.IS_IPARE_HTTP = "true";
-    const ctx = await new TestStartup()
+    const { ctx } = await new TestStartup()
       .setContext(
         await createTestContext({
           secret: "secret",
         })
       )
       .use(async (ctx, next) => {
-        (ctx as any).unauthorizedMsg = (msg: string) => {
+        ctx["unauthorizedMsg"] = (msg: string) => {
           ctx.bag("msg", msg);
         };
-        (ctx as any).res = {
-          status: 404,
-        };
+        ctx.res["status"] = 404;
         await next();
       })
       .useJwt({
@@ -75,10 +79,73 @@ describe("auth", () => {
     expect(ctx.bag("msg")).toBe("JWT validation failed");
   });
 
-  it(`should auth failed with custom status`, async function () {
+  it("should throw error when use useJwtVerify without env", async () => {
+    process.env.IS_IPARE_HTTP = "";
+    process.env.IS_IPARE_MICRO = "";
+    const startup = new TestStartup()
+      .setContext(
+        await createTestContext({
+          secret: "secret",
+        })
+      )
+      .useJwt({
+        secret: "secret",
+      })
+      .useJwtVerify();
+
+    let err = false;
+    try {
+      await startup.run();
+    } catch {
+      err = true;
+    }
+    expect(err).toBeTruthy();
+  });
+
+  it(`should auth failed when use useJwtVerify in micro`, async function () {
     process.env.IS_IPARE_HTTP = "" as any;
     process.env.IS_IPARE_MICRO = "true";
-    const ctx = await new TestStartup()
+    const { ctx } = await new TestStartup()
+      .setContext(
+        await createTestContext({
+          secret: "secret",
+        })
+      )
+      .useJwt({
+        secret: "secret",
+      })
+      .useJwtVerify()
+      .run();
+
+    expect(ctx.res["error"].message).toBe("jwt must be provided");
+    expect(ctx.res["status"]).toBe("error");
+  });
+
+  it(`should auth success with empty body and default verify when use micro`, async function () {
+    process.env.IS_IPARE_HTTP = "" as any;
+    process.env.IS_IPARE_MICRO = "true";
+    const testCtx = await createTestContext({
+      secret: "secret",
+    });
+    testCtx.req.setBody({
+      token: testCtx.req["headers"]["Authorization"],
+    });
+
+    const { ctx } = await new TestStartup()
+      .setContext(testCtx)
+      .useJwt({
+        secret: "secret",
+      })
+      .useJwtVerify()
+      .use((ctx) => ctx.bag("result", true))
+      .run();
+    expect(ctx.bag("result")).toBe(true);
+  });
+
+  it(`should auth failed with custom status when use micro`, async function () {
+    process.env.IS_IPARE_HTTP = "" as any;
+    process.env.IS_IPARE_MICRO = "true";
+    const { ctx } = await new TestStartup()
       .setContext(
         await createTestContext({
           secret: "secret",
@@ -97,7 +164,7 @@ describe("auth", () => {
   });
 
   it(`should auth with null token`, async function () {
-    const ctx = await new TestStartup()
+    const { ctx } = await new TestStartup()
       .useJwt({
         secret: "secret",
       })

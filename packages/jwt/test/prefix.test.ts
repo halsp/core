@@ -3,7 +3,8 @@ import { createTestContext } from "./utils";
 import "../src";
 
 test("prefix", async function () {
-  const result = await new TestStartup()
+  process.env.IS_IPARE_HTTP = "true";
+  const { ctx } = await new TestStartup()
     .setContext(
       await createTestContext(
         {
@@ -20,5 +21,5 @@ test("prefix", async function () {
     .useJwtVerify()
     .use((ctx) => ctx.bag("token", ctx.jwtToken))
     .run();
-  expect(!!result.bag("token")).toBeTruthy();
+  expect(!!ctx.bag("token")).toBeTruthy();
 });

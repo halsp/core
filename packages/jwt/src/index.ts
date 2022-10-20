@@ -49,8 +49,11 @@ Startup.prototype.useJwtVerify = function (
       const error = err as jwt.VerifyErrors;
       if (onError) {
         await onError(ctx, error);
-      } else if ("unauthorizedMsg" in ctx) {
+      } else if (process.env.IS_IPARE_HTTP) {
         ctx["unauthorizedMsg"](error.message);
+      } else if (process.env.IS_IPARE_MICRO) {
+        ctx.res["status"] = "error";
+        ctx.res["error"] = error;
       } else {
         throw err;
       }
@@ -69,10 +72,8 @@ Startup.prototype.useJwtExtraAuth = function (
     if (process.env.IS_IPARE_HTTP) {
       ctx["unauthorizedMsg"]("JWT validation failed");
     } else if (process.env.IS_IPARE_MICRO) {
-      ctx["result"] = {
-        status: "error",
-        message: "JWT validation failed",
-      };
+      ctx.res["status"] = "error";
+      ctx.res["error"] = "JWT validation failed";
     }
   });
 };
@@ -94,8 +95,12 @@ Startup.prototype.useJwt = function (options: JwtOptions) {
         get: () => {
           if (options.tokenProvider) {
             return options.tokenProvider(ctx);
-          } else if ("req" in ctx) {
-            return ctx["req"].get("Authorization");
+          } else if (process.env.IS_IPARE_HTTP) {
+            return ctx.req["get"]("Authorization");
+          } else if (process.env.IS_IPARE_MICRO) {
+            return ctx.req.body ? ctx.req.body["token"] : undefined;
+          } else {
+            return undefined;
           }
         },
       });
