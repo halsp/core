@@ -25,3 +25,4 @@ export {
 export { Context, Request, Response } from "./context";
 export { Startup } from "./startup";
 export { Middleware, ComposeMiddleware, HookType } from "./middlewares";
+export { IpareException } from "./exception";

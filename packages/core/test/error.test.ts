@@ -1,3 +1,4 @@
+import { IpareException } from "../src";
 import { TestStartup } from "./test-startup";
 
 describe("error", () => {
@@ -17,9 +18,7 @@ describe("error", () => {
         ctx.bag("test", true);
       })
       .use(async () => {
-        const err = new Error();
-        err["breakthrough"] = true;
-        throw err;
+        throw new IpareException().setBreakthrough();
       })
       .run();
 
@@ -34,13 +33,33 @@ describe("error", () => {
         ctx.bag("test", true);
       })
       .use(async () => {
-        const err = new Error();
-        err["breakthrough"] = false;
-        throw err;
+        throw new IpareException().setBreakthrough(false);
       })
       .run();
 
     expect(ctx.errorStack.length).toBe(1);
     expect(ctx.bag("test")).toBeTruthy();
+  });
+
+  it("should set message with string", () => {
+    const exception = new IpareException("abc");
+    expect(exception.message).toBe("abc");
+  });
+
+  it("should set message with string", () => {
+    const exception = new IpareException("abc");
+    expect(exception.message).toBe("abc");
+  });
+
+  it("should set message with error", () => {
+    const err = new Error("abc");
+    const exception = new IpareException(err);
+    expect(exception.message).toBe("abc");
+  });
+
+  it("should set message = '' with empty object", () => {
+    const err = {} as any;
+    const exception = new IpareException(err);
+    expect(exception.message).toBe("");
   });
 });

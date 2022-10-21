@@ -1,4 +1,5 @@
 import { Context } from "../context";
+import { IpareException } from "../exception";
 import { isClass, ObjectConstructor } from "../utils";
 import { execHooks, HookType } from "./hook.middleware";
 import { LambdaMiddleware } from "./lambda.middleware";
@@ -104,7 +105,7 @@ export abstract class Middleware {
       await nextMd.invoke();
       await execHooks(this.ctx, nextMd, HookType.AfterInvoke);
     } catch (err) {
-      const error = err as Error & { breakthrough: boolean };
+      const error = err as IpareException;
       if ("breakthrough" in error && error.breakthrough) {
         throw err;
       } else {
