@@ -64,7 +64,7 @@ describe("http exception", () => {
     new TestStartup();
     const ex = new HttpException(StatusCodes.BAD_REQUEST, {
       a: 1,
-    });
+    } as any);
     expect(ex.error).toEqual({ a: 1 });
     expect(ex.message).toBe(getReasonPhrase(StatusCodes.BAD_REQUEST));
 
@@ -205,7 +205,7 @@ test("extended exceptions with object error", () => {
   exceptions.forEach((exception) => {
     const ex = new exception.constructor({
       a: 1,
-    });
+    } as any);
     expect(ex.status).toBe(exception.status);
     expect(ex.error).toEqual({ a: 1 });
     expect(ex.message).toBe(getReasonPhrase(exception.status));
