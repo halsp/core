@@ -1,4 +1,4 @@
-import { MicroException, MicroStartup } from "@ipare/micro";
+import { MicroStartup } from "@ipare/micro";
 import { MicroTcpOptions } from "./options";
 import * as net from "net";
 import { Request } from "@ipare/core";
@@ -10,6 +10,10 @@ export class MicroTcpStartup extends MicroStartup {
   }
 
   readonly #server: net.Server;
+  public get server() {
+    return this.#server;
+  }
+
   get #port() {
     return this.options.port ?? 2333;
   }
@@ -19,7 +23,6 @@ export class MicroTcpStartup extends MicroStartup {
     socket.on("data", async (buffer) => {
       while (true) {
         stringBuffer += buffer.toString("utf-8");
-        console.log("stringBuffer", stringBuffer);
 
         const index = stringBuffer.indexOf("#");
         if (index < 0) return;
@@ -27,11 +30,10 @@ export class MicroTcpStartup extends MicroStartup {
         const contentLength = parseInt(stringBuffer.substring(0, index));
         if (isNaN(contentLength)) {
           socket.write(
-            JSON.stringify(
-              new MicroException(
-                `Error length "${contentLength}"`
-              ).toPlainObject()
-            )
+            JSON.stringify({
+              error: `Error length "${contentLength}"`,
+              status: "error",
+            })
           );
           return;
         }
@@ -52,7 +54,7 @@ export class MicroTcpStartup extends MicroStartup {
     });
 
     socket.on("close", () => {
-      console.log("close " + socket.remoteAddress);
+      //
     });
     socket.on("error", (err) => {
       if (err["code"] == "ECONNRESET") return;
@@ -91,7 +93,7 @@ export class MicroTcpStartup extends MicroStartup {
       (resolve, reject) => {
         let error = false;
         let listen = false;
-        const server = this.#server.listen(port);
+        const server = this.#server.listen(port, this.options.host);
         server.once("listening", () => {
           listen = true;
           if (error) return;
@@ -120,7 +122,7 @@ export class MicroTcpStartup extends MicroStartup {
     return await this.#dynamicListen(0);
   }
 
-  close(): Promise<void> {
-    throw new Error("Method not implemented.");
+  async close() {
+    this.#server.close();
   }
 }
