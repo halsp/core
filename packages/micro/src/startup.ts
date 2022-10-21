@@ -23,7 +23,4 @@ export abstract class MicroStartup extends Startup {
 
     return await super.invoke(ctx);
   }
-
-  abstract listen(): void;
-  abstract close(): Promise<void>;
 }

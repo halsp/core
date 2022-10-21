@@ -3,6 +3,7 @@ import {
   CTX_INITED,
   REQUEST_ID,
   REQUEST_PATTERN,
+  RESPONSE_ERROR,
   RESPONSE_STATUS,
 } from "./constant";
 import { MicroException } from "./exception";
@@ -60,16 +61,33 @@ export function initContext() {
     this.status = status;
     return this;
   };
+
+  Object.defineProperty(Response.prototype, "error", {
+    configurable: true,
+    enumerable: true,
+    get: function () {
+      if (!(RESPONSE_ERROR in this)) {
+        this[RESPONSE_ERROR] = undefined;
+      }
+      return this[RESPONSE_ERROR];
+    },
+    set: function (val) {
+      this[RESPONSE_ERROR] = val;
+    },
+  });
+  Response.prototype.setError = function (error?: string) {
+    this.error = error;
+    return this;
+  };
 }
 
 export function initCatchError(ctx: Context) {
   const catchError = ctx.catchError;
   ctx.catchError = function (err: Error | any): Context {
     if (err instanceof MicroException) {
-      this.res.body = err.toPlainObject();
+      this.res.setStatus("error").setError(err.message);
     } else if (err instanceof Error) {
-      const msg = err.message || undefined;
-      this.catchError(new MicroException(msg));
+      this.catchError(new MicroException(err.message));
     } else if (isObject(err)) {
       this.catchError(new MicroException(err));
     } else {
