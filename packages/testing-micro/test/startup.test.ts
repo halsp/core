@@ -11,7 +11,9 @@ describe("startup", () => {
       ctx.res.setBody("ok");
     })
     .it("should set res.body ok", (res) => {
-      res.expect("ok");
+      res.expect((res) => {
+        expect(res.body).toBe("ok");
+      });
     });
 
   new TestMicroStartup()
@@ -21,10 +23,9 @@ describe("startup", () => {
       throw new Error("err");
     })
     .it("shound set res.body if skip throw error", (res) => {
-      res.expect({
-        status: "error",
-        message: "err",
-      });
+      expect(res.body).toBeUndefined();
+      expect(res.status).toBe("error");
+      expect(res.error).toBe("err");
     });
 
   it("should throw error", async () => {

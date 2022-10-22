@@ -7,7 +7,7 @@ describe("response.expect", () => {
       .setBody({
         a: 1,
       })
-      .expect({
+      .expect(undefined, {
         a: 1,
       });
   });
