@@ -124,7 +124,7 @@ export abstract class Startup {
     return this;
   }
 
-  protected async invoke(ctx?: Request | Context): Promise<Response> {
+  protected async invoke(ctx: Request | Context): Promise<Response> {
     ctx = ctx instanceof Context ? ctx : new Context(ctx);
 
     Object.defineProperty(ctx, "startup", {

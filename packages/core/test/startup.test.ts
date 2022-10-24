@@ -1,4 +1,4 @@
-import { Context, Response, Startup } from "../src";
+import { Context, Request, Response, Startup } from "../src";
 import { TestStartup } from "./test-startup";
 
 describe("invoke", () => {
@@ -27,7 +27,7 @@ describe("invoke", () => {
 describe("custom", () => {
   class CustomStartup extends Startup {
     async run(): Promise<Response> {
-      return await super.invoke(new Context());
+      return await super.invoke(new Request());
     }
   }
 
