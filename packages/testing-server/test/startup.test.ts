@@ -22,7 +22,7 @@ describe("startup", () => {
       .use(() => {
         throw new Error("err");
       })
-      .skipThrow()
+      .setSkipThrow()
       .create()
       .get("")
       .expect(500, {

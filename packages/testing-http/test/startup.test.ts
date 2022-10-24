@@ -2,30 +2,36 @@ import { Request } from "@ipare/core";
 import { TestHttpStartup } from "../src";
 
 describe("startup", () => {
-  new TestHttpStartup().it("default status is 404", (res) => {
-    res.expect(404);
+  it("default status is 404", async () => {
+    await new TestHttpStartup().expect((res) => {
+      res.expect(404);
+    });
   });
 
-  new TestHttpStartup()
-    .use((ctx) => {
-      ctx.ok();
-    })
-    .it("should set status 200", (res) => {
-      res.expect(200);
-    });
-
-  new TestHttpStartup()
-    .skipThrow()
-    .setContext(new Request())
-    .use(() => {
-      throw new Error("err");
-    })
-    .it("status shound be 500 if skip throw error", (res) => {
-      res.expect(500, {
-        status: 500,
-        message: "err",
+  it("should set status 200", async () => {
+    await new TestHttpStartup()
+      .use((ctx) => {
+        ctx.ok();
+      })
+      .expect((res) => {
+        res.expect(200);
       });
-    });
+  });
+
+  it("status shound be 500 if skip throw error", async () => {
+    await new TestHttpStartup()
+      .setSkipThrow()
+      .setContext(new Request())
+      .use(() => {
+        throw new Error("err");
+      })
+      .expect((res) => {
+        res.expect(500, {
+          status: 500,
+          message: "err",
+        });
+      });
+  });
 
   it("should throw error", async () => {
     const startup = new TestHttpStartup().use(() => {

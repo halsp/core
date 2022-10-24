@@ -10,7 +10,7 @@ export abstract class HttpStartup extends Startup {
     initContext();
   }
 
-  protected async invoke(ctx: Context | Request): Promise<Response> {
+  protected async invoke(ctx: Request | Context): Promise<Response> {
     ctx = ctx instanceof Request ? new Context(ctx) : ctx;
     initCatchError(ctx);
 

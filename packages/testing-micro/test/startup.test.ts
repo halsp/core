@@ -2,31 +2,37 @@ import { Request } from "@ipare/core";
 import { TestMicroStartup } from "../src";
 
 describe("startup", () => {
-  new TestMicroStartup().it("default body is undefined", (res) => {
-    res.expect(undefined);
+  it("default body is undefined", async () => {
+    await new TestMicroStartup().expect((res) => {
+      res.expect(undefined);
+    });
   });
 
-  new TestMicroStartup()
-    .use((ctx) => {
-      ctx.res.setBody("ok");
-    })
-    .it("should set res.body ok", (res) => {
-      res.expect((res) => {
-        expect(res.body).toBe("ok");
+  it("should set res.body ok", async () => {
+    await new TestMicroStartup()
+      .use((ctx) => {
+        ctx.res.setBody("ok");
+      })
+      .expect((res) => {
+        res.expect((res) => {
+          expect(res.body).toBe("ok");
+        });
       });
-    });
+  });
 
-  new TestMicroStartup()
-    .skipThrow()
-    .setContext(new Request())
-    .use(() => {
-      throw new Error("err");
-    })
-    .it("shound set res.body if skip throw error", (res) => {
-      expect(res.body).toBeUndefined();
-      expect(res.status).toBe("error");
-      expect(res.error).toBe("err");
-    });
+  it("shound set res.body if skip throw error", async () => {
+    await new TestMicroStartup()
+      .setSkipThrow()
+      .setContext(new Request())
+      .use(() => {
+        throw new Error("err");
+      })
+      .expect((res) => {
+        expect(res.body).toBeUndefined();
+        expect(res.status).toBe("error");
+        expect(res.error).toBe("err");
+      });
+  });
 
   it("should throw error", async () => {
     const startup = new TestMicroStartup().use(() => {
@@ -40,11 +46,5 @@ describe("startup", () => {
       err = true;
     }
     expect(err).toBeTruthy();
-  });
-
-  it("should call other methods", async () => {
-    const startup = new TestMicroStartup();
-    startup.listen();
-    startup.close();
   });
 });

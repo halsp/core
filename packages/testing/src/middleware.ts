@@ -27,13 +27,20 @@ declare module "@ipare/core" {
 }
 
 Startup.prototype.expectMiddleware = function <T extends Middleware>(
-  mdCls: ObjectConstructor<T>,
-  fn: TestMiddlewareFn<T>,
+  middleware: ObjectConstructor<T>,
+  expect: TestMiddlewareFn<T>,
   type: ExpectMiddlewareType = HookType.BeforeInvoke
 ) {
-  return this.hook(type as any, async (ctx, md: T) => {
-    if (md.constructor == mdCls) {
-      await fn(md, ctx);
+  const key = "";
+  return this.use(async (ctx, next) => {
+    await next();
+    if (!ctx.bag(key)) {
+      throw new Error("The middleware is not executed!");
+    }
+  }).hook(type as any, async (ctx, md: T) => {
+    if (md.constructor == middleware) {
+      ctx.bag(key, true);
+      await expect(md, ctx);
     }
   });
 };

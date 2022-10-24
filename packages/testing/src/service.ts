@@ -1,6 +1,5 @@
 import "@ipare/core";
 import { Context, ObjectConstructor, Startup } from "@ipare/core";
-import { getDepFunc } from "./deps";
 
 declare module "@ipare/core" {
   interface Startup {
@@ -32,3 +31,9 @@ Startup.prototype.expectInject = function <T extends object>(
     await fn(sv, ctx);
   });
 };
+
+function getDepFunc<T = any>(depName: string, funcName: string): T {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const d = require(depName);
+  return d[funcName] as T;
+}

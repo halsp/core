@@ -17,8 +17,8 @@ export abstract class MicroStartup extends Startup {
     initContext();
   }
 
-  protected async invoke(ctx: Context | Request): Promise<Response> {
-    ctx = ctx instanceof Request ? new Context(ctx) : ctx;
+  protected async invoke(ctx: Request | Context): Promise<Response> {
+    ctx = ctx instanceof Context ? ctx : new Context(ctx);
     initCatchError(ctx);
 
     return await super.invoke(ctx);

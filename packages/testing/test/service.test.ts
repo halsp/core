@@ -16,11 +16,13 @@ class TestService2 {
 }
 
 describe("service", () => {
-  new TestStartup()
-    .expectInject(TestService2, (service) => {
-      expect(service.fn()).toBe(1);
-    })
-    .it("should create service by @ipare/inject");
+  it("should create service by @ipare/inject", async () => {
+    await new TestStartup()
+      .expectInject(TestService2, (service) => {
+        expect(service.fn()).toBe(1);
+      })
+      .run();
+  });
 
   it("should throw error when create service failed", async () => {
     let err = false;
