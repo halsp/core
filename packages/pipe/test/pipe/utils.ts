@@ -21,7 +21,7 @@ function runPipeTest(
 
   test(`parse: ${success} ${source}, ${target}`, async () => {
     const res = await new TestHttpStartup()
-      .skipThrow()
+      .setSkipThrow()
       .setContext(
         new Request().setBody({
           b1: source,

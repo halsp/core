@@ -49,7 +49,7 @@ function testSchema(useSchema: boolean) {
         b1: "1",
       };
       const startup = new TestStartup()
-        .skipThrow()
+        .setSkipThrow()
         .setContext(req)
         .useInject()
         .useValidator();

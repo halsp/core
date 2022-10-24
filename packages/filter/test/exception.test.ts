@@ -13,7 +13,7 @@ test(`empty exception filter`, async () => {
   }
 
   const res = await new TestHttpStartup()
-    .skipThrow()
+    .setSkipThrow()
     .useFilter()
     .add(TestAction)
     .run();
@@ -43,7 +43,7 @@ function runTest(executing: boolean) {
   function run(bad: boolean) {
     test(`exception filter ${executing} ${bad}`, async () => {
       const res = await new TestHttpStartup()
-        .skipThrow()
+        .setSkipThrow()
         .setContext(
           new Request().setPath("/filters/exception").setMethod("GET").setBody({
             bad,
@@ -88,7 +88,7 @@ runTest(false);
 test(`other error`, async () => {
   const res = await new TestHttpStartup()
     .setContext(new Request().setPath("/filters/exception").setMethod("GET"))
-    .skipThrow()
+    .setSkipThrow()
     .useFilter()
     .use(() => {
       throw new BadRequestException();

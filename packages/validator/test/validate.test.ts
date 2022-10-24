@@ -33,7 +33,7 @@ function runTest(validate: boolean) {
       b2: validate ? 1 : "1",
     };
     const { ctx } = await new TestStartup()
-      .skipThrow()
+      .setSkipThrow()
       .setContext(req)
       .useInject()
       .useValidator()
@@ -82,7 +82,7 @@ test("array message", async () => {
     b2: "1",
   };
   const { ctx } = await new TestStartup()
-    .skipThrow()
+    .setSkipThrow()
     .setContext(req)
     .useInject()
     .useValidator()

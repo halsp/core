@@ -1,6 +1,9 @@
 import { isObject, isString } from "./utils";
 
-export type ExceptionMessage = object & { message: string };
+export type ExceptionMessage = object & {
+  message: string;
+  [key: string]: any;
+};
 
 export function isExceptionMessage(
   error: any

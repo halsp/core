@@ -28,7 +28,7 @@ describe("parent validate", () => {
       b1: "1",
     };
     const { ctx } = await new TestStartup()
-      .skipThrow()
+      .setSkipThrow()
       .setContext(req)
       .useInject()
       .useValidator()
@@ -56,7 +56,7 @@ describe("parent validate", () => {
       arg: "1",
     };
     const { ctx } = await new TestStartup()
-      .skipThrow()
+      .setSkipThrow()
       .setContext(req)
       .useInject()
       .useValidator()

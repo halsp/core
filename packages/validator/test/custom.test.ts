@@ -55,7 +55,7 @@ describe("custom", () => {
     }
 
     const { ctx } = await new TestStartup()
-      .skipThrow()
+      .setSkipThrow()
       .useInject()
       .useValidator()
       .add(TestMiddleware)
@@ -86,7 +86,7 @@ describe("custom", () => {
     }
 
     const { ctx } = await new TestStartup()
-      .skipThrow()
+      .setSkipThrow()
       .useInject()
       .useValidator()
       .add(TestMiddleware)
@@ -115,7 +115,7 @@ describe("custom", () => {
     }
 
     const { ctx } = await new TestStartup()
-      .skipThrow()
+      .setSkipThrow()
       .useInject()
       .useValidator()
       .add(TestMiddleware)
@@ -152,7 +152,7 @@ describe("Is", () => {
     }
 
     const { ctx } = await new TestStartup()
-      .skipThrow()
+      .setSkipThrow()
       .useInject()
       .useValidator()
       .add(TestMiddleware)
@@ -185,7 +185,7 @@ describe("proxy", () => {
     }
 
     const { ctx } = await new TestStartup()
-      .skipThrow()
+      .setSkipThrow()
       .useInject()
       .useValidator()
       .add(TestMiddleware)
@@ -208,7 +208,7 @@ describe("extend", () => {
     }
 
     const { ctx } = await new TestStartup()
-      .skipThrow()
+      .setSkipThrow()
       .useInject()
       .useValidator()
       .add(TestMiddleware)

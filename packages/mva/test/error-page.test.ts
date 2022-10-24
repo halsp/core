@@ -29,7 +29,7 @@ function run404(isNumber: boolean) {
         const codes = [isNumber ? 404 : { code: 404 }];
         await runMva(async () => {
           const startup = new TestHttpStartup()
-            .skipThrow()
+            .setSkipThrow()
             .setContext(new Request().setPath("not-exist").setMethod("GET"))
             .useErrorPage(codes)
             .use(async (ctx, next) => {
@@ -102,7 +102,7 @@ test("404 without error page", async function () {
 test("string error", async function () {
   await runMva(async () => {
     const res = await new TestHttpStartup()
-      .skipThrow()
+      .setSkipThrow()
       .setContext(new Request().setMethod("GET"))
       .useErrorPage([{ code: 404 }])
       .use(() => {
@@ -150,7 +150,7 @@ test(`useMva before useErrorPage`, async function () {
 test(`404 default`, async function () {
   await runMva(async () => {
     const startup = new TestHttpStartup()
-      .skipThrow()
+      .setSkipThrow()
       .setContext(new Request().setPath("not-exist").setMethod("GET"))
       .useErrorPage()
       .use(async () => {

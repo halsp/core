@@ -31,7 +31,7 @@ function testOptions(useOptions: any, decOptions: any, result: boolean) {
       b1: null,
     };
     const startup = new TestStartup()
-      .skipThrow()
+      .setSkipThrow()
       .setContext(req)
       .useInject()
       .useValidator(useOptions);
