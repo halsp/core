@@ -1,15 +1,15 @@
 import "../src";
 import { Middleware } from "@ipare/core";
-import { Logger, LoggerInject, winston } from "../src";
+import { Logger, ILogger, winston } from "../src";
 import { CustomTransport } from "./utils";
 import { TestStartup } from "@ipare/testing";
 
 describe("identity", () => {
   class TestMiddleware extends Middleware {
-    @LoggerInject("app")
-    private readonly appLogger!: Logger;
-    @LoggerInject("core")
-    private readonly coreLogger!: Logger;
+    @Logger("app")
+    private readonly appLogger!: ILogger;
+    @Logger("core")
+    private readonly coreLogger!: ILogger;
 
     async invoke(): Promise<void> {
       this.appLogger.info("info");
@@ -50,8 +50,8 @@ describe("identity", () => {
 
   it("should define logger with identity by useConsoleLogger", async () => {
     class TestMiddleware extends Middleware {
-      @LoggerInject("testid")
-      private readonly logger!: Logger;
+      @Logger("testid")
+      private readonly logger!: ILogger;
 
       async invoke(): Promise<void> {
         this.ctx.bag("RESULT", this.logger.transports);

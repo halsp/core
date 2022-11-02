@@ -1,13 +1,13 @@
 import "../src";
 import { Middleware } from "@ipare/core";
-import { Logger, LoggerInject, winston } from "../src";
+import { Logger, ILogger, winston } from "../src";
 import { CustomTransport } from "./utils";
 import { TestStartup } from "@ipare/testing";
 import { InjectType } from "@ipare/inject";
 
 class TestMiddleware extends Middleware {
-  @LoggerInject()
-  private readonly logger!: Logger;
+  @Logger()
+  private readonly logger!: ILogger;
 
   async invoke(): Promise<void> {
     this.logger.info("info");
@@ -50,8 +50,8 @@ describe("logger", () => {
 
 describe("use", () => {
   class TestMiddleware extends Middleware {
-    @LoggerInject()
-    private readonly logger!: Logger;
+    @Logger()
+    private readonly logger!: ILogger;
 
     async invoke(): Promise<void> {
       this.ctx.bag("RESULT", this.logger.transports);
