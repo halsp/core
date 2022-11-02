@@ -1,8 +1,9 @@
 import "../src";
 import { Middleware } from "@ipare/core";
-import { Logger, LoggerInject } from "../src";
+import { Logger, LoggerInject, winston } from "../src";
 import { CustomTransport } from "./utils";
 import { TestStartup } from "@ipare/testing";
+import { InjectType } from "@ipare/inject";
 
 class TestMiddleware extends Middleware {
   @LoggerInject()
@@ -30,23 +31,69 @@ describe("logger", () => {
     });
 
     const obj = buffer[0] as any;
-    expect({ level: obj.level, message: obj.message }).toEqual({
-      level: "info",
-      message: "info",
-    });
+    expect(obj.level).toBe("info");
+    expect(obj.message).toBe("info");
   });
 
   it("should get logger by ctx", async () => {
     await new TestStartup()
       .useLogger()
-      .useLogger({
-        identity: "abc",
-      })
+      .useLogger("abc")
       .use(async (ctx) => {
         expect(!!(await ctx.getLogger())).toBeTruthy();
         expect(!!(await ctx.getLogger("abc"))).toBeTruthy();
         expect(!!(await ctx.getLogger("def"))).toBeFalsy();
       })
       .run();
+  });
+});
+
+describe("use", () => {
+  class TestMiddleware extends Middleware {
+    @LoggerInject()
+    private readonly logger!: Logger;
+
+    async invoke(): Promise<void> {
+      this.ctx.bag("RESULT", this.logger.transports);
+    }
+  }
+
+  it("should use console from useConsoleLogger", async () => {
+    const { ctx } = await new TestStartup()
+      .useConsoleLogger()
+      .add(TestMiddleware)
+      .run();
+
+    expect(
+      ctx.bag<winston.transport[]>("RESULT")[0] instanceof
+        winston.transports.Console
+    ).toBeTruthy();
+  });
+
+  it("should use file from useFileLogger", async () => {
+    const { ctx } = await new TestStartup()
+      .useFileLogger({
+        fileTransportOptions: {
+          filename: "node_modules/test.logger.log",
+        },
+      })
+      .add(TestMiddleware)
+      .run();
+
+    expect(
+      ctx.bag<winston.transport[]>("RESULT")[0] instanceof
+        winston.transports.File
+    ).toBeTruthy();
+  });
+
+  it("should be dispose after request when injectType is scoped", async () => {
+    const { ctx } = await new TestStartup()
+      .useConsoleLogger({
+        injectType: InjectType.Scoped,
+      })
+      .add(TestMiddleware)
+      .run();
+
+    expect((ctx.logger as winston.Logger).destroyed).toBeTruthy();
   });
 });

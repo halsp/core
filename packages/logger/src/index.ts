@@ -4,15 +4,26 @@ import winston from "winston";
 import Transport from "winston-transport";
 import { FileTransportOptions } from "winston/lib/winston/transports";
 import { OPTIONS_IDENTITY } from "./constant";
-import { Options } from "./options";
+import { FileOptions, Options } from "./options";
 
 export type Logger = winston.Logger;
 
 declare module "@ipare/core" {
   interface Startup {
     useLogger(options?: Options): this;
+    useLogger(identity: string, options?: Options): this;
     useConsoleLogger(options?: Omit<Options, "transports">): this;
+    useConsoleLogger(
+      identity: string,
+      options?: Omit<Options, "transports">
+    ): this;
     useFileLogger(
+      options: Omit<Options, "transports"> & {
+        fileTransportOptions: FileTransportOptions;
+      }
+    ): this;
+    useFileLogger(
+      identity: string,
       options: Omit<Options, "transports"> & {
         fileTransportOptions: FileTransportOptions;
       }
@@ -24,20 +35,30 @@ declare module "@ipare/core" {
   }
 }
 
-Startup.prototype.useLogger = function (options?: Options): Startup {
-  const injectKey = OPTIONS_IDENTITY + (options?.identity ?? "");
+function createLogger(options?: Options) {
+  const logger = winston.createLogger(options) as IService & Logger;
+  logger.dispose = async () => {
+    if (!logger.destroyed) {
+      logger.destroy();
+    }
+  };
+  return logger;
+}
+
+Startup.prototype.useLogger = function (...args: any[]): Startup {
+  const { identity, options } = getOptions(args);
+
+  let defaultLogger: Logger | undefined;
+  if (!identity) {
+    defaultLogger = createLogger(options);
+    this.setLogger(defaultLogger);
+  }
+
+  const injectKey = OPTIONS_IDENTITY + (identity ?? "");
   return this.useInject().inject(
     injectKey,
     () => {
-      const logger = winston.createLogger(options) as IService & Logger;
-
-      logger.dispose = async () => {
-        if (!logger.destroyed) {
-          logger.destroy();
-        }
-      };
-
-      return logger;
+      return defaultLogger ?? createLogger(options);
     },
     options?.injectType
   );
@@ -50,19 +71,53 @@ Context.prototype.getLogger = async function (
   return (await parseInject(this, injectKey)) as Logger;
 };
 
-Startup.prototype.useConsoleLogger = function (options: Options = {}): Startup {
+Startup.prototype.useConsoleLogger = function (...args: any[]): Startup {
+  const { identity, options } = getOptions<Options>(args, {});
   options.transports = new winston.transports.Console();
-  return this.useLogger(options);
+  return useLogger(this, identity, options);
 };
 
-Startup.prototype.useFileLogger = function (
-  options: Options & { fileTransportOptions: FileTransportOptions }
-): Startup {
+Startup.prototype.useFileLogger = function (...args: any[]): Startup {
+  const { identity, options } = getOptions<FileOptions>(args, {});
   options.transports = new winston.transports.File(
     options.fileTransportOptions
   );
-  return this.useLogger(options);
+  return useLogger(this, identity, options);
 };
+
+function getOptions<T extends Options = Options>(
+  args: any[]
+): {
+  identity: string;
+  options: T | undefined;
+};
+function getOptions<T extends Options = Options>(
+  args: any[],
+  def: T
+): {
+  identity: string;
+  options: T;
+};
+function getOptions<T extends Options = Options>(args: any[], def?: T) {
+  const identity = typeof args[0] == "string" ? args[0] : undefined;
+  const options = (typeof args[0] == "string" ? args[1] : args[0]) as
+    | T
+    | undefined;
+
+  return { identity, options: options || def };
+}
+
+function useLogger<T extends Options = Options>(
+  startup: Startup,
+  identity: string,
+  options: T
+) {
+  if (identity) {
+    return startup.useLogger(identity, options);
+  } else {
+    return startup.useLogger(options);
+  }
+}
 
 export { winston, Transport };
 export { LoggerInject } from "./decorators";
