@@ -1,4 +1,5 @@
 import { Context, Request, Response } from "./context";
+import { BaseLogger, IpareLogger } from "./logger";
 import {
   Middleware,
   MdHook,
@@ -141,5 +142,10 @@ export abstract class Startup {
       ctx.catchError(err);
     }
     return ctx.res;
+  }
+
+  logger = new BaseLogger();
+  setLogger(logger: IpareLogger) {
+    this.logger = logger;
   }
 }

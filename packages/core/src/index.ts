@@ -30,3 +30,4 @@ export {
   ExceptionMessage,
   isExceptionMessage,
 } from "./exception";
+export { IpareLogger } from "./logger";

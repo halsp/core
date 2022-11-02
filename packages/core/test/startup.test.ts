@@ -1,4 +1,5 @@
 import { Context, Request, Response, Startup } from "../src";
+import { BaseLogger } from "../src/logger";
 import { TestStartup } from "./test-startup";
 
 describe("invoke", () => {
@@ -63,4 +64,47 @@ describe("simple", () => {
 
     expect(ctx).not.toBeUndefined();
   });
+});
+
+describe("logger", () => {
+  it("should set logger", async () => {
+    const logger = new BaseLogger();
+    const startup = new TestStartup();
+    expect(!!startup.logger).toBeTruthy();
+
+    startup.setLogger(logger);
+    expect(startup.logger).toBe(logger);
+  });
+
+  it("should set ctx.logger", async () => {
+    const startup = new TestStartup();
+    await startup
+      .use(async (ctx) => {
+        expect(startup.logger).toBe(ctx.logger);
+      })
+      .run();
+  });
+
+  function testConsole(consoleFunc: string, logFunc?: string) {
+    logFunc = logFunc ?? consoleFunc;
+    it(`should log ${logFunc} by console.${consoleFunc}`, async () => {
+      const startup = new TestStartup();
+      const logger = startup.logger;
+
+      const beforeFunc = console[consoleFunc];
+      let message = "";
+      console[consoleFunc] = (msg: string) => {
+        message = msg;
+      };
+      logger[logFunc as string]("test");
+      console[consoleFunc] = beforeFunc;
+      expect(message).toBe("test");
+    });
+  }
+  testConsole("error");
+  testConsole("warn");
+  testConsole("info");
+  testConsole("info", "verbose");
+  testConsole("debug");
+  testConsole("debug", "silly");
 });

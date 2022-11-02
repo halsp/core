@@ -59,6 +59,10 @@ export class Context {
     return this.#res;
   }
 
+  get logger() {
+    return this.startup.logger;
+  }
+
   readonly startup!: Startup;
 
   get #singletonBag() {
