@@ -1,12 +1,10 @@
-import { Context, Startup } from "@ipare/core";
+import { Context, ILogger, Startup } from "@ipare/core";
 import { IService, parseInject } from "@ipare/inject";
 import winston from "winston";
 import Transport from "winston-transport";
 import { FileTransportOptions } from "winston/lib/winston/transports";
 import { OPTIONS_IDENTITY } from "./constant";
 import { FileOptions, Options } from "./options";
-
-export type ILogger = winston.Logger;
 
 declare module "@ipare/core" {
   interface Startup {
@@ -33,6 +31,9 @@ declare module "@ipare/core" {
   interface Context {
     getLogger(identity?: string): Promise<ILogger>;
   }
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface ILogger extends winston.Logger {}
 }
 
 function createLogger(options?: Options) {
@@ -64,9 +65,7 @@ Startup.prototype.useLogger = function (...args: any[]): Startup {
   );
 };
 
-Context.prototype.getLogger = async function (
-  identity?: string
-): Promise<ILogger> {
+Context.prototype.getLogger = async function (identity?: string) {
   const injectKey = OPTIONS_IDENTITY + (identity ?? "");
   return (await parseInject(this, injectKey)) as ILogger;
 };

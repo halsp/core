@@ -85,9 +85,8 @@ describe("logger", () => {
       .run();
   });
 
-  function testConsole(consoleFunc: string, logFunc?: string) {
-    logFunc = logFunc ?? consoleFunc;
-    it(`should log ${logFunc} by console.${consoleFunc}`, async () => {
+  function testConsole(consoleFunc: string) {
+    it(`should log ${consoleFunc} by console.${consoleFunc}`, async () => {
       const startup = new TestStartup();
       const logger = startup.logger;
 
@@ -96,7 +95,7 @@ describe("logger", () => {
       console[consoleFunc] = (msg: string) => {
         message = msg;
       };
-      logger[logFunc as string]("test");
+      logger[consoleFunc]("test");
       console[consoleFunc] = beforeFunc;
       expect(message).toBe("test");
     });
@@ -104,7 +103,5 @@ describe("logger", () => {
   testConsole("error");
   testConsole("warn");
   testConsole("info");
-  testConsole("info", "verbose");
   testConsole("debug");
-  testConsole("debug", "silly");
 });

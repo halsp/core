@@ -1,6 +1,6 @@
 import "../src";
-import { Middleware } from "@ipare/core";
-import { Logger, ILogger, winston } from "../src";
+import { Middleware, ILogger } from "@ipare/core";
+import { Logger, winston } from "../src";
 import { CustomTransport } from "./utils";
 import { TestStartup } from "@ipare/testing";
 import { InjectType } from "@ipare/inject";
