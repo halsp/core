@@ -21,20 +21,31 @@ export class MicroTcpStartup extends MicroStartup {
   #handler(socket: net.Socket) {
     let stringBuffer = "";
     socket.on("data", async (buffer) => {
+      stringBuffer += buffer.toString("utf-8");
+
       while (true) {
-        stringBuffer += buffer.toString("utf-8");
-
         const index = stringBuffer.indexOf("#");
-        if (index < 0) return;
-
-        const contentLength = parseInt(stringBuffer.substring(0, index));
-        if (isNaN(contentLength)) {
+        if (index < 0) {
           socket.write(
             JSON.stringify({
-              error: `Error length "${contentLength}"`,
+              error: `Error message format`,
               status: "error",
             })
           );
+          socket.end();
+          return;
+        }
+
+        const lengthStr = stringBuffer.substring(0, index);
+        const contentLength = parseInt(lengthStr);
+        if (isNaN(contentLength)) {
+          socket.write(
+            JSON.stringify({
+              error: `Error length "${lengthStr}"`,
+              status: "error",
+            })
+          );
+          socket.end();
           return;
         }
 
@@ -44,21 +55,28 @@ export class MicroTcpStartup extends MicroStartup {
           break;
         } else if (stringBuffer.length > contentLength) {
           const msg = stringBuffer.substring(0, contentLength);
-          stringBuffer = stringBuffer.substring(contentLength + 1);
+          stringBuffer = stringBuffer.substring(contentLength);
           await this.#invokeMessage(socket, msg);
           continue;
         } else {
-          break;
+          socket.write(
+            JSON.stringify({
+              error: `Required length "${contentLength}", bug actual length is "${stringBuffer.length}"`,
+              status: "error",
+            })
+          );
+          socket.end();
+          return;
         }
       }
+
+      socket.end();
     });
 
     socket.on("close", () => {
       //
     });
     socket.on("error", (err) => {
-      if (err["code"] == "ECONNRESET") return;
-
       console.error(err);
     });
   }
@@ -75,9 +93,7 @@ export class MicroTcpStartup extends MicroStartup {
       body: res.body,
     });
     const data = `${resultJson.length}#${resultJson}`;
-    console.log("data", data);
     socket.write(data, "utf-8");
-    socket.end();
   }
 
   listen(): net.Server {
@@ -86,10 +102,10 @@ export class MicroTcpStartup extends MicroStartup {
 
   async #dynamicListen(
     times: number
-  ): Promise<{ port?: number; server: net.Server }> {
+  ): Promise<{ port: number; server: net.Server }> {
     const port = this.#port + times;
 
-    return new Promise<{ port?: number; server: net.Server }>(
+    return new Promise<{ port: number; server: net.Server }>(
       (resolve, reject) => {
         let error = false;
         let listen = false;
@@ -118,7 +134,7 @@ export class MicroTcpStartup extends MicroStartup {
       }
     );
   }
-  async dynamicListen(): Promise<{ port?: number; server: net.Server }> {
+  async dynamicListen(): Promise<{ port: number; server: net.Server }> {
     return await this.#dynamicListen(0);
   }
 

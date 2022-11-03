@@ -76,25 +76,25 @@ export class ServerStartup<
   }
 
   dynamicListen(
-    port?: number,
+    port: number,
     hostname?: string,
     backlog?: number,
     listeningListener?: () => void
-  ): Promise<{ port?: number; server: ServerType<T> }>;
+  ): Promise<{ port: number; server: ServerType<T> }>;
   dynamicListen(
     port?: number,
     hostname?: string,
     listeningListener?: () => void
-  ): Promise<{ port?: number; server: ServerType<T> }>;
+  ): Promise<{ port: number; server: ServerType<T> }>;
   dynamicListen(
     port?: number,
     backlog?: number,
     listeningListener?: () => void
-  ): Promise<{ port?: number; server: ServerType<T> }>;
+  ): Promise<{ port: number; server: ServerType<T> }>;
   dynamicListen(
     options: net.ListenOptions,
     listeningListener?: () => void
-  ): Promise<{ port?: number; server: ServerType<T> }>;
+  ): Promise<{ port: number; server: ServerType<T> }>;
   async dynamicListen(
     arg0?: number | net.ListenOptions,
     ...args: any[]

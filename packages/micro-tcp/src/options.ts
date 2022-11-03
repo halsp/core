@@ -1,4 +1,4 @@
-export class MicroTcpOptions {
+export interface MicroTcpOptions {
   host?: string;
   port?: number;
   retryAttempts?: number;
