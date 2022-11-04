@@ -3,9 +3,14 @@ import { existsSync, lstatSync, readdirSync } from "fs";
 import path from "path";
 import { Action } from "../action";
 import { MethodItem } from "../action/method-item";
-import { ACTION_METADATA, ACTION_METHOD_METADATA } from "../constant";
+import {
+  ACTION_METADATA,
+  ACTION_METHOD_METADATA,
+  ACTION_PATTERN_METADATA,
+} from "../constant";
 import MapItem from "./map-item";
 import "reflect-metadata";
+import { PatternItem } from "../action/pattern-item";
 
 export default class MapCreater {
   constructor(private readonly dir: string) {
@@ -99,24 +104,33 @@ export default class MapCreater {
     actionName: string,
     action: ObjectConstructor<Action>
   ) {
-    const metadata =
-      Reflect.getMetadata(ACTION_METADATA, action.prototype) ?? {};
-
     const decMethods: MethodItem[] = Reflect.getMetadata(
       ACTION_METHOD_METADATA,
       action.prototype
     );
+    const decPatterns: PatternItem[] = Reflect.getMetadata(
+      ACTION_PATTERN_METADATA,
+      action.prototype
+    );
     let mapItem: MapItem;
-    if (decMethods) {
+    if (decMethods && decMethods.length) {
+      // http
       const url = decMethods.filter((m) => !!m.url)[0]?.url;
       const methods = decMethods.map((m) => m.method);
       mapItem = new MapItem(file, actionName, url, methods);
+    } else if (decPatterns && decPatterns.length) {
+      // micro
+      const pattern = decPatterns[0];
+      mapItem = new MapItem(file, actionName, pattern.pattern, [pattern.type]);
     } else {
+      // default
       mapItem = new MapItem(file, actionName);
     }
 
+    const metadata =
+      Reflect.getMetadata(ACTION_METADATA, action.prototype) ?? {};
     Object.keys(metadata).forEach((key) => {
-      if (mapItem[key] == undefined) {
+      if (!(key in mapItem)) {
         mapItem[key] = metadata[key];
       }
     });

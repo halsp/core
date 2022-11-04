@@ -17,9 +17,11 @@ export class MapMatcher {
   public notFound = false;
 
   private getMapItem(): MapItem | undefined {
-    // TODO
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { composePattern } = require("@ipare/micro");
+    const composedPattern = composePattern(this.ctx.req.path);
     const mapItem = this.ctx.routerMap.filter(
-      (m) => m.path == this.ctx.req.path
+      (m) => m.url == composedPattern
     )[0];
     if (mapItem) return mapItem;
 

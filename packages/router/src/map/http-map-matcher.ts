@@ -54,7 +54,7 @@ export class MapMatcher {
 
     if (methodIncluded && !mapItem.methods.includes(HttpMethods.any)) {
       const matchedMethod = HttpMethods.matched(
-        this.ctx.req.method,
+        this.ctx.req["method"],
         options.customMethods
       );
       if (!matchedMethod || !mapItem.methods.includes(matchedMethod)) {

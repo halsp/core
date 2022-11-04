@@ -1,5 +1,4 @@
-import { Startup } from "@ipare/core";
-import type { QueryDict, ReadonlyQueryDict } from "@ipare/http";
+import { Dict, ReadonlyDict, Startup } from "@ipare/core";
 import { Action } from "./action";
 import MapParser from "./map/map-parser";
 import path = require("path");
@@ -41,6 +40,9 @@ export {
   HttpWrapped,
   setActionMetadata,
   getActionMetadata,
+  EventPattern,
+  MessagePattern,
+  PatternItem,
 } from "./action";
 export { postbuild } from "./postbuild";
 
@@ -59,7 +61,7 @@ declare module "@ipare/core" {
   }
 
   interface Request {
-    get params(): ReadonlyQueryDict;
+    get params(): ReadonlyDict<string>;
   }
 }
 
@@ -162,14 +164,15 @@ Startup.prototype.useRouterParser = function (options?: RouterOptions) {
       const { MapMatcher } = require("./map/http-map-matcher");
       const mapMatcher = new MapMatcher(ctx);
       if (mapMatcher.notFound) {
-        ctx.notFoundMsg({
+        ctx["notFoundMsg"]({
           message: `Can't find the path：${ctx.req.path}`,
           path: ctx.req.path,
         });
       } else if (mapMatcher.methodNotAllowed) {
-        ctx.methodNotAllowedMsg({
-          message: `method not allowed：${ctx.req.method}`,
-          method: ctx.req.method,
+        const method: string = ctx.req["method"];
+        ctx["methodNotAllowedMsg"]({
+          message: `method not allowed：${method}`,
+          method: method,
           path: ctx.req.path,
         });
       } else {
@@ -189,7 +192,7 @@ Startup.prototype.useRouterParser = function (options?: RouterOptions) {
         return await next();
       }
 
-      const params: QueryDict = {};
+      const params: Dict<string> = {};
       const actionMetadata: MapItem = ctx.actionMetadata;
       if (actionMetadata.url.includes("^")) {
         const mapPathStrs = actionMetadata.url.split("/");
