@@ -1,5 +1,5 @@
 import { Middleware } from "@ipare/core";
-import { HttpMethod } from "@ipare/http";
+import { HttpMethods } from "@ipare/methods";
 import { FILE_404_BAG, FILE_BAG } from "../constant";
 import { FileOptions, DirectoryOptions } from "../options";
 
@@ -8,16 +8,16 @@ export abstract class BaseMiddleware extends Middleware {
 
   protected get isMethodValid(): boolean {
     if (!this.options.method) {
-      return this.ctx.req.method == HttpMethod.get;
+      return this.ctx.req.method == HttpMethods.get;
     }
     if (Array.isArray(this.options.method)) {
       const methods = this.options.method.map((m) => m.toUpperCase());
       return (
-        methods.includes(HttpMethod.any) ||
+        methods.includes(HttpMethods.any) ||
         methods.includes(this.ctx.req.method)
       );
     } else {
-      if (this.options.method.toUpperCase() == HttpMethod.any) return true;
+      if (this.options.method.toUpperCase() == HttpMethods.any) return true;
       if (this.ctx.req.method == this.options.method.toUpperCase()) return true;
       return false;
     }

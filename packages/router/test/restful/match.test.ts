@@ -1,5 +1,5 @@
 import "../../src";
-import { HttpMethod } from "@ipare/http";
+import { HttpMethods } from "@ipare/methods";
 import { TestHttpStartup } from "@ipare/testing-http";
 import "../global";
 import { Context, Request } from "@ipare/core";
@@ -7,7 +7,7 @@ import { Context, Request } from "@ipare/core";
 test(`find next`, async () => {
   const result = await new TestHttpStartup()
     .setContext(
-      new Request().setPath("/restful/method").setMethod(HttpMethod.post)
+      new Request().setPath("/restful/method").setMethod(HttpMethods.post)
     )
     .useTestRouter()
     .run();
@@ -17,7 +17,9 @@ test(`find next`, async () => {
 test(`find simple`, async () => {
   const result = await new TestHttpStartup()
     .setContext(
-      new Request().setPath("/restful/method/simple").setMethod(HttpMethod.post)
+      new Request()
+        .setPath("/restful/method/simple")
+        .setMethod(HttpMethods.post)
     )
     .useTestRouter()
     .run();
@@ -28,7 +30,7 @@ test(`find simple`, async () => {
 test(`find simple next`, async () => {
   const result = await new TestHttpStartup()
     .setContext(
-      new Request().setPath("/restful/method/any").setMethod(HttpMethod.post)
+      new Request().setPath("/restful/method/any").setMethod(HttpMethods.post)
     )
     .useTestRouter()
     .run();
@@ -39,7 +41,7 @@ test(`find simple next`, async () => {
 test(`find miss next`, async () => {
   const result = await new TestHttpStartup()
     .setContext(
-      new Request().setPath("/restful/method/miss").setMethod(HttpMethod.post)
+      new Request().setPath("/restful/method/miss").setMethod(HttpMethods.post)
     )
     .useTestRouter()
     .run();
@@ -53,7 +55,7 @@ test(`find miss next 2`, async () => {
     .setContext(
       new Request()
         .setPath("/restful/method/miss/any")
-        .setMethod(HttpMethod.post)
+        .setMethod(HttpMethods.post)
     )
     .useTestRouter()
     .run();
@@ -66,7 +68,7 @@ test(`find miss next 3`, async () => {
     .setContext(
       new Request()
         .setPath("/restful/method/any/miss")
-        .setMethod(HttpMethod.post)
+        .setMethod(HttpMethods.post)
     )
     .useTestRouter()
     .run();
@@ -79,7 +81,7 @@ test(`find miss next 4`, async () => {
     .setContext(
       new Request()
         .setPath("/restful/method/any/any")
-        .setMethod(HttpMethod.post)
+        .setMethod(HttpMethods.post)
     )
     .useTestRouter()
     .run();
@@ -93,7 +95,7 @@ test(`mostLikePathParts`, async () => {
     .setContext(
       new Request()
         .setPath("/restful/mostLike/q/act")
-        .setMethod(HttpMethod.post)
+        .setMethod(HttpMethods.post)
     )
     .use(async (ctx, next) => {
       context = ctx;
@@ -108,7 +110,7 @@ test(`mostLikePathParts`, async () => {
 test(`find sortest`, async () => {
   const result = await new TestHttpStartup()
     .setContext(
-      new Request().setPath("/restful/sortest/sort").setMethod(HttpMethod.get)
+      new Request().setPath("/restful/sortest/sort").setMethod(HttpMethods.get)
     )
     .useTestRouter()
     .run();

@@ -6,6 +6,7 @@ import { ERROR_CODES, USED } from "./constant";
 import { execFilters } from "@ipare/filter";
 import { Action } from "@ipare/router";
 import { HttpException, HttpStartup } from "@ipare/http";
+import { HttpMethods } from "@ipare/methods";
 
 export { MvaOptions };
 export { ResultFilter } from "./result.filter";
@@ -55,7 +56,7 @@ HttpStartup.prototype.useMva = function (options: MvaOptions = {}) {
   this[USED] = true;
 
   const renderMethods = (() => {
-    let result = options.renderMethods ?? ["get"];
+    let result = options.renderMethods ?? [HttpMethods.get];
     if (typeof result == "string") {
       result = [result];
     }
@@ -72,10 +73,8 @@ HttpStartup.prototype.useMva = function (options: MvaOptions = {}) {
 
       if (!ctx.res.isSuccess) return;
       if (
-        !renderMethods.some((m) => m.toLowerCase() == "any") &&
-        !renderMethods.some(
-          (m) => m.toLowerCase() == ctx.req.method.toLowerCase()
-        )
+        !renderMethods.some((m) => HttpMethods.equal(m, HttpMethods.any)) &&
+        !renderMethods.some((m) => HttpMethods.equal(m, ctx.req.method))
       ) {
         return;
       }

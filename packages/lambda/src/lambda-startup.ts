@@ -1,4 +1,5 @@
-import { HeadersDict, HttpMethod } from "@ipare/http";
+import { HeadersDict } from "@ipare/http";
+import { HttpMethods } from "@ipare/methods";
 import { ResponseStruct } from "./response-struct";
 import { Readable } from "stream";
 import { HttpStartup } from "@ipare/http";
@@ -19,7 +20,7 @@ export class LambdaStartup extends HttpStartup {
           event.httpMethod ||
             event.method ||
             event.requestContext?.http?.method ||
-            HttpMethod.get
+            HttpMethods.get
         )
         .setHeaders(event.headers ?? {})
         .setQuery(event.queryStringParameters ?? event.query ?? {})

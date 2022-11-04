@@ -1,5 +1,5 @@
 import "../src";
-import { HttpMethod } from "@ipare/http";
+import { HttpMethods } from "@ipare/methods";
 import { Request, Response } from "@ipare/core";
 import cors from "@koa/cors";
 import Router from "@koa/router";
@@ -8,7 +8,9 @@ import { TestHttpStartup } from "@ipare/testing-http";
 test("@koa/cors", async function () {
   const res = await new TestHttpStartup()
     .setContext(
-      new Request().setMethod(HttpMethod.get).set("origin", "https://ipare.org")
+      new Request()
+        .setMethod(HttpMethods.get)
+        .set("origin", "https://ipare.org")
     )
     .koa(
       cors({

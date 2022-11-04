@@ -10,8 +10,6 @@ export {
   getReasonPhrase,
 } from "http-status-codes";
 
-export { HttpMethod } from "./http-method";
-
 export {
   HttpException,
   BadGatewayException,

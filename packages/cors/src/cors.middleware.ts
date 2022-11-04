@@ -1,5 +1,5 @@
 import { Middleware } from "@ipare/core";
-import { HttpMethod } from "@ipare/http";
+import { HttpMethods } from "@ipare/methods";
 import { Options } from "./options";
 
 export class CorsMiddleware extends Middleware {
@@ -14,7 +14,7 @@ export class CorsMiddleware extends Middleware {
       return await this.next();
     }
     if (
-      this.ctx.req.method === HttpMethod.options &&
+      this.ctx.req.method === HttpMethods.options &&
       !this.ctx.req.getHeader("Access-Control-Request-Method")
     ) {
       return await this.next();
@@ -22,7 +22,7 @@ export class CorsMiddleware extends Middleware {
 
     await this.#setCorsHeaders();
 
-    if (this.ctx.req.method === HttpMethod.options) {
+    if (this.ctx.req.method === HttpMethods.options) {
       this.noContent();
     } else {
       await this.next();
@@ -73,7 +73,7 @@ export class CorsMiddleware extends Middleware {
       () => !!this.options.secureContext
     );
 
-    if (this.ctx.req.method === HttpMethod.options) {
+    if (this.ctx.req.method === HttpMethods.options) {
       this.#setHeader(
         "Access-Control-Max-Age",
         this.options.maxAge,

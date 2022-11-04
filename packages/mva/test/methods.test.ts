@@ -2,6 +2,7 @@ import { Request } from "@ipare/core";
 import { TestHttpStartup } from "@ipare/testing-http";
 import { runMva } from "./global";
 import "../src";
+import { HttpMethods } from "@ipare/methods";
 
 test("not allowed method", async function () {
   await runMva(async () => {
@@ -23,7 +24,7 @@ function testRanderEnable(enable: boolean) {
       const res = await new TestHttpStartup()
         .setContext(new Request().setMethod("post"))
         .useMva({
-          renderMethods: "any",
+          renderMethods: HttpMethods.any,
           randerEnable: () => enable,
         })
         .run();

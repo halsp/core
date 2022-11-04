@@ -1,5 +1,5 @@
 import "../../src";
-import { HttpMethod } from "@ipare/http";
+import { HttpMethods } from "@ipare/methods";
 import { TestHttpStartup } from "@ipare/testing-http";
 import "../global";
 import { Request } from "@ipare/core";
@@ -15,6 +15,6 @@ methods.forEach((method) => {
 
     expect(result.status).toBe(200);
     expect(!!result.body.method).toBe(true);
-    expect(result.body.method).toBe(HttpMethod.any);
+    expect(result.body.method).toBe(HttpMethods.any);
   });
 });

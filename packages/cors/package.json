@@ -28,7 +28,8 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^2.2.5"
+    "@ipare/core": "^2.2.5",
+    "@ipare/methods": "^2.2.5"
   },
   "devDependencies": {
     "@types/jest": "^29.0.3",

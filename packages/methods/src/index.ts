@@ -1,4 +1,4 @@
-export class HttpMethod {
+export class HttpMethods {
   static readonly any = "ANY";
   static readonly get = "GET";
   static readonly post = "POST";

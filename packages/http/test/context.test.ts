@@ -1,6 +1,6 @@
 import { Context } from "@ipare/core";
+import { HttpMethods } from "@ipare/methods";
 import "../src";
-import { HttpMethod } from "../src";
 import { initContext } from "../src/context";
 
 describe("context", () => {
@@ -79,6 +79,6 @@ describe("default req", () => {
 
   it("should set default req.method to be ANY", async () => {
     const ctx = new Context();
-    expect(ctx.req.method).toBe(HttpMethod.any);
+    expect(ctx.req.method).toBe(HttpMethods.any);
   });
 });

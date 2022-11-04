@@ -1,5 +1,6 @@
 import { Context, Dict, Request } from "@ipare/core";
-import { StatusCodes, HttpMethod } from "@ipare/http";
+import { StatusCodes } from "@ipare/http";
+import { HttpMethods } from "@ipare/methods";
 import { TestHttpStartup } from "@ipare/testing-http";
 import { Action } from "../src";
 import "./global";
@@ -67,14 +68,14 @@ function runMultipleTest(
   });
 }
 
-runMultipleTest("multiple", HttpMethod.get, 200, "multiple-default");
-runMultipleTest("multiple", HttpMethod.post, 405);
+runMultipleTest("multiple", HttpMethods.get, 200, "multiple-default");
+runMultipleTest("multiple", HttpMethods.post, 405);
 
-runMultipleTest("multiple/test1", HttpMethod.get, 200, "multiple-test");
-runMultipleTest("multiple/test1", HttpMethod.post, 405);
+runMultipleTest("multiple/test1", HttpMethods.get, 200, "multiple-test");
+runMultipleTest("multiple/test1", HttpMethods.post, 405);
 
-runMultipleTest("multiple/test2", HttpMethod.post, 200, "multiple-post");
-runMultipleTest("multiple/test2", HttpMethod.get, 405);
+runMultipleTest("multiple/test2", HttpMethods.post, 200, "multiple-post");
+runMultipleTest("multiple/test2", HttpMethods.get, 405);
 
-runMultipleTest("multiple/test3/path", HttpMethod.put, 200, "multiple-path");
-runMultipleTest("multiple/test2/path", HttpMethod.get, 404);
+runMultipleTest("multiple/test3/path", HttpMethods.put, 200, "multiple-path");
+runMultipleTest("multiple/test2/path", HttpMethods.get, 404);

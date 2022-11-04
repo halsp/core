@@ -1,4 +1,5 @@
-import { HttpMethod, StatusCodes } from "@ipare/http";
+import { StatusCodes } from "@ipare/http";
+import { HttpMethods } from "@ipare/methods";
 import { TestHttpStartup } from "@ipare/testing-http";
 import "../src";
 import "./global";
@@ -18,19 +19,24 @@ function runTest(method: string, success: boolean) {
   });
 }
 
-runTest(HttpMethod.get, true);
-runTest(HttpMethod.head, true);
-runTest(HttpMethod.post, true);
-runTest(HttpMethod.patch, true);
-runTest(HttpMethod.trace, true);
-runTest(HttpMethod.options, true);
+runTest(HttpMethods.get, true);
+runTest(HttpMethods.head, true);
+runTest(HttpMethods.post, true);
+runTest(HttpMethods.patch, true);
+runTest(HttpMethods.trace, true);
+runTest(HttpMethods.options, true);
+runTest(HttpMethods.move, true);
+runTest(HttpMethods.copy, true);
+runTest(HttpMethods.link, true);
+runTest(HttpMethods.unlink, true);
+runTest(HttpMethods.wrapped, true);
 
-runTest(HttpMethod.put, false);
-runTest(HttpMethod.any, false);
+runTest(HttpMethods.put, false);
+runTest(HttpMethods.any, false);
 
 test(`custom url`, async () => {
   const res = await new TestHttpStartup()
-    .setContext(new Request().setPath("/mu").setMethod(HttpMethod.put))
+    .setContext(new Request().setPath("/mu").setMethod(HttpMethods.put))
     .useTestRouter()
     .run();
 
@@ -43,7 +49,7 @@ test(`base path`, async () => {
     .setContext(
       new Request()
         .setPath("decorator/method-base-path/mup")
-        .setMethod(HttpMethod.get)
+        .setMethod(HttpMethods.get)
     )
     .useTestRouter()
     .run();

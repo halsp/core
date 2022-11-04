@@ -1,4 +1,4 @@
-import { HttpMethod } from "@ipare/http";
+import { HttpMethods } from "@ipare/methods";
 import { Request } from "@ipare/core";
 import { TestHttpStartup } from "@ipare/testing-http";
 import "../src";
@@ -20,7 +20,7 @@ describe("options", () => {
   it("should ignore use again", async () => {
     const res = await new TestHttpStartup()
       .setContext(
-        new Request().setMethod(HttpMethod.get).setPath("swagger/index.json")
+        new Request().setMethod(HttpMethods.get).setPath("swagger/index.json")
       )
       .use(async (ctx, next) => {
         await next();
@@ -47,7 +47,7 @@ describe("options", () => {
   it("should create custom builder", async () => {
     const res = await new TestHttpStartup()
       .setContext(
-        new Request().setMethod(HttpMethod.get).setPath("swagger/index.json")
+        new Request().setMethod(HttpMethods.get).setPath("swagger/index.json")
       )
       .useSwagger({
         builder: () => {
@@ -66,7 +66,7 @@ describe("options", () => {
   it("should set lang when set options.html.lang", async () => {
     const res = await new TestHttpStartup()
       .setContext(
-        new Request().setMethod(HttpMethod.get).setPath("swagger/index.html")
+        new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
       )
       .useSwagger({
         html: {
@@ -85,7 +85,7 @@ describe("options", () => {
   it("should remove default style when options.html.removeDefaultStyle=true", async () => {
     const res = await new TestHttpStartup()
       .setContext(
-        new Request().setMethod(HttpMethod.get).setPath("swagger/index.html")
+        new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
       )
       .useSwagger({
         html: {
@@ -104,7 +104,7 @@ describe("options", () => {
   it("should set title when set options.html.title", async () => {
     const res = await new TestHttpStartup()
       .setContext(
-        new Request().setMethod(HttpMethod.get).setPath("swagger/index.html")
+        new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
       )
       .useSwagger({
         html: {
@@ -123,7 +123,7 @@ describe("options", () => {
   it("should add favicon when set options.html.favicon", async () => {
     const res = await new TestHttpStartup()
       .setContext(
-        new Request().setMethod(HttpMethod.get).setPath("swagger/index.html")
+        new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
       )
       .useSwagger({
         html: {
@@ -161,7 +161,7 @@ describe("options", () => {
   it("should add multiple favicon when set options.html.favicon", async () => {
     const res = await new TestHttpStartup()
       .setContext(
-        new Request().setMethod(HttpMethod.get).setPath("swagger/index.html")
+        new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
       )
       .useSwagger({
         html: {
@@ -203,7 +203,7 @@ describe("options", () => {
   it("should add style when set options.html.style", async () => {
     const res = await new TestHttpStartup()
       .setContext(
-        new Request().setMethod(HttpMethod.get).setPath("swagger/index.html")
+        new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
       )
       .useSwagger({
         html: {
@@ -247,7 +247,7 @@ describe("options", () => {
   it("should add css when set options.html.css", async () => {
     const res = await new TestHttpStartup()
       .setContext(
-        new Request().setMethod(HttpMethod.get).setPath("swagger/index.html")
+        new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
       )
       .useSwagger({
         html: {
@@ -285,7 +285,7 @@ describe("options", () => {
   it("should add script when set options.html.script", async () => {
     const res = await new TestHttpStartup()
       .setContext(
-        new Request().setMethod(HttpMethod.get).setPath("swagger/index.html")
+        new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
       )
       .useSwagger({
         html: {
@@ -326,7 +326,7 @@ describe("options", () => {
   it("should js file when set options.html.js", async () => {
     const res = await new TestHttpStartup()
       .setContext(
-        new Request().setMethod(HttpMethod.get).setPath("swagger/index.html")
+        new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
       )
       .useSwagger({
         html: {
@@ -368,7 +368,7 @@ describe("swagger-initializer.js", () => {
     const res = await new TestHttpStartup()
       .setContext(
         new Request()
-          .setMethod(HttpMethod.get)
+          .setMethod(HttpMethods.get)
           .setPath("swagger/swagger-initializer.js")
       )
       .useSwagger()
@@ -400,7 +400,7 @@ describe("swagger-initializer.js", () => {
     const res = await new TestHttpStartup()
       .setContext(
         new Request()
-          .setMethod(HttpMethod.get)
+          .setMethod(HttpMethods.get)
           .setPath("swagger/swagger-initializer.js")
       )
       .useSwagger({
@@ -435,7 +435,7 @@ describe("swagger-initializer.js", () => {
     const res = await new TestHttpStartup()
       .setContext(
         new Request()
-          .setMethod(HttpMethod.get)
+          .setMethod(HttpMethods.get)
           .setPath("swagger/swagger-initializer.js")
       )
       .useSwagger({

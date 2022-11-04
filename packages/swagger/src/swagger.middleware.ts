@@ -4,7 +4,8 @@ import { SwaggerOptions } from "./options";
 import { OpenApiBuilder } from "openapi3-ts-remove-yaml";
 import path from "path";
 import * as fs from "fs";
-import { HttpMethod, HttpStartup, StatusCodes } from "@ipare/http";
+import { HttpStartup, StatusCodes } from "@ipare/http";
+import { HttpMethods } from "@ipare/methods";
 
 export class SwaggerMiddlware extends Middleware {
   constructor(private readonly options: SwaggerOptions) {
@@ -17,7 +18,7 @@ export class SwaggerMiddlware extends Middleware {
     if (!reqPath.startsWith(optPath)) {
       return await this.next();
     }
-    if (this.ctx.req.method != HttpMethod.get) {
+    if (this.ctx.req.method != HttpMethods.get) {
       return await this.next();
     }
 

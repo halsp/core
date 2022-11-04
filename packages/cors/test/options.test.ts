@@ -1,5 +1,5 @@
 import { TestHttpStartup } from "@ipare/testing-http";
-import { HttpMethod } from "@ipare/http";
+import { HttpMethods } from "@ipare/methods";
 import { Request } from "@ipare/core";
 import "../src";
 
@@ -30,7 +30,7 @@ it("should set Access-Control-Allow-Headers when set allowHeaders option", async
       new Request()
         .setHeader("Origin", "https://ipare.org")
         .setHeader("Access-Control-Request-Method", "POST")
-        .setMethod(HttpMethod.options)
+        .setMethod(HttpMethods.options)
     )
     .useCors({
       allowHeaders: ["get"],
@@ -46,7 +46,7 @@ describe("privateNetworkAccess", () => {
         new Request()
           .setHeader("Origin", "https://ipare.org")
           .setHeader("Access-Control-Request-Method", "POST")
-          .setMethod(HttpMethod.options)
+          .setMethod(HttpMethods.options)
       )
       .useCors({
         privateNetworkAccess: false,
@@ -61,7 +61,7 @@ describe("privateNetworkAccess", () => {
         new Request()
           .setHeader("Origin", "https://ipare.org")
           .setHeader("Access-Control-Request-Method", "POST")
-          .setMethod(HttpMethod.options)
+          .setMethod(HttpMethods.options)
       )
       .useCors({
         privateNetworkAccess: true,
@@ -77,7 +77,7 @@ describe("privateNetworkAccess", () => {
           .setHeader("Origin", "https://ipare.org")
           .setHeader("Access-Control-Request-Method", "POST")
           .setHeader("Access-Control-Request-Private-Network", "true")
-          .setMethod(HttpMethod.options)
+          .setMethod(HttpMethods.options)
       )
       .useCors({
         privateNetworkAccess: true,
@@ -102,7 +102,7 @@ describe("allowMethods", () => {
         new Request()
           .setHeader("Origin", "https://ipare.org")
           .setHeader("Access-Control-Request-Method", "POST")
-          .setMethod(HttpMethod.options)
+          .setMethod(HttpMethods.options)
       )
       .useCors()
       .run();
@@ -123,7 +123,7 @@ describe("allowMethods", () => {
         new Request()
           .setHeader("Origin", "https://ipare.org")
           .setHeader("Access-Control-Request-Method", "POST")
-          .setMethod(HttpMethod.options)
+          .setMethod(HttpMethods.options)
       )
       .useCors({
         allowMethods,

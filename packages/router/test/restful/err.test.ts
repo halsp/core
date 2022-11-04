@@ -1,12 +1,12 @@
 import "../../src";
-import { HttpMethod } from "@ipare/http";
+import { HttpMethods } from "@ipare/methods";
 import { Request } from "@ipare/core";
 import { TestHttpStartup } from "@ipare/testing-http";
 import "../global";
 
 test(`action name error`, async () => {
   const result = await new TestHttpStartup()
-    .setContext(new Request().setPath("/err").setMethod(HttpMethod.post))
+    .setContext(new Request().setPath("/err").setMethod(HttpMethods.post))
     .useTestRouter()
     .run();
 

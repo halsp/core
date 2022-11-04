@@ -1,6 +1,6 @@
 import { Dict, Request } from "@ipare/core";
+import { HttpMethods } from "@ipare/methods";
 import { initHeaderHandler } from "./header-handler";
-import { HttpMethod } from "../http-method";
 import { REQUEST_HEADERS, REQUEST_METHOD, REQUEST_QUERY } from "../constant";
 
 export function initRequest(req: typeof Request.prototype) {
@@ -32,7 +32,7 @@ export function initRequest(req: typeof Request.prototype) {
     enumerable: true,
     get: function () {
       if (!(REQUEST_METHOD in this)) {
-        this[REQUEST_METHOD] = HttpMethod.any;
+        this[REQUEST_METHOD] = HttpMethods.any;
       }
 
       const ovrdHeader = this.getHeader("X-HTTP-Method-Override");

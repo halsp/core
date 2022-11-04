@@ -1,4 +1,4 @@
-import { HttpMethod } from "@ipare/http";
+import { HttpMethods } from "@ipare/methods";
 import { Request } from "@ipare/core";
 import { TestHttpStartup } from "@ipare/testing-http";
 import "../src";
@@ -26,7 +26,7 @@ it("should not set 'Access-Control-Allow-Origin' when method is OPTIONS and no '
     .setContext(
       new Request()
         .setHeader("Origin", "https://ipare.org")
-        .setMethod(HttpMethod.options)
+        .setMethod(HttpMethods.options)
     )
     .useCors()
     .run();
@@ -40,7 +40,7 @@ it("should set status to 204 when method is OPTIONS", async () => {
       new Request()
         .setHeader("Origin", "https://ipare.org")
         .setHeader("Access-Control-Request-Method", "POST")
-        .setMethod(HttpMethod.options)
+        .setMethod(HttpMethods.options)
     )
     .useCors()
     .run();
