@@ -2,7 +2,6 @@ import { Context, isNil, isObject, Request, Response } from "@ipare/core";
 import {
   CTX_INITED,
   REQUEST_ID,
-  REQUEST_PATTERN,
   RESPONSE_ERROR,
   RESPONSE_STATUS,
 } from "./constant";
@@ -13,21 +12,6 @@ export function initContext() {
     return;
   }
   Context.prototype[CTX_INITED] = true;
-
-  Object.defineProperty(Request.prototype, "pattern", {
-    configurable: true,
-    enumerable: true,
-    get: function () {
-      if (!(REQUEST_PATTERN in this)) {
-        this[REQUEST_PATTERN] = "";
-      }
-      return this[REQUEST_PATTERN];
-    },
-  });
-  Request.prototype.setPattern = function (val: string): Request {
-    this[REQUEST_PATTERN] = val ?? "";
-    return this;
-  };
 
   Object.defineProperty(Request.prototype, "id", {
     configurable: true,

@@ -44,10 +44,9 @@ function testSchema(useSchema: boolean) {
         },
       };
 
-      const req = new Request();
-      req["body"] = {
+      const req = new Request().setBody({
         b1: "1",
-      };
+      });
       const startup = new TestStartup()
         .setSkipThrow()
         .setContext(req)

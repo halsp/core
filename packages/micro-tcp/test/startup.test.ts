@@ -22,7 +22,9 @@ describe("startup.listen", () => {
 
 describe("parse message", () => {
   it("should set default result", async () => {
-    const startup = new MicroTcpStartup();
+    const startup = new MicroTcpStartup({
+      port: 23334,
+    });
     const { port } = await startup.dynamicListen();
     const result = await sendMessage(port, true);
     await startup.close();
@@ -34,7 +36,9 @@ describe("parse message", () => {
   });
 
   it("should return error if there is no '#'", async () => {
-    const startup = new MicroTcpStartup();
+    const startup = new MicroTcpStartup({
+      port: 23334,
+    });
     const { port } = await startup.dynamicListen();
     const result = await sendData(port, "abc");
     await startup.close();
@@ -46,7 +50,9 @@ describe("parse message", () => {
   });
 
   it("should return error if length is nan", async () => {
-    const startup = new MicroTcpStartup();
+    const startup = new MicroTcpStartup({
+      port: 23334,
+    });
     const { port } = await startup.dynamicListen();
     const result = await sendData(port, "abc#{}");
     await startup.close();
@@ -58,7 +64,9 @@ describe("parse message", () => {
   });
 
   it("should return error if length is error", async () => {
-    const startup = new MicroTcpStartup();
+    const startup = new MicroTcpStartup({
+      port: 23334,
+    });
     const { port } = await startup.dynamicListen();
     const result = await sendData(port, "3#{}");
     await startup.close();
@@ -70,7 +78,9 @@ describe("parse message", () => {
   });
 
   it("should throw error when socket destroy", async () => {
-    const startup = new MicroTcpStartup();
+    const startup = new MicroTcpStartup({
+      port: 23334,
+    });
     const { port } = await startup.dynamicListen();
 
     const socket = net.createConnection(port);
@@ -83,7 +93,9 @@ describe("parse message", () => {
 
   it("should invoke multiple times when send multiple message", async () => {
     let times = 0;
-    const startup = new MicroTcpStartup().use(() => {
+    const startup = new MicroTcpStartup({
+      port: 23334,
+    }).use(() => {
       times++;
     });
     const { port } = await startup.dynamicListen();

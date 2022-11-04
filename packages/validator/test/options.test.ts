@@ -26,10 +26,9 @@ function testOptions(useOptions: any, decOptions: any, result: boolean) {
       }
     }
 
-    const req = new Request();
-    req["body"] = {
+    const req = new Request().setBody({
       b1: null,
-    };
+    });
     const startup = new TestStartup()
       .setSkipThrow()
       .setContext(req)

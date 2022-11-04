@@ -67,16 +67,6 @@ describe("default req", () => {
     expect(ctx.req.body).toBeUndefined();
   });
 
-  it("should set default req.originalPath to be undefined", async () => {
-    const ctx = new Context();
-    expect(ctx.req.originalPath).toBeUndefined();
-  });
-
-  it("should set default req.path to be ''", async () => {
-    const ctx = new Context();
-    expect(ctx.req.path).toBe("");
-  });
-
   it("should set default req.overrideMethod to be undefined", async () => {
     const ctx = new Context();
     expect(ctx.req.overrideMethod).toBeUndefined();

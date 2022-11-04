@@ -39,7 +39,7 @@ test("dynamicListen error", async () => {
 
 test("dynamicListen emit error", async () => {
   const { server, port } = await new MicroTcpStartup({
-    port: 2333,
+    port: 23334,
   })
     .use(async (ctx) => {
       ctx.res.setBody("ok");

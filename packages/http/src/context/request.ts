@@ -1,13 +1,7 @@
-import { Dict, normalizePath, Request } from "@ipare/core";
+import { Dict, Request } from "@ipare/core";
 import { initHeaderHandler } from "./header-handler";
 import { HttpMethod } from "../http-method";
-import {
-  REQUEST_HEADERS,
-  REQUEST_METHOD,
-  REQUEST_ORIGINAL_PATH,
-  REQUEST_PATH,
-  REQUEST_QUERY,
-} from "../constant";
+import { REQUEST_HEADERS, REQUEST_METHOD, REQUEST_QUERY } from "../constant";
 
 export function initRequest(req: typeof Request.prototype) {
   Object.defineProperty(req, "headers", {
@@ -20,34 +14,6 @@ export function initRequest(req: typeof Request.prototype) {
       return this[REQUEST_HEADERS];
     },
   });
-
-  Object.defineProperty(req, "path", {
-    configurable: true,
-    enumerable: true,
-    get: function () {
-      if (!(REQUEST_PATH in this)) {
-        this[REQUEST_PATH] = "";
-      }
-      return this[REQUEST_PATH];
-    },
-  });
-  Object.defineProperty(req, "originalPath", {
-    configurable: true,
-    enumerable: true,
-    get: function () {
-      if (!(REQUEST_ORIGINAL_PATH in this)) {
-        this[REQUEST_ORIGINAL_PATH] = undefined;
-      }
-      return this[REQUEST_ORIGINAL_PATH];
-    },
-  });
-  req.setPath = function (val: string): Request {
-    this[REQUEST_ORIGINAL_PATH] = val
-      ?.replace(/\?.*$/, "")
-      ?.replace(/^https?:\/{1,2}[^\/]+\//, "");
-    this[REQUEST_PATH] = normalizePath(this[REQUEST_ORIGINAL_PATH]);
-    return this;
-  };
 
   Object.defineProperty(req, "overrideMethod", {
     configurable: true,

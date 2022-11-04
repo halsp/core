@@ -23,10 +23,9 @@ describe("parent validate", () => {
       }
     }
 
-    const req = new Request();
-    req["body"] = {
+    const req = new Request().setBody({
       b1: "1",
-    };
+    });
     const { ctx } = await new TestStartup()
       .setSkipThrow()
       .setContext(req)
@@ -51,10 +50,9 @@ describe("parent validate", () => {
       }
     }
 
-    const req = new Request();
-    req["body"] = {
+    const req = new Request().setBody({
       arg: "1",
-    };
+    });
     const { ctx } = await new TestStartup()
       .setSkipThrow()
       .setContext(req)

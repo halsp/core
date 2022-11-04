@@ -74,10 +74,6 @@ declare module "@ipare/core" {
   interface Request extends HeaderHandler {
     get headers(): ReadonlyHeadersDict;
 
-    get path(): string;
-    get originalPath(): string;
-    setPath(path: string): this;
-
     get overrideMethod(): string | undefined;
     get method(): string;
     setMethod(method: string): this;

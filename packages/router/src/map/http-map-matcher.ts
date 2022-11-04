@@ -1,6 +1,7 @@
 import MapItem from "./map-item";
 import { Context } from "@ipare/core";
-import { HttpMethod } from "@ipare/http";
+
+const ANY = "ANY";
 
 export class MapMatcher {
   constructor(private readonly ctx: Context) {
@@ -23,7 +24,7 @@ export class MapMatcher {
       .filter((m) => !!m.methods.length)
       .filter((m) => this.isPathMatched(m, true));
     this.ctx.routerMap
-      .filter((m) => !m.methods.length || m.methods.includes(HttpMethod.any))
+      .filter((m) => !m.methods.length || m.methods.includes(ANY))
       .filter((m) => this.isPathMatched(m, false))
       .forEach((m) => matchedPaths.push(m));
     const mapItem = this.getMostLikeMapItem(matchedPaths);
@@ -52,7 +53,9 @@ export class MapMatcher {
     const mapUrlStrs = mapItem.url.toLowerCase().split("/");
     if (reqUrlStrs.length != mapUrlStrs.length) return false;
 
-    if (methodIncluded && !mapItem.methods.includes(HttpMethod.any)) {
+    if (methodIncluded && !mapItem.methods.includes(ANY)) {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { HttpMethod } = require("@ipare/http");
       const matchedMethod = HttpMethod.matched(
         this.ctx.req.method,
         options.customMethods
@@ -97,11 +100,11 @@ export class MapMatcher {
     }
 
     if (
-      pathsParts.some((pp) => pp.mapItem.methods.includes(HttpMethod.any)) &&
-      pathsParts.some((pp) => !pp.mapItem.methods.includes(HttpMethod.any))
+      pathsParts.some((pp) => pp.mapItem.methods.includes(ANY)) &&
+      pathsParts.some((pp) => !pp.mapItem.methods.includes(ANY))
     ) {
       pathsParts
-        .filter((pp) => pp.mapItem.methods.includes(HttpMethod.any))
+        .filter((pp) => pp.mapItem.methods.includes(ANY))
         .forEach((pp) => {
           pathsParts.splice(pathsParts.indexOf(pp), 1);
         });

@@ -5,11 +5,11 @@ test("dynamicListen", async () => {
   const startup = new ServerStartup();
   const { server, port } = await startup
     .use(async (ctx) => {
-      const { server, port } = await new ServerStartup().dynamicListen(2333);
+      const { server, port } = await new ServerStartup().dynamicListen(23334);
       server.close();
       ctx.ok(port);
     })
-    .dynamicListen(2333);
+    .dynamicListen(23334);
 
   expect(startup.server).toBe(server);
   const res = await request(server).get("");
@@ -22,13 +22,13 @@ test("dynamicListen path", async () => {
   const { server, port } = await new ServerStartup()
     .use(async (ctx) => {
       const { server, port } = await new ServerStartup().dynamicListen({
-        port: 2333,
+        port: 23334,
       });
       server.close();
       ctx.ok(port);
     })
     .dynamicListen({
-      port: 2333,
+      port: 23334,
     });
   const res = await request(server).get("");
   expect(res.status).toBe(200);
@@ -67,7 +67,7 @@ test("dynamicListen emit error", async () => {
       ctx.ok();
     })
     .dynamicListen({
-      port: 2333,
+      port: 23334,
     });
   server.once("connection", () => {
     server.emit("error");

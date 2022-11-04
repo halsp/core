@@ -27,11 +27,10 @@ function runTest(validate: boolean) {
       }
     }
 
-    const req = new Request();
-    req["body"] = {
+    const req = new Request().setBody({
       b1: "a",
       b2: validate ? 1 : "1",
-    };
+    });
     const { ctx } = await new TestStartup()
       .setSkipThrow()
       .setContext(req)
@@ -76,11 +75,10 @@ test("array message", async () => {
     }
   }
 
-  const req = new Request();
-  req["body"] = {
+  const req = new Request().setBody({
     b1: 1,
     b2: "1",
-  };
+  });
   const { ctx } = await new TestStartup()
     .setSkipThrow()
     .setContext(req)
@@ -105,10 +103,9 @@ test("validate disabled", async () => {
     }
   }
 
-  const req = new Request();
-  req["body"] = {
+  const req = new Request().setBody({
     b1: 1,
-  };
+  });
   const { ctx } = await new TestStartup()
     .setContext(req)
     .useInject()

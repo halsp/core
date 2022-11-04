@@ -6,12 +6,6 @@ beforeAll(() => {
 });
 
 describe("context", () => {
-  it("should set req.pattern", () => {
-    expect(new Request().pattern).toBe("");
-    expect(new Request().setPattern("abc").pattern).toBe("abc");
-    expect(new Request().setPattern(undefined as any).pattern).toBe("");
-  });
-
   it("should set req.id", () => {
     expect(new Request().id).toBe("");
     expect(new Request().setId("abc").id).toBe("abc");

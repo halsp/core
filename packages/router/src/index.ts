@@ -139,7 +139,7 @@ Startup.prototype.useRouterParser = function (options?: RouterOptions) {
       if (mapMatcher.notFound) {
         ctx.res.setBody({
           status: "error",
-          message: `Can't find the pattern: ${JSON.stringify(ctx["pattern"])}`,
+          message: `Can't find the path: ${ctx.req.path}`,
         });
       } else {
         const mapItem = mapMatcher.mapItem;

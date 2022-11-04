@@ -1,4 +1,4 @@
-import { Dict, isUndefined, isPlainObject } from "./utils";
+import { Dict, isUndefined, isPlainObject, normalizePath } from "./utils";
 import { Startup } from "./startup";
 
 type BuilderBagType = "singleton" | "scoped" | "transient";
@@ -12,12 +12,32 @@ type BuilderBagItem<T> = {
 export class Request {
   readonly ctx!: Context;
 
-  public body?: any;
-  public setBody(body?: any) {
-    this.body = body;
+  #body: unknown;
+  public get body(): any {
+    return this.#body;
+  }
+  setBody(body: unknown): this {
+    this.#body = body;
+    return this;
+  }
+
+  #path = "";
+  public get path(): string {
+    return this.#path;
+  }
+  #originalPath?: string;
+  public get originalPath(): string | undefined {
+    return this.#originalPath;
+  }
+  setPath(path: string): this {
+    this.#originalPath = path
+      ?.replace(/\?.*$/, "")
+      ?.replace(/^https?:\/{1,2}[^\/]+/, "");
+    this.#path = normalizePath(this.#originalPath);
     return this;
   }
 }
+
 export class Response {
   readonly ctx!: Context;
 

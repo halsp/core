@@ -84,7 +84,7 @@ export class MicroTcpStartup extends MicroStartup {
   async #invokeMessage(socket: net.Socket, text: string) {
     const json = JSON.parse(text);
     const req = new Request()
-      .setPattern(json.pattern)
+      .setPath(json.pattern)
       .setBody(json.data)
       .setId(json.id);
     const res = await this.invoke(req);

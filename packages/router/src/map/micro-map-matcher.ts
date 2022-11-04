@@ -1,4 +1,3 @@
-import "@ipare/micro";
 import MapItem from "./map-item";
 import { Context } from "@ipare/core";
 
@@ -20,7 +19,7 @@ export class MapMatcher {
   private getMapItem(): MapItem | undefined {
     // TODO
     const mapItem = this.ctx.routerMap.filter(
-      (m) => m.path == this.ctx.req.pattern
+      (m) => m.path == this.ctx.req.path
     )[0];
     if (mapItem) return mapItem;
 
