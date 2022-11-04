@@ -15,7 +15,7 @@ export class MessagePatternAction extends Action {
 }
 
 @MicroPattern("multi:123")
-@MicroPattern("multi:123")
+@MicroPattern("multi:456")
 export class MultiPatternAction extends Action {
   invoke() {
     this.res.setBody("multi-pattern-test");

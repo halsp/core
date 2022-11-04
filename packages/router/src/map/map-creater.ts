@@ -38,12 +38,12 @@ export default class MapCreater {
     const files = this.getFilesModules(storageItems);
     files.forEach((file) => {
       file.modules.forEach((module) => {
-        const mapItem = this.createMapItem(
+        const mapItems = this.createMapItems(
           file.path,
           module.actionName,
           module.action
         );
-        result.push(mapItem);
+        result.push(...mapItems);
       });
     });
 
@@ -98,42 +98,42 @@ export default class MapCreater {
       .map((item) => item as Exclude<typeof item, null>);
   }
 
-  private createMapItem(
+  private createMapItems(
     file: string,
     actionName: string,
     action: ObjectConstructor<Action>
   ) {
-    const decMethods: MethodItem[] = Reflect.getMetadata(
-      ACTION_METHOD_METADATA,
-      action.prototype
-    );
-    const decPatterns: string[] = Reflect.getMetadata(
-      ACTION_PATTERN_METADATA,
-      action.prototype
-    );
-    let mapItem: MapItem;
-    if (decMethods && decMethods.length) {
-      // http
-      const url = decMethods.filter((m) => !!m.url)[0]?.url;
-      const methods = decMethods.map((m) => m.method);
-      mapItem = new MapItem(file, actionName, url, methods);
-    } else if (decPatterns && decPatterns.length) {
-      // micro
-      const pattern = decPatterns[0];
-      mapItem = new MapItem(file, actionName, pattern, []);
-    } else {
-      // default
-      mapItem = new MapItem(file, actionName);
+    const mapItems: MapItem[] = [];
+
+    // http
+    const decMethods: MethodItem[] =
+      Reflect.getMetadata(ACTION_METHOD_METADATA, action.prototype) ?? [];
+    decMethods.forEach((method) => {
+      mapItems.push(new MapItem(file, actionName, method.url, [method.method]));
+    });
+
+    // micro
+    const decPatterns: string[] =
+      Reflect.getMetadata(ACTION_PATTERN_METADATA, action.prototype) ?? [];
+    decPatterns.forEach((pattern) => {
+      mapItems.push(new MapItem(file, actionName, pattern, []));
+    });
+
+    // default
+    if (!mapItems.length) {
+      mapItems.push(new MapItem(file, actionName));
     }
 
     const metadata =
       Reflect.getMetadata(ACTION_METADATA, action.prototype) ?? {};
-    Object.keys(metadata).forEach((key) => {
-      if (!(key in mapItem)) {
-        mapItem[key] = metadata[key];
-      }
+    mapItems.forEach((mapItem) => {
+      Object.keys(metadata).forEach((key) => {
+        if (!(key in mapItem)) {
+          mapItem[key] = metadata[key];
+        }
+      });
     });
 
-    return mapItem;
+    return mapItems;
   }
 }

@@ -3,24 +3,6 @@ import { TestMicroStartup } from "@ipare/testing-micro";
 import "./global";
 
 describe("pattern", () => {
-  it("should match event pattern when use micro env", async () => {
-    const result = await new TestMicroStartup()
-      .setContext(new Request().setPath("event:123"))
-      .useTestRouter()
-      .useRouter()
-      .run();
-    expect(result.body).toBe("event-pattern-test");
-  });
-
-  it("should match message pattern when use micro env", async () => {
-    const result = await new TestMicroStartup()
-      .setContext(new Request().setPath("message:123"))
-      .useTestRouter()
-      .useRouter()
-      .run();
-    expect(result.body).toBe("message-pattern-test");
-  });
-
   it("should match pattern by path", async () => {
     const result = await new TestMicroStartup()
       .setContext(new Request().setPath("path"))
@@ -51,16 +33,20 @@ describe("pattern", () => {
     });
   });
 
-  it("should match first pattern when use multi patterns", async () => {
-    const result = await new TestMicroStartup()
-      .setContext(new Request().setPath("multi:123"))
-      .use(async (ctx, next) => {
-        await next();
-        expect(ctx.actionMetadata.methods).toEqual([]);
-      })
-      .useTestRouter()
-      .useRouter()
-      .run();
-    expect(result.body).toEqual("multi-pattern-test");
+  it("should match all patterns when use multi patterns", async () => {
+    async function test(pattern: string) {
+      const result = await new TestMicroStartup()
+        .setContext(new Request().setPath(pattern))
+        .use(async (ctx, next) => {
+          await next();
+          expect(ctx.actionMetadata.methods).toEqual([]);
+        })
+        .useTestRouter()
+        .useRouter()
+        .run();
+      expect(result.body).toEqual("multi-pattern-test");
+    }
+    await test("multi:123");
+    await test("multi:456");
   });
 });
