@@ -36,9 +36,7 @@ export {
 } from "./exceptions";
 
 export {
-  QueryDict,
   HeadersDict,
-  ReadonlyQueryDict,
   ReadonlyHeadersDict,
   NumericalHeadersDict,
   HeaderValue,
