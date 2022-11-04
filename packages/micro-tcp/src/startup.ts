@@ -85,7 +85,7 @@ export class MicroTcpStartup extends MicroStartup {
     const json = JSON.parse(text);
     const req = new Request()
       .setPath(json.pattern)
-      .setBody(json.data)
+      .setBody(getBody(json.data))
       .setId(json.id);
     const res = await this.invoke(req);
     const resultJson = JSON.stringify({
@@ -140,5 +140,21 @@ export class MicroTcpStartup extends MicroStartup {
 
   async close() {
     this.#server.close();
+  }
+}
+
+function getBody(data: any) {
+  if (typeof data == "string") {
+    if (data.startsWith("{") || data.startsWith("[")) {
+      try {
+        return JSON.parse(data);
+      } catch {
+        return data;
+      }
+    } else {
+      return data;
+    }
+  } else {
+    return data;
   }
 }

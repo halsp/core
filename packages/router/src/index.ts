@@ -40,9 +40,7 @@ export {
   HttpWrapped,
   setActionMetadata,
   getActionMetadata,
-  EventPattern,
-  MessagePattern,
-  PatternItem,
+  MicroPattern,
 } from "./action";
 export { postbuild } from "./postbuild";
 

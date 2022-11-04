@@ -10,7 +10,6 @@ import {
 } from "../constant";
 import MapItem from "./map-item";
 import "reflect-metadata";
-import { PatternItem } from "../action/pattern-item";
 
 export default class MapCreater {
   constructor(private readonly dir: string) {
@@ -108,7 +107,7 @@ export default class MapCreater {
       ACTION_METHOD_METADATA,
       action.prototype
     );
-    const decPatterns: PatternItem[] = Reflect.getMetadata(
+    const decPatterns: string[] = Reflect.getMetadata(
       ACTION_PATTERN_METADATA,
       action.prototype
     );
@@ -121,7 +120,7 @@ export default class MapCreater {
     } else if (decPatterns && decPatterns.length) {
       // micro
       const pattern = decPatterns[0];
-      mapItem = new MapItem(file, actionName, pattern.pattern, [pattern.type]);
+      mapItem = new MapItem(file, actionName, pattern, []);
     } else {
       // default
       mapItem = new MapItem(file, actionName);
