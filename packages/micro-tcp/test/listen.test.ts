@@ -3,12 +3,12 @@ import { sendMessage } from "./utils";
 
 test("dynamicListen", async () => {
   const startup = new MicroTcpStartup({
-    port: 23344,
+    port: 23345,
   });
   const { server, port } = await startup
     .use(async (ctx) => {
       const { server, port } = await new MicroTcpStartup({
-        port: 23344,
+        port: 23345,
       }).dynamicListen();
       server.close();
       ctx.res.setBody(port);
@@ -18,7 +18,7 @@ test("dynamicListen", async () => {
   expect(startup.server).toBe(server);
   const res = await sendMessage(port, true);
   expect(res.status).toBeUndefined();
-  expect(port + 1).toBe(res.body);
+  expect(port + 1).toBe(res.data);
   server.close();
 });
 
@@ -50,6 +50,6 @@ test("dynamicListen emit error", async () => {
   });
 
   const res = await sendMessage(port, true);
-  expect(res.body).toBe("ok");
+  expect(res.data).toBe("ok");
   server.close();
 });

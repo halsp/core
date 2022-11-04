@@ -36,7 +36,7 @@ export async function sendMessage(
   waitReturn?: true
 ): Promise<{
   id: string;
-  body: any;
+  data: any;
   error: any;
   status: string;
 }>;
