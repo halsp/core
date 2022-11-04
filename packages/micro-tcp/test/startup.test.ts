@@ -99,7 +99,14 @@ describe("parse message", () => {
       times++;
     });
     const { port } = await startup.dynamicListen();
-    await sendData(port, "2#{}2#{}2#{}");
+    await sendData(port, "2#{}2#{}2#{}", false);
+    let i = 0;
+    while (i < 30 && times < 3) {
+      await new Promise<void>((resolve) => {
+        setTimeout(() => resolve(), 100);
+      });
+      i++;
+    }
     await startup.close();
 
     expect(times).toEqual(3);

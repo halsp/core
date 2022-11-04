@@ -14,7 +14,7 @@ test("dynamicListen", async () => {
   expect(startup.server).toBe(server);
   const res = await request(server).get("");
   expect(res.status).toBe(200);
-  expect((port as number) + 1).toBe(res.body);
+  expect(port + 1).toBe(res.body);
   server.close();
 });
 
@@ -32,7 +32,7 @@ test("dynamicListen path", async () => {
     });
   const res = await request(server).get("");
   expect(res.status).toBe(200);
-  expect((port as number) + 1).toBe(res.body);
+  expect(port + 1).toBe(res.body);
   server.close();
 });
 

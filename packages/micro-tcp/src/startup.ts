@@ -1,4 +1,4 @@
-import { MicroStartup } from "@ipare/micro";
+import { MicroStartup, parseMicroBody } from "@ipare/micro";
 import { MicroTcpOptions } from "./options";
 import * as net from "net";
 import { Request } from "@ipare/core";
@@ -85,9 +85,11 @@ export class MicroTcpStartup extends MicroStartup {
     const json = JSON.parse(text);
     const req = new Request()
       .setPath(json.pattern)
-      .setBody(getBody(json.data))
+      .setBody(parseMicroBody(json.data))
       .setId(json.id);
     const res = await this.invoke(req);
+    if (!req.id) return; // event
+
     const resultJson = JSON.stringify({
       id: req.id,
       body: res.body,
@@ -140,21 +142,5 @@ export class MicroTcpStartup extends MicroStartup {
 
   async close() {
     this.#server.close();
-  }
-}
-
-function getBody(data: any) {
-  if (typeof data == "string") {
-    if (data.startsWith("{") || data.startsWith("[")) {
-      try {
-        return JSON.parse(data);
-      } catch {
-        return data;
-      }
-    } else {
-      return data;
-    }
-  } else {
-    return data;
   }
 }
