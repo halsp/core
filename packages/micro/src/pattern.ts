@@ -1,6 +1,8 @@
 import { Dict } from "@ipare/core";
 
-export function composePattern(pattern: string | Dict<any>): string {
+export type PatternType = string | Dict<any>;
+
+export function composePattern(pattern: PatternType): string {
   if (typeof pattern == "string") {
     const parsedPattern = parsePattern(pattern);
     if (typeof parsedPattern == "string") {
@@ -21,7 +23,7 @@ export function composePattern(pattern: string | Dict<any>): string {
   }
 }
 
-export function parsePattern(pattern: string): string | Dict<any> {
+export function parsePattern(pattern: string): PatternType {
   if (pattern.startsWith("{") || pattern.startsWith("[")) {
     try {
       return JSON.parse(pattern);
