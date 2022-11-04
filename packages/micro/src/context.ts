@@ -6,6 +6,7 @@ import {
   RESPONSE_STATUS,
 } from "./constant";
 import { MicroException } from "./exception";
+import { parsePattern } from "./pattern";
 
 export function initContext() {
   if (Context.prototype[CTX_INITED]) {
@@ -27,6 +28,15 @@ export function initContext() {
     this[REQUEST_ID] = id;
     return this;
   };
+
+  Object.defineProperty(Request.prototype, "pattern", {
+    configurable: true,
+    enumerable: true,
+    get: function () {
+      const req = this as Request;
+      return parsePattern(req.path);
+    },
+  });
 
   Object.defineProperty(Response.prototype, "status", {
     configurable: true,
