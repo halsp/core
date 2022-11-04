@@ -2,11 +2,12 @@ import { Dict } from "@ipare/core";
 export { MicroException } from "./exception";
 export { MicroStartup } from "./startup";
 export { composePattern, parsePattern } from "./pattern";
+export { parseMicroBody } from "./body";
 
 declare module "@ipare/core" {
   interface Request {
-    id: string;
-    setId(id: string): this;
+    id?: string;
+    setId(id?: string): this;
 
     get pattern(): string | Dict<any>;
   }
