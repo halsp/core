@@ -3,12 +3,12 @@ import { TestStartup } from "@ipare/testing";
 import RedisClient from "@redis/client/dist/lib/client";
 
 it("should get redis by ctx", async () => {
+  const beforeConnect = RedisClient.prototype.connect;
+  RedisClient.prototype.connect = async () => undefined;
+  const beforeDisconnect = RedisClient.prototype.disconnect;
+  RedisClient.prototype.disconnect = async () => undefined;
+
   await new TestStartup()
-    .use(async (ctx, next) => {
-      RedisClient.prototype.connect = async () => undefined;
-      RedisClient.prototype.disconnect = async () => undefined;
-      await next();
-    })
     .useRedis({
       identity: "abc",
     })
@@ -21,4 +21,7 @@ it("should get redis by ctx", async () => {
       await next();
     })
     .run();
+
+  RedisClient.prototype.connect = beforeConnect;
+  RedisClient.prototype.disconnect = beforeDisconnect;
 });

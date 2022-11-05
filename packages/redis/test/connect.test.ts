@@ -6,6 +6,9 @@ import { OPTIONS_IDENTITY } from "../src/constant";
 import RedisClient from "@redis/client/dist/lib/client";
 
 test("connect failed", async () => {
+  const beforeConnect = RedisClient.prototype.connect;
+  const beforeDisconnect = RedisClient.prototype.disconnect;
+
   const { ctx } = await new TestStartup()
     .use(async (ctx, next) => {
       RedisClient.prototype.connect = async () => {
@@ -31,6 +34,9 @@ test("connect failed", async () => {
       });
     })
     .run();
+
+  RedisClient.prototype.connect = beforeConnect;
+  RedisClient.prototype.disconnect = beforeDisconnect;
 
   expect(ctx.bag("connect")).toBe("1");
   expect(ctx.bag("disconnect")).toBe("1");

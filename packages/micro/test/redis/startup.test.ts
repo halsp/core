@@ -35,17 +35,18 @@ describe("startup", () => {
       get: () => true,
     });
     await startup.close();
+
+    RedisClient.prototype.connect = beforeConnect;
+    RedisClient.prototype.disconnect = beforeDisconnect;
+    RedisClient.prototype.SUBSCRIBE = beforeSUBSCRIBE;
+    RedisClient.prototype.UNSUBSCRIBE = beforeUNSUBSCRIBE;
+
     expect(!!sub).toBeTruthy();
     expect(!!pub).toBeTruthy();
     expect(connect).toBeTruthy();
     expect(disconnect).toBeTruthy();
     expect(subscribe).toBeTruthy();
     expect(unsubscribe).toBeTruthy();
-
-    RedisClient.prototype.connect = beforeConnect;
-    RedisClient.prototype.disconnect = beforeDisconnect;
-    RedisClient.prototype.SUBSCRIBE = beforeSUBSCRIBE;
-    RedisClient.prototype.UNSUBSCRIBE = beforeUNSUBSCRIBE;
   });
 
   it("should be error when the message is invalidate", async () => {
