@@ -1,7 +1,7 @@
-import { ITestStartup, initBaseTestStartup } from "@ipare/testing";
 import { ServerStartup } from "@ipare/server";
 import supertest from "supertest";
 import { Context, Request, Response } from "@ipare/core";
+import { initBaseTestStartup, ITestStartup } from "../test-startup";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { Test } = require("supertest");
 
