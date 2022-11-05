@@ -1,4 +1,4 @@
-import { parseMicroBody } from "../src";
+import { parseMicroBody } from "../src/startup";
 describe("body", () => {
   it("should parse json str body", async () => {
     expect(parseMicroBody(`{"a":1}`)).toEqual({ a: 1 });

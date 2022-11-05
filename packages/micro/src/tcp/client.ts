@@ -1,7 +1,7 @@
 import { MicroClient, PatternType } from "../";
 import * as net from "net";
 import { MicroTcpClientOptions } from "./options";
-import { parseBuffer } from "./parser";
+import { parseBuffer } from "../parser";
 
 export class MicroTcpClient extends MicroClient {
   constructor(private readonly options: MicroTcpClientOptions) {

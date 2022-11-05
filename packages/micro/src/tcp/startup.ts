@@ -1,8 +1,6 @@
-import { MicroStartup, parseMicroBody } from "../";
+import { MicroStartup } from "../";
 import { MicroTcpOptions } from "./options";
 import * as net from "net";
-import { Request } from "@ipare/core";
-import { parseBuffer } from "./parser";
 
 export class MicroTcpStartup extends MicroStartup {
   constructor(readonly options: MicroTcpOptions = {}) {
@@ -21,20 +19,20 @@ export class MicroTcpStartup extends MicroStartup {
 
   #handler(socket: net.Socket) {
     socket.on("data", async (buffer) => {
-      try {
-        parseBuffer(
-          buffer,
-          async (json) => await this.#invokeMessage(socket, json)
-        );
-      } catch (err) {
-        const error = err as Error;
-        socket.write(
-          JSON.stringify({
-            status: "error",
-            error: error.message,
-          })
-        );
-      }
+      this.handleMessage(
+        buffer,
+        ({ result }) => {
+          socket.write(result, "utf-8");
+        },
+        (err) => {
+          socket.write(
+            JSON.stringify({
+              status: "error",
+              error: err.message,
+            })
+          );
+        }
+      );
     });
 
     socket.on("close", () => {
@@ -43,22 +41,6 @@ export class MicroTcpStartup extends MicroStartup {
     socket.on("error", (err) => {
       console.error(err);
     });
-  }
-
-  async #invokeMessage(socket: net.Socket, json: any) {
-    const req = new Request()
-      .setPath(json.pattern)
-      .setBody(parseMicroBody(json.data))
-      .setId(json.id);
-    const res = await this.invoke(req);
-    if (!req.id) return; // event
-
-    const resultJson = JSON.stringify({
-      id: req.id,
-      data: res.body,
-    });
-    const data = `${resultJson.length}#${resultJson}`;
-    socket.write(data, "utf-8");
   }
 
   listen(): net.Server {

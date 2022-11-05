@@ -22,5 +22,4 @@ declare module "@ipare/core" {
 export { MicroException } from "./exception";
 export { MicroStartup } from "./startup";
 export { composePattern, parsePattern, PatternType } from "./pattern";
-export { parseMicroBody } from "./body";
 export { MicroClient } from "./client";
