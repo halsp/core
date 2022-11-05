@@ -18,23 +18,6 @@ test("empty config", async () => {
   expect(count).toBe(1);
 });
 
-test("build actions", async () => {
-  fs.rmSync(`test/${CONFIG_FILE_NAME}`, {
-    force: true,
-  });
-
-  await postbuild({
-    config: {},
-    cacheDir: "test",
-  });
-
-  expect(fs.existsSync(`test/${CONFIG_FILE_NAME}`)).toBeTruthy();
-
-  fs.rmSync(`test/${CONFIG_FILE_NAME}`, {
-    force: true,
-  });
-});
-
 test("build and run", async () => {
   await postbuild({
     config: {

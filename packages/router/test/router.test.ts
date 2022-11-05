@@ -2,9 +2,9 @@ import { HttpStartup } from "@ipare/http";
 import { Request } from "@ipare/core";
 import "../src";
 import "./global";
-import * as fs from "fs";
-import { CONFIG_FILE_NAME } from "../src/constant";
 import { TestHttpStartup } from "@ipare/testing-http";
+import { DEFAULT_ACTION_DIR } from "../src/constant";
+import { runin, TestStartup } from "@ipare/testing";
 
 test("startup test", async () => {
   const result = await new TestHttpStartup()
@@ -63,31 +63,6 @@ test("null body test", async () => {
   expect(result.status).toBe(404);
 });
 
-test("blank config", async () => {
-  let waitTimes = 0;
-  while (fs.existsSync(CONFIG_FILE_NAME)) {
-    waitTimes++;
-    if (waitTimes > 10) {
-      throw new Error("timeout");
-    }
-    await new Promise((resolve) => {
-      setTimeout(() => resolve, 200);
-    });
-  }
-
-  let done = false;
-  try {
-    await new TestHttpStartup()
-      .setContext(new Request().setPath("").setMethod("GET"))
-      .useRouter()
-      .run();
-  } catch (err) {
-    done = true;
-    expect((err as Error).message).toBe("The router dir is not exist");
-  }
-  expect(done).toBeTruthy();
-}, 20000);
-
 describe("useRouterParser", () => {
   it("should not replace options", async () => {
     await new TestHttpStartup()
@@ -105,5 +80,17 @@ describe("useRouterParser", () => {
         customMethods: ["CUSTOM2"],
       })
       .run();
+  });
+
+  it("should set default dir", async () => {
+    await runin("test", async () => {
+      await new TestStartup()
+        .use(async (ctx, next) => {
+          await next();
+          expect(ctx.routerOptions.dir).toBe(DEFAULT_ACTION_DIR);
+        })
+        .useRouterParser()
+        .run();
+    });
   });
 });
