@@ -3,7 +3,7 @@ import { Request } from "@ipare/core";
 import "../src";
 import { ActionFilter, ResourceFilter, UseFilters } from "../src";
 import { Action } from "@ipare/router";
-import { TestHttpStartup } from "@ipare/testing-http";
+import { TestHttpStartup } from "@ipare/testing/dist/http";
 
 class TestResourceFilter implements ResourceFilter {
   onResourceExecuted(ctx: Context): void | Promise<void> {

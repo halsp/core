@@ -3,7 +3,7 @@ import { HttpMethods } from "@ipare/methods";
 import { Request, Response } from "@ipare/core";
 import cors from "@koa/cors";
 import Router from "@koa/router";
-import { TestHttpStartup } from "@ipare/testing-http";
+import { TestHttpStartup } from "@ipare/testing/dist/http";
 
 test("@koa/cors", async function () {
   const res = await new TestHttpStartup()

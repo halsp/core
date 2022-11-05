@@ -1,7 +1,7 @@
 import { Request } from "@ipare/core";
-import { TestHttpStartup } from "@ipare/testing-http";
+import { TestHttpStartup } from "@ipare/testing/dist/http";
 import "../src";
-import "./global";
+import "./utils-http";
 
 test("prefix", async () => {
   const result = await new TestHttpStartup()

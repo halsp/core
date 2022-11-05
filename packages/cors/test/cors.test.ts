@@ -1,6 +1,6 @@
 import { HttpMethods } from "@ipare/methods";
 import { Request } from "@ipare/core";
-import { TestHttpStartup } from "@ipare/testing-http";
+import { TestHttpStartup } from "@ipare/testing/dist/http";
 import "../src";
 
 it("default options", async () => {

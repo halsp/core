@@ -4,7 +4,7 @@ import "../src";
 import { ActionFilter } from "../src";
 import "@ipare/inject";
 import { Action } from "@ipare/router";
-import { TestHttpStartup } from "@ipare/testing-http";
+import { TestHttpStartup } from "@ipare/testing/dist/http";
 
 class TestAction extends Action {
   async invoke(): Promise<void> {

@@ -2,7 +2,7 @@ import { postbuild } from "../src";
 import * as fs from "fs";
 import { Request } from "@ipare/core";
 import { CONFIG_FILE_NAME } from "../src/constant";
-import { TestHttpStartup } from "@ipare/testing-http";
+import { TestHttpStartup } from "@ipare/testing/dist/http";
 
 test("empty config", async () => {
   let count = 0;

@@ -1,7 +1,7 @@
 import "../../src";
 import { HttpMethods } from "@ipare/methods";
-import { TestHttpStartup } from "@ipare/testing-http";
-import "../global";
+import { TestHttpStartup } from "@ipare/testing/dist/http";
+import "../utils-http";
 import { Context, Request } from "@ipare/core";
 
 test(`find next`, async () => {

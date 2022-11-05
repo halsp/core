@@ -1,5 +1,5 @@
 import { Request } from "@ipare/core";
-import { TestHttpStartup } from "@ipare/testing-http";
+import { TestHttpStartup } from "@ipare/testing/dist/http";
 import "../src";
 import { runMva } from "./global";
 

@@ -1,6 +1,6 @@
 import { Context, Request, Response } from "@ipare/core";
 import { HttpStartup } from "@ipare/http";
-import { initBaseTestStartup, ITestStartup } from "@ipare/testing";
+import { initBaseTestStartup, ITestStartup } from "../test-startup";
 
 export class TestHttpStartup extends HttpStartup {
   constructor() {

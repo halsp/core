@@ -1,4 +1,4 @@
-import { TestHttpStartup } from "@ipare/testing-http";
+import { TestHttpStartup } from "@ipare/testing/dist/http";
 import "@ipare/inject";
 import "../src";
 import { expectBody, getTestRequest, TestMiddleware } from "./TestMiddleware";

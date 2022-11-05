@@ -1,5 +1,5 @@
 import "../src";
-import { TestHttpStartup } from "@ipare/testing-http";
+import { TestHttpStartup } from "@ipare/testing/dist/http";
 import { TransResponse } from "../src/trans-response";
 
 test("middleware pipe", async function () {

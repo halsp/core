@@ -1,6 +1,6 @@
 import { HttpMethods } from "@ipare/methods";
 import { Request } from "@ipare/core";
-import { TestHttpStartup } from "@ipare/testing-http";
+import { TestHttpStartup } from "@ipare/testing/dist/http";
 import "../src";
 import { TEST_ACTION_DIR } from "@ipare/router/dist/constant";
 import { OpenApiBuilder } from "openapi3-ts-remove-yaml";

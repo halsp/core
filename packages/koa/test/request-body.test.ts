@@ -1,5 +1,5 @@
 import "../src";
-import { TestHttpStartup } from "@ipare/testing-http";
+import { TestHttpStartup } from "@ipare/testing/dist/http";
 import { Request } from "@ipare/core";
 
 describe("request body", () => {

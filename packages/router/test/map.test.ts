@@ -1,6 +1,6 @@
-import { TestHttpStartup } from "@ipare/testing-http";
+import { TestHttpStartup } from "@ipare/testing/dist/http";
 import MapCreater from "../src/map/map-creater";
-import "./global";
+import "./utils-http";
 import MapParser from "../src/map/map-parser";
 
 describe("map", () => {

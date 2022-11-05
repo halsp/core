@@ -2,7 +2,7 @@ import Koa from "koa";
 import request from "supertest";
 import { koaIpare } from "../src";
 import path from "path";
-import { TestHttpStartup } from "@ipare/testing-http";
+import { TestHttpStartup } from "@ipare/testing/dist/http";
 
 describe("koa-ipare", () => {
   it("should connect middlewares", async () => {

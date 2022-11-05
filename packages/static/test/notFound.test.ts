@@ -1,5 +1,5 @@
 import { Request } from "@ipare/core";
-import { TestHttpStartup } from "@ipare/testing-http";
+import { TestHttpStartup } from "@ipare/testing/dist/http";
 import "../src";
 import { FILE_404_BAG, FILE_BAG } from "../src/constant";
 

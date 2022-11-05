@@ -1,6 +1,6 @@
 import { Middleware, Request } from "@ipare/core";
 import { Inject } from "@ipare/inject";
-import { TestHttpStartup } from "@ipare/testing-http";
+import { TestHttpStartup } from "@ipare/testing/dist/http";
 import { Header, PipeTransform } from "../src";
 import { GlobalPipeType } from "../src/global-pipe-type";
 

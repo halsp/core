@@ -1,4 +1,4 @@
-import { TestHttpStartup } from "@ipare/testing-http";
+import { TestHttpStartup } from "@ipare/testing/dist/http";
 import { HttpMethods } from "@ipare/methods";
 import { Request } from "@ipare/core";
 import "../src";

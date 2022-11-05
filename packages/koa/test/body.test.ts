@@ -1,5 +1,5 @@
 import "../src";
-import { TestHttpStartup } from "@ipare/testing-http";
+import { TestHttpStartup } from "@ipare/testing/dist/http";
 
 test("default", async function () {
   const res = await new TestHttpStartup().koa(() => undefined).run();

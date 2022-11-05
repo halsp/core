@@ -1,5 +1,5 @@
 import { Middleware, Request } from "@ipare/core";
-import { TestHttpStartup } from "@ipare/testing-http";
+import { TestHttpStartup } from "@ipare/testing/dist/http";
 import { Body, Param } from "../src";
 
 test("null body", async () => {

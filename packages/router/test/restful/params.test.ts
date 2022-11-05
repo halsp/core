@@ -1,8 +1,8 @@
 import { HttpMethods } from "@ipare/methods";
 import { Request } from "@ipare/core";
-import { TestHttpStartup } from "@ipare/testing-http";
+import { TestHttpStartup } from "@ipare/testing/dist/http";
 import "../../src";
-import "../global";
+import "../utils-http";
 
 test(`restful params test1`, async () => {
   const res = await new TestHttpStartup()

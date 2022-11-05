@@ -3,7 +3,7 @@ import { BadRequestException, HttpException } from "@ipare/http";
 import "../src";
 import { Action } from "@ipare/router";
 import { ExceptionFilter, UseFilters } from "../src";
-import { TestHttpStartup } from "@ipare/testing-http";
+import { TestHttpStartup } from "@ipare/testing/dist/http";
 
 test(`empty exception filter`, async () => {
   class TestAction extends Action {

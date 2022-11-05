@@ -1,6 +1,6 @@
 import { Request } from "@ipare/core";
 import { TEST_ACTION_DIR } from "@ipare/router/dist/constant";
-import { TestHttpStartup } from "@ipare/testing-http";
+import { TestHttpStartup } from "@ipare/testing/dist/http";
 import "../src";
 import { SwaggerOptions } from "../src";
 

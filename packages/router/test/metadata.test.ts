@@ -1,8 +1,8 @@
 import { Request } from "@ipare/core";
-import { TestHttpStartup } from "@ipare/testing-http";
+import { TestHttpStartup } from "@ipare/testing/dist/http";
 import "../src";
 import { Action, getActionMetadata } from "../src";
-import "./global";
+import "./utils-http";
 
 test("custom metadata", async () => {
   const result = await new TestHttpStartup()

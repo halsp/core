@@ -1,8 +1,8 @@
 import "../../src";
 import { HttpMethods } from "@ipare/methods";
 import { Request } from "@ipare/core";
-import { TestHttpStartup } from "@ipare/testing-http";
-import "../global";
+import { TestHttpStartup } from "@ipare/testing/dist/http";
+import "../utils-http";
 
 test(`action name error`, async () => {
   const result = await new TestHttpStartup()

@@ -4,7 +4,7 @@ import "../src";
 import { ActionFilter, UseFilters } from "../src";
 import "@ipare/inject";
 import { Action } from "@ipare/router";
-import { TestHttpStartup } from "@ipare/testing-http";
+import { TestHttpStartup } from "@ipare/testing/dist/http";
 
 export class TestActionFilter1 implements ActionFilter {
   onActionExecuted(ctx: Context): void | Promise<void> {

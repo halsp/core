@@ -1,7 +1,7 @@
 import "../../src";
 import { Request } from "@ipare/core";
-import { TestHttpStartup } from "@ipare/testing-http";
-import "../global";
+import { TestHttpStartup } from "@ipare/testing/dist/http";
+import "../utils-http";
 
 test(`method not allowed`, async () => {
   const result = await new TestHttpStartup()

@@ -1,8 +1,8 @@
 import { HttpStartup } from "@ipare/http";
 import { Request } from "@ipare/core";
 import "../src";
-import "./global";
-import { TestHttpStartup } from "@ipare/testing-http";
+import "./utils-http";
+import { TestHttpStartup } from "@ipare/testing/dist/http";
 import { DEFAULT_ACTION_DIR } from "../src/constant";
 import { runin, TestStartup } from "@ipare/testing";
 

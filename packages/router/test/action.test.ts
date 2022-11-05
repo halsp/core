@@ -1,9 +1,9 @@
 import { Context, Dict, Request } from "@ipare/core";
 import { StatusCodes } from "@ipare/http";
 import { HttpMethods } from "@ipare/methods";
-import { TestHttpStartup } from "@ipare/testing-http";
+import { TestHttpStartup } from "@ipare/testing/dist/http";
 import { Action } from "../src";
-import "./global";
+import "./utils-http";
 
 beforeAll(() => {
   new TestHttpStartup();

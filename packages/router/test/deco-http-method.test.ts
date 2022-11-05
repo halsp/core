@@ -1,8 +1,8 @@
 import { StatusCodes } from "@ipare/http";
 import { HttpMethods } from "@ipare/methods";
-import { TestHttpStartup } from "@ipare/testing-http";
+import { TestHttpStartup } from "@ipare/testing/dist/http";
 import "../src";
-import "./global";
+import "./utils-http";
 import { Request } from "@ipare/core";
 
 function runTest(method: string, success: boolean) {
