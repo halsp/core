@@ -1,4 +1,4 @@
-export function parseBuffer(buffer: Buffer, callback: (json: any) => void) {
+export function parseBuffer(buffer: Buffer, callback: (packet: any) => void) {
   let stringBuffer = buffer.toString("utf-8");
 
   while (true) {
