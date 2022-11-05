@@ -88,4 +88,9 @@ describe("client", () => {
     }
     expect(error["code"]).toBe("ECONNREFUSED");
   });
+
+  it("should not send data when client redis is not connected", async () => {
+    const client = new MicroRedisClient({});
+    client.emit("", "");
+  });
 });

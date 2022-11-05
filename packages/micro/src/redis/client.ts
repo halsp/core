@@ -1,37 +1,23 @@
 import { MicroClient, PatternType } from "../";
 import { MicroRedisClientOptions } from "./options";
 import { parseBuffer } from "../parser";
-import * as redis from "redis";
-import { REDIS_DEFAULT_CHANNEL } from "../constant";
-import { closeClients, createClients } from "./connection";
+import { initRedisConnection, RedisConnection } from "./connection";
 
 export class MicroRedisClient extends MicroClient {
-  constructor(private readonly options: MicroRedisClientOptions) {
+  constructor(options: MicroRedisClientOptions) {
     super();
+    initRedisConnection.bind(this)(options);
   }
 
-  #pub?: redis.RedisClientType<any, any, any>;
-  #sub?: redis.RedisClientType<any, any, any>;
   #tasks = new Map<string, (data: any) => void>();
-
-  get #channel() {
-    return this.options.channel ?? REDIS_DEFAULT_CHANNEL;
-  }
-  get #replyChanlel() {
-    return this.#channel + ".reply";
-  }
 
   async connect() {
     await this.#close();
+    await this.initClients();
 
-    const { pub, sub } = createClients(this.options);
-    this.#pub = pub;
-    this.#sub = sub;
-
-    await Promise.all([this.#pub.connect(), this.#sub.connect()]);
-
-    await this.#sub.subscribe(
-      this.#replyChanlel,
+    const sub = this.sub as Exclude<typeof this.pub, undefined>;
+    await sub.subscribe(
+      this.replyChanlel,
       (buffer) => {
         parseBuffer(buffer, (packet) => this.#handleResponse(packet));
       },
@@ -49,10 +35,8 @@ export class MicroRedisClient extends MicroClient {
   }
 
   async #close() {
-    await this.#sub?.unsubscribe(this.#replyChanlel);
-    await closeClients(this.#sub, this.#pub);
-    this.#pub = undefined;
-    this.#sub = undefined;
+    await this.sub?.unsubscribe(this.replyChanlel);
+    await this.closeClients();
   }
 
   /**
@@ -81,6 +65,9 @@ export class MicroRedisClient extends MicroClient {
   #sendPacket(packet: any) {
     const json = JSON.stringify(packet);
     const str = `${json.length}#${json}`;
-    this.#pub?.publish(this.#channel, str);
+    this.pub?.publish(this.channel, str);
   }
 }
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface MicroRedisClient extends RedisConnection {}

@@ -1,46 +1,35 @@
 import { MicroStartup } from "../";
 import { MicroRedisOptions } from "./options";
-import * as redis from "redis";
-import { REDIS_DEFAULT_CHANNEL } from "../constant";
-import { closeClients, createClients } from "./connection";
+import { initRedisConnection, RedisConnection } from "./connection";
 
 export class MicroRedisStartup extends MicroStartup {
-  constructor(private readonly options: MicroRedisOptions = {}) {
+  constructor(options: MicroRedisOptions = {}) {
     super();
-  }
-
-  #pub?: redis.RedisClientType<any, any, any>;
-  #sub?: redis.RedisClientType<any, any, any>;
-
-  get #channel() {
-    return this.options.channel ?? REDIS_DEFAULT_CHANNEL;
-  }
-  get #replyChanlel() {
-    return this.#channel + ".reply";
+    initRedisConnection.bind(this)(options);
   }
 
   #handler(buffer: Buffer) {
     this.handleMessage(buffer, async ({ result }) => {
-      await this.#pub?.publish(this.#replyChanlel, result);
+      const pub = this.pub as Exclude<typeof this.pub, undefined>;
+      await pub.publish(this.replyChanlel, result);
     });
   }
 
   async listen() {
     await this.close();
+    await this.initClients();
 
-    const { pub, sub } = createClients(this.options);
-    this.#pub = pub;
-    this.#sub = sub;
-
-    await Promise.all([this.#pub.connect(), this.#sub.connect()]);
-    await this.#sub.subscribe(this.#channel, this.#handler.bind(this), true);
-    return { sub: this.#sub, pub: this.#pub };
+    const pub = this.pub as Exclude<typeof this.pub, undefined>;
+    const sub = this.sub as Exclude<typeof this.pub, undefined>;
+    await sub.subscribe(this.channel, this.#handler.bind(this), true);
+    return { sub, pub };
   }
 
   async close() {
-    await this.#sub?.unsubscribe(this.#channel);
-    await closeClients(this.#sub, this.#pub);
-    this.#pub = undefined;
-    this.#sub = undefined;
+    await this.sub?.unsubscribe(this.channel);
+    await this.closeClients();
   }
 }
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface MicroRedisStartup extends RedisConnection {}
