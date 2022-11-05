@@ -1,6 +1,6 @@
 import { Context, Request, Response } from "@ipare/core";
 import { MicroStartup } from "@ipare/micro";
-import { initBaseTestStartup, ITestStartup } from "@ipare/testing";
+import { initBaseTestStartup, ITestStartup } from "../test-startup";
 
 export class TestMicroStartup extends MicroStartup {
   constructor() {

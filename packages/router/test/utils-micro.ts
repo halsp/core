@@ -1,12 +1,12 @@
 import { RouterOptions } from "../src";
 import "@ipare/core";
-import { TestMicroStartup } from "@ipare/testing-micro";
+import { TestMicroStartup } from "@ipare/testing/dist/micro";
 import "../src";
 import { TEST_ACTION_DIR } from "../src/constant";
 
 export const testDir = "test/micro";
 
-declare module "@ipare/testing-micro" {
+declare module "@ipare/testing/dist/micro" {
   interface TestMicroStartup {
     useTestRouter(config?: RouterOptions): this;
     useTestRouterParser(config?: RouterOptions): this;

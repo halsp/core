@@ -32,6 +32,9 @@
     "@ipare/core": "^2.2.5"
   },
   "devDependencies": {
+    "@ipare/http": "^2.2.5",
+    "@ipare/micro": "^2.2.5",
+    "@ipare/server": "^2.2.5",
     "@types/jest": "^29.0.3",
     "@types/node": "^18.7.18",
     "@typescript-eslint/eslint-plugin": "^5.37.0",
@@ -42,6 +45,7 @@
     "jest": "^29.0.3",
     "prettier": "^2.7.1",
     "rimraf": "^3.0.2",
+    "supertest": "^6.3.1",
     "ts-jest": "^29.0.1"
   },
   "files": [

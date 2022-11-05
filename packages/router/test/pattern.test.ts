@@ -1,5 +1,5 @@
 import { Request } from "@ipare/core";
-import { TestMicroStartup } from "@ipare/testing-micro";
+import { TestMicroStartup } from "@ipare/testing/dist/micro";
 import "./utils-micro";
 
 describe("pattern", () => {

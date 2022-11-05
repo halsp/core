@@ -1,7 +1,19 @@
-import { Request } from "@ipare/core";
-import { TestMicroStartup } from "../src";
+import { Request, Response } from "@ipare/core";
+import { TestMicroStartup } from "../src/micro";
 
-describe("startup", () => {
+describe("micro response.expect", () => {
+  it("should expect body", async () => {
+    new Response()
+      .setBody({
+        a: 1,
+      })
+      .expect(undefined, {
+        a: 1,
+      });
+  });
+});
+
+describe("micro startup", () => {
   it("default body is undefined", async () => {
     await new TestMicroStartup().expect((res) => {
       res.expect(undefined);
