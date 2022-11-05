@@ -1,4 +1,4 @@
-import { MicroStartup, parseMicroBody } from "@ipare/micro";
+import { MicroStartup, parseMicroBody } from "../";
 import { MicroTcpOptions } from "./options";
 import * as net from "net";
 import { Request } from "@ipare/core";

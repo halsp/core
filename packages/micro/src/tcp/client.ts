@@ -1,4 +1,4 @@
-import { MicroClient, PatternType } from "@ipare/micro";
+import { MicroClient, PatternType } from "../";
 import * as net from "net";
 import { MicroTcpClientOptions } from "./options";
 import { parseBuffer } from "./parser";

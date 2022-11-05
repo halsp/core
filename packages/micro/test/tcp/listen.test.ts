@@ -1,4 +1,4 @@
-import { MicroTcpStartup } from "../src";
+import { MicroTcpStartup } from "../../src/tcp";
 import { sendMessage } from "./utils";
 
 test("dynamicListen", async () => {
