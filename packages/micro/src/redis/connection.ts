@@ -1,13 +1,10 @@
 import * as redis from "redis";
-import { REDIS_DEFAULT_CHANNEL } from "../constant";
 import { MicroRedisClientOptions, MicroRedisOptions } from "./options";
 
 export abstract class RedisConnection {
   protected abstract pub?: redis.RedisClientType<any, any, any>;
   protected abstract sub?: redis.RedisClientType<any, any, any>;
 
-  protected abstract get channel(): string;
-  protected abstract get replyChanlel(): string;
   protected abstract closeClients(): Promise<void>;
   protected abstract initClients(): Promise<void>;
 }
@@ -16,27 +13,25 @@ export async function initRedisConnection(
   this: RedisConnection,
   options: MicroRedisOptions | MicroRedisClientOptions
 ) {
-  Object.defineProperty(this, "channel", {
-    get: () => options.channel ?? REDIS_DEFAULT_CHANNEL,
-  });
-  Object.defineProperty(this, "replyChanlel", {
-    get: function () {
-      return this.channel + ".reply";
-    },
-  });
-
   this.closeClients = async function () {
-    if ((this as any).pub?.isReady) {
-      await (this as any).pub.disconnect();
+    async function disconnect(redis?: redis.RedisClientType<any, any, any>) {
+      if (redis?.isReady && redis.isOpen) {
+        try {
+          await redis.disconnect();
+        } catch (err) {
+          console.error(err);
+        }
+      }
     }
+    await disconnect((this as any).pub);
     (this as any).pub = undefined;
-    if ((this as any).sub?.isReady) {
-      await (this as any).sub.disconnect();
-    }
+    await disconnect((this as any).sub);
     (this as any).sub = undefined;
   };
 
   this.initClients = async function () {
+    await (this as any).closeClients();
+
     const host = options.host ?? "localhost";
     const port = options.port ?? 6379;
     const opt: any = { ...options };

@@ -24,6 +24,7 @@ export class MicroTcpStartup extends MicroStartup {
         ({ result }) => {
           socket.write(result, "utf-8");
         },
+        undefined,
         (err) => {
           socket.write(
             JSON.stringify({

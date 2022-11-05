@@ -1,17 +1,28 @@
 import { MicroRedisClient, MicroRedisStartup } from "../../src/redis";
-import { getTestOptions } from "./utils";
+import { testOptions } from "./utils";
 
 describe("client", () => {
   it("should send message and return boolean value", async () => {
-    const options = getTestOptions("send_return");
-    const startup = new MicroRedisStartup(options).use((ctx) => {
-      ctx.res.setBody(ctx.req.body);
-    });
+    const startup = new MicroRedisStartup(testOptions)
+      .use((ctx) => {
+        ctx.res.setBody(ctx.req.body);
+        expect(ctx.bag("pt")).toBeTruthy();
+      })
+      .pattern("test_return", (ctx) => {
+        ctx.bag("pt", true);
+      });
     await startup.listen();
 
-    const client = new MicroRedisClient(options);
+    await new Promise<void>((resolve) => {
+      setTimeout(async () => {
+        resolve();
+      }, 500);
+    });
+
+    const client = new MicroRedisClient(testOptions);
     await client.connect();
-    const result = await client.send("", true);
+
+    const result = await client.send("test_return", true);
 
     await startup.close();
     await client.dispose();
@@ -20,15 +31,26 @@ describe("client", () => {
   });
 
   it("should send message and return undefined value", async () => {
-    const options = getTestOptions("send_return_undefined");
-    const startup = new MicroRedisStartup(options).use((ctx) => {
-      ctx.res.setBody(ctx.req.body);
-    });
+    const startup = new MicroRedisStartup(testOptions)
+      .use((ctx) => {
+        ctx.res.setBody(ctx.req.body);
+        expect(ctx.bag("pt")).toBeTruthy();
+      })
+      .pattern("test_undefined", (ctx) => {
+        ctx.bag("pt", true);
+      });
     await startup.listen();
 
-    const client = new MicroRedisClient(options);
+    await new Promise<void>((resolve) => {
+      setTimeout(async () => {
+        resolve();
+      }, 500);
+    });
+
+    const client = new MicroRedisClient(testOptions);
     await client.connect();
-    const result = await client.send("", undefined);
+
+    const result = await client.send("test_undefined", undefined);
     await startup.close();
     await client.dispose();
 
@@ -36,23 +58,28 @@ describe("client", () => {
   });
 
   it("should emit message", async () => {
-    const options = getTestOptions("emit");
     let invoke = false;
-    const startup = new MicroRedisStartup(options).use(() => {
-      invoke = true;
-    });
+    const startup = new MicroRedisStartup(testOptions)
+      .use((ctx) => {
+        invoke = true;
+        expect(ctx.bag("pt")).toBeTruthy();
+      })
+      .pattern("test_emit", (ctx) => {
+        ctx.bag("pt", true);
+      });
+
     await startup.listen();
 
-    const client = new MicroRedisClient(options);
+    const client = new MicroRedisClient(testOptions);
     await client.connect();
-    client.emit("", true);
+    client.emit("test_emit", true);
 
     await new Promise<void>((resolve) => {
       setTimeout(async () => {
         await startup.close();
         await client.dispose();
         resolve();
-      }, 1000);
+      }, 500);
     });
     expect(invoke).toBeTruthy();
   });

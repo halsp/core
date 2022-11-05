@@ -33,6 +33,7 @@ export abstract class MicroStartup extends Startup {
       packet: PacketType;
       result: string;
     }) => void | Promise<void>,
+    prehook?: (ctx: Context) => Promise<void> | void,
     onError?: (err: Error) => void
   ) {
     try {
@@ -41,7 +42,9 @@ export abstract class MicroStartup extends Startup {
           .setPath(packet.pattern)
           .setBody(parseMicroBody(packet.data))
           .setId(packet.id);
-        const res = await this.invoke(req);
+        const ctx = new Context(req);
+        prehook && (await prehook(ctx));
+        const res = await this.invoke(ctx);
         if (!req.id) return; // event
 
         const resultJson = JSON.stringify({

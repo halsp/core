@@ -1,4 +1,4 @@
-import { Dict, ReadonlyDict, Startup } from "@ipare/core";
+import { Context, Dict, isFunction, ReadonlyDict, Startup } from "@ipare/core";
 import { Action } from "./action";
 import MapParser from "./map/map-parser";
 import path = require("path");
@@ -109,6 +109,29 @@ Startup.prototype.useRouterParser = function (options?: RouterOptions) {
     },
   });
 
+  if (
+    process.env.IS_IPARE_MICRO &&
+    "patterns" in this &&
+    isFunction(this["patterns"])
+  ) {
+    this["patterns"](
+      ...routerMap.map((item) => [
+        {
+          pattern: item.url,
+          hook: (ctx: Context) => {
+            Object.defineProperty(ctx, "actionMetadata", {
+              configurable: true,
+              enumerable: false,
+              get: () => {
+                return item;
+              },
+            });
+          },
+        },
+      ])
+    );
+  }
+
   return this.use(async (ctx, next) => {
     Object.defineProperty(ctx, "routerMap", {
       configurable: true,
@@ -130,6 +153,9 @@ Startup.prototype.useRouterParser = function (options?: RouterOptions) {
   })
     .use(async (ctx, next) => {
       if (!process.env.IS_IPARE_MICRO) {
+        return await next();
+      }
+      if (!!ctx.actionMetadata) {
         return await next();
       }
 
@@ -155,6 +181,9 @@ Startup.prototype.useRouterParser = function (options?: RouterOptions) {
     })
     .use(async (ctx, next) => {
       if (!process.env.IS_IPARE_HTTP) {
+        return await next();
+      }
+      if (!!ctx.actionMetadata) {
         return await next();
       }
 
@@ -186,7 +215,7 @@ Startup.prototype.useRouterParser = function (options?: RouterOptions) {
       await next();
     })
     .use(async (ctx, next) => {
-      if (!ctx.req || !ctx.actionMetadata) {
+      if (!ctx.actionMetadata) {
         return await next();
       }
 
