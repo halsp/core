@@ -8,14 +8,11 @@ export class CorsMiddleware extends Middleware {
   }
 
   async invoke() {
-    this.ctx.res.setHeader("Vary", "Origin");
+    this.ctx.res.set("Vary", "Origin");
 
-    if (!this.ctx.req.hasHeader("Origin")) {
-      return await this.next();
-    }
     if (
       this.ctx.req.method === HttpMethods.options &&
-      !this.ctx.req.getHeader("Access-Control-Request-Method")
+      !this.ctx.req.get("Access-Control-Request-Method")
     ) {
       return await this.next();
     }
@@ -33,11 +30,9 @@ export class CorsMiddleware extends Middleware {
     let origin: string | undefined;
     if (typeof this.options.origin === "function") {
       origin = await this.options.origin(this.ctx);
+      if (!origin) return await this.next();
     } else {
-      origin = this.options.origin || this.ctx.req.getHeader<string>("Origin");
-    }
-    if (!origin) {
-      return await this.next();
+      origin = this.options.origin || this.ctx.req.get<string>("Origin");
     }
 
     let credentials: boolean;
@@ -56,37 +51,33 @@ export class CorsMiddleware extends Middleware {
       "PATCH",
     ];
 
-    this.#setHeader("Access-Control-Allow-Origin", origin);
-    this.#setHeader(
-      "Access-Control-Allow-Credentials",
-      "true",
-      () => credentials
-    );
-    this.#setHeader(
+    this.#set("Access-Control-Allow-Origin", origin);
+    this.#set("Access-Control-Allow-Credentials", "true", () => credentials);
+    this.#set(
       "Cross-Origin-Opener-Policy",
       "same-origin",
       () => !!this.options.secureContext
     );
-    this.#setHeader(
+    this.#set(
       "Cross-Origin-Embedder-Policy",
       "require-corp",
       () => !!this.options.secureContext
     );
 
     if (this.ctx.req.method === HttpMethods.options) {
-      this.#setHeader(
+      this.#set(
         "Access-Control-Max-Age",
         this.options.maxAge,
         () => !!this.options.maxAge
       );
-      this.#setHeader(
+      this.#set(
         "Access-Control-Allow-Private-Network",
         this.options.privateNetworkAccess,
         () =>
           !!this.options.privateNetworkAccess &&
-          !!this.ctx.req.hasHeader("Access-Control-Request-Private-Network")
+          !!this.ctx.req.has("Access-Control-Request-Private-Network")
       );
-      this.#setHeader(
+      this.#set(
         "Access-Control-Allow-Methods",
         allowMethods,
         () => !!allowMethods
@@ -94,13 +85,13 @@ export class CorsMiddleware extends Middleware {
 
       let allowHeaders = this.options.allowHeaders;
       if (!allowHeaders) {
-        allowHeaders = this.ctx.req.getHeader("Access-Control-Request-Headers");
+        allowHeaders = this.ctx.req.get("Access-Control-Request-Headers");
       }
       if (allowHeaders) {
-        this.ctx.res.setHeader("Access-Control-Allow-Headers", allowHeaders);
+        this.ctx.res.set("Access-Control-Allow-Headers", allowHeaders);
       }
     } else {
-      this.#setHeader(
+      this.#set(
         "Access-Control-Expose-Headers",
         this.options.exposeHeaders,
         () => !!this.options.exposeHeaders
@@ -108,9 +99,9 @@ export class CorsMiddleware extends Middleware {
     }
   }
 
-  #setHeader(key: string, value: any, fn?: () => boolean) {
+  #set(key: string, value: any, fn?: () => boolean) {
     if (!fn || fn()) {
-      this.ctx.res.setHeader(key, value);
+      this.ctx.res.set(key, value);
     }
   }
 }
