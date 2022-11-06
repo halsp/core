@@ -5,7 +5,7 @@ import { initRedisConnection, RedisConnection } from "./connection";
 import { composePattern } from "../pattern";
 
 export class MicroRedisClient extends MicroClient {
-  constructor(options: MicroRedisClientOptions) {
+  constructor(options?: MicroRedisClientOptions) {
     super();
     initRedisConnection.bind(this)(options);
   }

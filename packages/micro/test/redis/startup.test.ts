@@ -1,6 +1,6 @@
-import { MicroRedisStartup } from "../../src/redis";
+import { MicroRedisClient, MicroRedisStartup } from "../../src/redis";
 import RedisClient from "@redis/client/dist/lib/client";
-import { testOptions } from "./utils";
+import { mockConnection, mockConnectionFrom } from "./utils";
 
 describe("startup", () => {
   it("should connect redis", async () => {
@@ -43,7 +43,7 @@ describe("startup", () => {
   it("should be error when the message is invalidate", async () => {
     let pattern: any = undefined;
     let data: any = undefined;
-    const startup = new MicroRedisStartup(testOptions)
+    const startup = new MicroRedisStartup()
       .use(async (ctx) => {
         pattern = ctx.req.pattern;
         data = ctx.req.body;
@@ -55,6 +55,7 @@ describe("startup", () => {
           ctx.bag("pt", true);
         },
       });
+    mockConnection.bind(startup)();
     const { pub } = await startup.listen();
 
     await pub.publish("test_invalidate", `3#{}`);
@@ -71,4 +72,42 @@ describe("startup", () => {
     expect(pattern).toBeUndefined();
     expect(data).toBeUndefined();
   });
+
+  it("should not publish message when disconnect", async () => {
+    const startup = new MicroRedisStartup()
+      .use((ctx) => {
+        ctx.res.setBody(ctx.req.body);
+        expect(ctx.bag("pt")).toBeTruthy();
+      })
+      .pattern("test_return", (ctx) => {
+        ctx.bag("pt", true);
+      });
+    mockConnection.bind(startup)();
+    await startup.listen();
+
+    await new Promise<void>((resolve) => {
+      setTimeout(async () => {
+        resolve();
+      }, 500);
+    });
+
+    const client = new MicroRedisClient();
+    mockConnectionFrom.bind(client)(startup);
+    await client.connect();
+
+    (startup as any).pub = undefined;
+
+    const waitResult = await new Promise<boolean>(async (resolve) => {
+      setTimeout(() => {
+        resolve(false);
+      }, 2000);
+      await client.send("test_return", true);
+      resolve(true);
+    });
+
+    await startup.close();
+    await client.dispose();
+
+    expect(waitResult).toBeFalsy();
+  }, 10000);
 });

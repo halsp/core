@@ -1,9 +1,9 @@
 import { MicroRedisClient, MicroRedisStartup } from "../../src/redis";
-import { testOptions } from "./utils";
+import { mockConnection, mockConnectionFrom } from "./utils";
 
 describe("client", () => {
   it("should send message and return boolean value", async () => {
-    const startup = new MicroRedisStartup(testOptions)
+    const startup = new MicroRedisStartup()
       .use((ctx) => {
         ctx.res.setBody(ctx.req.body);
         expect(ctx.bag("pt")).toBeTruthy();
@@ -11,6 +11,7 @@ describe("client", () => {
       .pattern("test_return", (ctx) => {
         ctx.bag("pt", true);
       });
+    mockConnection.bind(startup)();
     await startup.listen();
 
     await new Promise<void>((resolve) => {
@@ -19,7 +20,8 @@ describe("client", () => {
       }, 500);
     });
 
-    const client = new MicroRedisClient(testOptions);
+    const client = new MicroRedisClient();
+    mockConnectionFrom.bind(client)(startup);
     await client.connect();
 
     const result = await client.send("test_return", true);
@@ -31,7 +33,7 @@ describe("client", () => {
   });
 
   it("should send message and return undefined value", async () => {
-    const startup = new MicroRedisStartup(testOptions)
+    const startup = new MicroRedisStartup()
       .use((ctx) => {
         ctx.res.setBody(ctx.req.body);
         expect(ctx.bag("pt")).toBeTruthy();
@@ -39,6 +41,7 @@ describe("client", () => {
       .pattern("test_undefined", (ctx) => {
         ctx.bag("pt", true);
       });
+    mockConnection.bind(startup)();
     await startup.listen();
 
     await new Promise<void>((resolve) => {
@@ -47,7 +50,8 @@ describe("client", () => {
       }, 500);
     });
 
-    const client = new MicroRedisClient(testOptions);
+    const client = new MicroRedisClient();
+    mockConnectionFrom.bind(client)(startup);
     await client.connect();
 
     const result = await client.send("test_undefined", undefined);
@@ -59,7 +63,7 @@ describe("client", () => {
 
   it("should emit message", async () => {
     let invoke = false;
-    const startup = new MicroRedisStartup(testOptions)
+    const startup = new MicroRedisStartup()
       .use((ctx) => {
         invoke = true;
         expect(ctx.bag("pt")).toBeTruthy();
@@ -67,10 +71,12 @@ describe("client", () => {
       .pattern("test_emit", (ctx) => {
         ctx.bag("pt", true);
       });
+    mockConnection.bind(startup)();
 
     await startup.listen();
 
-    const client = new MicroRedisClient(testOptions);
+    const client = new MicroRedisClient();
+    mockConnectionFrom.bind(client)(startup);
     await client.connect();
     client.emit("test_emit", true);
 

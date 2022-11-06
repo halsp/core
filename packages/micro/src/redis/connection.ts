@@ -11,16 +11,12 @@ export abstract class RedisConnection {
 
 export async function initRedisConnection(
   this: RedisConnection,
-  options: MicroRedisOptions | MicroRedisClientOptions
+  options: MicroRedisOptions | MicroRedisClientOptions = {}
 ) {
   this.closeClients = async function () {
     async function disconnect(redis?: redis.RedisClientType<any, any, any>) {
       if (redis?.isReady && redis.isOpen) {
-        try {
-          await redis.disconnect();
-        } catch (err) {
-          console.error(err);
-        }
+        await redis.disconnect();
       }
     }
     await disconnect((this as any).pub);
