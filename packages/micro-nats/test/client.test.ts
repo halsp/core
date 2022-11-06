@@ -177,16 +177,14 @@ describe("client", () => {
   });
 
   it("should listen with default port when port is undefined", async () => {
-    const client = new MicroNatsClient({
-      host: "127.0.0.2",
-    });
+    const client = new MicroNatsClient();
 
     await client.connect();
     await client.dispose();
   });
 
   it("should not send data when client redis is not connected", async () => {
-    const client = new MicroNatsClient({});
+    const client = new MicroNatsClient();
     client.emit("", "");
   });
 
@@ -194,5 +192,39 @@ describe("client", () => {
     class TestClass extends MicroNatsConnection {}
     const obj = new TestClass();
     expect(!!obj["initClients"]).toBeTruthy();
+  });
+
+  it("should not send message when connection is undefined", async () => {
+    const startup = new MicroNatsStartup()
+      .use((ctx) => {
+        ctx.res.setBody(ctx.req.body);
+        expect(ctx.bag("pt")).toBeTruthy();
+      })
+      .pattern("test_undefined", (ctx) => {
+        ctx.bag("pt", true);
+      });
+    mockConnection.bind(startup)();
+    await startup.listen();
+
+    await new Promise<void>((resolve) => {
+      setTimeout(async () => {
+        resolve();
+      }, 500);
+    });
+
+    const client = new MicroNatsClient();
+    mockConnectionFrom.bind(client)(startup);
+    await client.connect();
+
+    startup["connection"] = undefined;
+    const waitResult = await new Promise<boolean>(async (resolve) => {
+      setTimeout(() => resolve(false), 2000);
+      await client.send("test_undefined", "abc");
+      resolve(true);
+    });
+    await startup.close();
+    await client.dispose();
+
+    expect(waitResult).toBeFalsy();
   });
 });

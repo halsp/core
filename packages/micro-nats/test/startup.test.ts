@@ -1,5 +1,5 @@
 import { MicroNatsClient, MicroNatsStartup } from "../src";
-import { mockConnection } from "../src/mock";
+import { mockConnection, mockConnectionFrom } from "../src/mock";
 
 describe("startup", () => {
   it("should be error when the message is invalidate", async () => {
@@ -36,10 +36,7 @@ describe("startup", () => {
   });
 
   it("should publish and return value", async () => {
-    const startup = new MicroNatsStartup({
-      host: "192.168.68.40",
-      port: 4222,
-    })
+    const startup = new MicroNatsStartup()
       .use((ctx) => {
         ctx.res.setBody(ctx.req.body);
         expect(ctx.bag("pt")).toBeTruthy();
@@ -47,6 +44,7 @@ describe("startup", () => {
       .pattern("test_return", (ctx) => {
         ctx.bag("pt", true);
       });
+    mockConnection.bind(startup)();
     await startup.listen();
 
     await new Promise<void>((resolve) => {
@@ -55,9 +53,8 @@ describe("startup", () => {
       }, 500);
     });
 
-    const client = new MicroNatsClient({
-      host: "demo.nats.io",
-    });
+    const client = new MicroNatsClient();
+    mockConnectionFrom.bind(client)(startup);
     await client.connect();
 
     (startup as any).pub = undefined;

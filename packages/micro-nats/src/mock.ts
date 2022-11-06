@@ -3,6 +3,8 @@ import { MicroNatsConnection } from "./connection";
 export function createMockNats() {
   let isClosed = true;
   const subscribes = {} as Record<string, (data: string) => void>;
+  let closeCallback!: () => void;
+
   return {
     subscribe: (channel: string) => {
       const asyncIterable: AsyncIterable<any> = {
@@ -11,6 +13,9 @@ export function createMockNats() {
             const data = await new Promise<any>((resolve) => {
               subscribes[channel] = (data) => {
                 resolve(data);
+              };
+              closeCallback = () => {
+                resolve(undefined);
               };
             });
             if (isClosed) break;
@@ -32,6 +37,7 @@ export function createMockNats() {
     },
     close() {
       isClosed = true;
+      closeCallback && closeCallback();
     },
     isClosed() {
       return isClosed;
