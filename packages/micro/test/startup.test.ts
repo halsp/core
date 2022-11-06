@@ -1,5 +1,6 @@
-import { Request } from "@ipare/core";
-import { MicroException } from "../src";
+import { Context, Request } from "@ipare/core";
+import { MicroException, MicroStartup } from "../src";
+import { PacketType } from "../src/startup";
 import { TestStartup } from "./utils";
 
 describe("startup", () => {
@@ -37,5 +38,79 @@ describe("startup", () => {
     expect(res.status).toBe("error");
     expect(res.error).toBe("err");
     expect(res.body).toBeUndefined();
+  });
+});
+
+describe("handle message", () => {
+  class TestClass extends MicroStartup {}
+  function handleMessage(
+    text: string,
+    onSend: (arg: {
+      packet: PacketType;
+      result: string;
+    }) => void | Promise<void>,
+    prehook?: (ctx: Context) => Promise<void> | void,
+    onError?: (err: Error) => void
+  ) {
+    new TestClass()["handleMessage"](
+      Buffer.from(text, "utf-8"),
+      onSend,
+      prehook,
+      onError
+    );
+  }
+
+  it("should handle message and send result", async () => {
+    await new Promise<void>((resolve) => {
+      handleMessage(`12#{"id":"abc"}`, ({ packet, result }) => {
+        expect(packet).toEqual({ id: "abc" });
+        expect(result).toBe(`12#{"id":"abc"}`);
+        resolve();
+      });
+    });
+  });
+
+  it("should handle message and invoke prehook", async () => {
+    await new Promise<void>((resolve) => {
+      handleMessage(
+        `2#{}`,
+        () => {
+          expect(true).toBe(false);
+        },
+        (ctx) => {
+          expect(ctx.req.id).toBeUndefined();
+          resolve();
+        }
+      );
+    });
+  });
+
+  it("should log error when message format is illegal", async () => {
+    await new Promise<void>((resolve) => {
+      const beforeError = console.error;
+      console.error = () => {
+        resolve();
+        console.error = beforeError;
+      };
+      handleMessage(`abc`, () => {
+        expect(true).toBe(false);
+      });
+    });
+  });
+
+  it("should invoke onError when message format is illegal", async () => {
+    await new Promise<void>((resolve) => {
+      handleMessage(
+        `abc`,
+        () => {
+          expect(true).toBe(false);
+        },
+        undefined,
+        (err) => {
+          expect(err.message).toBe("Error message format");
+          resolve();
+        }
+      );
+    });
   });
 });
