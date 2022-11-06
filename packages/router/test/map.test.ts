@@ -2,6 +2,7 @@ import { TestHttpStartup } from "@ipare/testing/dist/http";
 import MapCreater from "../src/map/map-creater";
 import "./utils-http";
 import MapParser from "../src/map/map-parser";
+import { MapItem } from "../src";
 
 describe("map", () => {
   it("should throw error when use MapCreater and router dir not exist", async () => {
@@ -31,5 +32,19 @@ describe("map", () => {
           dir: "test/not-exist",
         })
     ).toThrowError("The router dir is not exist");
+  });
+
+  it("should not find actionMetadata if preset", async () => {
+    const result = await new TestHttpStartup()
+      .use(async (ctx, next) => {
+        Object.defineProperty(ctx, "actionMetadata", {
+          get: () => new MapItem("Router.ts", "default"),
+        });
+        await next();
+      })
+      .useTestRouter()
+      .run();
+    expect(result.status).toBe(200);
+    expect(result.body).toBe("ok");
   });
 });

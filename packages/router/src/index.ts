@@ -115,20 +115,18 @@ Startup.prototype.useRouterParser = function (options?: RouterOptions) {
     isFunction(this["patterns"])
   ) {
     this["patterns"](
-      ...routerMap.map((item) => [
-        {
-          pattern: item.url,
-          hook: (ctx: Context) => {
-            Object.defineProperty(ctx, "actionMetadata", {
-              configurable: true,
-              enumerable: false,
-              get: () => {
-                return item;
-              },
-            });
-          },
+      ...routerMap.map((item) => ({
+        pattern: item.url,
+        handler: (ctx: Context) => {
+          Object.defineProperty(ctx, "actionMetadata", {
+            configurable: true,
+            enumerable: false,
+            get: () => {
+              return item;
+            },
+          });
         },
-      ])
+      }))
     );
   }
 

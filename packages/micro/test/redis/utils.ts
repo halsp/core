@@ -26,6 +26,7 @@ export function mockConnection(this: RedisConnection) {
 
     (this as any).pub = redis;
     (this as any).sub = redis;
+    redis.connect();
   };
 }
 

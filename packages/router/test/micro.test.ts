@@ -1,5 +1,9 @@
 import { Request } from "@ipare/core";
 import { TestMicroStartup } from "@ipare/testing/dist/micro";
+import {
+  TestMicroRedisClient,
+  TestMicroRedisStartup,
+} from "@ipare/testing/dist/micro/redis";
 import "./utils-micro";
 
 describe("pattern", () => {
@@ -52,16 +56,21 @@ describe("pattern", () => {
 });
 
 describe("registry", () => {
-  it("should add pattern handler", async () => {
-    const startup = new TestMicroStartup()
-      .setContext(new Request().setPath("path"))
-      .use(async (ctx, next) => {
-        await next();
-      })
+  it("should add pattern handlers", async () => {
+    const startup = new TestMicroRedisStartup()
+      .mockConnection()
       .useTestRouter()
       .useRouter();
-    const { ctx } = await startup.run();
+    await startup.listen();
 
-    expect(ctx.actionMetadata.url).toBe("path");
+    const client = new TestMicroRedisClient().mockConnectionFrom(startup);
+    await client.connect();
+
+    const result = await client.send("event:123", true);
+
+    await startup.close();
+    await client.dispose();
+
+    expect(result).toBe("event-pattern-test");
   });
 });
