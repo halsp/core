@@ -1,7 +1,7 @@
 import * as redis from "redis";
 import { MicroRedisClientOptions, MicroRedisOptions } from "./options";
 
-export abstract class RedisConnection<
+export abstract class MicroRedisConnection<
   T extends MicroRedisOptions | MicroRedisClientOptions =
     | MicroRedisOptions
     | MicroRedisClientOptions
@@ -48,9 +48,9 @@ export async function initRedisConnection<
   T extends MicroRedisOptions | MicroRedisClientOptions =
     | MicroRedisOptions
     | MicroRedisClientOptions
->(this: RedisConnection<T>) {
-  this.closeClients = RedisConnection.prototype.closeClients.bind(this);
-  this.initClients = RedisConnection.prototype.initClients.bind(this);
+>(this: MicroRedisConnection<T>) {
+  this.closeClients = MicroRedisConnection.prototype.closeClients.bind(this);
+  this.initClients = MicroRedisConnection.prototype.initClients.bind(this);
   Object.defineProperty(this, "prefix", {
     configurable: true,
     enumerable: true,

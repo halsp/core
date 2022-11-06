@@ -1,4 +1,8 @@
-import { MicroRedisClient, MicroRedisStartup } from "../../src/redis";
+import {
+  MicroRedisClient,
+  MicroRedisStartup,
+  MicroRedisConnection,
+} from "../../src/redis";
 import { mockConnection, mockConnectionFrom } from "./utils";
 
 describe("client", () => {
@@ -168,5 +172,11 @@ describe("client", () => {
   it("should not send data when client redis is not connected", async () => {
     const client = new MicroRedisClient({});
     client.emit("", "");
+  });
+
+  it("should create custom connection", async () => {
+    class TestClass extends MicroRedisConnection {}
+    const obj = new TestClass();
+    expect(!!obj["initClients"]).toBeTruthy();
   });
 });

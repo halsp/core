@@ -1,16 +1,15 @@
 import { Context, Request, Response } from "@ipare/core";
-import { MicroRedisOptions, MicroRedisStartup } from "@ipare/micro/dist/redis";
 import {
-  initRedisConnection,
-  RedisConnection,
-} from "@ipare/micro/dist/redis/connection";
+  MicroRedisOptions,
+  MicroRedisStartup,
+  MicroRedisConnection,
+} from "@ipare/micro/dist/redis";
 import { initBaseTestStartup, ITestStartup } from "../../test-startup";
 import { mockConnection, mockConnectionFrom } from "./mock";
 
 export class TestMicroRedisStartup extends MicroRedisStartup {
   constructor(options?: MicroRedisOptions) {
     super(options);
-    initRedisConnection.bind(this)();
     initBaseTestStartup(this);
   }
 
@@ -19,7 +18,7 @@ export class TestMicroRedisStartup extends MicroRedisStartup {
     return this;
   }
 
-  mockConnectionFrom(target: RedisConnection) {
+  mockConnectionFrom(target: MicroRedisConnection<MicroRedisOptions>) {
     mockConnectionFrom.bind(this)(target);
     return this;
   }

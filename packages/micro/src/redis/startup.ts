@@ -1,6 +1,6 @@
 import { composePattern, MicroStartup } from "../";
 import { MicroRedisOptions } from "./options";
-import { initRedisConnection, RedisConnection } from "./connection";
+import { initRedisConnection, MicroRedisConnection } from "./connection";
 import { Context } from "@ipare/core";
 
 export class MicroRedisStartup extends MicroStartup {
@@ -71,4 +71,5 @@ export class MicroRedisStartup extends MicroStartup {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface MicroRedisStartup extends RedisConnection<MicroRedisOptions> {}
+export interface MicroRedisStartup
+  extends MicroRedisConnection<MicroRedisOptions> {}

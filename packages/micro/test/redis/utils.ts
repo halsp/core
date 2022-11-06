@@ -1,4 +1,4 @@
-import { RedisConnection } from "../../src/redis/connection";
+import { MicroRedisConnection } from "../../src/redis";
 
 export function createMockRedis() {
   const subscribes = {} as Record<string, (data: string) => void>;
@@ -20,7 +20,7 @@ export function createMockRedis() {
   };
 }
 
-export function mockConnection(this: RedisConnection) {
+export function mockConnection(this: MicroRedisConnection) {
   this.initClients = async function () {
     const redis = createMockRedis();
 
@@ -31,8 +31,8 @@ export function mockConnection(this: RedisConnection) {
 }
 
 export function mockConnectionFrom(
-  this: RedisConnection,
-  target: RedisConnection
+  this: MicroRedisConnection,
+  target: MicroRedisConnection
 ) {
   this.initClients = async function () {
     (this as any).pub = (target as any).pub;

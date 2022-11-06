@@ -1,7 +1,7 @@
 import { MicroClient, PatternType } from "../";
 import { MicroRedisClientOptions } from "./options";
 import { parseBuffer } from "../parser";
-import { initRedisConnection, RedisConnection } from "./connection";
+import { initRedisConnection, MicroRedisConnection } from "./connection";
 import { composePattern } from "../pattern";
 
 export class MicroRedisClient extends MicroClient {
@@ -53,4 +53,4 @@ export class MicroRedisClient extends MicroClient {
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface MicroRedisClient
-  extends RedisConnection<MicroRedisClientOptions> {}
+  extends MicroRedisConnection<MicroRedisClientOptions> {}
