@@ -1,5 +1,4 @@
-import { MicroNatsClient, MicroNatsStartup } from "../src";
-import { MicroNatsConnection } from "../src/connection";
+import { MicroNatsClient, MicroNatsStartup, MicroNatsConnection } from "../src";
 import { mockConnection, mockConnectionFrom } from "../src/mock";
 
 describe("client", () => {
