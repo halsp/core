@@ -2,6 +2,7 @@ import { RouterOptions } from "../src";
 import "@ipare/core";
 import { TestMicroStartup } from "@ipare/testing/dist/micro";
 import { TestMicroRedisStartup } from "@ipare/testing/dist/micro-redis";
+import { TestMicroNatsStartup } from "@ipare/testing/dist/micro-nats";
 import "../src";
 import { TEST_ACTION_DIR } from "../src/constant";
 
@@ -16,6 +17,13 @@ declare module "@ipare/testing/dist/micro" {
 
 declare module "@ipare/testing/dist/micro-redis" {
   interface TestMicroRedisStartup {
+    useTestRouter(config?: RouterOptions): this;
+    useTestRouterParser(config?: RouterOptions): this;
+  }
+}
+
+declare module "@ipare/testing/dist/micro-nats" {
+  interface TestMicroNatsStartup {
     useTestRouter(config?: RouterOptions): this;
     useTestRouterParser(config?: RouterOptions): this;
   }
@@ -40,6 +48,18 @@ TestMicroRedisStartup.prototype.useTestRouter = function (config = {}) {
 };
 
 TestMicroRedisStartup.prototype.useTestRouterParser = function (config = {}) {
+  this[TEST_ACTION_DIR] = testDir;
+  this.useRouterParser(config);
+  return this;
+};
+
+TestMicroNatsStartup.prototype.useTestRouter = function (config = {}) {
+  this[TEST_ACTION_DIR] = testDir;
+  this.useRouter(config);
+  return this;
+};
+
+TestMicroNatsStartup.prototype.useTestRouterParser = function (config = {}) {
   this[TEST_ACTION_DIR] = testDir;
   this.useRouterParser(config);
   return this;

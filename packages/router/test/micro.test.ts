@@ -4,6 +4,10 @@ import {
   TestMicroRedisClient,
   TestMicroRedisStartup,
 } from "@ipare/testing/dist/micro-redis";
+import {
+  TestMicroNatsClient,
+  TestMicroNatsStartup,
+} from "@ipare/testing/dist/micro-nats";
 import "./utils-micro";
 
 describe("pattern", () => {
@@ -56,7 +60,7 @@ describe("pattern", () => {
 });
 
 describe("registry", () => {
-  it("should add pattern handlers", async () => {
+  it("should add pattern handlers when use micro redis", async () => {
     const startup = new TestMicroRedisStartup()
       .mockConnection()
       .useTestRouter()
@@ -64,6 +68,24 @@ describe("registry", () => {
     await startup.listen();
 
     const client = new TestMicroRedisClient().mockConnectionFrom(startup);
+    await client.connect();
+
+    const result = await client.send("event:123", true);
+
+    await startup.close();
+    await client.dispose();
+
+    expect(result).toBe("event-pattern-test");
+  });
+
+  it("should add pattern handlers when use micro nats", async () => {
+    const startup = new TestMicroNatsStartup()
+      .mockConnection()
+      .useTestRouter()
+      .useRouter();
+    await startup.listen();
+
+    const client = new TestMicroNatsClient().mockConnectionFrom(startup);
     await client.connect();
 
     const result = await client.send("event:123", true);
