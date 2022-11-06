@@ -5,9 +5,9 @@ import { initRedisConnection, RedisConnection } from "./connection";
 import { composePattern } from "../pattern";
 
 export class MicroRedisClient extends MicroClient {
-  constructor(options?: MicroRedisClientOptions) {
+  constructor(protected readonly options: MicroRedisClientOptions = {}) {
     super();
-    initRedisConnection.bind(this)(options);
+    initRedisConnection.bind(this)();
   }
 
   async connect() {
@@ -27,7 +27,7 @@ export class MicroRedisClient extends MicroClient {
     const sub = this.sub as Exclude<typeof this.pub, undefined>;
     return new Promise(async (resolve) => {
       await sub.subscribe(
-        composePattern(pattern) + ".reply",
+        this.prefix + composePattern(pattern) + this.reply,
         (buffer) => {
           parseBuffer(buffer, (packet) => {
             resolve(packet.data ?? packet.response);
@@ -47,9 +47,10 @@ export class MicroRedisClient extends MicroClient {
   #sendPacket(packet: any) {
     const json = JSON.stringify(packet);
     const str = `${json.length}#${json}`;
-    this.pub?.publish(packet.pattern, str);
+    this.pub?.publish(this.prefix + composePattern(packet.pattern), str);
   }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface MicroRedisClient extends RedisConnection {}
+export interface MicroRedisClient
+  extends RedisConnection<MicroRedisClientOptions> {}

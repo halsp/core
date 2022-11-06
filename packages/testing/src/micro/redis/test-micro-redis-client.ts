@@ -9,11 +9,6 @@ import {
 import { mockConnection, mockConnectionFrom } from "./mock";
 
 export class TestMicroRedisClient extends MicroRedisClient {
-  protected pub: RedisConnection["pub"];
-  protected sub: RedisConnection["sub"];
-  protected initClients!: RedisConnection["initClients"];
-  protected closeClients!: RedisConnection["closeClients"];
-
   constructor(options?: MicroRedisClientOptions) {
     super(options);
     initRedisConnection.bind(this)();

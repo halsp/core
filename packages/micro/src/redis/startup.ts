@@ -1,12 +1,12 @@
-import { MicroStartup } from "../";
+import { composePattern, MicroStartup } from "../";
 import { MicroRedisOptions } from "./options";
 import { initRedisConnection, RedisConnection } from "./connection";
 import { Context } from "@ipare/core";
 
 export class MicroRedisStartup extends MicroStartup {
-  constructor(options: MicroRedisOptions = {}) {
+  constructor(protected readonly options: MicroRedisOptions = {}) {
     super();
-    initRedisConnection.bind(this)(options);
+    initRedisConnection.bind(this)();
   }
 
   #handlers: {
@@ -30,12 +30,15 @@ export class MicroRedisStartup extends MicroStartup {
   #pattern(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
     if (!this.sub) return this;
     this.sub.subscribe(
-      pattern,
+      this.prefix + composePattern(pattern),
       async (buffer) => {
         this.handleMessage(
           buffer,
           async ({ result }) => {
-            await this.pub?.publish(pattern + ".reply", result);
+            await this.pub?.publish(
+              this.prefix + composePattern(pattern) + this.reply,
+              result
+            );
           },
           handler
         );
@@ -68,4 +71,4 @@ export class MicroRedisStartup extends MicroStartup {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface MicroRedisStartup extends RedisConnection {}
+export interface MicroRedisStartup extends RedisConnection<MicroRedisOptions> {}

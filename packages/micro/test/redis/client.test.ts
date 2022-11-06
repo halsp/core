@@ -3,7 +3,10 @@ import { mockConnection, mockConnectionFrom } from "./utils";
 
 describe("client", () => {
   it("should send message and return boolean value", async () => {
-    const startup = new MicroRedisStartup()
+    const startup = new MicroRedisStartup({
+      host: "localhost",
+      port: 2333,
+    })
       .use((ctx) => {
         ctx.res.setBody(ctx.req.body);
         expect(ctx.bag("pt")).toBeTruthy();
@@ -30,6 +33,46 @@ describe("client", () => {
     await client.dispose();
 
     expect(result).toBe(true);
+  });
+
+  it("should send message and return value with prefix", async () => {
+    const startup = new MicroRedisStartup({
+      prefix: "pr",
+    })
+      .use((ctx) => {
+        ctx.res.setBody(ctx.req.body);
+        expect(ctx.bag("pt")).toBeTruthy();
+      })
+      .pattern("test_prefix", (ctx) => {
+        ctx.bag("pt", true);
+      });
+    mockConnection.bind(startup)();
+    await startup.listen();
+
+    await new Promise<void>((resolve) => {
+      setTimeout(async () => {
+        resolve();
+      }, 500);
+    });
+
+    const client = new MicroRedisClient({
+      prefix: "pr",
+    });
+    mockConnectionFrom.bind(client)(startup);
+    await client.connect();
+
+    const result = await client.send("test_prefix", {
+      a: 1,
+      b: 2,
+    });
+
+    await startup.close();
+    await client.dispose();
+
+    expect(result).toEqual({
+      a: 1,
+      b: 2,
+    });
   });
 
   it("should send message and return undefined value", async () => {
