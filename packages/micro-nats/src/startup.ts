@@ -1,12 +1,12 @@
 import { composePattern, MicroStartup } from "@ipare/micro";
-import { MicroRedisOptions } from "./options";
-import { initRedisConnection, MicroRedisConnection } from "./connection";
+import { MicroNatsOptions } from "./options";
+import { initNatsConnection, MicroNatsConnection } from "./connection";
 import { Context } from "@ipare/core";
 
-export class MicroRedisStartup extends MicroStartup {
-  constructor(protected readonly options: MicroRedisOptions = {}) {
+export class MicroNatsStartup extends MicroStartup {
+  constructor(protected readonly options: MicroNatsOptions = {}) {
     super();
-    initRedisConnection.bind(this)();
+    initNatsConnection.bind(this)();
   }
 
   #handlers: {
@@ -21,30 +21,30 @@ export class MicroRedisStartup extends MicroStartup {
       this.pattern(item.pattern, item.handler);
     });
 
-    return {
-      sub: this.sub,
-      pub: this.pub,
-    };
+    return this.connection;
   }
 
   #pattern(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
-    if (!this.sub) return this;
-    this.sub.subscribe(
-      this.prefix + composePattern(pattern),
-      async (buffer) => {
+    if (!this.connection) return this;
+
+    const sub = this.connection.subscribe(
+      this.prefix + composePattern(pattern)
+    );
+    (async () => {
+      for await (const msg of sub) {
         this.handleMessage(
-          buffer,
+          Buffer.from(msg.data),
           async ({ result }) => {
-            await this.pub?.publish(
+            this.connection?.publish(
               this.prefix + composePattern(pattern) + this.reply,
-              result
+              Buffer.from(result, "utf-8")
             );
           },
           handler
         );
-      },
-      true
-    );
+      }
+    })();
+
     return this;
   }
 
@@ -71,5 +71,5 @@ export class MicroRedisStartup extends MicroStartup {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface MicroRedisStartup
-  extends MicroRedisConnection<MicroRedisOptions> {}
+export interface MicroNatsStartup
+  extends MicroNatsConnection<MicroNatsOptions> {}

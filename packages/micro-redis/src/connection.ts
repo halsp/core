@@ -26,7 +26,7 @@ export abstract class MicroRedisConnection<
   }
 
   protected async initClients(): Promise<void> {
-    await (this as any).closeClients();
+    await this.closeClients();
 
     const host = this.options.host ?? "localhost";
     const port = this.options.port ?? 6379;

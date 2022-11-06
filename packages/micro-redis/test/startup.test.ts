@@ -58,7 +58,7 @@ describe("startup", () => {
     mockConnection.bind(startup)();
     const { pub } = await startup.listen();
 
-    await pub.publish("test_invalidate", `3#{}`);
+    await pub?.publish("test_invalidate", `3#{}`);
 
     let times = 0;
     while (times < 20 && !pattern) {
