@@ -1,5 +1,10 @@
 import { Request, Response } from "@ipare/core";
 import { TestMicroStartup } from "../src/micro";
+import { TestMicroTcpClient, TestMicroTcpStartup } from "../src/micro/tcp";
+import {
+  TestMicroRedisStartup,
+  TestMicroRedisClient,
+} from "../src/micro/redis";
 
 describe("micro response.expect", () => {
   it("should expect body", async () => {
@@ -58,5 +63,83 @@ describe("micro startup", () => {
       err = true;
     }
     expect(err).toBeTruthy();
+  });
+});
+
+describe("micro tcp startup", () => {
+  it("should send message and return boolean value", async () => {
+    const startup = new TestMicroTcpStartup({
+      port: 23334,
+    }).use((ctx) => {
+      ctx.res.setBody(ctx.req.body);
+    });
+    const { port } = await startup.dynamicListen();
+
+    const client = new TestMicroTcpClient({
+      port,
+    });
+    await client.connect();
+    const result = await client.send("", true);
+    await startup.close();
+    client.dispose();
+
+    expect(result).toBe(true);
+  });
+});
+
+describe("micro redis startup", () => {
+  it("should create mock redis", async () => {
+    const startup = new TestMicroRedisStartup().mockConnection();
+    await startup.listen();
+
+    const client = new TestMicroRedisClient().mockConnection();
+    await client.connect();
+
+    expect(!!(startup as any).pub).toBeTruthy();
+    expect((startup as any).sub).toBe((startup as any).pub);
+    expect(!!(client as any).pub).toBeTruthy();
+    expect((client as any).sub).toBe((client as any).pub);
+
+    await startup.close();
+    await client.dispose();
+  });
+
+  it("should create startup mock from startup", async () => {
+    const startup1 = new TestMicroRedisStartup().mockConnection();
+    await startup1.listen();
+
+    const startup2 = new TestMicroRedisStartup().mockConnectionFrom(startup1);
+    await startup2.listen();
+
+    expect((startup2 as any).sub).toBe((startup2 as any).pub);
+    expect((startup1 as any).sub).toBe((startup1 as any).pub);
+    expect((startup2 as any).pub).toBe((startup1 as any).pub);
+    expect((startup2 as any).sub).toBe((startup1 as any).sub);
+
+    await startup1.close();
+    await startup2.close();
+  });
+
+  it("should send message and return boolean value", async () => {
+    const startup = new TestMicroRedisStartup()
+      .mockConnection()
+      .use((ctx) => {
+        ctx.res.setBody(ctx.req.body);
+        expect(ctx.bag("pt")).toBeTruthy();
+      })
+      .pattern("test_return", (ctx) => {
+        ctx.bag("pt", true);
+      });
+    await startup.listen();
+
+    const client = new TestMicroRedisClient().mockConnectionFrom(startup);
+    await client.connect();
+
+    const result = await client.send("test_return", true);
+
+    await startup.close();
+    await client.dispose();
+
+    expect(result).toBe(true);
   });
 });
