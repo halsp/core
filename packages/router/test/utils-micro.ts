@@ -1,7 +1,7 @@
 import { RouterOptions } from "../src";
 import "@ipare/core";
 import { TestMicroStartup } from "@ipare/testing/dist/micro";
-import { TestMicroRedisStartup } from "@ipare/testing/dist/micro/redis";
+import { TestMicroRedisStartup } from "@ipare/testing/dist/micro-redis";
 import "../src";
 import { TEST_ACTION_DIR } from "../src/constant";
 
@@ -14,7 +14,7 @@ declare module "@ipare/testing/dist/micro" {
   }
 }
 
-declare module "@ipare/testing/dist/micro/redis" {
+declare module "@ipare/testing/dist/micro-redis" {
   interface TestMicroRedisStartup {
     useTestRouter(config?: RouterOptions): this;
     useTestRouterParser(config?: RouterOptions): this;

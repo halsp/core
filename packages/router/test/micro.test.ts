@@ -3,7 +3,7 @@ import { TestMicroStartup } from "@ipare/testing/dist/micro";
 import {
   TestMicroRedisClient,
   TestMicroRedisStartup,
-} from "@ipare/testing/dist/micro/redis";
+} from "@ipare/testing/dist/micro-redis";
 import "./utils-micro";
 
 describe("pattern", () => {

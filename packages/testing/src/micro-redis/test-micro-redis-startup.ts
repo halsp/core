@@ -3,9 +3,12 @@ import {
   MicroRedisOptions,
   MicroRedisStartup,
   MicroRedisConnection,
-} from "@ipare/micro/dist/redis";
-import { initBaseTestStartup, ITestStartup } from "../../test-startup";
-import { mockConnection, mockConnectionFrom } from "./mock";
+} from "@ipare/micro-redis";
+import { initBaseTestStartup, ITestStartup } from "../test-startup";
+import {
+  mockConnection,
+  mockConnectionFrom,
+} from "@ipare/micro-redis/dist/mock";
 
 export class TestMicroRedisStartup extends MicroRedisStartup {
   constructor(options?: MicroRedisOptions) {

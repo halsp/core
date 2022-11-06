@@ -1,6 +1,6 @@
 import { MicroRedisClient, MicroRedisStartup } from "../src";
 import RedisClient from "@redis/client/dist/lib/client";
-import { mockConnection, mockConnectionFrom } from "./utils";
+import { mockConnection, mockConnectionFrom } from "../src/mock";
 
 describe("startup", () => {
   it("should connect redis", async () => {

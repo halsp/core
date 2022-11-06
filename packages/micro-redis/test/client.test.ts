@@ -3,7 +3,7 @@ import {
   MicroRedisStartup,
   MicroRedisConnection,
 } from "../src";
-import { mockConnection, mockConnectionFrom } from "./utils";
+import { mockConnection, mockConnectionFrom } from "../src/mock";
 
 describe("client", () => {
   it("should send message and return boolean value", async () => {

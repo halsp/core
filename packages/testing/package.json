@@ -34,6 +34,8 @@
   "devDependencies": {
     "@ipare/http": "^2.2.5",
     "@ipare/micro": "^2.2.5",
+    "@ipare/micro-tcp": "^2.2.5",
+    "@ipare/micro-redis": "^2.2.5",
     "@ipare/server": "^2.2.5",
     "@types/jest": "^29.2.2",
     "@types/node": "^18.11.9",

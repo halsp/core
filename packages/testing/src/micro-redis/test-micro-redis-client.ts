@@ -1,8 +1,8 @@
+import { MicroRedisClient, MicroRedisConnection } from "@ipare/micro-redis";
 import {
-  MicroRedisClient,
-  MicroRedisConnection,
-} from "@ipare/micro/dist/redis";
-import { mockConnection, mockConnectionFrom } from "./mock";
+  mockConnection,
+  mockConnectionFrom,
+} from "@ipare/micro-redis/dist/mock";
 
 export class TestMicroRedisClient extends MicroRedisClient {
   mockConnection() {

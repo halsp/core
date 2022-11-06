@@ -1,6 +1,6 @@
 import { Context, Request, Response } from "@ipare/core";
-import { MicroTcpOptions, MicroTcpStartup } from "@ipare/micro/dist/tcp";
-import { initBaseTestStartup, ITestStartup } from "../../test-startup";
+import { MicroTcpOptions, MicroTcpStartup } from "@ipare/micro-tcp";
+import { initBaseTestStartup, ITestStartup } from "../test-startup";
 
 export class TestMicroTcpStartup extends MicroTcpStartup {
   constructor(options?: MicroTcpOptions) {

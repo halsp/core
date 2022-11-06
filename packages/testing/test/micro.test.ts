@@ -1,10 +1,10 @@
 import { Request, Response } from "@ipare/core";
 import { TestMicroStartup } from "../src/micro";
-import { TestMicroTcpClient, TestMicroTcpStartup } from "../src/micro/tcp";
+import { TestMicroTcpClient, TestMicroTcpStartup } from "../src/micro-tcp";
 import {
   TestMicroRedisStartup,
   TestMicroRedisClient,
-} from "../src/micro/redis";
+} from "../src/micro-redis";
 
 describe("micro response.expect", () => {
   it("should expect body", async () => {
