@@ -50,3 +50,18 @@ describe("pattern", () => {
     await test("multi:456");
   });
 });
+
+describe("registry", () => {
+  it("should add pattern handler", async () => {
+    const startup = new TestMicroStartup()
+      .setContext(new Request().setPath("path"))
+      .use(async (ctx, next) => {
+        await next();
+      })
+      .useTestRouter()
+      .useRouter();
+    const { ctx } = await startup.run();
+
+    expect(ctx.actionMetadata.url).toBe("path");
+  });
+});
