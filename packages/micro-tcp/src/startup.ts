@@ -1,4 +1,4 @@
-import { MicroStartup } from "../";
+import { MicroStartup } from "@ipare/micro";
 import { MicroTcpOptions } from "./options";
 import * as net from "net";
 

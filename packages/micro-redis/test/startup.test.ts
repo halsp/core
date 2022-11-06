@@ -1,4 +1,4 @@
-import { MicroRedisClient, MicroRedisStartup } from "../../src/redis";
+import { MicroRedisClient, MicroRedisStartup } from "../src";
 import RedisClient from "@redis/client/dist/lib/client";
 import { mockConnection, mockConnectionFrom } from "./utils";
 

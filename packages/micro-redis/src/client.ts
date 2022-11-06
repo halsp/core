@@ -1,8 +1,11 @@
-import { MicroClient, PatternType } from "../";
+import {
+  MicroClient,
+  PatternType,
+  parseBuffer,
+  composePattern,
+} from "@ipare/micro";
 import { MicroRedisClientOptions } from "./options";
-import { parseBuffer } from "../parser";
 import { initRedisConnection, MicroRedisConnection } from "./connection";
-import { composePattern } from "../pattern";
 
 export class MicroRedisClient extends MicroClient {
   constructor(protected readonly options: MicroRedisClientOptions = {}) {

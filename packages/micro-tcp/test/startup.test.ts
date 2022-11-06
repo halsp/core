@@ -1,4 +1,4 @@
-import { MicroTcpOptions, MicroTcpStartup } from "../../src/tcp";
+import { MicroTcpOptions, MicroTcpStartup } from "../src";
 import { sendData, sendMessage } from "./utils";
 import net from "net";
 

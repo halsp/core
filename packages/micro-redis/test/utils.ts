@@ -1,4 +1,4 @@
-import { MicroRedisConnection } from "../../src/redis";
+import { MicroRedisConnection } from "../src";
 
 export function createMockRedis() {
   const subscribes = {} as Record<string, (data: string) => void>;

@@ -23,3 +23,4 @@ export { MicroException } from "./exception";
 export { MicroStartup } from "./startup";
 export { composePattern, parsePattern, PatternType } from "./pattern";
 export { MicroClient } from "./client";
+export { parseBuffer } from "./parser";

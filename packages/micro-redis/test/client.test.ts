@@ -2,7 +2,7 @@ import {
   MicroRedisClient,
   MicroRedisStartup,
   MicroRedisConnection,
-} from "../../src/redis";
+} from "../src";
 import { mockConnection, mockConnectionFrom } from "./utils";
 
 describe("client", () => {

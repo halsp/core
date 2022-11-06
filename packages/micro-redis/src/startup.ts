@@ -1,4 +1,4 @@
-import { composePattern, MicroStartup } from "../";
+import { composePattern, MicroStartup } from "@ipare/micro";
 import { MicroRedisOptions } from "./options";
 import { initRedisConnection, MicroRedisConnection } from "./connection";
 import { Context } from "@ipare/core";
