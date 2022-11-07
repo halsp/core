@@ -33,16 +33,17 @@ export class MicroNatsClient extends MicroClient {
       undefined
     >;
     return new Promise(async (resolve) => {
-      const sub = connection.subscribe(
-        this.prefix + composePattern(pattern) + this.reply
-      );
-      this.#sendPacket(packet);
-      for await (const msg of sub) {
-        parseBuffer(Buffer.from(msg.data), (packet) => {
-          resolve(packet.data ?? packet.response);
-        });
-        break;
-      }
+      const reply = nats.createInbox(this.options.prefix);
+      const sub = connection.subscribe(reply, {
+        callback: (err, msg) => {
+          parseBuffer(Buffer.from(msg.data), (packet) => {
+            resolve(packet.data ?? packet.response);
+          });
+          sub.unsubscribe();
+        },
+      });
+
+      this.#sendPacket(packet, reply);
     });
   }
 
@@ -51,12 +52,15 @@ export class MicroNatsClient extends MicroClient {
     this.#sendPacket(packet);
   }
 
-  #sendPacket(packet: any) {
+  #sendPacket(packet: any, reply?: string) {
     const json = JSON.stringify(packet);
     const str = `${json.length}#${json}`;
     this.connection?.publish(
       this.prefix + composePattern(packet.pattern),
-      Buffer.from(str, "utf-8")
+      Buffer.from(str, "utf-8"),
+      {
+        reply: reply,
+      }
     );
   }
 }

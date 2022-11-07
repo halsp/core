@@ -27,23 +27,19 @@ export class MicroNatsStartup extends MicroStartup {
   #pattern(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
     if (!this.connection) return this;
 
-    const sub = this.connection.subscribe(
-      this.prefix + composePattern(pattern)
-    );
-    (async () => {
-      for await (const msg of sub) {
+    this.connection.subscribe(this.prefix + composePattern(pattern), {
+      callback: (err, msg) => {
         this.handleMessage(
           Buffer.from(msg.data),
           async ({ result }) => {
-            this.connection?.publish(
-              this.prefix + composePattern(pattern) + this.reply,
-              Buffer.from(result, "utf-8")
-            );
+            if (msg.reply) {
+              msg.respond(Buffer.from(result, "utf-8"));
+            }
           },
           handler
         );
-      }
-    })();
+      },
+    });
 
     return this;
   }

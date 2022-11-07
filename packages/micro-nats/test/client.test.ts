@@ -193,38 +193,4 @@ describe("client", () => {
     const obj = new TestClass();
     expect(!!obj["initClients"]).toBeTruthy();
   });
-
-  it("should not send message when connection is undefined", async () => {
-    const startup = new MicroNatsStartup()
-      .use((ctx) => {
-        ctx.res.setBody(ctx.req.body);
-        expect(ctx.bag("pt")).toBeTruthy();
-      })
-      .pattern("test_undefined", (ctx) => {
-        ctx.bag("pt", true);
-      });
-    mockConnection.bind(startup)();
-    await startup.listen();
-
-    await new Promise<void>((resolve) => {
-      setTimeout(async () => {
-        resolve();
-      }, 500);
-    });
-
-    const client = new MicroNatsClient();
-    mockConnectionFrom.bind(client)(startup);
-    await client.connect();
-
-    startup["connection"] = undefined;
-    const waitResult = await new Promise<boolean>(async (resolve) => {
-      setTimeout(() => resolve(false), 2000);
-      await client.send("test_undefined", "abc");
-      resolve(true);
-    });
-    await startup.close();
-    await client.dispose();
-
-    expect(waitResult).toBeFalsy();
-  });
 });

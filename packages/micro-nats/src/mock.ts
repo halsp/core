@@ -1,43 +1,53 @@
 import { MicroNatsConnection } from "./connection";
+import * as nats from "nats";
 
 export function createMockNats() {
   let isClosed = true;
-  const subscribes = {} as Record<string, (data: string) => void>;
-  let closeCallback!: () => void;
+  const subscribes = {} as Record<
+    string,
+    (err: Error | undefined, msg: nats.Msg) => void
+  >;
+
+  const subscribe = (
+    channel: string,
+    options: { callback: (err: Error | undefined, msg: nats.Msg) => void }
+  ) => {
+    subscribes[channel] = options.callback;
+    return {
+      unsubscribe: () => {
+        delete subscribes[channel];
+      },
+    };
+  };
+
+  const publish = (
+    channel: string,
+    data: Uint8Array,
+    options?: { reply?: string }
+  ) => {
+    subscribes[channel] &&
+      subscribes[channel](undefined, {
+        subject: "",
+        data: data,
+        sid: 1,
+        reply: options?.reply,
+        respond: (data) => {
+          if (!isClosed && options?.reply && data) {
+            publish(options.reply, data);
+          }
+          return true;
+        },
+      });
+  };
 
   return {
-    subscribe: (channel: string) => {
-      const asyncIterable: AsyncIterable<any> = {
-        [Symbol.asyncIterator]: async function* () {
-          while (true) {
-            const data = await new Promise<any>((resolve) => {
-              subscribes[channel] = (data) => {
-                resolve(data);
-              };
-              closeCallback = () => {
-                resolve(undefined);
-              };
-            });
-            if (isClosed) break;
-
-            yield {
-              data: Buffer.from(data, "utf-8"),
-            };
-          }
-        },
-      };
-
-      return asyncIterable;
-    },
-    publish: (channel: string, data: string) => {
-      subscribes[channel] && subscribes[channel](data);
-    },
+    subscribe: subscribe,
+    publish: publish,
     connect() {
       isClosed = false;
     },
     close() {
       isClosed = true;
-      closeCallback && closeCallback();
     },
     isClosed() {
       return isClosed;
