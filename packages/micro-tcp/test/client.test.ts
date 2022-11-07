@@ -102,7 +102,11 @@ describe("client", () => {
       consoleError = true;
       console.error = beforeError;
     };
-    await client.connect();
+    try {
+      await client.connect();
+    } catch (err) {
+      console.error(err);
+    }
 
     console.error = beforeError;
     expect(consoleError).toBeTruthy();

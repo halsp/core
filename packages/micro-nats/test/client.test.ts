@@ -77,7 +77,11 @@ describe("client", () => {
   it("should listen with default port when port is undefined", async () => {
     const client = new MicroNatsClient();
 
-    await client.connect();
+    try {
+      await client.connect();
+    } catch (err) {
+      console.error(err);
+    }
     await client.dispose();
   });
 

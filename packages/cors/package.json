@@ -29,6 +29,7 @@
   "license": "MIT",
   "dependencies": {
     "@ipare/core": "^3.0.0-alpha.0",
+    "@ipare/http": "^3.0.0-alpha.0",
     "@ipare/methods": "^3.0.0-alpha.0"
   },
   "devDependencies": {
