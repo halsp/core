@@ -17,7 +17,7 @@ describe("client", () => {
     await startup.close();
     client.dispose();
 
-    expect(result).toBe(true);
+    expect(result.data).toBe(true);
   });
 
   it("should send message and return undefined value", async () => {
@@ -36,7 +36,7 @@ describe("client", () => {
     await startup.close();
     client.dispose();
 
-    expect(result).toBeUndefined();
+    expect(result.data).toBeUndefined();
   });
 
   it("should emit message", async () => {
@@ -69,7 +69,16 @@ describe("client", () => {
       port: 443,
       host: "0.0.0.0",
     });
+
+    let consoleError = false;
+    const beforeError = console.error;
+    console.error = () => {
+      consoleError = true;
+      console.error = beforeError;
+    };
     await client.connect();
+    console.error = beforeError;
+    expect(consoleError).toBeTruthy();
 
     let err = false;
     try {
@@ -78,6 +87,7 @@ describe("client", () => {
       err = true;
     }
     client.dispose();
+
     expect(err).toBeTruthy();
   });
 
@@ -85,7 +95,17 @@ describe("client", () => {
     const client = new MicroTcpClient({
       host: "127.0.0.2",
     });
+
+    let consoleError = false;
+    const beforeError = console.error;
+    console.error = () => {
+      consoleError = true;
+      console.error = beforeError;
+    };
     await client.connect();
+
+    console.error = beforeError;
+    expect(consoleError).toBeTruthy();
     client.dispose();
   });
 });

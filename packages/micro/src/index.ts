@@ -9,10 +9,6 @@ declare module "@ipare/core" {
   }
 
   interface Response {
-    get status(): string | undefined;
-    set status(status: string | undefined);
-    setStatus(status: string): this;
-
     get error(): string | undefined;
     set error(err: string | undefined);
     setError(err: string | undefined): this;

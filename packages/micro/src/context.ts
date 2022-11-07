@@ -1,10 +1,5 @@
 import { Context, isNil, isObject, Request, Response } from "@ipare/core";
-import {
-  CTX_INITED,
-  REQUEST_ID,
-  RESPONSE_ERROR,
-  RESPONSE_STATUS,
-} from "./constant";
+import { CTX_INITED, REQUEST_ID, RESPONSE_ERROR } from "./constant";
 import { MicroException } from "./exception";
 import { parsePattern } from "./pattern";
 
@@ -38,24 +33,6 @@ export function initContext() {
     },
   });
 
-  Object.defineProperty(Response.prototype, "status", {
-    configurable: true,
-    enumerable: true,
-    get: function () {
-      if (!(RESPONSE_STATUS in this)) {
-        this[RESPONSE_STATUS] = undefined;
-      }
-      return this[RESPONSE_STATUS];
-    },
-    set: function (val) {
-      this[RESPONSE_STATUS] = val;
-    },
-  });
-  Response.prototype.setStatus = function (status?: string) {
-    this.status = status;
-    return this;
-  };
-
   Object.defineProperty(Response.prototype, "error", {
     configurable: true,
     enumerable: true,
@@ -79,7 +56,7 @@ export function initCatchError(ctx: Context) {
   const catchError = ctx.catchError;
   ctx.catchError = function (err: Error | any): Context {
     if (err instanceof MicroException) {
-      this.res.setStatus("error").setError(err.message);
+      this.res.setError(err.message);
     } else if (err instanceof Error) {
       this.catchError(new MicroException(err.message));
     } else if (isObject(err)) {

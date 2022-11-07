@@ -24,7 +24,13 @@ export class MicroRedisClient extends MicroClient {
     await this.closeClients();
   }
 
-  async send<T = any>(pattern: PatternType, data: any): Promise<T> {
+  async send<T = any>(
+    pattern: PatternType,
+    data: any
+  ): Promise<{
+    data?: T;
+    error?: string;
+  }> {
     const packet = super.createPacket(pattern, data, true);
 
     const sub = this.sub as Exclude<typeof this.pub, undefined>;
@@ -33,7 +39,10 @@ export class MicroRedisClient extends MicroClient {
         this.prefix + composePattern(pattern) + this.reply,
         (buffer) => {
           parseBuffer(buffer, (packet) => {
-            resolve(packet.data ?? packet.response);
+            resolve({
+              data: packet.data ?? packet.response,
+              error: packet.error,
+            });
           });
         },
         true

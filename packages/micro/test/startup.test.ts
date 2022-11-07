@@ -9,24 +9,6 @@ describe("startup", () => {
     expect(process.env.IS_IPARE_MICRO).toBe("true");
   });
 
-  it("should invoke middlewares", async () => {
-    const res = await new TestStartup(new Request().setId("abc"))
-      .use(async (ctx, next) => {
-        ctx.res.setBody({
-          id: ctx.req.id,
-        });
-        await next();
-      })
-      .use((ctx) => {
-        ctx.res.setStatus("ok");
-      })
-      .run();
-    expect(res.body).toEqual({
-      id: "abc",
-    });
-    expect(res.status).toBe("ok");
-  });
-
   it("should set error if throw MicroException", async () => {
     const res = await new TestStartup()
       .use(() => {
@@ -34,7 +16,6 @@ describe("startup", () => {
       })
       .run();
 
-    expect(res.status).toBe("error");
     expect(res.error).toBe("err");
     expect(res.body).toBeUndefined();
   });
@@ -105,6 +86,22 @@ describe("handle message", () => {
         (err) => {
           expect(err.message).toBe("Error message format");
           resolve();
+        }
+      );
+    });
+  });
+
+  it("should return error message when res.error is not empty", async () => {
+    await new Promise<void>((resolve) => {
+      handleMessage(
+        `12#{"id":"abc"}`,
+        ({ req, result }) => {
+          expect(req.id).toBe("abc");
+          expect(result).toBe(`26#{"id":"abc","error":"err"}`);
+          resolve();
+        },
+        (ctx) => {
+          ctx.res.setError("err");
         }
       );
     });

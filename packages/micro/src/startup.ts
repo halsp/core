@@ -48,10 +48,13 @@ export abstract class MicroStartup extends Startup {
         const res = await this.invoke(ctx);
         if (!req.id) return; // event
 
-        const resultJson = JSON.stringify({
-          id: req.id,
-          data: res.body,
-        });
+        const result: any = { id: req.id };
+        if (res.error) {
+          result.error = res.error;
+        } else {
+          result.data = res.body;
+        }
+        const resultJson = JSON.stringify(result);
         await onSend({
           res,
           req,

@@ -36,7 +36,7 @@ describe("client", () => {
     await startup.close();
     await client.dispose();
 
-    expect(result).toBe(true);
+    expect(result.data).toBe(true);
   });
 
   it("should send message and return value with prefix", async () => {
@@ -73,7 +73,7 @@ describe("client", () => {
     await startup.close();
     await client.dispose();
 
-    expect(result).toEqual({
+    expect(result.data).toEqual({
       a: 1,
       b: 2,
     });
@@ -105,7 +105,7 @@ describe("client", () => {
     await startup.close();
     await client.dispose();
 
-    expect(result).toBeUndefined();
+    expect(result.data).toBeUndefined();
   });
 
   it("should emit message", async () => {

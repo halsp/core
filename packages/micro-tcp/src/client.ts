@@ -8,7 +8,7 @@ export class MicroTcpClient extends MicroClient {
   }
 
   #socket?: net.Socket;
-  #tasks = new Map<string, (data: any) => void>();
+  #tasks = new Map<string, (err?: string, data?: any) => void>();
 
   async connect(): Promise<void> {
     this.#close();
@@ -45,7 +45,7 @@ export class MicroTcpClient extends MicroClient {
     const id = json.id;
     const callback = this.#tasks.get(id);
     if (callback) {
-      callback(json.data ?? json.response);
+      callback(json.error, json.data ?? json.response);
       this.#tasks.delete(id);
     }
   }
@@ -64,15 +64,24 @@ export class MicroTcpClient extends MicroClient {
     this.#close();
   }
 
-  send<T = any>(pattern: PatternType, data: any): Promise<T> {
+  send<T = any>(
+    pattern: PatternType,
+    data: any
+  ): Promise<{
+    data?: T;
+    error?: string;
+  }> {
     this.#checkSocket();
 
     const socket = this.#socket as net.Socket;
     const packet = super.createPacket(pattern, data, true);
 
-    return new Promise<T>((resolve) => {
-      this.#tasks.set(packet.id, (data: any) => {
-        resolve(data);
+    return new Promise((resolve) => {
+      this.#tasks.set(packet.id, (error?: string, data?: any) => {
+        resolve({
+          data,
+          error,
+        });
       });
       this.#sendPacket(socket, packet);
     });
