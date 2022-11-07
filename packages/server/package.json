@@ -1,6 +1,6 @@
 {
   "name": "@ipare/server",
-  "version": "3.0.0-alpha.0",
+  "version": "3.0.0-alpha.1",
   "description": "Ipare 的 NodeJS 原生环境",
   "engines": {
     "node": ">=12.14.0"
@@ -36,8 +36,8 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^3.0.0-alpha.0",
-    "@ipare/http": "^3.0.0-alpha.0",
+    "@ipare/core": "^3.0.0-alpha.1",
+    "@ipare/http": "^3.0.0-alpha.1",
     "co-body": "^6.1.0",
     "formidable": "^2.0.1",
     "type-is": "^1.6.18",
