@@ -40,7 +40,7 @@ export class MicroTcpStartup extends MicroStartup {
       //
     });
     socket.on("error", (err) => {
-      console.error(err);
+      this.logger.error(err);
     });
   }
 

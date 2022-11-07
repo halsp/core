@@ -25,7 +25,14 @@ export class MicroNatsClient extends MicroClient {
     await this.closeClients();
   }
 
-  async send<T = any>(pattern: PatternType, data: any): Promise<T> {
+  async send<T = any>(
+    pattern: PatternType,
+    data: any,
+    headers?: nats.MsgHdrsImpl
+  ): Promise<{
+    data: T;
+    headers: nats.MsgHdrsImpl;
+  }> {
     const packet = super.createPacket(pattern, data, true);
 
     const connection: nats.NatsConnection = this.connection as Exclude<
@@ -36,23 +43,31 @@ export class MicroNatsClient extends MicroClient {
       const reply = nats.createInbox(this.options.prefix);
       const sub = connection.subscribe(reply, {
         callback: (err, msg) => {
+          if (err) {
+            console.error(err);
+            return;
+          }
+
           parseBuffer(Buffer.from(msg.data), (packet) => {
-            resolve(packet.data ?? packet.response);
+            resolve({
+              data: packet.data ?? packet.response,
+              headers: msg.headers as nats.MsgHdrsImpl,
+            });
           });
           sub.unsubscribe();
         },
       });
 
-      this.#sendPacket(packet, reply);
+      this.#sendPacket(packet, headers, reply);
     });
   }
 
-  emit(pattern: PatternType, data: any): void {
+  emit(pattern: PatternType, data: any, headers?: nats.MsgHdrsImpl): void {
     const packet = super.createPacket(pattern, data, false);
-    this.#sendPacket(packet);
+    this.#sendPacket(packet, headers);
   }
 
-  #sendPacket(packet: any, reply?: string) {
+  #sendPacket(packet: any, headers?: nats.MsgHdrsImpl, reply?: string) {
     const json = JSON.stringify(packet);
     const str = `${json.length}#${json}`;
     this.connection?.publish(
@@ -60,6 +75,7 @@ export class MicroNatsClient extends MicroClient {
       Buffer.from(str, "utf-8"),
       {
         reply: reply,
+        headers: headers,
       }
     );
   }

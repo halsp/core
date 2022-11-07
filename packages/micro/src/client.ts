@@ -4,7 +4,7 @@ import { v4 as uuid } from "uuid";
 export abstract class MicroClient {
   abstract connect(): Promise<void>;
   abstract dispose(): void;
-  abstract send<T>(pattern: PatternType, data: any): Promise<T>;
+  abstract send(pattern: PatternType, data: any): Promise<any>;
   abstract emit(pattern: PatternType, data: any): void;
 
   protected createPacket(

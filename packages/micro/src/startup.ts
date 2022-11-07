@@ -30,8 +30,9 @@ export abstract class MicroStartup extends Startup {
   protected handleMessage(
     buffer: Buffer,
     onSend: (arg: {
-      packet: PacketType;
+      req: Request;
       result: string;
+      res: Response;
     }) => void | Promise<void>,
     prehook?: (ctx: Context) => Promise<void> | void,
     onError?: (err: Error) => void
@@ -52,7 +53,8 @@ export abstract class MicroStartup extends Startup {
           data: res.body,
         });
         await onSend({
-          packet,
+          res,
+          req,
           result: `${resultJson.length}#${resultJson}`,
         });
       });
@@ -61,7 +63,7 @@ export abstract class MicroStartup extends Startup {
       if (onError) {
         onError(error);
       } else {
-        console.error(error);
+        this.logger.error(error);
       }
     }
   }

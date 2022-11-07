@@ -2,6 +2,7 @@ import { composePattern, MicroStartup } from "@ipare/micro";
 import { MicroNatsOptions } from "./options";
 import { initNatsConnection, MicroNatsConnection } from "./connection";
 import { Context } from "@ipare/core";
+import * as nats from "nats";
 
 export class MicroNatsStartup extends MicroStartup {
   constructor(protected readonly options: MicroNatsOptions = {}) {
@@ -29,14 +30,37 @@ export class MicroNatsStartup extends MicroStartup {
 
     this.connection.subscribe(this.prefix + composePattern(pattern), {
       callback: (err, msg) => {
+        if (err) {
+          this.logger.error(err);
+          return;
+        }
+
         this.handleMessage(
           Buffer.from(msg.data),
-          async ({ result }) => {
+          async ({ result, res }) => {
             if (msg.reply) {
-              msg.respond(Buffer.from(result, "utf-8"));
+              // res.headers._description = "";
+              // res.headers.status = res.status ?? "";
+              msg.respond(Buffer.from(result, "utf-8"), {
+                headers: res.headers as nats.MsgHdrsImpl,
+              });
             }
           },
-          handler
+          async (ctx) => {
+            const reqHeaders = msg.headers ?? nats.headers();
+            const resHeaders = nats.headers();
+            Object.defineProperty(ctx.req, "headers", {
+              configurable: true,
+              enumerable: true,
+              get: () => reqHeaders,
+            });
+            Object.defineProperty(ctx.res, "headers", {
+              configurable: true,
+              enumerable: true,
+              get: () => resHeaders,
+            });
+            await handler(ctx);
+          }
         );
       },
     });

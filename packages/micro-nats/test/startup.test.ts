@@ -1,5 +1,5 @@
-import { MicroNatsClient, MicroNatsStartup } from "../src";
-import { mockConnection, mockConnectionFrom } from "../src/mock";
+import { MicroNatsStartup } from "../src";
+import { createMockNats, mockConnection } from "../src/mock";
 
 describe("startup", () => {
   it("should be error when the message is invalidate", async () => {
@@ -20,6 +20,11 @@ describe("startup", () => {
     mockConnection.bind(startup)();
     const connect = await startup.listen();
 
+    const beforeError = console.error;
+    let err = false;
+    console.error = () => {
+      err = true;
+    };
     connect?.publish("test_invalidate", Buffer.from(`3#{}`, "utf-8"));
 
     let times = 0;
@@ -30,49 +35,58 @@ describe("startup", () => {
       times++;
     }
 
+    console.error = beforeError;
+
     await startup.close();
+    expect(err).toBeTruthy();
     expect(pattern).toBeUndefined();
     expect(data).toBeUndefined();
   });
+});
 
-  it("should publish and return value", async () => {
-    const startup = new MicroNatsStartup()
-      .use((ctx) => {
-        ctx.res.setBody(ctx.req.body);
-        expect(ctx.bag("pt")).toBeTruthy();
-      })
-      .pattern("test_return", (ctx) => {
-        ctx.bag("pt", true);
+describe("respond", () => {
+  it("should respond when reply is defined", async () => {
+    const waitResult = await new Promise<boolean>((resolve) => {
+      const mockConnection = createMockNats();
+      mockConnection.connect();
+      mockConnection.subscribe("test_respond", {
+        callback: (err, msg) => {
+          msg.respond(Buffer.from(`12#{"id":"abc"}`));
+        },
       });
-    mockConnection.bind(startup)();
-    await startup.listen();
-
-    await new Promise<void>((resolve) => {
-      setTimeout(async () => {
-        resolve();
-      }, 500);
+      mockConnection.subscribe("rep", {
+        callback: () => {
+          resolve(true);
+        },
+      });
+      mockConnection.publish("test_respond", Buffer.from(`12#{"id":"abc"}`), {
+        reply: "rep",
+      });
+      setTimeout(() => resolve(false), 1000);
     });
-
-    const client = new MicroNatsClient();
-    mockConnectionFrom.bind(client)(startup);
-    await client.connect();
-
-    (startup as any).pub = undefined;
-
-    const waitResult = await new Promise<boolean>(async (resolve) => {
-      setTimeout(() => {
-        resolve(false);
-      }, 2000);
-      const result = await client.send("test_return", "abc");
-      expect(result).toBe("abc");
-      setTimeout(async () => {
-        resolve(true);
-      }, 500);
-    });
-
-    await startup.close();
-    await client.dispose();
-
     expect(waitResult).toBeTruthy();
-  }, 10000);
+  });
+
+  it("should not respond when reply is undefined", async () => {
+    const waitResult = await new Promise<boolean>((resolve) => {
+      const mockConnection = createMockNats();
+      mockConnection.connect();
+      mockConnection.subscribe("test_not_respond", {
+        callback: (err, msg) => {
+          msg.respond(Buffer.from(`12#{"id":"abc"}`));
+        },
+      });
+      mockConnection.subscribe("rep", {
+        callback: () => {
+          resolve(false);
+        },
+      });
+      mockConnection.publish(
+        "test_not_respond",
+        Buffer.from(`12#{"id":"abc"}`)
+      );
+      setTimeout(() => resolve(true), 1000);
+    });
+    expect(waitResult).toBeTruthy();
+  });
 });

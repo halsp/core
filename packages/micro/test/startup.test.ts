@@ -1,6 +1,5 @@
 import { Context, Request } from "@ipare/core";
 import { MicroException, MicroStartup } from "../src";
-import { PacketType } from "../src/startup";
 import { TestStartup } from "./utils";
 
 describe("startup", () => {
@@ -45,10 +44,7 @@ describe("handle message", () => {
   class TestClass extends MicroStartup {}
   function handleMessage(
     text: string,
-    onSend: (arg: {
-      packet: PacketType;
-      result: string;
-    }) => void | Promise<void>,
+    onSend: (arg: { req: Request; result: string }) => void | Promise<void>,
     prehook?: (ctx: Context) => Promise<void> | void,
     onError?: (err: Error) => void
   ) {
@@ -62,8 +58,8 @@ describe("handle message", () => {
 
   it("should handle message and send result", async () => {
     await new Promise<void>((resolve) => {
-      handleMessage(`12#{"id":"abc"}`, ({ packet, result }) => {
-        expect(packet).toEqual({ id: "abc" });
+      handleMessage(`12#{"id":"abc"}`, ({ req, result }) => {
+        expect(req.id).toBe("abc");
         expect(result).toBe(`12#{"id":"abc"}`);
         resolve();
       });

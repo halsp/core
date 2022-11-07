@@ -1,155 +1,53 @@
-import { MicroNatsClient, MicroNatsStartup, MicroNatsConnection } from "../src";
-import { mockConnection, mockConnectionFrom } from "../src/mock";
+import { MicroNatsClient, MicroNatsConnection } from "../src";
+import { runEmitTest, runSendTest } from "./utils";
 
 describe("client", () => {
   it("should send message and return boolean value", async () => {
-    const startup = new MicroNatsStartup({
-      host: "localhost",
-      port: 4222,
-    })
-      .use((ctx) => {
+    const result = await runSendTest(
+      true,
+      (ctx) => {
         ctx.res.setBody(ctx.req.body);
-        expect(ctx.bag("pt")).toBeTruthy();
-      })
-      .pattern("test_return", (ctx) => {
-        ctx.bag("pt", true);
-      });
-    mockConnection.bind(startup)();
-    await startup.listen();
-
-    await new Promise<void>((resolve) => {
-      setTimeout(async () => {
-        resolve();
-      }, 500);
-    });
-
-    const client = new MicroNatsClient();
-    mockConnectionFrom.bind(client)(startup);
-    await client.connect();
-
-    const result = await client.send("test_return", true);
-
-    await new Promise<void>((resolve) => {
-      setTimeout(async () => {
-        resolve();
-      }, 500);
-    });
-
-    await startup.close();
-    await client.dispose();
-
-    expect(result).toBe(true);
+      },
+      {
+        host: "localhost",
+        port: 4222,
+      }
+    );
+    expect(result.data).toBe(true);
   });
 
   it("should send message and return value with prefix", async () => {
-    const startup = new MicroNatsStartup({
-      prefix: "pr",
-    })
-      .use((ctx) => {
+    const result = await runSendTest(
+      {
+        a: 1,
+        b: 2,
+      },
+      (ctx) => {
         ctx.res.setBody(ctx.req.body);
-        expect(ctx.bag("pt")).toBeTruthy();
-      })
-      .pattern("test_prefix", (ctx) => {
-        ctx.bag("pt", true);
-      });
-    mockConnection.bind(startup)();
-    await startup.listen();
+      },
+      {
+        prefix: "pr",
+      }
+    );
 
-    await new Promise<void>((resolve) => {
-      setTimeout(async () => {
-        resolve();
-      }, 500);
-    });
-
-    const client = new MicroNatsClient({
-      prefix: "pr",
-    });
-    mockConnectionFrom.bind(client)(startup);
-    await client.connect();
-
-    const result = await client.send("test_prefix", {
-      a: 1,
-      b: 2,
-    });
-
-    await new Promise<void>((resolve) => {
-      setTimeout(async () => {
-        resolve();
-      }, 500);
-    });
-
-    await startup.close();
-    await client.dispose();
-
-    expect(result).toEqual({
+    expect(result.data).toEqual({
       a: 1,
       b: 2,
     });
   });
 
   it("should send message and return undefined value", async () => {
-    const startup = new MicroNatsStartup()
-      .use((ctx) => {
-        ctx.res.setBody(ctx.req.body);
-        expect(ctx.bag("pt")).toBeTruthy();
-      })
-      .pattern("test_undefined", (ctx) => {
-        ctx.bag("pt", true);
-      });
-    mockConnection.bind(startup)();
-    await startup.listen();
-
-    await new Promise<void>((resolve) => {
-      setTimeout(async () => {
-        resolve();
-      }, 500);
+    const result = await runSendTest(undefined, (ctx) => {
+      ctx.res.setBody(ctx.req.body);
     });
 
-    const client = new MicroNatsClient();
-    mockConnectionFrom.bind(client)(startup);
-    await client.connect();
-
-    const result = await client.send("test_undefined", undefined);
-
-    await new Promise<void>((resolve) => {
-      setTimeout(async () => {
-        resolve();
-      }, 500);
-    });
-
-    await startup.close();
-    await client.dispose();
-
-    expect(result).toBeUndefined();
+    expect(result.data).toBeUndefined();
   });
 
   it("should emit message", async () => {
-    let invoke = false;
-    const startup = new MicroNatsStartup()
-      .use((ctx) => {
-        invoke = true;
-        expect(ctx.bag("pt")).toBeTruthy();
-      })
-      .pattern("test_emit", (ctx) => {
-        ctx.bag("pt", true);
-      });
-
-    mockConnection.bind(startup)();
-    await startup.listen();
-
-    const client = new MicroNatsClient();
-    mockConnectionFrom.bind(client)(startup);
-    await client.connect();
-    client.emit("test_emit", true);
-
-    await new Promise<void>((resolve) => {
-      setTimeout(async () => {
-        await startup.close();
-        await client.dispose();
-        resolve();
-      }, 500);
+    await runEmitTest(true, (ctx) => {
+      expect(ctx.req.body).toBe(true);
     });
-    expect(invoke).toBeTruthy();
   });
 
   it("should connect error with error host", async () => {
