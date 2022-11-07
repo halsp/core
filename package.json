@@ -21,7 +21,7 @@
     "bootstrap": "lerna bootstrap",
     "preupdate": "npm run bootstrap && npm run test",
     "update": "lerna version --force-publish -m \"chore(release): publish %s\"",
-    "publish-only:alpha": "lerna publish --npm-tag=alpha -m \"chore(release): publish %s\"",
+    "publish-only:alpha": "lerna publish --dist-tag=alpha -m \"chore(release): publish %s\" --tagVersionPrefix av",
     "publish:alpha": "npm run test && npm run publish-only:alpha",
     "lint": "lerna run lint",
     "prepare": "husky install"

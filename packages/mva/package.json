@@ -70,6 +70,5 @@
     "package.json",
     "README.md",
     "tsconfig.json"
-  ],
-  "gitHead": "106cb3a001b16d5745a1fff8377ce5e926188e69"
+  ]
 }
