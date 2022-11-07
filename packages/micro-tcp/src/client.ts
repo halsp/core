@@ -54,7 +54,7 @@ export class MicroTcpClient extends MicroClient {
     const socket = this.#socket;
     this.#socket = undefined;
     this.#tasks.clear();
-    socket?.end();
+    socket?.destroy();
   }
 
   /**

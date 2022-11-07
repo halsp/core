@@ -1,4 +1,4 @@
-import { MicroTcpOptions, MicroTcpStartup } from "../src";
+import { MicroTcpClient, MicroTcpOptions, MicroTcpStartup } from "../src";
 import { sendData, sendMessage } from "./utils";
 import net from "net";
 
@@ -110,5 +110,54 @@ describe("parse message", () => {
     await startup.close();
 
     expect(times).toEqual(3);
+  });
+});
+
+describe("socket", () => {
+  it("should get socket from ctx", async () => {
+    const startup = new MicroTcpStartup({
+      port: 23334,
+    }).use((ctx) => {
+      ctx.res.setBody(ctx.socket);
+    });
+    const { port } = await startup.dynamicListen();
+
+    const client = new MicroTcpClient({
+      port,
+    });
+    await client.connect();
+    const result = await client.send("", true);
+    client.dispose();
+    await startup.close();
+
+    expect(result.data).toBeTruthy();
+  });
+
+  it("should log error when socket emit error", async () => {
+    const startup = new MicroTcpStartup({
+      port: 23334,
+    }).use((ctx) => {
+      ctx.socket.emit("error", new Error("err"));
+    });
+    const { port } = await startup.dynamicListen();
+
+    const client = new MicroTcpClient({
+      port,
+    });
+    await client.connect();
+
+    let err: any;
+    const beforeError = console.error;
+    console.error = (error: Error) => {
+      err = error.message;
+      console.error = beforeError;
+    };
+    await client.send("", true);
+    console.error = beforeError;
+
+    client.dispose();
+    await startup.close();
+
+    expect(err).toBe("err");
   });
 });
