@@ -19,6 +19,11 @@
     "url": "https://github.com/ipare/ipare/issues",
     "email": "support@hal.wang"
   },
+  "private": false,
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "main": "dist/index.js",
   "scripts": {
     "prebuild": "npm run lint",
