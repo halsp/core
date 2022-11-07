@@ -2,10 +2,10 @@ import * as nats from "nats";
 
 declare module "@ipare/core" {
   interface Request {
-    get headers(): nats.MsgHdrsImpl;
+    get headers(): nats.MsgHdrs;
   }
   interface Response {
-    get headers(): Omit<nats.MsgHdrsImpl, "status">;
+    get headers(): nats.MsgHdrs;
   }
 }
 

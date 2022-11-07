@@ -39,10 +39,8 @@ export class MicroNatsStartup extends MicroStartup {
           Buffer.from(msg.data),
           async ({ result, res }) => {
             if (msg.reply) {
-              // res.headers._description = "";
-              // res.headers.status = res.status ?? "";
               msg.respond(Buffer.from(result, "utf-8"), {
-                headers: res.headers as nats.MsgHdrsImpl,
+                headers: res.headers,
               });
             }
           },

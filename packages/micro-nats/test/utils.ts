@@ -12,7 +12,8 @@ export async function runSendTest(
   data: any,
   middleware?: (ctx: Context) => void | Promise<void>,
   startupOptions?: MicroNatsOptions,
-  clientOptions?: MicroNatsClientOptions
+  clientOptions?: MicroNatsClientOptions,
+  headers?: nats.MsgHdrs
 ) {
   const pattern = nats.createInbox();
 
@@ -40,7 +41,7 @@ export async function runSendTest(
   mockConnectionFrom.bind(client)(startup);
   await client.connect();
 
-  const result = await client.send(pattern, data);
+  const result = await client.send(pattern, data, headers);
 
   await new Promise<void>((resolve) => {
     setTimeout(async () => {

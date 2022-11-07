@@ -1,14 +1,28 @@
 import { runSendTest } from "./utils";
+import * as nats from "nats";
 
 describe("headers", () => {
   it("should set and get header", async () => {
     const result = await runSendTest(true, (ctx) => {
       ctx.res.headers.set("a", "1");
-      ctx.res.headers.set("b", "2");
     });
 
-    console.log("result", result.headers.set);
     expect(result.headers.get("a")).toBe("1");
-    expect(result.headers.get("b")).toBe("2");
+  });
+
+  it("should send message with header", async () => {
+    const headers = nats.headers();
+    headers.set("a", "1");
+    const result = await runSendTest(
+      true,
+      (ctx) => {
+        ctx.res.headers.set("a", ctx.req.headers.get("a"));
+      },
+      undefined,
+      undefined,
+      headers
+    );
+
+    expect(result.headers.get("a")).toBe("1");
   });
 });

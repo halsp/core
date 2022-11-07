@@ -28,10 +28,11 @@ export class MicroNatsClient extends MicroClient {
   async send<T = any>(
     pattern: PatternType,
     data: any,
-    headers?: nats.MsgHdrsImpl
+    headers?: nats.MsgHdrs
   ): Promise<{
-    data: T;
-    headers: nats.MsgHdrsImpl;
+    data?: T;
+    error?: string;
+    headers: nats.MsgHdrs;
   }> {
     const packet = super.createPacket(pattern, data, true);
 
@@ -51,7 +52,8 @@ export class MicroNatsClient extends MicroClient {
           parseBuffer(Buffer.from(msg.data), (packet) => {
             resolve({
               data: packet.data ?? packet.response,
-              headers: msg.headers as nats.MsgHdrsImpl,
+              error: packet.error,
+              headers: msg.headers as nats.MsgHdrs,
             });
           });
           sub.unsubscribe();
@@ -62,12 +64,12 @@ export class MicroNatsClient extends MicroClient {
     });
   }
 
-  emit(pattern: PatternType, data: any, headers?: nats.MsgHdrsImpl): void {
+  emit(pattern: PatternType, data: any, headers?: nats.MsgHdrs): void {
     const packet = super.createPacket(pattern, data, false);
     this.#sendPacket(packet, headers);
   }
 
-  #sendPacket(packet: any, headers?: nats.MsgHdrsImpl, reply?: string) {
+  #sendPacket(packet: any, headers?: nats.MsgHdrs, reply?: string) {
     const json = JSON.stringify(packet);
     const str = `${json.length}#${json}`;
     this.connection?.publish(
