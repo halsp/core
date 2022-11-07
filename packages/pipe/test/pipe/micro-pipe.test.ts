@@ -57,7 +57,6 @@ describe("parse bool with micro", () => {
 
     expect(ctx.bag("p1")).toBeUndefined();
     expect(ctx.res.body).toBeUndefined();
-    expect(ctx.res.status).toBe("error");
     expect(ctx.res.error).toBe("Parse bool failed");
   });
 
@@ -85,7 +84,6 @@ describe("parse bool with micro", () => {
 
     expect(ctx.bag("p1")).toBeUndefined();
     expect(ctx.res.body).toBeUndefined();
-    expect(ctx.res.status).toBe("error");
     expect(ctx.res.error).toBe("Parse bool failed");
   });
 });

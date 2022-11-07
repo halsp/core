@@ -47,7 +47,6 @@ describe("micro startup", () => {
       })
       .expect((res) => {
         expect(res.body).toBeUndefined();
-        expect(res.status).toBe("error");
         expect(res.error).toBe("err");
       });
   });
@@ -84,7 +83,7 @@ describe("micro tcp startup", () => {
     await startup.close();
     client.dispose();
 
-    expect(result).toBe(true);
+    expect(result.data).toBe(true);
   });
 });
 
@@ -141,7 +140,7 @@ describe("micro redis startup", () => {
     await startup.close();
     await client.dispose();
 
-    expect(result).toBe(true);
+    expect(result.data).toBe(true);
   });
 });
 
@@ -193,6 +192,6 @@ describe("micro nats startup", () => {
     await startup.close();
     await client.dispose();
 
-    expect(result).toBe(true);
+    expect(result.data).toBe(true);
   });
 });

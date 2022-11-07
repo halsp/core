@@ -23,10 +23,15 @@ export function createMockNats() {
   const publish = (
     channel: string,
     data: Uint8Array,
-    options?: { reply?: string; headers?: nats.MsgHdrs }
+    options?: {
+      reply?: string;
+      headers?: nats.MsgHdrs;
+      err?: Error; // just for test err
+      resErr?: Error; // just for test err
+    }
   ) => {
     subscribes[channel] &&
-      subscribes[channel](undefined, {
+      subscribes[channel](options?.err, {
         subject: "",
         data: data,
         sid: 1,
@@ -36,6 +41,7 @@ export function createMockNats() {
           if (!isClosed && options?.reply && data) {
             publish(options.reply, data, {
               headers: resOpts?.headers as nats.MsgHdrs,
+              err: options.resErr,
             });
           }
           return true;

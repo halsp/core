@@ -38,7 +38,6 @@ export async function sendMessage(
   id: string;
   data: any;
   error: any;
-  status: string;
 }>;
 export async function sendMessage(port: number, data: any, waitReturn = true) {
   const json = JSON.stringify({

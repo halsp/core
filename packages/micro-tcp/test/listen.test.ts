@@ -17,7 +17,7 @@ test("dynamicListen", async () => {
 
   expect(startup.server).toBe(server);
   const res = await sendMessage(port, true);
-  expect(res.status).toBeUndefined();
+  expect(res.error).toBeUndefined();
   expect(port + 1).toBe(res.data);
   server.close();
 });
