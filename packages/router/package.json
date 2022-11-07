@@ -1,6 +1,6 @@
 {
   "name": "@ipare/router",
-  "version": "2.2.5",
+  "version": "3.0.0-alpha.0",
   "engines": {
     "node": ">=12.14.0"
   },
@@ -30,13 +30,13 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^2.2.5",
-    "@ipare/methods": "^2.2.5",
+    "@ipare/core": "^3.0.0-alpha.0",
+    "@ipare/methods": "^3.0.0-alpha.0",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "@ipare/http": "^2.2.5",
-    "@ipare/micro": "^2.2.5",
+    "@ipare/http": "^3.0.0-alpha.0",
+    "@ipare/micro": "^3.0.0-alpha.0",
     "@types/jest": "^29.2.2",
     "@types/node": "^18.11.9",
     "@typescript-eslint/eslint-plugin": "^5.42.0",
@@ -60,5 +60,6 @@
     "package.json",
     "README.md",
     "tsconfig.json"
-  ]
+  ],
+  "gitHead": "106cb3a001b16d5745a1fff8377ce5e926188e69"
 }

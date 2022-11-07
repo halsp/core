@@ -1,6 +1,6 @@
 {
   "name": "@ipare/core",
-  "version": "2.2.5",
+  "version": "3.0.0-alpha.0",
   "description": "面向云的现代渐进式轻量 Node.js 框架",
   "engines": {
     "node": ">=12.14.0"
@@ -28,7 +28,6 @@
   },
   "author": "hal-wang",
   "license": "MIT",
-  "dependencies": {},
   "devDependencies": {
     "@types/jest": "^29.2.2",
     "@types/node": "^18.11.9",
@@ -53,5 +52,6 @@
     "package.json",
     "README.md",
     "tsconfig.json"
-  ]
+  ],
+  "gitHead": "106cb3a001b16d5745a1fff8377ce5e926188e69"
 }
