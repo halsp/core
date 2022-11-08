@@ -1,5 +1,5 @@
 import { MicroMqttClient, MicroMqttConnection } from "../src";
-import { runEmitTest, runSendTest } from "./utils";
+import { localOptions, localTest, runEmitTest, runSendTest } from "./utils";
 
 describe("client", () => {
   it("should send message and return boolean value", async () => {
@@ -11,7 +11,9 @@ describe("client", () => {
       {
         host: "localhost",
         port: 1883,
-      }
+      },
+      undefined,
+      true
     );
     expect(result.data).toBe(true);
   });
@@ -27,7 +29,9 @@ describe("client", () => {
       },
       {
         prefix: "pr",
-      }
+      },
+      undefined,
+      true
     );
 
     expect(result.data).toEqual({
@@ -86,7 +90,7 @@ describe("client", () => {
   // });
 
   it("should not send data when client redis is not connected", async () => {
-    const client = new MicroMqttClient();
+    const client = new MicroMqttClient(localTest ? localOptions : undefined);
     client.emit("", "");
   });
 

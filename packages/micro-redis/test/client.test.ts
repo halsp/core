@@ -1,5 +1,5 @@
 import { MicroRedisClient, MicroRedisConnection } from "../src";
-import { runEmitTest, runSendTest } from "./utils";
+import { localOptions, localTest, runEmitTest, runSendTest } from "./utils";
 
 describe("client", () => {
   it("should send message and return boolean value", async () => {
@@ -99,7 +99,7 @@ describe("client", () => {
   });
 
   it("should not send data when client redis is not connected", async () => {
-    const client = new MicroRedisClient({});
+    const client = new MicroRedisClient(localTest ? localOptions : undefined);
     client.emit("", "");
   });
 

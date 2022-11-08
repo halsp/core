@@ -34,8 +34,7 @@ export class MicroMqttStartup extends MicroStartup {
         this.handleMessage(
           payload,
           async ({ result, req }) => {
-            const pattern = this.prefix + req.pattern;
-            const reply = pattern + "/" + req.id;
+            const reply = req.pattern + "/" + req.id;
             if (this.options.publishOptions) {
               client.publish(reply, result, this.options.publishOptions);
             } else {
