@@ -1,4 +1,4 @@
-import { MicroClient, PatternType, parseBuffer } from "@ipare/micro";
+import { MicroClient, parseBuffer } from "@ipare/micro";
 import * as net from "net";
 import { MicroTcpClientOptions } from "./options";
 
@@ -65,7 +65,7 @@ export class MicroTcpClient extends MicroClient {
   }
 
   send<T = any>(
-    pattern: PatternType,
+    pattern: string,
     data: any
   ): Promise<{
     data?: T;
@@ -87,7 +87,7 @@ export class MicroTcpClient extends MicroClient {
     });
   }
 
-  emit(pattern: PatternType, data: any): void {
+  emit(pattern: string, data: any): void {
     this.#checkSocket();
 
     const socket = this.#socket as net.Socket;

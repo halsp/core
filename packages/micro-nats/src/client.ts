@@ -1,4 +1,4 @@
-import { MicroClient, PatternType, parseBuffer } from "@ipare/micro";
+import { MicroClient, parseBuffer } from "@ipare/micro";
 import { MicroNatsClientOptions } from "./options";
 import { initNatsConnection, MicroNatsConnection } from "./connection";
 import * as nats from "nats";
@@ -21,7 +21,7 @@ export class MicroNatsClient extends MicroClient {
   }
 
   async send<T = any>(
-    pattern: PatternType,
+    pattern: string,
     data: any,
     headers?: nats.MsgHdrs
   ): Promise<{
@@ -59,7 +59,7 @@ export class MicroNatsClient extends MicroClient {
     });
   }
 
-  emit(pattern: PatternType, data: any, headers?: nats.MsgHdrs): void {
+  emit(pattern: string, data: any, headers?: nats.MsgHdrs): void {
     const packet = super.createPacket(pattern, data, false);
     this.#sendPacket(packet, headers);
   }
