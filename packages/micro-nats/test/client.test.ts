@@ -1,5 +1,5 @@
 import { MicroNatsClient, MicroNatsConnection } from "../src";
-import { runEmitTest, runSendTest } from "./utils";
+import { localOptions, localTest, runEmitTest, runSendTest } from "./utils";
 
 describe("client", () => {
   it("should send message and return boolean value", async () => {
@@ -11,7 +11,10 @@ describe("client", () => {
       {
         host: "localhost",
         port: 4222,
-      }
+      },
+      undefined,
+      undefined,
+      true
     );
     expect(result.data).toBe(true);
   });
@@ -27,7 +30,10 @@ describe("client", () => {
       },
       {
         prefix: "pr",
-      }
+      },
+      undefined,
+      undefined,
+      true
     );
 
     expect(result.data).toEqual({
@@ -37,17 +43,30 @@ describe("client", () => {
   });
 
   it("should send message and return undefined value", async () => {
-    const result = await runSendTest(undefined, (ctx) => {
-      ctx.res.setBody(ctx.req.body);
-    });
+    const result = await runSendTest(
+      undefined,
+      (ctx) => {
+        ctx.res.setBody(ctx.req.body);
+      },
+      undefined,
+      undefined,
+      undefined,
+      true
+    );
 
     expect(result.data).toBeUndefined();
   });
 
   it("should emit message", async () => {
-    await runEmitTest(true, (ctx) => {
-      expect(ctx.req.body).toBe(true);
-    });
+    await runEmitTest(
+      true,
+      (ctx) => {
+        expect(ctx.req.body).toBe(true);
+      },
+      undefined,
+      undefined,
+      true
+    );
   });
 
   it("should connect error with error host", async () => {
@@ -86,7 +105,7 @@ describe("client", () => {
   });
 
   it("should not send data when client redis is not connected", async () => {
-    const client = new MicroNatsClient();
+    const client = new MicroNatsClient(localTest ? localOptions : undefined);
     client.emit("", "");
   });
 

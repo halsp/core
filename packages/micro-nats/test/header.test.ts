@@ -3,9 +3,16 @@ import * as nats from "nats";
 
 describe("headers", () => {
   it("should set and get header", async () => {
-    const result = await runSendTest(true, (ctx) => {
-      ctx.res.headers.set("a", "1");
-    });
+    const result = await runSendTest(
+      true,
+      (ctx) => {
+        ctx.res.headers.set("a", "1");
+      },
+      undefined,
+      undefined,
+      undefined,
+      true
+    );
 
     expect(result.headers.get("a")).toBe("1");
   });
@@ -20,7 +27,8 @@ describe("headers", () => {
       },
       undefined,
       undefined,
-      headers
+      headers,
+      true
     );
 
     expect(result.headers.get("a")).toBe("1");

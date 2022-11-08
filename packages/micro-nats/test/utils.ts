@@ -8,13 +8,31 @@ import {
 import { mockConnection, mockConnectionFrom } from "../src/mock";
 import * as nats from "nats";
 
+export const localOptions: MicroNatsOptions = {
+  host: "127.0.0.1",
+  port: 4222,
+};
+
+export const localTest = !!process.env.LOCAL_TEST;
+
 export async function runSendTest(
   data: any,
   middleware?: (ctx: Context) => void | Promise<void>,
   startupOptions?: MicroNatsOptions,
   clientOptions?: MicroNatsClientOptions,
-  headers?: nats.MsgHdrs
+  headers?: nats.MsgHdrs,
+  useLocalTest = false
 ) {
+  const isLocalTest = localTest && useLocalTest;
+  if (isLocalTest) {
+    startupOptions = Object.assign({}, startupOptions, localOptions);
+    clientOptions = Object.assign(
+      {},
+      clientOptions ?? startupOptions,
+      localOptions
+    );
+  }
+
   const pattern = nats.createInbox();
 
   let invoke = false;
@@ -28,7 +46,9 @@ export async function runSendTest(
     .pattern(pattern, () => {
       setPattern = true;
     });
-  mockConnection.bind(startup)();
+  if (!isLocalTest) {
+    mockConnection.bind(startup)();
+  }
   await startup.listen();
 
   await new Promise<void>((resolve) => {
@@ -38,7 +58,9 @@ export async function runSendTest(
   });
 
   const client = new MicroNatsClient(clientOptions ?? startupOptions);
-  mockConnectionFrom.bind(client)(startup);
+  if (!isLocalTest) {
+    mockConnectionFrom.bind(client)(startup);
+  }
   await client.connect();
 
   const result = await client.send(pattern, data, headers);
@@ -62,9 +84,20 @@ export async function runEmitTest(
   data: any,
   middleware?: (ctx: Context) => void | Promise<void>,
   startupOptions?: MicroNatsOptions,
-  clientOptions?: MicroNatsClientOptions
+  clientOptions?: MicroNatsClientOptions,
+  useLocalTest = false
 ) {
   const pattern = nats.createInbox();
+
+  const isLocalTest = !!process.env.LOCAL_TEST && useLocalTest;
+  if (isLocalTest) {
+    startupOptions = Object.assign({}, startupOptions, localOptions);
+    clientOptions = Object.assign(
+      {},
+      clientOptions ?? startupOptions,
+      localOptions
+    );
+  }
 
   let invoke = false;
   let setPattern = false;
@@ -77,7 +110,9 @@ export async function runEmitTest(
     .pattern(pattern, () => {
       setPattern = true;
     });
-  mockConnection.bind(startup)();
+  if (!isLocalTest) {
+    mockConnection.bind(startup)();
+  }
   await startup.listen();
 
   await new Promise<void>((resolve) => {
@@ -87,7 +122,9 @@ export async function runEmitTest(
   });
 
   const client = new MicroNatsClient(clientOptions ?? startupOptions);
-  mockConnectionFrom.bind(client)(startup);
+  if (!isLocalTest) {
+    mockConnectionFrom.bind(client)(startup);
+  }
   await client.connect();
 
   client.emit(pattern, data);
