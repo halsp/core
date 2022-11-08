@@ -29,7 +29,7 @@ export abstract class MicroNatsConnection<
   }
 }
 
-export async function initNatsConnection<
+export function initNatsConnection<
   T extends MicroNatsOptions | MicroNatsClientOptions =
     | MicroNatsOptions
     | MicroNatsClientOptions

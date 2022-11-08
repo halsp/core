@@ -43,7 +43,7 @@ export abstract class MicroRedisConnection<
   }
 }
 
-export async function initRedisConnection<
+export function initRedisConnection<
   T extends MicroRedisOptions | MicroRedisClientOptions =
     | MicroRedisOptions
     | MicroRedisClientOptions

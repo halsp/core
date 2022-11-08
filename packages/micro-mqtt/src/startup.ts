@@ -98,13 +98,13 @@ export class MicroMqttStartup extends MicroStartup {
 export interface MicroMqttStartup
   extends MicroMqttConnection<MicroMqttOptions> {}
 
-function matchTopic(filter: string, topic: string) {
-  const filterArray = filter.split("/");
+function matchTopic(pattern: string, topic: string) {
+  const patternArray = pattern.split("/");
   const topicArray = topic.split("/");
 
-  const length = filterArray.length;
+  const length = patternArray.length;
   for (let i = 0; i < length; ++i) {
-    const filterItem = filterArray[i];
+    const filterItem = patternArray[i];
     const topicItem = topicArray[i];
     if (filterItem === "#") {
       return topicArray.length >= length - 1;

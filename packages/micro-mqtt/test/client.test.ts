@@ -54,40 +54,74 @@ describe("client", () => {
     });
   });
 
-  // it("should connect error with error host", async () => {
-  //   const client = new MicroMqttClient({
-  //     port: 443,
-  //     host: "0.0.0.0",
-  //   });
+  it("should connect error with error host", async () => {
+    const client = new MicroMqttClient({
+      port: 443,
+      host: "0.0.0.0",
+    });
 
-  //   let err = false;
-  //   try {
-  //     await client.connect();
-  //     await client.send("", true);
-  //   } catch {
-  //     err = true;
-  //   }
+    let err = false;
+    await new Promise<void>(async (resolve) => {
+      setTimeout(() => {
+        err = true;
+        resolve();
+      }, 1000);
+      await client.connect();
+      await client.send("", true);
+    });
 
-  //   await new Promise<void>((resolve) => {
-  //     setTimeout(async () => {
-  //       resolve();
-  //     }, 500);
-  //   });
+    await new Promise<void>((resolve) => {
+      setTimeout(async () => {
+        resolve();
+      }, 500);
+    });
 
-  //   await client.dispose();
-  //   expect(err).toBeTruthy();
-  // });
+    await client.dispose();
+    expect(err).toBeTruthy();
+  }, 10000);
 
-  // it("should listen with default port when port is undefined", async () => {
-  //   const client = new MicroMqttClient();
+  it("should connect success when client emit 'connect' event", async () => {
+    const client = new MicroMqttClient({
+      port: 443,
+      host: "0.0.0.0",
+    });
 
-  //   try {
-  //     await client.connect();
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  //   await client.dispose();
-  // });
+    let emit = false;
+    setTimeout(() => {
+      (client as any)["client"].emit("connect");
+      emit = true;
+    }, 500);
+    await client.connect();
+
+    await new Promise<void>((resolve) => {
+      setTimeout(async () => {
+        resolve();
+      }, 500);
+    });
+
+    await client.dispose();
+    expect(emit).toBeTruthy();
+  }, 10000);
+
+  it("should listen with default port when port is undefined", async () => {
+    const client = new MicroMqttClient({
+      subscribeOptions: {
+        qos: 1,
+      },
+    });
+
+    let err = false;
+    await new Promise<void>(async (resolve) => {
+      setTimeout(() => {
+        err = true;
+        resolve();
+      }, 1000);
+      await client.connect();
+    });
+
+    await client.dispose();
+    expect(err).toBeTruthy();
+  });
 
   it("should not send data when client redis is not connected", async () => {
     const client = new MicroMqttClient(localTest ? localOptions : undefined);

@@ -11,7 +11,14 @@ export abstract class MicroMqttConnection<
 
   protected client?: mqtt.MqttClient;
 
+  private connectResolve?: () => void;
+
   protected async closeClients(): Promise<void> {
+    if (this.connectResolve) {
+      this.connectResolve();
+      this.connectResolve = undefined;
+    }
+
     if (this.client && this.client.connected) {
       this.client.end();
     }
@@ -26,6 +33,7 @@ export abstract class MicroMqttConnection<
     opt.services = this.options.host ?? "localhost";
 
     return await new Promise((resolve) => {
+      this.connectResolve = resolve;
       this.client = mqtt.connect(this.options);
       this.client.on("connect", () => {
         resolve();
@@ -34,7 +42,7 @@ export abstract class MicroMqttConnection<
   }
 }
 
-export async function initMqttConnection<
+export function initMqttConnection<
   T extends MicroMqttOptions | MicroMqttClientOptions =
     | MicroMqttOptions
     | MicroMqttClientOptions

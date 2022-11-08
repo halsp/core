@@ -20,7 +20,8 @@ export async function runSendTest(
   middleware?: (ctx: Context) => void | Promise<void>,
   startupOptions?: MicroMqttOptions,
   clientOptions?: MicroMqttClientOptions,
-  useLocalTest = false
+  useLocalTest = false,
+  pattern?: string
 ) {
   const isLocalTest = localTest && useLocalTest;
   if (isLocalTest) {
@@ -32,7 +33,7 @@ export async function runSendTest(
     );
   }
 
-  const pattern = uuid().replace(/\-/g, "");
+  pattern = pattern ?? uuid().replace(/\-/g, "");
 
   let invoke = false;
   let setPattern = false;
