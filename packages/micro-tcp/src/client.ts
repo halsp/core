@@ -10,6 +10,10 @@ export class MicroTcpClient extends MicroClient {
   #socket?: net.Socket;
   #tasks = new Map<string, (err?: string, data?: any) => void>();
 
+  protected get prefix() {
+    return this.options.prefix ?? "";
+  }
+
   async connect(): Promise<void> {
     this.#close();
     const socket = new net.Socket();
@@ -73,6 +77,7 @@ export class MicroTcpClient extends MicroClient {
   }> {
     this.#checkSocket();
 
+    pattern = this.prefix + pattern;
     const socket = this.#socket as net.Socket;
     const packet = super.createPacket(pattern, data, true);
 
@@ -90,6 +95,7 @@ export class MicroTcpClient extends MicroClient {
   emit(pattern: string, data: any): void {
     this.#checkSocket();
 
+    pattern = this.prefix + pattern;
     const socket = this.#socket as net.Socket;
     const packet = super.createPacket(pattern, data, false);
     this.#sendPacket(socket, packet);

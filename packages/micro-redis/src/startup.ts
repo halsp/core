@@ -30,15 +30,12 @@ export class MicroRedisStartup extends MicroStartup {
   #pattern(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
     if (!this.sub) return this;
     this.sub.subscribe(
-      this.prefix + pattern,
+      pattern,
       async (buffer) => {
         this.handleMessage(
           buffer,
           async ({ result, req }) => {
-            await this.pub?.publish(
-              this.prefix + pattern + "." + req.id,
-              result
-            );
+            await this.pub?.publish(pattern + "." + req.id, result);
           },
           handler
         );
@@ -49,6 +46,7 @@ export class MicroRedisStartup extends MicroStartup {
   }
 
   pattern(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
+    pattern = this.prefix + pattern;
     this.#handlers.push({ pattern, handler });
     return this.#pattern(pattern, handler);
   }

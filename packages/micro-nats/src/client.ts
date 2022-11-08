@@ -29,6 +29,7 @@ export class MicroNatsClient extends MicroClient {
     error?: string;
     headers: nats.MsgHdrs;
   }> {
+    pattern = this.prefix + pattern;
     const packet = super.createPacket(pattern, data, true);
 
     const connection: nats.NatsConnection = this.connection as Exclude<
@@ -36,7 +37,7 @@ export class MicroNatsClient extends MicroClient {
       undefined
     >;
     return new Promise(async (resolve) => {
-      const reply = nats.createInbox(this.options.prefix);
+      const reply = pattern + "." + packet.id;
       const sub = connection.subscribe(reply, {
         callback: (err, msg) => {
           if (err) {
@@ -60,6 +61,7 @@ export class MicroNatsClient extends MicroClient {
   }
 
   emit(pattern: string, data: any, headers?: nats.MsgHdrs): void {
+    pattern = this.prefix + pattern;
     const packet = super.createPacket(pattern, data, false);
     this.#sendPacket(packet, headers);
   }
@@ -67,14 +69,10 @@ export class MicroNatsClient extends MicroClient {
   #sendPacket(packet: any, headers?: nats.MsgHdrs, reply?: string) {
     const json = JSON.stringify(packet);
     const str = `${json.length}#${json}`;
-    this.connection?.publish(
-      this.prefix + packet.pattern,
-      Buffer.from(str, "utf-8"),
-      {
-        reply: reply,
-        headers: headers,
-      }
-    );
+    this.connection?.publish(packet.pattern, Buffer.from(str, "utf-8"), {
+      reply: reply,
+      headers: headers,
+    });
   }
 }
 

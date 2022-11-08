@@ -20,6 +20,26 @@ describe("client", () => {
     expect(result.data).toBe(true);
   });
 
+  it("should send message and return value when use prefix", async () => {
+    const startup = new MicroTcpStartup({
+      prefix: "pf",
+    }).use((ctx) => {
+      ctx.res.setBody(ctx.req.body);
+    });
+    const { port } = await startup.dynamicListen();
+
+    const client = new MicroTcpClient({
+      port,
+      prefix: "pf",
+    });
+    await client.connect();
+    const result = await client.send("", "abc");
+    await startup.close();
+    client.dispose();
+
+    expect(result.data).toBe("abc");
+  });
+
   it("should send message and return undefined value", async () => {
     const startup = new MicroTcpStartup({
       port: 23334,

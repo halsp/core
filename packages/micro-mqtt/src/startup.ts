@@ -34,7 +34,8 @@ export class MicroMqttStartup extends MicroStartup {
         this.handleMessage(
           payload,
           async ({ result, req }) => {
-            const reply = this.prefix + req.pattern + "/" + req.id;
+            const pattern = this.prefix + req.pattern;
+            const reply = pattern + "/" + req.id;
             if (this.options.publishOptions) {
               client.publish(reply, result, this.options.publishOptions);
             } else {
@@ -69,8 +70,9 @@ export class MicroMqttStartup extends MicroStartup {
   }
 
   pattern(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
+    pattern = this.prefix + pattern;
     this.#handlers.push({
-      pattern: this.prefix + pattern,
+      pattern: pattern,
       handler,
     });
     return this.#pattern(pattern);

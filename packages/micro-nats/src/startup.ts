@@ -28,7 +28,7 @@ export class MicroNatsStartup extends MicroStartup {
   #pattern(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
     if (!this.connection) return this;
 
-    this.connection.subscribe(this.prefix + pattern, {
+    this.connection.subscribe(pattern, {
       callback: (err, msg) => {
         if (err) {
           this.logger.error(err);
@@ -67,6 +67,7 @@ export class MicroNatsStartup extends MicroStartup {
   }
 
   pattern(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
+    pattern = this.prefix + pattern;
     this.#handlers.push({ pattern, handler });
     return this.#pattern(pattern, handler);
   }

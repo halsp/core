@@ -52,11 +52,12 @@ export class MicroMqttClient extends MicroClient {
     error?: string;
     packet?: mqtt.IPublishPacket;
   }> {
+    pattern = this.prefix + pattern;
     const packet = super.createPacket(pattern, data, true);
 
     const client = this.client as mqtt.MqttClient;
     return new Promise(async (resolve) => {
-      const reply = this.prefix + pattern + "/" + packet.id;
+      const reply = pattern + "/" + packet.id;
       if (this.options.subscribeOptions) {
         client.subscribe(reply, this.options.subscribeOptions);
       } else {
@@ -80,6 +81,7 @@ export class MicroMqttClient extends MicroClient {
   }
 
   emit(pattern: string, data: any): void {
+    pattern = this.prefix + pattern;
     const packet = super.createPacket(pattern, data, false);
     this.#sendPacket(packet);
   }
@@ -87,7 +89,7 @@ export class MicroMqttClient extends MicroClient {
   #sendPacket(packet: any) {
     const json = JSON.stringify(packet);
     const str = `${json.length}#${json}`;
-    this.client?.publish(this.prefix + packet.pattern, str);
+    this.client?.publish(packet.pattern, str);
   }
 }
 
