@@ -45,8 +45,8 @@ export class MicroTcpClient extends MicroClient {
     const id = json.id;
     const callback = this.#tasks.get(id);
     if (callback) {
-      callback(json.error, json.data ?? json.response);
       this.#tasks.delete(id);
+      callback(json.error, json.data ?? json.response);
     }
   }
 

@@ -6,7 +6,6 @@ export abstract class MicroRedisConnection<
     | MicroRedisOptions
     | MicroRedisClientOptions
 > {
-  protected readonly reply!: string;
   protected readonly prefix!: string;
   protected readonly options!: T;
 
@@ -55,10 +54,5 @@ export async function initRedisConnection<
     configurable: true,
     enumerable: true,
     get: () => this.options.prefix ?? "",
-  });
-  Object.defineProperty(this, "reply", {
-    configurable: true,
-    enumerable: true,
-    get: () => ".reply",
   });
 }

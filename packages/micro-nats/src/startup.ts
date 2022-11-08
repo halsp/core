@@ -19,7 +19,7 @@ export class MicroNatsStartup extends MicroStartup {
     await this.initClients();
 
     this.#handlers.forEach((item) => {
-      this.pattern(item.pattern, item.handler);
+      this.#pattern(item.pattern, item.handler);
     });
 
     return this.connection;

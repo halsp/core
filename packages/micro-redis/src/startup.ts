@@ -18,7 +18,7 @@ export class MicroRedisStartup extends MicroStartup {
     await this.initClients();
 
     this.#handlers.forEach((item) => {
-      this.pattern(item.pattern, item.handler);
+      this.#pattern(item.pattern, item.handler);
     });
 
     return {
@@ -34,9 +34,9 @@ export class MicroRedisStartup extends MicroStartup {
       async (buffer) => {
         this.handleMessage(
           buffer,
-          async ({ result }) => {
+          async ({ result, req }) => {
             await this.pub?.publish(
-              this.prefix + composePattern(pattern) + this.reply,
+              this.prefix + composePattern(pattern) + "." + req.id,
               result
             );
           },

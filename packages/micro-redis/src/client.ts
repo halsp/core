@@ -36,7 +36,7 @@ export class MicroRedisClient extends MicroClient {
     const sub = this.sub as Exclude<typeof this.pub, undefined>;
     return new Promise(async (resolve) => {
       await sub.subscribe(
-        this.prefix + composePattern(pattern) + this.reply,
+        this.prefix + composePattern(pattern) + "." + packet.id,
         (buffer) => {
           parseBuffer(buffer, (packet) => {
             resolve({
