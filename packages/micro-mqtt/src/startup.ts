@@ -1,4 +1,4 @@
-import { composePattern, MicroStartup } from "@ipare/micro";
+import { MicroStartup } from "@ipare/micro";
 import { MicroMqttOptions } from "./options";
 import { initMqttConnection, MicroMqttConnection } from "./connection";
 import * as mqtt from "mqtt";
@@ -34,8 +34,7 @@ export class MicroMqttStartup extends MicroStartup {
         this.handleMessage(
           payload,
           async ({ result, req }) => {
-            const reply =
-              this.prefix + composePattern(req.pattern) + "/" + req.id;
+            const reply = this.prefix + req.pattern + "/" + req.id;
             if (this.options.publishOptions) {
               client.publish(reply, result, this.options.publishOptions);
             } else {
@@ -71,7 +70,7 @@ export class MicroMqttStartup extends MicroStartup {
 
   pattern(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
     this.#handlers.push({
-      pattern: this.prefix + composePattern(pattern),
+      pattern: this.prefix + pattern,
       handler,
     });
     return this.#pattern(pattern);

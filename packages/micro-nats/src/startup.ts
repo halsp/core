@@ -1,4 +1,4 @@
-import { composePattern, MicroStartup } from "@ipare/micro";
+import { MicroStartup } from "@ipare/micro";
 import { MicroNatsOptions } from "./options";
 import { initNatsConnection, MicroNatsConnection } from "./connection";
 import { Context } from "@ipare/core";
@@ -28,7 +28,7 @@ export class MicroNatsStartup extends MicroStartup {
   #pattern(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
     if (!this.connection) return this;
 
-    this.connection.subscribe(this.prefix + composePattern(pattern), {
+    this.connection.subscribe(this.prefix + pattern, {
       callback: (err, msg) => {
         if (err) {
           this.logger.error(err);

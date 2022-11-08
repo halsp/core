@@ -1,4 +1,4 @@
-import { composePattern, MicroStartup } from "@ipare/micro";
+import { MicroStartup } from "@ipare/micro";
 import { MicroRedisOptions } from "./options";
 import { initRedisConnection, MicroRedisConnection } from "./connection";
 import { Context } from "@ipare/core";
@@ -30,13 +30,13 @@ export class MicroRedisStartup extends MicroStartup {
   #pattern(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
     if (!this.sub) return this;
     this.sub.subscribe(
-      this.prefix + composePattern(pattern),
+      this.prefix + pattern,
       async (buffer) => {
         this.handleMessage(
           buffer,
           async ({ result, req }) => {
             await this.pub?.publish(
-              this.prefix + composePattern(pattern) + "." + req.id,
+              this.prefix + pattern + "." + req.id,
               result
             );
           },

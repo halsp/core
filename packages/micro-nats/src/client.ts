@@ -1,9 +1,4 @@
-import {
-  MicroClient,
-  PatternType,
-  parseBuffer,
-  composePattern,
-} from "@ipare/micro";
+import { MicroClient, PatternType, parseBuffer } from "@ipare/micro";
 import { MicroNatsClientOptions } from "./options";
 import { initNatsConnection, MicroNatsConnection } from "./connection";
 import * as nats from "nats";
@@ -73,7 +68,7 @@ export class MicroNatsClient extends MicroClient {
     const json = JSON.stringify(packet);
     const str = `${json.length}#${json}`;
     this.connection?.publish(
-      this.prefix + composePattern(packet.pattern),
+      this.prefix + packet.pattern,
       Buffer.from(str, "utf-8"),
       {
         reply: reply,

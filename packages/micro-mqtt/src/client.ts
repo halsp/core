@@ -1,9 +1,4 @@
-import {
-  MicroClient,
-  PatternType,
-  parseBuffer,
-  composePattern,
-} from "@ipare/micro";
+import { MicroClient, parseBuffer } from "@ipare/micro";
 import { MicroMqttClientOptions } from "./options";
 import { initMqttConnection, MicroMqttConnection } from "./connection";
 import * as mqtt from "mqtt";
@@ -50,7 +45,7 @@ export class MicroMqttClient extends MicroClient {
   }
 
   async send<T = any>(
-    pattern: PatternType,
+    pattern: string,
     data: any
   ): Promise<{
     data?: T;
@@ -61,7 +56,7 @@ export class MicroMqttClient extends MicroClient {
 
     const client = this.client as mqtt.MqttClient;
     return new Promise(async (resolve) => {
-      const reply = this.prefix + composePattern(pattern) + "/" + packet.id;
+      const reply = this.prefix + pattern + "/" + packet.id;
       if (this.options.subscribeOptions) {
         client.subscribe(reply, this.options.subscribeOptions);
       } else {
@@ -84,7 +79,7 @@ export class MicroMqttClient extends MicroClient {
     });
   }
 
-  emit(pattern: PatternType, data: any): void {
+  emit(pattern: string, data: any): void {
     const packet = super.createPacket(pattern, data, false);
     this.#sendPacket(packet);
   }
@@ -92,7 +87,7 @@ export class MicroMqttClient extends MicroClient {
   #sendPacket(packet: any) {
     const json = JSON.stringify(packet);
     const str = `${json.length}#${json}`;
-    this.client?.publish(this.prefix + composePattern(packet.pattern), str);
+    this.client?.publish(this.prefix + packet.pattern, str);
   }
 }
 

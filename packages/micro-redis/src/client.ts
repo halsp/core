@@ -1,9 +1,4 @@
-import {
-  MicroClient,
-  PatternType,
-  parseBuffer,
-  composePattern,
-} from "@ipare/micro";
+import { MicroClient, parseBuffer } from "@ipare/micro";
 import { MicroRedisClientOptions } from "./options";
 import { initRedisConnection, MicroRedisConnection } from "./connection";
 
@@ -25,7 +20,7 @@ export class MicroRedisClient extends MicroClient {
   }
 
   async send<T = any>(
-    pattern: PatternType,
+    pattern: string,
     data: any
   ): Promise<{
     data?: T;
@@ -36,7 +31,7 @@ export class MicroRedisClient extends MicroClient {
     const sub = this.sub as Exclude<typeof this.pub, undefined>;
     return new Promise(async (resolve) => {
       await sub.subscribe(
-        this.prefix + composePattern(pattern) + "." + packet.id,
+        this.prefix + pattern + "." + packet.id,
         (buffer) => {
           parseBuffer(buffer, (packet) => {
             resolve({
@@ -51,7 +46,7 @@ export class MicroRedisClient extends MicroClient {
     });
   }
 
-  emit(pattern: PatternType, data: any): void {
+  emit(pattern: string, data: any): void {
     const packet = super.createPacket(pattern, data, false);
     this.#sendPacket(packet);
   }
@@ -59,7 +54,7 @@ export class MicroRedisClient extends MicroClient {
   #sendPacket(packet: any) {
     const json = JSON.stringify(packet);
     const str = `${json.length}#${json}`;
-    this.pub?.publish(this.prefix + composePattern(packet.pattern), str);
+    this.pub?.publish(this.prefix + packet.pattern, str);
   }
 }
 
