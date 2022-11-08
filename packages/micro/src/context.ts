@@ -1,7 +1,6 @@
 import { Context, isNil, isObject, Request, Response } from "@ipare/core";
 import { CTX_INITED, REQUEST_ID, RESPONSE_ERROR } from "./constant";
 import { MicroException } from "./exception";
-import { parsePattern } from "./pattern";
 
 export function initContext() {
   if (Context.prototype[CTX_INITED]) {
@@ -29,7 +28,7 @@ export function initContext() {
     enumerable: true,
     get: function () {
       const req = this as Request;
-      return parsePattern(req.path);
+      return req.path;
     },
   });
 

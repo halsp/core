@@ -1,4 +1,4 @@
-import { MicroClient, PatternType } from "../src";
+import { MicroClient } from "../src";
 
 describe("client", () => {
   it("should create packet", async () => {
@@ -15,10 +15,10 @@ describe("client", () => {
       emit(): void {
         throw new Error("Method not implemented.");
       }
-      test1(pattern: PatternType, data: any) {
+      test1(pattern: string, data: any) {
         return super.createPacket(pattern, data, true);
       }
-      test2(pattern: PatternType, data: any) {
+      test2(pattern: string, data: any) {
         return super.createPacket(pattern, data, false);
       }
     }

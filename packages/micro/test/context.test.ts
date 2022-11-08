@@ -18,3 +18,15 @@ describe("context", () => {
     expect(new Response().setError(undefined as any).error).toBeUndefined();
   });
 });
+
+describe("parse pattern", () => {
+  it("should parse pattern from path", async () => {
+    await new TestStartup(new Request().setPath("{a:1}"))
+      .use((ctx) => {
+        expect(ctx.req.pattern).toEqual({
+          a: 1,
+        });
+      })
+      .run();
+  });
+});
