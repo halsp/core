@@ -66,10 +66,12 @@ export class MicroMqttClient extends MicroClient {
     return new Promise((resolve) => {
       const reply = pattern + "/" + packet.id;
 
-      const sendTimeout = timeout ?? this.options.sendTimeout ?? 3000;
+      let timeoutInstance: NodeJS.Timeout | undefined;
+      const sendTimeout = timeout ?? this.options.sendTimeout ?? 10000;
       if (sendTimeout != 0) {
-        client.unsubscribe(reply);
-        setTimeout(() => {
+        timeoutInstance = setTimeout(() => {
+          timeoutInstance = undefined;
+          client.unsubscribe(reply);
           resolve({
             error: "Send timeout",
           });
@@ -85,6 +87,10 @@ export class MicroMqttClient extends MicroClient {
       this.#tasks.set(
         packet.id,
         (error?: string, data?: any, publishPacket?: mqtt.IPublishPacket) => {
+          if (timeoutInstance) {
+            clearTimeout(timeoutInstance);
+            timeoutInstance = undefined;
+          }
           client.unsubscribe(reply);
           resolve({
             data,

@@ -38,7 +38,7 @@ export abstract class MicroMqttConnection<
         resolve();
       });
       this.client.on("error", (err) => {
-        this["logger"] && this["logger"].error(err);
+        this["logger"]?.error(err);
         resolve();
       });
     });

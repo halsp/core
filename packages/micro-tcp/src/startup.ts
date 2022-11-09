@@ -1,6 +1,7 @@
 import { MicroStartup } from "@ipare/micro";
 import { MicroTcpOptions } from "./options";
 import * as net from "net";
+import { onSocketClose } from "./socket";
 
 export class MicroTcpStartup extends MicroStartup {
   constructor(readonly options: MicroTcpOptions = {}) {
@@ -42,9 +43,8 @@ export class MicroTcpStartup extends MicroStartup {
       );
     });
 
-    socket.on("close", () => {
-      //
-    });
+    onSocketClose.bind(this)(socket);
+
     socket.on("error", (err) => {
       this.logger.error(err);
     });

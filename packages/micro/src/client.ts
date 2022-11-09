@@ -1,3 +1,4 @@
+import { ILogger } from "@ipare/core";
 import { v4 as uuid } from "uuid";
 
 export abstract class MicroClient {
@@ -5,6 +6,8 @@ export abstract class MicroClient {
   abstract dispose(): void;
   abstract send(pattern: string, data: any): Promise<any>;
   abstract emit(pattern: string, data: any): void;
+
+  public logger?: ILogger;
 
   protected createPacket(
     pattern: string,

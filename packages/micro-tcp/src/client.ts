@@ -1,6 +1,7 @@
 import { MicroClient, parseBuffer } from "@ipare/micro";
 import * as net from "net";
 import { MicroTcpClientOptions } from "./options";
+import { onSocketClose } from "./socket";
 
 export class MicroTcpClient extends MicroClient {
   constructor(private readonly options: MicroTcpClientOptions) {
@@ -19,9 +20,7 @@ export class MicroTcpClient extends MicroClient {
     const socket = new net.Socket();
     this.#socket = socket;
 
-    socket.on("close", () => {
-      //
-    });
+    onSocketClose.bind(this)(socket);
     socket.on("data", (buffer: Buffer) => {
       parseBuffer(buffer, (json) => this.#handleResponse(json));
     });
@@ -86,9 +85,10 @@ export class MicroTcpClient extends MicroClient {
     const packet = super.createPacket(pattern, data, true);
 
     return new Promise((resolve) => {
-      const sendTimeout = timeout ?? this.options.sendTimeout ?? 3000;
+      let timeoutInstance: NodeJS.Timeout | undefined;
+      const sendTimeout = timeout ?? this.options.sendTimeout ?? 10000;
       if (sendTimeout != 0) {
-        setTimeout(() => {
+        timeoutInstance = setTimeout(() => {
           this.#tasks.delete(packet.id);
           resolve({
             error: "Send timeout",
@@ -97,6 +97,10 @@ export class MicroTcpClient extends MicroClient {
       }
 
       this.#tasks.set(packet.id, (error?: string, data?: any) => {
+        if (timeoutInstance) {
+          clearTimeout(timeoutInstance);
+          timeoutInstance = undefined;
+        }
         this.#tasks.delete(packet.id);
 
         resolve({
