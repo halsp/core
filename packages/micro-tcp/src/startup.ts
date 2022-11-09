@@ -92,7 +92,8 @@ export class MicroTcpStartup extends MicroStartup {
     return await this.#dynamicListen(0);
   }
 
-  async close() {
+  close() {
+    this.#server.removeAllListeners();
     this.#server.close();
   }
 }

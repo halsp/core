@@ -48,41 +48,57 @@ export class MicroTcpClient extends MicroClient {
   #handleResponse(json: any) {
     const id = json.id;
     const callback = this.#tasks.get(id);
-    if (callback) {
-      this.#tasks.delete(id);
-      callback(json.error, json.data ?? json.response);
-    }
+    callback && callback(json.error, json.data ?? json.response);
   }
 
   #close() {
     const socket = this.#socket;
     this.#socket = undefined;
     this.#tasks.clear();
-    socket?.destroy();
+
+    socket?.removeAllListeners();
+    socket?.end();
   }
 
   /**
    * for @ipare/inject
    */
-  dispose(): void {
+  dispose() {
     this.#close();
   }
 
-  send<T = any>(
+  async send<T = any>(
     pattern: string,
-    data: any
+    data: any,
+    timeout?: number
   ): Promise<{
     data?: T;
     error?: string;
   }> {
-    this.#checkSocket();
+    if (!this.#socket || this.#socket.destroyed) {
+      return {
+        error: "The connection is not connected",
+      };
+    }
 
     pattern = this.prefix + pattern;
     const socket = this.#socket as net.Socket;
     const packet = super.createPacket(pattern, data, true);
 
     return new Promise((resolve) => {
+      const sendTimeout = timeout ?? this.options.sendTimeout ?? 3000;
+      if (sendTimeout != 0) {
+        setTimeout(() => {
+          this.#tasks.delete(packet.id);
+          resolve({
+            error: "Send timeout",
+          });
+        }, sendTimeout);
+      }
+
       this.#tasks.set(packet.id, (error?: string, data?: any) => {
+        this.#tasks.delete(packet.id);
+
         resolve({
           data,
           error,
@@ -93,7 +109,9 @@ export class MicroTcpClient extends MicroClient {
   }
 
   emit(pattern: string, data: any): void {
-    this.#checkSocket();
+    if (!this.#socket || this.#socket.destroyed) {
+      throw new Error("The connection is not connected");
+    }
 
     pattern = this.prefix + pattern;
     const socket = this.#socket as net.Socket;
@@ -104,9 +122,5 @@ export class MicroTcpClient extends MicroClient {
   #sendPacket(socket: net.Socket, packet: any) {
     const str = JSON.stringify(packet);
     socket.write(`${str.length}#${str}`);
-  }
-
-  #checkSocket() {
-    if (!this.#socket || this.#socket.destroyed) throw new Error();
   }
 }
