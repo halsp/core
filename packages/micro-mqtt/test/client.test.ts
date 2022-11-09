@@ -1,4 +1,5 @@
 import { MicroMqttClient, MicroMqttConnection } from "../src";
+import { mockConnection } from "../src/mock";
 import { localOptions, localTest, runEmitTest, runSendTest } from "./utils";
 
 describe("client", () => {
@@ -58,6 +59,9 @@ describe("client", () => {
     const client = new MicroMqttClient({
       port: 443,
       host: "0.0.0.0",
+      subscribeOptions: {
+        qos: 1,
+      },
     });
 
     let err = false;
@@ -105,11 +109,7 @@ describe("client", () => {
   }, 10000);
 
   it("should listen with default port when port is undefined", async () => {
-    const client = new MicroMqttClient({
-      subscribeOptions: {
-        qos: 1,
-      },
-    });
+    const client = new MicroMqttClient();
 
     let err = false;
     await new Promise<void>(async (resolve) => {
@@ -117,11 +117,57 @@ describe("client", () => {
         err = true;
         resolve();
       }, 1000);
-      await client.connect();
+      try {
+        await client.connect();
+      } catch {
+        err = true;
+      }
     });
 
     await client.dispose();
     expect(err).toBeTruthy();
+  });
+
+  it("should return error when client is not connected", async () => {
+    const client = new MicroMqttClient();
+    const result = await client.send("", "");
+    expect(result).toEqual({
+      error: "The connection is not connected",
+    });
+  });
+
+  it("should return error when send timeout and set timeout options", async () => {
+    const client = new MicroMqttClient({
+      sendTimeout: 1000,
+      subscribeOptions: {
+        qos: 1,
+      },
+      publishOptions: {
+        test_equal: true,
+      } as any,
+    });
+    mockConnection.bind(client)();
+    await client.connect();
+
+    const result = await client.send("abc", "");
+    expect(result).toEqual({
+      error: "Send timeout",
+    });
+  });
+
+  it("should return error when send timeout and set timeout argument", async () => {
+    const client = new MicroMqttClient({
+      publishOptions: {
+        test_equal: true,
+      } as any,
+    });
+    mockConnection.bind(client)();
+    await client.connect();
+
+    const result = await client.send("abc", "", 1000);
+    expect(result).toEqual({
+      error: "Send timeout",
+    });
   });
 
   it("should not send data when client redis is not connected", async () => {

@@ -14,6 +14,10 @@ export function createMockMqtt() {
     data: string | Buffer,
     options?: mqtt.IClientPublishOptions
   ) => {
+    if (options && !!options["test_equal"] && !topics.includes(topic)) {
+      return;
+    }
+
     const cbs = events["message"];
     if (!cbs) return;
     cbs.forEach((cb) => {

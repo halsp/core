@@ -71,9 +71,9 @@ export class MicroMqttClient extends MicroClient {
         client.unsubscribe(reply);
         setTimeout(() => {
           resolve({
-            error: "timeout",
+            error: "Send timeout",
           });
-        }, sendTimeout ?? 3000);
+        }, sendTimeout);
       }
 
       if (this.options.subscribeOptions) {
@@ -108,7 +108,11 @@ export class MicroMqttClient extends MicroClient {
     const json = JSON.stringify(packet);
     const str = `${json.length}#${json}`;
     if (this.client?.connected) {
-      this.client.publish(packet.pattern, str);
+      if (this.options.publishOptions) {
+        this.client.publish(packet.pattern, str, this.options.publishOptions);
+      } else {
+        this.client.publish(packet.pattern, str);
+      }
     }
   }
 }
