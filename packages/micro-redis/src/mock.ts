@@ -6,6 +6,9 @@ export function createMockRedis() {
     subscribe: (channel: string, listener: (data: string) => void) => {
       subscribes[channel] = listener;
     },
+    unsubscribe: (channel: string) => {
+      delete subscribes[channel];
+    },
     publish: (channel: string, data: string) => {
       subscribes[channel] && subscribes[channel](data);
     },

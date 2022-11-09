@@ -21,7 +21,8 @@ export async function runSendTest(
   middleware?: (ctx: Context) => void | Promise<void>,
   startupOptions?: MicroRedisOptions,
   clientOptions?: MicroRedisClientOptions,
-  useLocalTest = false
+  useLocalTest = false,
+  sendTimeout?: number
 ) {
   const isLocalTest = localTest && useLocalTest;
   if (isLocalTest) {
@@ -63,7 +64,7 @@ export async function runSendTest(
   }
   await client.connect();
 
-  const result = await client.send(pattern, data);
+  const result = await client.send(pattern, data, sendTimeout);
 
   await new Promise<void>((resolve) => {
     setTimeout(async () => {

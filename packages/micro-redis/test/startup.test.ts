@@ -101,7 +101,7 @@ describe("startup", () => {
       setTimeout(() => {
         resolve(false);
       }, 2000);
-      await client.send("test_return", true);
+      await client.send("test_return", true, 3000);
       resolve(true);
     });
 

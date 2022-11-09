@@ -7,8 +7,6 @@ export interface MicroRedisOptions<
 > extends Omit<redis.RedisClientOptions<M, F, S>, "url"> {
   host?: string;
   port?: number;
-  retryAttempts?: number;
-  retryDelay?: number;
   prefix?: string;
 }
 
@@ -20,4 +18,5 @@ export interface MicroRedisClientOptions<
   host?: string;
   port?: number;
   prefix?: string;
+  sendTimeout?: number;
 }
