@@ -50,6 +50,11 @@ export function createMockMqtt() {
         events[event] = [callback];
       }
     },
+    removeAllListeners() {
+      for (const key in events) {
+        delete events[key];
+      }
+    },
     connect() {
       connected = true;
     },

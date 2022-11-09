@@ -19,9 +19,8 @@ export abstract class MicroMqttConnection<
       this.connectResolve = undefined;
     }
 
-    if (this.client && this.client.connected) {
-      this.client.end();
-    }
+    this.client?.removeAllListeners();
+    this.client?.end();
   }
 
   protected async initClients(): Promise<void> {

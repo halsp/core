@@ -16,7 +16,7 @@ describe("client", () => {
       true
     );
     expect(result.data).toBe(true);
-  });
+  }, 10000);
 
   it("should send message and return value with prefix", async () => {
     const result = await runSendTest(
@@ -38,7 +38,7 @@ describe("client", () => {
       a: 1,
       b: 2,
     });
-  });
+  }, 10000);
 
   it("should send message and return undefined value", async () => {
     const result = await runSendTest(undefined, (ctx) => {
@@ -46,13 +46,13 @@ describe("client", () => {
     });
 
     expect(result.data).toBeUndefined();
-  });
+  }, 10000);
 
   it("should emit message", async () => {
     await runEmitTest(true, (ctx) => {
       expect(ctx.req.body).toBe(true);
     });
-  });
+  }, 10000);
 
   it("should connect error with error host", async () => {
     const client = new MicroMqttClient({
@@ -67,7 +67,7 @@ describe("client", () => {
         resolve();
       }, 1000);
       await client.connect();
-      await client.send("", true);
+      await client.send("", true, 1000);
     });
 
     await new Promise<void>((resolve) => {
@@ -84,6 +84,7 @@ describe("client", () => {
     const client = new MicroMqttClient({
       port: 443,
       host: "0.0.0.0",
+      connectTimeout: 1000,
     });
 
     let emit = false;

@@ -46,18 +46,36 @@ export class MicroMqttClient extends MicroClient {
 
   async send<T = any>(
     pattern: string,
-    data: any
+    data: any,
+    timeout?: number
   ): Promise<{
     data?: T;
     error?: string;
     packet?: mqtt.IPublishPacket;
   }> {
+    if (!this.client?.connected) {
+      return {
+        error: "The connection is not connected",
+      };
+    }
+
     pattern = this.prefix + pattern;
     const packet = super.createPacket(pattern, data, true);
 
-    const client = this.client as mqtt.MqttClient;
+    const client = this.client;
     return new Promise(async (resolve) => {
       const reply = pattern + "/" + packet.id;
+
+      const sendTimeout = timeout ?? this.options.sendTimeout ?? 3000;
+      if (sendTimeout != 0) {
+        client.unsubscribe(reply);
+        setTimeout(() => {
+          resolve({
+            error: "timeout",
+          });
+        }, sendTimeout ?? 3000);
+      }
+
       if (this.options.subscribeOptions) {
         client.subscribe(reply, this.options.subscribeOptions);
       } else {
@@ -89,7 +107,9 @@ export class MicroMqttClient extends MicroClient {
   #sendPacket(packet: any) {
     const json = JSON.stringify(packet);
     const str = `${json.length}#${json}`;
-    this.client?.publish(packet.pattern, str);
+    if (this.client?.connected) {
+      this.client.publish(packet.pattern, str);
+    }
   }
 }
 
