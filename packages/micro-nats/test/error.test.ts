@@ -39,7 +39,7 @@ describe("error", () => {
         resolve(true);
       }, 1000);
 
-      await client.send(pattern, true);
+      await client.send(pattern, true, undefined, 1000);
 
       resolve(false);
     });
@@ -75,29 +75,23 @@ describe("error", () => {
       data?: Uint8Array,
       options?: nats.PublishOptions
     ) => {
-      return publish(subject, data, { ...options, resErr: "err" } as any);
+      return publish(subject, data, {
+        ...options,
+        resErr: new Error("err"),
+      } as any);
     };
 
-    const beforeError = console.error;
-    let err = false;
-    console.error = () => {
-      err = true;
-    };
-    const waitResult = await new Promise(async (resolve) => {
+    const result = await client.send(pattern, true);
+
+    await new Promise<void>((resolve) => {
       setTimeout(async () => {
-        resolve(true);
-      }, 1000);
-
-      await client.send(pattern, true);
-
-      resolve(false);
+        resolve();
+      }, 500);
     });
-    console.error = beforeError;
 
     await startup.close();
     await client.dispose();
 
-    expect(err).toBeTruthy();
-    expect(waitResult).toBeTruthy();
+    expect(result.error).toBe("err");
   });
 });

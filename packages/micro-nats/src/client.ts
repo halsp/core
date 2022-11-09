@@ -23,12 +23,20 @@ export class MicroNatsClient extends MicroClient {
   async send<T = any>(
     pattern: string,
     data: any,
-    headers?: nats.MsgHdrs
+    headers?: nats.MsgHdrs,
+    timeout?: number
   ): Promise<{
     data?: T;
     error?: string;
     headers: nats.MsgHdrs;
   }> {
+    if (!this.connection || this.connection.isClosed()) {
+      return {
+        error: "The connection is not connected",
+        headers: nats.headers(),
+      };
+    }
+
     pattern = this.prefix + pattern;
     const packet = super.createPacket(pattern, data, true);
 
@@ -36,12 +44,23 @@ export class MicroNatsClient extends MicroClient {
       typeof this.connection,
       undefined
     >;
-    return new Promise(async (resolve) => {
+
+    let timeoutInstance: NodeJS.Timeout | undefined;
+    return await new Promise(async (resolve) => {
       const reply = pattern + "." + packet.id;
       const sub = connection.subscribe(reply, {
         callback: (err, msg) => {
+          sub.unsubscribe();
+
+          if (timeoutInstance) {
+            clearTimeout(timeoutInstance);
+          }
+
           if (err) {
-            console.error(err);
+            resolve({
+              error: err.message,
+              headers: nats.headers(),
+            });
             return;
           }
 
@@ -52,15 +71,30 @@ export class MicroNatsClient extends MicroClient {
               headers: msg.headers as nats.MsgHdrs,
             });
           });
-          sub.unsubscribe();
         },
       });
+
+      const sendTimeout = timeout ?? this.options.sendTimeout ?? 10000;
+      if (sendTimeout != 0) {
+        timeoutInstance = setTimeout(() => {
+          timeoutInstance = undefined;
+          sub.unsubscribe();
+          resolve({
+            error: "Send timeout",
+            headers: nats.headers(),
+          });
+        }, sendTimeout);
+      }
 
       this.#sendPacket(packet, headers, reply);
     });
   }
 
   emit(pattern: string, data: any, headers?: nats.MsgHdrs): void {
+    if (!this.connection || this.connection.isClosed()) {
+      throw new Error("The connection is not connected");
+    }
+
     pattern = this.prefix + pattern;
     const packet = super.createPacket(pattern, data, false);
     this.#sendPacket(packet, headers);
@@ -69,7 +103,9 @@ export class MicroNatsClient extends MicroClient {
   #sendPacket(packet: any, headers?: nats.MsgHdrs, reply?: string) {
     const json = JSON.stringify(packet);
     const str = `${json.length}#${json}`;
-    this.connection?.publish(packet.pattern, Buffer.from(str, "utf-8"), {
+
+    const connection = this.connection as nats.NatsConnection;
+    connection.publish(packet.pattern, Buffer.from(str, "utf-8"), {
       reply: reply,
       headers: headers,
     });

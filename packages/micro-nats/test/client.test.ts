@@ -1,4 +1,5 @@
-import { MicroNatsClient, MicroNatsConnection } from "../src";
+import { MicroNatsClient, MicroNatsConnection, MicroNatsStartup } from "../src";
+import { mockConnection, mockConnectionFrom } from "../src/mock";
 import { localOptions, localTest, runEmitTest, runSendTest } from "./utils";
 
 describe("client", () => {
@@ -104,9 +105,21 @@ describe("client", () => {
     await client.dispose();
   });
 
+  it("should retrn error when client redis is not connected", async () => {
+    const client = new MicroNatsClient(localTest ? localOptions : undefined);
+    const result = client.send("", "");
+    expect((await result).error).toBe("The connection is not connected");
+  });
+
   it("should not send data when client redis is not connected", async () => {
     const client = new MicroNatsClient(localTest ? localOptions : undefined);
-    client.emit("", "");
+    let err: any;
+    try {
+      client.emit("", "");
+    } catch (error) {
+      err = error as Error;
+    }
+    expect(err.message).toBe("The connection is not connected");
   });
 
   it("should create custom connection", async () => {
@@ -114,4 +127,69 @@ describe("client", () => {
     const obj = new TestClass();
     expect(!!obj["initClients"]).toBeTruthy();
   });
+});
+
+describe("timeout", () => {
+  it("should return error when send timeout and set timeout options", async () => {
+    const result = await runSendTest(
+      true,
+      (ctx) => {
+        ctx.res.setBody(ctx.req.body);
+      },
+      {
+        host: "localhost",
+        port: 4222,
+      },
+      {
+        sendTimeout: 1000,
+      },
+      undefined,
+      true
+    );
+    expect(result.data).toBe(true);
+  }, 10000);
+
+  it("should return error when send timeout and set timeout argument", async () => {
+    const result = await runSendTest(
+      true,
+      (ctx) => {
+        ctx.res.setBody(ctx.req.body);
+      },
+      {
+        host: "localhost",
+        port: 4222,
+      },
+      undefined,
+      undefined,
+      true,
+      1000
+    );
+    expect(result.data).toBe(true);
+  }, 10000);
+
+  it("should return error when send timeout", async () => {
+    const startup = new MicroNatsStartup();
+    mockConnection.bind(startup)();
+    await startup.listen();
+
+    await new Promise<void>((resolve) => {
+      setTimeout(async () => {
+        resolve();
+      }, 500);
+    });
+
+    const client = new MicroNatsClient();
+    mockConnectionFrom.bind(client)(startup);
+    await client.connect();
+
+    const result = await client.send("test_timeout", "", undefined, 1000);
+
+    await new Promise<void>((resolve) => {
+      setTimeout(async () => {
+        resolve();
+      }, 500);
+    });
+
+    expect(result.error).toBe("Send timeout");
+  }, 10000);
 });

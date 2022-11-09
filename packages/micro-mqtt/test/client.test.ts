@@ -172,7 +172,13 @@ describe("client", () => {
 
   it("should not send data when client redis is not connected", async () => {
     const client = new MicroMqttClient(localTest ? localOptions : undefined);
-    client.emit("", "");
+    let err: any;
+    try {
+      client.emit("", "");
+    } catch (error) {
+      err = error as Error;
+    }
+    expect(err.message).toBe("The connection is not connected");
   });
 
   it("should create custom connection", async () => {

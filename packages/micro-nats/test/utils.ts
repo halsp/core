@@ -21,7 +21,8 @@ export async function runSendTest(
   startupOptions?: MicroNatsOptions,
   clientOptions?: MicroNatsClientOptions,
   headers?: nats.MsgHdrs,
-  useLocalTest = false
+  useLocalTest = false,
+  sendTimeout?: number
 ) {
   const isLocalTest = localTest && useLocalTest;
   if (isLocalTest) {
@@ -63,7 +64,7 @@ export async function runSendTest(
   }
   await client.connect();
 
-  const result = await client.send(pattern, data, headers);
+  const result = await client.send(pattern, data, headers, sendTimeout);
 
   await new Promise<void>((resolve) => {
     setTimeout(async () => {
