@@ -11,20 +11,20 @@ export abstract class MicroMqttConnection<
 
   protected client?: mqtt.MqttClient;
 
-  private connectResolve?: () => void;
+  private connectResolve?: (err: void) => void;
 
-  protected async closeClients(): Promise<void> {
+  protected async closeClients(force?: boolean): Promise<void> {
     if (this.connectResolve) {
       this.connectResolve();
       this.connectResolve = undefined;
     }
 
+    this.client?.end(force);
     this.client?.removeAllListeners();
-    this.client?.end();
   }
 
   protected async initClients(): Promise<void> {
-    await this.closeClients();
+    await this.closeClients(true);
 
     const opt: any = { ...this.options };
     delete opt.host;
@@ -35,6 +35,10 @@ export abstract class MicroMqttConnection<
       this.connectResolve = resolve;
       this.client = mqtt.connect(this.options);
       this.client.on("connect", () => {
+        resolve();
+      });
+      this.client.on("error", (err) => {
+        this["logger"] && this["logger"].error(err);
         resolve();
       });
     });

@@ -45,6 +45,38 @@ describe("startup", () => {
     expect(data).toBeUndefined();
   });
 
+  it("should log error when connect error", async () => {
+    const startup = new MicroMqttStartup({
+      port: 443,
+      host: "0.0.0.-1",
+      reconnectPeriod: 0,
+    });
+
+    const beforeError = console.error;
+    let err = false;
+    console.error = () => {
+      err = true;
+    };
+    await new Promise<void>(async (resolve) => {
+      setTimeout(() => {
+        err = true;
+        resolve();
+      }, 1000);
+
+      await startup.listen();
+      resolve();
+    });
+    console.error = beforeError;
+
+    await new Promise<void>(async (resolve) => {
+      setTimeout(() => {
+        resolve();
+      }, 500);
+    });
+
+    expect(err).toBeTruthy();
+  }, 100000);
+
   it("should publish with publishOptions", async () => {
     const result = await runSendTest(
       true,

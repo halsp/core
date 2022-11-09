@@ -89,8 +89,8 @@ export class MicroMqttStartup extends MicroStartup {
     return this;
   }
 
-  async close() {
-    await this.closeClients();
+  async close(force?: boolean) {
+    await this.closeClients(force);
   }
 }
 
