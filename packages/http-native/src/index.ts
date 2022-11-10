@@ -1,6 +1,6 @@
 import * as http from "http";
 
-export { HttpServerStartup } from "./startup";
+export { HttpNativeStartup } from "./startup";
 
 declare module "@ipare/core" {
   interface Context {

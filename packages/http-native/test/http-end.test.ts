@@ -1,8 +1,8 @@
-import { HttpServerStartup } from "../src";
+import { HttpNativeStartup } from "../src";
 import request from "supertest";
 
 test("end ahead", async () => {
-  const server = new HttpServerStartup()
+  const server = new HttpNativeStartup()
     .use(async (ctx, next) => {
       ctx.resStream.end();
       expect(!!ctx.reqStream).toBeTruthy();
@@ -20,7 +20,7 @@ test("end ahead", async () => {
 });
 
 test("writeHead", async () => {
-  const server = new HttpServerStartup()
+  const server = new HttpNativeStartup()
     .use(async (ctx, next) => {
       ctx.resStream.writeHead(200);
       await next();

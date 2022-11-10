@@ -1,8 +1,8 @@
-import { HttpServerStartup } from "../src";
+import { HttpNativeStartup } from "../src";
 import request from "supertest";
 
 test("http", async () => {
-  const server = new HttpServerStartup()
+  const server = new HttpNativeStartup()
     .use(async (ctx) => {
       ctx.ok({
         content: "BODY",

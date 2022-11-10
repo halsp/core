@@ -1,5 +1,5 @@
 {
-  "name": "@ipare/http-server",
+  "name": "@ipare/http-native",
   "version": "3.0.0-alpha.2",
   "description": "Ipare 的 NodeJS 原生环境",
   "engines": {
@@ -39,20 +39,14 @@
     "@ipare/core": "^3.0.0-alpha.2",
     "@ipare/http": "^3.0.0-alpha.2",
     "@ipare/http-body": "^3.0.0-alpha.2",
-    "co-body": "^6.1.0",
-    "formidable": "^2.0.1",
-    "type-is": "^1.6.18",
     "url-parse": "^1.5.10"
   },
   "devDependencies": {
-    "@types/co-body": "^6.1.0",
-    "@types/formidable": "^2.0.5",
     "@types/jest": "^29.2.2",
     "@types/node": "^18.11.9",
     "@types/qs": "^6.9.7",
     "@types/shelljs": "^0.8.11",
     "@types/supertest": "^2.0.12",
-    "@types/type-is": "^1.6.3",
     "@types/url-parse": "^1.4.8",
     "@typescript-eslint/eslint-plugin": "^5.42.0",
     "@typescript-eslint/parser": "^5.42.0",

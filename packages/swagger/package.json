@@ -47,7 +47,7 @@
     "swagger-ui-dist": "^4.15.2"
   },
   "devDependencies": {
-    "@ipare/http-server": "^3.0.0-alpha.2",
+    "@ipare/http-native": "^3.0.0-alpha.2",
     "@types/jest": "^29.2.2",
     "@types/node": "^18.11.9",
     "@types/swagger-ui-dist": "^3.30.1",

@@ -1,8 +1,8 @@
-import { HttpServerStartup } from "../../src";
+import { HttpNativeStartup } from "../../src";
 import request from "supertest";
 
 test("json body explicit type", async () => {
-  const server = new HttpServerStartup()
+  const server = new HttpNativeStartup()
     .use(async (ctx) => {
       ctx.res.setHeader("content-type", "application/json");
       ctx.res.setHeader(
@@ -29,7 +29,7 @@ test("json body explicit type", async () => {
 });
 
 test("return json", async () => {
-  const server = new HttpServerStartup()
+  const server = new HttpNativeStartup()
     .use(async (ctx) => {
       ctx.ok({
         content: "BODY",

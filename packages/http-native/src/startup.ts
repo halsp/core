@@ -7,15 +7,15 @@ import { NumericalHeadersDict } from "@ipare/http";
 import urlParse from "url-parse";
 import { Stream } from "stream";
 
-type HttpServerOptions = http.ServerOptions;
-type HttpsServerOptions = https.ServerOptions & { https: true };
-type ServerType<T extends HttpServerOptions | HttpsServerOptions> =
-  T extends HttpServerOptions ? http.Server : https.Server;
+type HttpNativeOptions = http.ServerOptions;
+type HttpsNativeOptions = https.ServerOptions & { https: true };
+type ServerType<T extends HttpNativeOptions | HttpsNativeOptions> =
+  T extends HttpNativeOptions ? http.Server : https.Server;
 
-export class HttpServerStartup<
-  T extends HttpServerOptions | HttpsServerOptions =
-    | HttpServerOptions
-    | HttpsServerOptions
+export class HttpNativeStartup<
+  T extends HttpNativeOptions | HttpsNativeOptions =
+    | HttpNativeOptions
+    | HttpsNativeOptions
 > extends HttpBodyPraserStartup {
   readonly #server: ServerType<T>;
 
@@ -209,7 +209,7 @@ export class HttpServerStartup<
 }
 
 function isHttpsOptions(
-  options?: HttpServerOptions | HttpsServerOptions
-): options is HttpsServerOptions {
+  options?: HttpNativeOptions | HttpsNativeOptions
+): options is HttpsNativeOptions {
   return !!options && "https" in options && options.https;
 }
