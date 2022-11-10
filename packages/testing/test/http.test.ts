@@ -1,5 +1,5 @@
 import { Response, Request } from "@ipare/core";
-import { TestHttpStartup, TestServerStartup } from "../src/http";
+import { TestHttpStartup, TestHttpServerStartup } from "../src/http";
 new TestHttpStartup();
 
 describe("response.expect", () => {
@@ -85,7 +85,7 @@ describe("http startup", () => {
 
 describe("server startup", () => {
   it("should set body", async () => {
-    await new TestServerStartup()
+    await new TestHttpServerStartup()
       .use((ctx) => {
         ctx.ok({
           method: ctx.req.method,
@@ -101,7 +101,7 @@ describe("server startup", () => {
   });
 
   it("status shound be 500 if skip throw error", async () => {
-    await new TestServerStartup()
+    await new TestHttpServerStartup()
       .use(() => {
         throw new Error("err");
       })
@@ -117,7 +117,7 @@ describe("server startup", () => {
   it("shound throw error", async () => {
     let errMsg: string | undefined;
     try {
-      await new TestServerStartup()
+      await new TestHttpServerStartup()
         .use(() => {
           throw new Error("err");
         })

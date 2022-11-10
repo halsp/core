@@ -1,10 +1,11 @@
-import { ServerStartup } from "../src";
+import { HttpServerStartup } from "../src";
 import request from "supertest";
 
 test("end ahead", async () => {
-  const server = new ServerStartup()
+  const server = new HttpServerStartup()
     .use(async (ctx, next) => {
       ctx.serverRes.end();
+      expect(!!ctx.serverReq).toBeTruthy();
       await next();
     })
     .use(async (ctx) => {
@@ -19,7 +20,7 @@ test("end ahead", async () => {
 });
 
 test("writeHead", async () => {
-  const server = new ServerStartup()
+  const server = new HttpServerStartup()
     .use(async (ctx, next) => {
       ctx.serverRes.writeHead(200);
       await next();

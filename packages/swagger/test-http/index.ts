@@ -1,18 +1,18 @@
-import { ServerStartup } from "@ipare/server";
+import { HttpServerStartup } from "@ipare/http-server";
 import chalk from "chalk";
 import "../src";
 import "@ipare/router";
 import { TEST_ACTION_DIR } from "@ipare/router/dist/constant";
 
 async function bootstrap() {
-  // const startup = new ServerStartup()
+  // const startup = new HttpServerStartup()
   //   .useHttpJsonBody()
   //   .useSwagger({})
   //   .useRouter({
   //     dir: "test-http/actions",
   //   });
 
-  const startup = new ServerStartup()
+  const startup = new HttpServerStartup()
     .useHttpJsonBody()
     .useSwagger({
       path: "",

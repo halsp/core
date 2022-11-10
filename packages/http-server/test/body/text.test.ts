@@ -1,8 +1,9 @@
-import { ServerStartup } from "../../src";
+import { HttpServerStartup } from "../../src";
 import request from "supertest";
 
 test("text body", async () => {
-  const server = new ServerStartup()
+  const server = new HttpServerStartup()
+    .useHttpTextBody()
     .use(async (ctx) => {
       ctx.ok("BODY");
     })
@@ -16,7 +17,7 @@ test("text body", async () => {
 });
 
 test("text body explicit type", async () => {
-  const server = new ServerStartup()
+  const server = new HttpServerStartup()
     .use(async (ctx) => {
       ctx.res.setHeader("content-type", "text/plain");
       ctx.res.setHeader("content-length", Buffer.byteLength("BODY").toString());
@@ -32,7 +33,7 @@ test("text body explicit type", async () => {
 });
 
 test("html body", async () => {
-  const server = new ServerStartup()
+  const server = new HttpServerStartup()
     .use(async (ctx) => {
       ctx.ok("<div>BODY</div>");
     })
@@ -47,7 +48,7 @@ test("html body", async () => {
 
 function runTextReturn(headersSent: boolean) {
   test(`return text headersSent: ${headersSent}`, async () => {
-    const server = new ServerStartup()
+    const server = new HttpServerStartup()
       .use(async (ctx) => {
         if (headersSent) {
           ctx.serverRes.flushHeaders();

@@ -1,8 +1,8 @@
-import { ServerStartup } from "../../src";
+import { HttpServerStartup } from "../../src";
 import request from "supertest";
 
 test("buffer body explicit type", async () => {
-  const server = new ServerStartup()
+  const server = new HttpServerStartup()
     .use(async (ctx) => {
       ctx.res.setHeader("content-type", "application/octet-stream");
       ctx.res.setHeader("content-length", Buffer.byteLength("BODY").toString());
@@ -18,7 +18,7 @@ test("buffer body explicit type", async () => {
 });
 
 test("buffer body", async () => {
-  const server = new ServerStartup()
+  const server = new HttpServerStartup()
     .use(async (ctx) => {
       ctx.ok(Buffer.from("BODY", "utf-8"));
     })

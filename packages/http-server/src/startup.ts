@@ -1,5 +1,5 @@
 import * as net from "net";
-import { BodyPraserStartup } from "./body-praser.startup";
+import { HttpBodyPraserStartup } from "@ipare/http-body";
 import * as http from "http";
 import * as https from "https";
 import { Request, Response, Dict, isString, Context } from "@ipare/core";
@@ -12,11 +12,11 @@ type HttpsServerOptions = https.ServerOptions & { https: true };
 type ServerType<T extends HttpServerOptions | HttpsServerOptions> =
   T extends HttpServerOptions ? http.Server : https.Server;
 
-export class ServerStartup<
+export class HttpServerStartup<
   T extends HttpServerOptions | HttpsServerOptions =
     | HttpServerOptions
     | HttpsServerOptions
-> extends BodyPraserStartup {
+> extends HttpBodyPraserStartup {
   readonly #server: ServerType<T>;
 
   public get server() {

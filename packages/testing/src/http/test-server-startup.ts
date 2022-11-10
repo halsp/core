@@ -1,11 +1,11 @@
-import { ServerStartup } from "@ipare/server";
+import { HttpServerStartup } from "@ipare/http-server";
 import supertest from "supertest";
 import { Context, Request, Response } from "@ipare/core";
 import { initBaseTestStartup, ITestStartup } from "../test-startup";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { Test } = require("supertest");
 
-export class TestServerStartup extends ServerStartup {
+export class TestHttpServerStartup extends HttpServerStartup {
   #errorStack?: Error[];
 
   constructor() {
@@ -48,4 +48,4 @@ export class TestServerStartup extends ServerStartup {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface TestServerStartup extends ITestStartup {}
+export interface TestHttpServerStartup extends ITestStartup {}

@@ -1,5 +1,5 @@
 {
-  "name": "@ipare/server",
+  "name": "@ipare/http-server",
   "version": "3.0.0-alpha.2",
   "description": "Ipare 的 NodeJS 原生环境",
   "engines": {
@@ -38,6 +38,7 @@
   "dependencies": {
     "@ipare/core": "^3.0.0-alpha.2",
     "@ipare/http": "^3.0.0-alpha.2",
+    "@ipare/http-body": "^3.0.0-alpha.2",
     "co-body": "^6.1.0",
     "formidable": "^2.0.1",
     "type-is": "^1.6.18",

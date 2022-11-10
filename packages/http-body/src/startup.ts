@@ -4,12 +4,9 @@ import cobody from "co-body";
 import formidable from "formidable";
 import http from "http";
 import { HttpStartup, StatusCodes } from "@ipare/http";
+import { MultipartBody } from "./multipart";
 
-export type MultipartBody =
-  | { fields: formidable.Fields; files: formidable.Files }
-  | undefined;
-
-export abstract class BodyPraserStartup extends HttpStartup {
+export abstract class HttpBodyPraserStartup extends HttpStartup {
   constructor(
     private readonly sourceReqBuilder: (ctx: Context) => http.IncomingMessage
   ) {

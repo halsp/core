@@ -1,10 +1,10 @@
 import { Context, isString, Request, Response } from "@ipare/core";
-import { BodyPraserStartup } from "@ipare/server";
+import { HttpBodyPraserStartup } from "@ipare/http-body";
 import { Stream } from "stream";
 import { AliReq } from "./ali-req";
 import { AliRes } from "./ali-res";
 
-export class AlifcStartup extends BodyPraserStartup {
+export class AlifcStartup extends HttpBodyPraserStartup {
   constructor() {
     super((ctx) => ctx.aliReq);
   }

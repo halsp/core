@@ -1,10 +1,24 @@
-import { MultipartBody, ServerStartup } from "../../../src";
 import request from "supertest";
 import { File } from "formidable";
 import { readFileSync } from "fs";
+import { TestBodyParserStartup } from "./utils";
+import { MultipartBody } from "../src";
 
 test("useHttpMultipartBody", async () => {
-  const server = new ServerStartup()
+  let invoke = false;
+  const server = new TestBodyParserStartup()
+    .use(async (ctx, next) => {
+      await next();
+
+      expect(ctx.res.body.fields).toEqual({
+        name: "fileName",
+      });
+      expect(ctx.res.body.file.name).toBe("LICENSE");
+      expect(
+        (ctx.res.body.file.content as string).startsWith("MIT License")
+      ).toBeTruthy();
+      invoke = true;
+    })
     .useHttpMultipartBody()
     .use(async (ctx) => {
       const multipartBody = ctx.req.body as MultipartBody;
@@ -20,25 +34,24 @@ test("useHttpMultipartBody", async () => {
       });
     })
     .listen();
-  const res = await request(server)
+  await request(server)
     .post("")
     .field("name", "fileName")
     .attach("file", "./LICENSE");
   server.close();
-
-  expect(res.status).toBe(200);
-  expect(res.headers["content-type"]).toBe("application/json; charset=utf-8");
-  expect(res.body.fields).toEqual({
-    name: "fileName",
-  });
-  expect(res.body.file.name).toBe("LICENSE");
-  expect(
-    (res.body.file.content as string).startsWith("MIT License")
-  ).toBeTruthy();
+  expect(invoke).toBeTruthy();
 });
 
 test("on file begin", async () => {
-  const server = new ServerStartup()
+  let invoke = false;
+  const server = new TestBodyParserStartup()
+    .use(async (ctx, next) => {
+      await next();
+
+      expect(ctx.res.get("file-name")).toBe("LICENSE");
+      expect(ctx.res.body).toBe("LICENSE");
+      invoke = true;
+    })
     .useHttpMultipartBody(undefined, (ctx, formName, file) => {
       ctx.res.setHeader("file-name", file.originalFilename ?? "");
       expect(formName).toBe("file");
@@ -52,19 +65,24 @@ test("on file begin", async () => {
       ctx.ok(file.originalFilename);
     })
     .listen();
-  const res = await request(server)
+  await request(server)
     .post("")
     .field("name", "fileName")
     .attach("file", "./LICENSE");
   server.close();
-
-  expect(res.status).toBe(200);
-  expect(res.headers["file-name"]).toBe("LICENSE");
-  expect(res.text).toBe("LICENSE");
+  expect(invoke).toBeTruthy();
 });
 
 test("prase file error without callback", async () => {
-  const server = new ServerStartup()
+  let invoke = false;
+  const server = new TestBodyParserStartup()
+    .use(async (ctx, next) => {
+      await next();
+
+      expect(ctx.res.status).toBe(400);
+      expect(ctx.res.body).toBeUndefined();
+      invoke = true;
+    })
     .useHttpMultipartBody()
     .use(async (ctx) => {
       ctx.noContent();
@@ -79,21 +97,26 @@ test("prase file error without callback", async () => {
     "\r\nThis is the first file\r\n" +
     "--foo--\r\n";
 
-  const res = await request(server)
+  await request(server)
     .post("")
     .set("content-type", "multipart/form-data; boundary=foo")
     .send(body);
   server.close();
-
-  expect(res.status).toBe(400);
-  expect(res.body).toEqual({});
-  expect(res.text).toEqual("");
+  expect(invoke).toBeTruthy();
 });
 
 test("prase file error", async () => {
-  const server = new ServerStartup()
+  let invoke = false;
+  const server = new TestBodyParserStartup()
+    .use(async (ctx, next) => {
+      await next();
+
+      expect(ctx.res.status).toBe(400);
+      expect(ctx.res.get("parse-err")).toBe("unknown transfer-encoding");
+      invoke = true;
+    })
     .useHttpMultipartBody(undefined, undefined, async (ctx, err) => {
-      ctx.res.setHeader("prase-err", err.message);
+      ctx.res.set("parse-err", err.message);
     })
     .use(async (ctx) => {
       ctx.noContent();
@@ -108,12 +131,10 @@ test("prase file error", async () => {
     "\r\nThis is the first file\r\n" +
     "--foo--\r\n";
 
-  const res = await request(server)
+  await request(server)
     .post("")
     .set("content-type", "multipart/form-data; boundary=foo")
     .send(body);
   server.close();
-
-  expect(res.status).toBe(400);
-  expect(res.headers["prase-err"]).toBe("unknown transfer-encoding");
+  expect(invoke).toBeTruthy();
 });
