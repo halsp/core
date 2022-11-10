@@ -12,7 +12,7 @@ type HttpsNativeOptions = https.ServerOptions & { https: true };
 type ServerType<T extends HttpNativeOptions | HttpsNativeOptions> =
   T extends HttpNativeOptions ? http.Server : https.Server;
 
-export class HttpNativeStartup<
+export class NativeStartup<
   T extends HttpNativeOptions | HttpsNativeOptions =
     | HttpNativeOptions
     | HttpsNativeOptions

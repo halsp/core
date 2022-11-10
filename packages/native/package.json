@@ -1,5 +1,5 @@
 {
-  "name": "@ipare/http-native",
+  "name": "@ipare/native",
   "version": "3.0.0-alpha.2",
   "description": "Ipare 的 NodeJS 原生环境",
   "engines": {
@@ -44,7 +44,6 @@
   "devDependencies": {
     "@types/jest": "^29.2.2",
     "@types/node": "^18.11.9",
-    "@types/qs": "^6.9.7",
     "@types/shelljs": "^0.8.11",
     "@types/supertest": "^2.0.12",
     "@types/url-parse": "^1.4.8",
