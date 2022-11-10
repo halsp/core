@@ -1,7 +1,7 @@
 {
-  "name": "@ipare/micro",
+  "name": "@ipare/micro-client",
   "version": "3.0.0-alpha.3",
-  "description": "Ipare 微服务基础框架",
+  "description": "Ipare 微服务请求客户端",
   "engines": {
     "node": ">=12.14.0"
   },
@@ -33,11 +33,14 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^3.0.0-alpha.2"
+    "@ipare/core": "^3.0.0-alpha.2",
+    "@ipare/inject": "^3.0.0-alpha.2",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/jest": "^29.2.2",
     "@types/node": "^18.11.9",
+    "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.42.0",
     "@typescript-eslint/parser": "^5.42.0",
     "eslint": "^8.27.0",
