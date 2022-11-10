@@ -1,6 +1,6 @@
 {
   "name": "@ipare/router",
-  "version": "3.0.0-alpha.2",
+  "version": "3.0.0-alpha.3",
   "engines": {
     "node": ">=12.14.0"
   },
@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "@ipare/http": "^3.0.0-alpha.2",
-    "@ipare/micro": "^3.0.0-alpha.2",
+    "@ipare/micro": "^3.0.0-alpha.3",
     "@types/jest": "^29.2.2",
     "@types/node": "^18.11.9",
     "@typescript-eslint/eslint-plugin": "^5.42.0",
