@@ -4,7 +4,7 @@ export { HttpServerStartup } from "./startup";
 
 declare module "@ipare/core" {
   interface Context {
-    get serverReq(): http.IncomingMessage;
-    get serverRes(): http.ServerResponse;
+    get reqStream(): http.IncomingMessage;
+    get resStream(): http.ServerResponse;
   }
 }

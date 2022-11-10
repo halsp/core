@@ -24,7 +24,7 @@ export class HttpServerStartup<
   }
 
   constructor(serverOptions?: T) {
-    super((ctx) => ctx.serverReq);
+    super((ctx) => ctx.reqStream);
 
     if (isHttpsOptions(serverOptions)) {
       this.#server = https.createServer(serverOptions, this.#requestListener);
@@ -151,59 +151,59 @@ export class HttpServerStartup<
   }
 
   #requestListener = async (
-    serverReq: http.IncomingMessage,
-    serverRes: http.ServerResponse
+    reqStream: http.IncomingMessage,
+    resStream: http.ServerResponse
   ): Promise<void> => {
-    const url = urlParse(serverReq.url as string, true);
+    const url = urlParse(reqStream.url as string, true);
     const ctx = new Context(
       new Request()
         .setPath(url.pathname)
-        .setMethod(serverReq.method as string)
+        .setMethod(reqStream.method as string)
         .setQuery(url.query as Dict<string>)
-        .setHeaders(serverReq.headers as NumericalHeadersDict)
+        .setHeaders(reqStream.headers as NumericalHeadersDict)
     );
 
-    serverRes.statusCode = 404;
+    resStream.statusCode = 404;
 
-    Object.defineProperty(ctx, "serverRes", {
-      get: () => serverRes,
+    Object.defineProperty(ctx, "resStream", {
+      get: () => resStream,
     });
-    Object.defineProperty(ctx, "serverReq", {
-      get: () => serverReq,
+    Object.defineProperty(ctx, "reqStream", {
+      get: () => reqStream,
     });
 
     const res = await this.invoke(ctx);
 
-    if (!serverRes.writableEnded) {
-      serverRes.statusCode = res.status;
-      this.#writeHead(res, serverRes);
-      this.#writeBody(res, serverRes);
+    if (!resStream.writableEnded) {
+      resStream.statusCode = res.status;
+      this.#writeHead(res, resStream);
+      this.#writeBody(res, resStream);
     }
   };
 
-  #writeHead(ipareRes: Response, serverRes: http.ServerResponse) {
-    if (serverRes.headersSent) return;
+  #writeHead(ipareRes: Response, resStream: http.ServerResponse) {
+    if (resStream.headersSent) return;
     Object.keys(ipareRes.headers)
       .filter((key) => !!ipareRes.headers[key])
       .forEach((key) => {
-        serverRes.setHeader(key, ipareRes.headers[key] as string | string[]);
+        resStream.setHeader(key, ipareRes.headers[key] as string | string[]);
       });
   }
 
-  #writeBody(ipareRes: Response, serverRes: http.ServerResponse) {
+  #writeBody(ipareRes: Response, resStream: http.ServerResponse) {
     if (!ipareRes.body) {
-      serverRes.end();
+      resStream.end();
       return;
     }
 
     if (ipareRes.body instanceof Stream) {
-      ipareRes.body.pipe(serverRes);
+      ipareRes.body.pipe(resStream);
     } else if (Buffer.isBuffer(ipareRes.body)) {
-      serverRes.end(ipareRes.body);
+      resStream.end(ipareRes.body);
     } else if (isString(ipareRes.body)) {
-      serverRes.end(ipareRes.body);
+      resStream.end(ipareRes.body);
     } else {
-      serverRes.end(JSON.stringify(ipareRes.body));
+      resStream.end(JSON.stringify(ipareRes.body));
     }
   }
 }

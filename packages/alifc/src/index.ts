@@ -8,6 +8,7 @@ declare module "@ipare/core" {
     get aliContext(): any;
     get aliReq(): AliReq;
     get aliRes(): AliRes;
+    get reqStream(): AliReq;
   }
   interface Request {
     get aliReq(): AliReq;

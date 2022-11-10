@@ -6,14 +6,14 @@ import { NumericalHeadersDict } from "@ipare/http";
 
 declare module "@ipare/core" {
   interface Context {
-    get serverReq(): http.IncomingMessage;
-    get serverRes(): http.ServerResponse;
+    get reqStream(): http.IncomingMessage;
+    get resStream(): http.ServerResponse;
   }
 }
 
 export class TestBodyParserStartup extends HttpBodyPraserStartup {
   constructor() {
-    super((ctx) => ctx.serverReq);
+    super((ctx) => ctx.reqStream);
   }
 
   public get listen() {
@@ -22,25 +22,25 @@ export class TestBodyParserStartup extends HttpBodyPraserStartup {
   }
 
   protected requestListener = async (
-    serverReq: http.IncomingMessage,
-    serverRes: http.ServerResponse
+    reqStream: http.IncomingMessage,
+    resStream: http.ServerResponse
   ): Promise<void> => {
-    const url = urlParse(serverReq.url as string, true);
+    const url = urlParse(reqStream.url as string, true);
     const req = new Request()
       .setPath(url.pathname)
-      .setMethod(serverReq.method as string)
+      .setMethod(reqStream.method as string)
       .setQuery(url.query as Dict<string>)
-      .setHeaders(serverReq.headers as NumericalHeadersDict);
+      .setHeaders(reqStream.headers as NumericalHeadersDict);
     const ctx = new Context(req);
-    Object.defineProperty(ctx, "serverRes", {
-      get: () => serverRes,
+    Object.defineProperty(ctx, "resStream", {
+      get: () => resStream,
     });
-    Object.defineProperty(ctx, "serverReq", {
-      get: () => serverReq,
+    Object.defineProperty(ctx, "reqStream", {
+      get: () => reqStream,
     });
 
     await this.invoke(ctx);
-    serverRes.statusCode = ctx.res.status;
-    serverRes.end();
+    resStream.statusCode = ctx.res.status;
+    resStream.end();
   };
 }

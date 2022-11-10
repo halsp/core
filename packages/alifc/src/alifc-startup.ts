@@ -19,28 +19,33 @@ export class AlifcStartup extends HttpBodyPraserStartup {
     );
 
     Object.defineProperty(ctx, "aliContext", {
-      configurable: false,
-      enumerable: false,
+      configurable: true,
+      enumerable: true,
       get: () => aliContext,
     });
     Object.defineProperty(ctx, "aliReq", {
-      configurable: false,
-      enumerable: false,
+      configurable: true,
+      enumerable: true,
+      get: () => aliReq,
+    });
+    Object.defineProperty(ctx, "reqStream", {
+      configurable: true,
+      enumerable: true,
       get: () => aliReq,
     });
     Object.defineProperty(ctx.req, "aliReq", {
-      configurable: false,
-      enumerable: false,
+      configurable: true,
+      enumerable: true,
       get: () => aliReq,
     });
     Object.defineProperty(ctx, "aliRes", {
-      configurable: false,
-      enumerable: false,
+      configurable: true,
+      enumerable: true,
       get: () => aliRes,
     });
     Object.defineProperty(ctx.res, "aliRes", {
-      configurable: false,
-      enumerable: false,
+      configurable: true,
+      enumerable: true,
       get: () => aliRes,
     });
 

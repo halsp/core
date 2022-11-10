@@ -15,19 +15,20 @@ res.send = () => undefined;
 test("context", async () => {
   await new AlifcStartup()
     .use((ctx) => {
-      const context = ctx.aliContext;
-      const aliReq1 = ctx.aliReq;
-      const aliReq2 = ctx.req.aliReq;
-      const aliRes1 = ctx.aliRes;
-      const aliRes2 = ctx.res.aliRes;
+      const ctxAliReq = ctx.aliReq;
+      const ctxAliRes = ctx.aliRes;
+      const reqAliReq = ctx.req.aliReq;
+      const resAliRes = ctx.res.aliRes;
+      const reqStream = ctx.reqStream;
 
-      expect(context).toBe({
+      expect(ctx.aliContext).toBe({
         c: 3,
       });
-      expect(aliReq1).toBe(aliReq2);
-      expect(aliReq1).toEqual(req);
-      expect(aliRes1).toBe(aliRes2);
-      expect(aliRes1).toEqual(res);
+      expect(ctxAliReq).toBe(reqAliReq);
+      expect(ctxAliReq).toEqual(req);
+      expect(ctxAliRes).toBe(resAliRes);
+      expect(ctxAliRes).toEqual(res);
+      expect(reqStream).toBe(ctxAliReq);
     })
     .run(req, res, {
       c: 3,
