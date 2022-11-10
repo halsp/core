@@ -6,7 +6,7 @@ import http from "http";
 import { HttpStartup, StatusCodes } from "@ipare/http";
 import { MultipartBody } from "./multipart";
 
-export abstract class HttpBodyPraserStartup extends HttpStartup {
+export abstract class BodyPraserStartup extends HttpStartup {
   constructor(
     private readonly sourceReqBuilder: (ctx: Context) => http.IncomingMessage
   ) {

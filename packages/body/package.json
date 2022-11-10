@@ -1,5 +1,5 @@
 {
-  "name": "@ipare/http-body",
+  "name": "@ipare/body",
   "version": "3.0.0-alpha.2",
   "description": "Ipare 的 Http Body 解析插件",
   "engines": {

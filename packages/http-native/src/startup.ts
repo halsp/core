@@ -1,5 +1,5 @@
 import * as net from "net";
-import { HttpBodyPraserStartup } from "@ipare/http-body";
+import { BodyPraserStartup } from "@ipare/body";
 import * as http from "http";
 import * as https from "https";
 import { Request, Response, Dict, isString, Context } from "@ipare/core";
@@ -16,7 +16,7 @@ export class HttpNativeStartup<
   T extends HttpNativeOptions | HttpsNativeOptions =
     | HttpNativeOptions
     | HttpsNativeOptions
-> extends HttpBodyPraserStartup {
+> extends BodyPraserStartup {
   readonly #server: ServerType<T>;
 
   public get server() {

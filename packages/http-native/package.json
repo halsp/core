@@ -38,7 +38,7 @@
   "dependencies": {
     "@ipare/core": "^3.0.0-alpha.2",
     "@ipare/http": "^3.0.0-alpha.2",
-    "@ipare/http-body": "^3.0.0-alpha.2",
+    "@ipare/body": "^3.0.0-alpha.2",
     "url-parse": "^1.5.10"
   },
   "devDependencies": {

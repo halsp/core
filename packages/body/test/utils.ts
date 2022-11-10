@@ -1,4 +1,4 @@
-import { HttpBodyPraserStartup } from "../src";
+import { BodyPraserStartup } from "../src";
 import * as http from "http";
 import { Context, Dict, Request } from "@ipare/core";
 import urlParse from "url-parse";
@@ -11,7 +11,7 @@ declare module "@ipare/core" {
   }
 }
 
-export class TestBodyParserStartup extends HttpBodyPraserStartup {
+export class TestBodyParserStartup extends BodyPraserStartup {
   constructor() {
     super((ctx) => ctx.reqStream);
   }
