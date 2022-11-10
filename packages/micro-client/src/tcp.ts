@@ -1,7 +1,13 @@
-import { MicroClient, parseBuffer } from "@ipare/micro";
+import { parseBuffer } from "@ipare/micro";
 import * as net from "net";
-import { MicroTcpClientOptions } from "./options";
-import { onSocketClose } from "./socket";
+import { MicroClient } from "./client";
+
+export interface MicroTcpClientOptions {
+  host?: string;
+  port?: number;
+  prefix?: string;
+  sendTimeout?: number;
+}
 
 export class MicroTcpClient extends MicroClient {
   constructor(private readonly options: MicroTcpClientOptions) {
@@ -15,12 +21,15 @@ export class MicroTcpClient extends MicroClient {
     return this.options.prefix ?? "";
   }
 
-  async connect(): Promise<void> {
+  async connect(): Promise<net.Socket> {
     this.#close();
     const socket = new net.Socket();
     this.#socket = socket;
 
-    onSocketClose.bind(this)(socket);
+    socket.on("close", () => {
+      //
+    });
+
     socket.on("data", (buffer: Buffer) => {
       parseBuffer(buffer, (json) => this.#handleResponse(json));
     });
@@ -42,6 +51,8 @@ export class MicroTcpClient extends MicroClient {
     );
 
     await promise;
+
+    return socket;
   }
 
   #handleResponse(json: any) {

@@ -1,6 +1,8 @@
-import { MicroTcpClient, MicroTcpOptions, MicroTcpStartup } from "../src";
+import { MicroTcpOptions, MicroTcpStartup } from "../src";
 import { sendData, sendMessage } from "./utils";
 import net from "net";
+
+import { MicroTcpClient } from "@ipare/micro-client";
 
 describe("startup.listen", () => {
   it("should listen and close", async () => {

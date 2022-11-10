@@ -7,5 +7,4 @@ declare module "@ipare/core" {
 }
 
 export { MicroTcpStartup } from "./startup";
-export { MicroTcpOptions, MicroTcpClientOptions } from "./options";
-export { MicroTcpClient } from "./client";
+export { MicroTcpOptions } from "./options";

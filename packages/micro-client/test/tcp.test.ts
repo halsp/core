@@ -1,4 +1,5 @@
-import { MicroTcpClient, MicroTcpStartup } from "../src";
+import { MicroTcpClient } from "../src";
+import { MicroTcpStartup } from "@ipare/micro-tcp";
 
 describe("client", () => {
   it("should send message and return boolean value", async () => {
@@ -209,4 +210,22 @@ describe("client", () => {
       error: "Send timeout",
     });
   }, 10000);
+
+  it("should clouse when emit close event", async () => {
+    const startup = new MicroTcpStartup({
+      port: 23334,
+    }).use((ctx) => {
+      ctx.res.setBody(ctx.req.body);
+    });
+    const { port } = await startup.dynamicListen();
+
+    const client = new MicroTcpClient({
+      port,
+    });
+    const socket = await client.connect();
+    socket.emit("close");
+
+    client.dispose();
+    startup.close();
+  });
 });
