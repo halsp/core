@@ -1,4 +1,5 @@
-import { MicroClient, parseBuffer } from "@ipare/micro";
+import { MicroClient } from "@ipare/micro-client";
+import { parseBuffer } from "@ipare/micro";
 import { MicroNatsClientOptions } from "./options";
 import { initNatsConnection, MicroNatsConnection } from "./connection";
 import * as nats from "nats";
