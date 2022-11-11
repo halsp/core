@@ -1,24 +1,48 @@
-import { MicroClient } from "@ipare/micro-client";
 import { parseBuffer } from "@ipare/micro";
-import { MicroNatsClientOptions } from "./options";
-import { initNatsConnection, MicroNatsConnection } from "./connection";
-import * as nats from "nats";
+import type nats from "nats";
+import { MicroClient } from "./base";
+
+export interface MicroNatsClientOptions
+  extends Omit<nats.ConnectionOptions, "services"> {
+  host?: string;
+  prefix?: string;
+  sendTimeout?: number;
+}
 
 export class MicroNatsClient extends MicroClient {
   constructor(protected readonly options: MicroNatsClientOptions = {}) {
     super();
-    initNatsConnection.bind(this)();
+  }
+
+  protected connection?: nats.NatsConnection;
+  protected get prefix() {
+    return this.options.prefix ?? "";
   }
 
   async connect() {
-    await this.initClients();
+    await this.#close();
+
+    const opt: any = { ...this.options };
+    delete opt.host;
+    opt.port = this.options.port ?? 4222;
+    opt.services = this.options.host ?? "localhost";
+
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const natsPkg = require("nats");
+    this.connection = await natsPkg.connect(opt);
+  }
+
+  async #close() {
+    if (this.connection && !this.connection.isClosed()) {
+      await this.connection.close();
+    }
   }
 
   /**
    * for @ipare/inject
    */
   async dispose() {
-    await this.closeClients();
+    await this.#close();
   }
 
   async send<T = any>(
@@ -34,7 +58,7 @@ export class MicroNatsClient extends MicroClient {
     if (!this.connection || this.connection.isClosed()) {
       return {
         error: "The connection is not connected",
-        headers: nats.headers(),
+        headers: createHeaders(),
       };
     }
 
@@ -57,10 +81,10 @@ export class MicroNatsClient extends MicroClient {
             clearTimeout(timeoutInstance);
           }
 
-          if (err) {
+          if (err && !msg.data) {
             resolve({
               error: err.message,
-              headers: nats.headers(),
+              headers: createHeaders(),
             });
             return;
           }
@@ -68,7 +92,7 @@ export class MicroNatsClient extends MicroClient {
           parseBuffer(Buffer.from(msg.data), (packet) => {
             resolve({
               data: packet.data ?? packet.response,
-              error: packet.error,
+              error: err?.message ?? packet.error,
               headers: msg.headers as nats.MsgHdrs,
             });
           });
@@ -82,7 +106,7 @@ export class MicroNatsClient extends MicroClient {
           sub.unsubscribe();
           resolve({
             error: "Send timeout",
-            headers: nats.headers(),
+            headers: createHeaders(),
           });
         }, sendTimeout);
       }
@@ -113,6 +137,8 @@ export class MicroNatsClient extends MicroClient {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface MicroNatsClient
-  extends MicroNatsConnection<MicroNatsClientOptions> {}
+function createHeaders() {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const natsPkg = require("nats");
+  return natsPkg.headers() as nats.MsgHdrs;
+}

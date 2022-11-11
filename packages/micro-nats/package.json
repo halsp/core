@@ -28,8 +28,7 @@
     "build": "rimraf ./dist/* && tsc",
     "lint": "eslint src test --ext .ts",
     "pretest": "npm run build",
-    "test": "jest",
-    "test:local": "jest --setupFiles ./test/local.ts"
+    "test": "jest"
   },
   "author": "hal-wang",
   "license": "MIT",

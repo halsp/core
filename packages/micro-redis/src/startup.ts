@@ -16,7 +16,7 @@ export class MicroRedisStartup extends MicroStartup {
   protected pub?: redis.RedisClientType;
   protected sub?: redis.RedisClientType;
 
-  get prefix() {
+  protected get prefix() {
     return this.options.prefix ?? "";
   }
 

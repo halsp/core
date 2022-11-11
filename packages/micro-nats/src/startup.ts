@@ -1,13 +1,11 @@
 import { MicroStartup } from "@ipare/micro";
 import { MicroNatsOptions } from "./options";
-import { initNatsConnection, MicroNatsConnection } from "./connection";
 import { Context } from "@ipare/core";
-import * as nats from "nats";
+import type nats from "nats";
 
 export class MicroNatsStartup extends MicroStartup {
   constructor(protected readonly options: MicroNatsOptions = {}) {
     super();
-    initNatsConnection.bind(this)();
   }
 
   #handlers: {
@@ -15,8 +13,22 @@ export class MicroNatsStartup extends MicroStartup {
     handler: (ctx: Context) => Promise<void> | void;
   }[] = [];
 
+  protected connection?: nats.NatsConnection;
+  protected get prefix() {
+    return this.options.prefix ?? "";
+  }
+
   async listen() {
-    await this.initClients();
+    await this.close();
+
+    const opt: any = { ...this.options };
+    delete opt.host;
+    opt.port = this.options.port ?? 4222;
+    opt.services = this.options.host ?? "localhost";
+
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const natsPkg = require("nats");
+    this.connection = await natsPkg.connect(opt);
 
     this.#handlers.forEach((item) => {
       this.#pattern(item.pattern, item.handler);
@@ -45,8 +57,8 @@ export class MicroNatsStartup extends MicroStartup {
             }
           },
           async (ctx) => {
-            const reqHeaders = msg.headers ?? nats.headers();
-            const resHeaders = nats.headers();
+            const reqHeaders = msg.headers ?? createHeaders();
+            const resHeaders = createHeaders();
             Object.defineProperty(ctx.req, "headers", {
               configurable: true,
               enumerable: true,
@@ -85,10 +97,14 @@ export class MicroNatsStartup extends MicroStartup {
   }
 
   async close() {
-    await this.closeClients();
+    if (this.connection && !this.connection.isClosed()) {
+      await this.connection.close();
+    }
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface MicroNatsStartup
-  extends MicroNatsConnection<MicroNatsOptions> {}
+function createHeaders() {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const natsPkg = require("nats");
+  return natsPkg.headers() as nats.MsgHdrs;
+}
