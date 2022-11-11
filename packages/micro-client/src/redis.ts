@@ -1,23 +1,66 @@
-import { MicroClient, parseBuffer } from "@ipare/micro";
-import { MicroRedisClientOptions } from "./options";
-import { initRedisConnection, MicroRedisConnection } from "./connection";
-import * as redis from "redis";
+import { parseBuffer } from "@ipare/micro";
+import type redis from "redis";
+import { MicroClient } from "./base";
+
+export interface MicroRedisClientOptions<
+  M extends redis.RedisModules = redis.RedisModules,
+  F extends redis.RedisFunctions = redis.RedisFunctions,
+  S extends redis.RedisScripts = redis.RedisScripts
+> extends Omit<redis.RedisClientOptions<M, F, S>, "url"> {
+  host?: string;
+  port?: number;
+  prefix?: string;
+  sendTimeout?: number;
+}
 
 export class MicroRedisClient extends MicroClient {
   constructor(protected readonly options: MicroRedisClientOptions = {}) {
     super();
-    initRedisConnection.bind(this)();
+  }
+
+  protected pub?: redis.RedisClientType;
+  protected sub?: redis.RedisClientType;
+  protected get prefix() {
+    return this.options.prefix ?? "";
   }
 
   async connect() {
-    await this.initClients();
+    await this.#close();
+
+    const host = this.options.host ?? "localhost";
+    const port = this.options.port ?? 6379;
+    const opt: any = { ...this.options };
+    delete opt.host;
+    delete opt.port;
+    opt.url = `redis://${host}:${port}`;
+
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const redisPkg = require("redis");
+    const pub = redisPkg.createClient(opt) as redis.RedisClientType;
+    const sub = redisPkg.createClient(opt) as redis.RedisClientType;
+
+    this.pub = pub;
+    this.sub = sub;
+    await Promise.all([pub.connect(), sub.connect()]);
+  }
+
+  async #close() {
+    async function disconnect(redis?: redis.RedisClientType) {
+      if (redis?.isReady && redis.isOpen) {
+        await redis.disconnect();
+      }
+    }
+    await disconnect(this.pub);
+    this.pub = undefined;
+    await disconnect(this.sub);
+    this.sub = undefined;
   }
 
   /**
    * for @ipare/inject
    */
   async dispose() {
-    await this.closeClients();
+    await this.#close();
   }
 
   async send<T = any>(
@@ -74,7 +117,7 @@ export class MicroRedisClient extends MicroClient {
   }
 
   emit(pattern: string, data: any): void {
-    if (!this.sub?.isReady || !this.pub?.isReady) {
+    if (!this.pub?.isReady) {
       throw new Error("The connection is not connected");
     }
 
@@ -91,7 +134,3 @@ export class MicroRedisClient extends MicroClient {
     pub.publish(packet.pattern, str);
   }
 }
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface MicroRedisClient
-  extends MicroRedisConnection<MicroRedisClientOptions> {}

@@ -1,6 +1,6 @@
 import { parseBuffer } from "@ipare/micro";
 import * as net from "net";
-import { MicroClient } from "./client";
+import { MicroClient } from "./base";
 
 export interface MicroTcpClientOptions {
   host?: string;

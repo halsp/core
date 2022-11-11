@@ -1,2 +1,3 @@
-export { MicroClient } from "./client";
-export { MicroTcpClient } from "./tcp";
+export { MicroClient } from "./base";
+export { MicroTcpClient, MicroTcpClientOptions } from "./tcp";
+export { MicroRedisClient, MicroRedisClientOptions } from "./redis";
