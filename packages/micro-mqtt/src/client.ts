@@ -1,4 +1,5 @@
-import { MicroClient, parseBuffer } from "@ipare/micro";
+import { MicroClient } from "@ipare/micro-client";
+import { parseBuffer } from "@ipare/micro";
 import { MicroMqttClientOptions } from "./options";
 import { initMqttConnection, MicroMqttConnection } from "./connection";
 import * as mqtt from "mqtt";

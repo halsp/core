@@ -1,7 +1,6 @@
 import { Request, Response } from "@ipare/core";
 import { TestMicroStartup } from "../src/micro";
 import { TestMicroTcpClient, TestMicroTcpStartup } from "../src/micro-tcp";
-import { TestMicroNatsStartup, TestMicroNatsClient } from "../src/micro-nats";
 
 describe("micro response.expect", () => {
   it("should expect body", async () => {
@@ -78,58 +77,6 @@ describe("micro tcp startup", () => {
     const result = await client.send("", true);
     await startup.close();
     client.dispose();
-
-    expect(result.data).toBe(true);
-  });
-});
-
-describe("micro nats startup", () => {
-  it("should create mock redis", async () => {
-    const startup = new TestMicroNatsStartup().mockConnection();
-    await startup.listen();
-
-    const client = new TestMicroNatsClient().mockConnection();
-    await client.connect();
-
-    expect(!!(startup as any).connection).toBeTruthy();
-    expect(!!(client as any).connection).toBeTruthy();
-
-    await startup.close();
-    await client.dispose();
-  });
-
-  it("should create startup mock from startup", async () => {
-    const startup1 = new TestMicroNatsStartup().mockConnection();
-    await startup1.listen();
-
-    const startup2 = new TestMicroNatsStartup().mockConnectionFrom(startup1);
-    await startup2.listen();
-
-    expect((startup2 as any).connection).toBe((startup1 as any).connection);
-
-    await startup1.close();
-    await startup2.close();
-  });
-
-  it("should send message and return boolean value", async () => {
-    const startup = new TestMicroNatsStartup()
-      .mockConnection()
-      .use((ctx) => {
-        ctx.res.setBody(ctx.req.body);
-        expect(ctx.bag("pt")).toBeTruthy();
-      })
-      .pattern("test_return", (ctx) => {
-        ctx.bag("pt", true);
-      });
-    await startup.listen();
-
-    const client = new TestMicroNatsClient().mockConnectionFrom(startup);
-    await client.connect();
-
-    const result = await client.send("test_return", true);
-
-    await startup.close();
-    await client.dispose();
 
     expect(result.data).toBe(true);
   });

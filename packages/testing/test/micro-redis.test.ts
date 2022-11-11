@@ -52,7 +52,7 @@ describe("micro-redis", () => {
     expect(publishPattern).toBe("test_pattern.123");
   });
 
-  it("should ", async () => {
+  it("should be not connected", async () => {
     const client = new TestMicroRedisClient();
     const result = await client.send("", "");
     expect(result).toEqual({
