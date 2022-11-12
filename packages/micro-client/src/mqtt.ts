@@ -37,12 +37,12 @@ export class MicroMqttClient extends MicroClient {
       this.connectResolve = resolve;
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const mqttPkg = require("mqtt");
-      this.client = mqttPkg.connect(this.options) as mqtt.MqttClient;
+      this.client = mqttPkg.connect(opt) as mqtt.MqttClient;
       this.client.on("connect", () => {
         resolve();
       });
       this.client.on("error", (err) => {
-        this["logger"]?.error(err);
+        this.logger?.error(err);
         resolve();
       });
     });
@@ -57,7 +57,7 @@ export class MicroMqttClient extends MicroClient {
           if (callback) {
             callback(
               packet.error,
-              packet.data ?? packet.response,
+              this.getDataFromReturnPacket(packet),
               publishPacket
             );
             this.#tasks.delete(id);
@@ -65,6 +65,10 @@ export class MicroMqttClient extends MicroClient {
         });
       }
     );
+  }
+
+  private getDataFromReturnPacket(packet: any) {
+    return packet.data ?? packet.response;
   }
 
   #close(force = false) {

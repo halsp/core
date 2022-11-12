@@ -1,8 +1,8 @@
-import { MicroNatsClient } from "../../src";
+import { MicroMqttClient } from "../../src";
 
 describe("emit", () => {
   it("should not emit message before connect", async () => {
-    const client = new MicroNatsClient();
+    const client = new MicroMqttClient();
 
     let error: any;
     try {
@@ -13,10 +13,10 @@ describe("emit", () => {
     expect(error.message).toBe("The connection is not connected");
   });
 
-  it("should not emit message if connection is closed", async () => {
-    const client = new MicroNatsClient();
-    (client as any).connection = {
-      isClosed: () => true,
+  it("should not emit message if connected is false", async () => {
+    const client = new MicroMqttClient();
+    (client as any).client = {
+      connected: false,
     };
 
     let error: any;
@@ -30,9 +30,9 @@ describe("emit", () => {
 
   it("should emit message when connected", async () => {
     let published = false;
-    const client = new MicroNatsClient();
-    (client as any).connection = {
-      isClosed: () => false,
+    const client = new MicroMqttClient();
+    (client as any).client = {
+      connected: true,
       publish: () => {
         published = true;
       },
