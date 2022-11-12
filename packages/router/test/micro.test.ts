@@ -1,7 +1,5 @@
 import { Request } from "@ipare/core";
 import { TestMicroStartup } from "@ipare/testing/dist/micro";
-import { TestMicroRedisStartup } from "@ipare/testing/dist/micro-redis";
-import { TestMicroNatsStartup } from "@ipare/testing/dist/micro-nats";
 import "./utils-micro";
 
 describe("pattern", () => {
@@ -50,62 +48,5 @@ describe("pattern", () => {
     }
     await test("multi:123");
     await test("multi:456");
-  });
-});
-
-describe("registry", () => {
-  it("should add pattern handlers when use micro redis", async () => {
-    jest.mock("redis", () => {
-      return {
-        createClient: () => {
-          return {
-            connect: () => undefined,
-            subscribe: () => undefined,
-          };
-        },
-      };
-    });
-
-    const startup = new TestMicroRedisStartup().useTestRouter().useRouter();
-    await startup.listen();
-
-    // const client = new TestMicroRedisClient().mockConnectionFrom(startup);
-    // await client.connect();
-
-    // const result = await client.send("event:123", true);
-
-    // await startup.close();
-    // await client.dispose();
-
-    // expect(result.data).toBe("event-pattern-test");
-  });
-
-  it("should add pattern handlers when use micro nats", async () => {
-    jest.mock("nats", () => {
-      return {
-        connect: () => {
-          return {
-            connect: () => undefined,
-            subscribe: () => undefined,
-          };
-        },
-        headers: () => {
-          return {};
-        },
-      };
-    });
-
-    const startup = new TestMicroNatsStartup().useTestRouter().useRouter();
-    await startup.listen();
-
-    // const client = new TestMicroNatsClient();
-    // await client.connect();
-
-    // const result = await client.send("event:123", true);
-
-    // await startup.close();
-    // await client.dispose();
-
-    // expect(result.data).toBe("event-pattern-test");
   });
 });
