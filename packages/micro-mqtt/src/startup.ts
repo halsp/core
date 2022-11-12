@@ -2,6 +2,7 @@ import { MicroStartup } from "@ipare/micro";
 import { MicroMqttOptions } from "./options";
 import type mqtt from "mqtt";
 import { Context } from "@ipare/core";
+import { matchTopic } from "./topic";
 
 export class MicroMqttStartup extends MicroStartup {
   constructor(protected readonly options: MicroMqttOptions = {}) {
@@ -31,12 +32,12 @@ export class MicroMqttStartup extends MicroStartup {
       this.connectResolve = resolve;
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const mqttPkg = require("mqtt");
-      this.client = mqttPkg.connect(this.options) as mqtt.MqttClient;
+      this.client = mqttPkg.connect(opt) as mqtt.MqttClient;
       this.client.on("connect", () => {
         resolve();
       });
       this.client.on("error", (err) => {
-        this["logger"]?.error(err);
+        this.logger.error(err);
         resolve();
       });
     });
@@ -121,23 +122,4 @@ export class MicroMqttStartup extends MicroStartup {
     this.client?.end(force);
     this.client?.removeAllListeners();
   }
-}
-
-function matchTopic(pattern: string, topic: string) {
-  const patternArray = pattern.split("/");
-  const topicArray = topic.split("/");
-
-  const length = patternArray.length;
-  for (let i = 0; i < length; ++i) {
-    const filterItem = patternArray[i];
-    const topicItem = topicArray[i];
-    if (filterItem === "#") {
-      return topicArray.length >= length - 1;
-    }
-    if (filterItem !== "+" && filterItem !== topicItem) {
-      return false;
-    }
-  }
-
-  return length === topicArray.length;
 }

@@ -8,3 +8,4 @@ declare module "@ipare/core" {
 
 export { MicroMqttOptions } from "./options";
 export { MicroMqttStartup } from "./startup";
+export { matchTopic } from "./topic";

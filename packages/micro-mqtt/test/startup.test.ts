@@ -1,159 +1,68 @@
-import { MicroMqttClient, MicroMqttStartup } from "../src";
-import { mockConnection, mockConnectionFrom } from "../src/mock";
-import { localTest, runSendTest } from "./utils";
+import { MicroMqttStartup } from "../src";
+import { createMock } from "@ipare/testing/dist/micro-mqtt";
+import { MicroMqttClient } from "@ipare/micro-client";
 
 describe("startup", () => {
-  it("should be error when the message is invalidate", async () => {
-    let pattern: any = undefined;
-    let data: any = undefined;
-    const startup = new MicroMqttStartup()
-      .use(async (ctx) => {
-        pattern = ctx.req.pattern;
-        data = ctx.req.body;
-        expect(ctx.bag("pt")).toBeTruthy();
-        expect(!!ctx.req.packet).toBeTruthy();
-      })
-      .patterns({
-        pattern: "test_invalidate",
-        handler: (ctx) => {
-          ctx.bag("pt", true);
-        },
-      });
-    mockConnection.bind(startup)();
-    const connect = await startup.listen();
+  jest.mock("mqtt", () => createMock());
 
-    const beforeError = console.error;
-    let err = false;
-    console.error = () => {
-      err = true;
-    };
-    connect?.publish("test_invalidate", Buffer.from(`3#{}`, "utf-8"));
-
-    let times = 0;
-    while (times < 20 && !pattern) {
-      await new Promise<void>((resolve) => {
-        setTimeout(() => resolve(), 100);
-      });
-      times++;
-    }
-
-    console.error = beforeError;
-
-    await startup.close();
-    expect(err).toBeTruthy();
-    expect(pattern).toBeUndefined();
-    expect(data).toBeUndefined();
-  });
-
-  it("should log error when connect error", async () => {
+  it("should subscribe and publish", async () => {
     const startup = new MicroMqttStartup({
-      port: 443,
-      host: "0.0.0.-1",
-      reconnectPeriod: 0,
-    });
-
-    const beforeError = console.error;
-    let err = false;
-    console.error = () => {
-      err = true;
-    };
-    await new Promise<void>(async (resolve) => {
-      setTimeout(() => {
-        err = true;
-        resolve();
-      }, 1000);
-
-      await startup.listen();
-      resolve();
-    });
-    console.error = beforeError;
-
-    await new Promise<void>(async (resolve) => {
-      setTimeout(() => {
-        resolve();
-      }, 500);
-    });
-
-    expect(err).toBeTruthy();
-  }, 100000);
-
-  it("should publish with publishOptions", async () => {
-    const result = await runSendTest(
-      true,
-      (ctx) => {
-        ctx.res.setBody(ctx.req.body);
-        expect(ctx.req.packet).toBe(ctx.req.path);
-      },
-      {
-        publishOptions: {
-          qos: 1,
-        },
-      },
-      undefined,
-      true
-    );
-    expect(result.data).toBe(true);
-  });
-
-  it("should subscribe with subscribeOptions", async () => {
-    const result = await runSendTest(
-      true,
-      (ctx) => {
-        ctx.res.setBody(ctx.req.body);
-      },
-      {
-        subscribeOptions: {
-          qos: 1,
-        },
-      },
-      undefined,
-      true
-    );
-    expect(result.data).toBe(true);
-  });
-});
-
-describe("pattern", () => {
-  async function testPattern(pattern: string, topic: string) {
-    const startup = new MicroMqttStartup()
-      .use(async (ctx) => {
+      subscribeOptions: { qos: 1 },
+      publishOptions: {},
+    }).patterns({
+      pattern: "test_pattern_subscribe",
+      handler: (ctx) => {
         ctx.res.body = ctx.req.body;
-        // expect(ctx.req.pattern).toBe(topic);
-      })
-      .patterns({
-        pattern: pattern,
-        handler: () => undefined,
-      });
-    if (!localTest) {
-      mockConnection.bind(startup)();
-    }
+      },
+    });
     await startup.listen();
 
     const client = new MicroMqttClient();
-    if (!localTest) {
-      mockConnectionFrom.bind(client)(startup);
-    }
     await client.connect();
+    const result = await client.send("test_pattern_subscribe", "test_body");
 
-    const result = await client.send(topic, "123");
-
-    await new Promise<void>((resolve) => {
-      setTimeout(() => resolve(), 500);
-    });
-
-    await client.dispose();
     await startup.close();
+    await client.dispose();
 
-    expect(result.data).toBe("123");
-  }
-
-  it("should match topic with #", async () => {
-    await testPattern("test/#", "test/abc");
-    await testPattern("test/#", "test/abc/def");
+    expect(result.data).toBe("test_body");
+    expect(result.error).toBeUndefined();
   });
 
-  it("should match topic with +", async () => {
-    await testPattern("test/+/ab", "test/123/ab");
-    await testPattern("+/ab", "123/ab");
+  it("should subscribe wiehout publish when pattern is not matched", async () => {
+    const startup = new MicroMqttStartup({
+      subscribeOptions: { qos: 1 },
+      publishOptions: {},
+    }).patterns({
+      pattern: "test_pattern_not_matched",
+      handler: (ctx) => {
+        ctx.res.body = ctx.req.body;
+      },
+    });
+    await startup.listen();
+
+    const client = new MicroMqttClient();
+    await client.connect();
+    const result = await client.send("test_pattern_not_matched1", "test_body");
+
+    await startup.close();
+    await client.dispose();
+
+    expect(result.data).toBe("test_body");
+    expect(result.error).toBeUndefined();
+  });
+
+  it("should log error if client emit error event", async () => {
+    const startup = new MicroMqttStartup();
+    await startup.listen();
+
+    let error: any;
+    const consoleError = console.error;
+    console.error = (err) => {
+      error = err;
+    };
+    startup["client"]?.emit("error", new Error("err"));
+    console.error = consoleError;
+
+    expect(error.message).toBe("err");
   });
 });
