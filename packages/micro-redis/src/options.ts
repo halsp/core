@@ -1,4 +1,4 @@
-import * as redis from "redis";
+import type redis from "redis";
 
 export interface MicroRedisOptions<
   M extends redis.RedisModules = redis.RedisModules,

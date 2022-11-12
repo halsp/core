@@ -1,18 +1,18 @@
 import {
   createMock,
-  TestMicroNatsClient,
-  TestMicroNatsStartup,
-} from "@ipare/testing/dist/micro-nats";
+  TestMicroRedisClient,
+  TestMicroRedisStartup,
+} from "@ipare/testing/dist/micro-redis";
 import "./utils-micro";
 
 describe("micro-nats", () => {
-  jest.mock("nats", () => createMock(true));
+  jest.mock("redis", () => createMock());
 
   it("should add pattern handlers when use micro nats", async () => {
-    const startup = new TestMicroNatsStartup().useTestRouter().useRouter();
+    const startup = new TestMicroRedisStartup().useTestRouter().useRouter();
     await startup.listen();
 
-    const client = new TestMicroNatsClient();
+    const client = new TestMicroRedisClient();
     await client.connect();
 
     const result = await client.send("event:123", true);

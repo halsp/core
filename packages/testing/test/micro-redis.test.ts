@@ -1,62 +1,36 @@
 import {
+  createMock,
   TestMicroRedisClient,
   TestMicroRedisStartup,
 } from "../src/micro-redis";
 
 describe("micro-redis", () => {
-  jest.mock("redis", () => {
-    return {
-      createClient: () => {
-        return {
-          connect: () => undefined,
-        };
-      },
-    };
-  });
+  jest.mock("redis", () => createMock(true));
 
   it("should subscribe and publish", async () => {
-    let publishPattern = "";
-    let subscribePattern = "";
-    let subscribeCallback: any;
-    const startup = new TestMicroRedisStartup();
+    const startup = new TestMicroRedisStartup().pattern(
+      "test_pattern",
+      (ctx) => {
+        ctx.res.body = ctx.req.body;
+      }
+    );
     await startup.listen();
 
-    (startup as any).sub = {
-      isReady: true,
-      subscribe: (pattern: string, callback: any) => {
-        subscribePattern = pattern;
-        subscribeCallback = callback;
-      },
-      unsubscribe: () => undefined,
-    };
-    (startup as any).pub = {
-      isReady: true,
-      publish: (pattern: string) => {
-        publishPattern = pattern;
-      },
-    };
+    const client = new TestMicroRedisClient();
+    await client.connect();
 
-    startup.pattern("test_pattern", () => undefined);
+    const result = await client.send("test_pattern", "test_body");
+    expect(result.data).toBe("test_body");
 
-    const str = JSON.stringify({
-      id: "123",
-      data: "d",
-      pattern: "pt",
-    });
-    await subscribeCallback(Buffer.from(`${str.length}#${str}`));
-
-    await new Promise<void>((resolve) => {
-      setTimeout(() => resolve(), 500);
-    });
-    expect(subscribePattern).toBe("test_pattern");
-    expect(publishPattern).toBe("test_pattern.123");
+    await client.dispose();
+    await startup.close();
   });
 
-  it("should be not connected", async () => {
-    const client = new TestMicroRedisClient();
-    const result = await client.send("", "");
-    expect(result).toEqual({
-      error: "The connection is not connected",
-    });
+  it("should create new mock client", async () => {
+    const client1 = createMock();
+    expect(client1.createClient()).toBe(client1.createClient());
+
+    const client2 = createMock(false);
+    expect(client2.createClient()).not.toBe(client2.createClient());
   });
 });
