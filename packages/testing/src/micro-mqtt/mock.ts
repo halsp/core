@@ -1,8 +1,6 @@
-import { MicroMqttConnection } from "./connection";
-import * as mqtt from "mqtt";
+import type mqtt from "mqtt";
 
-export function createMockMqtt() {
-  let connected = false;
+function createMockClient() {
   const topics: string[] = [];
   const events: Record<
     string,
@@ -11,7 +9,7 @@ export function createMockMqtt() {
 
   const publish = (
     topic: string,
-    data: string | Buffer,
+    data: string,
     options?: mqtt.IClientPublishOptions
   ) => {
     if (options && !!options["test_equal"] && !topics.includes(topic)) {
@@ -21,7 +19,7 @@ export function createMockMqtt() {
     const cbs = events["message"];
     if (!cbs) return;
     cbs.forEach((cb) => {
-      cb(topic, Buffer.isBuffer(data) ? data : Buffer.from(data, "utf-8"), {
+      cb(topic, Buffer.from(data, "utf-8"), {
         ...options,
         payload: data,
         topic,
@@ -54,42 +52,42 @@ export function createMockMqtt() {
         events[event] = [callback];
       }
     },
+    emit: (event: string, ...args: any[]) => {
+      const cbs = events[event] ?? [];
+      cbs.forEach((cb) => {
+        (cb as any)(...args);
+      });
+    },
     removeAllListeners() {
       for (const key in events) {
         delete events[key];
       }
     },
-    connect() {
-      connected = true;
-    },
     end() {
-      connected = false;
+      this.connected = false;
+      this.disconnected = true;
     },
-    connected() {
-      return connected;
-    },
-    disconnected() {
-      return !connected;
+    connected: false,
+    disconnected: undefined as boolean | undefined,
+    reset() {
+      this.connected = false;
+      this.disconnected = undefined;
     },
   };
 }
 
-export function mockConnection(this: MicroMqttConnection) {
-  this.initClients = async function () {
-    const mqtt = createMockMqtt();
+export function createMock(singleton = true) {
+  const client = createMockClient();
 
-    (this as any).client = mqtt;
-    mqtt.connect();
+  return {
+    connect: () => {
+      const result = singleton ? client : createMockClient();
+      result.reset();
+      setTimeout(() => {
+        result.connected = true;
+        result.emit("connect");
+      }, 500);
+      return result;
+    },
   };
-  return this;
-}
-
-export function mockConnectionFrom(
-  this: MicroMqttConnection,
-  target: MicroMqttConnection
-) {
-  this.initClients = async function () {
-    (this as any).client = (target as any).client;
-  };
-  return this;
 }

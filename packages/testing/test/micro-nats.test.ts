@@ -7,7 +7,7 @@ import "@ipare/micro-nats";
 import type nats from "nats";
 
 describe("micro-nats", () => {
-  jest.mock("nats", () => createMock(true));
+  jest.mock("nats", () => createMock());
 
   it("should subscribe and publish", async () => {
     const startup = new TestMicroNatsStartup().pattern(

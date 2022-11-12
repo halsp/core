@@ -1,13 +1,11 @@
 import { MicroStartup } from "@ipare/micro";
 import { MicroMqttOptions } from "./options";
-import { initMqttConnection, MicroMqttConnection } from "./connection";
-import * as mqtt from "mqtt";
+import type mqtt from "mqtt";
 import { Context } from "@ipare/core";
 
 export class MicroMqttStartup extends MicroStartup {
   constructor(protected readonly options: MicroMqttOptions = {}) {
     super();
-    initMqttConnection.bind(this)();
   }
 
   #handlers: {
@@ -15,8 +13,33 @@ export class MicroMqttStartup extends MicroStartup {
     handler: (ctx: Context) => Promise<void> | void;
   }[] = [];
 
+  protected client?: mqtt.MqttClient;
+  private connectResolve?: (err: void) => void;
+  protected get prefix() {
+    return this.options.prefix ?? "";
+  }
+
   async listen() {
-    await this.initClients();
+    this.close(true);
+
+    const opt: any = { ...this.options };
+    delete opt.host;
+    opt.port = this.options.port ?? 1883;
+    opt.services = this.options.host ?? "localhost";
+
+    await new Promise<void>((resolve) => {
+      this.connectResolve = resolve;
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const mqttPkg = require("mqtt");
+      this.client = mqttPkg.connect(this.options) as mqtt.MqttClient;
+      this.client.on("connect", () => {
+        resolve();
+      });
+      this.client.on("error", (err) => {
+        this["logger"]?.error(err);
+        resolve();
+      });
+    });
 
     this.#handlers.forEach((item) => {
       this.#pattern(item.pattern);
@@ -90,13 +113,15 @@ export class MicroMqttStartup extends MicroStartup {
   }
 
   async close(force?: boolean) {
-    await this.closeClients(force);
+    if (this.connectResolve) {
+      this.connectResolve();
+      this.connectResolve = undefined;
+    }
+
+    this.client?.end(force);
+    this.client?.removeAllListeners();
   }
 }
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface MicroMqttStartup
-  extends MicroMqttConnection<MicroMqttOptions> {}
 
 function matchTopic(pattern: string, topic: string) {
   const patternArray = pattern.split("/");

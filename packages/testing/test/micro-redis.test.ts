@@ -5,7 +5,7 @@ import {
 } from "../src/micro-redis";
 
 describe("micro-redis", () => {
-  jest.mock("redis", () => createMock(true));
+  jest.mock("redis", () => createMock());
 
   it("should subscribe and publish", async () => {
     const startup = new TestMicroRedisStartup().pattern(

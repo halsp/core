@@ -1,13 +1,17 @@
-import { MicroClient } from "@ipare/micro-client";
 import { parseBuffer } from "@ipare/micro";
-import { MicroMqttClientOptions } from "./options";
-import { initMqttConnection, MicroMqttConnection } from "./connection";
-import * as mqtt from "mqtt";
+import type mqtt from "mqtt";
+import { MicroClient } from "./base";
+
+export interface MicroMqttClientOptions extends mqtt.IClientOptions {
+  subscribeOptions?: mqtt.IClientSubscribeOptions;
+  publishOptions?: mqtt.IClientPublishOptions;
+  prefix?: string;
+  sendTimeout?: number;
+}
 
 export class MicroMqttClient extends MicroClient {
   constructor(protected readonly options: MicroMqttClientOptions = {}) {
     super();
-    initMqttConnection.bind(this)();
   }
 
   #tasks = new Map<
@@ -15,8 +19,33 @@ export class MicroMqttClient extends MicroClient {
     (err?: string, data?: any, packet?: mqtt.IPublishPacket) => void
   >();
 
+  protected client?: mqtt.MqttClient;
+  private connectResolve?: (err: void) => void;
+  protected get prefix() {
+    return this.options.prefix ?? "";
+  }
+
   async connect() {
-    await this.initClients();
+    this.#close(true);
+
+    const opt: any = { ...this.options };
+    delete opt.host;
+    opt.port = this.options.port ?? 1883;
+    opt.services = this.options.host ?? "localhost";
+
+    await new Promise<void>((resolve) => {
+      this.connectResolve = resolve;
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const mqttPkg = require("mqtt");
+      this.client = mqttPkg.connect(this.options) as mqtt.MqttClient;
+      this.client.on("connect", () => {
+        resolve();
+      });
+      this.client.on("error", (err) => {
+        this["logger"]?.error(err);
+        resolve();
+      });
+    });
 
     const client = this.client as mqtt.MqttClient;
     client.on(
@@ -38,11 +67,21 @@ export class MicroMqttClient extends MicroClient {
     );
   }
 
+  #close(force = false) {
+    if (this.connectResolve) {
+      this.connectResolve();
+      this.connectResolve = undefined;
+    }
+
+    this.client?.end(force);
+    this.client?.removeAllListeners();
+  }
+
   /**
    * for @ipare/inject
    */
   async dispose() {
-    await this.closeClients();
+    this.#close();
   }
 
   async send<T = any>(
@@ -127,7 +166,3 @@ export class MicroMqttClient extends MicroClient {
     }
   }
 }
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface MicroMqttClient
-  extends MicroMqttConnection<MicroMqttClientOptions> {}

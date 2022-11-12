@@ -1,4 +1,4 @@
-import * as mqtt from "mqtt";
+import type mqtt from "mqtt";
 
 declare module "@ipare/core" {
   interface Request {
@@ -6,7 +6,5 @@ declare module "@ipare/core" {
   }
 }
 
-export { MicroMqttClientOptions, MicroMqttOptions } from "./options";
+export { MicroMqttOptions } from "./options";
 export { MicroMqttStartup } from "./startup";
-export { MicroMqttClient } from "./client";
-export { MicroMqttConnection } from "./connection";
