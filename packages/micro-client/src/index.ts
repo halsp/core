@@ -1,17 +1,30 @@
 import { Context, ObjectConstructor, Startup } from "@ipare/core";
 import { InjectType, parseInject } from "@ipare/inject";
 import { MicroIdentityKey } from "./constant";
-import { MicroMqttClient, MicroMqttClientOptions } from "./mqtt";
-import { MicroNatsClient, MicroNatsClientOptions } from "./nats";
-import { MicroRedisClient, MicroRedisClientOptions } from "./redis";
-import { MicroTcpClient, MicroTcpClientOptions } from "./tcp";
+import {
+  MicroMqttClient,
+  MicroMqttClientOptions,
+  MicroNatsClient,
+  MicroNatsClientOptions,
+  MicroRedisClient,
+  MicroRedisClientOptions,
+  MicroTcpClient,
+  MicroTcpClientOptions,
+} from "./clients";
 
-export { MicroBaseClient } from "./base";
 export { MicroClient } from "./decorators";
-export { MicroTcpClient, MicroTcpClientOptions } from "./tcp";
-export { MicroRedisClient, MicroRedisClientOptions } from "./redis";
-export { MicroNatsClient, MicroNatsClientOptions } from "./nats";
-export { MicroMqttClient, MicroMqttClientOptions } from "./mqtt";
+
+export {
+  MicroBaseClient,
+  MicroMqttClient,
+  MicroMqttClientOptions,
+  MicroNatsClient,
+  MicroNatsClientOptions,
+  MicroRedisClient,
+  MicroRedisClientOptions,
+  MicroTcpClient,
+  MicroTcpClientOptions,
+} from "./clients";
 
 declare module "@ipare/core" {
   interface Startup {
@@ -38,19 +51,20 @@ function initFunctions(fnName: string, clientConstructor: ObjectConstructor) {
     const injectKey = MicroIdentityKey + (options.identity ?? "");
     return this.useInject().inject(
       injectKey,
-      async (ctx) => {
+      async () => {
         const opts = { ...options } as InjectMicroClient;
         delete opts.identity;
         delete opts.injectType;
 
         const client = new clientConstructor(opts);
         Object.defineProperty(client, "logger", {
+          configurable: true,
+          enumerable: false,
           get: () => this.logger,
           set: (val) => {
             this.logger = val;
           },
         });
-        client.logger = ctx.logger;
         await client.connect();
         return client;
       },

@@ -7,7 +7,7 @@ export abstract class MicroBaseClient {
   abstract send(pattern: string, data: any): Promise<any>;
   abstract emit(pattern: string, data: any): void;
 
-  public logger?: ILogger;
+  public logger!: ILogger;
 
   protected createPacket(
     pattern: string,
