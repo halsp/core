@@ -51,10 +51,10 @@ describe("identity", () => {
   it("should define logger with identity by useConsoleLogger", async () => {
     class TestMiddleware extends Middleware {
       @Logger("testid")
-      private readonly logger!: ILogger;
+      private readonly testLogger!: ILogger;
 
       async invoke(): Promise<void> {
-        this.ctx.bag("RESULT", this.logger.transports);
+        this.ctx.bag("RESULT", this.testLogger.transports);
       }
     }
 

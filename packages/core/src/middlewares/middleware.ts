@@ -60,6 +60,13 @@ export abstract class Middleware {
     return this.#ctx.response;
   }
 
+  get logger() {
+    return this.ctx.logger;
+  }
+  set logger(val) {
+    this.ctx.logger = val;
+  }
+
   public isPrevInstanceOf<T extends object = any>(
     target: ObjectConstructor<T>
   ): target is ObjectConstructor<T> {

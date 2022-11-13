@@ -31,4 +31,14 @@ describe("middleware.ctx", () => {
     expect(md.res).toBe(md.ctx.res);
     expect(md.response).toBe(md.ctx.res);
   });
+
+  it("should set logger", async () => {
+    const md = new TestMiddleware();
+    const startup = new TestStartup();
+    await startup.add(() => md).run();
+
+    expect(md.logger).toBe(startup.logger);
+    md.logger = {} as any;
+    expect(md.logger).toBe(startup.logger);
+  });
 });

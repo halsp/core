@@ -7,10 +7,10 @@ import { InjectType } from "@ipare/inject";
 
 class TestMiddleware extends Middleware {
   @Logger()
-  private readonly logger!: ILogger;
+  private readonly testLogger!: ILogger;
 
   async invoke(): Promise<void> {
-    this.logger.info("info");
+    this.testLogger.info("info");
   }
 }
 
@@ -51,10 +51,10 @@ describe("logger", () => {
 describe("use", () => {
   class TestMiddleware extends Middleware {
     @Logger()
-    private readonly logger!: ILogger;
+    private readonly testLogger!: ILogger;
 
     async invoke(): Promise<void> {
-      this.ctx.bag("RESULT", this.logger.transports);
+      this.ctx.bag("RESULT", this.testLogger.transports);
     }
   }
 
