@@ -26,7 +26,7 @@ export class MicroMqttClient extends MicroBaseClient {
   }
 
   async connect() {
-    this.#close(true);
+    this.#close();
 
     const opt: any = { ...this.options };
     delete opt.host;
