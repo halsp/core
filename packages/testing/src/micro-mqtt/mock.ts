@@ -91,3 +91,10 @@ export function createMock(singleton = true) {
     },
   };
 }
+
+export const mockPkgName = "";
+Object.defineProperty(exports, "mockPkgName", {
+  get: () => {
+    return process.env.IS_LOCAL_TEST ? "jest" : "mqtt";
+  },
+});

@@ -1,5 +1,6 @@
 import {
   createMock,
+  mockPkgName,
   TestMicroNatsClient,
   TestMicroNatsStartup,
 } from "../src/micro-nats";
@@ -7,7 +8,7 @@ import "@ipare/micro-nats";
 import type nats from "nats";
 
 describe("micro-nats", () => {
-  jest.mock("nats", () => createMock());
+  jest.mock(mockPkgName, () => createMock());
 
   it("should subscribe and publish", async () => {
     const startup = new TestMicroNatsStartup().pattern(
@@ -38,7 +39,8 @@ describe("micro-nats", () => {
         expect(reqHeaders.get("req_h")).toBe("1");
         expect(reqHeaders.has("req_h")).toBeTruthy();
         expect(reqHeaders.keys()).toEqual(["req_h"]);
-        expect(reqHeaders.values("")).toEqual(["1"]);
+        expect(reqHeaders.values("not-exist")).toEqual([]);
+        expect(reqHeaders.values("req_h")).toEqual(["1"]);
         resHeaders.set("res_h1", "1");
         resHeaders.append("res_h1", "1");
         resHeaders.append("res_h2", "2");
@@ -114,5 +116,16 @@ describe("micro-nats", () => {
         reply: "reply",
       }
     );
+  });
+
+  it("should not mock packate when IS_LOCAL_TEST is true", () => {
+    process.env.IS_LOCAL_TEST = "true";
+    expect(mockPkgName).toBe("jest");
+    process.env.IS_LOCAL_TEST = "";
+  });
+
+  it("should mock packate when IS_LOCAL_TEST is undefined", () => {
+    process.env.IS_LOCAL_TEST = "";
+    expect(mockPkgName).toBe("nats");
   });
 });

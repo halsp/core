@@ -1,3 +1,4 @@
+import { isUndefined } from "@ipare/core";
 import type nats from "nats";
 
 function createMockClient() {
@@ -101,8 +102,8 @@ export function createMock(singleton = true) {
         keys(): string[] {
           return Object.keys(headers);
         },
-        values() {
-          return Object.values(headers);
+        values(k: string) {
+          return [headers[k]].filter((item) => !isUndefined(item));
         },
         delete(k: string) {
           delete headers[k];
@@ -111,3 +112,10 @@ export function createMock(singleton = true) {
     },
   };
 }
+
+export const mockPkgName = "";
+Object.defineProperty(exports, "mockPkgName", {
+  get: () => {
+    return process.env.IS_LOCAL_TEST ? "jest" : "nats";
+  },
+});

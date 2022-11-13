@@ -1,22 +1,24 @@
 import {
   createMock,
+  mockPkgName,
   TestMicroRedisClient,
   TestMicroRedisStartup,
 } from "../src/micro-redis";
 
 describe("micro-redis", () => {
-  jest.mock("redis", () => createMock());
+  jest.mock(mockPkgName, () => createMock());
 
   it("should subscribe and publish", async () => {
-    const startup = new TestMicroRedisStartup().pattern(
-      "test_pattern",
-      (ctx) => {
-        ctx.res.body = ctx.req.body;
-      }
-    );
+    const startup = new TestMicroRedisStartup({
+      password: "H",
+    }).pattern("test_pattern", (ctx) => {
+      ctx.res.body = ctx.req.body;
+    });
     await startup.listen();
 
-    const client = new TestMicroRedisClient();
+    const client = new TestMicroRedisClient({
+      password: "H",
+    });
     await client.connect();
 
     const result = await client.send("test_pattern", "test_body");
@@ -32,5 +34,16 @@ describe("micro-redis", () => {
 
     const client2 = createMock(false);
     expect(client2.createClient()).not.toBe(client2.createClient());
+  });
+
+  it("should not mock packate when IS_LOCAL_TEST is true", () => {
+    process.env.IS_LOCAL_TEST = "true";
+    expect(mockPkgName).toBe("jest");
+    process.env.IS_LOCAL_TEST = "";
+  });
+
+  it("should mock packate when IS_LOCAL_TEST is undefined", () => {
+    process.env.IS_LOCAL_TEST = "";
+    expect(mockPkgName).toBe("redis");
   });
 });

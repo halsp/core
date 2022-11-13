@@ -1,11 +1,12 @@
 import {
   createMock,
+  mockPkgName,
   TestMicroMqttClient,
   TestMicroMqttStartup,
 } from "../src/micro-mqtt";
 
 describe("micro-mqtt", () => {
-  jest.mock("mqtt", () => createMock());
+  jest.mock(mockPkgName, () => createMock());
 
   it("should subscribe and publish", async () => {
     const startup = new TestMicroMqttStartup().pattern(
@@ -51,5 +52,16 @@ describe("micro-mqtt", () => {
 
     await client.dispose();
     await startup.close();
+  });
+
+  it("should not mock packate when IS_LOCAL_TEST is true", () => {
+    process.env.IS_LOCAL_TEST = "true";
+    expect(mockPkgName).toBe("jest");
+    process.env.IS_LOCAL_TEST = "";
+  });
+
+  it("should mock packate when IS_LOCAL_TEST is undefined", () => {
+    process.env.IS_LOCAL_TEST = "";
+    expect(mockPkgName).toBe("mqtt");
   });
 });
