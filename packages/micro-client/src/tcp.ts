@@ -1,6 +1,6 @@
 import { parseBuffer } from "@ipare/micro";
 import * as net from "net";
-import { MicroClient } from "./base";
+import { MicroBaseClient } from "./base";
 
 export interface MicroTcpClientOptions {
   host?: string;
@@ -9,7 +9,7 @@ export interface MicroTcpClientOptions {
   sendTimeout?: number;
 }
 
-export class MicroTcpClient extends MicroClient {
+export class MicroTcpClient extends MicroBaseClient {
   constructor(private readonly options: MicroTcpClientOptions) {
     super();
   }

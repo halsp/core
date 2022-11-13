@@ -82,6 +82,9 @@ export class Context {
   get logger() {
     return this.startup.logger;
   }
+  set logger(val) {
+    this.startup.logger = val;
+  }
 
   readonly startup!: Startup;
 

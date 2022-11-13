@@ -81,6 +81,8 @@ describe("logger", () => {
     await startup
       .use(async (ctx) => {
         expect(startup.logger).toBe(ctx.logger);
+        ctx.logger = {} as any;
+        expect(startup.logger).toBe(ctx.logger);
       })
       .run();
   });

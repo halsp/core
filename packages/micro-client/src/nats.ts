@@ -1,6 +1,6 @@
 import { parseBuffer } from "@ipare/micro";
 import type nats from "nats";
-import { MicroClient } from "./base";
+import { MicroBaseClient } from "./base";
 
 export interface MicroNatsClientOptions
   extends Omit<nats.ConnectionOptions, "services"> {
@@ -9,7 +9,7 @@ export interface MicroNatsClientOptions
   sendTimeout?: number;
 }
 
-export class MicroNatsClient extends MicroClient {
+export class MicroNatsClient extends MicroBaseClient {
   constructor(protected readonly options: MicroNatsClientOptions = {}) {
     super();
   }

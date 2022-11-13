@@ -1,6 +1,6 @@
 import { parseBuffer } from "@ipare/micro";
 import type mqtt from "mqtt";
-import { MicroClient } from "./base";
+import { MicroBaseClient } from "./base";
 
 export interface MicroMqttClientOptions extends mqtt.IClientOptions {
   subscribeOptions?: mqtt.IClientSubscribeOptions;
@@ -9,7 +9,7 @@ export interface MicroMqttClientOptions extends mqtt.IClientOptions {
   sendTimeout?: number;
 }
 
-export class MicroMqttClient extends MicroClient {
+export class MicroMqttClient extends MicroBaseClient {
   constructor(protected readonly options: MicroMqttClientOptions = {}) {
     super();
   }
