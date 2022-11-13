@@ -43,6 +43,8 @@
     "@ipare/micro-nats": "^3.0.0-alpha.3",
     "@ipare/micro-redis": "^3.0.0-alpha.3",
     "@ipare/micro-tcp": "^3.0.0-alpha.3",
+    "@ipare/micro-mqtt": "^3.0.0-alpha.3",
+    "@ipare/micro-client": "^3.0.0-alpha.3",
     "@ipare/native": "^3.0.0-alpha.2",
     "@types/jest": "^29.2.2",
     "@types/node": "^18.11.9",
