@@ -21,8 +21,8 @@ describe("startup", () => {
     await client.connect();
     const result = await client.send("test_pattern_subscribe", "test_body");
 
-    await startup.close();
-    await client.dispose();
+    await startup.close(true);
+    await client.dispose(true);
 
     expect(result.data).toBe("test_body");
     expect(result.error).toBeUndefined();
@@ -44,8 +44,8 @@ describe("startup", () => {
     await client.connect();
     await client.send("test_pattern_not_matched1", "test_body", 1000);
 
-    await startup.close();
-    await client.dispose();
+    await startup.close(true);
+    await client.dispose(true);
   });
 
   it("should log error if client emit error event", async () => {
@@ -60,6 +60,7 @@ describe("startup", () => {
     startup["client"]?.emit("error", new Error("err"));
     console.error = consoleError;
 
+    await startup.close(true);
     expect(error.message).toBe("err");
   });
 });

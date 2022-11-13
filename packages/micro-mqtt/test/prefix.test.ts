@@ -20,8 +20,8 @@ describe("prefix", () => {
     await client.connect();
     const result = await client.send("test_pattern", "test_body");
 
-    await startup.close();
-    await client.dispose();
+    await startup.close(true);
+    await client.dispose(true);
 
     expect(result.data).toBe("test_body");
     expect(result.error).toBeUndefined();

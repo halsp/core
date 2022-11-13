@@ -84,8 +84,8 @@ export class MicroMqttClient extends MicroClient {
   /**
    * for @ipare/inject
    */
-  async dispose() {
-    this.#close();
+  async dispose(force = false) {
+    this.#close(force);
   }
 
   async send<T = any>(

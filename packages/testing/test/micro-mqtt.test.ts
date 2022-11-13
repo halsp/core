@@ -23,8 +23,8 @@ describe("micro-mqtt", () => {
     const result = await client.send("test_pattern", "test_body");
     expect(result.data).toBe("test_body");
 
-    await client.dispose();
-    await startup.close();
+    await client.dispose(true);
+    await startup.close(true);
   });
 
   it("should create new mock client", async () => {
@@ -50,8 +50,8 @@ describe("micro-mqtt", () => {
     const result = await client.send("test_pattern_equal", "test_body", 1000);
     expect(result.error).toBe("Send timeout");
 
-    await client.dispose();
-    await startup.close();
+    await client.dispose(true);
+    await startup.close(true);
   });
 
   it("should not mock packate when IS_LOCAL_TEST is true", () => {
