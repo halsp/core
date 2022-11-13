@@ -47,7 +47,7 @@ export class MicroRedisClient extends MicroClient {
   async #close() {
     async function disconnect(redis?: redis.RedisClientType) {
       if (redis?.isReady && redis.isOpen) {
-        await redis.disconnect();
+        await redis.quit();
       }
     }
     await disconnect(this.pub);

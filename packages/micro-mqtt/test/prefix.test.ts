@@ -1,9 +1,9 @@
 import { MicroMqttStartup } from "../src";
-import { createMock } from "@ipare/testing/dist/micro-mqtt";
+import { createMock, mockPkgName } from "@ipare/testing/dist/micro-mqtt";
 import { MicroMqttClient } from "@ipare/micro-client";
 
 describe("prefix", () => {
-  jest.mock("mqtt", () => createMock());
+  jest.mock(mockPkgName, () => createMock());
 
   it("should subscribe and publish pattern with prefix", async () => {
     const startup = new MicroMqttStartup({

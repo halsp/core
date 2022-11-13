@@ -59,7 +59,7 @@ describe("redis client", () => {
       (client as any).sub = {
         isReady: true,
         isOpen: true,
-        disconnect: () => undefined,
+        quit: () => undefined,
       };
       const result = await client.send("", "");
       await client.dispose();

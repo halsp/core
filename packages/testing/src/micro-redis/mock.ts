@@ -13,7 +13,7 @@ function createMockClient() {
     connect() {
       this.isReady = true;
     },
-    disconnect() {
+    quit() {
       this.isReady = false;
     },
     isReady: true,

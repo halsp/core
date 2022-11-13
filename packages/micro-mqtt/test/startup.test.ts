@@ -1,9 +1,9 @@
 import { MicroMqttStartup } from "../src";
-import { createMock } from "@ipare/testing/dist/micro-mqtt";
+import { createMock, mockPkgName } from "@ipare/testing/dist/micro-mqtt";
 import { MicroMqttClient } from "@ipare/micro-client";
 
 describe("startup", () => {
-  jest.mock("mqtt", () => createMock());
+  jest.mock(mockPkgName, () => createMock());
 
   it("should subscribe and publish", async () => {
     const startup = new MicroMqttStartup({
@@ -42,13 +42,10 @@ describe("startup", () => {
 
     const client = new MicroMqttClient();
     await client.connect();
-    const result = await client.send("test_pattern_not_matched1", "test_body");
+    await client.send("test_pattern_not_matched1", "test_body", 1000);
 
     await startup.close();
     await client.dispose();
-
-    expect(result.data).toBe("test_body");
-    expect(result.error).toBeUndefined();
   });
 
   it("should log error if client emit error event", async () => {

@@ -1,4 +1,5 @@
 import type mqtt from "mqtt";
+import "@ipare/core";
 
 declare module "@ipare/core" {
   interface Request {
