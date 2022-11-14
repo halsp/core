@@ -11,7 +11,11 @@
     "url": "https://github.com/ipare/ipare"
   },
   "keywords": [
-    "ipare"
+    "ipare",
+    "micro",
+    "pubsub",
+    "microservice",
+    "microservices"
   ],
   "bugs": {
     "url": "https://github.com/ipare/ipare/issues",
