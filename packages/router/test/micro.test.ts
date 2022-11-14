@@ -27,10 +27,7 @@ describe("pattern", () => {
       .useTestRouter()
       .useRouter()
       .run();
-    expect(res.body).toEqual({
-      status: "error",
-      message: `Can't find the path: not-exist`,
-    });
+    expect(res.error).toBe(`Can't find the path: not-exist`);
   });
 
   it("should match all patterns when use multi patterns", async () => {

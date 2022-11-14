@@ -161,10 +161,7 @@ Startup.prototype.useRouterParser = function (options?: RouterOptions) {
       const { MapMatcher } = require("./map/micro-map-matcher");
       const mapMatcher = new MapMatcher(ctx);
       if (mapMatcher.notFound) {
-        ctx.res.setBody({
-          status: "error",
-          message: `Can't find the path: ${ctx.req.path}`,
-        });
+        ctx.res["error"] = `Can't find the path: ${ctx.req.path}`;
       } else {
         const mapItem = mapMatcher.mapItem;
         Object.defineProperty(ctx, "actionMetadata", {
