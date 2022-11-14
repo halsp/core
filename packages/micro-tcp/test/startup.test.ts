@@ -45,10 +45,7 @@ describe("parse message", () => {
     const result = await sendData(port, "abc");
     await startup.close();
 
-    expect(JSON.parse(result)).toEqual({
-      error: `Error message format`,
-      status: "error",
-    });
+    expect(result).toBe(`Error message format`);
   });
 
   it("should return error if length is nan", async () => {
@@ -59,10 +56,7 @@ describe("parse message", () => {
     const result = await sendData(port, "abc#{}");
     await startup.close();
 
-    expect(JSON.parse(result)).toEqual({
-      error: `Error length "abc"`,
-      status: "error",
-    });
+    expect(result).toBe(`Error length "abc"`);
   });
 
   it("should return error if length is error", async () => {
@@ -73,10 +67,7 @@ describe("parse message", () => {
     const result = await sendData(port, "3#{}");
     await startup.close();
 
-    expect(JSON.parse(result)).toEqual({
-      error: `Required length "3", bug actual length is "2"`,
-      status: "error",
-    });
+    expect(result).toBe(`Required length "3", bug actual length is "2"`);
   });
 
   it("should throw error when socket destroy", async () => {

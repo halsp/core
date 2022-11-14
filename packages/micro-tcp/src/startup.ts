@@ -38,12 +38,7 @@ export class MicroTcpStartup extends MicroStartup {
           );
         });
       } catch (err) {
-        socket.write(
-          JSON.stringify({
-            status: "error",
-            error: (err as Error).message,
-          })
-        );
+        socket.write((err as Error).message);
       }
     });
     socket.on("close", () => {
