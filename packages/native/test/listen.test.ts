@@ -5,11 +5,11 @@ test("dynamicListen", async () => {
   const startup = new NativeStartup();
   const { server, port } = await startup
     .use(async (ctx) => {
-      const { server, port } = await new NativeStartup().dynamicListen(23334);
+      const { server, port } = await new NativeStartup().dynamicListen(23338);
       server.close();
       ctx.ok(port);
     })
-    .dynamicListen(23334);
+    .dynamicListen(23338);
 
   expect(startup.server).toBe(server);
   const res = await request(server).get("");

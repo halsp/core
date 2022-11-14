@@ -146,7 +146,7 @@ describe("client", () => {
       ctx.res.setBody(ctx.req.body);
     });
     const { port } = await startup.dynamicListen();
-    startup["handleMessage"] = () => undefined;
+    startup["handleMessage"] = () => new Promise((resolve) => resolve());
 
     const client = new MicroTcpClient({
       port,
@@ -171,7 +171,7 @@ describe("client", () => {
       ctx.res.setBody(ctx.req.body);
     });
     const { port } = await startup.dynamicListen();
-    startup["handleMessage"] = () => undefined;
+    startup["handleMessage"] = () => new Promise((resolve) => resolve());
 
     const client = new MicroTcpClient({
       port,
@@ -195,7 +195,7 @@ describe("client", () => {
       ctx.res.setBody(ctx.req.body);
     });
     const { port } = await startup.dynamicListen();
-    startup["handleMessage"] = () => undefined;
+    startup["handleMessage"] = () => new Promise((resolve) => resolve());
 
     const client = new MicroTcpClient({
       port,

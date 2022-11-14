@@ -1,8 +1,9 @@
 import { MicroNatsClient } from "@ipare/micro-client";
-import { createMock, mockPkgName } from "@ipare/testing/dist/micro-nats";
 import { MicroNatsStartup } from "../src";
 
 describe("prefix", () => {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { createMock, mockPkgName } = require("@ipare/testing/dist/micro-nats");
   jest.mock(mockPkgName, () => createMock());
 
   it("should subscribe and publish pattern with prefix", async () => {

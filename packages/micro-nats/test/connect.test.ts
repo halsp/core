@@ -1,7 +1,8 @@
 import { MicroNatsStartup } from "../src";
-import { JSONCodec } from "@ipare/testing/dist/micro-nats";
 
 describe("connect", () => {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { JSONCodec } = require("@ipare/testing/dist/micro-nats");
   jest.mock("nats", () => {
     return {
       connect: (opt: any) => {
