@@ -1,5 +1,5 @@
 import { MicroNatsClient } from "@ipare/micro-client";
-import { createMock, mockPkgName } from "@ipare/testing/dist/micro-mqtt";
+import { createMock, mockPkgName } from "@ipare/testing/dist/micro-nats";
 import { MicroNatsStartup } from "../src";
 
 describe("prefix", () => {
@@ -22,10 +22,7 @@ describe("prefix", () => {
     await client.dispose();
     await startup.close();
 
-    expect(result).toEqual({
-      data: "test_body",
-      error: undefined,
-      headers: undefined,
-    });
+    expect(result.data).toBe("test_body");
+    expect(result.error).toBeUndefined();
   });
 });
