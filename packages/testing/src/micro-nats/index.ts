@@ -1,6 +1,6 @@
 export { TestMicroNatsStartup } from "./test-micro-nats-startup";
 export { TestMicroNatsClient } from "./test-micro-nats-client";
-export { createMock, mockPkgName } from "./mock";
+export { createMock, mockPkgName, JSONCodec } from "./mock";
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace

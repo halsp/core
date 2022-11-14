@@ -28,7 +28,7 @@ describe("prefix", () => {
     await new Promise<void>(async (resolve) => {
       setTimeout(() => {
         subscribeOpts.callback(undefined, {
-          data: Uint8Array.from(Buffer.from("2#{}")),
+          data: Uint8Array.from(Buffer.from("{}")),
         });
       }, 500);
       await client.send("test_pattern", "", undefined, 1000);

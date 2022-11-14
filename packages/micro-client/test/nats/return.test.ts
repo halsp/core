@@ -30,7 +30,7 @@ describe("return", () => {
       pattern: "test",
       data: "d",
     });
-    const result = await runTest(Buffer.from(`${str.length}#${str}`));
+    const result = await runTest(Buffer.from(str));
     expect(result.data).toBe("d");
     expect(result.error).toBeUndefined();
   });
@@ -41,7 +41,7 @@ describe("return", () => {
       pattern: "test",
       response: "d",
     });
-    const result = await runTest(Buffer.from(`${str.length}#${str}`));
+    const result = await runTest(Buffer.from(str));
     expect(result.data).toBe("d");
     expect(result.error).toBeUndefined();
   });
@@ -59,10 +59,7 @@ describe("return", () => {
       pattern: "test",
       data: "d",
     });
-    const result = await runTest(
-      Buffer.from(`${str.length}#${str}`),
-      new Error("err")
-    );
+    const result = await runTest(Buffer.from(str), new Error("err"));
 
     expect(result.data).toBe("d");
     expect(result.error).toBe("err");

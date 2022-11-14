@@ -3,6 +3,7 @@ import { MicroMqttOptions } from "./options";
 import type mqtt from "mqtt";
 import { Context } from "@ipare/core";
 import { matchTopic } from "./topic";
+import { parseJsonBuffer } from "@ipare/micro-common";
 
 export class MicroMqttStartup extends MicroStartup {
   constructor(protected readonly options: MicroMqttOptions = {}) {
@@ -56,13 +57,14 @@ export class MicroMqttStartup extends MicroStartup {
         if (!handler) return;
 
         this.handleMessage(
-          payload,
+          parseJsonBuffer(payload),
           async ({ result, req }) => {
             const reply = req.pattern + "/" + req.id;
+            const json = JSON.stringify(result);
             if (this.options.publishOptions) {
-              client.publish(reply, result, this.options.publishOptions);
+              client.publish(reply, json, this.options.publishOptions);
             } else {
-              client.publish(reply, result);
+              client.publish(reply, json);
             }
           },
           async (ctx) => {

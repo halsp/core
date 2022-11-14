@@ -1,4 +1,4 @@
-import { parseJsonBuffer } from "@ipare/micro-common";
+import { ClientPacket, parseJsonBuffer } from "@ipare/micro-common";
 import type mqtt from "mqtt";
 import { MicroBaseClient } from "./base";
 
@@ -91,11 +91,11 @@ export class MicroMqttClient extends MicroBaseClient {
     pattern: string,
     data: any,
     timeout?: number
-  ): Promise<{
-    data?: T;
-    error?: string;
-    packet?: mqtt.IPublishPacket;
-  }> {
+  ): Promise<
+    ClientPacket<T> & {
+      packet?: mqtt.IPublishPacket;
+    }
+  > {
     if (!this.client?.connected) {
       return {
         error: "The connection is not connected",

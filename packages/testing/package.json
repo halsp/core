@@ -40,6 +40,7 @@
   "devDependencies": {
     "@ipare/http": "^3.0.0-alpha.4",
     "@ipare/micro": "^3.0.0-alpha.4",
+    "@ipare/micro-common": "^3.0.0-alpha.4",
     "@ipare/micro-client": "^3.0.0-alpha.4",
     "@ipare/micro-mqtt": "^3.0.0-alpha.4",
     "@ipare/micro-nats": "^3.0.0-alpha.4",

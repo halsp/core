@@ -12,6 +12,8 @@ export interface MicroNatsClientOptions
 export class MicroNatsClient extends MicroBaseClient {
   constructor(protected readonly options: MicroNatsClientOptions = {}) {
     super();
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    this.#jsonCodec = require("nats").JSONCodec();
   }
 
   #jsonCodec!: nats.Codec<any>;
@@ -29,9 +31,7 @@ export class MicroNatsClient extends MicroBaseClient {
     opt.services = this.options.host ?? "localhost";
 
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const natsPkg = require("nats");
-    this.#jsonCodec = natsPkg.JSONCodec();
-    this.connection = await natsPkg.connect(opt);
+    this.connection = await require("nats").connect(opt);
   }
 
   async #close() {

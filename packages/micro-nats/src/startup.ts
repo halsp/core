@@ -6,6 +6,8 @@ import type nats from "nats";
 export class MicroNatsStartup extends MicroStartup {
   constructor(protected readonly options: MicroNatsOptions = {}) {
     super();
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    this.#jsonCodec = require("nats").JSONCodec();
   }
 
   #handlers: {
@@ -28,9 +30,7 @@ export class MicroNatsStartup extends MicroStartup {
     opt.services = this.options.host ?? "localhost";
 
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const natsPkg = require("nats");
-    this.#jsonCodec = natsPkg.JSONCodec();
-    this.connection = await natsPkg.connect(opt);
+    this.connection = await require("nats").connect(opt);
 
     this.#handlers.forEach((item) => {
       this.#pattern(item.pattern, item.handler);
@@ -49,6 +49,7 @@ export class MicroNatsStartup extends MicroStartup {
           return;
         }
 
+        console.log("res.headers", this.#jsonCodec.decode(msg.data));
         this.handleMessage(
           this.#jsonCodec.decode(msg.data),
           async ({ result, res }) => {

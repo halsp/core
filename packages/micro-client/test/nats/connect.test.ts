@@ -1,4 +1,5 @@
 import { MicroNatsClient } from "../../src";
+import { JSONCodec } from "@ipare/testing/dist/micro-nats";
 
 describe("connect", () => {
   jest.mock("nats", () => {
@@ -8,6 +9,7 @@ describe("connect", () => {
           opt,
         };
       },
+      JSONCodec: JSONCodec,
     };
   });
 

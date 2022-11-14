@@ -1,4 +1,5 @@
 import { isUndefined } from "@ipare/core";
+import { parseJsonBuffer } from "@ipare/micro-common";
 import type nats from "nats";
 
 function createMockClient() {
@@ -110,16 +111,7 @@ export function createMock(singleton = true) {
         },
       };
     },
-    JSONCodec: () => {
-      return {
-        encode: (obj: any) => {
-          return Uint8Array.from(Buffer.from(JSON.stringify(obj), "utf-8"));
-        },
-        decode: (arr: Uint8Array) => {
-          return JSON.parse(Buffer.from(arr).toString("utf-8"));
-        },
-      };
-    },
+    JSONCodec: JSONCodec,
   };
 }
 
@@ -129,3 +121,14 @@ Object.defineProperty(exports, "mockPkgName", {
     return process.env.IS_LOCAL_TEST ? "jest" : "nats";
   },
 });
+
+export const JSONCodec = () => {
+  return {
+    encode: (obj: any) => {
+      return Uint8Array.from(Buffer.from(JSON.stringify(obj), "utf-8"));
+    },
+    decode: (arr: Uint8Array) => {
+      return parseJsonBuffer(Buffer.from(arr));
+    },
+  };
+};

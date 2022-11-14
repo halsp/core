@@ -1,5 +1,6 @@
 import {
   createMock,
+  JSONCodec,
   mockPkgName,
   TestMicroNatsClient,
   TestMicroNatsStartup,
@@ -85,14 +86,11 @@ describe("micro-nats", () => {
     const client = createMock().connect();
     client.subscribe("subscribe_test", {
       callback: (err, opts) => {
-        opts.respond(Uint8Array.from(Buffer.from(`${str.length}#${str}`)));
+        opts.respond(Uint8Array.from(Buffer.from(str)));
       },
     });
 
-    client.publish(
-      "subscribe_test",
-      Uint8Array.from(Buffer.from(`${str.length}#${str}`))
-    );
+    client.publish("subscribe_test", Uint8Array.from(Buffer.from(str)));
   });
 
   it("should subscribe and reply mock client", async () => {
@@ -105,17 +103,13 @@ describe("micro-nats", () => {
     const client = createMock().connect();
     client.subscribe("subscribe_test", {
       callback: (err, opts) => {
-        opts.respond(Uint8Array.from(Buffer.from(`${str.length}#${str}`)));
+        opts.respond(Uint8Array.from(Buffer.from(str)));
       },
     });
 
-    client.publish(
-      "subscribe_test",
-      Uint8Array.from(Buffer.from(`${str.length}#${str}`)),
-      {
-        reply: "reply",
-      }
-    );
+    client.publish("subscribe_test", Uint8Array.from(Buffer.from(str)), {
+      reply: "reply",
+    });
   });
 
   it("should not mock packate when IS_LOCAL_TEST is true", () => {
@@ -127,5 +121,9 @@ describe("micro-nats", () => {
   it("should mock packate when IS_LOCAL_TEST is undefined", () => {
     process.env.IS_LOCAL_TEST = "";
     expect(mockPkgName).toBe("nats");
+  });
+
+  it("should encode data by JSONCodec", () => {
+    expect(JSONCodec().encode({})).toEqual(Uint8Array.from(Buffer.from("{}")));
   });
 });

@@ -1,3 +1,4 @@
+import { JSONCodec } from "@ipare/testing/dist/micro-nats";
 import { MicroNatsStartup } from "../src";
 
 describe("headers", () => {
@@ -12,6 +13,7 @@ describe("headers", () => {
       headers: () => {
         return {};
       },
+      JSONCodec: JSONCodec,
     };
   });
 
@@ -43,7 +45,7 @@ describe("headers", () => {
       pattern: "pt",
     });
     await subscribeCallback(undefined, {
-      data: Uint8Array.from(Buffer.from(`${str.length}#${str}`)),
+      data: Uint8Array.from(Buffer.from(str)),
       reply: "456",
       respond: () => undefined,
       headers: {
@@ -88,7 +90,7 @@ describe("headers", () => {
       pattern: "pt",
     });
     await subscribeCallback(undefined, {
-      data: Uint8Array.from(Buffer.from(`${str.length}#${str}`)),
+      data: Uint8Array.from(Buffer.from(str)),
       reply: "456",
       respond: (buffer, opts) => {
         resHeaders = opts.headers;

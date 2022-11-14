@@ -70,7 +70,7 @@ describe("startup", () => {
       if (isPubUndefined) {
         (startup as any).pub = undefined;
       }
-      await subscribeCallback(Buffer.from(`${str.length}#${str}`));
+      await subscribeCallback(Buffer.from(str));
 
       await new Promise<void>((resolve) => {
         setTimeout(() => resolve(), 500);

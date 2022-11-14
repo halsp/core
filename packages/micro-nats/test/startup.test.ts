@@ -1,3 +1,4 @@
+import { JSONCodec } from "@ipare/testing/dist/micro-nats";
 import { MicroNatsStartup } from "../src";
 
 describe("startup", () => {
@@ -17,6 +18,7 @@ describe("startup", () => {
             isClosed: () => false,
           };
         },
+        JSONCodec: JSONCodec,
       };
     });
 

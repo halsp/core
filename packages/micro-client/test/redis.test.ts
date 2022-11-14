@@ -142,7 +142,7 @@ describe("redis client", () => {
             pattern: "test",
             data: "d",
           });
-          callback(Buffer.from(`${str.length}#${str}`));
+          callback(Buffer.from(str));
         },
         unsubscribe: () => undefined,
       };
@@ -169,7 +169,7 @@ describe("redis client", () => {
             pattern: "test",
             response: "d",
           });
-          callback(Buffer.from(`${str.length}#${str}`));
+          callback(Buffer.from(str));
         },
         unsubscribe: () => undefined,
       };

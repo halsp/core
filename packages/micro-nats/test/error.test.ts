@@ -1,4 +1,5 @@
 import { MicroNatsStartup } from "../src";
+import { JSONCodec } from "@ipare/testing/dist/micro-nats";
 
 describe("error", () => {
   jest.mock("nats", () => {
@@ -12,6 +13,7 @@ describe("error", () => {
       headers: () => {
         return {};
       },
+      JSONCodec: JSONCodec,
     };
   });
 

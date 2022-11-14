@@ -127,9 +127,8 @@ export class MicroRedisClient extends MicroBaseClient {
 
   #sendPacket(packet: any) {
     const json = JSON.stringify(packet);
-    const str = `${json.length}#${json}`;
 
     const pub = this.pub as redis.RedisClientType;
-    pub.publish(packet.pattern, str);
+    pub.publish(packet.pattern, json);
   }
 }
