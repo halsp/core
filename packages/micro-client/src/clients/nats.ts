@@ -63,7 +63,7 @@ export class MicroNatsClient extends MicroBaseClient {
     }
 
     pattern = this.prefix + pattern;
-    const packet = super.createPacket(pattern, data, true);
+    const packet = super.createServerPacket(pattern, data, true);
 
     const connection: nats.NatsConnection = this.connection as Exclude<
       typeof this.connection,
@@ -121,7 +121,7 @@ export class MicroNatsClient extends MicroBaseClient {
     }
 
     pattern = this.prefix + pattern;
-    const packet = super.createPacket(pattern, data, false);
+    const packet = super.createServerPacket(pattern, data, false);
     this.#sendPacket(packet, headers);
   }
 

@@ -1,5 +1,10 @@
 import * as net from "net";
 import { MicroBaseClient } from "./base";
+import {
+  ClientPacket,
+  parseTcpBuffer,
+  ServerPacket,
+} from "@ipare/micro-common";
 
 export interface MicroTcpClientOptions {
   host?: string;
@@ -30,9 +35,7 @@ export class MicroTcpClient extends MicroBaseClient {
     });
 
     socket.on("data", (buffer: Buffer) => {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const { parseBuffer } = require("@ipare/micro-tcp-buffer");
-      parseBuffer(buffer, (json: any) => this.#handleResponse(json));
+      parseTcpBuffer(buffer, (json: any) => this.#handleResponse(json));
     });
 
     const promise = new Promise<void>((resolve) => {
@@ -82,10 +85,7 @@ export class MicroTcpClient extends MicroBaseClient {
     pattern: string,
     data: any,
     timeout?: number
-  ): Promise<{
-    data?: T;
-    error?: string;
-  }> {
+  ): Promise<ClientPacket<T>> {
     if (!this.#socket || this.#socket.destroyed) {
       return {
         error: "The connection is not connected",
@@ -94,33 +94,33 @@ export class MicroTcpClient extends MicroBaseClient {
 
     pattern = this.prefix + pattern;
     const socket = this.#socket as net.Socket;
-    const packet = super.createPacket(pattern, data, true);
+    const serverPacket = super.createServerPacket(pattern, data, true);
 
     return new Promise((resolve) => {
       let timeoutInstance: NodeJS.Timeout | undefined;
       const sendTimeout = timeout ?? this.options.sendTimeout ?? 10000;
       if (sendTimeout != 0) {
         timeoutInstance = setTimeout(() => {
-          this.#tasks.delete(packet.id);
+          this.#tasks.delete(serverPacket.id);
           resolve({
             error: "Send timeout",
           });
         }, sendTimeout);
       }
 
-      this.#tasks.set(packet.id, (error?: string, data?: any) => {
+      this.#tasks.set(serverPacket.id, (error?: string, data?: any) => {
         if (timeoutInstance) {
           clearTimeout(timeoutInstance);
           timeoutInstance = undefined;
         }
-        this.#tasks.delete(packet.id);
+        this.#tasks.delete(serverPacket.id);
 
         resolve({
           data,
           error,
         });
       });
-      this.#sendPacket(socket, packet);
+      this.#sendPacket(socket, serverPacket);
     });
   }
 
@@ -131,12 +131,12 @@ export class MicroTcpClient extends MicroBaseClient {
 
     pattern = this.prefix + pattern;
     const socket = this.#socket as net.Socket;
-    const packet = super.createPacket(pattern, data, false);
-    this.#sendPacket(socket, packet);
+    const serverPacket = super.createServerPacket(pattern, data, false);
+    this.#sendPacket(socket, serverPacket);
   }
 
-  #sendPacket(socket: net.Socket, packet: any) {
-    const str = JSON.stringify(packet);
+  #sendPacket(socket: net.Socket, serverPacket: ServerPacket) {
+    const str = JSON.stringify(serverPacket);
     socket.write(`${str.length}#${str}`);
   }
 }

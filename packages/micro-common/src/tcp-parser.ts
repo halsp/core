@@ -1,4 +1,7 @@
-export function parseBuffer(buffer: Buffer, callback: (packet: any) => void) {
+export function parseTcpBuffer(
+  buffer: Buffer,
+  callback: (packet: any) => void
+) {
   let stringBuffer = buffer.toString("utf-8");
 
   while (true) {

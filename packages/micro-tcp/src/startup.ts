@@ -1,5 +1,5 @@
 import { MicroStartup } from "@ipare/micro";
-import { parseBuffer } from "@ipare/micro-tcp-buffer";
+import { parseTcpBuffer } from "@ipare/micro-common";
 import { MicroTcpOptions } from "./options";
 import * as net from "net";
 
@@ -21,7 +21,7 @@ export class MicroTcpStartup extends MicroStartup {
   #handler(socket: net.Socket) {
     socket.on("data", async (buffer) => {
       try {
-        parseBuffer(buffer, async (packet) => {
+        parseTcpBuffer(buffer, async (packet) => {
           await this.handleMessage(
             packet,
             ({ result }) => {

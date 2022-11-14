@@ -1,7 +1,7 @@
 {
-  "name": "@ipare/micro-tcp-buffer",
+  "name": "@ipare/micro-common",
   "version": "3.0.0-alpha.4",
-  "description": "Ipare 微服务 TCP Buffer 解析插件",
+  "description": "Ipare 微服务公共插件",
   "engines": {
     "node": ">=12.14.0"
   },

@@ -16,10 +16,10 @@ describe("client", () => {
         throw new Error("Method not implemented.");
       }
       test1(pattern: string, data: any) {
-        return super.createPacket(pattern, data, true);
+        return super.createServerPacket(pattern, data, true);
       }
       test2(pattern: string, data: any) {
-        return super.createPacket(pattern, data, false);
+        return super.createServerPacket(pattern, data, false);
       }
     }
 

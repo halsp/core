@@ -104,7 +104,7 @@ export class MicroMqttClient extends MicroBaseClient {
     }
 
     pattern = this.prefix + pattern;
-    const packet = super.createPacket(pattern, data, true);
+    const packet = super.createServerPacket(pattern, data, true);
 
     const client = this.client;
     return new Promise((resolve) => {
@@ -154,7 +154,7 @@ export class MicroMqttClient extends MicroBaseClient {
     }
 
     pattern = this.prefix + pattern;
-    const packet = super.createPacket(pattern, data, false);
+    const packet = super.createServerPacket(pattern, data, false);
     this.#sendPacket(packet);
   }
 

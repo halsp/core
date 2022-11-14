@@ -78,7 +78,7 @@ export class MicroRedisClient extends MicroBaseClient {
     }
 
     pattern = this.prefix + pattern;
-    const packet = super.createPacket(pattern, data, true);
+    const packet = super.createServerPacket(pattern, data, true);
     const reply = pattern + "." + packet.id;
 
     const sub = this.sub as Exclude<typeof this.pub, undefined>;
@@ -122,7 +122,7 @@ export class MicroRedisClient extends MicroBaseClient {
     }
 
     pattern = this.prefix + pattern;
-    const packet = super.createPacket(pattern, data, false);
+    const packet = super.createServerPacket(pattern, data, false);
     this.#sendPacket(packet);
   }
 

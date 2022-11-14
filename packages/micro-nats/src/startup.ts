@@ -17,6 +17,7 @@ export class MicroNatsStartup extends MicroStartup {
   protected get prefix() {
     return this.options.prefix ?? "";
   }
+  #jsonCodec!: nats.Codec<any>;
 
   async listen() {
     await this.close();
@@ -28,6 +29,7 @@ export class MicroNatsStartup extends MicroStartup {
 
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const natsPkg = require("nats");
+    this.#jsonCodec = natsPkg.JSONCodec();
     this.connection = await natsPkg.connect(opt);
 
     this.#handlers.forEach((item) => {
@@ -48,7 +50,7 @@ export class MicroNatsStartup extends MicroStartup {
         }
 
         this.handleMessage(
-          Buffer.from(msg.data),
+          this.#jsonCodec.decode(msg.data),
           async ({ result, res }) => {
             if (msg.reply) {
               msg.respond(Buffer.from(result, "utf-8"), {

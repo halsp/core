@@ -1,5 +1,6 @@
 import { Context, Request, Response, Startup } from "@ipare/core";
 import { initCatchError, initContext } from "./context";
+import { ServerPacket } from "@ipare/micro-common";
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -9,8 +10,6 @@ declare global {
     }
   }
 }
-
-export type PacketType = { pattern: string; data: any; id?: string };
 
 export abstract class MicroStartup extends Startup {
   constructor() {
@@ -27,7 +26,7 @@ export abstract class MicroStartup extends Startup {
   }
 
   protected async handleMessage(
-    packet: PacketType,
+    packet: ServerPacket,
     onSend: (arg: {
       req: Request;
       result: string;

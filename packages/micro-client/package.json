@@ -36,6 +36,7 @@
   "dependencies": {
     "@ipare/core": "^3.0.0-alpha.4",
     "@ipare/inject": "^3.0.0-alpha.4",
+    "@ipare/micro-common": "^3.0.0-alpha.4",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
