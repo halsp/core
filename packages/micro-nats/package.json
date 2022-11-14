@@ -1,6 +1,6 @@
 {
   "name": "@ipare/micro-nats",
-  "version": "3.0.0-alpha.4",
+  "version": "3.0.0-alpha.5",
   "description": "Ipare 微服务 NATS 通信",
   "engines": {
     "node": ">=12.14.0"
@@ -35,8 +35,8 @@
   "license": "MIT",
   "dependencies": {
     "@ipare/core": "^3.0.0-alpha.4",
-    "@ipare/micro": "^3.0.0-alpha.4",
-    "@ipare/micro-common": "^3.0.0-alpha.4",
+    "@ipare/micro": "^3.0.0-alpha.5",
+    "@ipare/micro-common": "^3.0.0-alpha.5",
     "nats": "^2.9.0"
   },
   "devDependencies": {
