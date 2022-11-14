@@ -1,6 +1,6 @@
 {
   "name": "@ipare/micro-mqtt",
-  "version": "3.0.0-alpha.3",
+  "version": "3.0.0-alpha.4",
   "description": "Ipare 微服务 MQTT 通信",
   "engines": {
     "node": ">=12.14.0"
@@ -29,13 +29,13 @@
     "lint": "eslint src test --ext .ts",
     "pretest": "npm run build",
     "test": "jest",
-    "test:local":"cross-env IS_LOCAL_TEST=true jest"
+    "test:local": "cross-env IS_LOCAL_TEST=true jest"
   },
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^3.0.0-alpha.2",
-    "@ipare/micro": "^3.0.0-alpha.3",
+    "@ipare/core": "^3.0.0-alpha.4",
+    "@ipare/micro": "^3.0.0-alpha.4",
     "mqtt": "^4.3.7"
   },
   "devDependencies": {

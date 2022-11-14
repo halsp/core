@@ -1,6 +1,6 @@
 {
   "name": "@ipare/koa",
-  "version": "3.0.0-alpha.2",
+  "version": "3.0.0-alpha.4",
   "description": "让 Koa 成为 Ipare 的中间件，或 Ipare 成为 Koa 的中间件，并打通二者中间件管道",
   "engines": {
     "node": ">=12.14.0"
@@ -35,9 +35,9 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^3.0.0-alpha.2",
-    "@ipare/http": "^3.0.0-alpha.2",
-    "@ipare/methods": "^3.0.0-alpha.2",
+    "@ipare/core": "^3.0.0-alpha.4",
+    "@ipare/http": "^3.0.0-alpha.4",
+    "@ipare/methods": "^3.0.0-alpha.4",
     "koa": "^2.13.4",
     "koa-compose": "^4.1.0",
     "query-string": "^7.1.1"
