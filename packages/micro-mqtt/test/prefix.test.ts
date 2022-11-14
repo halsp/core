@@ -1,8 +1,10 @@
 import { MicroMqttStartup } from "../src";
-import { createMock, mockPkgName } from "@ipare/testing/dist/micro-mqtt";
 import { MicroMqttClient } from "@ipare/micro-client";
 
 describe("prefix", () => {
+  // prevent loop type check
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { createMock, mockPkgName } = require("@ipare/testing/dist/micro-mqtt");
   jest.mock(mockPkgName, () => createMock());
 
   it("should subscribe and publish pattern with prefix", async () => {
