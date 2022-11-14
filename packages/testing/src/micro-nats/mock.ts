@@ -110,6 +110,16 @@ export function createMock(singleton = true) {
         },
       };
     },
+    JSONCodec: () => {
+      return {
+        encode: (obj: any) => {
+          return Uint8Array.from(Buffer.from(JSON.stringify(obj), "utf-8"));
+        },
+        decode: (arr: Uint8Array) => {
+          return JSON.parse(Buffer.from(arr).toString("utf-8"));
+        },
+      };
+    },
   };
 }
 

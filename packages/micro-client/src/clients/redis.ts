@@ -1,4 +1,4 @@
-import { parseBuffer } from "@ipare/micro";
+import { parseJsonBuffer } from "@ipare/micro-common";
 import type redis from "redis";
 import { MicroBaseClient } from "./base";
 
@@ -103,11 +103,10 @@ export class MicroRedisClient extends MicroBaseClient {
           }
           sub.unsubscribe(reply);
 
-          parseBuffer(buffer, (packet) => {
-            resolve({
-              data: packet.data ?? packet.response,
-              error: packet.error,
-            });
+          const packet = parseJsonBuffer(buffer);
+          resolve({
+            data: packet.data ?? packet.response,
+            error: packet.error,
           });
         },
         true

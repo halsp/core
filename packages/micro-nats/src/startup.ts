@@ -53,7 +53,7 @@ export class MicroNatsStartup extends MicroStartup {
           this.#jsonCodec.decode(msg.data),
           async ({ result, res }) => {
             if (msg.reply) {
-              msg.respond(Buffer.from(result, "utf-8"), {
+              msg.respond(this.#jsonCodec.encode(result), {
                 headers: res.headers,
               });
             }

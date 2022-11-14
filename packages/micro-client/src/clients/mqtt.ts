@@ -1,4 +1,4 @@
-import { parseBuffer } from "@ipare/micro";
+import { parseJsonBuffer } from "@ipare/micro-common";
 import type mqtt from "mqtt";
 import { MicroBaseClient } from "./base";
 
@@ -51,18 +51,17 @@ export class MicroMqttClient extends MicroBaseClient {
     client.on(
       "message",
       (topic: string, payload: Buffer, publishPacket: mqtt.IPublishPacket) => {
-        parseBuffer(payload, (packet) => {
-          const id = packet.id;
-          const callback = this.#tasks.get(id);
-          if (callback) {
-            callback(
-              packet.error,
-              this.getDataFromReturnPacket(packet),
-              publishPacket
-            );
-            this.#tasks.delete(id);
-          }
-        });
+        const packet = parseJsonBuffer(payload);
+        const id = packet.id;
+        const callback = this.#tasks.get(id);
+        if (callback) {
+          callback(
+            packet.error,
+            this.getDataFromReturnPacket(packet),
+            publishPacket
+          );
+          this.#tasks.delete(id);
+        }
       }
     );
   }
@@ -160,13 +159,12 @@ export class MicroMqttClient extends MicroBaseClient {
 
   #sendPacket(packet: any) {
     const json = JSON.stringify(packet);
-    const str = `${json.length}#${json}`;
 
     const client = this.client as mqtt.MqttClient;
     if (this.options.publishOptions) {
-      client.publish(packet.pattern, str, this.options.publishOptions);
+      client.publish(packet.pattern, json, this.options.publishOptions);
     } else {
-      client.publish(packet.pattern, str);
+      client.publish(packet.pattern, json);
     }
   }
 }

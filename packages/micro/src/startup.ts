@@ -25,11 +25,11 @@ export abstract class MicroStartup extends Startup {
     return await super.invoke(ctx);
   }
 
-  protected async handleMessage(
+  protected async handleMessage<T = object>(
     packet: ServerPacket,
     onSend: (arg: {
       req: Request;
-      result: string;
+      result: T;
       res: Response;
     }) => void | Promise<void>,
     prehook?: (ctx: Context) => Promise<void> | void
@@ -52,7 +52,7 @@ export abstract class MicroStartup extends Startup {
     await onSend({
       res,
       req,
-      result: JSON.stringify(result),
+      result: result,
     });
   }
 }

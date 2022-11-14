@@ -1,4 +1,4 @@
-import { parseBuffer } from "@ipare/micro";
+import { ServerPacket } from "@ipare/micro-common";
 import type nats from "nats";
 import { MicroBaseClient } from "./base";
 
@@ -14,6 +14,7 @@ export class MicroNatsClient extends MicroBaseClient {
     super();
   }
 
+  #jsonCodec!: nats.Codec<any>;
   protected connection?: nats.NatsConnection;
   protected get prefix() {
     return this.options.prefix ?? "";
@@ -29,6 +30,7 @@ export class MicroNatsClient extends MicroBaseClient {
 
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const natsPkg = require("nats");
+    this.#jsonCodec = natsPkg.JSONCodec();
     this.connection = await natsPkg.connect(opt);
   }
 
@@ -89,12 +91,11 @@ export class MicroNatsClient extends MicroBaseClient {
             return;
           }
 
-          parseBuffer(Buffer.from(msg.data), (packet) => {
-            resolve({
-              data: packet.data ?? packet.response,
-              error: err?.message ?? packet.error,
-              headers: msg.headers as nats.MsgHdrs,
-            });
+          const clientPacket = this.#jsonCodec.decode(msg.data);
+          resolve({
+            data: clientPacket.data ?? clientPacket.response,
+            error: err?.message ?? clientPacket.error,
+            headers: msg.headers as nats.MsgHdrs,
           });
         },
       });
@@ -125,12 +126,10 @@ export class MicroNatsClient extends MicroBaseClient {
     this.#sendPacket(packet, headers);
   }
 
-  #sendPacket(packet: any, headers?: nats.MsgHdrs, reply?: string) {
-    const json = JSON.stringify(packet);
-    const str = `${json.length}#${json}`;
-
+  #sendPacket(packet: ServerPacket, headers?: nats.MsgHdrs, reply?: string) {
     const connection = this.connection as nats.NatsConnection;
-    connection.publish(packet.pattern, Buffer.from(str, "utf-8"), {
+
+    connection.publish(packet.pattern, this.#jsonCodec.encode(packet), {
       reply: reply,
       headers: headers,
     });

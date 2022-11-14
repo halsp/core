@@ -36,6 +36,7 @@
   "dependencies": {
     "@ipare/core": "^3.0.0-alpha.4",
     "@ipare/micro": "^3.0.0-alpha.4",
+    "@ipare/micro-common": "^3.0.0-alpha.4",
     "redis": "^4.4.0"
   },
   "devDependencies": {

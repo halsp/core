@@ -25,7 +25,8 @@ export class MicroTcpStartup extends MicroStartup {
           await this.handleMessage(
             packet,
             ({ result }) => {
-              socket.write(`${result.length}#${result}`, "utf-8");
+              const jsonResult = JSON.stringify(result);
+              socket.write(`${jsonResult.length}#${jsonResult}`, "utf-8");
             },
             (ctx) => {
               Object.defineProperty(ctx, "socket", {

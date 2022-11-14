@@ -2,6 +2,7 @@ import { MicroStartup } from "@ipare/micro";
 import { MicroRedisOptions } from "./options";
 import { Context } from "@ipare/core";
 import type redis from "redis";
+import { parseJsonBuffer } from "@ipare/micro-common";
 
 export class MicroRedisStartup extends MicroStartup {
   constructor(protected readonly options: MicroRedisOptions = {}) {
@@ -55,9 +56,12 @@ export class MicroRedisStartup extends MicroStartup {
       pattern,
       async (buffer) => {
         this.handleMessage(
-          buffer,
+          parseJsonBuffer(buffer),
           async ({ result, req }) => {
-            await this.pub?.publish(pattern + "." + req.id, result);
+            await this.pub?.publish(
+              pattern + "." + req.id,
+              JSON.stringify(result)
+            );
           },
           handler
         );

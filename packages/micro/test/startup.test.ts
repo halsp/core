@@ -23,9 +23,9 @@ describe("startup", () => {
 
 describe("handle message", () => {
   class TestClass extends MicroStartup {}
-  async function handleMessage(
+  async function handleMessage<T = object>(
     text: string,
-    onSend: (arg: { req: Request; result: string }) => void | Promise<void>,
+    onSend: (arg: { req: Request; result: T }) => void | Promise<void>,
     prehook?: (ctx: Context) => Promise<void> | void
   ) {
     await new TestClass()["handleMessage"](JSON.parse(text), onSend, prehook);
@@ -34,7 +34,7 @@ describe("handle message", () => {
   it("should handle message and send result", async () => {
     await handleMessage(`{"id":"abc"}`, ({ req, result }) => {
       expect(req.id).toBe("abc");
-      expect(result).toBe(`{"id":"abc"}`);
+      expect(result).toEqual({ id: "abc" });
     });
   });
 
@@ -67,7 +67,7 @@ describe("handle message", () => {
       `{"id":"abc"}`,
       ({ req, result }) => {
         expect(req.id).toBe("abc");
-        expect(result).toBe(`{"id":"abc","error":"err"}`);
+        expect(result).toEqual({ id: "abc", error: "err" });
       },
       (ctx) => {
         ctx.res.setError("err");
