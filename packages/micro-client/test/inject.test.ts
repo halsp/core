@@ -1,7 +1,7 @@
 import { Middleware } from "@ipare/core";
 import { TestStartup } from "@ipare/testing";
 import "../src";
-import { MicroBaseClient, MicroClient, MicroTcpClient } from "../src";
+import { IMicroClient, MicroClient, MicroTcpClient } from "../src";
 import * as net from "net";
 import { InjectType } from "@ipare/inject";
 
@@ -44,9 +44,9 @@ describe("inject", () => {
   it("should get micro client by decorator", async () => {
     class TestMiddleware extends Middleware {
       @MicroClient()
-      readonly injectDefaultClient!: MicroBaseClient;
+      readonly injectDefaultClient!: IMicroClient;
       @MicroClient("custom_id")
-      readonly injectIdentityClient!: MicroBaseClient;
+      readonly injectIdentityClient!: IMicroClient;
 
       invoke() {
         this.ctx.bag(

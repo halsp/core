@@ -1,5 +1,5 @@
 import * as net from "net";
-import { MicroBaseClient } from "./base";
+import { IMicroClient } from "./base";
 import {
   ClientPacket,
   parseTcpBuffer,
@@ -13,7 +13,7 @@ export interface MicroTcpClientOptions {
   sendTimeout?: number;
 }
 
-export class MicroTcpClient extends MicroBaseClient {
+export class MicroTcpClient extends IMicroClient {
   constructor(private readonly options: MicroTcpClientOptions = {}) {
     super();
   }

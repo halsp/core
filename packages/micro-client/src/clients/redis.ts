@@ -1,6 +1,6 @@
 import { parseJsonBuffer } from "@ipare/micro-common";
 import type redis from "redis";
-import { MicroBaseClient } from "./base";
+import { IMicroClient } from "./base";
 
 export interface MicroRedisClientOptions<
   M extends redis.RedisModules = redis.RedisModules,
@@ -13,7 +13,7 @@ export interface MicroRedisClientOptions<
   sendTimeout?: number;
 }
 
-export class MicroRedisClient extends MicroBaseClient {
+export class MicroRedisClient extends IMicroClient {
   constructor(protected readonly options: MicroRedisClientOptions = {}) {
     super();
   }

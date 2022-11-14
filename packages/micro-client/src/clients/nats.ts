@@ -1,6 +1,6 @@
 import { ServerPacket } from "@ipare/micro-common";
 import type nats from "nats";
-import { MicroBaseClient } from "./base";
+import { IMicroClient } from "./base";
 
 export interface MicroNatsClientOptions
   extends Omit<nats.ConnectionOptions, "services"> {
@@ -9,7 +9,7 @@ export interface MicroNatsClientOptions
   sendTimeout?: number;
 }
 
-export class MicroNatsClient extends MicroBaseClient {
+export class MicroNatsClient extends IMicroClient {
   constructor(protected readonly options: MicroNatsClientOptions = {}) {
     super();
     // eslint-disable-next-line @typescript-eslint/no-var-requires

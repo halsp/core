@@ -1,8 +1,8 @@
-import { MicroBaseClient } from "../src";
+import { IMicroClient } from "../src";
 
 describe("client", () => {
   it("should create packet", async () => {
-    class TestClient extends MicroBaseClient {
+    class TestClient extends IMicroClient {
       connect(): Promise<void> {
         throw new Error("Method not implemented.");
       }

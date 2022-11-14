@@ -15,7 +15,7 @@ import {
 export { MicroClient } from "./decorators";
 
 export {
-  MicroBaseClient,
+  IMicroClient,
   MicroMqttClient,
   MicroMqttClientOptions,
   MicroNatsClient,
