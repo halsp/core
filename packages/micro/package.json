@@ -34,7 +34,7 @@
   "license": "MIT",
   "dependencies": {
     "@ipare/core": "^3.0.0-alpha.4",
-    "@ipare/micro-commons": "^3.0.0-alpha.4"
+    "@ipare/micro-common": "^3.0.0-alpha.4"
   },
   "devDependencies": {
     "@types/jest": "^29.2.2",
