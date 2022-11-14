@@ -62,5 +62,5 @@ Context.prototype.getTypeorm = async function (
 };
 
 export { typeorm };
-export { TypeormInject } from "./decorators";
+export { Typeorm } from "./decorators";
 export { Options } from "./options";

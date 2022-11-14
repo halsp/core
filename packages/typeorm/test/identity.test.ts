@@ -1,12 +1,12 @@
 import "../src";
 import { Middleware } from "@ipare/core";
 import { TestStartup } from "@ipare/testing";
-import { TypeormInject, TypeormConnection } from "../src";
+import { Typeorm, TypeormConnection } from "../src";
 
 class TestMiddleware extends Middleware {
-  @TypeormInject("app")
+  @Typeorm("app")
   private readonly appConnection!: TypeormConnection;
-  @TypeormInject()
+  @Typeorm()
   private readonly coreConnection!: TypeormConnection;
 
   async invoke(): Promise<void> {
