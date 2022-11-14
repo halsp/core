@@ -1,4 +1,3 @@
-import { parseBuffer } from "@ipare/micro";
 import * as net from "net";
 import { MicroBaseClient } from "./base";
 
@@ -31,7 +30,9 @@ export class MicroTcpClient extends MicroBaseClient {
     });
 
     socket.on("data", (buffer: Buffer) => {
-      parseBuffer(buffer, (json) => this.#handleResponse(json));
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { parseBuffer } = require("@ipare/micro-tcp-buffer");
+      parseBuffer(buffer, (json: any) => this.#handleResponse(json));
     });
 
     const promise = new Promise<void>((resolve) => {

@@ -1,4 +1,5 @@
 import { MicroStartup } from "@ipare/micro";
+import { parseBuffer } from "@ipare/micro-tcp-buffer";
 import { MicroTcpOptions } from "./options";
 import * as net from "net";
 
@@ -19,27 +20,30 @@ export class MicroTcpStartup extends MicroStartup {
 
   #handler(socket: net.Socket) {
     socket.on("data", async (buffer) => {
-      this.handleMessage(
-        buffer,
-        ({ result }) => {
-          socket.write(result, "utf-8");
-        },
-        (ctx) => {
-          Object.defineProperty(ctx, "socket", {
-            configurable: true,
-            enumerable: true,
-            get: () => socket,
-          });
-        },
-        (err) => {
-          socket.write(
-            JSON.stringify({
-              status: "error",
-              error: err.message,
-            })
+      try {
+        parseBuffer(buffer, async (packet) => {
+          await this.handleMessage(
+            packet,
+            ({ result }) => {
+              socket.write(`${result.length}#${result}`, "utf-8");
+            },
+            (ctx) => {
+              Object.defineProperty(ctx, "socket", {
+                configurable: true,
+                enumerable: true,
+                get: () => socket,
+              });
+            }
           );
-        }
-      );
+        });
+      } catch (err) {
+        socket.write(
+          JSON.stringify({
+            status: "error",
+            error: (err as Error).message,
+          })
+        );
+      }
     });
     socket.on("close", () => {
       //
@@ -91,7 +95,7 @@ export class MicroTcpStartup extends MicroStartup {
     return await this.#dynamicListen(0);
   }
 
-  close() {
+  async close() {
     this.#server.removeAllListeners();
     this.#server.close();
   }
