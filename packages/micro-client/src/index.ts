@@ -1,6 +1,6 @@
 import { Context, ObjectConstructor, Startup } from "@ipare/core";
 import { InjectType, parseInject } from "@ipare/inject";
-import { MicroIdentityKey } from "./constant";
+import { MICRO_IDENTITY_KEY } from "./constant";
 import {
   MicroMqttClient,
   MicroMqttClientOptions,
@@ -48,7 +48,7 @@ function initFunctions(fnName: string, clientConstructor: ObjectConstructor) {
   Startup.prototype[fnName] = function (
     options: InjectMicroClient = {}
   ): Startup {
-    const injectKey = MicroIdentityKey + (options.identity ?? "");
+    const injectKey = MICRO_IDENTITY_KEY + (options.identity ?? "");
     return this.useInject().inject(
       injectKey,
       async () => {
@@ -81,6 +81,6 @@ initFunctions("useMicroNats", MicroNatsClient);
 Context.prototype.getMicroClient = async function (
   identity?: string
 ): Promise<any> {
-  const injectKey = MicroIdentityKey + (identity ?? "");
+  const injectKey = MICRO_IDENTITY_KEY + (identity ?? "");
   return await parseInject(this, injectKey);
 };

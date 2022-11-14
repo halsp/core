@@ -1,1 +1,1 @@
-export const MicroIdentityKey = "@ipare/micro-client/identity";
+export const MICRO_IDENTITY_KEY = "@ipare/micro-client/identity";

@@ -1,5 +1,5 @@
 import { Inject } from "@ipare/inject";
-import { MicroIdentityKey } from "./constant";
+import { MICRO_IDENTITY_KEY } from "./constant";
 
 export const MicroClient = (identity?: string) =>
-  Inject(MicroIdentityKey + (identity ?? ""));
+  Inject(MICRO_IDENTITY_KEY + (identity ?? ""));
