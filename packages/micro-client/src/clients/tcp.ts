@@ -10,7 +10,7 @@ export interface MicroTcpClientOptions {
 }
 
 export class MicroTcpClient extends MicroBaseClient {
-  constructor(private readonly options: MicroTcpClientOptions) {
+  constructor(private readonly options: MicroTcpClientOptions = {}) {
     super();
   }
 

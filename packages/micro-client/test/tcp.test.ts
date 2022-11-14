@@ -228,4 +228,8 @@ describe("client", () => {
     client.dispose();
     startup.close();
   });
+
+  it("should create client by default port and host", () => {
+    new MicroTcpClient();
+  });
 });

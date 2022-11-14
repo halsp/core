@@ -1,6 +1,5 @@
 import { Context, Request, Response, Startup } from "@ipare/core";
 import { initCatchError, initContext } from "./context";
-import { parseBuffer } from "./parser";
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -27,48 +26,35 @@ export abstract class MicroStartup extends Startup {
     return await super.invoke(ctx);
   }
 
-  protected handleMessage(
-    buffer: Buffer,
+  protected async handleMessage(
+    packet: PacketType,
     onSend: (arg: {
       req: Request;
       result: string;
       res: Response;
     }) => void | Promise<void>,
-    prehook?: (ctx: Context) => Promise<void> | void,
-    onError?: (err: Error) => void
+    prehook?: (ctx: Context) => Promise<void> | void
   ) {
-    try {
-      parseBuffer(buffer, async (packet) => {
-        const req = new Request()
-          .setPath(packet.pattern)
-          .setBody(parseMicroBody(packet.data))
-          .setId(packet.id);
-        const ctx = new Context(req);
-        prehook && (await prehook(ctx));
-        const res = await this.invoke(ctx);
-        if (!req.id) return; // event
+    const req = new Request()
+      .setPath(packet.pattern)
+      .setBody(parseMicroBody(packet.data))
+      .setId(packet.id);
+    const ctx = new Context(req);
+    prehook && (await prehook(ctx));
+    const res = await this.invoke(ctx);
+    if (!req.id) return; // event
 
-        const result: any = { id: req.id };
-        if (res.error) {
-          result.error = res.error;
-        } else {
-          result.data = res.body;
-        }
-        const resultJson = JSON.stringify(result);
-        await onSend({
-          res,
-          req,
-          result: `${resultJson.length}#${resultJson}`,
-        });
-      });
-    } catch (err) {
-      const error = err as Error;
-      if (onError) {
-        onError(error);
-      } else {
-        this.logger.error(error);
-      }
+    const result: any = { id: req.id };
+    if (res.error) {
+      result.error = res.error;
+    } else {
+      result.data = res.body;
     }
+    await onSend({
+      res,
+      req,
+      result: JSON.stringify(result),
+    });
   }
 }
 

@@ -23,87 +23,55 @@ describe("startup", () => {
 
 describe("handle message", () => {
   class TestClass extends MicroStartup {}
-  function handleMessage(
+  async function handleMessage(
     text: string,
     onSend: (arg: { req: Request; result: string }) => void | Promise<void>,
-    prehook?: (ctx: Context) => Promise<void> | void,
-    onError?: (err: Error) => void
+    prehook?: (ctx: Context) => Promise<void> | void
   ) {
-    new TestClass()["handleMessage"](
-      Buffer.from(text, "utf-8"),
-      onSend,
-      prehook,
-      onError
-    );
+    await new TestClass()["handleMessage"](JSON.parse(text), onSend, prehook);
   }
 
   it("should handle message and send result", async () => {
-    await new Promise<void>((resolve) => {
-      handleMessage(`12#{"id":"abc"}`, ({ req, result }) => {
-        expect(req.id).toBe("abc");
-        expect(result).toBe(`12#{"id":"abc"}`);
-        resolve();
-      });
+    await handleMessage(`{"id":"abc"}`, ({ req, result }) => {
+      expect(req.id).toBe("abc");
+      expect(result).toBe(`{"id":"abc"}`);
     });
   });
 
   it("should handle message and invoke prehook", async () => {
-    await new Promise<void>((resolve) => {
-      handleMessage(
-        `2#{}`,
-        () => {
-          expect(true).toBe(false);
-        },
-        (ctx) => {
-          expect(ctx.req.id).toBeUndefined();
-          resolve();
-        }
-      );
-    });
+    await handleMessage(
+      `{}`,
+      () => {
+        expect(true).toBe(false);
+      },
+      (ctx) => {
+        expect(ctx.req.id).toBeUndefined();
+      }
+    );
   });
 
   it("should log error when message format is illegal", async () => {
-    await new Promise<void>((resolve) => {
-      const beforeError = console.error;
-      console.error = () => {
-        resolve();
-        console.error = beforeError;
-      };
-      handleMessage(`abc`, () => {
+    let error: any;
+    try {
+      await handleMessage(`abc`, () => {
         expect(true).toBe(false);
       });
-    });
-  });
-
-  it("should invoke onError when message format is illegal", async () => {
-    await new Promise<void>((resolve) => {
-      handleMessage(
-        `abc`,
-        () => {
-          expect(true).toBe(false);
-        },
-        undefined,
-        (err) => {
-          expect(err.message).toBe("Error message format");
-          resolve();
-        }
-      );
-    });
+    } catch (err) {
+      error = err;
+    }
+    expect(!!error).toBeTruthy();
   });
 
   it("should return error message when res.error is not empty", async () => {
-    await new Promise<void>((resolve) => {
-      handleMessage(
-        `12#{"id":"abc"}`,
-        ({ req, result }) => {
-          expect(req.id).toBe("abc");
-          expect(result).toBe(`26#{"id":"abc","error":"err"}`);
-          resolve();
-        },
-        (ctx) => {
-          ctx.res.setError("err");
-        }
-      );
-    });
+    await handleMessage(
+      `{"id":"abc"}`,
+      ({ req, result }) => {
+        expect(req.id).toBe("abc");
+        expect(result).toBe(`{"id":"abc","error":"err"}`);
+      },
+      (ctx) => {
+        ctx.res.setError("err");
+      }
+    );
   });
 });

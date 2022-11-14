@@ -15,4 +15,3 @@ declare module "@ipare/core" {
 
 export { MicroException } from "./exception";
 export { MicroStartup } from "./startup";
-export { parseBuffer } from "./parser";
