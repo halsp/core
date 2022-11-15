@@ -1,6 +1,6 @@
 import { Context, Request, Response, Startup } from "@ipare/core";
 import { initCatchError, initContext } from "./context";
-import { ServerPacket } from "@ipare/micro-common";
+import { ClientPacket, ServerPacket } from "@ipare/micro-common";
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
@@ -29,7 +29,7 @@ export abstract class MicroStartup extends Startup {
     packet: ServerPacket,
     onSend: (arg: {
       req: Request;
-      result: T;
+      result: ClientPacket<T>;
       res: Response;
     }) => void | Promise<void>,
     prehook?: (ctx: Context) => Promise<void> | void

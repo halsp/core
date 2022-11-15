@@ -1,4 +1,5 @@
 import { Context, Request } from "@ipare/core";
+import { ClientPacket } from "@ipare/micro-common";
 import { MicroException, MicroStartup } from "../src";
 import { TestStartup } from "./utils";
 
@@ -25,7 +26,10 @@ describe("handle message", () => {
   class TestClass extends MicroStartup {}
   async function handleMessage<T = object>(
     text: string,
-    onSend: (arg: { req: Request; result: T }) => void | Promise<void>,
+    onSend: (arg: {
+      req: Request;
+      result: ClientPacket<T>;
+    }) => void | Promise<void>,
     prehook?: (ctx: Context) => Promise<void> | void
   ) {
     await new TestClass()["handleMessage"](JSON.parse(text), onSend, prehook);

@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package serverStream;
+
+service ServerStreamService {
+  rpc testMethod (TestRequest) returns (stream TestReply) {}
+}
+
+message TestRequest {
+  string message = 1;
+}
+
+message TestReply {
+  string message = 1;
+}
