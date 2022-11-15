@@ -3,9 +3,11 @@ import { MicroGrpcOptions } from "./options";
 import * as grpc from "@grpc/grpc-js";
 import * as grpcLoader from "@grpc/proto-loader";
 import { Context, isClass, normalizePath } from "@ipare/core";
+import path from "path";
+import * as glob from "glob";
 
 export class MicroGrpcStartup extends MicroStartup {
-  constructor(protected readonly options: MicroGrpcOptions) {
+  constructor(protected readonly options: MicroGrpcOptions = {}) {
     super();
   }
 
@@ -57,8 +59,18 @@ export class MicroGrpcStartup extends MicroStartup {
   }
 
   async #getPackages() {
+    let protoFiles = this.options.protoFiles;
+    if (!protoFiles || (Array.isArray(protoFiles) && !protoFiles.length)) {
+      const proptosDir = path.join(process.cwd(), "protos");
+      protoFiles = glob
+        .sync("*.proto", {
+          cwd: proptosDir,
+        })
+        .map((f) => path.join(proptosDir, f));
+    }
+
     const definition = await grpcLoader.load(
-      this.options.protoFiles,
+      protoFiles,
       this.options.loaderOptions
     );
     const grpcObject = grpc.loadPackageDefinition(definition);

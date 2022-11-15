@@ -5,6 +5,6 @@ export interface MicroGrpcOptions extends grpc.ChannelOptions {
   host?: string;
   port?: number;
   credentials?: grpc.ServerCredentials;
-  protoFiles: string | string[];
+  protoFiles?: string | string[];
   loaderOptions?: grpcLoader.Options;
 }
