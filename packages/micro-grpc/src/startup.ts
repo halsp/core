@@ -19,13 +19,13 @@ export class MicroGrpcStartup extends MicroStartup {
   protected server?: grpc.Server;
 
   async listen() {
-    this.close(true);
+    this.close();
 
     const opt: any = { ...this.options };
     delete opt.host;
     delete opt.port;
     opt.port = this.options.port ?? 5000;
-    opt.host = this.options.host ?? "localhost";
+    opt.host = this.options.host ?? "0.0.0.0";
     const url = `${opt.host}:${opt.port}`;
 
     const server = new grpc.Server();
@@ -41,21 +41,24 @@ export class MicroGrpcStartup extends MicroStartup {
       }
     }
 
-    await new Promise<Error | number>((resolve) => {
+    const bindPort = await new Promise<number>((resolve, reject) => {
       server.bindAsync(
         url,
         this.options.credentials ?? grpc.ServerCredentials.createInsecure(),
         (err, port) => {
           if (err) {
-            this.logger.error(err);
+            reject(err);
           }
-          resolve(err ?? port);
+
+          resolve(port);
         }
       );
     });
-    this.server.start();
 
-    return this.server;
+    server.start();
+    this.logger.info(`Server started, listening port: ${bindPort}`);
+
+    return server;
   }
 
   async #getPackages() {
@@ -91,6 +94,9 @@ export class MicroGrpcStartup extends MicroStartup {
     });
     if (Object.keys(implementation).length) {
       server.addService(svc.service, implementation);
+      this.logger.debug(
+        `Add service: ${Object.keys(implementation).join(",")}`
+      );
     }
   }
 
@@ -129,6 +135,7 @@ export class MicroGrpcStartup extends MicroStartup {
   }
 
   pattern(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
+    this.logger.debug(`Add pattern: ${pattern}`);
     this.#handlers.push({ pattern, handler });
     return this;
   }
@@ -145,15 +152,40 @@ export class MicroGrpcStartup extends MicroStartup {
     return this;
   }
 
-  async close(force: true): Promise<void>;
-  async close(force?: false): Promise<Error | undefined>;
-  async close(force?: boolean) {
-    if (force) {
-      this.server?.forceShutdown();
-    } else {
-      return await new Promise((resolve) => {
-        this.server?.tryShutdown((err) => resolve(err));
+  async close() {
+    if (!this.server) return;
+    const server = this.server;
+
+    let shutdownTimeout = false;
+    await new Promise<void>((resolve) => {
+      const shutdownTimer = setTimeout(() => {
+        shutdownTimeout = true;
+        server.forceShutdown();
+        this.logger.error(
+          `Server shutdown timeout and will invoke force shutdown`
+        );
+        resolve();
+      }, 2000);
+
+      server.tryShutdown((err) => {
+        clearTimeout(shutdownTimer);
+        if (shutdownTimeout) return;
+
+        if (err) {
+          this.logger.error(
+            `Server shutdown error and will invoke force shutdown, err = ${err.message}`
+          );
+          server.forceShutdown();
+          resolve();
+        } else {
+          this.logger.info("Server shutdown success");
+          resolve();
+        }
       });
+    });
+
+    if (this.server == server) {
+      this.server = undefined;
     }
   }
 }
