@@ -1,9 +1,9 @@
 syntax = "proto3";
 
-package clientStream;
+package csStream;
 
-service ClientStreamService {
-  rpc testMethod (stream TestRequest) returns (TestReply) {}
+service CSStreamService {
+  rpc testMethod (stream TestRequest) returns (stream TestReply) {}
 }
 
 message TestRequest {

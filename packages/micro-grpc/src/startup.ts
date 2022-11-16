@@ -5,6 +5,7 @@ import * as grpcLoader from "@grpc/proto-loader";
 import { Context, isClass, normalizePath } from "@ipare/core";
 import path from "path";
 import * as glob from "glob";
+import { ReadIterator, WriteIterator } from "./stream";
 
 export class MicroGrpcStartup extends MicroStartup {
   constructor(protected readonly options: MicroGrpcOptions = {}) {
@@ -115,13 +116,23 @@ export class MicroGrpcStartup extends MicroStartup {
         enumerable: true,
         get: () => call.metadata,
       });
+      if (method.responseStream) {
+        ctx.res.setBody(new WriteIterator());
+      }
       await handler(ctx);
     }
     function createServerPacket(call: any) {
+      let data: any;
+      if (method.requestStream) {
+        data = new ReadIterator(call as grpc.ServerReadableStream<any, any>);
+      } else {
+        data = (call as grpc.ServerUnaryCall<any, any>).request;
+      }
+
       return {
         id: method.path,
         pattern: method.path,
-        data: call.request,
+        data: data,
       };
     }
 
@@ -129,9 +140,15 @@ export class MicroGrpcStartup extends MicroStartup {
       return async (call: grpc.ServerWritableStream<any, any>) => {
         await this.handleMessage(
           createServerPacket(call),
-          ({ result }) => {
-            if (result.data) {
-              call.write(result.data);
+          async ({ result }) => {
+            if (result.data instanceof WriteIterator) {
+              for await (const item of result.data) {
+                call.write(item);
+              }
+            } else {
+              if (result.data) {
+                call.write(result.data);
+              }
             }
             call.end();
           },
