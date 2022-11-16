@@ -53,7 +53,7 @@ describe("startup", () => {
     });
     expect(!!req.call).toBeTruthy();
     expect(!!req.metadata).toBeTruthy();
-  }, 100000);
+  }, 10000);
 
   it("should load default protos", async () => {
     await runin("test", async () => {
@@ -114,7 +114,7 @@ describe("startup", () => {
         protoFiles: [],
       });
     });
-  }, 100000);
+  }, 40000);
 });
 
 describe("shutdown", () => {

@@ -7,9 +7,9 @@ service ClientStreamService {
 }
 
 message TestRequest {
-  string message = 1;
+  string reqMessage = 1;
 }
 
 message TestReply {
-  string message = 1;
+  string resMessage = 1;
 }

@@ -84,12 +84,12 @@ export class MicroGrpcStartup extends MicroStartup {
     const server = this.server as grpc.Server;
     const implementation: grpc.UntypedServiceImplementation = {};
     Object.keys(svc.prototype).forEach((item) => {
-      const methodPath = svc.prototype[item].path;
+      const method = svc.prototype[item] as grpc.MethodDefinition<any, any>;
       const handler = this.#handlers.filter((item) =>
-        isPathEqual(item.pattern, methodPath)
+        isPathEqual(item.pattern, method.path)
       )[0]?.handler;
       if (handler) {
-        implementation[item] = this.#getServiceMethod(methodPath, handler);
+        implementation[item] = this.#getServiceMethod(method, handler);
       }
     });
     if (Object.keys(implementation).length) {
@@ -101,37 +101,57 @@ export class MicroGrpcStartup extends MicroStartup {
   }
 
   #getServiceMethod(
-    path: string,
+    method: grpc.MethodDefinition<any, any>,
     handler: (ctx: Context) => void | Promise<void>
   ): grpc.UntypedHandleCall {
-    return async (
-      call: grpc.ServerUnaryCall<any, any>,
-      callback: grpc.sendUnaryData<any>
-    ) => {
-      await this.handleMessage(
-        {
-          id: path,
-          pattern: path,
-          data: call.request,
-        },
-        ({ result }) => {
-          callback(null, result.data);
-        },
-        async (ctx) => {
-          Object.defineProperty(ctx.req, "call", {
-            configurable: true,
-            enumerable: true,
-            get: () => call,
-          });
-          Object.defineProperty(ctx.req, "metadata", {
-            configurable: true,
-            enumerable: true,
-            get: () => call.metadata,
-          });
-          await handler(ctx);
-        }
-      );
-    };
+    async function prehook(ctx: Context, call: any) {
+      Object.defineProperty(ctx.req, "call", {
+        configurable: true,
+        enumerable: true,
+        get: () => call,
+      });
+      Object.defineProperty(ctx.req, "metadata", {
+        configurable: true,
+        enumerable: true,
+        get: () => call.metadata,
+      });
+      await handler(ctx);
+    }
+    function createServerPacket(call: any) {
+      return {
+        id: method.path,
+        pattern: method.path,
+        data: call.request,
+      };
+    }
+
+    if (method.responseStream) {
+      return async (call: grpc.ServerWritableStream<any, any>) => {
+        await this.handleMessage(
+          createServerPacket(call),
+          ({ result }) => {
+            if (result.data) {
+              call.write(result.data);
+            }
+            call.end();
+          },
+          async (ctx) => await prehook(ctx, call)
+        );
+      };
+    } else {
+      return async (
+        call: grpc.ServerUnaryCall<any, any>,
+        callback: grpc.sendUnaryData<any>
+      ) => {
+        await this.handleMessage(
+          createServerPacket(call),
+          ({ result }) => {
+            callback(null, result.data);
+          },
+          async (ctx) => await prehook(ctx, call)
+        );
+      };
+    }
   }
 
   pattern(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
