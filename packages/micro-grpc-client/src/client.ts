@@ -1,5 +1,4 @@
 import * as grpc from "@grpc/grpc-js";
-import * as grpcLoader from "@grpc/proto-loader";
 import { IMicroClient } from "@ipare/micro-client";
 import {
   loadPackages,
@@ -7,14 +6,9 @@ import {
   WriteIterator,
 } from "@ipare/micro-grpc-common";
 import { isClass } from "@ipare/core";
+import { MicroGrpcClientOptions } from "./options";
 
-export interface MicroGrpcClientOptions extends grpc.ChannelOptions {
-  host?: string;
-  port?: number;
-  credentials?: grpc.ChannelCredentials;
-  protoFiles?: string | string[];
-  loaderOptions?: grpcLoader.Options;
-}
+export { MicroGrpcClientOptions } from "./options";
 
 export class MicroGrpcClient extends IMicroClient {
   constructor(protected readonly options: MicroGrpcClientOptions = {}) {
