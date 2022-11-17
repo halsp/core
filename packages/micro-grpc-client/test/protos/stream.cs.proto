@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package csStream;
+
+service CSStreamService {
+  rpc testMethod (stream TestRequest) returns (stream TestReply) {}
+}
+
+message TestRequest {
+  string reqMessage = 1;
+}
+
+message TestReply {
+  repeated string resMessage = 1;
+}
