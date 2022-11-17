@@ -1,9 +1,4 @@
-import {
-  MicroGrpcStartup,
-  ReadIterator,
-  StreamIterator,
-  WriteIterator,
-} from "../src";
+import { MicroGrpcStartup, ReadIterator, WriteIterator } from "../src";
 import * as grpc from "@grpc/grpc-js";
 import * as grpcLoader from "@grpc/proto-loader";
 import { Request } from "@ipare/core";
@@ -16,8 +11,8 @@ describe("stream", () => {
       port: 5011,
     })
       .pattern("serverStream.ServerStreamService/testMethod", (ctx) => {
-        const body = ctx.res.body as WriteIterator;
         expect(ctx.res.body instanceof WriteIterator).toBeTruthy();
+        const body = ctx.res.body as WriteIterator;
         body.push({
           resMessage: "1",
         });
@@ -97,7 +92,6 @@ describe("stream", () => {
           resMessage: [] as string[],
         };
         expect(ctx.req.body instanceof ReadIterator).toBeTruthy();
-        expect(ctx.req.body instanceof StreamIterator).toBeTruthy();
         for await (const item of ctx.req.body) {
           result.resMessage.push(item.reqMessage);
         }

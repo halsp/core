@@ -1,7 +1,7 @@
 {
-  "name": "@ipare/micro-grpc",
+  "name": "@ipare/micro-grpc-common",
   "version": "3.0.0-alpha.5",
-  "description": "Ipare 微服务 gRPC 通信",
+  "description": "Ipare 微服务 gRPC 公共内容",
   "engines": {
     "node": ">=12.14.0"
   },
@@ -15,8 +15,7 @@
     "micro",
     "pubsub",
     "microservice",
-    "microservices",
-    "gRPC"
+    "microservices"
   ],
   "bugs": {
     "url": "https://github.com/ipare/ipare/issues",
@@ -33,22 +32,18 @@
     "build": "rimraf ./dist/* && tsc",
     "lint": "eslint src test --ext .ts",
     "pretest": "npm run build",
-    "test": "jest",
-    "test:local": "cross-env IS_LOCAL_TEST=true jest"
+    "test": "jest"
   },
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
     "@ipare/core": "^3.0.0-alpha.4",
-    "@ipare/micro": "^3.0.0-alpha.5",
-    "@ipare/micro-common": "^3.0.0-alpha.5",
-    "@ipare/micro-grpc-common": "^3.0.0-alpha.5",
-    "@grpc/grpc-js": "^1.7.3"
+    "@grpc/grpc-js": "^1.7.3",
+    "@grpc/proto-loader": "^0.7.3"
   },
   "devDependencies": {
     "@types/jest": "^29.2.2",
     "@types/node": "^18.11.9",
-    "@types/glob": "^8.0.0",
     "@typescript-eslint/eslint-plugin": "^5.42.0",
     "@typescript-eslint/parser": "^5.42.0",
     "eslint": "^8.27.0",

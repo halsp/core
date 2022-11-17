@@ -2,6 +2,7 @@ import { Context, ObjectConstructor, Startup } from "@ipare/core";
 import { InjectType, parseInject } from "@ipare/inject";
 import { MICRO_IDENTITY_KEY } from "./constant";
 import {
+  IMicroClient,
   MicroMqttClient,
   MicroMqttClientOptions,
   MicroNatsClient,
@@ -39,12 +40,15 @@ declare module "@ipare/core" {
   }
 }
 
-type InjectMicroClient = {
+export type InjectMicroClient = {
   identity?: string;
   injectType?: InjectType;
 };
 
-function initFunctions(fnName: string, clientConstructor: ObjectConstructor) {
+export function addClientUse(
+  fnName: string,
+  clientConstructor: ObjectConstructor<IMicroClient>
+) {
   Startup.prototype[fnName] = function (
     options: InjectMicroClient = {}
   ): Startup {
@@ -73,10 +77,10 @@ function initFunctions(fnName: string, clientConstructor: ObjectConstructor) {
   };
 }
 
-initFunctions("useMicroRedis", MicroRedisClient);
-initFunctions("useMicroMqtt", MicroMqttClient);
-initFunctions("useMicroTcp", MicroTcpClient);
-initFunctions("useMicroNats", MicroNatsClient);
+addClientUse("useMicroRedis", MicroRedisClient);
+addClientUse("useMicroMqtt", MicroMqttClient);
+addClientUse("useMicroTcp", MicroTcpClient);
+addClientUse("useMicroNats", MicroNatsClient);
 
 Context.prototype.getMicroClient = async function (
   identity?: string

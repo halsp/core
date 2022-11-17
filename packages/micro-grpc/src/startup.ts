@@ -1,11 +1,12 @@
 import { MicroStartup } from "@ipare/micro";
 import { MicroGrpcOptions } from "./options";
 import * as grpc from "@grpc/grpc-js";
-import * as grpcLoader from "@grpc/proto-loader";
 import { Context, isClass, normalizePath } from "@ipare/core";
-import path from "path";
-import * as glob from "glob";
-import { ReadIterator, WriteIterator } from "./stream";
+import {
+  loadPackages,
+  ReadIterator,
+  WriteIterator,
+} from "@ipare/micro-grpc-common";
 
 export class MicroGrpcStartup extends MicroStartup {
   constructor(protected readonly options: MicroGrpcOptions = {}) {
@@ -22,7 +23,7 @@ export class MicroGrpcStartup extends MicroStartup {
   async listen() {
     this.close();
 
-    const opt: any = { ...this.options };
+    const opt: MicroGrpcOptions & Record<string, any> = { ...this.options };
     delete opt.host;
     delete opt.port;
     opt.port = this.options.port ?? 5000;
@@ -32,8 +33,12 @@ export class MicroGrpcStartup extends MicroStartup {
     const server = new grpc.Server();
     this.server = server;
 
-    const packages = await this.#getPackages();
-    for (const pkg of packages) {
+    const packages = await loadPackages({
+      protoFiles: opt.protoFiles,
+      loaderOptions: opt.loaderOptions,
+    });
+    for (const pkgName in packages) {
+      const pkg = packages[pkgName];
       const services = Object.keys(pkg)
         .filter((item) => isClass(pkg[item]))
         .map((item) => pkg[item] as grpc.ServiceClientConstructor);
@@ -60,25 +65,6 @@ export class MicroGrpcStartup extends MicroStartup {
     this.logger.info(`Server started, listening port: ${bindPort}`);
 
     return server;
-  }
-
-  async #getPackages() {
-    let protoFiles = this.options.protoFiles;
-    if (!protoFiles || (Array.isArray(protoFiles) && !protoFiles.length)) {
-      const proptosDir = path.join(process.cwd(), "protos");
-      protoFiles = glob
-        .sync("*.proto", {
-          cwd: proptosDir,
-        })
-        .map((f) => path.join(proptosDir, f));
-    }
-
-    const definition = await grpcLoader.load(
-      protoFiles,
-      this.options.loaderOptions
-    );
-    const grpcObject = grpc.loadPackageDefinition(definition);
-    return Object.values(grpcObject);
   }
 
   #addService(svc: grpc.ServiceClientConstructor) {
@@ -142,7 +128,7 @@ export class MicroGrpcStartup extends MicroStartup {
           createServerPacket(call),
           async ({ result }) => {
             if (result.data instanceof WriteIterator) {
-              for await (const item of result.data) {
+              for await (const item of result.data as WriteIterator) {
                 call.write(item);
               }
             } else {

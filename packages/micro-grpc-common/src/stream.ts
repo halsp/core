@@ -23,7 +23,13 @@ export abstract class StreamIterator<T> {
 }
 
 export class ReadIterator<T = any> extends StreamIterator<T> {
-  constructor(stream: grpc.ServerReadableStream<any, any>) {
+  constructor(
+    stream:
+      | grpc.ServerReadableStream<any, any>
+      | grpc.ServerDuplexStream<any, any>
+      | grpc.ClientReadableStream<any>
+      | grpc.ClientDuplexStream<any, any>
+  ) {
     super();
 
     stream.on("data", (data) => {
