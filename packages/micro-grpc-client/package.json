@@ -1,5 +1,5 @@
 {
-  "name": "@ipare/micro-client-grpc",
+  "name": "@ipare/micro-grpc-client",
   "version": "3.0.0-alpha.5",
   "description": "Ipare 微服务 GRPC 通信客户端",
   "engines": {
