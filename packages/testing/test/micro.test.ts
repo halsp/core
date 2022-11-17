@@ -1,6 +1,5 @@
 import { Request, Response } from "@ipare/core";
 import { TestMicroStartup } from "../src/micro";
-import { TestMicroTcpClient, TestMicroTcpStartup } from "../src/micro-tcp";
 
 describe("micro response.expect", () => {
   it("should expect body", async () => {
@@ -58,26 +57,5 @@ describe("micro startup", () => {
       err = true;
     }
     expect(err).toBeTruthy();
-  });
-});
-
-describe("micro tcp startup", () => {
-  it("should send message and return boolean value", async () => {
-    const startup = new TestMicroTcpStartup({
-      port: 23334,
-    }).use((ctx) => {
-      ctx.res.setBody(ctx.req.body);
-    });
-    const { port } = await startup.dynamicListen();
-
-    const client = new TestMicroTcpClient({
-      port,
-    });
-    await client.connect();
-    const result = await client.send("", true);
-    await startup.close();
-    client.dispose();
-
-    expect(result.data).toBe(true);
   });
 });

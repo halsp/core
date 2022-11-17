@@ -1,9 +1,9 @@
 import {
   createMock,
-  TestMicroNatsClient,
   TestMicroNatsStartup,
 } from "@ipare/testing/dist/micro-nats";
 import "./utils-micro";
+import { MicroNatsClient } from "@ipare/micro-nats-client";
 
 describe("micro-nats", () => {
   jest.mock("nats", () => createMock(true));
@@ -12,7 +12,7 @@ describe("micro-nats", () => {
     const startup = new TestMicroNatsStartup().useTestRouter().useRouter();
     await startup.listen();
 
-    const client = new TestMicroNatsClient();
+    const client = new MicroNatsClient();
     await client.connect();
 
     const result = await client.send("event:123", true);

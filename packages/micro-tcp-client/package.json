@@ -1,7 +1,7 @@
 {
-  "name": "@ipare/micro-grpc-client",
+  "name": "@ipare/micro-tcp-client",
   "version": "3.0.0-alpha.5",
-  "description": "Ipare 微服务 GRPC 通信客户端",
+  "description": "Ipare 微服务 TCP 通信请求客户端",
   "engines": {
     "node": ">=12.14.0"
   },
@@ -15,7 +15,8 @@
     "micro",
     "pubsub",
     "microservice",
-    "microservices"
+    "microservices",
+    "client"
   ],
   "bugs": {
     "url": "https://github.com/ipare/ipare/issues",
@@ -32,18 +33,15 @@
     "build": "rimraf ./dist/* && tsc",
     "lint": "eslint src test --ext .ts",
     "pretest": "npm run build",
-    "test": "jest"
+    "test": "jest",
+    "test:local": "jest --setupFiles ./test/local.ts"
   },
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
     "@ipare/core": "^3.0.0-alpha.4",
-    "@ipare/inject": "^3.0.0-alpha.4",
-    "@ipare/micro-client": "^3.0.0-alpha.5",
     "@ipare/micro-common": "^3.0.0-alpha.5",
-    "@ipare/micro-grpc-common": "^3.0.0-alpha.5",
-    "@grpc/grpc-js": "^1.7.3",
-    "@grpc/proto-loader": "^0.7.3"
+    "@ipare/micro-client": "^3.0.0-alpha.5"
   },
   "devDependencies": {
     "@types/jest": "^29.2.2",

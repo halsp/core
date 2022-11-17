@@ -2,11 +2,11 @@ import {
   createMock,
   JSONCodec,
   mockPkgName,
-  TestMicroNatsClient,
   TestMicroNatsStartup,
 } from "../src/micro-nats";
 import "@ipare/micro-nats";
 import type nats from "nats";
+import { MicroNatsClient } from "@ipare/micro-nats-client";
 
 describe("micro-nats", () => {
   jest.mock(mockPkgName, () => createMock());
@@ -19,7 +19,7 @@ describe("micro-nats", () => {
       }
     );
     await startup.listen();
-    const client = new TestMicroNatsClient();
+    const client = new MicroNatsClient();
     await client.connect();
 
     const result = await client.send("test_pattern", "test_body");
@@ -50,7 +50,7 @@ describe("micro-nats", () => {
       }
     );
     await startup.listen();
-    const client = new TestMicroNatsClient();
+    const client = new MicroNatsClient();
     await client.connect();
 
     // eslint-disable-next-line @typescript-eslint/no-var-requires

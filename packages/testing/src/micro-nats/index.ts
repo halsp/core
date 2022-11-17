@@ -1,5 +1,4 @@
 export { TestMicroNatsStartup } from "./test-micro-nats-startup";
-export { TestMicroNatsClient } from "./test-micro-nats-client";
 export { createMock, mockPkgName, JSONCodec } from "./mock";
 
 declare global {

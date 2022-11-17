@@ -1,27 +1,29 @@
-import { MicroNatsClient } from "@ipare/micro-nats-client";
-import { MicroNatsStartup } from "../src";
+import { MicroMqttStartup } from "@ipare/micro-mqtt";
+import { createMock } from "@ipare/testing/dist/micro-mqtt";
+import { MicroMqttClient } from "../src";
 
 describe("prefix", () => {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { createMock, mockPkgName } = require("@ipare/testing/dist/micro-nats");
-  jest.mock(mockPkgName, () => createMock());
+  jest.mock("mqtt", () => createMock());
 
   it("should subscribe and publish pattern with prefix", async () => {
-    const startup = new MicroNatsStartup({
+    const startup = new MicroMqttStartup({
       prefix: "pt_",
     }).pattern("test_pattern", (ctx) => {
       ctx.res.body = ctx.req.body;
+      expect(!!ctx.req.packet).toBeTruthy();
     });
     await startup.listen();
 
-    const client = new MicroNatsClient({
+    const client = new MicroMqttClient({
       prefix: "pt_",
+      subscribeOptions: { qos: 1 },
+      publishOptions: {},
     });
     await client.connect();
     const result = await client.send("test_pattern", "test_body");
 
-    await client.dispose();
     await startup.close();
+    await client.dispose();
 
     expect(result.data).toBe("test_body");
     expect(result.error).toBeUndefined();

@@ -1,4 +1,4 @@
-import { addClientUse, InjectMicroClient } from "@ipare/micro-client";
+import { useMicroClient, InjectMicroClient } from "@ipare/micro-client";
 import { MicroGrpcClient, MicroGrpcClientOptions } from "./MicroGrpcClient";
 
 export { cliConfigHook } from "./cli-config";
@@ -11,4 +11,4 @@ declare module "@ipare/core" {
   }
 }
 
-addClientUse("useMicroGrpc", MicroGrpcClient);
+useMicroClient("useMicroGrpc", MicroGrpcClient);

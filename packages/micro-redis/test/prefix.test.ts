@@ -1,4 +1,4 @@
-import { MicroRedisClient } from "@ipare/micro-client";
+import { MicroRedisClient } from "@ipare/micro-redis-client";
 import { createMock, mockPkgName } from "@ipare/testing/dist/micro-redis";
 import { MicroRedisStartup } from "../src";
 

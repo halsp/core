@@ -1,9 +1,9 @@
 import {
   createMock,
   mockPkgName,
-  TestMicroMqttClient,
   TestMicroMqttStartup,
 } from "../src/micro-mqtt";
+import { MicroMqttClient } from "@ipare/micro-mqtt-client";
 
 describe("micro-mqtt", () => {
   jest.mock(mockPkgName, () => createMock());
@@ -17,7 +17,7 @@ describe("micro-mqtt", () => {
     );
     await startup.listen();
 
-    const client = new TestMicroMqttClient();
+    const client = new MicroMqttClient();
     await client.connect();
 
     const result = await client.send("test_pattern", "test_body");
@@ -42,7 +42,7 @@ describe("micro-mqtt", () => {
     const startup = new TestMicroMqttStartup();
     await startup.listen();
 
-    const client = new TestMicroMqttClient({
+    const client = new MicroMqttClient({
       publishOptions: opt as any,
     });
     await client.connect();

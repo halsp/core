@@ -1,9 +1,9 @@
 import {
   createMock,
   mockPkgName,
-  TestMicroRedisClient,
   TestMicroRedisStartup,
 } from "../src/micro-redis";
+import { MicroRedisClient } from "@ipare/micro-redis-client";
 
 describe("micro-redis", () => {
   jest.mock(mockPkgName, () => createMock());
@@ -16,7 +16,7 @@ describe("micro-redis", () => {
     });
     await startup.listen();
 
-    const client = new TestMicroRedisClient({
+    const client = new MicroRedisClient({
       password: "H",
     });
     await client.connect();

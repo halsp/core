@@ -1,9 +1,37 @@
 import { Middleware } from "@ipare/core";
 import { TestStartup } from "@ipare/testing";
 import "../src";
-import { IMicroClient, MicroClient, MicroTcpClient } from "../src";
+import {
+  IMicroClient,
+  InjectMicroClient,
+  MicroClient,
+  useMicroClient,
+} from "../src";
 import * as net from "net";
 import { InjectType } from "@ipare/inject";
+
+class TestClient extends IMicroClient {
+  async connect() {
+    return;
+  }
+  dispose(): void {
+    return;
+  }
+  async send(): Promise<any> {
+    return;
+  }
+  emit(): void {
+    return;
+  }
+}
+
+declare module "@ipare/core" {
+  interface Startup {
+    useTestClient(options?: InjectMicroClient): this;
+  }
+}
+
+useMicroClient("useTestClient", TestClient);
 
 describe("inject", () => {
   it("should get micro client by getMicroClient", async () => {
@@ -13,20 +41,17 @@ describe("inject", () => {
     server2.listen(23378);
 
     const { ctx } = await new TestStartup()
-      .useMicroTcp({
-        port: 23377,
-      })
-      .useMicroTcp({
-        port: 23378,
+      .useTestClient()
+      .useTestClient({
         identity: "custom_id",
       })
       .use(async (ctx) => {
-        const client1 = await ctx.getMicroClient<MicroTcpClient>();
+        const client1 = await ctx.getMicroClient<TestClient>();
         ctx.bag("logger1", client1.logger);
         client1.dispose();
 
         client1.logger = undefined as any;
-        const client2 = await ctx.getMicroClient<MicroTcpClient>("custom_id");
+        const client2 = await ctx.getMicroClient<TestClient>("custom_id");
         ctx.bag("logger2", client2.logger);
         client2.dispose();
       })
@@ -64,13 +89,11 @@ describe("inject", () => {
     server2.listen(23380);
 
     const { ctx } = await new TestStartup()
-      .useMicroTcp({
-        port: 23379,
+      .useTestClient({
         injectType: InjectType.Scoped,
       })
-      .useMicroTcp({
+      .useTestClient({
         identity: "custom_id",
-        port: 23380,
         injectType: InjectType.Scoped,
       })
       .add(TestMiddleware)
@@ -90,9 +113,9 @@ describe("inject", () => {
     server.listen(2333);
 
     const { ctx } = await new TestStartup()
-      .useMicroTcp()
+      .useTestClient()
       .use(async (ctx) => {
-        const client1 = await ctx.getMicroClient<MicroTcpClient>();
+        const client1 = await ctx.getMicroClient<TestClient>();
         ctx.bag("logger", client1.logger);
         client1.dispose();
       })

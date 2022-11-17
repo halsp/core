@@ -1,5 +1,5 @@
 import { MicroMqttStartup } from "../src";
-import { MicroMqttClient } from "@ipare/micro-client";
+import { MicroMqttClient } from "@ipare/micro-mqtt-client";
 
 describe("prefix", () => {
   // prevent loop type check
