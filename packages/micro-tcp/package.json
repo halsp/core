@@ -1,6 +1,6 @@
 {
   "name": "@ipare/micro-tcp",
-  "version": "3.0.0-alpha.5",
+  "version": "3.0.0-alpha.6",
   "description": "Ipare 微服务 TCP 通信",
   "engines": {
     "node": ">=12.14.0"
@@ -39,8 +39,8 @@
   "license": "MIT",
   "dependencies": {
     "@ipare/core": "^3.0.0-alpha.4",
-    "@ipare/micro": "^3.0.0-alpha.5",
-    "@ipare/micro-common": "^3.0.0-alpha.5"
+    "@ipare/micro": "^3.0.0-alpha.6",
+    "@ipare/micro-common": "^3.0.0-alpha.6"
   },
   "devDependencies": {
     "@types/jest": "^29.2.2",

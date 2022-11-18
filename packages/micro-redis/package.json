@@ -1,6 +1,6 @@
 {
   "name": "@ipare/micro-redis",
-  "version": "3.0.0-alpha.5",
+  "version": "3.0.0-alpha.6",
   "description": "Ipare 微服务 Redis 通信",
   "engines": {
     "node": ">=12.14.0"
@@ -40,8 +40,8 @@
   "license": "MIT",
   "dependencies": {
     "@ipare/core": "^3.0.0-alpha.4",
-    "@ipare/micro": "^3.0.0-alpha.5",
-    "@ipare/micro-common": "^3.0.0-alpha.5",
+    "@ipare/micro": "^3.0.0-alpha.6",
+    "@ipare/micro-common": "^3.0.0-alpha.6",
     "redis": "^4.4.0"
   },
   "devDependencies": {

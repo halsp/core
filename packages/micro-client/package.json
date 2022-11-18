@@ -1,6 +1,6 @@
 {
   "name": "@ipare/micro-client",
-  "version": "3.0.0-alpha.5",
+  "version": "3.0.0-alpha.6",
   "description": "Ipare 微服务请求客户端",
   "engines": {
     "node": ">=12.14.0"
@@ -41,7 +41,7 @@
   "dependencies": {
     "@ipare/core": "^3.0.0-alpha.4",
     "@ipare/inject": "^3.0.0-alpha.4",
-    "@ipare/micro-common": "^3.0.0-alpha.5",
+    "@ipare/micro-common": "^3.0.0-alpha.6",
     "uuid": "^9.0.0"
   },
   "devDependencies": {

@@ -1,6 +1,6 @@
 {
   "name": "@ipare/swagger",
-  "version": "3.0.0-alpha.5",
+  "version": "3.0.0-alpha.6",
   "description": "使用 swagger 自动生成你的 Ipare 文档",
   "engines": {
     "node": ">=12.14.0"
@@ -39,7 +39,7 @@
     "@ipare/inject": "^3.0.0-alpha.4",
     "@ipare/methods": "^3.0.0-alpha.4",
     "@ipare/pipe": "^3.0.0-alpha.4",
-    "@ipare/router": "^3.0.0-alpha.5",
+    "@ipare/router": "^3.0.0-alpha.6",
     "@ipare/static": "^3.0.0-alpha.4",
     "@ipare/validator": "^3.0.0-alpha.4",
     "openapi3-ts-remove-yaml": "^3.0.2",

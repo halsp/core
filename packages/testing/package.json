@@ -1,6 +1,6 @@
 {
   "name": "@ipare/testing",
-  "version": "3.0.0-alpha.5",
+  "version": "3.0.0-alpha.6",
   "description": "Ipare 的测试插件，用于单元测试、本地测试等",
   "engines": {
     "node": ">=12.14.0"
@@ -39,13 +39,13 @@
   },
   "devDependencies": {
     "@ipare/http": "^3.0.0-alpha.4",
-    "@ipare/micro": "^3.0.0-alpha.5",
-    "@ipare/micro-client": "^3.0.0-alpha.5",
-    "@ipare/micro-common": "^3.0.0-alpha.5",
-    "@ipare/micro-mqtt": "^3.0.0-alpha.5",
-    "@ipare/micro-nats": "^3.0.0-alpha.5",
-    "@ipare/micro-redis": "^3.0.0-alpha.5",
-    "@ipare/micro-tcp": "^3.0.0-alpha.5",
+    "@ipare/micro": "^3.0.0-alpha.6",
+    "@ipare/micro-client": "^3.0.0-alpha.6",
+    "@ipare/micro-common": "^3.0.0-alpha.6",
+    "@ipare/micro-mqtt": "^3.0.0-alpha.6",
+    "@ipare/micro-nats": "^3.0.0-alpha.6",
+    "@ipare/micro-redis": "^3.0.0-alpha.6",
+    "@ipare/micro-tcp": "^3.0.0-alpha.6",
     "@ipare/native": "^3.0.0-alpha.4",
     "@types/jest": "^29.2.2",
     "@types/node": "^18.11.9",

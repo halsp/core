@@ -1,6 +1,6 @@
 {
   "name": "@ipare/micro-common",
-  "version": "3.0.0-alpha.5",
+  "version": "3.0.0-alpha.6",
   "description": "Ipare 微服务公共插件",
   "engines": {
     "node": ">=12.14.0"
