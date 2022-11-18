@@ -36,6 +36,7 @@
   },
   "author": "hal-wang",
   "license": "MIT",
+  "dependencies": {},
   "devDependencies": {
     "@types/jest": "^29.2.2",
     "@types/node": "^18.11.9",

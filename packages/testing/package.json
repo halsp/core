@@ -46,6 +46,7 @@
     "@ipare/micro-nats": "^3.0.0-alpha.6",
     "@ipare/micro-redis": "^3.0.0-alpha.6",
     "@ipare/micro-tcp": "^3.0.0-alpha.6",
+    "@ipare/micro-grpc": "^3.0.0-alpha.6",
     "@ipare/native": "^3.0.0-alpha.4",
     "@types/jest": "^29.2.2",
     "@types/node": "^18.11.9",
