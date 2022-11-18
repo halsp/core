@@ -164,7 +164,13 @@ export class MicroGrpcClient extends IMicroClient {
 
     if (method.requestStream) {
       const requestIterator = data as WriteIterator;
-      const call: grpc.ClientWritableStream<any> = method();
+      const call: grpc.ClientWritableStream<any> = method(
+        (err: grpc.ServerErrorResponse | undefined) => {
+          if (err) {
+            this.logger.error(err);
+          }
+        }
+      );
       (async () => {
         for await (const item of requestIterator) {
           call.write(item);
@@ -172,7 +178,14 @@ export class MicroGrpcClient extends IMicroClient {
         call.end();
       })();
     } else {
-      method(data as Record<string, any>);
+      method(
+        data as Record<string, any>,
+        (err: grpc.ServerErrorResponse | undefined) => {
+          if (err) {
+            this.logger.error(err);
+          }
+        }
+      );
     }
   }
 
@@ -248,10 +261,13 @@ export class MicroGrpcClient extends IMicroClient {
       return;
     }
 
-    return service[methodName]?.bind(service) as (
-      | ((...args: any[]) => any)
-      | undefined
-    ) &
+    const result = service[methodName]?.bind(service);
+    if (result) {
+      Object.keys(service[methodName]).forEach((k) => {
+        result[k] = service[methodName][k];
+      });
+    }
+    return result as (((...args: any[]) => any) | undefined) &
       grpc.MethodDefinition<any, any>;
   }
 
