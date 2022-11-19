@@ -1,6 +1,6 @@
 {
   "name": "@ipare/swagger",
-  "version": "3.0.0-alpha.7",
+  "version": "3.0.0-alpha.8",
   "description": "使用 swagger 自动生成你的 Ipare 文档",
   "engines": {
     "node": ">=12.14.0"
@@ -34,20 +34,20 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^3.0.0-alpha.4",
-    "@ipare/http": "^3.0.0-alpha.4",
-    "@ipare/inject": "^3.0.0-alpha.4",
-    "@ipare/methods": "^3.0.0-alpha.4",
-    "@ipare/pipe": "^3.0.0-alpha.4",
-    "@ipare/router": "^3.0.0-alpha.7",
-    "@ipare/static": "^3.0.0-alpha.4",
-    "@ipare/validator": "^3.0.0-alpha.4",
+    "@ipare/core": "^3.0.0-alpha.8",
+    "@ipare/http": "^3.0.0-alpha.8",
+    "@ipare/inject": "^3.0.0-alpha.8",
+    "@ipare/methods": "^3.0.0-alpha.8",
+    "@ipare/pipe": "^3.0.0-alpha.8",
+    "@ipare/router": "^3.0.0-alpha.8",
+    "@ipare/static": "^3.0.0-alpha.8",
+    "@ipare/validator": "^3.0.0-alpha.8",
     "openapi3-ts-remove-yaml": "^3.0.2",
     "reflect-metadata": "^0.1.13",
     "swagger-ui-dist": "^4.15.2"
   },
   "devDependencies": {
-    "@ipare/native": "^3.0.0-alpha.4",
+    "@ipare/native": "^3.0.0-alpha.8",
     "@types/jest": "^29.2.2",
     "@types/node": "^18.11.9",
     "@types/swagger-ui-dist": "^3.30.1",

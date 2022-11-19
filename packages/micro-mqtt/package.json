@@ -1,6 +1,6 @@
 {
   "name": "@ipare/micro-mqtt",
-  "version": "3.0.0-alpha.7",
+  "version": "3.0.0-alpha.8",
   "description": "Ipare 微服务 MQTT 通信",
   "engines": {
     "node": ">=12.14.0"
@@ -39,9 +39,9 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^3.0.0-alpha.4",
-    "@ipare/micro": "^3.0.0-alpha.7",
-    "@ipare/micro-common": "^3.0.0-alpha.7",
+    "@ipare/core": "^3.0.0-alpha.8",
+    "@ipare/micro": "^3.0.0-alpha.8",
+    "@ipare/micro-common": "^3.0.0-alpha.8",
     "mqtt": "^4.3.7"
   },
   "devDependencies": {
