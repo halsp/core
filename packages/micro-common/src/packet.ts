@@ -5,6 +5,7 @@ export interface ServerPacket<T = any> {
 }
 
 export interface ClientPacket<T = any> {
+  id?: string;
   data?: T;
   error?: string;
 }

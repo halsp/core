@@ -1,6 +1,8 @@
+import { ClientPacket, ServerPacket } from "./packet";
+
 export function parseTcpBuffer(
   buffer: Buffer,
-  callback: (packet: any) => void
+  callback: (packet: ServerPacket | ClientPacket) => void
 ) {
   let stringBuffer = buffer.toString("utf-8");
 

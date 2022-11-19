@@ -5,28 +5,30 @@ describe("client", () => {
   it("should send message and return boolean value", async () => {
     const startup = new MicroTcpStartup({
       port: 23334,
-    }).use((ctx) => {
-      ctx.res.setBody(ctx.req.body);
-    });
+    })
+      .use((ctx) => {
+        ctx.res.setBody(ctx.req.body);
+      })
+      .pattern("test_pattern", () => undefined);
     const { port } = await startup.dynamicListen();
 
     const client = new MicroTcpClient({
       port,
     });
     await client.connect();
-    const result = await client.send("", true);
-    startup.close();
-    client.dispose();
+    const result = await client.send("test_pattern", true);
+    await startup.close();
+    await client.dispose();
 
     expect(result.data).toBe(true);
   });
 
   it("should send message and return value when use prefix", async () => {
-    const startup = new MicroTcpStartup({
-      prefix: "pf",
-    }).use((ctx) => {
-      ctx.res.setBody(ctx.req.body);
-    });
+    const startup = new MicroTcpStartup()
+      .use((ctx) => {
+        ctx.res.setBody(ctx.req.body);
+      })
+      .pattern("pftest_pattern", () => undefined);
     const { port } = await startup.dynamicListen();
 
     const client = new MicroTcpClient({
@@ -34,9 +36,9 @@ describe("client", () => {
       prefix: "pf",
     });
     await client.connect();
-    const result = await client.send("", "abc");
-    startup.close();
-    client.dispose();
+    const result = await client.send("test_pattern", "abc");
+    await startup.close();
+    await client.dispose();
 
     expect(result.data).toBe("abc");
   });
@@ -44,18 +46,20 @@ describe("client", () => {
   it("should send message and return undefined value", async () => {
     const startup = new MicroTcpStartup({
       port: 23334,
-    }).use((ctx) => {
-      ctx.res.setBody(ctx.req.body);
-    });
+    })
+      .use((ctx) => {
+        ctx.res.setBody(ctx.req.body);
+      })
+      .pattern("test_pattern", () => undefined);
     const { port } = await startup.dynamicListen();
 
     const client = new MicroTcpClient({
       port,
     });
     await client.connect();
-    const result = await client.send("", undefined);
-    startup.close();
-    client.dispose();
+    const result = await client.send("test_pattern", undefined);
+    await startup.close();
+    await client.dispose();
 
     expect(result.data).toBeUndefined();
   });
@@ -64,21 +68,23 @@ describe("client", () => {
     let invoke = false;
     const startup = new MicroTcpStartup({
       port: 23334,
-    }).use(() => {
-      invoke = true;
-    });
+    })
+      .use(() => {
+        invoke = true;
+      })
+      .pattern("test_pattern", () => undefined);
     const { port } = await startup.dynamicListen();
 
     const client = new MicroTcpClient({
       port,
     });
     await client.connect();
-    client.emit("", true);
+    client.emit("test_pattern", true);
 
     await new Promise<void>((resolve) => {
-      setTimeout(() => {
-        startup.close();
-        client.dispose();
+      setTimeout(async () => {
+        await startup.close();
+        await client.dispose();
         resolve();
       }, 1000);
     });
@@ -142,9 +148,11 @@ describe("client", () => {
   it("should wait all times with timeout = 0", async () => {
     const startup = new MicroTcpStartup({
       port: 23334,
-    }).use((ctx) => {
-      ctx.res.setBody(ctx.req.body);
-    });
+    })
+      .use((ctx) => {
+        ctx.res.setBody(ctx.req.body);
+      })
+      .pattern("test_pattern", () => undefined);
     const { port } = await startup.dynamicListen();
     startup["handleMessage"] = () => new Promise((resolve) => resolve());
 
@@ -155,11 +163,11 @@ describe("client", () => {
 
     const waitResult = await new Promise<boolean>(async (resolve) => {
       setTimeout(() => resolve(true), 5000);
-      await client.send("abc", "", 0);
+      await client.send("test_pattern", "", 0);
       resolve(false);
     });
-    client.dispose();
-    startup.close();
+    await client.dispose();
+    await startup.close();
 
     expect(waitResult).toBeTruthy();
   }, 10000);
@@ -167,9 +175,11 @@ describe("client", () => {
   it("should return error when send timeout and set timeout options", async () => {
     const startup = new MicroTcpStartup({
       port: 23334,
-    }).use((ctx) => {
-      ctx.res.setBody(ctx.req.body);
-    });
+    })
+      .use((ctx) => {
+        ctx.res.setBody(ctx.req.body);
+      })
+      .pattern("test_pattern", () => undefined);
     const { port } = await startup.dynamicListen();
     startup["handleMessage"] = () => new Promise((resolve) => resolve());
 
@@ -179,9 +189,9 @@ describe("client", () => {
     });
     await client.connect();
 
-    const result = await client.send("abc", "");
-    client.dispose();
-    startup.close();
+    const result = await client.send("test_pattern", "");
+    await client.dispose();
+    await startup.close();
 
     expect(result).toEqual({
       error: "Send timeout",
@@ -191,9 +201,11 @@ describe("client", () => {
   it("should return error when send timeout and set timeout argument", async () => {
     const startup = new MicroTcpStartup({
       port: 23334,
-    }).use((ctx) => {
-      ctx.res.setBody(ctx.req.body);
-    });
+    })
+      .use((ctx) => {
+        ctx.res.setBody(ctx.req.body);
+      })
+      .pattern("test_pattern", () => undefined);
     const { port } = await startup.dynamicListen();
     startup["handleMessage"] = () => new Promise((resolve) => resolve());
 
@@ -202,9 +214,9 @@ describe("client", () => {
     });
     await client.connect();
 
-    const result = await client.send("abc", "", 1000);
-    client.dispose();
-    startup.close();
+    const result = await client.send("test_pattern", "", 1000);
+    await client.dispose();
+    await startup.close();
 
     expect(result).toEqual({
       error: "Send timeout",
@@ -225,8 +237,8 @@ describe("client", () => {
     const socket = await client.connect();
     socket.emit("close");
 
-    client.dispose();
-    startup.close();
+    await client.dispose();
+    await startup.close();
   });
 
   it("should create client by default port and host", () => {

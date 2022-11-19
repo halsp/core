@@ -6,7 +6,7 @@ test("dynamicListen", async () => {
     port: 23345,
   });
   const { server, port } = await startup
-    .use(async (ctx) => {
+    .pattern("test_pattern", async (ctx) => {
       const { server, port } = await new MicroTcpStartup({
         port: 23345,
       }).dynamicListen();
@@ -19,7 +19,7 @@ test("dynamicListen", async () => {
   const res = await sendMessage(port, true);
   expect(res.error).toBeUndefined();
   expect(port + 1).toBe(res.data);
-  server.close();
+  await startup.close();
 });
 
 test("dynamicListen error", async () => {
@@ -41,7 +41,7 @@ test("dynamicListen emit error", async () => {
   const { server, port } = await new MicroTcpStartup({
     port: 23334,
   })
-    .use(async (ctx) => {
+    .pattern("test_pattern", async (ctx) => {
       ctx.res.setBody("ok");
     })
     .dynamicListen();

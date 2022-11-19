@@ -26,14 +26,14 @@ describe("parse message", () => {
   it("should set default result", async () => {
     const startup = new MicroTcpStartup({
       port: 23334,
-    });
+    }).pattern("test_pattern", () => undefined);
     const { port } = await startup.dynamicListen();
     const result = await sendMessage(port, true);
     await startup.close();
 
     expect(result).toEqual({
       id: "123",
-      body: undefined,
+      data: undefined,
     });
   });
 
@@ -45,7 +45,9 @@ describe("parse message", () => {
     const result = await sendData(port, "abc");
     await startup.close();
 
-    expect(result).toBe(`Error message format`);
+    expect(result).toEqual({
+      error: `Error message format`,
+    });
   });
 
   it("should return error if length is nan", async () => {
@@ -56,7 +58,9 @@ describe("parse message", () => {
     const result = await sendData(port, "abc#{}");
     await startup.close();
 
-    expect(result).toBe(`Error length "abc"`);
+    expect(result).toEqual({
+      error: `Error length "abc"`,
+    });
   });
 
   it("should return error if length is error", async () => {
@@ -67,7 +71,9 @@ describe("parse message", () => {
     const result = await sendData(port, "3#{}");
     await startup.close();
 
-    expect(result).toBe(`Required length "3", bug actual length is "2"`);
+    expect(result).toEqual({
+      error: `Required length "3", bug actual length is "2"`,
+    });
   });
 
   it("should throw error when socket destroy", async () => {
@@ -88,11 +94,17 @@ describe("parse message", () => {
     let times = 0;
     const startup = new MicroTcpStartup({
       port: 23334,
-    }).use(() => {
-      times++;
-    });
+    })
+      .use(() => {
+        times++;
+      })
+      .pattern("test_pattern", () => undefined);
     const { port } = await startup.dynamicListen();
-    await sendData(port, "2#{}2#{}2#{}", false);
+    const jsonData = JSON.stringify({
+      pattern: "test_pattern",
+    });
+    const sendStr = `${jsonData.length}#${jsonData}`;
+    await sendData(port, `${sendStr}${sendStr}${sendStr}`, false);
     let i = 0;
     while (i < 30 && times < 3) {
       await new Promise<void>((resolve) => {
@@ -110,17 +122,19 @@ describe("socket", () => {
   it("should get socket from ctx", async () => {
     const startup = new MicroTcpStartup({
       port: 23334,
-    }).use((ctx) => {
-      ctx.res.setBody(ctx.socket);
-    });
+    })
+      .use((ctx) => {
+        ctx.res.setBody(ctx.socket);
+      })
+      .pattern("test_pattern", () => undefined);
     const { port } = await startup.dynamicListen();
 
     const client = new MicroTcpClient({
       port,
     });
     await client.connect();
-    const result = await client.send("", true);
-    client.dispose();
+    const result = await client.send("test_pattern", true);
+    await client.dispose();
     await startup.close();
 
     expect(result.data).toBeTruthy();
@@ -129,9 +143,14 @@ describe("socket", () => {
   it("should log error when socket emit error", async () => {
     const startup = new MicroTcpStartup({
       port: 23334,
-    }).use((ctx) => {
-      ctx.socket.emit("error", new Error("err"));
-    });
+    })
+      .use((ctx) => {
+        ctx.socket.emit("error", new Error("err"));
+      })
+      .patterns({
+        pattern: "test_pattern",
+        handler: () => undefined,
+      });
     const { port } = await startup.dynamicListen();
 
     const client = new MicroTcpClient({
@@ -145,12 +164,78 @@ describe("socket", () => {
       err = error.message;
       console.error = beforeError;
     };
-    await client.send("", true);
+    await client.send("test_pattern", true);
     console.error = beforeError;
 
-    client.dispose();
+    await client.dispose();
     await startup.close();
 
     expect(err).toBe("err");
+  });
+
+  it("should return error when send pattern is not exist", async () => {
+    const startup = new MicroTcpStartup({
+      port: 23335,
+    });
+    const { port } = await startup.dynamicListen();
+
+    const client = new MicroTcpClient({
+      port,
+    });
+    await client.connect();
+    const result = await client.send("test_pattern", true);
+
+    await client.dispose();
+    await startup.close();
+
+    expect(result.error).toBe(`Can't find the pattern: test_pattern`);
+    expect(!!result.id).toBeTruthy();
+    expect(result.data).toBeUndefined();
+  });
+
+  it("should log error when emit pattern is not exist", async () => {
+    const startup = new MicroTcpStartup({
+      port: 23336,
+    });
+    const { port } = await startup.dynamicListen();
+
+    const client = new MicroTcpClient({
+      port,
+    });
+    await client.connect();
+    client.emit("test_pattern", true);
+
+    await new Promise<void>((resolve) => {
+      setTimeout(() => resolve(), 500);
+    });
+
+    await client.dispose();
+    await startup.close();
+  });
+
+  it("should return Internal Error when handle message error", async () => {
+    const startup = new MicroTcpStartup({
+      port: 23337,
+    });
+    const { port } = await startup.dynamicListen();
+
+    const client = new MicroTcpClient({
+      port,
+    });
+    await client.connect();
+
+    const beforeFilter = Array.prototype.filter;
+    Array.prototype.filter = () => {
+      throw new Error("err");
+    };
+    const result = await client.send("test_pattern", true);
+    Array.prototype.filter = beforeFilter;
+
+    await client.dispose();
+    await startup.close();
+
+    expect(result.error).toBe("Internal Error");
+    expect(result.data).toBeUndefined();
+    expect(result.id).not.toBeUndefined();
   });
 });

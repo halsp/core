@@ -1,13 +1,19 @@
 import { MicroStartup } from "@ipare/micro";
-import { parseTcpBuffer } from "@ipare/micro-common";
+import { parseTcpBuffer, ServerPacket } from "@ipare/micro-common";
 import { MicroTcpOptions } from "./options";
 import * as net from "net";
+import { Context } from "@ipare/core";
 
 export class MicroTcpStartup extends MicroStartup {
   constructor(readonly options: MicroTcpOptions = {}) {
     super();
     this.#server = net.createServer(this.#handler.bind(this));
   }
+
+  #handlers: {
+    pattern: string;
+    handler: (ctx: Context) => Promise<void> | void;
+  }[] = [];
 
   readonly #server: net.Server;
   public get server() {
@@ -22,23 +28,53 @@ export class MicroTcpStartup extends MicroStartup {
     socket.on("data", async (buffer) => {
       try {
         parseTcpBuffer(buffer, async (packet) => {
-          await this.handleMessage(
-            packet,
-            ({ result }) => {
-              const jsonResult = JSON.stringify(result);
-              socket.write(`${jsonResult.length}#${jsonResult}`, "utf-8");
-            },
-            (ctx) => {
-              Object.defineProperty(ctx, "socket", {
-                configurable: true,
-                enumerable: true,
-                get: () => socket,
-              });
+          try {
+            const pattern = (packet as ServerPacket).pattern;
+            const handler = this.#handlers.filter(
+              (item) => item.pattern == pattern
+            )[0]?.handler;
+            if (!handler) {
+              if (packet.id) {
+                this.#writeData(socket, {
+                  id: packet.id,
+                  error: `Can't find the pattern: ${pattern}`,
+                });
+              } else {
+                this.logger.info(`Can't find the pattern: ${pattern}`);
+                this.#writeData(socket, {
+                  error: `Can't find the pattern: ${pattern}`,
+                });
+              }
+              return;
             }
-          );
+
+            await this.handleMessage(
+              packet as ServerPacket,
+              ({ result }) => {
+                this.#writeData(socket, result);
+              },
+              async (ctx) => {
+                Object.defineProperty(ctx, "socket", {
+                  configurable: true,
+                  enumerable: true,
+                  get: () => socket,
+                });
+                await handler(ctx);
+              }
+            );
+          } catch (err) {
+            this.logger.error(err);
+            this.#writeData(socket, {
+              id: packet.id,
+              error: `Internal Error`,
+            });
+          }
         });
       } catch (err) {
-        socket.write((err as Error).message);
+        this.logger.debug("parse tcp buffer error", err);
+        this.#writeData(socket, {
+          error: (err as Error).message,
+        });
       }
     });
     socket.on("close", () => {
@@ -47,6 +83,11 @@ export class MicroTcpStartup extends MicroStartup {
     socket.on("error", (err) => {
       this.logger.error(err);
     });
+  }
+
+  #writeData(socket: net.Socket, data: any) {
+    const jsonResult = JSON.stringify(data);
+    socket.write(`${jsonResult.length}#${jsonResult}`, "utf-8");
   }
 
   listen(): net.Server {
@@ -89,6 +130,24 @@ export class MicroTcpStartup extends MicroStartup {
   }
   async dynamicListen(): Promise<{ port: number; server: net.Server }> {
     return await this.#dynamicListen(0);
+  }
+
+  pattern(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
+    this.logger.debug(`Add pattern: ${pattern}`);
+    this.#handlers.push({ pattern, handler });
+    return this;
+  }
+
+  patterns(
+    ...patterns: {
+      pattern: string;
+      handler: (ctx: Context) => Promise<void> | void;
+    }[]
+  ) {
+    patterns.forEach((item) => {
+      this.pattern(item.pattern, item.handler);
+    });
+    return this;
   }
 
   async close() {

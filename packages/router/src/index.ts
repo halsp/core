@@ -116,7 +116,7 @@ Startup.prototype.useRouterParser = function (options?: RouterOptions) {
   ) {
     this["patterns"](
       ...routerMap.map((item) => ({
-        pattern: item.url,
+        pattern: (options?.prefix ?? "") + item.url,
         handler: (ctx: Context) => {
           Object.defineProperty(ctx, "actionMetadata", {
             configurable: true,
@@ -149,31 +149,6 @@ Startup.prototype.useRouterParser = function (options?: RouterOptions) {
 
     await next();
   })
-    .use(async (ctx, next) => {
-      if (!process.env.IS_IPARE_MICRO) {
-        return await next();
-      }
-      if (!!ctx.actionMetadata) {
-        return await next();
-      }
-
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const { MapMatcher } = require("./map/micro-map-matcher");
-      const mapMatcher = new MapMatcher(ctx);
-      if (mapMatcher.notFound) {
-        ctx.res["error"] = `Can't find the path: ${ctx.req.path}`;
-      } else {
-        const mapItem = mapMatcher.mapItem;
-        Object.defineProperty(ctx, "actionMetadata", {
-          configurable: true,
-          enumerable: false,
-          get: () => {
-            return mapItem;
-          },
-        });
-      }
-      await next();
-    })
     .use(async (ctx, next) => {
       if (!process.env.IS_IPARE_HTTP) {
         return await next();

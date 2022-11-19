@@ -29,7 +29,9 @@ export class MicroTcpClient extends IMicroClient {
     });
 
     socket.on("data", (buffer: Buffer) => {
-      parseTcpBuffer(buffer, (json: any) => this.#handleResponse(json));
+      parseTcpBuffer(buffer, (packet) =>
+        this.#handleResponse(packet as ClientPacket)
+      );
     });
 
     const promise = new Promise<void>((resolve) => {
@@ -53,26 +55,31 @@ export class MicroTcpClient extends IMicroClient {
     return socket;
   }
 
-  #handleResponse(json: any) {
-    const id = json.id;
+  #handleResponse(packet: ClientPacket & { response?: any }) {
+    const id = packet.id as string;
     const callback = this.#tasks.get(id);
-    callback && callback(json.error, json.data ?? json.response);
+    callback && callback(packet.error, packet.data ?? packet.response);
   }
 
-  #close() {
+  async #close() {
     const socket = this.#socket;
     this.#socket = undefined;
     this.#tasks.clear();
 
-    socket?.removeAllListeners();
-    socket?.end();
+    if (socket) {
+      socket.removeAllListeners();
+
+      await new Promise<void>((resolve) => {
+        socket.end(() => resolve());
+      });
+    }
   }
 
   /**
    * for @ipare/inject
    */
-  dispose() {
-    this.#close();
+  async dispose() {
+    await this.#close();
   }
 
   async send<T = any>(
@@ -110,6 +117,7 @@ export class MicroTcpClient extends IMicroClient {
         this.#tasks.delete(serverPacket.id);
 
         resolve({
+          id: serverPacket.id,
           data,
           error,
         });

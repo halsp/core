@@ -1,3 +1,4 @@
+import { ClientPacket } from "@ipare/micro-common";
 import net from "net";
 
 export async function sendData(
@@ -5,12 +6,15 @@ export async function sendData(
   data: string | Uint8Array,
   waitReturn = true
 ) {
-  let result = "";
+  let result: ClientPacket | undefined;
   await new Promise<void>((resolve) => {
     const socket = net.createConnection(port);
     if (waitReturn) {
       socket.on("data", (buffer) => {
-        result = buffer.toString("utf-8");
+        const str = buffer.toString("utf-8");
+        const strs = str.split("#");
+        expect(strs[0]).toBe(String(strs[1].length));
+        result = JSON.parse(strs[1]);
         resolve();
       });
     }
@@ -34,21 +38,19 @@ export async function sendMessage(
   port: number,
   data: any,
   waitReturn?: true
-): Promise<{
-  id: string;
-  data: any;
-  error: any;
-}>;
-export async function sendMessage(port: number, data: any, waitReturn = true) {
+): Promise<ClientPacket>;
+export async function sendMessage(
+  port: number,
+  data: any,
+  waitReturn = true
+): Promise<ClientPacket | void> {
   const json = JSON.stringify({
-    pattern: "p",
+    pattern: "test_pattern",
     id: waitReturn ? "123" : undefined,
     data,
   });
-  const str = await sendData(port, `${json.length}#${json}`, waitReturn);
+  const result = await sendData(port, `${json.length}#${json}`, waitReturn);
   if (!waitReturn) return;
 
-  const strs = str.split("#");
-  expect(strs[0]).toBe(String(strs[1].length));
-  return JSON.parse(strs[1]);
+  return result;
 }
