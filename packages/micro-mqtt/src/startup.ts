@@ -17,9 +17,6 @@ export class MicroMqttStartup extends MicroStartup {
 
   protected client?: mqtt.MqttClient;
   private connectResolve?: (err: void) => void;
-  protected get prefix() {
-    return this.options.prefix ?? "";
-  }
 
   async listen() {
     this.close(true);
@@ -95,7 +92,6 @@ export class MicroMqttStartup extends MicroStartup {
   }
 
   pattern(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
-    pattern = this.prefix + pattern;
     this.#handlers.push({
       pattern: pattern,
       handler,

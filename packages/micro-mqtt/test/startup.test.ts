@@ -7,7 +7,25 @@ describe("startup", () => {
   const { createMock, mockPkgName } = require("@ipare/testing/dist/micro-mqtt");
   jest.mock(mockPkgName, () => createMock());
 
-  it("should subscribe and publish", async () => {
+  it("should subscribe and publish ", async () => {
+    const startup = new MicroMqttStartup().pattern("test_pattern", (ctx) => {
+      ctx.res.body = ctx.req.body;
+      expect(!!ctx.req.packet).toBeTruthy();
+    });
+    await startup.listen();
+
+    const client = new MicroMqttClient();
+    await client.connect();
+    const result = await client.send("test_pattern", "test_body");
+
+    await startup.close(true);
+    await client.dispose(true);
+
+    expect(result.data).toBe("test_body");
+    expect(result.error).toBeUndefined();
+  });
+
+  it("should subscribe and publish with subscribeOptions and publishOptions", async () => {
     const startup = new MicroMqttStartup({
       subscribeOptions: { qos: 1 },
       publishOptions: {},
