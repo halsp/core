@@ -6,9 +6,7 @@ describe("prefix", () => {
   jest.mock("mqtt", () => createMock());
 
   it("should subscribe and publish pattern with prefix", async () => {
-    const startup = new MicroMqttStartup({
-      prefix: "pt_",
-    }).pattern("test_pattern", (ctx) => {
+    const startup = new MicroMqttStartup().pattern("pt_test_pattern", (ctx) => {
       ctx.res.body = ctx.req.body;
       expect(!!ctx.req.packet).toBeTruthy();
     });
