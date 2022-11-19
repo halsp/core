@@ -16,9 +16,6 @@ export class MicroNatsStartup extends MicroStartup {
   }[] = [];
 
   protected connection?: nats.NatsConnection;
-  protected get prefix() {
-    return this.options.prefix ?? "";
-  }
   #jsonCodec!: nats.Codec<any>;
 
   async listen() {
@@ -82,7 +79,6 @@ export class MicroNatsStartup extends MicroStartup {
   }
 
   pattern(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
-    pattern = this.prefix + pattern;
     this.#handlers.push({ pattern, handler });
     return this.#pattern(pattern, handler);
   }
