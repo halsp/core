@@ -1,6 +1,6 @@
 {
   "name": "@ipare/filter",
-  "version": "3.0.0-alpha.6",
+  "version": "3.0.0-alpha.7",
   "description": "Ipare 的请求过滤器插件",
   "engines": {
     "node": ">=12.14.0"
@@ -35,7 +35,7 @@
   "dependencies": {
     "@ipare/core": "^3.0.0-alpha.4",
     "@ipare/inject": "^3.0.0-alpha.4",
-    "@ipare/router": "^3.0.0-alpha.6",
+    "@ipare/router": "^3.0.0-alpha.7",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
