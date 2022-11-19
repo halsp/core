@@ -2,12 +2,11 @@ import { MicroRedisClient } from "@ipare/micro-redis-client";
 import { createMock, mockPkgName } from "@ipare/testing/dist/micro-redis";
 import { MicroRedisStartup } from "../src";
 
-describe("prefix", () => {
+describe("mock", () => {
   jest.mock(mockPkgName, () => createMock());
 
-  it("should subscribe and publish pattern with prefix", async () => {
+  it("should subscribe and publish when use mock", async () => {
     const startup = new MicroRedisStartup({
-      prefix: "pt_",
       password: "H",
     }).pattern("test_pattern", (ctx) => {
       ctx.res.body = ctx.req.body;
@@ -15,7 +14,6 @@ describe("prefix", () => {
     await startup.listen();
 
     const client = new MicroRedisClient({
-      prefix: "pt_",
       password: "H",
     });
     await client.connect();

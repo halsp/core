@@ -22,4 +22,23 @@ describe("micro-nats", () => {
 
     expect(result.data).toBe("event-pattern-test");
   });
+
+  it("should match pattern with prefix", async () => {
+    const startup = new TestMicroNatsStartup()
+      .useTestRouter({
+        prefix: "pf:",
+      })
+      .useRouter();
+    startup.listen();
+
+    const client = new MicroNatsClient();
+    await client.connect();
+
+    const result = await client.send("pf:event:123", true);
+
+    await startup.close();
+    await client.dispose();
+
+    expect(result.data).toBe("event-pattern-test");
+  });
 });

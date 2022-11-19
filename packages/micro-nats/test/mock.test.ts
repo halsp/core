@@ -6,7 +6,7 @@ describe("mock", () => {
   const { createMock, mockPkgName } = require("@ipare/testing/dist/micro-nats");
   jest.mock(mockPkgName, () => createMock());
 
-  it("should subscribe and publish", async () => {
+  it("should subscribe and publish when use mock", async () => {
     const startup = new MicroNatsStartup().pattern("test_pattern", (ctx) => {
       ctx.res.body = ctx.req.body;
     });

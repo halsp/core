@@ -17,10 +17,6 @@ export class MicroRedisStartup extends MicroStartup {
   protected pub?: redis.RedisClientType;
   protected sub?: redis.RedisClientType;
 
-  protected get prefix() {
-    return this.options.prefix ?? "";
-  }
-
   async listen() {
     await this.close();
 
@@ -72,7 +68,6 @@ export class MicroRedisStartup extends MicroStartup {
   }
 
   pattern(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
-    pattern = this.prefix + pattern;
     this.#handlers.push({ pattern, handler });
     return this.#pattern(pattern, handler);
   }

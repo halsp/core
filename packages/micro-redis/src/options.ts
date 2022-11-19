@@ -7,5 +7,4 @@ export interface MicroRedisOptions<
 > extends Omit<redis.RedisClientOptions<M, F, S>, "url"> {
   host?: string;
   port?: number;
-  prefix?: string;
 }
