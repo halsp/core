@@ -43,8 +43,7 @@
     "@grpc/proto-loader": "^0.7.3",
     "@ipare/core": "^3.0.0-alpha.4",
     "@ipare/micro": "^3.0.0-alpha.6",
-    "@ipare/micro-common": "^3.0.0-alpha.6",
-    "@ipare/micro-grpc-common": "^3.0.0-alpha.6"
+    "@ipare/micro-common": "^3.0.0-alpha.6"
   },
   "devDependencies": {
     "@types/jest": "^29.2.2",

@@ -1,10 +1,6 @@
 import * as grpc from "@grpc/grpc-js";
 import { IMicroClient } from "@ipare/micro-client";
-import {
-  loadPackages,
-  ReadIterator,
-  WriteIterator,
-} from "@ipare/micro-grpc-common";
+import { loadPackages, ReadIterator, WriteIterator } from "@ipare/micro-common";
 import { isClass } from "@ipare/core";
 import { MicroGrpcClientOptions } from "./options";
 

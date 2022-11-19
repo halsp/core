@@ -1,4 +1,4 @@
-import * as grpc from "@grpc/grpc-js";
+import type grpc from "@grpc/grpc-js";
 
 export abstract class StreamIterator<T> {
   protected queue: T[] = [];

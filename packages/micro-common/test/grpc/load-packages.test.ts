@@ -1,4 +1,4 @@
-import { loadPackages } from "../src";
+import { loadPackages } from "../../src";
 import { runin } from "@ipare/testing";
 
 describe("load packages", () => {
@@ -8,7 +8,7 @@ describe("load packages", () => {
   });
 
   it("should load default packages", async () => {
-    await runin("test", async () => {
+    await runin("test/grpc", async () => {
       const packages = await loadPackages();
       expect(Object.keys(packages).length >= 0).toBeTruthy();
     });

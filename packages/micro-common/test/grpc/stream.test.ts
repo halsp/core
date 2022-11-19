@@ -1,5 +1,5 @@
 import { EventEmitter } from "stream";
-import { ReadIterator, StreamIterator, WriteIterator } from "../src";
+import { ReadIterator, StreamIterator, WriteIterator } from "../../src";
 
 describe("stream", () => {
   it("should create write iterator", async () => {

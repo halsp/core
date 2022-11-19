@@ -1,4 +1,4 @@
-import { ClientPacket, ServerPacket } from "./packet";
+import { ClientPacket, ServerPacket } from "../packet";
 
 export function parseTcpBuffer(
   buffer: Buffer,

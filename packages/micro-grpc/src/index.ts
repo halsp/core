@@ -11,4 +11,4 @@ declare module "@ipare/core" {
 export { MicroGrpcOptions } from "./options";
 export { MicroGrpcStartup } from "./startup";
 export { cliConfigHook } from "./cli-config";
-export { WriteIterator, ReadIterator } from "@ipare/micro-grpc-common";
+export { WriteIterator, ReadIterator } from "@ipare/micro-common";

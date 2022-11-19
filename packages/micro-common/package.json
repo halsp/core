@@ -36,10 +36,13 @@
   },
   "author": "hal-wang",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "glob": "^8.0.3"
+  },
   "devDependencies": {
     "@types/jest": "^29.2.2",
     "@types/node": "^18.11.9",
+    "@types/glob": "^8.0.0",
     "@typescript-eslint/eslint-plugin": "^5.42.0",
     "@typescript-eslint/parser": "^5.42.0",
     "eslint": "^8.27.0",

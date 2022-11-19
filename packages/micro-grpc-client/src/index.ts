@@ -3,7 +3,7 @@ import { MicroGrpcClient, MicroGrpcClientOptions } from "./client";
 
 export { cliConfigHook } from "./cli-config";
 export { MicroGrpcClientOptions, MicroGrpcClient } from "./client";
-export { WriteIterator, ReadIterator } from "@ipare/micro-grpc-common";
+export { WriteIterator, ReadIterator } from "@ipare/micro-common";
 
 declare module "@ipare/core" {
   interface Startup {
