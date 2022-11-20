@@ -1,6 +1,6 @@
 {
   "name": "@ipare/micro-nats-client",
-  "version": "3.0.0-alpha.8",
+  "version": "3.0.0",
   "description": "Ipare 微服务 NATS 通信请求客户端",
   "engines": {
     "node": ">=12.14.0"
@@ -38,9 +38,9 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^3.0.0-alpha.8",
-    "@ipare/micro-client": "^3.0.0-alpha.8",
-    "@ipare/micro-common": "^3.0.0-alpha.8",
+    "@ipare/core": "^3.0.0",
+    "@ipare/micro-client": "^3.0.0",
+    "@ipare/micro-common": "^3.0.0",
     "nats": "^2.9.0"
   },
   "files": [
