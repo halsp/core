@@ -40,6 +40,7 @@ export class MicroRedisStartup extends MicroStartup {
       this.#pattern(item.pattern, item.handler);
     });
 
+    this.logger.info(`Server started, listening port: ${opt.port}`);
     return {
       sub: this.sub,
       pub: this.pub,
@@ -68,6 +69,7 @@ export class MicroRedisStartup extends MicroStartup {
   }
 
   pattern(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
+    this.logger.debug(`Add pattern: ${pattern}`);
     this.#handlers.push({ pattern, handler });
     return this.#pattern(pattern, handler);
   }
@@ -94,5 +96,6 @@ export class MicroRedisStartup extends MicroStartup {
     this.pub = undefined;
     await disconnect(this.sub);
     this.sub = undefined;
+    this.logger.info("Server shutdown success");
   }
 }

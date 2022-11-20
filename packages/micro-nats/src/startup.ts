@@ -33,6 +33,7 @@ export class MicroNatsStartup extends MicroStartup {
       this.#pattern(item.pattern, item.handler);
     });
 
+    this.logger.info(`Server started, listening port: ${opt.port}`);
     return this.connection;
   }
 
@@ -79,6 +80,7 @@ export class MicroNatsStartup extends MicroStartup {
   }
 
   pattern(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
+    this.logger.debug(`Add pattern: ${pattern}`);
     this.#handlers.push({ pattern, handler });
     return this.#pattern(pattern, handler);
   }
@@ -99,6 +101,7 @@ export class MicroNatsStartup extends MicroStartup {
     if (this.connection && !this.connection.isClosed()) {
       await this.connection.close();
     }
+    this.logger.info("Server shutdown success");
   }
 }
 

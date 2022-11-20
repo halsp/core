@@ -76,6 +76,7 @@ export class MicroMqttStartup extends MicroStartup {
       }
     );
 
+    this.logger.info(`Server started, listening port: ${opt.port}`);
     return client;
   }
 
@@ -92,6 +93,7 @@ export class MicroMqttStartup extends MicroStartup {
   }
 
   pattern(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
+    this.logger.debug(`Add pattern: ${pattern}`);
     this.#handlers.push({
       pattern: pattern,
       handler,
@@ -119,5 +121,6 @@ export class MicroMqttStartup extends MicroStartup {
 
     this.client?.end(force);
     this.client?.removeAllListeners();
+    this.logger.info("Server shutdown success");
   }
 }

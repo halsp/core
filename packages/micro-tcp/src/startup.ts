@@ -91,7 +91,9 @@ export class MicroTcpStartup extends MicroStartup {
   }
 
   listen(): net.Server {
-    return this.#server.listen(this.#port, this.options.host);
+    this.#server.listen(this.#port, this.options.host);
+    this.logger.info(`Server started, listening port: ${this.#port}`);
+    return this.#server;
   }
 
   async #dynamicListen(
@@ -153,5 +155,6 @@ export class MicroTcpStartup extends MicroStartup {
   async close() {
     this.#server.removeAllListeners();
     this.#server.close();
+    this.logger.info("Server shutdown success");
   }
 }
