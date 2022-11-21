@@ -13,6 +13,12 @@ import {
 import { ObjectConstructor } from "./utils";
 
 export abstract class Startup {
+  constructor() {
+    if (!process.env.NODE_ENV) {
+      process.env.NODE_ENV = "production";
+    }
+  }
+
   readonly #mds: MiddlewareItem[] = [];
   use(lambda: (ctx: Context, next: () => Promise<void>) => Promise<void>): this;
   use(lambda: (ctx: Context, next: () => Promise<void>) => void): this;

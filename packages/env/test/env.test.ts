@@ -4,16 +4,24 @@ import { getEnv } from "./utils";
 
 describe("env", () => {
   it("should load env with empty options", async () => {
-    const env = await getEnv("");
+    const env = await getEnv();
     expect(env.BNAME).toBe("BASE");
     expect(env.NAME).toBeUndefined();
     expect(env.SNAME).toBeUndefined();
   });
 
+  it("should load env with options", async () => {
+    const env = await getEnv("development", {});
+    expect(env.BNAME).toBe("DEVELOPMENT");
+    expect(env.NAME).toBe("DEVELOPMENT");
+    expect(env.SNAME).toBe("DEV");
+  });
+
   it("should load env with cwd", async () => {
-    const { ctx } = await new TestStartup()
+    const startup = new TestStartup();
+    process.env.NODE_ENV = "production";
+    const { ctx } = await startup
       .useEnv({
-        mode: "production",
         cwd: "test/envs",
         override: true,
       })
@@ -29,38 +37,11 @@ describe("env", () => {
   });
 });
 
-describe("mode", () => {
-  it("should load env with options", async () => {
-    const env = await getEnv({
-      mode: "development",
-    });
-    expect(env.BNAME).toBe("DEVELOPMENT");
-    expect(env.NAME).toBe("DEVELOPMENT");
-    expect(env.SNAME).toBe("DEV");
-  });
-
-  it("should load env with default mode", async () => {
-    delete process.env.NODE_ENV;
-    await getEnv();
-    expect(process.env.NODE_ENV).toBe("production");
-  });
-});
-
 describe("debug", () => {
   it("should load env with debug value true", async () => {
-    const env = await getEnv({
-      mode: "stage",
+    const env = await getEnv("stage", {
       debug: true,
     });
-    expect(env.NAME).toBe("STAGE");
-  });
-
-  it("should load env with IPARE_DEBUG", async () => {
-    process.env.IPARE_DEBUG = "true";
-    const env = await getEnv({
-      mode: "stage",
-    });
-    process.env.IPARE_DEBUG = "";
     expect(env.NAME).toBe("STAGE");
   });
 });

@@ -15,6 +15,7 @@ describe("invoke", () => {
       .use(async (ctx) => {
         ctx.bag("result", ctx.bag<number>("result") + 1);
       });
+    process.env.NODE_ENV = "";
 
     let res = await startup.run();
     expect(res.ctx.bag("result")).toBe(2);
