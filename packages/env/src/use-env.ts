@@ -29,9 +29,9 @@ function initEnv(options: EnvOptions) {
   for (const fileName of fileNames) {
     dotenv.config({
       path: options.cwd ? path.join(options.cwd, fileName) : fileName,
-      debug: options.debug,
+      debug: options.debug ?? !!process.env.IPARE_DEBUG,
       encoding: options.encoding,
-      override: options.override,
+      override: options.override ?? true,
     });
   }
 }
