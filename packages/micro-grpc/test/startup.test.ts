@@ -114,4 +114,13 @@ describe("shutdown", () => {
 
     expect(err).toBeTruthy();
   });
+
+  it("should listen with IPARE_DEBUG_PORT", async () => {
+    process.env.IPARE_DEBUG_PORT = "50001";
+    const startup = new MicroGrpcStartup();
+    const server = await startup.listen();
+    await startup.close();
+
+    expect(!!server).toBeTruthy();
+  });
 });

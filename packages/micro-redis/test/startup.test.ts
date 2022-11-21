@@ -82,4 +82,14 @@ describe("startup", () => {
     await test(true);
     await test(false);
   });
+
+  it("should listen with IPARE_DEBUG_PORT", async () => {
+    process.env.IPARE_DEBUG_PORT = "63791";
+    const startup = new MicroRedisStartup();
+    const { pub, sub } = await startup.listen();
+    await startup.close();
+
+    expect(!!sub).toBeTruthy();
+    expect(!!pub).toBeTruthy();
+  });
 });

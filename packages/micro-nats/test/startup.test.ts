@@ -31,4 +31,13 @@ describe("startup", () => {
     expect(connect).toBeTruthy();
     expect(disconnect).toBeTruthy();
   });
+
+  it("should listen with IPARE_DEBUG_PORT", async () => {
+    process.env.IPARE_DEBUG_PORT = "42221";
+    const startup = new MicroNatsStartup();
+    const conection = await startup.listen();
+    await startup.close();
+
+    expect(!!conection).toBeTruthy();
+  });
 });

@@ -22,7 +22,11 @@ export class MicroGrpcStartup extends MicroStartup {
     const opt: MicroGrpcOptions & Record<string, any> = { ...this.options };
     delete opt.host;
     delete opt.port;
-    opt.port = this.options.port ?? 5000;
+    if (process.env.IPARE_DEBUG_PORT) {
+      opt.port = Number(process.env.IPARE_DEBUG_PORT);
+    } else {
+      opt.port = this.options.port ?? 5000;
+    }
     opt.host = this.options.host ?? "0.0.0.0";
     const url = `${opt.host}:${opt.port}`;
 

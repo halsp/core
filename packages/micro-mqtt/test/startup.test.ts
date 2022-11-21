@@ -83,4 +83,13 @@ describe("startup", () => {
     await startup.close(true);
     expect(error.message).toBe("err");
   });
+
+  it("should listen with IPARE_DEBUG_PORT", async () => {
+    process.env.IPARE_DEBUG_PORT = "18831";
+    const startup = new MicroMqttStartup();
+    const client = await startup.listen();
+    await startup.close();
+
+    expect(!!client).toBeTruthy();
+  });
 });

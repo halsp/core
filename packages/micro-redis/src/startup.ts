@@ -21,7 +21,12 @@ export class MicroRedisStartup extends MicroStartup {
     await this.close();
 
     const host = this.options.host ?? "localhost";
-    const port = this.options.port ?? 6379;
+    let port!: number;
+    if (process.env.IPARE_DEBUG_PORT) {
+      port = Number(process.env.IPARE_DEBUG_PORT);
+    } else {
+      port = this.options.port ?? 6379;
+    }
     const opt: any = { ...this.options };
     delete opt.host;
     delete opt.port;

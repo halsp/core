@@ -7,6 +7,8 @@ import { NumericalHeadersDict } from "@ipare/http";
 import urlParse from "url-parse";
 import { Stream } from "stream";
 
+const defaultPort = 2333;
+
 type HttpNativeOptions = http.ServerOptions;
 type HttpsNativeOptions = https.ServerOptions & { https: true };
 type ServerType<T extends HttpNativeOptions | HttpsNativeOptions> =
@@ -92,41 +94,62 @@ export class NativeStartup<
     listeningListener?: () => void
   ): Promise<{ port: number; server: ServerType<T> }>;
   dynamicListen(
-    options: net.ListenOptions,
+    options: Omit<net.ListenOptions, "path">,
     listeningListener?: () => void
   ): Promise<{ port: number; server: ServerType<T> }>;
   async dynamicListen(
-    arg0?: number | net.ListenOptions,
+    arg0: number | net.ListenOptions = {},
     ...args: any[]
   ): Promise<{ port?: number; server: ServerType<T> }> {
+    return await this.#tryListen(true, arg0, ...args);
+  }
+
+  #tryListen(first: boolean, arg0: number | net.ListenOptions, ...args: any[]) {
     function getPort() {
-      let port: number | undefined = undefined;
-      if (typeof arg0 == "number") {
+      let port!: number;
+      if (first && process.env.IPARE_DEBUG_PORT) {
+        port = Number(process.env.IPARE_DEBUG_PORT);
+      } else if (typeof arg0 == "number") {
         port = arg0;
-      } else if (typeof arg0 == "object" && arg0.port) {
-        port = arg0.port;
+      } else {
+        if (!arg0.port && first) {
+          port = defaultPort;
+        } else {
+          port = arg0.port as number;
+        }
       }
 
-      const nextPort = port ? port + 1 : undefined;
-      let next: number | net.ListenOptions | undefined = undefined;
+      const nextPort = port + 1;
+      let next!: number | net.ListenOptions;
       if (typeof arg0 == "number") {
         next = nextPort;
-      } else if (typeof arg0 == "object" && arg0.port) {
+      } else {
         next = { ...arg0, port: nextPort };
       }
 
-      return { port, next: next as any };
+      return { port, next };
     }
 
-    return new Promise<{ port?: number; server: ServerType<T> }>(
+    function getArg0(port: number) {
+      if (typeof arg0 == "number") {
+        return port;
+      } else {
+        return {
+          ...arg0,
+          port: port,
+        };
+      }
+    }
+
+    return new Promise<{ port: number; server: ServerType<T> }>(
       (resolve, reject) => {
         let error = false;
         let listen = false;
-        const server = this.#server.listen(arg0, ...args);
+        const { port, next } = getPort();
+        const server = this.#server.listen(getArg0(port), ...args);
         server.once("listening", () => {
           listen = true;
           if (error) return;
-          const { port } = getPort();
           resolve({
             port,
             server,
@@ -138,8 +161,7 @@ export class NativeStartup<
 
           server.close();
           if ((err as any).code == "EADDRINUSE") {
-            const { next } = getPort();
-            this.dynamicListen(next, ...args).then((svr) => {
+            this.#tryListen(false, next, ...args).then((svr) => {
               resolve(svr);
             });
           } else {

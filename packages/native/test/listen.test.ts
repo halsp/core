@@ -77,3 +77,16 @@ test("dynamicListen emit error", async () => {
   expect(res.status).toBe(200);
   server.close();
 });
+
+test("dynamicListen empty", async () => {
+  process.env.IPARE_DEBUG_PORT = "23338";
+  const { port, server } = await new NativeStartup()
+    .use((ctx) => {
+      ctx.ok();
+    })
+    .dynamicListen();
+  process.env.IPARE_DEBUG_PORT = "";
+
+  expect(port).toBe(23338);
+  server.close();
+});

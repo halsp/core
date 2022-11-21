@@ -21,7 +21,11 @@ export class MicroTcpStartup extends MicroStartup {
   }
 
   get #port() {
-    return this.options.port ?? 2333;
+    if (process.env.IPARE_DEBUG_PORT) {
+      return Number(process.env.IPARE_DEBUG_PORT);
+    } else {
+      return this.options.port ?? 2333;
+    }
   }
 
   #handler(socket: net.Socket) {

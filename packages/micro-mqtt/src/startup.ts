@@ -23,7 +23,11 @@ export class MicroMqttStartup extends MicroStartup {
 
     const opt: any = { ...this.options };
     delete opt.host;
-    opt.port = this.options.port ?? 1883;
+    if (process.env.IPARE_DEBUG_PORT) {
+      opt.port = Number(process.env.IPARE_DEBUG_PORT);
+    } else {
+      opt.port = this.options.port ?? 1883;
+    }
     opt.services = this.options.host ?? "localhost";
 
     await new Promise<void>((resolve) => {
