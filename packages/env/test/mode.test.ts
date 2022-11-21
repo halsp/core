@@ -12,7 +12,10 @@ test("mode options", async () => {
 });
 
 test("mode", async () => {
-  const env = await getEnv("stage");
+  const env = await getEnv({
+    mode: "stage",
+    override: true,
+  });
   expect(env.NAME).toBe("STAGE");
 });
 
