@@ -110,7 +110,7 @@ Startup.prototype.useRouterParser = function (options?: RouterOptions) {
   });
 
   if (
-    process.env.IS_IPARE_MICRO &&
+    process.env.IPARE_ENV == "micro" &&
     "patterns" in this &&
     isFunction(this["patterns"])
   ) {
@@ -150,7 +150,7 @@ Startup.prototype.useRouterParser = function (options?: RouterOptions) {
     await next();
   })
     .use(async (ctx, next) => {
-      if (!process.env.IS_IPARE_HTTP) {
+      if (process.env.IPARE_ENV != "http") {
         return await next();
       }
       if (!!ctx.actionMetadata) {

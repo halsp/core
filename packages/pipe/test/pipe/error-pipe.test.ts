@@ -4,8 +4,7 @@ import { MicroException } from "@ipare/micro";
 
 describe("parse failed", () => {
   it("should create BadRequestException if env is http", async () => {
-    process.env.IS_IPARE_HTTP = "true";
-    process.env.IS_IPARE_MICRO = "" as any;
+    process.env.IPARE_ENV = "http";
     const err = createBadRequestError("test");
 
     expect(err instanceof BadRequestException).toBeTruthy();
@@ -13,8 +12,7 @@ describe("parse failed", () => {
   });
 
   it("should create BadRequestException if env is micro", async () => {
-    process.env.IS_IPARE_HTTP = "" as any;
-    process.env.IS_IPARE_MICRO = "true";
+    process.env.IPARE_ENV = "micro";
     const err = createBadRequestError("test");
 
     expect(err instanceof MicroException).toBeTruthy();
@@ -22,8 +20,7 @@ describe("parse failed", () => {
   });
 
   it("should create BadRequestException if env is unknow", async () => {
-    process.env.IS_IPARE_HTTP = "" as any;
-    process.env.IS_IPARE_MICRO = "" as any;
+    process.env.IPARE_ENV = "" as any;
     const err = createBadRequestError("test");
 
     expect(err instanceof Error).toBeTruthy();

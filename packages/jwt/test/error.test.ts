@@ -6,7 +6,7 @@ import { Context } from "@ipare/core";
 function testErrorSecret(isError: boolean) {
   function runTest(customError: boolean) {
     test(`error secret ${isError} ${customError}`, async function () {
-      process.env.IS_IPARE_HTTP = "true";
+      process.env.IPARE_ENV = "http";
       const startup = new TestStartup()
         .setContext(
           await createTestContext({

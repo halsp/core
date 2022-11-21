@@ -2,19 +2,10 @@ import { Context, Request, Response, Startup } from "@ipare/core";
 import { initCatchError, initContext } from "./context";
 import { ClientPacket, ServerPacket } from "@ipare/micro-common";
 
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace NodeJS {
-    export interface ProcessEnv {
-      IS_IPARE_MICRO: "true";
-    }
-  }
-}
-
 export abstract class MicroStartup extends Startup {
   constructor() {
     super();
-    process.env.IS_IPARE_MICRO = "true";
+    process.env.IPARE_ENV = "micro";
     initContext();
   }
 

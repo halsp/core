@@ -5,8 +5,7 @@ import { JwtService } from "../src";
 import { createTestContext } from "./utils";
 
 beforeEach(() => {
-  process.env.IS_IPARE_HTTP = "";
-  process.env.IS_IPARE_MICRO = "";
+  process.env.IPARE_ENV = "" as any;
 });
 
 describe("auth", () => {
@@ -35,7 +34,7 @@ describe("auth", () => {
   runAuthTest(false);
 
   it("should set 401 when use useJwtVerify in http", async () => {
-    process.env.IS_IPARE_HTTP = "true";
+    process.env.IPARE_ENV = "http";
     const { ctx } = await new TestStartup()
       .setContext(
         await createTestContext({
@@ -57,7 +56,7 @@ describe("auth", () => {
   });
 
   it("should set 401 when use useJwtExtraAuth in http", async () => {
-    process.env.IS_IPARE_HTTP = "true";
+    process.env.IPARE_ENV = "http";
     const { ctx } = await new TestStartup()
       .setContext(
         await createTestContext({
@@ -80,8 +79,7 @@ describe("auth", () => {
   });
 
   it("should throw error when use useJwtVerify without env", async () => {
-    process.env.IS_IPARE_HTTP = "";
-    process.env.IS_IPARE_MICRO = "";
+    process.env.IPARE_ENV = "" as any;
     const startup = new TestStartup()
       .setContext(
         await createTestContext({
@@ -103,14 +101,13 @@ describe("auth", () => {
   });
 
   it(`should auth failed when use useJwtVerify in micro`, async function () {
-    process.env.IS_IPARE_HTTP = "" as any;
-    process.env.IS_IPARE_MICRO = "true";
-    const { ctx } = await new TestStartup()
-      .setContext(
-        await createTestContext({
-          secret: "secret",
-        })
-      )
+    const startup = new TestStartup();
+    const context = await createTestContext({
+      secret: "secret",
+    });
+    process.env.IPARE_ENV = "micro";
+    const { ctx } = await startup
+      .setContext(context)
       .useJwt({
         secret: "secret",
       })
@@ -118,12 +115,10 @@ describe("auth", () => {
       .run();
 
     expect(ctx.res["error"].message).toBe("jwt must be provided");
-    expect(ctx.res["status"]).toBe("error");
   });
 
   it(`should auth success with empty body and default verify when use micro`, async function () {
-    process.env.IS_IPARE_HTTP = "" as any;
-    process.env.IS_IPARE_MICRO = "true";
+    process.env.IPARE_ENV = "micro";
     const testCtx = await createTestContext({
       secret: "secret",
     });
@@ -143,8 +138,7 @@ describe("auth", () => {
   });
 
   it(`should auth failed with custom status when use micro`, async function () {
-    process.env.IS_IPARE_HTTP = "" as any;
-    process.env.IS_IPARE_MICRO = "true";
+    process.env.IPARE_ENV = "micro";
     const { ctx } = await new TestStartup()
       .setContext(
         await createTestContext({

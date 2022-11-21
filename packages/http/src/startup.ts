@@ -6,7 +6,7 @@ import { initCatchError, initContext } from "./context";
 export abstract class HttpStartup extends Startup {
   constructor() {
     super();
-    process.env.IS_IPARE_HTTP = "true";
+    process.env.IPARE_ENV = "http";
     initContext();
   }
 

@@ -49,10 +49,9 @@ Startup.prototype.useJwtVerify = function (
       const error = err as jwt.VerifyErrors;
       if (onError) {
         await onError(ctx, error);
-      } else if (process.env.IS_IPARE_HTTP) {
+      } else if (process.env.IPARE_ENV == "http") {
         ctx["unauthorizedMsg"](error.message);
-      } else if (process.env.IS_IPARE_MICRO) {
-        ctx.res["status"] = "error";
+      } else if (process.env.IPARE_ENV == "micro") {
         ctx.res["error"] = error;
       } else {
         throw err;
@@ -69,10 +68,9 @@ Startup.prototype.useJwtExtraAuth = function (
       return await next();
     }
 
-    if (process.env.IS_IPARE_HTTP) {
+    if (process.env.IPARE_ENV == "http") {
       ctx["unauthorizedMsg"]("JWT validation failed");
-    } else if (process.env.IS_IPARE_MICRO) {
-      ctx.res["status"] = "error";
+    } else if (process.env.IPARE_ENV == "micro") {
       ctx.res["error"] = "JWT validation failed";
     }
   });
@@ -95,9 +93,9 @@ Startup.prototype.useJwt = function (options: JwtOptions) {
         get: () => {
           if (options.tokenProvider) {
             return options.tokenProvider(ctx);
-          } else if (process.env.IS_IPARE_HTTP) {
+          } else if (process.env.IPARE_ENV == "http") {
             return ctx.req["get"]("Authorization");
-          } else if (process.env.IS_IPARE_MICRO) {
+          } else if (process.env.IPARE_ENV == "micro") {
             return ctx.req.body ? ctx.req.body["token"] : undefined;
           } else {
             return undefined;

@@ -5,9 +5,9 @@ import { TestStartup } from "./utils";
 
 describe("startup", () => {
   it("should set env", () => {
-    process.env.IS_IPARE_MICRO = "" as any;
+    process.env.IPARE_ENV = "" as any;
     new TestStartup();
-    expect(process.env.IS_IPARE_MICRO).toBe("true");
+    expect(process.env.IPARE_ENV).toBe("micro");
   });
 
   it("should set error if throw MicroException", async () => {

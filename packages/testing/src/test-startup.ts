@@ -19,6 +19,7 @@ export class TestStartup extends Startup {
 export interface TestStartup extends ITestStartup {}
 
 export function initBaseTestStartup<T extends ITestStartup>(startup: T): T {
+  process.env.NODE_ENV = "test";
   startup.skipThrow = undefined;
   startup.ctx = undefined;
   startup.setSkipThrow = function (val = true): T {
