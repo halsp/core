@@ -1,6 +1,6 @@
 import { MicroStartup } from "@ipare/micro";
 import { MicroNatsOptions } from "./options";
-import { Context } from "@ipare/core";
+import { Context, getIparePort } from "@ipare/core";
 import type nats from "nats";
 
 export class MicroNatsStartup extends MicroStartup {
@@ -22,14 +22,8 @@ export class MicroNatsStartup extends MicroStartup {
     await this.close();
 
     const opt: MicroNatsOptions = { ...this.options };
-    delete opt.host;
-    if (!("servers" in this.options)) {
-      if (process.env.IPARE_DEBUG_PORT) {
-        opt.port = Number(process.env.IPARE_DEBUG_PORT);
-      } else {
-        opt.port = this.options.port ?? 4222;
-      }
-      opt.servers = this.options.host ?? "localhost";
+    if (!("servers" in this.options) && !("port" in this.options)) {
+      opt.port = getIparePort(4222);
     }
 
     // eslint-disable-next-line @typescript-eslint/no-var-requires

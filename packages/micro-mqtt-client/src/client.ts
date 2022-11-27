@@ -22,15 +22,15 @@ export class MicroMqttClient extends IMicroClient {
   async connect() {
     this.#close();
 
-    const opt: any = { ...this.options };
-    delete opt.host;
-    opt.port = this.options.port ?? 1883;
-    opt.services = this.options.host ?? "localhost";
+    const opt: MicroMqttClientOptions = { ...this.options };
+    if (!("servers" in this.options) && !("port" in this.options)) {
+      opt.port = 1883;
+    }
 
     await new Promise<void>((resolve) => {
       this.connectResolve = resolve;
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const mqttPkg = require("mqtt");
+      const mqttPkg = require("mqtt") as typeof mqtt;
       this.client = mqttPkg.connect(opt) as mqtt.MqttClient;
       this.client.on("connect", () => {
         resolve();

@@ -25,7 +25,7 @@ describe("connect", () => {
 
     expect((client as any)["client"]["opt"]).toEqual({
       port: 1000,
-      services: "127.0.0.1",
+      host: "127.0.0.1",
     });
   });
 
@@ -35,7 +35,6 @@ describe("connect", () => {
 
     expect((client as any)["client"]["opt"]).toEqual({
       port: 1883,
-      services: "localhost",
     });
   });
 });

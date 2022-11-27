@@ -1,5 +1,4 @@
 import * as nats from "nats";
 
-export interface MicroNatsOptions extends nats.ConnectionOptions {
-  host?: string;
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface MicroNatsOptions extends nats.ConnectionOptions {}

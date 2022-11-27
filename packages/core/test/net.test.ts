@@ -1,90 +1,11 @@
 import { Server, AddressInfo } from "net";
-import { netListen, netDynamicListen, logNetListen, netClose } from "../src";
-
-describe("listen", () => {
-  it("should listen with default port", async () => {
-    const server = new Server();
-    netListen(server);
-
-    await new Promise<void>((resolve) => {
-      setTimeout(() => resolve(), 500);
-    });
-    await netClose(server, console as any);
-  });
-
-  it("should listen with custom port and host", async () => {
-    const server = new Server();
-    netListen(server, 23431, "127.0.0.1");
-
-    await new Promise<void>((resolve) => {
-      setTimeout(() => resolve(), 500);
-    });
-    await netClose(server, console as any);
-  });
-
-  it("should listen with env IPARE_DEBUG_PORT", async () => {
-    const port = 23432;
-    process.env.IPARE_DEBUG_PORT = port.toString();
-    const server = new Server();
-    netListen(server, {
-      port: port + 1,
-    });
-
-    process.env.IPARE_DEBUG_PORT = "";
-
-    await new Promise<void>((resolve) => {
-      server.once("listening", () => {
-        resolve();
-      });
-    });
-
-    const address = server.address();
-    await netClose(server, console as any);
-
-    if (typeof address == "object") {
-      expect(address?.port).toBe(port);
-    } else {
-      expect(address.includes(":" + port));
-    }
-  }, 10000);
-
-  it("should listen with path pipe", async () => {
-    const server = new Server();
-    netListen(server, "test");
-
-    await new Promise<void>((resolve) => {
-      server.on("error", () => {
-        resolve();
-      });
-    });
-    await netClose(server, console as any);
-  });
-
-  it("should listen with handle", async () => {
-    const port = 23433;
-
-    const server1 = new Server();
-    netListen(server1, port);
-    await new Promise<void>((resolve) => {
-      setTimeout(() => resolve(), 500);
-    });
-
-    const server2 = new Server();
-    netListen(server2, server1);
-    await new Promise<void>((resolve) => {
-      setTimeout(() => resolve(), 500);
-    });
-
-    await netClose(server1, console as any);
-    await netClose(server2, console as any);
-  });
-});
+import { dynamicListen, closeServer, logAddress, getIparePort } from "../src";
 
 describe("dynamic listen", () => {
   it("should dynamic with default port", async () => {
     const server = new Server();
-    const port = await netDynamicListen(server);
-    await netClose(server, console as any);
+    const port = await dynamicListen(server);
+    await closeServer(server, console as any);
 
     expect(!!port).toBeTruthy();
   });
@@ -92,13 +13,13 @@ describe("dynamic listen", () => {
   it("should find next port to listen", async () => {
     const port = 23441;
     const server1 = new Server();
-    const port1 = await netDynamicListen(server1, port);
+    const port1 = await dynamicListen(server1, port);
 
     const server2 = new Server();
-    const port2 = await netDynamicListen(server2, port);
+    const port2 = await dynamicListen(server2, port);
 
-    await netClose(server1, console as any);
-    await netClose(server2, console as any);
+    await closeServer(server1, console as any);
+    await closeServer(server2, console as any);
 
     expect(port1).toBe(port);
     expect(port2).toBe(port + 1);
@@ -106,10 +27,10 @@ describe("dynamic listen", () => {
 
   it("should ignore error after listen success", async () => {
     const server = new Server();
-    const port = await netDynamicListen(server);
+    const port = await dynamicListen(server);
     server.emit("error", new Error("err"));
 
-    await netClose(server, console as any);
+    await closeServer(server, console as any);
 
     expect(!!port).toBeTruthy();
   });
@@ -118,12 +39,12 @@ describe("dynamic listen", () => {
     const server = new Server();
     let error: any;
     try {
-      await netDynamicListen(server, 80, "ipare.org");
+      await dynamicListen(server, 80, "ipare.org");
     } catch (err) {
       error = err;
     }
 
-    await netClose(server, console as any);
+    await closeServer(server, console as any);
     expect(error.code).toBe("EADDRNOTAVAIL");
   });
 });
@@ -131,7 +52,7 @@ describe("dynamic listen", () => {
 describe("log", () => {
   it("should log address with string", async () => {
     let address: any;
-    logNetListen(
+    logAddress(
       {
         address: () => {
           return "string address";
@@ -148,7 +69,7 @@ describe("log", () => {
 
   it("should log address with object", async () => {
     let address: any;
-    logNetListen(
+    logAddress(
       {
         address: () => {
           return {
@@ -168,7 +89,7 @@ describe("log", () => {
 
   it("should log address with object add address is ::", async () => {
     let address: any;
-    logNetListen(
+    logAddress(
       {
         address: () => {
           return {
@@ -186,5 +107,21 @@ describe("log", () => {
     expect(address).toBe(
       "Server started, listening address: http://localhost:2333"
     );
+  });
+});
+
+describe("port", () => {
+  it("should get port without change when IPARE_DEBUG_PORT is undefined", async () => {
+    const port = 23431;
+    const realPort = getIparePort(port);
+    expect(realPort).toBe(port);
+  });
+
+  it("should get debug port when IPARE_DEBUG_PORT is defined", async () => {
+    const port = 23432;
+    process.env.IPARE_DEBUG_PORT = port.toString();
+    const realPort = getIparePort(port - 1);
+    process.env.IPARE_DEBUG_PORT = "";
+    expect(realPort).toBe(port);
   });
 });

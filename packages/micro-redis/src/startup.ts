@@ -1,6 +1,6 @@
 import { MicroStartup } from "@ipare/micro";
 import { MicroRedisOptions } from "./options";
-import { Context } from "@ipare/core";
+import { Context, getIparePort } from "@ipare/core";
 import type redis from "redis";
 import { parseJsonBuffer } from "@ipare/micro-common";
 
@@ -20,17 +20,11 @@ export class MicroRedisStartup extends MicroStartup {
   async listen() {
     await this.close();
 
-    const host = this.options.host ?? "localhost";
-    let port!: number;
-    if (process.env.IPARE_DEBUG_PORT) {
-      port = Number(process.env.IPARE_DEBUG_PORT);
-    } else {
-      port = this.options.port ?? 6379;
+    const opt: MicroRedisOptions = { ...this.options };
+    if (!("url" in opt)) {
+      const port = getIparePort(6379);
+      opt.url = `redis://localhost:${port}`;
     }
-    const opt: any = { ...this.options };
-    delete opt.host;
-    delete opt.port;
-    opt.url = `redis://${host}:${port}`;
 
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const redisPkg = require("redis");
@@ -45,7 +39,7 @@ export class MicroRedisStartup extends MicroStartup {
       this.#pattern(item.pattern, item.handler);
     });
 
-    this.logger.info(`Server started, listening port: ${opt.port}`);
+    this.logger.info(`Server started, listening url: ${opt.url}`);
     return {
       sub: this.sub,
       pub: this.pub,

@@ -222,7 +222,7 @@ export class MicroGrpcClient extends IMicroClient {
       delete opt.host;
       delete opt.port;
       opt.port = this.options.port ?? 5000;
-      opt.host = this.options.host ?? "0.0.0.0";
+      opt.host = this.options.host ?? "localhost";
       const url = `${opt.host}:${opt.port}`;
 
       const service = new serviceConstructor(

@@ -16,26 +16,33 @@ describe("connect", () => {
     };
   });
 
-  it("should create url for mqtt package", async () => {
-    const startup = new MicroMqttStartup({
-      host: "127.0.0.1",
-      port: 1000,
-    });
-    await startup.listen();
-
-    expect((startup as any)["client"]["opt"]).toEqual({
-      services: "127.0.0.1",
-      port: 1000,
-    });
-  });
-
-  it("should connect with default host and port", async () => {
+  it("should connect with default port", async () => {
     const startup = new MicroMqttStartup();
     await startup.listen();
 
     expect((startup as any)["client"]["opt"]).toEqual({
-      services: "localhost",
       port: 1883,
+    });
+  });
+
+  it("should connect with servers", async () => {
+    const startup = new MicroMqttStartup({
+      servers: [
+        {
+          host: "localhost",
+          port: 1884,
+        },
+      ],
+    });
+    await startup.listen();
+
+    expect((startup as any)["client"]["opt"]).toEqual({
+      servers: [
+        {
+          host: "localhost",
+          port: 1884,
+        },
+      ],
     });
   });
 });

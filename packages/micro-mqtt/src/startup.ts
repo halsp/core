@@ -1,7 +1,7 @@
 import { MicroStartup } from "@ipare/micro";
 import { MicroMqttOptions } from "./options";
 import type mqtt from "mqtt";
-import { Context } from "@ipare/core";
+import { Context, getIparePort } from "@ipare/core";
 import { matchTopic } from "./topic";
 import { parseJsonBuffer } from "@ipare/micro-common";
 
@@ -21,19 +21,15 @@ export class MicroMqttStartup extends MicroStartup {
   async listen() {
     this.close(true);
 
-    const opt: any = { ...this.options };
-    delete opt.host;
-    if (process.env.IPARE_DEBUG_PORT) {
-      opt.port = Number(process.env.IPARE_DEBUG_PORT);
-    } else {
-      opt.port = this.options.port ?? 1883;
+    const opt: MicroMqttOptions = { ...this.options };
+    if (!("servers" in this.options) && !("port" in this.options)) {
+      opt.port = getIparePort(1883);
     }
-    opt.services = this.options.host ?? "localhost";
 
     await new Promise<void>((resolve) => {
       this.connectResolve = resolve;
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const mqttPkg = require("mqtt");
+      const mqttPkg = require("mqtt") as typeof mqtt;
       this.client = mqttPkg.connect(opt) as mqtt.MqttClient;
       this.client.on("connect", () => {
         resolve();
@@ -80,7 +76,13 @@ export class MicroMqttStartup extends MicroStartup {
       }
     );
 
-    this.logger.info(`Server started, listening port: ${opt.port}`);
+    if (opt.port) {
+      this.logger.info(`Server started, listening port: ${opt.port}`);
+    } else {
+      this.logger.info(
+        `Server started, listening servers: ${JSON.stringify(opt.servers)}`
+      );
+    }
     return client;
   }
 

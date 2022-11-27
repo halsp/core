@@ -20,10 +20,8 @@ export class MicroNatsClient extends IMicroClient {
     await this.#close();
 
     const opt: MicroNatsClientOptions = { ...this.options };
-    delete opt.host;
-    if (!("servers" in this.options)) {
-      opt.port = this.options.port ?? 4222;
-      opt.servers = this.options.host ?? "localhost";
+    if (!("servers" in this.options) && !("port" in this.options)) {
+      opt.port = 4222;
     }
 
     // eslint-disable-next-line @typescript-eslint/no-var-requires

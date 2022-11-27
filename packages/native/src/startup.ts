@@ -8,10 +8,9 @@ import {
   Dict,
   isString,
   Context,
-  netDynamicListen,
-  netListen,
-  netClose,
-  logNetListen,
+  closeServer,
+  dynamicListen,
+  logAddress,
 } from "@ipare/core";
 import { NumericalHeadersDict } from "@ipare/http";
 import urlParse from "url-parse";
@@ -44,7 +43,7 @@ export class NativeStartup<
     }
 
     this.#server.on("listening", () => {
-      logNetListen(this.#server, this.logger);
+      logAddress(this.#server, this.logger);
     });
   }
 
@@ -82,7 +81,7 @@ export class NativeStartup<
   ): ServerType<T>;
   listen(handle: any, listeningListener?: () => void): ServerType<T>;
   listen(...args: any[]) {
-    return netListen(this.#server, ...args);
+    return this.#server.listen(...args);
   }
 
   dynamicListen(
@@ -102,7 +101,7 @@ export class NativeStartup<
     listeningListener?: () => void
   ): Promise<{ port: number; server: ServerType<T> }>;
   async dynamicListen(...args: any[]) {
-    const port = await netDynamicListen(this.#server, ...args);
+    const port = await dynamicListen(this.#server, ...args);
     return {
       port,
       server: this.#server,
@@ -167,7 +166,7 @@ export class NativeStartup<
   }
 
   async close() {
-    await netClose(this.#server, this.logger);
+    await closeServer(this.#server, this.logger);
   }
 }
 

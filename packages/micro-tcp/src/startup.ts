@@ -2,9 +2,15 @@ import { MicroStartup } from "@ipare/micro";
 import { parseTcpBuffer, ServerPacket } from "@ipare/micro-common";
 import { MicroTcpOptions } from "./options";
 import * as net from "net";
-import { Context, logNetListen, netClose, netDynamicListen } from "@ipare/core";
+import {
+  closeServer,
+  Context,
+  dynamicListen,
+  getIparePort,
+  logAddress,
+} from "@ipare/core";
 
-const defaultPort = 2333;
+const defaultPort = getIparePort(2333);
 
 export class MicroTcpStartup extends MicroStartup {
   constructor(readonly options: MicroTcpOptions = {}) {
@@ -20,7 +26,7 @@ export class MicroTcpStartup extends MicroStartup {
     }
 
     this.#server.on("listening", () => {
-      logNetListen(this.#server, this.logger);
+      logAddress(this.#server, this.logger);
     });
   }
 
@@ -114,7 +120,7 @@ export class MicroTcpStartup extends MicroStartup {
   }
 
   async dynamicListen(): Promise<{ port: number; server: net.Server }> {
-    const port = await netDynamicListen(
+    const port = await dynamicListen(
       this.#server,
       this.options.port ?? defaultPort,
       this.options.backlog,
@@ -145,6 +151,6 @@ export class MicroTcpStartup extends MicroStartup {
   }
 
   async close() {
-    await netClose(this.#server, this.logger);
+    await closeServer(this.#server, this.logger);
   }
 }

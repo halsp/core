@@ -17,12 +17,10 @@ export class MicroRedisClient extends IMicroClient {
   async connect() {
     await this.#close();
 
-    const host = this.options.host ?? "localhost";
-    const port = this.options.port ?? 6379;
-    const opt: any = { ...this.options };
-    delete opt.host;
-    delete opt.port;
-    opt.url = `redis://${host}:${port}`;
+    const opt: MicroRedisClientOptions = { ...this.options };
+    if (!("url" in opt)) {
+      opt.url = `redis://localhost:6379`;
+    }
 
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const redisPkg = require("redis");

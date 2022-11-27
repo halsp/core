@@ -1,7 +1,7 @@
 import { MicroStartup } from "@ipare/micro";
 import { MicroGrpcOptions } from "./options";
 import * as grpc from "@grpc/grpc-js";
-import { Context, isClass, normalizePath } from "@ipare/core";
+import { Context, getIparePort, isClass, normalizePath } from "@ipare/core";
 import { loadPackages, ReadIterator, WriteIterator } from "@ipare/micro-common";
 
 export class MicroGrpcStartup extends MicroStartup {
@@ -19,14 +19,8 @@ export class MicroGrpcStartup extends MicroStartup {
   async listen() {
     this.close();
 
-    const opt: MicroGrpcOptions & Record<string, any> = { ...this.options };
-    delete opt.host;
-    delete opt.port;
-    if (process.env.IPARE_DEBUG_PORT) {
-      opt.port = Number(process.env.IPARE_DEBUG_PORT);
-    } else {
-      opt.port = this.options.port ?? 5000;
-    }
+    const opt: MicroGrpcOptions = { ...this.options };
+    opt.port = this.options.port ?? getIparePort(5000);
     opt.host = this.options.host ?? "0.0.0.0";
     const url = `${opt.host}:${opt.port}`;
 
