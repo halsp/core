@@ -17,8 +17,8 @@ describe("micro tcp startup", () => {
     });
     await client.connect();
     const result = await client.send("test_pattern", true);
-    await startup.close();
     await client.dispose();
+    await startup.close();
 
     expect(result.data).toBe(true);
   });

@@ -26,24 +26,24 @@ export class NativeStartup<
     | HttpNativeOptions
     | HttpsNativeOptions
 > extends BodyPraserStartup {
-  readonly #server!: ServerType<T>;
+  protected readonly server!: ServerType<T>;
 
   constructor(serverOptions?: T) {
     super((ctx) => ctx.reqStream);
 
     if (isHttpsOptions(serverOptions)) {
-      this.#server = https.createServer(serverOptions, this.#requestListener);
+      this.server = https.createServer(serverOptions, this.#requestListener);
     } else if (serverOptions) {
-      this.#server = http.createServer(
+      this.server = http.createServer(
         serverOptions,
         this.#requestListener
       ) as ServerType<T>;
     } else {
-      this.#server = http.createServer(this.#requestListener) as ServerType<T>;
+      this.server = http.createServer(this.#requestListener) as ServerType<T>;
     }
 
-    this.#server.on("listening", () => {
-      logAddress(this.#server, this.logger);
+    this.server.on("listening", () => {
+      logAddress(this.server, this.logger);
     });
   }
 
@@ -81,7 +81,7 @@ export class NativeStartup<
   ): ServerType<T>;
   listen(handle: any, listeningListener?: () => void): ServerType<T>;
   listen(...args: any[]) {
-    return this.#server.listen(...args);
+    return this.server.listen(...args);
   }
 
   dynamicListen(
@@ -101,10 +101,10 @@ export class NativeStartup<
     listeningListener?: () => void
   ): Promise<{ port: number; server: ServerType<T> }>;
   async dynamicListen(...args: any[]) {
-    const port = await dynamicListen(this.#server, ...args);
+    const port = await dynamicListen(this.server, ...args);
     return {
       port,
-      server: this.#server,
+      server: this.server,
     };
   }
 
@@ -166,7 +166,7 @@ export class NativeStartup<
   }
 
   async close() {
-    await closeServer(this.#server, this.logger);
+    await closeServer(this.server, this.logger);
   }
 }
 
