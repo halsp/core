@@ -17,8 +17,8 @@ describe("client", () => {
     });
     await client.connect();
     const result = await client.send("test_pattern", true);
-    await startup.close();
     await client.dispose();
+    await startup.close();
 
     expect(result.data).toBe(true);
   });
@@ -37,8 +37,8 @@ describe("client", () => {
     });
     await client.connect();
     const result = await client.send("test_pattern", "abc");
-    await startup.close();
     await client.dispose();
+    await startup.close();
 
     expect(result.data).toBe("abc");
   });
@@ -58,8 +58,8 @@ describe("client", () => {
     });
     await client.connect();
     const result = await client.send("test_pattern", undefined);
-    await startup.close();
     await client.dispose();
+    await startup.close();
 
     expect(result.data).toBeUndefined();
   });
@@ -83,8 +83,8 @@ describe("client", () => {
 
     await new Promise<void>((resolve) => {
       setTimeout(async () => {
-        await startup.close();
         await client.dispose();
+        await startup.close();
         resolve();
       }, 1000);
     });
@@ -125,24 +125,12 @@ describe("client", () => {
 
   it("should listen with default port when port is undefined", async () => {
     const client = new MicroTcpClient({
-      host: "127.0.0.2",
+      host: "0.0.0.0",
     });
-
-    let consoleError = false;
-    const beforeError = console.error;
-    console.error = () => {
-      consoleError = true;
-      console.error = beforeError;
-    };
     try {
       await client.connect();
-    } catch (err) {
-      console.error(err);
-    }
-
-    console.error = beforeError;
-    expect(consoleError).toBeTruthy();
-    client.dispose();
+    } catch (err) {}
+    await client.dispose();
   });
 
   it("should wait all times with timeout = 0", async () => {

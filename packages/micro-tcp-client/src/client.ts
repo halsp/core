@@ -72,6 +72,7 @@ export class MicroTcpClient extends IMicroClient {
       await new Promise<void>((resolve) => {
         socket.end(() => resolve());
       });
+      socket.destroy();
     }
   }
 
