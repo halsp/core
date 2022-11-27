@@ -19,10 +19,12 @@ export class MicroNatsClient extends IMicroClient {
   async connect() {
     await this.#close();
 
-    const opt: any = { ...this.options };
+    const opt: MicroNatsClientOptions = { ...this.options };
     delete opt.host;
-    opt.port = this.options.port ?? 4222;
-    opt.services = this.options.host ?? "localhost";
+    if (!("servers" in this.options)) {
+      opt.port = this.options.port ?? 4222;
+      opt.servers = this.options.host ?? "localhost";
+    }
 
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     this.connection = await require("nats").connect(opt);

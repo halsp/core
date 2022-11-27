@@ -22,7 +22,7 @@ describe("connect", () => {
 
     expect((client as any)["connection"]["opt"]).toEqual({
       port: 4000,
-      services: "127.0.0.1",
+      servers: "127.0.0.1",
     });
   });
 
@@ -32,7 +32,7 @@ describe("connect", () => {
 
     expect((client as any)["connection"]["opt"]).toEqual({
       port: 4222,
-      services: "localhost",
+      servers: "localhost",
     });
   });
 });

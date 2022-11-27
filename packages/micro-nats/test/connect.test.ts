@@ -22,7 +22,7 @@ describe("connect", () => {
     await startup.listen();
 
     expect((startup as any)["connection"]["opt"]).toEqual({
-      services: "127.0.0.1",
+      servers: "127.0.0.1",
       port: 4000,
     });
   });
@@ -32,7 +32,7 @@ describe("connect", () => {
     await startup.listen();
 
     expect((startup as any)["connection"]["opt"]).toEqual({
-      services: "localhost",
+      servers: "localhost",
       port: 4222,
     });
   });

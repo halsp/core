@@ -1,6 +1,5 @@
 import * as nats from "nats";
 
-export interface MicroNatsOptions
-  extends Omit<nats.ConnectionOptions, "services"> {
+export interface MicroNatsOptions extends nats.ConnectionOptions {
   host?: string;
 }

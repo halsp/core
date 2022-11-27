@@ -21,14 +21,16 @@ export class MicroNatsStartup extends MicroStartup {
   async listen() {
     await this.close();
 
-    const opt: any = { ...this.options };
+    const opt: MicroNatsOptions = { ...this.options };
     delete opt.host;
-    if (process.env.IPARE_DEBUG_PORT) {
-      opt.port = Number(process.env.IPARE_DEBUG_PORT);
-    } else {
-      opt.port = this.options.port ?? 4222;
+    if (!("servers" in this.options)) {
+      if (process.env.IPARE_DEBUG_PORT) {
+        opt.port = Number(process.env.IPARE_DEBUG_PORT);
+      } else {
+        opt.port = this.options.port ?? 4222;
+      }
+      opt.servers = this.options.host ?? "localhost";
     }
-    opt.services = this.options.host ?? "localhost";
 
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     this.connection = await require("nats").connect(opt);
