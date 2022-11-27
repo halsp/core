@@ -2,12 +2,26 @@ import { MicroStartup } from "@ipare/micro";
 import { parseTcpBuffer, ServerPacket } from "@ipare/micro-common";
 import { MicroTcpOptions } from "./options";
 import * as net from "net";
-import { Context } from "@ipare/core";
+import { Context, logNetListen, netClose, netDynamicListen } from "@ipare/core";
+
+const defaultPort = 2333;
 
 export class MicroTcpStartup extends MicroStartup {
   constructor(readonly options: MicroTcpOptions = {}) {
     super();
-    this.#server = net.createServer(this.#handler.bind(this));
+
+    if (options.serverOpts) {
+      this.#server = net.createServer(
+        options.serverOpts,
+        this.#handler.bind(this)
+      );
+    } else {
+      this.#server = net.createServer(this.#handler.bind(this));
+    }
+
+    this.#server.on("listening", () => {
+      logNetListen(this.#server, this.logger);
+    });
   }
 
   #handlers: {
@@ -16,17 +30,6 @@ export class MicroTcpStartup extends MicroStartup {
   }[] = [];
 
   readonly #server: net.Server;
-  public get server() {
-    return this.#server;
-  }
-
-  get #port() {
-    if (process.env.IPARE_DEBUG_PORT) {
-      return Number(process.env.IPARE_DEBUG_PORT);
-    } else {
-      return this.options.port ?? 2333;
-    }
-  }
 
   #handler(socket: net.Socket) {
     socket.on("data", async (buffer) => {
@@ -95,47 +98,32 @@ export class MicroTcpStartup extends MicroStartup {
   }
 
   listen(): net.Server {
-    this.#server.listen(this.#port, this.options.host);
-    this.logger.info(`Server started, listening port: ${this.#port}`);
+    if ("handle" in this.options) {
+      this.#server.listen(
+        this.options.handle,
+        this.options.backlog,
+        this.options.listeningListener
+      );
+    } else if ("path" in this.options) {
+      this.#server.listen(this.options);
+    } else {
+      const opts = { ...this.options, port: this.options.port ?? defaultPort };
+      this.#server.listen(opts);
+    }
     return this.#server;
   }
 
-  async #dynamicListen(
-    times: number
-  ): Promise<{ port: number; server: net.Server }> {
-    const port = this.#port + times;
-
-    return new Promise<{ port: number; server: net.Server }>(
-      (resolve, reject) => {
-        let error = false;
-        let listen = false;
-        const server = this.#server.listen(port, this.options.host);
-        server.once("listening", () => {
-          listen = true;
-          if (error) return;
-          resolve({
-            port,
-            server,
-          });
-        });
-        server.once("error", (err) => {
-          error = true;
-          if (listen) return;
-
-          server.close();
-          if ((err as any).code == "EADDRINUSE") {
-            this.#dynamicListen(times + 1).then((svr) => {
-              resolve(svr);
-            });
-          } else {
-            reject(err);
-          }
-        });
-      }
-    );
-  }
   async dynamicListen(): Promise<{ port: number; server: net.Server }> {
-    return await this.#dynamicListen(0);
+    const port = await netDynamicListen(
+      this.#server,
+      this.options.port ?? defaultPort,
+      this.options.backlog,
+      this.options.listeningListener
+    );
+    return {
+      port,
+      server: this.#server,
+    };
   }
 
   pattern(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
@@ -157,8 +145,6 @@ export class MicroTcpStartup extends MicroStartup {
   }
 
   async close() {
-    this.#server.removeAllListeners();
-    this.#server.close();
-    this.logger.info("Server shutdown success");
+    await netClose(this.#server, this.logger);
   }
 }

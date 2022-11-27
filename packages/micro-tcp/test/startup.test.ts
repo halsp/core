@@ -1,6 +1,6 @@
 import { MicroTcpOptions, MicroTcpStartup } from "../src";
 import { sendData, sendMessage } from "./utils";
-import net from "net";
+import net, { Server } from "net";
 
 import { MicroTcpClient } from "@ipare/micro-tcp-client";
 
@@ -13,11 +13,59 @@ describe("startup.listen", () => {
     startup.close();
   });
 
+  it("should listen default port", async () => {
+    try {
+      const server = new MicroTcpStartup().listen();
+      server.on("error", () => undefined);
+      server.close();
+    } catch {}
+  });
+
   it("should listen port 23333", async () => {
     const opts: MicroTcpOptions = {
       port: 23333,
+      serverOpts: {},
     };
     const server = new MicroTcpStartup(opts).listen();
+    server.close();
+  });
+
+  it("should listen port 23333", async () => {
+    const opts: MicroTcpOptions = {
+      port: 23333,
+      serverOpts: {},
+    };
+    const server = new MicroTcpStartup(opts).listen();
+    server.close();
+  });
+
+  it("should listen with handle", async () => {
+    const baseServer = new Server();
+    baseServer.listen(23367);
+    await new Promise<void>((resolve) => {
+      setTimeout(() => resolve(), 500);
+    });
+    const opts: MicroTcpOptions = {
+      handle: baseServer,
+    };
+    const server = new MicroTcpStartup(opts).listen();
+    await new Promise<void>((resolve) => {
+      setTimeout(() => resolve(), 500);
+    });
+    server.close();
+  });
+
+  it("should listen with pipe path", async () => {
+    await new Promise<void>((resolve) => {
+      setTimeout(() => resolve(), 500);
+    });
+    const opts: MicroTcpOptions = {
+      path: "//pipe/foo",
+    };
+    const server = new MicroTcpStartup(opts).listen();
+    await new Promise<void>((resolve) => {
+      server.on("error", () => resolve());
+    });
     server.close();
   });
 });

@@ -1,4 +1,5 @@
 import { BodyPraserStartup } from "@ipare/body";
+import * as net from "net";
 import * as http from "http";
 import * as https from "https";
 import {
@@ -7,8 +8,10 @@ import {
   Dict,
   isString,
   Context,
-  IpareNetListener,
-  initNetListener,
+  netDynamicListen,
+  netListen,
+  netClose,
+  logNetListen,
 } from "@ipare/core";
 import { NumericalHeadersDict } from "@ipare/http";
 import urlParse from "url-parse";
@@ -20,13 +23,10 @@ type ServerType<T extends HttpNativeOptions | HttpsNativeOptions> =
   T extends HttpNativeOptions ? http.Server : https.Server;
 
 export class NativeStartup<
-    T extends HttpNativeOptions | HttpsNativeOptions =
-      | HttpNativeOptions
-      | HttpsNativeOptions
-  >
-  extends BodyPraserStartup
-  implements IpareNetListener<ServerType<T>>
-{
+  T extends HttpNativeOptions | HttpsNativeOptions =
+    | HttpNativeOptions
+    | HttpsNativeOptions
+> extends BodyPraserStartup {
   readonly #server!: ServerType<T>;
 
   constructor(serverOptions?: T) {
@@ -43,70 +43,71 @@ export class NativeStartup<
       this.#server = http.createServer(this.#requestListener) as ServerType<T>;
     }
 
-    initNetListener(this, this.#server);
+    this.#server.on("listening", () => {
+      logNetListen(this.#server, this.logger);
+    });
   }
 
-  listen = undefined as any as IpareNetListener<ServerType<T>>["listen"];
-  dynamicListen = undefined as any as IpareNetListener<
-    ServerType<T>
-  >["dynamicListen"];
+  listen(
+    port?: number,
+    hostname?: string,
+    backlog?: number,
+    listeningListener?: () => void
+  ): ServerType<T>;
+  listen(
+    port?: number,
+    hostname?: string,
+    listeningListener?: () => void
+  ): ServerType<T>;
+  listen(
+    port?: number,
+    backlog?: number,
+    listeningListener?: () => void
+  ): ServerType<T>;
+  listen(port?: number, listeningListener?: () => void): ServerType<T>;
+  listen(
+    path: string,
+    backlog?: number,
+    listeningListener?: () => void
+  ): ServerType<T>;
+  listen(path: string, listeningListener?: () => void): ServerType<T>;
+  listen(
+    options: net.ListenOptions,
+    listeningListener?: () => void
+  ): ServerType<T>;
+  listen(
+    handle: any,
+    backlog?: number,
+    listeningListener?: () => void
+  ): ServerType<T>;
+  listen(handle: any, listeningListener?: () => void): ServerType<T>;
+  listen(...args: any[]) {
+    return netListen(this.#server, ...args);
+  }
 
-  // listen(
-  //   port?: number,
-  //   hostname?: string,
-  //   backlog?: number,
-  //   listeningListener?: () => void
-  // ): ServerType<T>;
-  // listen(
-  //   port?: number,
-  //   hostname?: string,
-  //   listeningListener?: () => void
-  // ): ServerType<T>;
-  // listen(
-  //   port?: number,
-  //   backlog?: number,
-  //   listeningListener?: () => void
-  // ): ServerType<T>;
-  // listen(port?: number, listeningListener?: () => void): ServerType<T>;
-  // listen(
-  //   path: string,
-  //   backlog?: number,
-  //   listeningListener?: () => void
-  // ): ServerType<T>;
-  // listen(path: string, listeningListener?: () => void): ServerType<T>;
-  // listen(
-  //   options: net.ListenOptions,
-  //   listeningListener?: () => void
-  // ): ServerType<T>;
-  // listen(
-  //   handle: any,
-  //   backlog?: number,
-  //   listeningListener?: () => void
-  // ): ServerType<T>;
-  // listen(handle: any, listeningListener?: () => void): ServerType<T>;
-  // listen(...args: any[]) {
-  //   return args as any;
-  // }
-
-  // dynamicListen(
-  //   port?: number,
-  //   hostname?: string,
-  //   backlog?: number,
-  //   listeningListener?: () => void
-  // ): Promise<{ port: number; server: ServerType<T> }>;
-  // dynamicListen(
-  //   port?: number,
-  //   hostname?: string,
-  //   listeningListener?: () => void
-  // ): Promise<{ port: number; server: ServerType<T> }>;
-  // dynamicListen(
-  //   port?: number,
-  //   backlog?: number,
-  //   listeningListener?: () => void
-  // ): Promise<{ port: number; server: ServerType<T> }>;
-  // dynamicListen(...args: any[]) {
-  //   return args as any;
-  // }
+  dynamicListen(
+    port?: number,
+    hostname?: string,
+    backlog?: number,
+    listeningListener?: () => void
+  ): Promise<{ port: number; server: ServerType<T> }>;
+  dynamicListen(
+    port?: number,
+    hostname?: string,
+    listeningListener?: () => void
+  ): Promise<{ port: number; server: ServerType<T> }>;
+  dynamicListen(
+    port?: number,
+    backlog?: number,
+    listeningListener?: () => void
+  ): Promise<{ port: number; server: ServerType<T> }>;
+  async dynamicListen(...args: any[]) {
+    const port = await netDynamicListen(this.#server, ...args);
+    return {
+      port,
+      server: this.#server,
+    };
+  }
 
   #requestListener = async (
     reqStream: http.IncomingMessage,
@@ -166,13 +167,7 @@ export class NativeStartup<
   }
 
   async close() {
-    this.#server.removeAllListeners();
-    await new Promise<void>((resolve) => {
-      this.#server.close(() => {
-        resolve();
-      });
-    });
-    this.logger.info("Server shutdown success");
+    await netClose(this.#server, this.logger);
   }
 }
 
