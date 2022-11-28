@@ -7,15 +7,15 @@ describe("micro-nats", () => {
     const startup = new TestMicroTcpStartup()
       .useTestRouter(null as any)
       .useRouter();
-    startup.listen();
+    const { port } = await startup.dynamicListen();
 
-    const client = new MicroTcpClient();
+    const client = new MicroTcpClient({ port });
     await client.connect();
 
     const result = await client.send("event:123", true);
 
-    await startup.close();
     await client.dispose();
+    await startup.close();
 
     expect(result.data).toBe("event-pattern-test");
   });
@@ -26,15 +26,15 @@ describe("micro-nats", () => {
         prefix: "pf:",
       })
       .useRouter();
-    startup.listen();
+    const { port } = await startup.dynamicListen();
 
-    const client = new MicroTcpClient();
+    const client = new MicroTcpClient({ port });
     await client.connect();
 
     const result = await client.send("pf:event:123", true);
 
-    await startup.close();
     await client.dispose();
+    await startup.close();
 
     expect(result.data).toBe("event-pattern-test");
   });

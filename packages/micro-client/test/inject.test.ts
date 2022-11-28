@@ -110,7 +110,7 @@ describe("inject", () => {
 
   it("should set default options", async () => {
     const server = net.createServer(() => undefined);
-    server.listen(2333);
+    server.listen(23381);
 
     const { ctx } = await new TestStartup()
       .useTestClient()
