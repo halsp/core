@@ -1,4 +1,4 @@
-import { Context, Startup } from "@ipare/core";
+import { Context, Response, Startup } from "@ipare/core";
 import {
   consolidate,
   Engine,
@@ -14,6 +14,21 @@ export function useView(startup: Startup, options: ViewOptions) {
     locals: Record<string, unknown> = {}
   ) {
     return await render(this, options, tmpPath, locals);
+  };
+  Response.prototype.view = async function (
+    tmpPath,
+    locals: Record<string, unknown> = {}
+  ) {
+    const html = await render(this.ctx, options, tmpPath, locals);
+    if (!html) return this;
+
+    if (process.env.IPARE_ENV == "http") {
+      this["ok"](html);
+      this["set"]("content-type", "text/html");
+    } else {
+      this.setBody(html);
+    }
+    return this;
   };
 
   return startup.use(async (ctx, next) => {
@@ -40,7 +55,7 @@ async function render(
   }
 
   const file = getFile(tmpPath, engines);
-  if (!file) return undefined;
+  if (!file) return;
 
   const engine = getEngine(file.ext, engines);
   if (engine) {

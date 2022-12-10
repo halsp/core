@@ -15,6 +15,10 @@ declare module "@ipare/core" {
       locals?: Record<string, unknown>
     ): Promise<string | undefined>;
   }
+
+  interface Response {
+    view(tmpPath: string, locals?: Record<string, unknown>): Promise<this>;
+  }
 }
 
 Startup.prototype.useView = function (options: ViewOptions = {}): Startup {

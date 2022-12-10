@@ -112,10 +112,7 @@ async function errorView(ctx: Context, codes: CodeType[]) {
 }
 
 async function render(ctx: Context, url: string) {
-  const html = await ctx.view(url, ctx.res.body);
-  if (html) {
-    ctx.ok(html).set("content-type", "text/html");
-  }
+  await ctx.res.view(url, ctx.res.body);
 }
 
 function getCode(

@@ -2,56 +2,125 @@ import { TestStartup } from "@ipare/testing";
 import "../src";
 import { consolidate } from "../src";
 
-test("str engine", async () => {
-  await new TestStartup()
-    .useView({
-      dir: "test/views",
-      engines: [
-        { ext: "ejs", render: "ejs" },
-        { ext: "custom", render: "ejs" },
-      ],
-    })
-    .use(async (ctx) => {
-      expect(
-        await ctx.view("ejs/index.ejs", {
-          name: "test ejs",
-        })
-      ).toBe("<p>test ejs</p>");
-    })
-    .run();
+describe("engine", () => {
+  it("should render by str engine", async () => {
+    await new TestStartup()
+      .useView({
+        dir: "test/views",
+        engines: [
+          { ext: "ejs", render: "ejs" },
+          { ext: "custom", render: "ejs" },
+        ],
+      })
+      .use(async (ctx) => {
+        expect(
+          await ctx.view("ejs/index.ejs", {
+            name: "test ejs",
+          })
+        ).toBe("<p>test ejs</p>");
+      })
+      .run();
+  });
+
+  it("should render by func engine", async () => {
+    await new TestStartup()
+      .useView({
+        dir: "test/views",
+        engines: { ext: "ejs", render: consolidate.ejs },
+      })
+      .use(async (ctx) => {
+        expect(
+          await ctx.view("ejs/index.ejs", {
+            name: "test ejs",
+          })
+        ).toBe("<p>test ejs</p>");
+      })
+      .run();
+  });
+
+  it("should render by file ext when engine is null", async () => {
+    await new TestStartup()
+      .useView({
+        dir: "test/views",
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        engines: null as any,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        options: null as any,
+      })
+      .use(async (ctx) => {
+        expect(
+          await ctx.view("ejs/index.ejs", {
+            name: "test ejs",
+          })
+        ).toBe("<p>test ejs</p>");
+      })
+      .run();
+  });
 });
 
-test("func engine", async () => {
-  await new TestStartup()
-    .useView({
-      dir: "test/views",
-      engines: { ext: "ejs", render: consolidate.ejs },
-    })
-    .use(async (ctx) => {
-      expect(
-        await ctx.view("ejs/index.ejs", {
-          name: "test ejs",
-        })
-      ).toBe("<p>test ejs</p>");
-    })
-    .run();
+describe("pub", () => {
+  it("should render with pug engine", async () => {
+    const { ctx } = await new TestStartup()
+      .useView({
+        dir: "test/views",
+      })
+      .use(async (ctx) => {
+        ctx.bag(
+          "view",
+          await ctx.view("pug/test", {
+            name: "test pug",
+          })
+        );
+      })
+      .run();
+
+    expect(ctx.bag("view")).toBe("<p>test pug</p>");
+  });
 });
 
-test("empty engine", async () => {
-  await new TestStartup()
-    .useView({
-      dir: "test/views",
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      engines: null as any,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      options: null as any,
-    })
-    .use(async (ctx) => {
-      expect(
-        await ctx.view("ejs/index.ejs", {
-          name: "test ejs",
-        })
-      ).toBe("<p>test ejs</p>");
-    })
-    .run();
+describe("ejs", () => {
+  it("should render with ejs engine", async () => {
+    await new TestStartup()
+      .useView({
+        dir: "test/views",
+      })
+      .use(async (ctx) => {
+        expect(
+          await ctx.view("ejs/index.ejs", {
+            name: "test ejs",
+          })
+        ).toBe("<p>test ejs</p>");
+      })
+      .run();
+  });
+
+  it("should render index with ejs", async () => {
+    await new TestStartup()
+      .useView({
+        dir: "test/views/ejs",
+      })
+      .use(async (ctx) => {
+        expect(
+          await ctx.view("", {
+            name: "test ejs",
+          })
+        ).toBe("<p>test ejs</p>");
+      })
+      .run();
+  });
+});
+
+describe("html", () => {
+  it("should not render html file", async () => {
+    const { ctx } = await new TestStartup()
+      .useView({
+        dir: "test/views",
+      })
+      .use(async (ctx) => {
+        ctx.bag("view", await ctx.view("html/"));
+      })
+      .run();
+
+    expect(ctx.bag("view")).toBe("html content");
+  });
 });
