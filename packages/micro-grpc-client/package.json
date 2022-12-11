@@ -37,8 +37,8 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@grpc/grpc-js": "^1.7.3",
-    "@grpc/proto-loader": "^0.7.3",
+    "@grpc/grpc-js": "^1.8.0",
+    "@grpc/proto-loader": "^0.7.4",
     "@ipare/core": "^3.0.2",
     "@ipare/inject": "^3.0.2",
     "@ipare/micro-client": "^3.0.2",

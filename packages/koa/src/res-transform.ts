@@ -44,46 +44,46 @@ export async function createContext(
   koaApp: Koa,
   ipareCtx: Context
 ): Promise<Koa.ParameterizedContext> {
-  const httpReq = await getHttpReq(ipareCtx);
-  const httpRes = new TransResponse(httpReq);
+  const reqStream = await getReqStream(ipareCtx);
+  const resStream = new TransResponse(reqStream);
 
-  const koaCtx = koaApp.createContext(httpReq, httpRes);
+  const koaCtx = koaApp.createContext(reqStream, resStream);
   await ipareResToKoaRes(ipareCtx.res, koaCtx);
   return koaCtx;
 }
 
-async function getHttpReq(ipareCtx: Context): Promise<http.IncomingMessage> {
-  let httpReq: http.IncomingMessage;
-  if ("httpReq" in ipareCtx) {
-    httpReq = ipareCtx["httpReq"];
+async function getReqStream(ipareCtx: Context): Promise<http.IncomingMessage> {
+  let reqStream: http.IncomingMessage;
+  if ("reqStream" in ipareCtx) {
+    reqStream = ipareCtx["reqStream"] as http.IncomingMessage;
   } else if ("aliReq" in ipareCtx) {
-    httpReq = ipareCtx["aliReq"];
+    reqStream = ipareCtx["aliReq"] as http.IncomingMessage;
   } else {
-    httpReq = new http.IncomingMessage(new net.Socket());
+    reqStream = new http.IncomingMessage(new net.Socket());
     const body = ipareCtx.req.body;
     if (Buffer.isBuffer(body)) {
-      httpReq.push(body);
+      reqStream.push(body);
     } else if (typeof body == "string") {
-      httpReq.push(body);
+      reqStream.push(body);
     } else if (isPlainObject(body)) {
-      httpReq.push(JSON.stringify(body));
+      reqStream.push(JSON.stringify(body));
     } else {
-      httpReq.push(body);
+      reqStream.push(body);
     }
   }
 
-  httpReq.headers = Object.assign({}, ipareCtx.req.headers);
-  httpReq.url =
+  reqStream.headers = Object.assign({}, ipareCtx.req.headers);
+  reqStream.url =
     "/" +
     queryString.stringifyUrl({
       url: ipareCtx.req.path,
       query: ipareCtx.req.query,
     });
-  httpReq.method = ipareCtx.req.method;
-  httpReq.complete = true;
-  httpReq.httpVersion = "1.1";
-  httpReq.httpVersionMajor = 1;
-  httpReq.httpVersionMinor = 1;
+  reqStream.method = ipareCtx.req.method;
+  reqStream.complete = true;
+  reqStream.httpVersion = "1.1";
+  reqStream.httpVersionMajor = 1;
+  reqStream.httpVersionMinor = 1;
 
-  return httpReq;
+  return reqStream;
 }

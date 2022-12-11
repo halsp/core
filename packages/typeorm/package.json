@@ -36,7 +36,7 @@
     "@ipare/core": "^3.0.2",
     "@ipare/inject": "^3.0.2",
     "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.3.10"
+    "typeorm": "^0.3.11"
   },
   "devDependencies": {
     "sqlite3": "^5.1.2"

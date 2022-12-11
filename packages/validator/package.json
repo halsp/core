@@ -38,7 +38,7 @@
     "@ipare/core": "^3.0.2",
     "@ipare/inject": "^3.0.2",
     "@ipare/pipe": "^3.0.2",
-    "class-validator": "^0.13.2",
+    "class-validator": "^0.14.0",
     "reflect-metadata": "^0.1.13"
   },
   "peerDependencies": {

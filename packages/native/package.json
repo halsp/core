@@ -46,7 +46,7 @@
     "@types/supertest": "^2.0.12",
     "@types/url-parse": "^1.4.8",
     "shelljs": "^0.8.5",
-    "supertest": "^6.3.1"
+    "supertest": "^6.3.3"
   },
   "files": [
     "/dist/*",

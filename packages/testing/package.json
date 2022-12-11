@@ -48,7 +48,7 @@
     "@ipare/micro-redis": "^3.0.2",
     "@ipare/micro-tcp": "^3.0.2",
     "@ipare/native": "^3.0.2",
-    "supertest": "^6.3.1"
+    "supertest": "^6.3.3"
   },
   "files": [
     "/dist/*",

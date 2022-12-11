@@ -35,7 +35,7 @@
   "dependencies": {
     "@ipare/core": "^3.0.2",
     "@ipare/inject": "^3.0.2",
-    "redis": "^4.5.0",
+    "redis": "^4.5.1",
     "reflect-metadata": "^0.1.13"
   },
   "files": [

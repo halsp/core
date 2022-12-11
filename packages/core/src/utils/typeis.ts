@@ -45,7 +45,8 @@ export const normalizePath = (path?: string | null, leading = false) => {
   return leading ? addLeadingSlash(result) : result;
 };
 
-export const isFunction = (val: any): boolean => typeof val === "function";
+export const isFunction = <T = (...args: any[]) => any>(val: any): val is T =>
+  typeof val === "function";
 export const isString = (val: any): val is string => typeof val === "string";
 export const isNumber = (val: any): val is number => typeof val === "number";
 export function isFiniteNumber(val: any): val is number {

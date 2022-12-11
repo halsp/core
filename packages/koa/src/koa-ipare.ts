@@ -15,8 +15,8 @@ class KoaStartup extends HttpStartup {
         .setBody(koaCtx.body)
     );
 
-    if (!("httpReq" in ctx)) {
-      Object.defineProperty(ctx, "httpReq", {
+    if (!("reqStream" in ctx)) {
+      Object.defineProperty(ctx, "reqStream", {
         configurable: false,
         enumerable: false,
         get: () => koaCtx.req,

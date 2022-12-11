@@ -44,11 +44,7 @@ async function render(
   locals: Record<string, unknown>
 ): Promise<string | undefined> {
   tmpPath = path.join(options.dir ?? "views", tmpPath ?? "");
-  options.options = Object.assign(
-    options.options ?? {},
-    ctx.state ?? {},
-    locals ?? {}
-  );
+  options.options = Object.assign({}, options.options, ctx.state, locals);
   let engines = options.engines ?? [];
   if (!Array.isArray(engines)) {
     engines = [engines];
