@@ -4,14 +4,13 @@ import { Body } from "@ipare/pipe";
 import { ValidationSchema } from "class-validator";
 import "@ipare/inject";
 import "../src";
-import { UseValidatorSchema, V, ValidatorEnable } from "../src";
+import { UseValidatorSchema, V } from "../src";
 
 function testSchema(useSchema: boolean) {
   function runTest(func: boolean) {
     test(`schema test ${useSchema} ${func}}`, async () => {
       const schemaName = func ? () => "testSchema" : "testSchema";
       @UseValidatorSchema(schemaName as any)
-      @ValidatorEnable(() => useSchema)
       class TestDto {
         @V().IsInt()
         b1!: number;
@@ -56,16 +55,8 @@ function testSchema(useSchema: boolean) {
         startup.useValidationSchema(testSchema);
       }
       const { ctx } = await startup.add(TestMiddleware).run();
-
-      if (useSchema) {
-        expect(ctx.bag("b1")).toBeUndefined();
-        expect(ctx.bag("body")).toBeUndefined();
-        expect(ctx.errorStack[0].message).toBe("b1 must be an integer number");
-      } else {
-        expect(ctx.bag("b1")).toBe("1");
-        expect(ctx.bag<TestDto>("body")["b"]).toBe("1");
-        expect(ctx.errorStack.length).toBe(0);
-      }
+      expect(ctx.errorStack[0].message).toBe("b1 must be an integer number");
+      expect(ctx.bag("body")).toBeUndefined();
     });
   }
   runTest(true);

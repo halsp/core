@@ -3,7 +3,7 @@ import { TestStartup } from "@ipare/testing";
 import { Body } from "@ipare/pipe";
 import "@ipare/inject";
 import "../src";
-import { V } from "../src";
+import { V, ValidatorEnable } from "../src";
 
 function runTest(validate: boolean) {
   test(`validate ${validate}`, async () => {
@@ -93,32 +93,65 @@ test("array message", async () => {
   );
 });
 
-test("validate disabled", async () => {
-  class TestMiddleware extends Middleware {
-    @Body
-    b!: Record<string, any>;
-
-    async invoke(): Promise<void> {
-      this.ctx.bag("ok", 1);
-    }
-  }
-
-  const req = new Request().setBody({
-    b1: 1,
-  });
-  const { ctx } = await new TestStartup()
-    .setContext(req)
-    .useInject()
-    .useValidator()
-    .add(TestMiddleware)
-    .run();
-
-  expect(ctx.bag("ok")).toBe(1);
-});
-
 it("should be undefined when exec V()()", async () => {
   class TestClass {
     //
   }
   expect(V()(TestClass, "")).toBeUndefined();
+});
+
+describe("disabled", () => {
+  it("should not validate when body type is plain object", async () => {
+    class TestMiddleware extends Middleware {
+      @Body
+      @V
+      b!: Record<string, any>;
+
+      async invoke(): Promise<void> {
+        this.ctx.bag("ok", 1);
+      }
+    }
+
+    const req = new Request().setBody({
+      b1: 1,
+    });
+    const { ctx } = await new TestStartup()
+      .setContext(req)
+      .useInject()
+      .useValidator()
+      .add(TestMiddleware)
+      .run();
+
+    expect(ctx.bag("ok")).toBe(1);
+  });
+
+  it("should not validate when disabled by @ValidatorEnable", async () => {
+    @ValidatorEnable(() => false)
+    class TestClass {
+      @V().IsInt()
+      b1!: number;
+    }
+
+    class TestMiddleware extends Middleware {
+      @Body
+      @V
+      b!: TestClass;
+
+      async invoke(): Promise<void> {
+        this.ctx.bag("ok", 1);
+      }
+    }
+
+    const req = new Request().setBody({
+      b1: "1",
+    });
+    const { ctx } = await new TestStartup()
+      .setContext(req)
+      .useInject()
+      .useValidator()
+      .add(TestMiddleware)
+      .run();
+
+    expect(ctx.bag("ok")).toBe(1);
+  });
 });
