@@ -1,8 +1,8 @@
 import { BodyPraserStartup } from "../src";
 import * as http from "http";
 import { Context, Dict, Request } from "@ipare/core";
-import urlParse from "url-parse";
 import { NumericalHeadersDict } from "@ipare/http";
+import qs from "qs";
 
 declare module "@ipare/core" {
   interface Context {
@@ -25,11 +25,12 @@ export class TestBodyParserStartup extends BodyPraserStartup {
     reqStream: http.IncomingMessage,
     resStream: http.ServerResponse
   ): Promise<void> => {
-    const url = urlParse(reqStream.url as string, true);
+    const pathname = (reqStream.url as string).split("?")[0];
+    const query = qs.parse((reqStream.url as string).split("?")[1] ?? "");
     const req = new Request()
-      .setPath(url.pathname)
+      .setPath(pathname)
       .setMethod(reqStream.method as string)
-      .setQuery(url.query as Dict<string>)
+      .setQuery(query as Dict<string>)
       .setHeaders(reqStream.headers as NumericalHeadersDict);
     const ctx = new Context(req);
     Object.defineProperty(ctx, "resStream", {

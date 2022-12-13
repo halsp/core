@@ -39,12 +39,12 @@
     "@ipare/body": "^3.0.2",
     "@ipare/core": "^3.0.2",
     "@ipare/http": "^3.0.2",
-    "url-parse": "^1.5.10"
+    "qs": "^6.11.0"
   },
   "devDependencies": {
     "@types/shelljs": "^0.8.11",
     "@types/supertest": "^2.0.12",
-    "@types/url-parse": "^1.4.8",
+    "@types/qs": "^6.9.7",
     "shelljs": "^0.8.5",
     "supertest": "^6.3.3"
   },

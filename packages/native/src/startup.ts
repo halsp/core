@@ -13,7 +13,7 @@ import {
   logAddress,
 } from "@ipare/core";
 import { NumericalHeadersDict } from "@ipare/http";
-import urlParse from "url-parse";
+import qs from "qs";
 import { Stream } from "stream";
 
 type HttpNativeOptions = http.ServerOptions;
@@ -112,12 +112,13 @@ export class NativeStartup<
     reqStream: http.IncomingMessage,
     resStream: http.ServerResponse
   ): Promise<void> => {
-    const url = urlParse(reqStream.url as string, true);
+    const pathname = (reqStream.url as string).split("?")[0];
+    const query = qs.parse((reqStream.url as string).split("?")[1]);
     const ctx = new Context(
       new Request()
-        .setPath(url.pathname)
+        .setPath(pathname)
         .setMethod(reqStream.method as string)
-        .setQuery(url.query as Dict<string>)
+        .setQuery(query as Dict<string>)
         .setHeaders(reqStream.headers as NumericalHeadersDict)
     );
 
