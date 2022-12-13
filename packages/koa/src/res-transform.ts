@@ -54,10 +54,8 @@ export async function createContext(
 
 async function getReqStream(ipareCtx: Context): Promise<http.IncomingMessage> {
   let reqStream: http.IncomingMessage;
-  if ("reqStream" in ipareCtx) {
+  if (ipareCtx["reqStream"]) {
     reqStream = ipareCtx["reqStream"] as http.IncomingMessage;
-  } else if ("aliReq" in ipareCtx) {
-    reqStream = ipareCtx["aliReq"] as http.IncomingMessage;
   } else {
     reqStream = new http.IncomingMessage(new net.Socket());
     const body = ipareCtx.req.body;
