@@ -358,7 +358,8 @@ class InjectDecoratorParser<T extends object = any> {
   private getExistTargetMap(target: ObjectConstructor<T>) {
     const injectMaps = this.ctx.bag<InjectMap[]>(MAP_BAG) ?? [];
     return injectMaps.filter(
-      (map) => isFunction(map.anestor) && map.anestor == target
+      (map) =>
+        isFunction<ObjectConstructor<T>>(map.anestor) && map.anestor == target
     )[0];
   }
 }

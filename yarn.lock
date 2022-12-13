@@ -3016,7 +3016,7 @@
   resolved "https://registry.npmmirror.com/@types/prettier/-/prettier-2.7.0.tgz#ea03e9f0376a4446f44797ca19d9c46c36e352dc"
   integrity sha512-RI1L7N4JnW5gQw2spvL7Sllfuf1SaHdrZpCHiBlCXjIlufi1SMNnbu2teze3/QE67Fg2tBlH7W+mi4hVNk4p0A==
 
-"@types/qs@*":
+"@types/qs@*", "@types/qs@^6.9.7":
   version "6.9.7"
   resolved "https://registry.npmmirror.com/@types/qs/-/qs-6.9.7.tgz#63bb7d067db107cc1e457c303bc25d511febf6cb"
   integrity sha512-FGa1F62FT09qcrueBA6qYTrJPVDzah9a+493+o2PCXsesWHIn27G98TsSMs3WPNbZIEj4+VJf6saSFpvD+3Zsw==
@@ -4338,11 +4338,6 @@ decamelize@^1.1.0:
   resolved "https://registry.npmmirror.com/decamelize/-/decamelize-1.2.0.tgz#f6534d15148269b20352e7bee26f501f9a191290"
   integrity sha512-z2S+W9X73hAUUki+N+9Za2lBlun89zigOyGrsax+KUQ6wKW4ZoWpEYBkGhQjwAjjDCkWxhY0VKEhk8wzY7F5cA==
 
-decode-uri-component@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.npmmirror.com/decode-uri-component/-/decode-uri-component-0.2.2.tgz#e69dbe25d37941171dd540e024c444cd5188e1e9"
-  integrity sha512-FqUYQ+8o158GyGTrMFJms9qh3CqTKvAqgqsTnkLI8sKu0028orqBhxNMFkFen0zGyg6epACD32pjVk58ngIErQ==
-
 dedent@^0.7.0:
   version "0.7.0"
   resolved "https://registry.npmmirror.com/dedent/-/dedent-0.7.0.tgz#2495ddbaf6eb874abb0e1be9df22d2e5a544326c"
@@ -4919,11 +4914,6 @@ fill-range@^7.0.1:
   integrity sha512-qOo9F+dMUmC2Lcb4BbVvnKJxTPjCm+RRpe4gDuGrzkL7mEVl/djYSu2OdQ2Pa302N4oqkSg9ir6jaLWJ2USVpQ==
   dependencies:
     to-regex-range "^5.0.1"
-
-filter-obj@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.npmmirror.com/filter-obj/-/filter-obj-5.1.0.tgz#5bd89676000a713d7db2e197f660274428e524ed"
-  integrity sha512-qWeTREPoT7I0bifpPUXtxkZJ1XJzxWtfoWWkdVGqa+eCr3SHW/Ocp89o8vLvbUuQnadybJpjOKu4V+RwO6sGng==
 
 find-up@^2.0.0:
   version "2.1.0"
@@ -8042,15 +8032,6 @@ qs@^6.11.0, qs@^6.5.2:
   dependencies:
     side-channel "^1.0.4"
 
-query-string@^8.0.0:
-  version "8.0.0"
-  resolved "https://registry.npmmirror.com/query-string/-/query-string-8.0.0.tgz#6fe8b0efcfea80dabe470f64a2e46eaf8beae357"
-  integrity sha512-mB9U/uR7+1ZTzHMMlkk06qH74bKeNkZXzZXxLpoOfypAR9AVhVcYhvOnFtiosoS6Mf7rNwsLhnzeefgZMgCE/A==
-  dependencies:
-    decode-uri-component "^0.2.2"
-    filter-obj "^5.1.0"
-    split-on-first "^1.0.0"
-
 querystringify@^2.1.1:
   version "2.2.0"
   resolved "https://registry.npmmirror.com/querystringify/-/querystringify-2.2.0.tgz#3345941b4153cb9d082d8eee4cda2016a9aef7f6"
@@ -8578,11 +8559,6 @@ spdx-license-ids@^3.0.0:
   version "3.0.12"
   resolved "https://registry.npmmirror.com/spdx-license-ids/-/spdx-license-ids-3.0.12.tgz#69077835abe2710b65f03969898b6637b505a779"
   integrity sha512-rr+VVSXtRhO4OHbXUiAF7xW3Bo9DuuF6C5jH+q/x15j2jniycgKbxU09Hr0WqlSLUs4i4ltHGXqTe7VHclYWyA==
-
-split-on-first@^1.0.0:
-  version "1.1.0"
-  resolved "https://registry.npmmirror.com/split-on-first/-/split-on-first-1.1.0.tgz#f610afeee3b12bce1d0c30425e76398b78249a5f"
-  integrity sha512-43ZssAJaMusuKWL8sKUBQXHWOpq8d6CfN/u1p4gUzfJkM05C8rxTmYrkIPTXapZpORA6LkkzcUulJ8FqA7Uudw==
 
 split2@^3.0.0, split2@^3.1.0:
   version "3.2.2"

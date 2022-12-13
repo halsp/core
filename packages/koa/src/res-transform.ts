@@ -3,7 +3,7 @@ import http from "http";
 import net from "net";
 import { Context, isPlainObject, Response } from "@ipare/core";
 import { TransResponse } from "./trans-response";
-import queryString from "query-string";
+import qs from "qs";
 
 export async function koaResToIpareRes(
   koaCtx: Koa.ParameterizedContext,
@@ -73,11 +73,12 @@ async function getReqStream(ipareCtx: Context): Promise<http.IncomingMessage> {
   }
 
   reqStream.headers = Object.assign({}, ipareCtx.req.headers);
+
   reqStream.url =
     "/" +
-    queryString.stringifyUrl({
-      url: ipareCtx.req.path,
-      query: ipareCtx.req.query,
+    ipareCtx.req.path +
+    qs.stringify(ipareCtx.req.query, {
+      addQueryPrefix: true,
     });
   reqStream.method = ipareCtx.req.method;
   reqStream.complete = true;
