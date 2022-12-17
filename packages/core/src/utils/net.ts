@@ -44,7 +44,7 @@ export async function dynamicListen(
     });
   }
 
-  return await tryListen(port ?? 9504);
+  return await tryListen(getIparePort(port) ?? 9504);
 }
 
 export function logAddress(server: net.Server, logger: ILogger) {
