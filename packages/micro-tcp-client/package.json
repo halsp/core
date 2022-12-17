@@ -1,6 +1,6 @@
 {
   "name": "@ipare/micro-tcp-client",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "description": "Ipare 微服务 TCP 通信请求客户端",
   "engines": {
     "node": ">=12.14.0"
@@ -39,9 +39,9 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^3.0.3",
-    "@ipare/micro-client": "^3.0.3",
-    "@ipare/micro-common": "^3.0.3"
+    "@ipare/core": "^3.0.4",
+    "@ipare/micro-client": "^3.0.4",
+    "@ipare/micro-common": "^3.0.4"
   },
   "files": [
     "/dist/*",

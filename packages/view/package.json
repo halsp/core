@@ -1,6 +1,6 @@
 {
   "name": "@ipare/view",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "description": "Ipare 视图渲染中间件",
   "engines": {
     "node": ">=12.14.0"
@@ -37,7 +37,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^3.0.3",
+    "@ipare/core": "^3.0.4",
     "consolidate": "^0.16.0"
   },
   "devDependencies": {
