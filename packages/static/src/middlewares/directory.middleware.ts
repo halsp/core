@@ -16,12 +16,7 @@ export class DirectoryMiddleware extends BaseMiddleware {
       return;
     }
 
-    if (
-      !this.options.prefix ||
-      this.ctx.req.path
-        .toUpperCase()
-        .startsWith(this.options.prefix.toUpperCase())
-    ) {
+    if (!this.prefix || this.ctx.req.path.startsWith(this.prefix)) {
       const filePath = this.filePath;
       if (filePath) {
         this.ok(fs.readFileSync(filePath, this.options.encoding)).setHeader(
@@ -47,10 +42,14 @@ export class DirectoryMiddleware extends BaseMiddleware {
     await this.next();
   }
 
+  private get prefix() {
+    return normalizePath(this.options.prefix);
+  }
+
   get filePath(): string | undefined {
-    let reqPath = normalizePath(this.ctx.req.path);
-    if (this.options.prefix) {
-      reqPath = reqPath.substring(this.options.prefix.length, reqPath.length);
+    let reqPath = this.ctx.req.path;
+    if (this.prefix) {
+      reqPath = reqPath.substring(this.prefix.length, reqPath.length);
     }
 
     const reqFilePath = path.join(this.options.dir, reqPath);

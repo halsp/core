@@ -6,10 +6,10 @@ test("cli config hook", async () => {
     build: {
       assets: [
         {
-          include: "views/*",
+          include: "views/**/*",
           root: "src",
         },
-        "views/*",
+        "views/**/*",
       ],
     },
   });
