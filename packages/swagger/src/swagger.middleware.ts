@@ -1,4 +1,4 @@
-import { isString, isUndefined, Middleware, normalizePath } from "@ipare/core";
+import { isUndefined, Middleware, normalizePath } from "@ipare/core";
 import { Parser } from "./parser";
 import { SwaggerOptions } from "./options";
 import { OpenApiBuilder } from "openapi3-ts-remove-yaml";
@@ -6,6 +6,7 @@ import path from "path";
 import * as fs from "fs";
 import { HttpStartup, StatusCodes } from "@ipare/http";
 import { HttpMethods } from "@ipare/methods";
+import { Readable } from "stream";
 
 export class SwaggerMiddlware extends Middleware {
   constructor(private readonly options: SwaggerOptions) {
@@ -114,9 +115,9 @@ export class SwaggerMiddlware extends Middleware {
 
   private async replaceBody(extendPath: string) {
     if (this.res.status != 200) return;
-    if (isUndefined(this.res.body)) return;
-    if (!isString(this.res.body)) return;
+    if (!(this.res.body instanceof Readable)) return;
 
+    this.res.body = await readStream(this.res.body);
     if (extendPath == "index.html") {
       await this.replaceIndexContent();
     }
@@ -184,6 +185,15 @@ export class SwaggerMiddlware extends Middleware {
 
     this.res.body = content;
   }
+}
+
+async function readStream(stream: Readable) {
+  const chunks: Buffer[] = [];
+  return new Promise<string>((resolve, reject) => {
+    stream.on("data", (data) => chunks.push(data as Buffer));
+    stream.on("end", () => resolve(Buffer.concat(chunks).toString()));
+    stream.on("error", (err) => reject(err));
+  });
 }
 
 function addDocumentItems(

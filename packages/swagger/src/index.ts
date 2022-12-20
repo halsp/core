@@ -46,7 +46,6 @@ HttpStartup.prototype.useSwagger = function (options: SwaggerOptions = {}) {
     .useStatic({
       prefix: opt.path,
       dir: getAbsoluteFSPath(),
-      encoding: "utf-8",
       fileIndex: true,
     });
 };

@@ -4,6 +4,8 @@ import { TestHttpStartup } from "@ipare/testing/dist/http";
 import "../src";
 import { TEST_ACTION_DIR } from "@ipare/router/dist/constant";
 import { OpenApiBuilder } from "openapi3-ts-remove-yaml";
+import { SwaggerMiddlware } from "../src/swagger.middleware";
+import * as fs from "fs";
 
 declare module "@ipare/core" {
   interface Startup {
@@ -360,6 +362,47 @@ describe("options", () => {
 </html>
 `
     );
+  });
+
+  it("should be error when index.html body stream emit error", async () => {
+    const res = await new TestHttpStartup()
+      .setContext(
+        new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
+      )
+      .setSkipThrow()
+      .use(async (ctx, next) => {
+        Object.defineProperty(ctx, "swaggerOptions", {
+          configurable: false,
+          enumerable: false,
+          get: () => {
+            return {
+              path: "swagger",
+            };
+          },
+        });
+        ctx.res.status = 200;
+        ctx.res.body = fs.createReadStream("not-exist");
+
+        try {
+          await next();
+        } catch (err) {
+          console.log("err", err);
+          throw err;
+        }
+      })
+      .add(
+        () =>
+          new SwaggerMiddlware({
+            path: "swagger",
+          })
+      )
+      .setTestDir("test/parser")
+      .run();
+
+    console.log("body", res.body);
+    expect(res.status).toBe(500);
+    expect(res.body.status).toBe(500);
+    expect(res.body.code).toBe("ENOENT");
   });
 });
 
