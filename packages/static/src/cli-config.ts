@@ -5,9 +5,9 @@ export const cliConfigHook = (config: any) => {
     config,
     (ass) => ass.startsWith("static/"),
     {
-      include: "static/*",
+      include: "static/**/*",
       root: "src",
     },
-    "static/*"
+    "static/**/*"
   );
 };
