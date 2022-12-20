@@ -1,6 +1,7 @@
 import { Request } from "@ipare/core";
 import { TestHttpStartup } from "@ipare/testing/dist/http";
 import "../src";
+import { readStream } from "./utils";
 
 test("unknown mime", async () => {
   {
@@ -12,7 +13,7 @@ test("unknown mime", async () => {
       })
       .run();
     expect(result.status).toBe(200);
-    expect(result.body).toBe("unknown");
+    expect(await readStream(result.body)).toBe("unknown");
     expect(result.headers["content-type"]).toBe("*/*");
   }
   {
@@ -25,7 +26,7 @@ test("unknown mime", async () => {
       })
       .run();
     expect(result.status).toBe(404);
-    expect(result.body).toBe("unknown");
+    expect(await readStream(result.body)).toBe("unknown");
     expect(result.headers["content-type"]).toBe("*/*");
   }
 });
@@ -40,6 +41,6 @@ test("single unknown mime", async () => {
     })
     .run();
   expect(result.status).toBe(200);
-  expect(result.body).toBe("unknown");
+  expect(await readStream(result.body)).toBe("unknown");
   expect(result.headers["content-type"]).toBe("*/*");
 });

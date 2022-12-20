@@ -1,6 +1,7 @@
 interface Options extends Object {
   encoding?: BufferEncoding;
   method?: string | string[];
+  use405?: boolean;
 }
 
 export interface DirectoryOptions extends Options {

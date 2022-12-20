@@ -2,6 +2,7 @@ import { Request } from "@ipare/core";
 import { TestHttpStartup } from "@ipare/testing/dist/http";
 import "../src";
 import { FILE_404_BAG, FILE_BAG } from "../src/constant";
+import { readStream } from "./utils";
 
 test("not found", async () => {
   const result = await new TestHttpStartup()
@@ -30,7 +31,7 @@ test("404 page", async () => {
       })
       .run();
     expect(result.status).toBe(404);
-    expect(result.body).toBe("404 page");
+    expect(await readStream(result.body)).toBe("404 page");
   }
   {
     const result = await new TestHttpStartup()
@@ -42,7 +43,7 @@ test("404 page", async () => {
       })
       .run();
     expect(result.status).toBe(404);
-    expect(result.body).toBe("404 page");
+    expect(await readStream(result.body)).toBe("404 page");
   }
 });
 

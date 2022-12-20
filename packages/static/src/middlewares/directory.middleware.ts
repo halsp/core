@@ -1,6 +1,4 @@
 import * as path from "path";
-import * as fs from "fs";
-import * as mime from "mime";
 import { DirectoryOptions } from "../options";
 import { BaseMiddleware } from "./base.middleware";
 import { normalizePath } from "@ipare/core";
@@ -11,31 +9,28 @@ export class DirectoryMiddleware extends BaseMiddleware {
   }
 
   async invoke(): Promise<void> {
-    if (!this.isMethodValid) {
-      await this.next();
-      return;
-    }
-
-    if (!this.prefix || this.ctx.req.path.startsWith(this.prefix)) {
+    if (this.options.use405 && !this.isMethodValid) {
       const filePath = this.filePath;
       if (filePath) {
-        this.ok(fs.readFileSync(filePath, this.options.encoding)).setHeader(
-          "content-type",
-          mime.getType(filePath) || "*/*"
-        );
-        this.setBagFile(filePath);
-        return;
+        return this.setMethodNotAllowed();
+      } else {
+        return await this.next();
       }
+    }
+
+    if (!this.isMethodValid) {
+      return await this.next();
+    }
+
+    const filePath = this.filePath;
+    if (filePath) {
+      return this.setFileResult(filePath);
     }
 
     if (this.options.file404) {
       const file404Path = this.file404Path;
       if (file404Path) {
-        this.notFound(
-          fs.readFileSync(file404Path, this.options.encoding)
-        ).setHeader("content-type", mime.getType(file404Path) || "*/*");
-        this.setBagFile(file404Path, true);
-        return;
+        return this.setFileResult(file404Path, true);
       }
     }
 
@@ -47,25 +42,30 @@ export class DirectoryMiddleware extends BaseMiddleware {
   }
 
   get filePath(): string | undefined {
+    if (this.prefix && !this.ctx.req.path.startsWith(this.prefix)) {
+      return;
+    }
+
     let reqPath = this.ctx.req.path;
     if (this.prefix) {
       reqPath = reqPath.substring(this.prefix.length, reqPath.length);
     }
+    reqPath = normalizePath(reqPath);
 
-    const reqFilePath = path.join(this.options.dir, reqPath);
+    const reqFilePath = path.resolve(this.options.dir, reqPath);
     let filePath = reqFilePath;
-    if (fs.existsSync(filePath) && fs.lstatSync(filePath).isFile()) {
+    if (this.isFile(filePath)) {
       return filePath;
     }
 
     if (this.options.fileIndex) {
-      filePath = path.join(
+      filePath = path.resolve(
         reqFilePath,
         typeof this.options.fileIndex == "string"
           ? this.options.fileIndex
           : "index.html"
       );
-      if (fs.existsSync(filePath) && fs.lstatSync(filePath).isFile()) {
+      if (this.isFile(filePath)) {
         return filePath;
       }
     }
@@ -80,10 +80,6 @@ export class DirectoryMiddleware extends BaseMiddleware {
         ? "404.html"
         : (this.options.file404 as string)
     );
-    if (fs.existsSync(filePath) && fs.lstatSync(filePath).isFile()) {
-      return filePath;
-    }
-
-    return;
+    return this.isFile(filePath) ? filePath : undefined;
   }
 }

@@ -2,6 +2,7 @@ import { Request } from "@ipare/core";
 import { TestHttpStartup } from "@ipare/testing/dist/http";
 import "../src";
 import { FILE_BAG } from "../src/constant";
+import { readStream } from "./utils";
 
 describe("index.html", () => {
   it("should return status 404", async () => {
@@ -28,7 +29,7 @@ describe("index.html", () => {
       })
       .run();
     expect(result.status).toBe(200);
-    expect(result.body).toBe("TEST");
+    expect(await readStream(result.body)).toBe("TEST");
   });
 
   it("should find index.html when options.fileIndex is true", async () => {
@@ -45,7 +46,7 @@ describe("index.html", () => {
       })
       .run();
     expect(result.status).toBe(200);
-    expect(result.body).toBe("TEST");
+    expect(await readStream(result.body)).toBe("TEST");
   });
 
   it("should find custom index file when options.fileIndex is string", async () => {
@@ -62,7 +63,7 @@ describe("index.html", () => {
       })
       .run();
     expect(result.status).toBe(200);
-    expect(result.body).toBe("TEST");
+    expect(await readStream(result.body)).toBe("TEST");
   });
 
   it("should match prefix", async () => {

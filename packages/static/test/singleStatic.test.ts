@@ -2,9 +2,10 @@ import { Request } from "@ipare/core";
 import { TestHttpStartup } from "@ipare/testing/dist/http";
 import "../src";
 import { FILE_BAG } from "../src/constant";
+import { readStream } from "./utils";
 
-test("match", async () => {
-  {
+describe("single file", () => {
+  it("should match index file when set reqPath option", async () => {
     const result = await new TestHttpStartup()
       .setContext(new Request().setMethod("get").setPath("ind"))
       .use(async (ctx, next) => {
@@ -18,21 +19,10 @@ test("match", async () => {
       })
       .run();
     expect(result.status).toBe(200);
-    expect(result.body).toBe("TEST");
-  }
-  {
-    const result = await new TestHttpStartup()
-      .setContext(new Request().setMethod("get").setPath("/ind/"))
-      .useStatic({
-        file: "test/static/index.html",
-        reqPath: "/ind/",
-        encoding: "utf-8",
-      })
-      .run();
-    expect(result.status).toBe(200);
-    expect(result.body).toBe("TEST");
-  }
-  {
+    expect(await readStream(result.body)).toBe("TEST");
+  });
+
+  it("should match index when reqPath startsWith /", async () => {
     const result = await new TestHttpStartup()
       .setContext(new Request().setMethod("get").setPath("ind"))
       .useStatic({
@@ -42,8 +32,21 @@ test("match", async () => {
       })
       .run();
     expect(result.status).toBe(200);
-    expect(result.body).toBe("TEST");
-  }
+    expect(await readStream(result.body)).toBe("TEST");
+  });
+
+  it("should match index when reqPath and path startsWith /", async () => {
+    const result = await new TestHttpStartup()
+      .setContext(new Request().setMethod("get").setPath("/ind/"))
+      .useStatic({
+        file: "test/static/index.html",
+        reqPath: "/ind/",
+        encoding: "utf-8",
+      })
+      .run();
+    expect(result.status).toBe(200);
+    expect(await readStream(result.body)).toBe("TEST");
+  });
 });
 
 test("not found path", async () => {
