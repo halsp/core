@@ -5,9 +5,9 @@ export const cliConfigHook = (config: any) => {
     config,
     (ass) => ass.startsWith("views/"),
     {
-      include: "views/*",
+      include: "views/**/*",
       root: "src",
     },
-    "views/*"
+    "views/**/*"
   );
 };
