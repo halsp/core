@@ -12,15 +12,16 @@ export class FileMiddleware extends BaseMiddleware {
       return this.setMethodNotAllowed();
     }
 
-    if (
-      !this.isMethodValid ||
-      !this.isPathEqual ||
-      !this.isFile(this.options.file)
-    ) {
+    if (!this.isMethodValid || !this.isPathEqual) {
       return await this.next();
     }
 
-    this.setFileResult(this.options.file);
+    const stats = await this.getFileStats(this.options.file);
+    if (!stats?.isFile()) {
+      return await this.next();
+    }
+
+    this.setFileResult(this.options.file, stats);
   }
 
   private get isPathEqual() {

@@ -28,12 +28,26 @@ describe("method", () => {
 
   it("should be 405 when method is POST and use405 is true", async () => {
     const result = await new TestHttpStartup()
+      .setContext(
+        new Request().setMethod(HttpMethods.post).setPath("index.html")
+      )
+      .useStatic({
+        dir: "test/static",
+        method: HttpMethods.get,
+        use405: true,
+      })
+      .run();
+    expect(result.status).toBe(405);
+  });
+
+  it("should be 405 when method is POST and use405 is true with fileIndex = true", async () => {
+    const result = await new TestHttpStartup()
       .setContext(new Request().setMethod(HttpMethods.post))
       .useStatic({
         dir: "test/static",
         method: HttpMethods.get,
-        fileIndex: true,
         use405: true,
+        fileIndex: true,
       })
       .run();
     expect(result.status).toBe(405);

@@ -41,4 +41,17 @@ describe("prefix", () => {
       .run();
     expect(result.status).toBe(404);
   });
+
+  it("prefix not found with fileIndex = true", async () => {
+    const result = await new TestHttpStartup()
+      .setContext(new Request().setMethod("get").setPath("/static/index.un/"))
+      .useStatic({
+        dir: "test/static",
+        encoding: "utf-8",
+        prefix: "static1",
+        fileIndex: true,
+      })
+      .run();
+    expect(result.status).toBe(404);
+  });
 });

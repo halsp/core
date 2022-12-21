@@ -32,13 +32,15 @@ export abstract class BaseMiddleware extends Middleware {
     this.methodNotAllowed().set("Allow", this.allowMethods);
   }
 
-  protected setFileResult(filePath: string, is404 = false) {
+  protected setFileResult(filePath: string, stats: fs.Stats, is404 = false) {
     const stream = fs.createReadStream(filePath, this.options.encoding);
     const mimeType = mime.getType(filePath) || "*/*";
     this.ctx.res
       .setBody(stream)
       .setStatus(is404 ? 404 : 200)
-      .set("content-type", mimeType);
+      .set("content-type", mimeType)
+      .set("accept-ranges", "bytes")
+      .set("last-modified", stats.mtime.toUTCString());
 
     this.ctx.bag(FILE_BAG, filePath);
     if (is404) {
@@ -46,7 +48,11 @@ export abstract class BaseMiddleware extends Middleware {
     }
   }
 
-  protected isFile(filePath: string) {
-    return fs.existsSync(filePath) && fs.statSync(filePath).isFile();
+  protected async getFileStats(
+    filePath: string
+  ): Promise<fs.Stats | undefined> {
+    if (fs.existsSync(filePath)) {
+      return await fs.promises.stat(filePath);
+    }
   }
 }
