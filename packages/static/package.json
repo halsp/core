@@ -38,10 +38,12 @@
     "@ipare/core": "^3.0.4",
     "@ipare/http": "^3.0.4",
     "@ipare/methods": "^3.0.4",
-    "mime": "^3.0.0"
+    "mime": "^3.0.0",
+    "glob": "^8.0.3"
   },
   "devDependencies": {
-    "@types/mime": "^3.0.1"
+    "@types/mime": "^3.0.1",
+    "@types/glob": "^8.0.0"
   },
   "files": [
     "/dist/*",

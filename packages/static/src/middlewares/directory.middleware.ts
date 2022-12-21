@@ -2,6 +2,7 @@ import * as path from "path";
 import { DirectoryOptions } from "../options";
 import { BaseMiddleware } from "./base.middleware";
 import { normalizePath } from "@ipare/core";
+import glob from "glob";
 
 export class DirectoryMiddleware extends BaseMiddleware {
   constructor(readonly options: DirectoryOptions) {
@@ -41,6 +42,31 @@ export class DirectoryMiddleware extends BaseMiddleware {
     return normalizePath(this.options.prefix);
   }
 
+  private isIgnore(filePath: string) {
+    const excludePaths: string[] = [];
+    const excludeArr: string[] = [];
+    if (Array.isArray(this.options.exclude)) {
+      excludeArr.push(...this.options.exclude.filter((item) => !!item));
+    } else if (this.options.exclude) {
+      excludeArr.push(this.options.exclude);
+    }
+    excludeArr.forEach((item) => {
+      if (glob.hasMagic(item)) {
+        const paths = glob.sync(item, {
+          cwd: path.resolve(this.options.dir),
+        });
+        excludePaths.push(...paths);
+      } else {
+        excludePaths.push(item);
+      }
+    });
+
+    return excludePaths.some((item) => {
+      const exPath = path.resolve(this.options.dir, item);
+      return exPath == filePath || filePath.startsWith(exPath + path.sep);
+    });
+  }
+
   get filePath(): string | undefined {
     if (this.prefix && !this.ctx.req.path.startsWith(this.prefix)) {
       return;
@@ -52,21 +78,20 @@ export class DirectoryMiddleware extends BaseMiddleware {
     }
     reqPath = normalizePath(reqPath);
 
-    const reqFilePath = path.resolve(this.options.dir, reqPath);
-    let filePath = reqFilePath;
-    if (this.isFile(filePath)) {
+    const filePath = path.resolve(this.options.dir, reqPath);
+    if (!this.isIgnore(filePath) && this.isFile(filePath)) {
       return filePath;
     }
 
     if (this.options.fileIndex) {
-      filePath = path.resolve(
-        reqFilePath,
+      const indexFilePath = path.resolve(
+        filePath,
         typeof this.options.fileIndex == "string"
           ? this.options.fileIndex
           : "index.html"
       );
-      if (this.isFile(filePath)) {
-        return filePath;
+      if (this.isFile(indexFilePath)) {
+        return indexFilePath;
       }
     }
 
