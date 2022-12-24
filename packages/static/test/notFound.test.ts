@@ -87,7 +87,7 @@ describe("not found", () => {
       })
       .run();
     expect(result.status).toBe(404);
-    expect(result.body).toBe(undefined);
+    expect((result.body as string).includes("<span>404</span>")).toBeTruthy();
   });
 
   it("should return default 404 page", async () => {

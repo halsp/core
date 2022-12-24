@@ -1,5 +1,6 @@
 import { HttpStartup } from "@ipare/http";
 import { FileMiddleware, DirectoryMiddleware } from "./middlewares";
+import { Status404Middleware } from "./middlewares/status404.middleware";
 import { FileOptions, DirectoryOptions } from "./options";
 
 export { FileOptions, DirectoryOptions };
@@ -22,6 +23,9 @@ HttpStartup.prototype.useStatic = function (
     this.add(() => new FileMiddleware(options as FileOptions));
   } else {
     this.add(() => new DirectoryMiddleware(options as DirectoryOptions));
+  }
+  if (options.file404) {
+    this.add(() => new Status404Middleware(options));
   }
   return this;
 };

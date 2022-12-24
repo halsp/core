@@ -99,19 +99,15 @@ export abstract class BaseMiddleware extends Middleware {
     }
   }
 
-  private async getErrorStats(
+  protected async getErrorStats(
     error: string
-  ): Promise<(FilePathStats & { error?: string }) | undefined> {
+  ): Promise<FilePathStats & { error?: string }> {
     const filePath = path.join(__dirname, "../../html/error.html");
     const stats = await this.getFileStats(filePath);
     return {
       ...(stats as FilePathStats),
       error,
     };
-  }
-
-  protected async get404Stats() {
-    return await this.getErrorStats("The requested path could not be found");
   }
 
   protected async get405Stats() {

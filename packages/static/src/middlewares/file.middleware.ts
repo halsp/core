@@ -27,14 +27,6 @@ export class FileMiddleware extends BaseMiddleware {
       return await this.setFileResult(fileInfo.path, fileInfo.stats);
     }
 
-    const file404Info = await this.getFile404Info();
-    if (file404Info) {
-      return await this.setFileResult(file404Info.path, file404Info.stats, {
-        status: 404,
-        error: file404Info.error,
-      });
-    }
-
     await this.next();
   }
 
@@ -49,19 +41,6 @@ export class FileMiddleware extends BaseMiddleware {
     const fileInfo = await this.getFileStats(this.options.file);
     if (fileInfo?.stats?.isFile()) {
       return fileInfo;
-    }
-  }
-
-  private async getFile404Info(): Promise<
-    (FilePathStats & { error?: string }) | undefined
-  > {
-    if (!this.options.file404) return;
-
-    if (this.options.file404 == true) {
-      return await this.get404Stats();
-    } else {
-      const filePath = path.resolve(this.options.file404);
-      return await this.getFileStats(filePath);
     }
   }
 

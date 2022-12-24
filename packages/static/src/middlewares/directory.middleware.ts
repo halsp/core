@@ -41,14 +41,6 @@ export class DirectoryMiddleware extends BaseMiddleware {
       return await this.setFileResult(fileIndexInfo.path, fileIndexInfo.stats);
     }
 
-    const file404Info = await this.getFile404Info();
-    if (file404Info) {
-      return await this.setFileResult(file404Info.path, file404Info.stats, {
-        status: 404,
-        error: file404Info.error,
-      });
-    }
-
     await this.next();
   }
 
@@ -103,24 +95,6 @@ export class DirectoryMiddleware extends BaseMiddleware {
         : "index.html"
     );
     return await this.getFileStats(indexFilePath);
-  }
-
-  private async getFile404Info(): Promise<
-    (FilePathStats & { error?: string }) | undefined
-  > {
-    if (!this.options.file404) return;
-
-    if (this.options.file404 == true) {
-      const filePath = path.resolve(this.options.dir, "404.html");
-      if (fs.existsSync(filePath)) {
-        return await this.getFileStats(filePath);
-      } else {
-        return await this.get404Stats();
-      }
-    } else {
-      const filePath = path.resolve(this.options.dir, this.options.file404);
-      return await this.getFileStats(filePath);
-    }
   }
 
   private async getFile405Info(): Promise<
