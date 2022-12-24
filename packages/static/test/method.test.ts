@@ -2,6 +2,7 @@ import { Request } from "@ipare/core";
 import { HttpMethods } from "@ipare/methods";
 import { TestHttpStartup } from "@ipare/testing/dist/http";
 import "../src";
+import { readStream } from "./utils";
 
 describe("method", () => {
   it("should match with GET", async () => {
@@ -20,13 +21,57 @@ describe("method", () => {
       .setContext(new Request().setMethod(HttpMethods.post))
       .useStatic({
         dir: "test/static",
+        fileIndex: true,
         method: HttpMethods.get,
       })
       .run();
     expect(result.status).toBe(404);
   });
 
-  it("should be 405 when method is POST and use405 is true", async () => {
+  it("should return default 405.html when method is POST and use405 is true", async () => {
+    {
+      const result = await new TestHttpStartup()
+        .setContext(
+          new Request().setMethod(HttpMethods.post).setPath("index.html")
+        )
+        .useStatic({
+          dir: "test/static/dir",
+          method: HttpMethods.get,
+          file405: true,
+        })
+        .run();
+      expect(result.status).toBe(405);
+      expect((result.body as string).includes("<span>405</span>")).toBeTruthy();
+    }
+
+    {
+      const result = await new TestHttpStartup()
+        .setContext(new Request().setMethod(HttpMethods.post).setPath("index"))
+        .useStatic({
+          file: "test/static/index.html",
+          reqPath: "index",
+          method: HttpMethods.get,
+          file405: true,
+        })
+        .run();
+      expect(result.status).toBe(405);
+      expect((result.body as string).includes("<span>405</span>")).toBeTruthy();
+    }
+
+    {
+      const result = await new TestHttpStartup()
+        .setContext(new Request().setMethod(HttpMethods.post).setPath("index"))
+        .useStatic({
+          file: "test/static/index.html",
+          reqPath: "index",
+          method: HttpMethods.get,
+        })
+        .run();
+      expect(result.status).toBe(404);
+    }
+  });
+
+  it("should return 405.html in dir when method is POST and use405 is true", async () => {
     const result = await new TestHttpStartup()
       .setContext(
         new Request().setMethod(HttpMethods.post).setPath("index.html")
@@ -34,10 +79,42 @@ describe("method", () => {
       .useStatic({
         dir: "test/static",
         method: HttpMethods.get,
-        use405: true,
+        file405: true,
       })
       .run();
     expect(result.status).toBe(405);
+    expect(await readStream(result.body)).toBe("405 page");
+  });
+
+  it("should use custom 405 page", async () => {
+    {
+      const result = await new TestHttpStartup()
+        .setContext(
+          new Request().setMethod(HttpMethods.post).setPath("index.html")
+        )
+        .useStatic({
+          dir: "test/static/dir",
+          method: HttpMethods.get,
+          file405: "../405.html",
+        })
+        .run();
+      expect(result.status).toBe(405);
+      expect(await readStream(result.body)).toBe("405 page");
+    }
+
+    {
+      const result = await new TestHttpStartup()
+        .setContext(new Request().setMethod(HttpMethods.post).setPath("index"))
+        .useStatic({
+          file: "test/static/index.html",
+          reqPath: "index",
+          method: HttpMethods.get,
+          file405: "test/static/405.html",
+        })
+        .run();
+      expect(result.status).toBe(405);
+      expect(await readStream(result.body)).toBe("405 page");
+    }
   });
 
   it("should be 405 when method is POST and use405 is true with fileIndex = true", async () => {
@@ -46,7 +123,7 @@ describe("method", () => {
       .useStatic({
         dir: "test/static",
         method: HttpMethods.get,
-        use405: true,
+        file405: true,
         fileIndex: true,
       })
       .run();
@@ -60,22 +137,35 @@ describe("method", () => {
         file: "test/static/index.html",
         reqPath: "ind",
         method: HttpMethods.get,
-        use405: true,
+        file405: true,
       })
       .run();
     expect(result.status).toBe(405);
   });
 
   it("should be 404 when file is not exist and use405 is true", async () => {
-    const result = await new TestHttpStartup()
-      .setContext(new Request().setMethod(HttpMethods.post))
-      .useStatic({
-        dir: "test/static",
-        method: HttpMethods.get,
-        use405: true,
-      })
-      .run();
-    expect(result.status).toBe(404);
+    {
+      const result = await new TestHttpStartup()
+        .setContext(new Request().setMethod(HttpMethods.post))
+        .useStatic({
+          dir: "test/static",
+          method: HttpMethods.get,
+          file405: true,
+        })
+        .run();
+      expect(result.status).toBe(404);
+    }
+    {
+      const result = await new TestHttpStartup()
+        .setContext(new Request().setMethod(HttpMethods.post))
+        .useStatic({
+          file: "test/static/not-exist",
+          method: HttpMethods.get,
+          file405: true,
+        })
+        .run();
+      expect(result.status).toBe(404);
+    }
   });
 
   it("should match with custom methods", async () => {

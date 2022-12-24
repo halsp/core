@@ -1,11 +1,9 @@
 import * as path from "path";
 import { DirectoryOptions } from "../options";
-import { BaseMiddleware } from "./base.middleware";
+import { BaseMiddleware, FilePathStats } from "./base.middleware";
 import { normalizePath } from "@ipare/core";
 import glob from "glob";
 import * as fs from "fs";
-
-type FilePathStats = { path: string; stats: fs.Stats };
 
 export class DirectoryMiddleware extends BaseMiddleware {
   constructor(readonly options: DirectoryOptions) {
@@ -13,31 +11,42 @@ export class DirectoryMiddleware extends BaseMiddleware {
   }
 
   async invoke(): Promise<void> {
-    if (this.options.use405 && !this.isMethodValid) {
-      if ((await this.getFileInfo()) || (await this.getFileIndexInfo())) {
-        return this.setMethodNotAllowed();
-      } else {
-        return await this.next();
-      }
-    }
-
     if (!this.isMethodValid) {
+      const file405Info = await this.getFile405Info();
+      if (file405Info) {
+        return await this.setFileResult(file405Info.path, file405Info.stats, {
+          status: 405,
+          error: file405Info.error,
+        });
+      }
       return await this.next();
     }
 
     const fileInfo = await this.getFileInfo();
     if (fileInfo) {
-      return this.setFileResult(fileInfo.path, fileInfo.stats);
+      if (fileInfo.stats.isFile()) {
+        return await this.setFileResult(fileInfo.path, fileInfo.stats);
+      } else {
+        if (this.options.listDir) {
+          const tempPath = path.join(__dirname, "../../html/dir.html");
+          return await this.setFileResult(tempPath, fileInfo.stats, {
+            dirHtml: await this.createDirHtml(fileInfo.path, tempPath),
+          });
+        }
+      }
     }
 
     const fileIndexInfo = await this.getFileIndexInfo();
     if (fileIndexInfo) {
-      return this.setFileResult(fileIndexInfo.path, fileIndexInfo.stats);
+      return await this.setFileResult(fileIndexInfo.path, fileIndexInfo.stats);
     }
 
     const file404Info = await this.getFile404Info();
     if (file404Info) {
-      return this.setFileResult(file404Info.path, file404Info.stats, true);
+      return await this.setFileResult(file404Info.path, file404Info.stats, {
+        status: 404,
+        error: file404Info.error,
+      });
     }
 
     await this.next();
@@ -72,16 +81,16 @@ export class DirectoryMiddleware extends BaseMiddleware {
     });
   }
 
-  async getFileInfo(): Promise<FilePathStats | undefined> {
+  private async getFileInfo(): Promise<FilePathStats | undefined> {
     const filePath = this.getFilePath();
     if (!filePath) return;
 
     if (!this.isIgnore(filePath)) {
-      return await this.createFileStats(filePath);
+      return await this.getFileStats(filePath, true);
     }
   }
 
-  async getFileIndexInfo(): Promise<FilePathStats | undefined> {
+  private async getFileIndexInfo(): Promise<FilePathStats | undefined> {
     if (!this.options.fileIndex) return;
 
     const filePath = this.getFilePath();
@@ -93,22 +102,54 @@ export class DirectoryMiddleware extends BaseMiddleware {
         ? this.options.fileIndex
         : "index.html"
     );
-    return await this.createFileStats(indexFilePath);
+    return await this.getFileStats(indexFilePath);
   }
 
-  async getFile404Info(): Promise<FilePathStats | undefined> {
+  private async getFile404Info(): Promise<
+    (FilePathStats & { error?: string }) | undefined
+  > {
     if (!this.options.file404) return;
 
-    const filePath = path.resolve(
-      this.options.dir,
-      this.options.file404 == true
-        ? "404.html"
-        : (this.options.file404 as string)
-    );
-    return await this.createFileStats(filePath);
+    if (this.options.file404 == true) {
+      const filePath = path.resolve(this.options.dir, "404.html");
+      if (fs.existsSync(filePath)) {
+        return await this.getFileStats(filePath);
+      } else {
+        return await this.get404Stats();
+      }
+    } else {
+      const filePath = path.resolve(this.options.dir, this.options.file404);
+      return await this.getFileStats(filePath);
+    }
   }
 
-  getFilePath(): string | undefined {
+  private async getFile405Info(): Promise<
+    (FilePathStats & { error?: string }) | undefined
+  > {
+    if (!this.options.file405) return;
+
+    const fileInfo = await this.getFileInfo();
+    if (
+      (!fileInfo || (!this.options.listDir && fileInfo.stats.isDirectory())) &&
+      !(await this.getFileIndexInfo())
+    ) {
+      return;
+    }
+
+    if (this.options.file405 == true) {
+      const filePath = path.resolve(this.options.dir, "405.html");
+      if (fs.existsSync(filePath)) {
+        return await this.getFileStats(filePath);
+      } else {
+        return await this.get405Stats();
+      }
+    } else {
+      const filePath = path.resolve(this.options.dir, this.options.file405);
+      return await this.getFileStats(filePath);
+    }
+  }
+
+  private getFilePath(): string | undefined {
     if (this.prefix && !this.ctx.req.path.startsWith(this.prefix)) {
       return;
     }
@@ -122,13 +163,65 @@ export class DirectoryMiddleware extends BaseMiddleware {
     return path.resolve(this.options.dir, reqPath);
   }
 
-  async createFileStats(filePath: string): Promise<FilePathStats | undefined> {
-    const stats = await this.getFileStats(filePath);
-    if (!!stats?.isFile()) {
-      return {
-        stats,
-        path: filePath,
-      };
+  private async createDirHtml(dir: string, tempPath: string) {
+    const html = await fs.promises.readFile(tempPath, "utf-8");
+
+    return html
+      .replace("{{DIR_PATH}}", this.getRelativeDir(dir) + path.sep)
+      .replace("{{DIR_PATHS}}", this.getDirPaths(dir))
+      .replace("{{DIR_FILES}}", await this.getDirFiles(dir));
+  }
+
+  private getDirPaths(dir: string) {
+    return this.getRelativeDir(dir)
+      .split(path.sep)
+      .map((item, index, parts) => {
+        const dirPath = [...parts].splice(0, index + 1).join("/");
+        const dirUrl = this.getRelativeDir(dirPath).replace("\\", "/");
+        return {
+          name: item,
+          path: dirUrl,
+        };
+      })
+      .map((item) => `<a href="/${item.path}">${item.name}${path.sep}</a>`)
+      .join("");
+  }
+
+  private getRelativeDir(dir: string) {
+    return path.relative(path.join(process.cwd(), this.options.dir), dir);
+  }
+
+  private async getDirFiles(dir: string) {
+    const relativeDir = this.getRelativeDir(dir);
+    const files = await fs.promises.readdir(dir);
+    if (relativeDir) {
+      files.splice(0, 0, "..");
     }
+
+    return files
+      .filter((item) => !this.isIgnore(path.join(dir, item)))
+      .sort((left, right) => {
+        const isLeftDir = fs.statSync(path.join(dir, left)).isDirectory();
+        const isRightDir = fs.statSync(path.join(dir, right)).isDirectory();
+        if (isLeftDir > isRightDir) {
+          return -1;
+        } else if (isLeftDir < isRightDir) {
+          return 1;
+        } else {
+          return 0;
+        }
+      })
+      .map((file) => {
+        const ext = path.extname(file).replace(/^.+/, "");
+        const name = path.basename(file);
+        const relative = path.join(relativeDir, file).replace("\\", "/");
+        const isDir = fs.statSync(path.join(dir, file)).isDirectory();
+        const type = isDir ? "folder" : "file";
+
+        return `<li>
+      <a href="/${relative}" title="${file}" class="${type} ${ext}">${name}</a>
+    </li>`;
+      })
+      .join("\n");
   }
 }

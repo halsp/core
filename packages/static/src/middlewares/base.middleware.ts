@@ -1,9 +1,12 @@
 import { Middleware } from "@ipare/core";
 import { HttpMethods } from "@ipare/methods";
-import { FILE_404_BAG, FILE_BAG } from "../constant";
+import { FILE_ERROR_STATUS_BAG, FILE_BAG, DIR_RESULT_BAG } from "../constant";
 import { FileOptions, DirectoryOptions } from "../options";
 import * as fs from "fs";
 import * as mime from "mime";
+import path from "path";
+
+export type FilePathStats = { path: string; stats: fs.Stats };
 
 export abstract class BaseMiddleware extends Middleware {
   readonly options!: FileOptions | DirectoryOptions;
@@ -28,31 +31,90 @@ export abstract class BaseMiddleware extends Middleware {
     );
   }
 
-  protected setMethodNotAllowed() {
-    this.methodNotAllowed().set("Allow", this.allowMethods);
-  }
-
-  protected setFileResult(filePath: string, stats: fs.Stats, is404 = false) {
-    const stream = fs.createReadStream(filePath, this.options.encoding);
+  protected async setFileResult(
+    filePath: string,
+    stats: fs.Stats,
+    args: {
+      status?: number;
+      dirHtml?: string;
+      error?: string;
+    } = {}
+  ) {
     const mimeType = mime.getType(filePath) || "*/*";
     this.ctx.res
-      .setBody(stream)
-      .setStatus(is404 ? 404 : 200)
+      .setStatus(args.status || 200)
       .set("content-type", mimeType)
       .set("accept-ranges", "bytes")
       .set("last-modified", stats.mtime.toUTCString());
 
     this.ctx.bag(FILE_BAG, filePath);
-    if (is404) {
-      this.ctx.bag(FILE_404_BAG, true);
+    if (!args.status || args.status == 200) {
+      if (args.dirHtml) {
+        this.ctx.res.setBody(args.dirHtml);
+        this.ctx.bag(DIR_RESULT_BAG, true);
+      } else {
+        const stream = fs.createReadStream(filePath, this.options.encoding);
+        this.ctx.res.setBody(stream);
+      }
+    } else {
+      if (args.error) {
+        const html = await this.createErrorHtml(
+          args.status,
+          args.error,
+          filePath
+        );
+        this.ctx.res.setBody(html);
+      } else {
+        const stream = fs.createReadStream(filePath, this.options.encoding);
+        this.ctx.res.setBody(stream);
+      }
+      this.ctx.bag(FILE_ERROR_STATUS_BAG, args.status);
     }
   }
 
+  private async createErrorHtml(
+    status: number,
+    message: string,
+    tempPath: string
+  ) {
+    const html = await fs.promises.readFile(tempPath, "utf-8");
+    return html
+      .replace("{{ERROR_MESSAGE}}", message)
+      .replace("{{ERROR_STATUS}}", status.toString());
+  }
+
   protected async getFileStats(
-    filePath: string
-  ): Promise<fs.Stats | undefined> {
-    if (fs.existsSync(filePath)) {
-      return await fs.promises.stat(filePath);
+    filePath: string,
+    allowDir = false
+  ): Promise<FilePathStats | undefined> {
+    if (!fs.existsSync(filePath)) {
+      return;
     }
+    const stats = await fs.promises.stat(filePath);
+    if (allowDir || stats.isFile()) {
+      return {
+        stats,
+        path: filePath,
+      };
+    }
+  }
+
+  private async getErrorStats(
+    error: string
+  ): Promise<(FilePathStats & { error?: string }) | undefined> {
+    const filePath = path.join(__dirname, "../../html/error.html");
+    const stats = await this.getFileStats(filePath);
+    return {
+      ...(stats as FilePathStats),
+      error,
+    };
+  }
+
+  protected async get404Stats() {
+    return await this.getErrorStats("The requested path could not be found");
+  }
+
+  protected async get405Stats() {
+    return await this.getErrorStats("Method not allowed");
   }
 }
