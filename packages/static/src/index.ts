@@ -1,6 +1,9 @@
 import { HttpStartup } from "@ipare/http";
 import { FileMiddleware, DirectoryMiddleware } from "./middlewares";
+import { MatchMiddleware } from "./middlewares/match.middleware";
+import { MethodMiddleware } from "./middlewares/method.middleware";
 import { Status404Middleware } from "./middlewares/status404.middleware";
+import { Status405Middleware } from "./middlewares/status405.middleware";
 import { FileOptions, DirectoryOptions } from "./options";
 
 export { FileOptions, DirectoryOptions };
@@ -19,6 +22,11 @@ HttpStartup.prototype.useStatic = function (
     dir: "static",
   }
 ): HttpStartup {
+  this.add(() => new MethodMiddleware(options));
+  this.add(() => new MatchMiddleware(options));
+  if (options.file405) {
+    this.add(() => new Status405Middleware(options));
+  }
   if (options.hasOwnProperty("file")) {
     this.add(() => new FileMiddleware(options as FileOptions));
   } else {

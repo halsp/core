@@ -1,35 +1,13 @@
 import { Middleware } from "@ipare/core";
-import { HttpMethods } from "@ipare/methods";
 import { FILE_ERROR_STATUS_BAG, FILE_BAG, DIR_RESULT_BAG } from "../constant";
 import { FileOptions, DirectoryOptions } from "../options";
 import * as fs from "fs";
 import * as mime from "mime";
 import path from "path";
-
-export type FilePathStats = { path: string; stats: fs.Stats };
+import { MatchResult } from "./match.middleware";
 
 export abstract class BaseMiddleware extends Middleware {
   readonly options!: FileOptions | DirectoryOptions;
-
-  protected get allowMethods() {
-    const methods: string[] = [];
-    if (!this.options.method?.length) {
-      methods.push(HttpMethods.get, HttpMethods.head);
-    } else if (Array.isArray(this.options.method)) {
-      methods.push(...this.options.method);
-    } else {
-      methods.push(this.options.method);
-    }
-    return methods.map((m) => m.toUpperCase());
-  }
-
-  protected get isMethodValid(): boolean {
-    const allowMethods = this.allowMethods;
-    return (
-      allowMethods.includes(HttpMethods.any) ||
-      allowMethods.includes(this.ctx.req.method)
-    );
-  }
 
   protected async setFileResult(
     filePath: string,
@@ -83,34 +61,15 @@ export abstract class BaseMiddleware extends Middleware {
       .replace("{{ERROR_STATUS}}", status.toString());
   }
 
-  protected async getFileStats(
-    filePath: string,
-    allowDir = false
-  ): Promise<FilePathStats | undefined> {
-    if (!fs.existsSync(filePath)) {
-      return;
-    }
-    const stats = await fs.promises.stat(filePath);
-    if (allowDir || stats.isFile()) {
-      return {
-        stats,
-        path: filePath,
-      };
-    }
-  }
-
   protected async getErrorStats(
     error: string
-  ): Promise<FilePathStats & { error?: string }> {
+  ): Promise<MatchResult & { error?: string }> {
     const filePath = path.join(__dirname, "../../html/error.html");
-    const stats = await this.getFileStats(filePath);
+    const stats = await fs.promises.stat(filePath);
     return {
-      ...(stats as FilePathStats),
+      stats,
+      filePath,
       error,
     };
-  }
-
-  protected async get405Stats() {
-    return await this.getErrorStats("Method not allowed");
   }
 }

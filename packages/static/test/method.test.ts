@@ -16,7 +16,7 @@ describe("method", () => {
     expect(result.status).toBe(200);
   });
 
-  it("should be 404 when method is POST", async () => {
+  it("should be 404 when method is POST and file405 is undefined", async () => {
     const result = await new TestHttpStartup()
       .setContext(new Request().setMethod(HttpMethods.post))
       .useStatic({
@@ -26,6 +26,19 @@ describe("method", () => {
       })
       .run();
     expect(result.status).toBe(404);
+  });
+
+  it("should be 200 and ignore file405 when path exist", async () => {
+    const result = await new TestHttpStartup()
+      .setContext(new Request().setMethod(HttpMethods.get))
+      .useStatic({
+        dir: "test/static",
+        fileIndex: true,
+        method: HttpMethods.get,
+        file405: true,
+      })
+      .run();
+    expect(result.status).toBe(200);
   });
 
   it("should return default 405.html when method is POST and use405 is true", async () => {
@@ -168,6 +181,19 @@ describe("method", () => {
     }
   });
 
+  it("should be 405 when file is not exist and generic405 is true", async () => {
+    const result = await new TestHttpStartup()
+      .setContext(new Request().setMethod(HttpMethods.post))
+      .useStatic({
+        dir: "test/static",
+        method: HttpMethods.get,
+        file405: true,
+        generic405: true,
+      })
+      .run();
+    expect(result.status).toBe(405);
+  });
+
   it("should match with custom methods", async () => {
     const result = await new TestHttpStartup()
       .setContext(new Request().setMethod("PUT"))
@@ -209,7 +235,7 @@ describe("method", () => {
       .setContext(new Request().setMethod("put").setPath("ind"))
       .useStatic({
         file: "test/static/index.html",
-        reqPath: "ind",
+        reqPath: ["ind"],
         method: ["PUT"],
       })
       .run();

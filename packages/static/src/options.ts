@@ -3,17 +3,18 @@ interface Options extends Object {
   method?: string | string[];
   file404?: string | true;
   file405?: string | true;
+  generic405?: boolean;
 }
 
 export interface DirectoryOptions extends Options {
   dir: string;
   prefix?: string;
-  fileIndex?: string | true;
   exclude?: string | string[];
   listDir?: boolean;
+  fileIndex?: string | true;
 }
 
 export interface FileOptions extends Options {
   file: string;
-  reqPath?: string;
+  reqPath?: string | string[];
 }

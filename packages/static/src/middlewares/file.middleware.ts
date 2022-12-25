@@ -1,59 +1,28 @@
+import { IS_METHOD_VALID_BAG, MATCH_RESULT_BAG } from "../constant";
 import { FileOptions } from "../options";
-import { BaseMiddleware, FilePathStats } from "./base.middleware";
-import { normalizePath } from "@ipare/core";
-import path from "path";
+import { BaseMiddleware } from "./base.middleware";
+import { MatchResult } from "./match.middleware";
 
 export class FileMiddleware extends BaseMiddleware {
   constructor(readonly options: FileOptions) {
     super();
   }
 
+  private get matchResult() {
+    return this.ctx.bag<MatchResult | undefined>(MATCH_RESULT_BAG);
+  }
+  private get isMethodValid() {
+    return this.ctx.bag<boolean>(IS_METHOD_VALID_BAG);
+  }
+
   async invoke(): Promise<void> {
-    if (!this.isMethodValid) {
-      if (await this.getFileInfo()) {
-        const file405Info = await this.getFile405Info();
-        if (file405Info) {
-          return await this.setFileResult(file405Info.path, file405Info.stats, {
-            status: 405,
-            error: file405Info.error,
-          });
-        }
-      }
+    if (!this.matchResult || !this.isMethodValid) {
       return await this.next();
     }
 
-    const fileInfo = await this.getFileInfo();
-    if (fileInfo) {
-      return await this.setFileResult(fileInfo.path, fileInfo.stats);
-    }
-
-    await this.next();
-  }
-
-  private async getFileInfo(): Promise<FilePathStats | undefined> {
-    if (
-      normalizePath(this.ctx.req.path) !=
-      normalizePath(this.options.reqPath ?? this.options.file)
-    ) {
-      return;
-    }
-
-    const fileInfo = await this.getFileStats(this.options.file);
-    if (fileInfo?.stats?.isFile()) {
-      return fileInfo;
-    }
-  }
-
-  private async getFile405Info(): Promise<
-    (FilePathStats & { error?: string }) | undefined
-  > {
-    if (!this.options.file405) return;
-
-    if (this.options.file405 == true) {
-      return await this.get405Stats();
-    } else {
-      const filePath = path.resolve(this.options.file405);
-      return await this.getFileStats(filePath);
-    }
+    return await this.setFileResult(
+      this.matchResult.filePath,
+      this.matchResult.stats
+    );
   }
 }

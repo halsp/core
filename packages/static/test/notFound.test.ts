@@ -6,19 +6,19 @@ import { FILE_ERROR_STATUS_BAG, FILE_BAG } from "../src/constant";
 import { readStream } from "./utils";
 
 describe("not found", () => {
-  it("should set status = 404 when then path is not exist", async () => {
-    const result = await new TestHttpStartup()
-      .setContext(new Request().setMethod("get").setPath("not-exist"))
-      .use(async (ctx, next) => {
-        await next();
-      })
-      .useStatic({
-        dir: "test/static",
-        encoding: "utf-8",
-      })
-      .run();
-    expect(result.status).toBe(404);
-  });
+  // it("should set status = 404 when then path is not exist", async () => {
+  //   const result = await new TestHttpStartup()
+  //     .setContext(new Request().setMethod("get").setPath("not-exist"))
+  //     .use(async (ctx, next) => {
+  //       await next();
+  //     })
+  //     .useStatic({
+  //       dir: "test/static",
+  //       encoding: "utf-8",
+  //     })
+  //     .run();
+  //   expect(result.status).toBe(404);
+  // });
 
   it("should return 404 page when file404 = true", async () => {
     {

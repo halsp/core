@@ -1,7 +1,8 @@
 import * as path from "path";
 import { DirectoryOptions, FileOptions } from "../options";
-import { BaseMiddleware, FilePathStats } from "./base.middleware";
+import { BaseMiddleware } from "./base.middleware";
 import * as fs from "fs";
+import { MatchResult } from "./match.middleware";
 
 export class Status404Middleware extends BaseMiddleware {
   constructor(readonly options: DirectoryOptions | FileOptions) {
@@ -10,7 +11,7 @@ export class Status404Middleware extends BaseMiddleware {
 
   async invoke(): Promise<void> {
     const file404Info = await this.getFile404Info();
-    await this.setFileResult(file404Info.path, file404Info.stats, {
+    await this.setFileResult(file404Info.filePath, file404Info.stats, {
       status: 404,
       error: file404Info.error,
     });
@@ -20,16 +21,16 @@ export class Status404Middleware extends BaseMiddleware {
     return this.options.file404 as string | true;
   }
 
-  private async getFile404Info(): Promise<FilePathStats & { error?: string }> {
+  private async getFile404Info(): Promise<MatchResult & { error?: string }> {
     async function getFileInfo(
       filePath: string
-    ): Promise<FilePathStats | undefined> {
+    ): Promise<MatchResult | undefined> {
       if (fs.existsSync(filePath)) {
         const stats = await fs.promises.stat(filePath);
         if (stats.isFile()) {
           return {
             stats,
-            path: filePath,
+            filePath,
           };
         }
       }
@@ -53,10 +54,6 @@ export class Status404Middleware extends BaseMiddleware {
       }
     }
 
-    return await this.get404Error();
-  }
-
-  private async get404Error() {
     return await this.getErrorStats("The requested path could not be found");
   }
 }
