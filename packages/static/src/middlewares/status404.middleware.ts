@@ -17,8 +17,8 @@ export class Status404Middleware extends BaseMiddleware {
     });
   }
 
-  private get file404() {
-    return this.options.file404 as string | true;
+  private get use404() {
+    return this.options.use404 as string | true;
   }
 
   private async getFile404Info(): Promise<MatchResult & { error?: string }> {
@@ -35,7 +35,7 @@ export class Status404Middleware extends BaseMiddleware {
         }
       }
     }
-    if (this.file404 == true) {
+    if (this.use404 == true) {
       if ("dir" in this.options) {
         const filePath = path.resolve(this.options.dir, "404.html");
         const fileInfo = await getFileInfo(filePath);
@@ -46,7 +46,7 @@ export class Status404Middleware extends BaseMiddleware {
     } else {
       const filePath = path.resolve(
         this.options["dir"] ?? process.cwd(),
-        this.file404
+        this.use404
       );
       const fileInfo = await getFileInfo(filePath);
       if (fileInfo) {

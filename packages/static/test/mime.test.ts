@@ -22,7 +22,7 @@ test("unknown mime", async () => {
       .useStatic({
         dir: "test/static",
         encoding: "utf-8",
-        file404: "index.un",
+        use404: "index.un",
       })
       .run();
     expect(result.status).toBe(404);

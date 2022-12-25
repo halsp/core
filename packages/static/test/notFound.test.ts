@@ -6,21 +6,7 @@ import { FILE_ERROR_STATUS_BAG, FILE_BAG } from "../src/constant";
 import { readStream } from "./utils";
 
 describe("not found", () => {
-  // it("should set status = 404 when then path is not exist", async () => {
-  //   const result = await new TestHttpStartup()
-  //     .setContext(new Request().setMethod("get").setPath("not-exist"))
-  //     .use(async (ctx, next) => {
-  //       await next();
-  //     })
-  //     .useStatic({
-  //       dir: "test/static",
-  //       encoding: "utf-8",
-  //     })
-  //     .run();
-  //   expect(result.status).toBe(404);
-  // });
-
-  it("should return 404 page when file404 = true", async () => {
+  it("should return 404 page when use404 = true", async () => {
     {
       const result = await new TestHttpStartup()
         .setContext(new Request().setMethod("get").setPath("not-exist"))
@@ -31,7 +17,7 @@ describe("not found", () => {
         })
         .useStatic({
           dir: "test/static",
-          file404: true,
+          use404: true,
         })
         .run();
       expect(result.status).toBe(404);
@@ -43,7 +29,7 @@ describe("not found", () => {
         .setContext(new Request().setMethod("get").setPath("not-exist"))
         .useStatic({
           file: "test/static/index.html",
-          file404: true,
+          use404: true,
         })
         .run();
       expect(result.status).toBe(404);
@@ -51,13 +37,13 @@ describe("not found", () => {
     }
   });
 
-  it("should return 404 page when file404 = <file path>", async () => {
+  it("should return 404 page when use404 = <file path>", async () => {
     {
       const result = await new TestHttpStartup()
         .setContext(new Request().setMethod("get").setPath("not-exist"))
         .useStatic({
           dir: "test/static",
-          file404: "404.html",
+          use404: "404.html",
         })
         .run();
       expect(result.status).toBe(404);
@@ -69,7 +55,7 @@ describe("not found", () => {
         .setContext(new Request().setMethod("get").setPath("not-exist"))
         .useStatic({
           file: "test/static/index.html",
-          file404: "test/static/404.html",
+          use404: "test/static/404.html",
         })
         .run();
       expect(result.status).toBe(404);
@@ -83,7 +69,7 @@ describe("not found", () => {
       .useStatic({
         dir: "test/static",
         encoding: "utf-8",
-        file404: "4044.html",
+        use404: "4044.html",
       })
       .run();
     expect(result.status).toBe(404);
@@ -96,7 +82,7 @@ describe("not found", () => {
       .useStatic({
         dir: "test/static/dir",
         encoding: "utf-8",
-        file404: true,
+        use404: true,
       })
       .run();
     expect(result.status).toBe(404);
@@ -109,7 +95,7 @@ describe("not found", () => {
       .useStatic({
         dir: "test/static/not-exist",
         listDir: true,
-        file405: true,
+        use405: true,
       })
       .run();
 

@@ -1,7 +1,11 @@
 import * as path from "path";
 import { DirectoryOptions, FileOptions } from "../options";
-import { BaseMiddleware } from "./base.middleware";
-import { isUndefined, normalizePath } from "@ipare/core";
+import {
+  ComposeMiddleware,
+  isUndefined,
+  Middleware,
+  normalizePath,
+} from "@ipare/core";
 import * as fs from "fs";
 import { MATCH_RESULT_BAG, IS_METHOD_VALID_BAG } from "../constant";
 import { isIgnore } from "./utils";
@@ -11,8 +15,8 @@ export type MatchResult = {
   stats: fs.Stats;
 };
 
-export class MatchMiddleware extends BaseMiddleware {
-  constructor(readonly options: DirectoryOptions | FileOptions) {
+abstract class BaseMatchMiddleware extends Middleware {
+  constructor(readonly options: FileOptions | DirectoryOptions) {
     super();
   }
 
@@ -20,68 +24,85 @@ export class MatchMiddleware extends BaseMiddleware {
     return this.ctx.bag<boolean>(IS_METHOD_VALID_BAG);
   }
 
-  private getOptions<T extends DirectoryOptions | FileOptions>() {
-    return this.options as T;
+  protected get isEnable() {
+    return !this.options.strictMethod || this.isMethodValid;
+  }
+}
+
+class FileMatchMiddleware extends BaseMatchMiddleware {
+  constructor(readonly options: FileOptions) {
+    super(options);
   }
 
   async invoke(): Promise<void> {
-    if (this.options.generic405 && !this.isMethodValid) {
-      return await this.next();
+    if (this.isEnable) {
+      await this.matchFile();
     }
 
-    if ("file" in this.options) {
-      await this.matchFile();
-    } else {
-      await this.matchDirectory();
-    }
     await this.next();
   }
 
   private async matchFile() {
-    const options = this.getOptions<FileOptions>();
-    if (!fs.existsSync(path.resolve(options.file))) {
+    if (!fs.existsSync(path.resolve(this.options.file))) {
       return;
     }
 
-    const reqPath: string[] = [];
-    if (!isUndefined(options.reqPath)) {
-      if (Array.isArray(options.reqPath)) {
-        reqPath.push(...options.reqPath);
-      } else {
-        reqPath.push(options.reqPath);
-      }
-    } else {
-      reqPath.push(options.file);
-    }
-
-    const isExist = reqPath.some(
-      (item) => this.ctx.req.path == normalizePath(item)
-    );
-    if (!isExist) {
+    if (!this.isPathEqual) {
       return;
     }
 
-    const stats = await fs.promises.stat(options.file);
+    const stats = await fs.promises.stat(this.options.file);
     if (!stats.isFile()) {
       return;
     }
     this.ctx.bag<MatchResult>(MATCH_RESULT_BAG, {
-      filePath: options.file,
+      filePath: this.options.file,
       stats: stats,
     });
   }
 
-  private async matchDirectory() {
-    const options = this.getOptions<DirectoryOptions>();
+  private get isPathEqual() {
+    return this.reqPaths.some((rp) => this.ctx.req.path == normalizePath(rp));
+  }
 
+  private get reqPaths() {
+    const reqPaths: string[] = [];
+    if (!isUndefined(this.options.reqPath)) {
+      if (Array.isArray(this.options.reqPath)) {
+        reqPaths.push(...this.options.reqPath);
+      } else {
+        reqPaths.push(this.options.reqPath);
+      }
+    } else {
+      reqPaths.push(this.options.file);
+    }
+    return reqPaths;
+  }
+}
+
+class DirectoryMatchMiddleware extends BaseMatchMiddleware {
+  constructor(readonly options: DirectoryOptions) {
+    super(options);
+  }
+
+  async invoke(): Promise<void> {
+    if (this.isEnable) {
+      await this.matchDirectory();
+    }
+
+    await this.next();
+  }
+
+  private async matchDirectory() {
+    const options = this.options;
     const filePath = this.getDirFilePath();
     if (!filePath) return;
 
     const paths = [filePath];
-    if (options.fileIndex) {
+    if (options.useIndex) {
       const indexFilePath = path.resolve(
         filePath,
-        typeof options.fileIndex == "string" ? options.fileIndex : "index.html"
+        typeof options.useIndex == "string" ? options.useIndex : "index.html"
       );
       paths.push(indexFilePath);
     }
@@ -110,8 +131,7 @@ export class MatchMiddleware extends BaseMiddleware {
       return;
     }
 
-    const options = this.getOptions<DirectoryOptions>();
-    if (isIgnore(filePath, options)) {
+    if (isIgnore(filePath, this.options)) {
       return;
     }
 
@@ -123,8 +143,7 @@ export class MatchMiddleware extends BaseMiddleware {
   }
 
   private getDirFilePath(): string | undefined {
-    const options = this.getOptions<DirectoryOptions>();
-    const prefix = normalizePath(options.prefix);
+    const prefix = normalizePath(this.options.prefix);
 
     if (prefix && !this.ctx.req.path.startsWith(prefix)) {
       return;
@@ -136,6 +155,17 @@ export class MatchMiddleware extends BaseMiddleware {
     }
     reqPath = normalizePath(reqPath);
 
-    return path.resolve(options.dir, reqPath);
+    return path.resolve(this.options.dir, reqPath);
+  }
+}
+
+export class MatchMiddleware extends ComposeMiddleware {
+  constructor(options: FileOptions | DirectoryOptions) {
+    super();
+    if ("file" in options) {
+      this.add(() => new FileMatchMiddleware(options));
+    } else {
+      this.add(() => new DirectoryMatchMiddleware(options));
+    }
   }
 }

@@ -16,15 +16,15 @@ export class Status405Middleware extends BaseMiddleware {
   private get isMethodValid() {
     return this.ctx.bag<boolean>(IS_METHOD_VALID_BAG);
   }
-  private get file405() {
-    return this.options.file405 as string | true;
+  private get use405() {
+    return this.options.use405 as string | true;
   }
 
   async invoke(): Promise<void> {
     if (this.isMethodValid) {
       return await this.next();
     }
-    if (!this.matchResult && !this.options.generic405) {
+    if (!this.matchResult && !this.options.strictMethod) {
       return await this.next();
     }
     if (
@@ -43,7 +43,7 @@ export class Status405Middleware extends BaseMiddleware {
   }
 
   private async getFile405Info(): Promise<MatchResult & { error?: string }> {
-    if (this.file405 == true) {
+    if (this.use405 == true) {
       if ("dir" in this.options) {
         const filePath = path.resolve(this.options.dir, "405.html");
         if (fs.existsSync(filePath)) {
@@ -56,7 +56,7 @@ export class Status405Middleware extends BaseMiddleware {
     } else {
       const filePath = path.resolve(
         this.options["dir"] ?? process.cwd(),
-        this.file405
+        this.use405
       );
       if (fs.existsSync(filePath)) {
         return {

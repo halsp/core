@@ -1,9 +1,9 @@
 interface Options extends Object {
   encoding?: BufferEncoding;
   method?: string | string[];
-  file404?: string | true;
-  file405?: string | true;
-  generic405?: boolean;
+  strictMethod?: boolean;
+  use404?: string | true;
+  use405?: string | true;
 }
 
 export interface DirectoryOptions extends Options {
@@ -11,7 +11,7 @@ export interface DirectoryOptions extends Options {
   prefix?: string;
   exclude?: string | string[];
   listDir?: boolean;
-  fileIndex?: string | true;
+  useIndex?: string | true;
 }
 
 export interface FileOptions extends Options {

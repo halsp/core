@@ -42,14 +42,14 @@ describe("prefix", () => {
     expect(result.status).toBe(404);
   });
 
-  it("prefix not found with fileIndex = true", async () => {
+  it("prefix not found with useIndex = true", async () => {
     const result = await new TestHttpStartup()
       .setContext(new Request().setMethod("get").setPath("/static/index.un/"))
       .useStatic({
         dir: "test/static",
         encoding: "utf-8",
         prefix: "static1",
-        fileIndex: true,
+        useIndex: true,
       })
       .run();
     expect(result.status).toBe(404);

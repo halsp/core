@@ -32,7 +32,7 @@ describe("index.html", () => {
     expect(await readStream(result.body)).toBe("TEST");
   });
 
-  it("should find index.html when options.fileIndex is true", async () => {
+  it("should find index.html when options.useIndex is true", async () => {
     const result = await new TestHttpStartup()
       .setContext(new Request().setMethod("get"))
       .use(async (ctx, next) => {
@@ -41,15 +41,14 @@ describe("index.html", () => {
       })
       .useStatic({
         dir: "test/static",
-        encoding: "utf-8",
-        fileIndex: true,
+        useIndex: true,
       })
       .run();
     expect(result.status).toBe(200);
     expect(await readStream(result.body)).toBe("TEST");
   });
 
-  it("should find custom index file when options.fileIndex is string", async () => {
+  it("should find custom index file when options.useIndex is string", async () => {
     const result = await new TestHttpStartup()
       .setContext(new Request().setMethod("get"))
       .use(async (ctx, next) => {
@@ -59,7 +58,7 @@ describe("index.html", () => {
       .useStatic({
         dir: "test/static",
         encoding: "utf-8",
-        fileIndex: "index.html",
+        useIndex: "index.html",
       })
       .run();
     expect(result.status).toBe(200);

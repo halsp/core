@@ -10,32 +10,32 @@ describe("method", () => {
       .setContext(new Request().setMethod(HttpMethods.get))
       .useStatic({
         dir: "test/static",
-        fileIndex: true,
+        useIndex: true,
       })
       .run();
     expect(result.status).toBe(200);
   });
 
-  it("should be 404 when method is POST and file405 is undefined", async () => {
+  it("should be 404 when method is POST and use405 is undefined", async () => {
     const result = await new TestHttpStartup()
       .setContext(new Request().setMethod(HttpMethods.post))
       .useStatic({
         dir: "test/static",
-        fileIndex: true,
+        useIndex: true,
         method: HttpMethods.get,
       })
       .run();
     expect(result.status).toBe(404);
   });
 
-  it("should be 200 and ignore file405 when path exist", async () => {
+  it("should be 200 and ignore use405 when path exist", async () => {
     const result = await new TestHttpStartup()
       .setContext(new Request().setMethod(HttpMethods.get))
       .useStatic({
         dir: "test/static",
-        fileIndex: true,
+        useIndex: true,
         method: HttpMethods.get,
-        file405: true,
+        use405: true,
       })
       .run();
     expect(result.status).toBe(200);
@@ -50,7 +50,7 @@ describe("method", () => {
         .useStatic({
           dir: "test/static/dir",
           method: HttpMethods.get,
-          file405: true,
+          use405: true,
         })
         .run();
       expect(result.status).toBe(405);
@@ -64,7 +64,7 @@ describe("method", () => {
           file: "test/static/index.html",
           reqPath: "index",
           method: HttpMethods.get,
-          file405: true,
+          use405: true,
         })
         .run();
       expect(result.status).toBe(405);
@@ -92,7 +92,7 @@ describe("method", () => {
       .useStatic({
         dir: "test/static",
         method: HttpMethods.get,
-        file405: true,
+        use405: true,
       })
       .run();
     expect(result.status).toBe(405);
@@ -108,7 +108,7 @@ describe("method", () => {
         .useStatic({
           dir: "test/static/dir",
           method: HttpMethods.get,
-          file405: "../405.html",
+          use405: "../405.html",
         })
         .run();
       expect(result.status).toBe(405);
@@ -122,7 +122,7 @@ describe("method", () => {
           file: "test/static/index.html",
           reqPath: "index",
           method: HttpMethods.get,
-          file405: "test/static/405.html",
+          use405: "test/static/405.html",
         })
         .run();
       expect(result.status).toBe(405);
@@ -130,14 +130,14 @@ describe("method", () => {
     }
   });
 
-  it("should be 405 when method is POST and use405 is true with fileIndex = true", async () => {
+  it("should be 405 when method is POST and use405 is true with useIndex = true", async () => {
     const result = await new TestHttpStartup()
       .setContext(new Request().setMethod(HttpMethods.post))
       .useStatic({
         dir: "test/static",
         method: HttpMethods.get,
-        file405: true,
-        fileIndex: true,
+        use405: true,
+        useIndex: true,
       })
       .run();
     expect(result.status).toBe(405);
@@ -150,7 +150,7 @@ describe("method", () => {
         file: "test/static/index.html",
         reqPath: "ind",
         method: HttpMethods.get,
-        file405: true,
+        use405: true,
       })
       .run();
     expect(result.status).toBe(405);
@@ -163,7 +163,7 @@ describe("method", () => {
         .useStatic({
           dir: "test/static",
           method: HttpMethods.get,
-          file405: true,
+          use405: true,
         })
         .run();
       expect(result.status).toBe(404);
@@ -174,21 +174,21 @@ describe("method", () => {
         .useStatic({
           file: "test/static/not-exist",
           method: HttpMethods.get,
-          file405: true,
+          use405: true,
         })
         .run();
       expect(result.status).toBe(404);
     }
   });
 
-  it("should be 405 when file is not exist and generic405 is true", async () => {
+  it("should be 405 when file is not exist and strictMethod is true", async () => {
     const result = await new TestHttpStartup()
       .setContext(new Request().setMethod(HttpMethods.post))
       .useStatic({
         dir: "test/static",
         method: HttpMethods.get,
-        file405: true,
-        generic405: true,
+        use405: true,
+        strictMethod: true,
       })
       .run();
     expect(result.status).toBe(405);
@@ -200,7 +200,7 @@ describe("method", () => {
       .useStatic({
         dir: "test/static",
         method: "PUT",
-        fileIndex: true,
+        useIndex: true,
       })
       .run();
     expect(result.status).toBe(200);
@@ -224,7 +224,7 @@ describe("method", () => {
       .useStatic({
         dir: "test/static",
         method: ["PUT"],
-        fileIndex: true,
+        useIndex: true,
       })
       .run();
     expect(result.status).toBe(200);
@@ -248,7 +248,7 @@ describe("method", () => {
       .useStatic({
         dir: "test/static",
         method: "ANY",
-        fileIndex: true,
+        useIndex: true,
       })
       .run();
     expect(result.status).toBe(200);
