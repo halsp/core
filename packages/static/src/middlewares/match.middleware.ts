@@ -94,21 +94,11 @@ class DirectoryMatchMiddleware extends BaseMatchMiddleware {
   }
 
   private async matchDirectory() {
-    const options = this.options;
     const filePath = this.getDirFilePath();
     if (!filePath) return;
 
-    const paths = [filePath];
-    if (options.useIndex) {
-      const indexFilePath = path.resolve(
-        filePath,
-        typeof options.useIndex == "string" ? options.useIndex : "index.html"
-      );
-      paths.push(indexFilePath);
-    }
-
     let defaultFileInfo: MatchResult | undefined = undefined;
-    for (const pathItem of paths) {
+    for (const pathItem of this.getMatchPaths(filePath)) {
       const fileInfo = await this.tryGetDirFileInfo(pathItem);
       if (pathItem == filePath) {
         defaultFileInfo = fileInfo;
@@ -122,6 +112,48 @@ class DirectoryMatchMiddleware extends BaseMatchMiddleware {
     if (defaultFileInfo?.stats?.isDirectory()) {
       this.ctx.bag(MATCH_RESULT_BAG, defaultFileInfo);
     }
+  }
+
+  private getMatchPaths(filePath: string) {
+    const options = this.options;
+    const paths = [filePath];
+
+    if (options.useIndex) {
+      if (Array.isArray(options.useIndex)) {
+        options.useIndex.forEach((inx) => {
+          const indexFilePath = path.resolve(filePath, inx);
+          paths.push(indexFilePath);
+        });
+      } else if (typeof options.useIndex == "string") {
+        const indexFilePath = path.resolve(filePath, options.useIndex);
+        paths.push(indexFilePath);
+      } else {
+        const indexFilePath = path.resolve(filePath, "index.html");
+        paths.push(indexFilePath);
+      }
+      const indexFilePath = path.resolve(
+        filePath,
+        typeof options.useIndex == "string" ? options.useIndex : "index.html"
+      );
+      paths.push(indexFilePath);
+    }
+
+    if (options.useExt) {
+      if (Array.isArray(options.useExt)) {
+        options.useExt.forEach((ext) => {
+          const extFilePath = filePath + "." + ext.replace(/^\.+/, "");
+          paths.push(extFilePath);
+        });
+      } else if (typeof options.useExt == "string") {
+        const extFilePath = filePath + "." + options.useExt.replace(/^\.+/, "");
+        paths.push(extFilePath);
+      } else {
+        const extFilePath = filePath + ".html";
+        paths.push(extFilePath);
+      }
+    }
+
+    return paths;
   }
 
   private async tryGetDirFileInfo(

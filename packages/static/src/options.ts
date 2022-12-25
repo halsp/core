@@ -11,7 +11,8 @@ export interface DirectoryOptions extends Options {
   prefix?: string;
   exclude?: string | string[];
   listDir?: boolean;
-  useIndex?: string | true;
+  useIndex?: string | string[] | true;
+  useExt?: string | string[] | true;
 }
 
 export interface FileOptions extends Options {
