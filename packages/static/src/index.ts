@@ -1,5 +1,6 @@
 import { HttpStartup } from "@ipare/http";
-import { FileMiddleware, DirectoryMiddleware } from "./middlewares";
+import { DirectoryMiddleware } from "./middlewares/directory.middleware";
+import { FileMiddleware } from "./middlewares/file.middleware";
 import { MatchMiddleware } from "./middlewares/match.middleware";
 import { MethodMiddleware } from "./middlewares/method.middleware";
 import { Status404Middleware } from "./middlewares/status404.middleware";

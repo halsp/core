@@ -49,7 +49,7 @@ export async function createDirHtml(
   }
 
   function getRelativeDir(dir: string) {
-    return path.relative(path.join(process.cwd(), options.dir), dir);
+    return path.relative(path.join(options.dir), path.join(dir));
   }
 
   async function getDirFiles(dir: string) {
