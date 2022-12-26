@@ -33,27 +33,31 @@ export async function createDirHtml(
   tempPath: string,
   options: DirectoryOptions
 ) {
-  function getDirPaths(dir: string) {
-    return getRelativeDir(dir)
+  const prefix = options.prefix ?? "";
+  const getDirPaths = (dir: string) =>
+    getRelativeDir(dir, true)
       .split(path.sep)
       .map((item, index, parts) => {
         const dirPath = [...parts].splice(0, index + 1).join("/");
-        const dirUrl = getRelativeDir(dirPath).replace("\\", "/");
+        const dirUrl = path
+          .join(prefix, getRelativeDir(dirPath, false))
+          .replace(/\\/g, "/");
         return {
-          name: item,
+          name: index == 0 ? "📂" : item,
           path: dirUrl,
         };
       })
       .map((item) => `<a href="/${item.path}">${item.name}${path.sep}</a>`)
       .join("");
-  }
 
-  function getRelativeDir(dir: string) {
-    return path.relative(path.join(options.dir), path.join(dir));
-  }
+  const getRelativeDir = (dir: string, containsParent: boolean) =>
+    path.relative(
+      containsParent ? path.basename(path.dirname(options.dir)) : options.dir,
+      dir
+    );
 
   async function getDirFiles(dir: string) {
-    const relativeDir = getRelativeDir(dir);
+    const relativeDir = getRelativeDir(dir, false);
     const files = await fs.promises.readdir(dir);
     if (relativeDir) {
       files.splice(0, 0, "..");
@@ -75,13 +79,15 @@ export async function createDirHtml(
       .map((file) => {
         const ext = path.extname(file).replace(/^.+/, "");
         const name = path.basename(file);
-        const relative = path.join(relativeDir, file).replace("\\", "/");
+        const relative = path
+          .join(prefix, relativeDir, file)
+          .replace(/\\/g, "/");
         const isDir = fs.statSync(path.join(dir, file)).isDirectory();
         const type = isDir ? "folder" : "file";
 
-        return `<li>
-      <a href="/${relative}" title="${file}" class="${type} ${ext}">${name}</a>
-    </li>`;
+        return `      <li>
+        <a href="/${relative}" title="${file}" class="${type} ${ext}">${name}</a>
+      </li>`;
       })
       .join("\n");
   }
@@ -89,7 +95,7 @@ export async function createDirHtml(
   const html = await fs.promises.readFile(tempPath, "utf-8");
 
   return html
-    .replace("{{DIR_PATH}}", getRelativeDir(dir) + path.sep)
+    .replace("{{DIR_PATH}}", getRelativeDir(dir, false) + path.sep)
     .replace("{{DIR_PATHS}}", getDirPaths(dir))
     .replace("{{DIR_FILES}}", await getDirFiles(dir));
 }

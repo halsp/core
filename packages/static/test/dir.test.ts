@@ -46,9 +46,54 @@ describe("dir", () => {
 
     expect(result.status).toBe(200);
     const html = result.body as string;
+    console.log("html", html);
     expect(
       html.includes(`<title>Files within dir${path.sep}</title>`)
     ).toBeTruthy();
-    expect(html.includes(`>..</a>`)).toBeTruthy();
+    expect(
+      html.includes(
+        `<a href="/../../static">📂${path.sep}</a><a href="/../../static/dir">dir${path.sep}</a>`
+      )
+    ).toBeTruthy();
+    expect(
+      html.includes(`<a href="/." title=".." class="folder ">..</a>`)
+    ).toBeTruthy();
+    expect(
+      html.includes(
+        `<a href="/dir/index.html" title="index.html" class="file ">index.html</a>`
+      )
+    ).toBeTruthy();
+  });
+
+  it("should list dir with prefix", async () => {
+    const result = await new TestHttpStartup()
+      .setContext(
+        new Request().setMethod(HttpMethods.get).setPath("static/dir")
+      )
+      .useStatic({
+        dir: "test/static",
+        listDir: true,
+        prefix: "static",
+      })
+      .run();
+
+    expect(result.status).toBe(200);
+    const html = result.body as string;
+    expect(
+      html.includes(`<title>Files within dir${path.sep}</title>`)
+    ).toBeTruthy();
+    expect(
+      html.includes(
+        `<a href="/../static">📂${path.sep}</a><a href="/../static/dir">dir${path.sep}</a>`
+      )
+    ).toBeTruthy();
+    expect(
+      html.includes(`<a href="/static" title=".." class="folder ">..</a>`)
+    ).toBeTruthy();
+    expect(
+      html.includes(
+        `<a href="/static/dir/index.html" title="index.html" class="file ">index.html</a>`
+      )
+    ).toBeTruthy();
   });
 });
