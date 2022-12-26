@@ -6,7 +6,7 @@ describe("startup", () => {
     const startup = new NativeStartup({});
     const { server } = await startup
       .use(async (ctx) => {
-        ctx.ok({
+        ctx.res.ok({
           content: "BODY",
         });
       })
@@ -38,7 +38,7 @@ describe("write end", () => {
         await next();
       })
       .use(async (ctx) => {
-        ctx.ok("BODY");
+        ctx.res.ok("BODY");
       })
       .listen();
     const res = await request(server).get("");

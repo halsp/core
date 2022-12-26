@@ -16,14 +16,14 @@ test(`object`, async function () {
       service1.count++;
       const service2 = await parseInject(ctx, Service);
       service2.count++;
-      ctx.bag("result", {
+      ctx.set("result", {
         count1: service1.count,
         count2: service2.count,
       });
     })
     .run();
 
-  expect(ctx.bag("result")).toEqual({
+  expect(ctx.get("result")).toEqual({
     count1: 2,
     count2: 2,
   });
@@ -43,7 +43,7 @@ function runBuilderTest(type?: InjectType.Scoped | InjectType.Transient) {
         service1.count++;
         const service2 = await parseInject(ctx, BuilderService);
         service2.count++;
-        ctx.bag("result", {
+        ctx.set("result", {
           ctx: service1.ctx == service2.ctx,
           count1: service1.count,
           count2: service2.count,
@@ -52,13 +52,13 @@ function runBuilderTest(type?: InjectType.Scoped | InjectType.Transient) {
       .run();
 
     if (type == InjectType.Transient) {
-      expect(ctx.bag("result")).toEqual({
+      expect(ctx.get("result")).toEqual({
         ctx: true,
         count1: 1,
         count2: 1,
       });
     } else {
-      expect(ctx.bag("result")).toEqual({
+      expect(ctx.get("result")).toEqual({
         ctx: true,
         count1: 2,
         count2: 2,
@@ -97,7 +97,7 @@ function runPrimiseBuilderTest(type?: InjectType) {
         service1.count++;
         const service2 = await parseInject(ctx, PromiseBuilderService);
         service2.count++;
-        ctx.bag("result", {
+        ctx.set("result", {
           ctx: service1.ctx == service2.ctx,
           count1: service1.count,
           count2: service2.count,
@@ -106,13 +106,13 @@ function runPrimiseBuilderTest(type?: InjectType) {
       .run();
 
     if (type == InjectType.Transient) {
-      expect(ctx.bag("result")).toEqual({
+      expect(ctx.get("result")).toEqual({
         ctx: true,
         count1: 1,
         count2: 1,
       });
     } else {
-      expect(ctx.bag("result")).toEqual({
+      expect(ctx.get("result")).toEqual({
         ctx: true,
         count1: 2,
         count2: 2,

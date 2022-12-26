@@ -26,9 +26,9 @@ describe("koa-ipare", () => {
             ctx.res.created("created").setBody({
               b: 1,
             });
-            ctx.setHeader("h2", getIndexValue());
+            ctx.res.set("h2", getIndexValue());
             await next();
-            ctx.setHeader("h4", getIndexValue());
+            ctx.res.set("h4", getIndexValue());
           });
         })
       )

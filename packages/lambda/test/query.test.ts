@@ -3,7 +3,7 @@ import { LambdaStartup } from "../src";
 test("query", async () => {
   const res = await new LambdaStartup()
     .use(async (ctx, next) => {
-      ctx.ok(ctx.req.query);
+      ctx.res.ok(ctx.req.query);
       await next();
     })
     .run(

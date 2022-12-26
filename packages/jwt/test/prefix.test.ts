@@ -19,7 +19,7 @@ test("prefix", async function () {
       prefix: "custom",
     })
     .useJwtVerify()
-    .use((ctx) => ctx.bag("token", ctx.jwtToken))
+    .use((ctx) => ctx.set("token", ctx.jwtToken))
     .run();
-  expect(!!ctx.bag("token")).toBeTruthy();
+  expect(!!ctx.get("token")).toBeTruthy();
 });

@@ -97,30 +97,49 @@ export class Context {
   readonly #scopedBag: Dict = {};
   readonly #bag: Dict = {};
 
-  public bag<T>(key: string): T;
-  public bag<T>(key: string, value: T): this;
-  public bag<T>(key: string, type: BuilderBagType, builder: () => T): this;
-  public bag<T>(key: string, arg1?: any, arg2?: any): this | T {
-    if (!isUndefined(arg1) && !isUndefined(arg2)) {
+  public get<T>(key: string): T {
+    if (key in this.#singletonBag) {
+      return this.#getBagValue(key, this.#singletonBag[key]);
+    } else if (key in this.#scopedBag) {
+      return this.#getBagValue(key, this.#scopedBag[key]);
+    } else {
+      const result: BuilderBagItem<T> | T = this.#bag[key];
+      return this.#getBagValue(key, result);
+    }
+  }
+
+  public set<T>(key: string, value: T): this;
+  public set<T>(key: string, type: BuilderBagType, builder: () => T): this;
+  public set<T>(key: string, arg1?: any, arg2?: any): this | T {
+    if (!isUndefined(arg2)) {
       this.#bag[key] = <BuilderBagItem<T>>{
         type: arg1,
         builder: arg2,
         isBuilderBag: true,
       };
       return this;
-    } else if (!isUndefined(arg1)) {
+    } else {
       this.#bag[key] = arg1;
       return this;
-    } else {
-      if (key in this.#singletonBag) {
-        return this.#getBagValue(key, this.#singletonBag[key]);
-      }
-      if (key in this.#scopedBag) {
-        return this.#getBagValue(key, this.#scopedBag[key]);
-      }
-      const result: BuilderBagItem<T> | T = this.#bag[key];
-      return this.#getBagValue(key, result);
     }
+  }
+
+  public has(key: string): boolean {
+    return key in this.#bag;
+  }
+
+  public delete(key: string): boolean {
+    const hasKey = this.has(key);
+
+    delete this.#bag[key];
+    delete this.#singletonBag[key];
+    delete this.#scopedBag[key];
+
+    return hasKey;
+  }
+
+  public get length() {
+    return Object.keys(this.#bag).length;
   }
 
   #getBagValue<T>(key: string, result: BuilderBagItem<T> | T) {

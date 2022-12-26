@@ -52,11 +52,11 @@ export class SwaggerMiddlware extends Middleware {
         openApiBuilder,
         startup.routerOptions
       ).parse();
-      this.ctx.set("content-type", "text/json").ok(apiDoc);
+      this.ctx.res.set("content-type", "text/json").ok(apiDoc);
       return;
     } else if (extendPath == "swagger-initializer.js") {
       const js = await this.createInitializer();
-      this.ctx.set("content-type", "application/javascript").ok(js);
+      this.ctx.res.set("content-type", "application/javascript").ok(js);
       return;
     }
 

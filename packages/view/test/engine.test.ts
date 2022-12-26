@@ -65,7 +65,7 @@ describe("pub", () => {
         dir: "test/views",
       })
       .use(async (ctx) => {
-        ctx.bag(
+        ctx.set(
           "view",
           await ctx.view("pug/test", {
             name: "test pug",
@@ -74,7 +74,7 @@ describe("pub", () => {
       })
       .run();
 
-    expect(ctx.bag("view")).toBe("<p>test pug</p>");
+    expect(ctx.get("view")).toBe("<p>test pug</p>");
   });
 });
 
@@ -117,10 +117,10 @@ describe("html", () => {
         dir: "test/views",
       })
       .use(async (ctx) => {
-        ctx.bag("view", await ctx.view("html/"));
+        ctx.set("view", await ctx.view("html/"));
       })
       .run();
 
-    expect(ctx.bag("view")).toBe("html content");
+    expect(ctx.get("view")).toBe("html content");
   });
 });

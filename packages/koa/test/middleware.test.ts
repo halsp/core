@@ -18,7 +18,7 @@ test("@koa/cors", async function () {
       })
     )
     .use(async (ctx) => {
-      ctx.ok("ipare");
+      ctx.res.ok("ipare");
     })
     .run();
 

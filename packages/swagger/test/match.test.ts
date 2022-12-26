@@ -115,7 +115,7 @@ describe("match path", () => {
       .setContext(new Request().setPath("swagger/not-exist").setMethod("get"))
       .useSwagger()
       .use(async (ctx) => {
-        ctx.badRequest("ab");
+        ctx.res.badRequest("ab");
       })
       .run();
 
@@ -128,7 +128,7 @@ describe("match path", () => {
       .setContext(new Request().setPath("swagger/not-exist").setMethod("get"))
       .useSwagger()
       .use(async (ctx) => {
-        ctx.ok();
+        ctx.res.ok();
       })
       .run();
 
@@ -141,7 +141,7 @@ describe("match path", () => {
       .setContext(new Request().setPath("swagger/not-exist").setMethod("get"))
       .useSwagger()
       .use(async (ctx) => {
-        ctx.ok(123);
+        ctx.res.ok(123);
       })
       .run();
 

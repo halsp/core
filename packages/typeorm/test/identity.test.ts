@@ -10,7 +10,7 @@ class TestMiddleware extends Middleware {
   private readonly coreConnection!: TypeormConnection;
 
   async invoke(): Promise<void> {
-    this.ctx.bag("result", {
+    this.ctx.set("result", {
       app: !!this.appConnection,
       core: !!this.coreConnection,
       eq: this.appConnection == this.coreConnection,
@@ -32,7 +32,7 @@ test("identity", async () => {
     .add(TestMiddleware)
     .run();
 
-  expect(ctx.bag("result")).toEqual({
+  expect(ctx.get("result")).toEqual({
     app: true,
     core: true,
     eq: false,

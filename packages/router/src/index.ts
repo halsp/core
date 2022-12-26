@@ -161,13 +161,13 @@ Startup.prototype.useRouterParser = function (options?: RouterOptions) {
       const { MapMatcher } = require("./map/http-map-matcher");
       const mapMatcher = new MapMatcher(ctx);
       if (mapMatcher.notFound) {
-        ctx["notFoundMsg"]({
+        ctx.res["notFoundMsg"]({
           message: `Can't find the path：${ctx.req.path}`,
           path: ctx.req.path,
         });
       } else if (mapMatcher.methodNotAllowed) {
         const method: string = ctx.req["method"];
-        ctx["methodNotAllowedMsg"]({
+        ctx.res["methodNotAllowedMsg"]({
           message: `method not allowed：${method}`,
           method: method,
           path: ctx.req.path,

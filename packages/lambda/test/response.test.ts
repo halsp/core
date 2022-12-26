@@ -42,7 +42,7 @@ test("set json type", async () => {
     .use(async (ctx, next) => {
       ctx.res.setHeader("content-type", "application/json");
       ctx.res.setHeader("content-length", "10");
-      ctx.ok({
+      ctx.res.ok({
         body: "BODY",
       });
       await next();

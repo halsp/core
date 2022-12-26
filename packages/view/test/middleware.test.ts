@@ -6,7 +6,7 @@ describe("middleware", () => {
   it("should not render empty string", async () => {
     class Md extends Middleware {
       async invoke(): Promise<void> {
-        this.ctx.bag("view", await this.ctx.view(""));
+        this.ctx.set("view", await this.ctx.view(""));
       }
     }
 
@@ -15,13 +15,13 @@ describe("middleware", () => {
       .add(() => new Md())
       .run();
 
-    expect(ctx.bag("view")).toBeUndefined();
+    expect(ctx.get("view")).toBeUndefined();
   });
 
   it("should set views dir", async () => {
     class Md extends Middleware {
       async invoke(): Promise<void> {
-        this.ctx.bag("view", await this.ctx.view(""));
+        this.ctx.set("view", await this.ctx.view(""));
       }
     }
 
@@ -32,6 +32,6 @@ describe("middleware", () => {
       .add(() => new Md())
       .run();
 
-    expect(ctx.bag("view")).toBeUndefined();
+    expect(ctx.get("view")).toBeUndefined();
   });
 });

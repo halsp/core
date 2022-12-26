@@ -25,7 +25,7 @@ test(`http context`, async () => {
     .useInject()
     .use(async (ctx) => {
       const obj = await parseInject(ctx, new TestService());
-      return ctx.ok(obj.invoke());
+      return ctx.res.ok(obj.invoke());
     })
     .run();
   expect(res.body).toEqual({

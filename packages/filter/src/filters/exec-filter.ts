@@ -59,8 +59,8 @@ function getFilters<T extends Filter = Filter>(
   const useFilters: FilterItem<T>[] =
     Reflect.getMetadata(FILTERS_METADATA, action.constructor) ?? [];
   const globalFilters =
-    action.ctx.bag<FilterItem<T>[]>(GLOBAL_FILTERS_BAG) ?? [];
-  const orders = action.ctx.bag<OrderRecord<T>[]>(FILTERS_ORDER_BAG) ?? [];
+    action.ctx.get<FilterItem<T>[]>(GLOBAL_FILTERS_BAG) ?? [];
+  const orders = action.ctx.get<OrderRecord<T>[]>(FILTERS_ORDER_BAG) ?? [];
   const filters: FilterItem<T>[] = [...globalFilters, ...useFilters];
   if (!isExecuting) filters.reverse();
   return filters

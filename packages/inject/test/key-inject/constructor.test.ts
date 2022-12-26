@@ -23,7 +23,7 @@ class TestMiddleware extends Middleware {
   }
 
   async invoke(): Promise<void> {
-    this.ctx.bag("result", {
+    this.ctx.set("result", {
       key1: this.key1,
       key2: this.key2,
       key3: this.key3,
@@ -44,7 +44,7 @@ test(`inject key`, async function () {
     .add(TestMiddleware)
     .run();
 
-  expect(ctx.bag("result")).toEqual({
+  expect(ctx.get("result")).toEqual({
     key1: 1,
     key2: "2",
     key3: true,
@@ -57,7 +57,7 @@ test(`inject key`, async function () {
 test(`inject key empty`, async function () {
   const { ctx } = await new TestStartup().useInject().add(TestMiddleware).run();
 
-  expect(ctx.bag("result")).toEqual({
+  expect(ctx.get("result")).toEqual({
     key1: undefined,
     key2: undefined,
     key3: undefined,

@@ -81,7 +81,7 @@ describe("custom", () => {
       private readonly body!: TestDto;
 
       invoke(): void | Promise<void> {
-        this.ctx.bag("body", this.body);
+        this.ctx.set("body", this.body);
       }
     }
 
@@ -93,7 +93,7 @@ describe("custom", () => {
       .run();
 
     expect(ctx.errorStack[0].message).toBe("prop: error");
-    expect(ctx.bag("body")).toBeUndefined();
+    expect(ctx.get("body")).toBeUndefined();
   });
 
   it("should validate custom validation with args", async () => {

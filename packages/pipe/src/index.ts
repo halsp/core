@@ -35,12 +35,12 @@ Startup.prototype.useGlobalPipe = function <T = any, R = any>(
   pipe: PipeItem<T, R>
 ) {
   return this.use(async (ctx, next) => {
-    const pipes = ctx.bag<GlobalPipeItem<T, R>[]>(GLOBAL_PIPE_BAG) ?? [];
+    const pipes = ctx.get<GlobalPipeItem<T, R>[]>(GLOBAL_PIPE_BAG) ?? [];
     pipes.push({
       pipe,
       type,
     });
-    ctx.bag(GLOBAL_PIPE_BAG, pipes);
+    ctx.set(GLOBAL_PIPE_BAG, pipes);
     await next();
   });
 };

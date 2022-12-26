@@ -5,7 +5,7 @@ test("simple hook", async () => {
   class TestMiddleware extends Middleware {
     static index = 1;
     async invoke(): Promise<void> {
-      this.ctx.bag(`h${TestMiddleware.index}`, this.count);
+      this.ctx.set(`h${TestMiddleware.index}`, this.count);
       TestMiddleware.index++;
       await this.next();
     }
@@ -34,17 +34,17 @@ test("simple hook", async () => {
     .hook(HookType.AfterInvoke, (ctx, md) => {
       if (md instanceof TestMiddleware) {
         md.count++;
-        ctx.bag("after", 1);
+        ctx.set("after", 1);
       }
     }) // 3 hooks
     .add(TestMiddleware);
 
   const { ctx } = await startup.run();
-  expect(ctx.bag("h1")).toBe(1);
-  expect(ctx.bag("h2")).toBe(2);
-  expect(ctx.bag("h3")).toBe(3);
-  expect(ctx.bag("h4")).toBeUndefined();
-  expect(ctx.bag("after")).toBe(1);
+  expect(ctx.get("h1")).toBe(1);
+  expect(ctx.get("h2")).toBe(2);
+  expect(ctx.get("h3")).toBe(3);
+  expect(ctx.get("h4")).toBeUndefined();
+  expect(ctx.get("after")).toBe(1);
 });
 
 function runReturnFalse(type: HookType.BeforeInvoke | HookType.BeforeNext) {
@@ -53,10 +53,10 @@ function runReturnFalse(type: HookType.BeforeInvoke | HookType.BeforeNext) {
       static index = 1;
       async invoke(): Promise<void> {
         const index = TestMiddleware.index;
-        this.ctx.bag(`h${index}`, this.count);
+        this.ctx.set(`h${index}`, this.count);
         TestMiddleware.index++;
         await this.next();
-        this.ctx.bag(`hn${index}`, this.count);
+        this.ctx.set(`hn${index}`, this.count);
       }
       count = 0;
     }
@@ -86,19 +86,19 @@ function runReturnFalse(type: HookType.BeforeInvoke | HookType.BeforeNext) {
 
     const { ctx } = await startup.run();
     if (type == HookType.BeforeInvoke) {
-      expect(ctx.bag("h1")).toBe(1);
-      expect(ctx.bag("hn1")).toBe(1);
-      expect(ctx.bag("h2")).toBeUndefined();
-      expect(ctx.bag("hn2")).toBeUndefined();
-      expect(ctx.bag("h3")).toBeUndefined();
-      expect(ctx.bag("hn3")).toBeUndefined();
+      expect(ctx.get("h1")).toBe(1);
+      expect(ctx.get("hn1")).toBe(1);
+      expect(ctx.get("h2")).toBeUndefined();
+      expect(ctx.get("hn2")).toBeUndefined();
+      expect(ctx.get("h3")).toBeUndefined();
+      expect(ctx.get("hn3")).toBeUndefined();
     } else if (type == HookType.BeforeNext) {
-      expect(ctx.bag("h1")).toBe(0);
-      expect(ctx.bag("hn1")).toBe(1);
-      expect(ctx.bag("h2")).toBe(0); // 为什么是0：BeforeNext 作用于下一个中间件，而当前中间件的 count 在赋值后才 +1
-      expect(ctx.bag("hn2")).toBe(2);
-      expect(ctx.bag("h3")).toBeUndefined();
-      expect(ctx.bag("hn3")).toBeUndefined();
+      expect(ctx.get("h1")).toBe(0);
+      expect(ctx.get("hn1")).toBe(1);
+      expect(ctx.get("h2")).toBe(0); // 为什么是0：BeforeNext 作用于下一个中间件，而当前中间件的 count 在赋值后才 +1
+      expect(ctx.get("hn2")).toBe(2);
+      expect(ctx.get("h3")).toBeUndefined();
+      expect(ctx.get("hn3")).toBeUndefined();
     }
   });
 }

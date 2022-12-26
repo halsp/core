@@ -280,10 +280,10 @@ class InjectDecoratorParser<T extends object = any> {
   }
 
   private getRecordsFromBag(bagName: string) {
-    let records = this.ctx.bag<InjectDecoratorRecordItem[]>(bagName);
+    let records = this.ctx.get<InjectDecoratorRecordItem[]>(bagName);
     if (!records) {
       records = [];
-      this.ctx.bag(bagName, records);
+      this.ctx.set(bagName, records);
     }
     return records;
   }
@@ -349,14 +349,14 @@ class InjectDecoratorParser<T extends object = any> {
   }
 
   private getExistKeyMap(key: string) {
-    const injectMaps = this.ctx.bag<InjectMap[]>(MAP_BAG) ?? [];
+    const injectMaps = this.ctx.get<InjectMap[]>(MAP_BAG) ?? [];
     return injectMaps.filter(
       (map) => isString(map.anestor) && map.anestor == key
     )[0];
   }
 
   private getExistTargetMap(target: ObjectConstructor<T>) {
-    const injectMaps = this.ctx.bag<InjectMap[]>(MAP_BAG) ?? [];
+    const injectMaps = this.ctx.get<InjectMap[]>(MAP_BAG) ?? [];
     return injectMaps.filter(
       (map) =>
         isFunction<ObjectConstructor<T>>(map.anestor) && map.anestor == target

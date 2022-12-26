@@ -46,7 +46,8 @@ HttpStartup.prototype.useSwagger = function (options: SwaggerOptions = {}) {
     .useStatic({
       prefix: opt.path,
       dir: getAbsoluteFSPath(),
-      fileIndex: true,
+      useIndex: true,
+      useExt: true,
     });
 };
 

@@ -9,12 +9,12 @@ describe("custom inject", () => {
     function Custom(target: any, propertyKey: string | symbol): void;
     function Custom(arg1: any, arg2?: any) {
       if (typeof arg1 == "string") {
-        return Inject((ctx) => ctx.bag<object>("custom")[arg1]);
+        return Inject((ctx) => ctx.get<object>("custom")[arg1]);
       } else {
         createInject(
           (ctx, parent) => {
             expect(parent instanceof TestMiddleware).toBeTruthy();
-            return ctx.bag<object>("custom");
+            return ctx.get<object>("custom");
           },
           arg1,
           arg2
@@ -29,7 +29,7 @@ describe("custom inject", () => {
       private readonly c2!: any;
 
       async invoke(): Promise<void> {
-        this.ctx.bag("result", {
+        this.ctx.set("result", {
           c1: this.c1,
           c2: this.c2,
         });
@@ -38,7 +38,7 @@ describe("custom inject", () => {
 
     const { ctx } = await new TestStartup()
       .setContext(
-        new Context().bag("custom", {
+        new Context().set("custom", {
           a: 1,
         })
       )
@@ -46,7 +46,7 @@ describe("custom inject", () => {
       .add(TestMiddleware)
       .run();
 
-    expect(ctx.bag("result")).toEqual({
+    expect(ctx.get("result")).toEqual({
       c1: {
         a: 1,
       },
@@ -63,12 +63,12 @@ describe("custom inject", () => {
     ): void;
     function Custom(...args: any[]): void | ParameterDecorator {
       if (typeof args[0] == "string") {
-        return Inject((ctx) => ctx.bag<object>("custom")[args[0]]);
+        return Inject((ctx) => ctx.get<object>("custom")[args[0]]);
       } else {
         createInject(
           (ctx, parent) => {
             expect(parent == TestMiddleware).toBeTruthy();
-            return ctx.bag<object>("custom");
+            return ctx.get<object>("custom");
           },
           args[0],
           args[1],
@@ -87,7 +87,7 @@ describe("custom inject", () => {
       }
 
       async invoke(): Promise<void> {
-        this.ctx.bag("result", {
+        this.ctx.set("result", {
           c1: this.c1,
           c2: this.c2,
         });
@@ -96,7 +96,7 @@ describe("custom inject", () => {
 
     const { ctx } = await new TestStartup()
       .setContext(
-        new Context().bag("custom", {
+        new Context().set("custom", {
           a: 1,
         })
       )
@@ -104,7 +104,7 @@ describe("custom inject", () => {
       .add(TestMiddleware)
       .run();
 
-    expect(ctx.bag("result")).toEqual({
+    expect(ctx.get("result")).toEqual({
       c1: {
         a: 1,
       },
@@ -124,11 +124,11 @@ describe("inject custom type", () => {
             return count;
           }, type)
         : Inject((ctx) => {
-            if (!ctx.bag("count")) {
-              ctx.bag("count", 0);
+            if (!ctx.get("count")) {
+              ctx.set("count", 0);
             }
-            ctx.bag("count", ctx.bag<number>("count") + 1);
-            return ctx.bag("count");
+            ctx.set("count", ctx.get<number>("count") + 1);
+            return ctx.get("count");
           }, type);
 
     class TestMiddleware extends Middleware {
@@ -138,7 +138,7 @@ describe("inject custom type", () => {
       private readonly count2!: any;
 
       async invoke(): Promise<void> {
-        this.ctx.bag("result", {
+        this.ctx.set("result", {
           count1: this.count1,
           count2: this.count2,
         });
@@ -151,7 +151,7 @@ describe("inject custom type", () => {
       let res = await startup.run();
       let ctx = res.ctx;
 
-      expect(ctx.bag("result")).toEqual({
+      expect(ctx.get("result")).toEqual({
         count1: type == InjectType.Transient ? 1 : 1,
         count2: type == InjectType.Transient ? 2 : 1,
       });
@@ -159,17 +159,17 @@ describe("inject custom type", () => {
       res = await startup.run();
       ctx = res.ctx;
       if (type == InjectType.Transient) {
-        expect(ctx.bag("result")).toEqual({
+        expect(ctx.get("result")).toEqual({
           count1: 1,
           count2: 2,
         });
       } else if (type == InjectType.Scoped) {
-        expect(ctx.bag("result")).toEqual({
+        expect(ctx.get("result")).toEqual({
           count1: 1,
           count2: 1,
         });
       } else if (type == InjectType.Singleton) {
-        expect(ctx.bag("result")).toEqual({
+        expect(ctx.get("result")).toEqual({
           count1: 1,
           count2: 1,
         });
@@ -190,11 +190,11 @@ describe("inject custom type", () => {
             return count;
           }, type)
         : Inject((ctx) => {
-            if (!ctx.bag("count")) {
-              ctx.bag("count", 0);
+            if (!ctx.get("count")) {
+              ctx.set("count", 0);
             }
-            ctx.bag("count", ctx.bag<number>("count") + 1);
-            return ctx.bag("count");
+            ctx.set("count", ctx.get<number>("count") + 1);
+            return ctx.get("count");
           }, type);
 
     @Inject
@@ -207,7 +207,7 @@ describe("inject custom type", () => {
       }
 
       async invoke(): Promise<void> {
-        this.ctx.bag("result", {
+        this.ctx.set("result", {
           count1: this.count1,
           count2: this.count2,
         });
@@ -220,7 +220,7 @@ describe("inject custom type", () => {
       let res = await startup.run();
       let ctx = res.ctx;
 
-      expect(ctx.bag("result")).toEqual({
+      expect(ctx.get("result")).toEqual({
         count1: type == InjectType.Transient ? 1 : 1,
         count2: type == InjectType.Transient ? 2 : 1,
       });
@@ -228,17 +228,17 @@ describe("inject custom type", () => {
       res = await startup.run();
       ctx = res.ctx;
       if (type == InjectType.Transient) {
-        expect(ctx.bag("result")).toEqual({
+        expect(ctx.get("result")).toEqual({
           count1: 1,
           count2: 2,
         });
       } else if (type == InjectType.Scoped) {
-        expect(ctx.bag("result")).toEqual({
+        expect(ctx.get("result")).toEqual({
           count1: 1,
           count2: 1,
         });
       } else if (type == InjectType.Singleton) {
-        expect(ctx.bag("result")).toEqual({
+        expect(ctx.get("result")).toEqual({
           count1: 1,
           count2: 1,
         });

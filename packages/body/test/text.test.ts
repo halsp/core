@@ -11,7 +11,7 @@ test("useHttpTextBody", async () => {
     })
     .useHttpTextBody()
     .use(async (ctx) => {
-      ctx.ok(ctx.req.body);
+      ctx.res.ok(ctx.req.body);
     })
     .listen();
   await request(server).post("").type("text").send("a piece of text");
@@ -31,7 +31,7 @@ test("error type", async () => {
     })
     .useHttpTextBody()
     .use(async (ctx) => {
-      ctx.ok({
+      ctx.res.ok({
         exist: !!ctx.req.body,
       });
     })

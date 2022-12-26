@@ -56,7 +56,7 @@ describe("method override", () => {
       new Request().setMethod("PATCH".toUpperCase())
     )
       .use(async (ctx) => {
-        ctx.ok({
+        ctx.res.ok({
           method: "GET",
         });
       })

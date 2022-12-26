@@ -14,7 +14,7 @@ class TestMiddleware extends Middleware {
   }
 
   async invoke(): Promise<void> {
-    this.ctx.bag("result", {
+    this.ctx.set("result", {
       md: `md.${this.service?.invoke()}`,
       num: this.num,
       str: this.str,
@@ -25,7 +25,7 @@ class TestMiddleware extends Middleware {
 test(`middleware constructor`, async () => {
   const { ctx } = await new TestStartup().useInject().add(TestMiddleware).run();
 
-  expect(ctx.bag("result")).toEqual({
+  expect(ctx.get("result")).toEqual({
     md: "md.service2.service1",
     num: undefined,
     str: undefined,
@@ -37,17 +37,17 @@ test(`function middleware constructor`, async () => {
     .useInject()
     .inject("KEY_INJ", 3)
     .add((ctx) => {
-      ctx.bag("h", "1");
+      ctx.set("h", "1");
       return TestMiddleware;
     })
     .run();
 
-  expect(ctx.bag("result")).toEqual({
+  expect(ctx.get("result")).toEqual({
     md: "md.service2.service1",
     num: 3,
     str: undefined,
   });
-  expect(ctx.bag("h")).toBe("1");
+  expect(ctx.get("h")).toBe("1");
 });
 
 test(`async function middleware constructor`, async () => {
@@ -57,15 +57,15 @@ test(`async function middleware constructor`, async () => {
       await new Promise<void>((resolve) => {
         setTimeout(() => resolve(), 200);
       });
-      ctx.bag("h", "1");
+      ctx.set("h", "1");
       return TestMiddleware;
     })
     .run();
 
-  expect(ctx.bag("result")).toEqual({
+  expect(ctx.get("result")).toEqual({
     md: "md.service2.service1",
     num: undefined,
     str: undefined,
   });
-  expect(ctx.bag("h")).toBe("1");
+  expect(ctx.get("h")).toBe("1");
 });

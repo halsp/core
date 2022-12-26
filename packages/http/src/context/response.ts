@@ -2,6 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import { Response } from "@ipare/core";
 import { initResultHandler } from "./result-handler";
 import { RESPONSE_HEADERS, RESPONSE_STATUS } from "../constant";
+import { initHeaderHandler } from "./header-handler";
 
 export function initResponse(res: typeof Response.prototype) {
   Object.defineProperty(res, "isSuccess", {
@@ -40,11 +41,11 @@ export function initResponse(res: typeof Response.prototype) {
     return this;
   };
 
-  initResultHandler(
+  initResultHandler(res, function () {
+    return this;
+  });
+  initHeaderHandler(
     res,
-    function () {
-      return this;
-    },
     function () {
       return this.headers;
     },

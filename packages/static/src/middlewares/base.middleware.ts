@@ -25,11 +25,11 @@ export abstract class BaseMiddleware extends Middleware {
       .set("accept-ranges", "bytes")
       .set("last-modified", stats.mtime.toUTCString());
 
-    this.ctx.bag(FILE_BAG, filePath);
+    this.ctx.set(FILE_BAG, filePath);
     if (!args.status || args.status == 200) {
       if (args.dirHtml) {
         this.ctx.res.setBody(args.dirHtml);
-        this.ctx.bag(DIR_RESULT_BAG, true);
+        this.ctx.set(DIR_RESULT_BAG, true);
       } else {
         const stream = fs.createReadStream(filePath, this.options.encoding);
         this.ctx.res.setBody(stream);
@@ -46,7 +46,7 @@ export abstract class BaseMiddleware extends Middleware {
         const stream = fs.createReadStream(filePath, this.options.encoding);
         this.ctx.res.setBody(stream);
       }
-      this.ctx.bag(FILE_ERROR_STATUS_BAG, args.status);
+      this.ctx.set(FILE_ERROR_STATUS_BAG, args.status);
     }
   }
 

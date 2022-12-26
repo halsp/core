@@ -5,7 +5,7 @@ import { createReadStream } from "fs";
 test("stream body", async () => {
   const server = new NativeStartup()
     .use(async (ctx) => {
-      ctx.ok(createReadStream("./LICENSE"));
+      ctx.res.ok(createReadStream("./LICENSE"));
     })
     .listen();
   const res = await request(server).get("");
@@ -21,7 +21,7 @@ test("stream body explicit type", async () => {
   const server = new NativeStartup()
     .use(async (ctx) => {
       ctx.res.setHeader("content-type", "application/octet-stream");
-      ctx.ok(createReadStream("./LICENSE"));
+      ctx.res.ok(createReadStream("./LICENSE"));
     })
     .listen();
   const res = await request(server).get("");

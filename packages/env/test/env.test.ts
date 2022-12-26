@@ -26,10 +26,10 @@ describe("env", () => {
         override: true,
       })
       .use((ctx) => {
-        ctx.bag("env", process.env);
+        ctx.set("env", process.env);
       })
       .run();
-    const env = ctx.bag<typeof process.env>("env");
+    const env = ctx.get<typeof process.env>("env");
 
     expect(env.BNAME).toBe("PRODUCTION");
     expect(env.NAME).toBe("PRODUCTION");

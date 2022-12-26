@@ -15,7 +15,7 @@ describe("error", () => {
     const { ctx } = await new TestStartup()
       .use(async (ctx, next) => {
         await next();
-        ctx.bag("test", true);
+        ctx.set("test", true);
       })
       .use(async () => {
         throw new IpareException().setBreakthrough();
@@ -23,14 +23,14 @@ describe("error", () => {
       .run();
 
     expect(ctx.errorStack.length).toBe(1);
-    expect(ctx.bag("test")).toBeUndefined();
+    expect(ctx.get("test")).toBeUndefined();
   });
 
   it("should not breakthrough when set error.breakthrough = false", async () => {
     const { ctx } = await new TestStartup()
       .use(async (ctx, next) => {
         await next();
-        ctx.bag("test", true);
+        ctx.set("test", true);
       })
       .use(async () => {
         throw new IpareException().setBreakthrough(false);
@@ -38,7 +38,7 @@ describe("error", () => {
       .run();
 
     expect(ctx.errorStack.length).toBe(1);
-    expect(ctx.bag("test")).toBeTruthy();
+    expect(ctx.get("test")).toBeTruthy();
   });
 
   it("should set message with string", () => {

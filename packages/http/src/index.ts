@@ -54,9 +54,7 @@ export {
 
 declare module "@ipare/core" {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface Context extends ResultHandler {}
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface Middleware extends ResultHandler {}
+  interface Middleware extends ResultHandler, HeaderHandler {}
 
   interface Request extends HeaderHandler {
     get headers(): ReadonlyHeadersDict;
@@ -70,7 +68,7 @@ declare module "@ipare/core" {
     setQuery(query: Dict<string>): this;
   }
 
-  interface Response extends ResultHandler {
+  interface Response extends ResultHandler, HeaderHandler {
     get isSuccess(): boolean;
     get headers(): ReadonlyHeadersDict;
 

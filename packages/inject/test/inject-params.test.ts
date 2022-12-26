@@ -36,11 +36,11 @@ test(`inject params`, async function () {
     .inject("KEY1", 1)
     .use(async (ctx) => {
       const service = await parseInject(ctx, Service2);
-      ctx.bag("result", service.invoke());
+      ctx.set("result", service.invoke());
     })
     .run();
 
-  expect(ctx.bag("result")).toEqual({
+  expect(ctx.get("result")).toEqual({
     service: "service2.service1",
     key1: 1,
     key2: undefined,

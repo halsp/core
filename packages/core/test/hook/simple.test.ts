@@ -7,9 +7,9 @@ class TestMiddleware extends Middleware {
     const index = TestMiddleware.index;
     TestMiddleware.index++;
 
-    this.ctx.bag(`h1${index}`, this.count);
+    this.ctx.set(`h1${index}`, this.count);
     await this.next();
-    this.ctx.bag(`h2${index}`, this.count);
+    this.ctx.set(`h2${index}`, this.count);
   }
   count = 0;
 }
@@ -40,7 +40,7 @@ test("simple hook", async () => {
       // executed but without effective
       if (md instanceof TestMiddleware) {
         md.count++;
-        ctx.bag("after", 1);
+        ctx.set("after", 1);
       }
     })
     .hook(HookType.BeforeNext, (ctx, md) => {
@@ -52,13 +52,13 @@ test("simple hook", async () => {
     .add(TestMiddleware);
 
   const { ctx } = await startup.run();
-  expect(ctx.bag("h11")).toBe(1);
-  expect(ctx.bag("h12")).toBe(2);
-  expect(ctx.bag("h13")).toBe(3);
-  expect(ctx.bag("h14")).toBeUndefined();
-  expect(ctx.bag("after")).toBe(1);
+  expect(ctx.get("h11")).toBe(1);
+  expect(ctx.get("h12")).toBe(2);
+  expect(ctx.get("h13")).toBe(3);
+  expect(ctx.get("h14")).toBeUndefined();
+  expect(ctx.get("after")).toBe(1);
 
-  expect(ctx.bag("h21")).toBe(1);
-  expect(ctx.bag("h22")).toBe(2);
-  expect(ctx.bag("h23")).toBe(4);
+  expect(ctx.get("h21")).toBe(1);
+  expect(ctx.get("h22")).toBe(2);
+  expect(ctx.get("h23")).toBe(4);
 });

@@ -14,12 +14,12 @@ class TestAction extends Action {
 
 class TestActionFilter implements ActionFilter {
   onActionExecuted(ctx: Context): void | Promise<void> {
-    ctx.res.setHeader(`action2`, 2);
+    ctx.res.set(`action2`, 2);
   }
   onActionExecuting(
     ctx: Context
   ): boolean | void | Promise<void> | Promise<boolean> {
-    ctx.res.setHeader(`action1`, 1);
+    ctx.res.set(`action1`, 1);
     return ctx.req.body["executing"];
   }
 }

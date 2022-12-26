@@ -13,10 +13,10 @@ export async function getEnv(mode?: string, options?: EnvOptions) {
     const { ctx } = await startup
       .useEnv(options as any)
       .use((ctx) => {
-        ctx.bag("env", process.env);
+        ctx.set("env", process.env);
       })
       .run();
-    return ctx.bag<typeof process.env>("env");
+    return ctx.get<typeof process.env>("env");
   } finally {
     process.chdir("../..");
   }

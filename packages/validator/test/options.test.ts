@@ -22,7 +22,7 @@ function testOptions(useOptions: any, decOptions: any, result: boolean) {
       private readonly body!: TestDto;
 
       async invoke(): Promise<void> {
-        this.ctx.bag("result", this.body);
+        this.ctx.set("result", this.body);
       }
     }
 
@@ -37,10 +37,10 @@ function testOptions(useOptions: any, decOptions: any, result: boolean) {
     const { ctx } = await startup.add(TestMiddleware).run();
 
     if (result) {
-      expect(ctx.bag<TestDto>("result").b).toBeNull();
+      expect(ctx.get<TestDto>("result").b).toBeNull();
       expect(ctx.errorStack.length).toBe(0);
     } else {
-      expect(ctx.bag("result")).toBeUndefined();
+      expect(ctx.get("result")).toBeUndefined();
       expect(ctx.errorStack[0].message).toBe("b1 must be an integer number");
     }
   });

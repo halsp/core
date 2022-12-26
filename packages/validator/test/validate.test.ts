@@ -23,7 +23,7 @@ function runTest(validate: boolean) {
       private readonly body!: TestDto;
 
       async invoke(): Promise<void> {
-        this.ctx.bag("body", this.body);
+        this.ctx.set("body", this.body);
       }
     }
 
@@ -39,7 +39,7 @@ function runTest(validate: boolean) {
       .add(TestMiddleware)
       .run();
 
-    const body = ctx.bag<TestDto>("body");
+    const body = ctx.get<TestDto>("body");
     if (validate) {
       expect(body.b).toBe("a1");
       expect(ctx.errorStack.length).toBe(0);
@@ -71,7 +71,7 @@ test("array message", async () => {
     private readonly body!: TestDto;
 
     async invoke(): Promise<void> {
-      this.ctx.bag("body", this.body);
+      this.ctx.set("body", this.body);
     }
   }
 
@@ -87,7 +87,7 @@ test("array message", async () => {
     .add(TestMiddleware)
     .run();
 
-  expect(ctx.bag("body")).toBeUndefined();
+  expect(ctx.get("body")).toBeUndefined();
   expect(ctx.errorStack[0].message).toBe(
     "b1 must be a string, b2 must be an integer number"
   );
@@ -108,7 +108,7 @@ describe("disabled", () => {
       b!: Record<string, any>;
 
       async invoke(): Promise<void> {
-        this.ctx.bag("ok", 1);
+        this.ctx.set("ok", 1);
       }
     }
 
@@ -122,7 +122,7 @@ describe("disabled", () => {
       .add(TestMiddleware)
       .run();
 
-    expect(ctx.bag("ok")).toBe(1);
+    expect(ctx.get("ok")).toBe(1);
   });
 
   it("should not validate when disabled by @ValidatorEnable", async () => {
@@ -138,7 +138,7 @@ describe("disabled", () => {
       b!: TestClass;
 
       async invoke(): Promise<void> {
-        this.ctx.bag("ok", 1);
+        this.ctx.set("ok", 1);
       }
     }
 
@@ -152,6 +152,6 @@ describe("disabled", () => {
       .add(TestMiddleware)
       .run();
 
-    expect(ctx.bag("ok")).toBe(1);
+    expect(ctx.get("ok")).toBe(1);
   });
 });

@@ -3,12 +3,7 @@ import { initResultHandler, ResultHandler } from "../../src";
 
 class CustomResultHandler {
   constructor() {
-    initResultHandler(
-      this,
-      () => this.res,
-      () => this.res.headers,
-      () => this.res.headers
-    );
+    initResultHandler(this, () => this.res);
   }
 
   readonly res = new Response();

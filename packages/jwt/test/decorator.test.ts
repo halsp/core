@@ -16,10 +16,10 @@ class TestMiddleware extends Middleware {
   private readonly str2!: any;
 
   async invoke(): Promise<void> {
-    this.ctx.bag("jwt", this.jwt);
-    this.ctx.bag("payload", this.payload);
-    this.ctx.bag("str1", this.str1);
-    this.ctx.bag("str2", this.str2);
+    this.ctx.set("jwt", this.jwt);
+    this.ctx.set("payload", this.payload);
+    this.ctx.set("str1", this.str1);
+    this.ctx.set("str2", this.str2);
   }
 }
 
@@ -44,15 +44,15 @@ test("decorator", async function () {
     })
     .add(TestMiddleware)
     .run();
-  expect(Object.keys(ctx.bag("jwt"))).toEqual([
+  expect(Object.keys(ctx.get("jwt"))).toEqual([
     "header",
     "payload",
     "signature",
   ]);
-  expect(Object.keys(ctx.bag("payload"))).toEqual(["iat"]);
-  expect(ctx.bag("payload")).toEqual(ctx.bag<jwt.Jwt>("jwt")["payload"]);
-  expect(ctx.bag("str1")).toBe(jwt);
-  expect(ctx.bag("str2")).toBe(jwt);
+  expect(Object.keys(ctx.get("payload"))).toEqual(["iat"]);
+  expect(ctx.get("payload")).toEqual(ctx.get<jwt.Jwt>("jwt")["payload"]);
+  expect(ctx.get("str1")).toBe(jwt);
+  expect(ctx.get("str2")).toBe(jwt);
 });
 
 function testGetToken(skip: boolean) {

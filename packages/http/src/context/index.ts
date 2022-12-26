@@ -8,6 +8,7 @@ import {
 } from "@ipare/core";
 import { CTX_INITED } from "../constant";
 import { HttpException, InternalServerErrorException } from "../exceptions";
+import { initHeaderHandler } from "./header-handler";
 import { initRequest } from "./request";
 import { initResponse } from "./response";
 import { initResultHandler } from "./result-handler";
@@ -24,24 +25,11 @@ export function initContext() {
   initRequest(Request.prototype);
   initResponse(Response.prototype);
 
-  initResultHandler(
-    Context.prototype,
-    function () {
-      return this.res;
-    },
-    function () {
-      return this.req.headers;
-    },
-    function () {
-      return this.res.headers;
-    }
-  );
-
-  initResultHandler(
+  initResultHandler(Middleware.prototype, function () {
+    return this.res;
+  });
+  initHeaderHandler(
     Middleware.prototype,
-    function () {
-      return this.res;
-    },
     function () {
       return this.req.headers;
     },
@@ -55,9 +43,9 @@ export function initCatchError(ctx: Context) {
   const catchError = ctx.catchError;
   ctx.catchError = function (err: Error | any): Context {
     if (err instanceof HttpException) {
-      ctx
+      ctx.res
         .setHeaders(err.headers)
-        .res.setStatus(err.status)
+        .setStatus(err.status)
         .setBody(err.toPlainObject());
     } else if (err instanceof Error) {
       const msg = err.message || undefined;

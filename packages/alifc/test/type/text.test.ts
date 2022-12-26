@@ -8,7 +8,7 @@ test("text body", async function () {
 
   await new AlifcStartup()
     .use((ctx) => {
-      ctx.ok("BODY");
+      ctx.res.ok("BODY");
     })
     .run(aliReq, aliRes, aliContext);
 
@@ -26,7 +26,7 @@ test("text body set type", async function () {
     .use((ctx) => {
       ctx.res.setHeader("content-type", "text/plain");
       ctx.res.setHeader("content-length", Buffer.byteLength("BODY").toString());
-      ctx.ok("BODY");
+      ctx.res.ok("BODY");
     })
     .run(aliReq, aliRes, aliContext);
 
@@ -42,7 +42,7 @@ test("html body", async function () {
 
   await new AlifcStartup()
     .use((ctx) => {
-      ctx.ok("<div>BODY</div>");
+      ctx.res.ok("<div>BODY</div>");
     })
     .run(aliReq, aliRes, aliContext);
 

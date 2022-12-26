@@ -12,10 +12,10 @@ abstract class BaseResultMiddleware extends BaseMiddleware {
   }
 
   protected get matchResult() {
-    return this.ctx.bag<MatchResult>(MATCH_RESULT_BAG);
+    return this.ctx.get<MatchResult>(MATCH_RESULT_BAG);
   }
   private get isMethodValid() {
-    return this.ctx.bag<boolean>(IS_METHOD_VALID_BAG);
+    return this.ctx.get<boolean>(IS_METHOD_VALID_BAG);
   }
 
   protected get isEnable() {

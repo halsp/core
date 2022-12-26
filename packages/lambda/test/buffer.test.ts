@@ -4,7 +4,7 @@ import * as fs from "fs";
 test("buffer", async () => {
   const res = await new LambdaStartup()
     .use(async (ctx, next) => {
-      ctx.ok(ctx.req.body);
+      ctx.res.ok(ctx.req.body);
       await next();
     })
     .run(
@@ -24,7 +24,7 @@ test("return stream", async () => {
   const res = await new LambdaStartup()
     .use(async (ctx) => {
       const stream = fs.createReadStream("./LICENSE");
-      ctx.ok(stream);
+      ctx.res.ok(stream);
     })
     .run({}, {});
 
@@ -38,7 +38,7 @@ test("return stream", async () => {
     .use(async (ctx) => {
       const stream = fs.createReadStream("./LICENSE");
       stream.setEncoding("hex");
-      ctx.ok(stream);
+      ctx.res.ok(stream);
     })
     .run({}, {});
 
@@ -53,7 +53,7 @@ test("error stream", async () => {
     await new LambdaStartup()
       .use(async (ctx) => {
         const stream = fs.createReadStream("./not-exist");
-        ctx.ok(stream);
+        ctx.res.ok(stream);
       })
       .run({}, {});
   } catch (err) {

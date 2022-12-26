@@ -8,10 +8,10 @@ test("connected connection should be destroy", async () => {
   const { ctx } = await new TestStartup()
     .use(async (ctx, next) => {
       (mongoose as any).createConnection = async () => {
-        ctx.bag("connect", "1");
+        ctx.set("connect", "1");
         return {
           destroy: () => {
-            ctx.bag("destroy", "1");
+            ctx.set("destroy", "1");
           },
           readyState: mongoose.ConnectionStates.connected,
         } as any;
@@ -30,18 +30,18 @@ test("connected connection should be destroy", async () => {
     })
     .run();
 
-  expect(ctx.bag("connect")).toBe("1");
-  expect(ctx.bag("destroy")).toBe("1");
+  expect(ctx.get("connect")).toBe("1");
+  expect(ctx.get("destroy")).toBe("1");
 });
 
 it("disconnected connection should not be destroy", async () => {
   const { ctx } = await new TestStartup()
     .use(async (ctx, next) => {
       (mongoose as any).createConnection = async () => {
-        ctx.bag("connect", "1");
+        ctx.set("connect", "1");
         return {
           destroy: () => {
-            ctx.bag("destroy", "1");
+            ctx.set("destroy", "1");
           },
           readyState: mongoose.ConnectionStates.disconnected,
         } as any;
@@ -60,6 +60,6 @@ it("disconnected connection should not be destroy", async () => {
     })
     .run();
 
-  expect(ctx.bag("connect")).toBe("1");
-  expect(ctx.bag("destroy")).toBeUndefined();
+  expect(ctx.get("connect")).toBe("1");
+  expect(ctx.get("destroy")).toBeUndefined();
 });

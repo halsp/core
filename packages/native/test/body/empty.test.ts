@@ -4,7 +4,7 @@ import request from "supertest";
 test("empty body", async () => {
   const server = new NativeStartup()
     .use(async (ctx) => {
-      ctx.ok(undefined);
+      ctx.res.ok(undefined);
     })
     .listen();
   const res = await request(server).get("").type("text");

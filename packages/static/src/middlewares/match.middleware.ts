@@ -21,7 +21,7 @@ abstract class BaseMatchMiddleware extends Middleware {
   }
 
   private get isMethodValid() {
-    return this.ctx.bag<boolean>(IS_METHOD_VALID_BAG);
+    return this.ctx.get<boolean>(IS_METHOD_VALID_BAG);
   }
 
   protected get isEnable() {
@@ -55,7 +55,7 @@ class FileMatchMiddleware extends BaseMatchMiddleware {
     if (!stats.isFile()) {
       return;
     }
-    this.ctx.bag<MatchResult>(MATCH_RESULT_BAG, {
+    this.ctx.set<MatchResult>(MATCH_RESULT_BAG, {
       filePath: this.options.file,
       stats: stats,
     });
@@ -104,13 +104,13 @@ class DirectoryMatchMiddleware extends BaseMatchMiddleware {
         defaultFileInfo = fileInfo;
       }
       if (fileInfo && fileInfo.stats.isFile()) {
-        this.ctx.bag(MATCH_RESULT_BAG, fileInfo);
+        this.ctx.set(MATCH_RESULT_BAG, fileInfo);
         return;
       }
     }
 
     if (defaultFileInfo?.stats?.isDirectory()) {
-      this.ctx.bag(MATCH_RESULT_BAG, defaultFileInfo);
+      this.ctx.set(MATCH_RESULT_BAG, defaultFileInfo);
     }
   }
 

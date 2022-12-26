@@ -9,7 +9,7 @@ test("stream body", async function () {
 
   await new AlifcStartup()
     .use((ctx) => {
-      ctx.ok(createReadStream("./LICENSE"));
+      ctx.res.ok(createReadStream("./LICENSE"));
     })
     .run(aliReq, aliRes, aliContext);
 

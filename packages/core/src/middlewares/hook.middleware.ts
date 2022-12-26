@@ -41,9 +41,9 @@ export class HookMiddleware extends Middleware {
   #type: HookType;
 
   async invoke(): Promise<void> {
-    const hooks = this.ctx.bag<HookItem[]>(MIDDLEWARE_HOOK_BAG) ?? [];
+    const hooks = this.ctx.get<HookItem[]>(MIDDLEWARE_HOOK_BAG) ?? [];
     hooks.push({ hook: this.#mh, type: this.#type });
-    this.ctx.bag(MIDDLEWARE_HOOK_BAG, hooks);
+    this.ctx.set(MIDDLEWARE_HOOK_BAG, hooks);
     await this.next();
   }
 }
@@ -81,7 +81,7 @@ export async function execHooks(
     return await execErrorHooks(ctx, middleware as Middleware, error as Error);
   }
 
-  const hooks = ctx.bag<HookItem[]>(MIDDLEWARE_HOOK_BAG) ?? [];
+  const hooks = ctx.get<HookItem[]>(MIDDLEWARE_HOOK_BAG) ?? [];
   for (const hookItem of hooks.filter((h) => h.type == type)) {
     const hookResult = await hookItem.hook(ctx, middleware);
     if (typeof hookResult == "boolean" && !hookResult) {
@@ -95,7 +95,7 @@ async function execErrorHooks(
   middleware: Middleware,
   error: Error
 ): Promise<boolean> {
-  const hooks = ctx.bag<HookItem[]>(MIDDLEWARE_HOOK_BAG) ?? [];
+  const hooks = ctx.get<HookItem[]>(MIDDLEWARE_HOOK_BAG) ?? [];
   let result = false;
   for (const hookItem of hooks.filter((h) => h.type == HookType.Error)) {
     result = (await hookItem.hook(ctx, middleware, error)) as boolean;
@@ -108,7 +108,7 @@ async function execConstructorHooks(
   ctx: Context,
   middleware: MiddlewareConstructor
 ): Promise<Middleware | undefined> {
-  const hooks = ctx.bag<HookItem[]>(MIDDLEWARE_HOOK_BAG) ?? [];
+  const hooks = ctx.get<HookItem[]>(MIDDLEWARE_HOOK_BAG) ?? [];
   let result: Middleware | undefined;
   for (const hookItem of hooks.filter((h) => h.type == HookType.Constructor)) {
     if (!(middleware instanceof Middleware)) {

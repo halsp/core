@@ -11,7 +11,7 @@ class TestMiddleware extends Middleware {
   private readonly service3!: Service3;
 
   async invoke(): Promise<void> {
-    this.ctx.bag("result", {
+    this.ctx.set("result", {
       service2: this.service2.invoke(),
       service3: this.service3.invoke(),
     });
@@ -25,7 +25,7 @@ test(`derive`, async function () {
     .add(TestMiddleware)
     .run();
 
-  expect(ctx.bag("result")).toEqual({
+  expect(ctx.get("result")).toEqual({
     service2: "service3.service2.service1",
     service3: "service3.service2.service1",
   });

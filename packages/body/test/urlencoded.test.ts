@@ -15,7 +15,7 @@ test("useHttpUrlencodedBody", async () => {
     })
     .useHttpUrlencodedBody()
     .use(async (ctx) => {
-      ctx.ok({
+      ctx.res.ok({
         body: ctx.req.body,
         type: ctx.req.getHeader("content-type"),
       });

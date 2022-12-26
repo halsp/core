@@ -23,33 +23,33 @@ function runSimpleTest(handle: boolean, afterNext: boolean) {
     const { ctx } = await new TestStartup()
       .use(async (ctx, next) => {
         ctx.catchError = (err) => {
-          ctx.bag("result", err.message);
+          ctx.set("result", err.message);
           return ctx;
         };
         await next();
       })
       .hook(HookType.Error, (ctx, middleware, error) => {
         errorMiddleware = middleware;
-        ctx.bag("result", {
+        ctx.set("result", {
           message: error.message,
         });
         return handle;
       })
       .add(TestMiddleware)
       .use((ctx) => {
-        ctx.bag("h", 1);
+        ctx.set("h", 1);
       })
       .add(TestMiddleware)
       .run();
 
-    expect(ctx.bag("result")).toEqual(
+    expect(ctx.get("result")).toEqual(
       handle
         ? {
             message: "err",
           }
         : "err"
     );
-    expect(ctx.bag("h")).toBe(afterNext ? 1 : undefined);
+    expect(ctx.get("h")).toBe(afterNext ? 1 : undefined);
     expect(errorMiddleware.constructor).toBe(TestMiddleware);
   });
 }
@@ -71,7 +71,7 @@ function runBeforeNextTest(handle: boolean) {
     const { ctx } = await new TestStartup()
       .use(async (ctx, next) => {
         ctx.catchError = (err) => {
-          ctx.bag("result", err.message);
+          ctx.set("result", err.message);
           return ctx;
         };
         await next();
@@ -85,26 +85,26 @@ function runBeforeNextTest(handle: boolean) {
       })
       .hook(HookType.Error, (ctx, middleware, error) => {
         errorMiddleware = middleware;
-        ctx.bag("result", {
+        ctx.set("result", {
           message: error.message,
         });
         return handle;
       })
       .add(TestMiddleware)
       .use((ctx) => {
-        ctx.bag("h", 1);
+        ctx.set("h", 1);
       })
       .add(TestMiddleware)
       .run();
 
-    expect(ctx.bag("result")).toEqual(
+    expect(ctx.get("result")).toEqual(
       handle
         ? {
             message: "err",
           }
         : "err"
     );
-    expect(ctx.bag("h")).toBe(undefined);
+    expect(ctx.get("h")).toBe(undefined);
     expect(errorMiddleware.constructor).toBe(TestMiddleware);
   });
 }

@@ -19,7 +19,7 @@ describe("parent validate", () => {
       b1!: string;
 
       async invoke(): Promise<void> {
-        this.ctx.bag("b1", this.b1);
+        this.ctx.set("b1", this.b1);
       }
     }
 
@@ -34,7 +34,7 @@ describe("parent validate", () => {
       .add(TestMiddleware)
       .run();
 
-    expect(ctx.bag("b1")).toBeUndefined();
+    expect(ctx.get("b1")).toBeUndefined();
     expect(ctx.errorStack[0].message).toBe("b1 must be base64 encoded");
   });
 

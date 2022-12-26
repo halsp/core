@@ -13,7 +13,7 @@ describe("parse bool with micro", () => {
       readonly p1!: any;
 
       invoke(): void {
-        this.ctx.bag("p1", this.p1);
+        this.ctx.set("p1", this.p1);
       }
     }
 
@@ -28,7 +28,7 @@ describe("parse bool with micro", () => {
       .add(new TestMiddleware())
       .run();
 
-    expect(ctx.bag("p1")).toBeTruthy();
+    expect(ctx.get("p1")).toBeTruthy();
     expect(ctx.res.body).toBeUndefined();
   });
 
@@ -38,7 +38,7 @@ describe("parse bool with micro", () => {
       readonly p1!: any;
 
       invoke(): void {
-        this.ctx.bag("p1", this.p1);
+        this.ctx.set("p1", this.p1);
       }
     }
 
@@ -55,7 +55,7 @@ describe("parse bool with micro", () => {
       .add(new TestMiddleware())
       .run();
 
-    expect(ctx.bag("p1")).toBeUndefined();
+    expect(ctx.get("p1")).toBeUndefined();
     expect(ctx.res.body).toBeUndefined();
     expect(ctx.res.error).toBe("Parse bool failed");
   });
@@ -66,7 +66,7 @@ describe("parse bool with micro", () => {
       readonly p1!: any;
 
       invoke(): void {
-        this.ctx.bag("p1", this.p1);
+        this.ctx.set("p1", this.p1);
       }
     }
 
@@ -82,7 +82,7 @@ describe("parse bool with micro", () => {
       .add(new TestMiddleware())
       .run();
 
-    expect(ctx.bag("p1")).toBeUndefined();
+    expect(ctx.get("p1")).toBeUndefined();
     expect(ctx.res.body).toBeUndefined();
     expect(ctx.res.error).toBe("Parse bool failed");
   });

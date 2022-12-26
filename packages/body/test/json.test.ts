@@ -33,10 +33,10 @@ test("parse json error", async () => {
       invoke = true;
     })
     .useHttpJsonBody(undefined, async (ctx) => {
-      ctx.badRequestMsg({ message: "ERROR" });
+      ctx.res.badRequestMsg({ message: "ERROR" });
     })
     .use(async (ctx) => {
-      ctx.ok(ctx.req.body);
+      ctx.res.ok(ctx.req.body);
     })
     .listen();
   await request(server).post("").send("+'{}").type("json");
@@ -58,7 +58,7 @@ test("parse json error default", async () => {
     })
     .useHttpJsonBody()
     .use((ctx) => {
-      ctx.ok(ctx.req.body);
+      ctx.res.ok(ctx.req.body);
     })
     .listen();
   await request(server).post("").send("+'{}").type("json");

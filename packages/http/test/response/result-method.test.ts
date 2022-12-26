@@ -132,7 +132,7 @@ async function testBody(body?: unknown) {
     const methodItem = normalMethod[i];
     const res = await new TestStartup()
       .use(async (ctx) => {
-        (ctx as any)[methodItem.method](body);
+        ctx.res[methodItem.method](body);
       })
       .run();
 
@@ -184,7 +184,7 @@ test(`http result created`, async () => {
   {
     const res = await new TestStartup()
       .use(async (ctx) => {
-        ctx.created("loca", "body");
+        ctx.res.created("loca", "body");
       })
       .run();
     expect(res.status).toBe(201);
@@ -196,7 +196,7 @@ test(`http result created`, async () => {
 test(`http result noContent`, async () => {
   const res = await new TestStartup()
     .use(async (ctx) => {
-      ctx.noContent();
+      ctx.res.noContent();
     })
     .run();
   expect(res.status).toBe(204);

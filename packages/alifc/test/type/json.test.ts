@@ -8,7 +8,7 @@ test("json body", async function () {
 
   await new AlifcStartup()
     .use((ctx) => {
-      ctx.ok({
+      ctx.res.ok({
         content: "BODY",
       });
     })
@@ -42,7 +42,7 @@ test("json body set type", async function () {
         "content-length",
         Buffer.byteLength(strBody).toString()
       );
-      ctx.ok(body);
+      ctx.res.ok(body);
     })
     .run(aliReq, aliRes, aliContext);
 
@@ -61,7 +61,7 @@ test("prase json", async function () {
   await new AlifcStartup()
     .useHttpJsonBody()
     .use((ctx) => {
-      ctx.ok(ctx.req.body);
+      ctx.res.ok(ctx.req.body);
     })
     .run(aliReq, aliRes, aliContext);
 

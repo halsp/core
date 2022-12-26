@@ -26,7 +26,7 @@ async function execPipes<T extends object = any>(
   propertyType: any,
   pipes: PipeItem[]
 ) {
-  const globalPipes = ctx.bag<GlobalPipeItem[]>(GLOBAL_PIPE_BAG) ?? [];
+  const globalPipes = ctx.get<GlobalPipeItem[]>(GLOBAL_PIPE_BAG) ?? [];
   const beforeGlobalPipes = globalPipes
     .filter((p) => p.type == GlobalPipeType.before)
     .map((item) => item.pipe);

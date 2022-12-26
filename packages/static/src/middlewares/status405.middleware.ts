@@ -11,10 +11,10 @@ export class Status405Middleware extends BaseMiddleware {
   }
 
   private get matchResult() {
-    return this.ctx.bag<MatchResult | undefined>(MATCH_RESULT_BAG);
+    return this.ctx.get<MatchResult | undefined>(MATCH_RESULT_BAG);
   }
   private get isMethodValid() {
-    return this.ctx.bag<boolean>(IS_METHOD_VALID_BAG);
+    return this.ctx.get<boolean>(IS_METHOD_VALID_BAG);
   }
   private get use405() {
     return this.options.use405 as string | true;

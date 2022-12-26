@@ -21,7 +21,7 @@ describe("path match", () => {
       .setContext(new Request().setMethod("get").setPath("index.html"))
       .use(async (ctx, next) => {
         await next();
-        expect(ctx.bag<string>(FILE_BAG)).not.toBeUndefined();
+        expect(ctx.get<string>(FILE_BAG)).not.toBeUndefined();
       })
       .useStatic({
         dir: "test/static",
@@ -37,7 +37,7 @@ describe("path match", () => {
       .setContext(new Request().setMethod("get"))
       .use(async (ctx, next) => {
         await next();
-        expect(ctx.bag<string>(FILE_BAG)).toBeUndefined();
+        expect(ctx.get<string>(FILE_BAG)).toBeUndefined();
       })
       .useStatic()
       .run();
@@ -51,7 +51,7 @@ describe("useIndex", () => {
       .setContext(new Request().setMethod("get"))
       .use(async (ctx, next) => {
         await next();
-        expect(ctx.bag<string>(FILE_BAG)).not.toBeUndefined();
+        expect(ctx.get<string>(FILE_BAG)).not.toBeUndefined();
       })
       .useStatic({
         dir: "test/static",
@@ -67,7 +67,7 @@ describe("useIndex", () => {
       .setContext(new Request().setMethod("get"))
       .use(async (ctx, next) => {
         await next();
-        expect(ctx.bag<string>(FILE_BAG)).not.toBeUndefined();
+        expect(ctx.get<string>(FILE_BAG)).not.toBeUndefined();
       })
       .useStatic({
         dir: "test/static",
@@ -84,7 +84,7 @@ describe("useIndex", () => {
       .setContext(new Request().setMethod("get"))
       .use(async (ctx, next) => {
         await next();
-        expect(ctx.bag<string>(FILE_BAG)).not.toBeUndefined();
+        expect(ctx.get<string>(FILE_BAG)).not.toBeUndefined();
       })
       .useStatic({
         dir: "test/static",
@@ -116,7 +116,7 @@ describe("useExt", () => {
       .setContext(new Request().setMethod("get").setPath("index"))
       .use(async (ctx, next) => {
         await next();
-        expect(ctx.bag<string>(FILE_BAG)).not.toBeUndefined();
+        expect(ctx.get<string>(FILE_BAG)).not.toBeUndefined();
       })
       .useStatic({
         dir: "test/static",
@@ -132,7 +132,7 @@ describe("useExt", () => {
       .setContext(new Request().setMethod("get").setPath("index"))
       .use(async (ctx, next) => {
         await next();
-        expect(ctx.bag<string>(FILE_BAG)).not.toBeUndefined();
+        expect(ctx.get<string>(FILE_BAG)).not.toBeUndefined();
       })
       .useStatic({
         dir: "test/static",
@@ -149,7 +149,7 @@ describe("useExt", () => {
       .setContext(new Request().setMethod("get").setPath("index"))
       .use(async (ctx, next) => {
         await next();
-        expect(ctx.bag<string>(FILE_BAG)).not.toBeUndefined();
+        expect(ctx.get<string>(FILE_BAG)).not.toBeUndefined();
       })
       .useStatic({
         dir: "test/static",

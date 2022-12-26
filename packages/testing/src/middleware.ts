@@ -34,12 +34,12 @@ Startup.prototype.expectMiddleware = function <T extends Middleware>(
   const key = "";
   return this.use(async (ctx, next) => {
     await next();
-    if (!ctx.bag(key)) {
+    if (!ctx.get(key)) {
       throw new Error("The middleware is not executed!");
     }
   }).hook(type as any, async (ctx, md: T) => {
     if (md.constructor == middleware) {
-      ctx.bag(key, true);
+      ctx.set(key, true);
       await expect(md, ctx);
     }
   });

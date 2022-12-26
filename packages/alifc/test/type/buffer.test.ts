@@ -8,7 +8,7 @@ test("buffer body", async function () {
 
   await new AlifcStartup()
     .use((ctx) => {
-      ctx.ok(Buffer.from("BODY", "utf-8"));
+      ctx.res.ok(Buffer.from("BODY", "utf-8"));
     })
     .run(aliReq, aliRes, aliContext);
 
@@ -29,7 +29,7 @@ test("buffer body set type", async function () {
         "content-length",
         Buffer.from("BODY", "utf-8").length.toString()
       );
-      ctx.ok(Buffer.from("BODY", "utf-8"));
+      ctx.res.ok(Buffer.from("BODY", "utf-8"));
     })
     .run(aliReq, aliRes, aliContext);
 

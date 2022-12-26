@@ -33,7 +33,7 @@ class TestMiddleware extends Middleware {
   async invoke(): Promise<void> {
     this.service1.count++;
     this.service3.count++;
-    this.ctx.bag("result", {
+    this.ctx.set("result", {
       service1: this.service1.invoke(), // add 1
       service2: this.service2.invoke(), // add 1
       service3: this.service1.invoke(), // add 1
@@ -50,7 +50,7 @@ test(`class`, async function () {
     .add(TestMiddleware)
     .run();
 
-  expect(ctx.bag("result")).toEqual({
+  expect(ctx.get("result")).toEqual({
     service1: "service1",
     service2: "service2.service1",
     service3: "service1",

@@ -5,7 +5,7 @@ test("text body", async () => {
   const server = new NativeStartup()
     .useHttpTextBody()
     .use(async (ctx) => {
-      ctx.ok("BODY");
+      ctx.res.ok("BODY");
     })
     .listen();
   const res = await request(server).get("").type("text");
@@ -21,7 +21,7 @@ test("text body explicit type", async () => {
     .use(async (ctx) => {
       ctx.res.setHeader("content-type", "text/plain");
       ctx.res.setHeader("content-length", Buffer.byteLength("BODY").toString());
-      ctx.ok("BODY");
+      ctx.res.ok("BODY");
     })
     .listen();
   const res = await request(server).get("").type("text");
@@ -35,7 +35,7 @@ test("text body explicit type", async () => {
 test("html body", async () => {
   const server = new NativeStartup()
     .use(async (ctx) => {
-      ctx.ok("<div>BODY</div>");
+      ctx.res.ok("<div>BODY</div>");
     })
     .listen();
   const res = await request(server).get("").type("text");
@@ -53,7 +53,7 @@ function runTextReturn(headersSent: boolean) {
         if (headersSent) {
           ctx.resStream.flushHeaders();
         }
-        ctx.ok("BODY");
+        ctx.res.ok("BODY");
       })
       .listen();
     const res = await request(server).get("").responseType("text/plain");

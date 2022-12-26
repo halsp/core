@@ -39,13 +39,13 @@ Startup.prototype.useFilterOrder = function <T extends Filter = Filter>(
   order: number
 ) {
   return this.useFilter().use(async (ctx, next) => {
-    const existOrders = ctx.bag<OrderRecord<T>[]>(FILTERS_ORDER_BAG) ?? [];
+    const existOrders = ctx.get<OrderRecord<T>[]>(FILTERS_ORDER_BAG) ?? [];
     const orders = existOrders.filter((item) => item.filter != filter);
     orders.push({
       filter,
       order,
     });
-    ctx.bag(FILTERS_ORDER_BAG, orders);
+    ctx.set(FILTERS_ORDER_BAG, orders);
     await next();
   });
 };
@@ -64,9 +64,9 @@ Startup.prototype.useGlobalFilter = function <T extends Filter = Filter>(
   }
 
   return this.use(async (ctx, next) => {
-    const filters = ctx.bag<FilterItem<T>[]>(GLOBAL_FILTERS_BAG) ?? [];
+    const filters = ctx.get<FilterItem<T>[]>(GLOBAL_FILTERS_BAG) ?? [];
     filters.push(filter);
-    ctx.bag(GLOBAL_FILTERS_BAG, filters);
+    ctx.set(GLOBAL_FILTERS_BAG, filters);
     await next();
   });
 };

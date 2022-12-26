@@ -27,8 +27,8 @@ function testSchema(useSchema: boolean) {
         private readonly b1!: string;
 
         async invoke(): Promise<void> {
-          this.ctx.bag("b1", this.b1);
-          this.ctx.bag("body", this.body);
+          this.ctx.set("b1", this.b1);
+          this.ctx.set("body", this.body);
         }
       }
 
@@ -56,7 +56,7 @@ function testSchema(useSchema: boolean) {
       }
       const { ctx } = await startup.add(TestMiddleware).run();
       expect(ctx.errorStack[0].message).toBe("b1 must be an integer number");
-      expect(ctx.bag("body")).toBeUndefined();
+      expect(ctx.get("body")).toBeUndefined();
     });
   }
   runTest(true);

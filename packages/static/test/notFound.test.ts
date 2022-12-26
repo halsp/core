@@ -12,8 +12,8 @@ describe("not found", () => {
         .setContext(new Request().setMethod("get").setPath("not-exist"))
         .use(async (ctx, next) => {
           await next();
-          expect(ctx.bag<string>(FILE_BAG)).not.toBeUndefined();
-          expect(ctx.bag<number>(FILE_ERROR_STATUS_BAG)).toBe(404);
+          expect(ctx.get<string>(FILE_BAG)).not.toBeUndefined();
+          expect(ctx.get<number>(FILE_ERROR_STATUS_BAG)).toBe(404);
         })
         .useStatic({
           dir: "test/static",

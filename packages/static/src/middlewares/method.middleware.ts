@@ -29,7 +29,7 @@ export class MethodMiddleware extends BaseMiddleware {
   }
 
   async invoke(): Promise<void> {
-    this.ctx.bag(IS_METHOD_VALID_BAG, this.isMethodValid);
+    this.ctx.set(IS_METHOD_VALID_BAG, this.isMethodValid);
     await this.next();
   }
 }

@@ -10,7 +10,7 @@ describe("single file", () => {
       .setContext(new Request().setMethod("get").setPath("ind"))
       .use(async (ctx, next) => {
         await next();
-        expect(ctx.bag<string>(FILE_BAG)).not.toBeUndefined();
+        expect(ctx.get<string>(FILE_BAG)).not.toBeUndefined();
       })
       .useStatic({
         file: "test/static/index.html",
@@ -54,7 +54,7 @@ test("not found path", async () => {
     .setContext(new Request().setMethod("get").setPath("ind1"))
     .use(async (ctx, next) => {
       await next();
-      expect(ctx.bag<string>(FILE_BAG)).toBeUndefined();
+      expect(ctx.get<string>(FILE_BAG)).toBeUndefined();
     })
     .useStatic({
       file: "test/static/index.html",

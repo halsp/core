@@ -5,11 +5,11 @@ test("middleware pipeline", async () => {
   const startup = new TestStartup().add(new Md());
 
   let res = await startup.run();
-  expect(res.ctx.bag("num")).toBe(1);
+  expect(res.ctx.get("num")).toBe(1);
   res = await startup.run();
-  expect(res.ctx.bag("num")).toBe(2);
+  expect(res.ctx.get("num")).toBe(2);
   res = await startup.run();
-  expect(res.ctx.bag("num")).toBe(3);
+  expect(res.ctx.get("num")).toBe(3);
 });
 
 class Md extends Middleware {
@@ -17,7 +17,7 @@ class Md extends Middleware {
 
   async invoke(): Promise<void> {
     this.#number++;
-    this.ctx.bag("num", this.#number);
+    this.ctx.set("num", this.#number);
     await this.next();
   }
 }

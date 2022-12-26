@@ -10,7 +10,7 @@ class TestMiddleware extends Middleware {
   private readonly coreConnection!: MongooseConnection;
 
   async invoke(): Promise<void> {
-    this.ctx.bag("result", {
+    this.ctx.set("result", {
       app: !!this.appConnection,
       core: !!this.coreConnection,
       eq: this.appConnection == this.coreConnection,
@@ -22,10 +22,10 @@ test("identity", async () => {
   const { ctx } = await new TestStartup()
     .use(async (ctx, next) => {
       (mongoose as any).createConnection = async () => {
-        ctx.bag("connect", "1");
+        ctx.set("connect", "1");
         return {
           close: () => {
-            ctx.bag("destroy", "1");
+            ctx.set("destroy", "1");
           },
         } as any;
       };
@@ -41,7 +41,7 @@ test("identity", async () => {
     .add(TestMiddleware)
     .run();
 
-  expect(ctx.bag("result")).toEqual({
+  expect(ctx.get("result")).toEqual({
     app: true,
     core: true,
     eq: false,

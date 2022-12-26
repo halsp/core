@@ -47,12 +47,12 @@ describe("inject", () => {
       })
       .use(async (ctx) => {
         const client1 = await ctx.getMicroClient<TestClient>();
-        ctx.bag("logger1", client1.logger);
+        ctx.set("logger1", client1.logger);
         client1.dispose();
 
         client1.logger = undefined as any;
         const client2 = await ctx.getMicroClient<TestClient>("custom_id");
-        ctx.bag("logger2", client2.logger);
+        ctx.set("logger2", client2.logger);
         client2.dispose();
       })
       .run();
@@ -62,8 +62,8 @@ describe("inject", () => {
     server2.removeAllListeners();
     server2.close();
 
-    expect(!!ctx.bag("logger1")).toBeTruthy();
-    expect(!!ctx.bag("logger2")).toBeFalsy();
+    expect(!!ctx.get("logger1")).toBeTruthy();
+    expect(!!ctx.get("logger2")).toBeFalsy();
   });
 
   it("should get micro client by decorator", async () => {
@@ -74,11 +74,11 @@ describe("inject", () => {
       readonly injectIdentityClient!: IMicroClient;
 
       invoke() {
-        this.ctx.bag(
+        this.ctx.set(
           "equal",
           this.injectDefaultClient == this.injectIdentityClient
         );
-        this.ctx.bag("instance", !!this.injectDefaultClient);
+        this.ctx.set("instance", !!this.injectDefaultClient);
       }
     }
 
@@ -104,8 +104,8 @@ describe("inject", () => {
     server2.removeAllListeners();
     server2.close();
 
-    expect(ctx.bag("equal")).toBeFalsy();
-    expect(ctx.bag("instance")).toBeTruthy();
+    expect(ctx.get("equal")).toBeFalsy();
+    expect(ctx.get("instance")).toBeTruthy();
   });
 
   it("should set default options", async () => {
@@ -116,7 +116,7 @@ describe("inject", () => {
       .useTestClient()
       .use(async (ctx) => {
         const client1 = await ctx.getMicroClient<TestClient>();
-        ctx.bag("logger", client1.logger);
+        ctx.set("logger", client1.logger);
         client1.dispose();
       })
       .run();
@@ -124,6 +124,6 @@ describe("inject", () => {
     server.removeAllListeners();
     server.close();
 
-    expect(!!ctx.bag("logger")).toBeTruthy();
+    expect(!!ctx.get("logger")).toBeTruthy();
   });
 });

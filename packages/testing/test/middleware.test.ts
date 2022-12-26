@@ -7,7 +7,7 @@ class TestMiddleware extends Middleware {
   }
 
   invoke(): void | Promise<void> {
-    this.ctx.bag("result", "OK");
+    this.ctx.set("result", "OK");
   }
 }
 
@@ -24,7 +24,7 @@ describe("middleware", () => {
   it("should expect before invoke", async () => {
     await new TestStartup()
       .expectMiddleware(TestMiddleware, (md) => {
-        expect(md.ctx.bag("result")).toBeUndefined();
+        expect(md.ctx.get("result")).toBeUndefined();
       })
       .add(TestMiddleware)
       .run();

@@ -1,10 +1,8 @@
 import { StatusCodes, getReasonPhrase } from "http-status-codes";
 import { HttpErrorMessage } from "./http-error-message";
-import { HeaderHandler, initHeaderHandler } from "./header-handler";
 import { isString, Response } from "@ipare/core";
-import { HeadersDict } from "../types";
 
-export interface ResultHandler extends HeaderHandler {
+export interface ResultHandler {
   // 200
   ok: (body?: unknown) => this;
   // 201
@@ -114,12 +112,8 @@ export interface ResultHandler extends HeaderHandler {
 
 export function initResultHandler<T extends ResultHandler>(
   target: T,
-  getRes: (this: any) => Response,
-  getHeaders: (this: any) => HeadersDict,
-  setHeaders: (this: any) => HeadersDict
+  getRes: (this: any) => Response
 ) {
-  initHeaderHandler(target, getHeaders, setHeaders);
-
   function setResult(this: any, status: StatusCodes, body?: unknown): T {
     const res = getRes.bind(this)();
     if (body != undefined) {
@@ -154,9 +148,10 @@ export function initResultHandler<T extends ResultHandler>(
   };
 
   target.created = function (location: string, body?: unknown): T {
-    return setResult
-      .bind(this)(StatusCodes.CREATED, body)
-      .setHeader("location", location);
+    setResult.bind(this)(StatusCodes.CREATED, body);
+    const res = getRes.bind(this)();
+    res.set("location", location);
+    return this;
   };
 
   target.accepted = function (body?: unknown): T {
@@ -181,7 +176,7 @@ export function initResultHandler<T extends ResultHandler>(
       | StatusCodes.PERMANENT_REDIRECT = StatusCodes.MOVED_TEMPORARILY
   ): T {
     const res = getRes.bind(this)();
-    res.setStatus(code).setHeader("location", location);
+    res.setStatus(code).set("location", location);
     return this;
   };
 

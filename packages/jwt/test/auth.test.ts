@@ -13,7 +13,7 @@ describe("auth", () => {
     it(`should auth ${auth}`, async function () {
       const { ctx } = await new TestStartup()
         .use(async (ctx, next) => {
-          ctx.bag("result", false);
+          ctx.set("result", false);
           await next();
         })
         .setContext(
@@ -25,9 +25,9 @@ describe("auth", () => {
           secret: "secret",
         })
         .useJwtExtraAuth(() => auth)
-        .use((ctx) => ctx.bag("result", true))
+        .use((ctx) => ctx.set("result", true))
         .run();
-      expect(ctx.bag("result")).toBe(auth);
+      expect(ctx.get("result")).toBe(auth);
     });
   }
   runAuthTest(true);
@@ -43,7 +43,7 @@ describe("auth", () => {
       )
       .use(async (ctx, next) => {
         ctx["unauthorizedMsg"] = (msg) => {
-          ctx.bag("msg", msg);
+          ctx.set("msg", msg);
         };
         await next();
       })
@@ -52,7 +52,7 @@ describe("auth", () => {
       })
       .useJwtVerify()
       .run();
-    expect(ctx.bag("msg")).toBe("invalid signature");
+    expect(ctx.get("msg")).toBe("invalid signature");
   });
 
   it("should set 401 when use useJwtExtraAuth in http", async () => {
@@ -65,7 +65,7 @@ describe("auth", () => {
       )
       .use(async (ctx, next) => {
         ctx["unauthorizedMsg"] = (msg: string) => {
-          ctx.bag("msg", msg);
+          ctx.set("msg", msg);
         };
         ctx.res["status"] = 404;
         await next();
@@ -75,7 +75,7 @@ describe("auth", () => {
       })
       .useJwtExtraAuth(() => false)
       .run();
-    expect(ctx.bag("msg")).toBe("JWT validation failed");
+    expect(ctx.get("msg")).toBe("JWT validation failed");
   });
 
   it("should throw error when use useJwtVerify without env", async () => {
@@ -132,9 +132,9 @@ describe("auth", () => {
         secret: "secret",
       })
       .useJwtVerify()
-      .use((ctx) => ctx.bag("result", true))
+      .use((ctx) => ctx.set("result", true))
       .run();
-    expect(ctx.bag("result")).toBe(true);
+    expect(ctx.get("result")).toBe(true);
   });
 
   it(`should auth failed with custom status when use micro`, async function () {
@@ -149,12 +149,12 @@ describe("auth", () => {
         secret: "secret",
       })
       .useJwtExtraAuth(async (ctx) => {
-        ctx.bag("extra", true);
+        ctx.set("extra", true);
         return false;
       })
-      .use((ctx) => ctx.bag("extra", false))
+      .use((ctx) => ctx.set("extra", false))
       .run();
-    expect(ctx.bag("extra")).toBeTruthy();
+    expect(ctx.get("extra")).toBeTruthy();
   });
 
   it(`should auth with null token`, async function () {
@@ -166,12 +166,12 @@ describe("auth", () => {
         const jwtService = await parseInject(ctx, JwtService);
         try {
           await jwtService.verify(null as any);
-          ctx.bag("result", false);
+          ctx.set("result", false);
         } catch (ex) {
-          ctx.bag("result", true);
+          ctx.set("result", true);
         }
       })
       .run();
-    expect(ctx.bag("result")).toBeTruthy();
+    expect(ctx.get("result")).toBeTruthy();
   });
 });

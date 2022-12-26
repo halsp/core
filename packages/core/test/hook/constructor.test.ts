@@ -7,7 +7,7 @@ class TestMiddleware1 extends Middleware {
   }
 
   async invoke(): Promise<void> {
-    this.ctx.bag(`h1`, this.num);
+    this.ctx.set(`h1`, this.num);
     await this.next();
   }
 }
@@ -18,7 +18,7 @@ class TestMiddleware2 extends Middleware {
   }
 
   async invoke(): Promise<void> {
-    this.ctx.bag(`h2`, this.num);
+    this.ctx.set(`h2`, this.num);
     await this.next();
   }
 }
@@ -33,7 +33,7 @@ test("constructor hook", async () => {
     .hook<TestMiddleware1>(HookType.Constructor, (ctx, md) => {
       // usless
       if (md == TestMiddleware1) {
-        ctx.bag("h3", 3);
+        ctx.set("h3", 3);
         return new md(3);
       }
     })
@@ -46,13 +46,13 @@ test("constructor hook", async () => {
     .add(TestMiddleware2)
     .run();
 
-  expect(ctx.bag("h1")).toBe(1);
-  expect(ctx.bag("h2")).toBe(2);
-  expect(ctx.bag("h3")).toBeUndefined();
+  expect(ctx.get("h1")).toBe(1);
+  expect(ctx.get("h2")).toBe(2);
+  expect(ctx.get("h3")).toBeUndefined();
 });
 
 test("constructor hook error", async () => {
   const { ctx } = await new TestStartup().add(TestMiddleware1).run();
 
-  expect(ctx.bag("h1")).toBeUndefined();
+  expect(ctx.get("h1")).toBeUndefined();
 });

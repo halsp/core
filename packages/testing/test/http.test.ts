@@ -46,7 +46,7 @@ describe("http startup", () => {
   it("should set status 200", async () => {
     await new TestHttpStartup()
       .use((ctx) => {
-        ctx.ok();
+        ctx.res.ok();
       })
       .expect((res) => {
         res.expect(200);
@@ -87,7 +87,7 @@ describe("server startup", () => {
   it("should set body", async () => {
     await new TestNativeStartup()
       .use((ctx) => {
-        ctx.ok({
+        ctx.res.ok({
           method: ctx.req.method,
           path: ctx.req.path,
         });

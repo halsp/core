@@ -54,7 +54,7 @@ describe("identity", () => {
       private readonly testLogger!: ILogger;
 
       async invoke(): Promise<void> {
-        this.ctx.bag("RESULT", this.testLogger.transports);
+        this.ctx.set("RESULT", this.testLogger.transports);
       }
     }
 
@@ -64,7 +64,7 @@ describe("identity", () => {
       .run();
 
     expect(
-      ctx.bag<winston.transport[]>("RESULT")[0] instanceof
+      ctx.get<winston.transport[]>("RESULT")[0] instanceof
         winston.transports.Console
     ).toBeTruthy();
   });

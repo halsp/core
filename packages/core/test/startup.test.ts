@@ -6,23 +6,23 @@ describe("invoke", () => {
   it("should invoke multiple", async () => {
     const startup = new TestStartup()
       .use(async (ctx, next) => {
-        if (!ctx.bag("result")) {
-          ctx.bag("result", 0);
+        if (!ctx.has("result")) {
+          ctx.set("result", 0);
         }
-        ctx.bag("result", ctx.bag<number>("result") + 1);
+        ctx.set("result", ctx.get<number>("result") + 1);
         await next();
       })
       .use(async (ctx) => {
-        ctx.bag("result", ctx.bag<number>("result") + 1);
+        ctx.set("result", ctx.get<number>("result") + 1);
       });
     process.env.NODE_ENV = "";
 
     let res = await startup.run();
-    expect(res.ctx.bag("result")).toBe(2);
+    expect(res.ctx.get("result")).toBe(2);
     res = await startup.run();
-    expect(res.ctx.bag("result")).toBe(2);
+    expect(res.ctx.get("result")).toBe(2);
     res = await startup.run();
-    expect(res.ctx.bag("result")).toBe(2);
+    expect(res.ctx.get("result")).toBe(2);
   });
 });
 
@@ -36,13 +36,13 @@ describe("custom", () => {
   it("should run with custom startup", async () => {
     const { ctx } = await new CustomStartup()
       .use((ctx) => {
-        ctx.bag("result", {
+        ctx.set("result", {
           msg: "ok",
         });
       })
       .run();
 
-    expect(ctx.bag("result")).toEqual({
+    expect(ctx.get("result")).toEqual({
       msg: "ok",
     });
   });

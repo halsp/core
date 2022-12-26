@@ -6,7 +6,7 @@ test("buffer body explicit type", async () => {
     .use(async (ctx) => {
       ctx.res.setHeader("content-type", "application/octet-stream");
       ctx.res.setHeader("content-length", Buffer.byteLength("BODY").toString());
-      ctx.ok(Buffer.from("BODY", "utf-8"));
+      ctx.res.ok(Buffer.from("BODY", "utf-8"));
     })
     .listen();
   const res = await request(server).get("");
@@ -20,7 +20,7 @@ test("buffer body explicit type", async () => {
 test("buffer body", async () => {
   const server = new NativeStartup()
     .use(async (ctx) => {
-      ctx.ok(Buffer.from("BODY", "utf-8"));
+      ctx.res.ok(Buffer.from("BODY", "utf-8"));
     })
     .listen();
   const res = await request(server).get("");

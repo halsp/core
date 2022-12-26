@@ -5,7 +5,7 @@ import { execFilters, Filter, UseFilters } from "../src";
 
 class CustomFilter implements Filter {
   execute(ctx: Context) {
-    ctx.setHeader("custom", 1);
+    ctx.res.set("custom", 1);
   }
 }
 

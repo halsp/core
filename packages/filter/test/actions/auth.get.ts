@@ -6,10 +6,10 @@ const Admin = ActionMetadata("admin", "true");
 
 class TestAuthorizationFilter implements AuthorizationFilter {
   onAuthorization(ctx: Context): boolean | Promise<boolean> {
-    ctx.setHeader("admin", ctx.actionMetadata.admin);
+    ctx.res.set("admin", ctx.actionMetadata.admin);
     const executing: boolean = ctx.req.body["executing"];
     if (!executing) {
-      ctx.unauthorizedMsg();
+      ctx.res.unauthorizedMsg();
     }
     return executing;
   }

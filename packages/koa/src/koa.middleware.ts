@@ -27,16 +27,16 @@ export class KoaMiddleware extends Middleware {
   // step: ipare -> koa -> ipare ->koa ->ipare
   async invoke() {
     const middlewares =
-      this.ctx.bag<Parameters<typeof Koa.prototype.use>[0][]>(
+      this.ctx.get<Parameters<typeof Koa.prototype.use>[0][]>(
         KOA_MIDDLEWARES_BAG
       ) ?? [];
     middlewares.push(this.middleware);
 
     if (this.isNextInstanceOf(KoaMiddleware)) {
-      this.ctx.bag(KOA_MIDDLEWARES_BAG, middlewares);
+      this.ctx.set(KOA_MIDDLEWARES_BAG, middlewares);
       return await this.next();
     }
-    this.ctx.bag(KOA_MIDDLEWARES_BAG, []);
+    this.ctx.set(KOA_MIDDLEWARES_BAG, []);
 
     const app = new Koa(this.options);
     middlewares.splice(0, 0, async (koaCtx, next) => {

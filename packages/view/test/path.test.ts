@@ -7,7 +7,7 @@ test("run multiple", async () => {
       dir: "test/views",
     })
     .use(async (ctx) => {
-      ctx.bag(
+      ctx.set(
         "view",
         await ctx.view("ejs/index.ejs", {
           name: "test ejs",
@@ -16,10 +16,10 @@ test("run multiple", async () => {
     });
 
   const { ctx: ctx1 } = await startup.run();
-  expect(ctx1.bag("view")).toBe("<p>test ejs</p>");
+  expect(ctx1.get("view")).toBe("<p>test ejs</p>");
 
   const { ctx: ctx2 } = await startup.run();
-  expect(ctx2.bag("view")).toBe("<p>test ejs</p>");
+  expect(ctx2.get("view")).toBe("<p>test ejs</p>");
 });
 
 test("default index", async () => {
@@ -28,7 +28,7 @@ test("default index", async () => {
       dir: "test/views",
     })
     .use(async (ctx) => {
-      ctx.bag(
+      ctx.set(
         "view",
         await ctx.view("ejs", {
           name: "test ejs",
@@ -37,7 +37,7 @@ test("default index", async () => {
     })
     .run();
 
-  expect(ctx.bag("view")).toBe("<p>test ejs</p>");
+  expect(ctx.get("view")).toBe("<p>test ejs</p>");
 });
 
 test("without ext", async () => {
@@ -46,7 +46,7 @@ test("without ext", async () => {
       dir: "test/views",
     })
     .use(async (ctx) => {
-      ctx.bag(
+      ctx.set(
         "view",
         await ctx.view("ejs/index", {
           name: "test ejs",
@@ -55,14 +55,14 @@ test("without ext", async () => {
     })
     .run();
 
-  expect(ctx.bag("view")).toBe("<p>test ejs</p>");
+  expect(ctx.get("view")).toBe("<p>test ejs</p>");
 });
 
 test("default dir", async () => {
   const { ctx } = await new TestStartup()
     .useView()
     .use(async (ctx) => {
-      ctx.bag(
+      ctx.set(
         "view",
         await ctx.view("ejs/index", {
           name: "test ejs",
@@ -71,7 +71,7 @@ test("default dir", async () => {
     })
     .run();
 
-  expect(ctx.bag("view")).toBeUndefined();
+  expect(ctx.get("view")).toBeUndefined();
 });
 
 test("null", async () => {
@@ -82,9 +82,9 @@ test("null", async () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ctx.state = null as any;
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ctx.bag("view", await ctx.view(null as any, null as any));
+      ctx.set("view", await ctx.view(null as any, null as any));
     })
     .run();
 
-  expect(ctx.bag("view")).toBeUndefined();
+  expect(ctx.get("view")).toBeUndefined();
 });

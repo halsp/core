@@ -13,7 +13,7 @@ test("json body explicit type", async () => {
           })
         ).toString()
       );
-      ctx.ok({
+      ctx.res.ok({
         content: "BODY",
       });
     })
@@ -31,7 +31,7 @@ test("json body explicit type", async () => {
 test("return json", async () => {
   const server = new NativeStartup()
     .use(async (ctx) => {
-      ctx.ok({
+      ctx.res.ok({
         content: "BODY",
       });
     })

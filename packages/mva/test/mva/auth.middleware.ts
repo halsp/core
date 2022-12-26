@@ -16,14 +16,14 @@ export class AutFilter implements AuthorizationFilter {
 
     if (ctx.actionMetadata.roles.includes("pl")) {
       if (!(await this.paramsLoginAuth(ctx))) {
-        ctx.forbiddenMsg({ message: "error email or password" });
+        ctx.res.forbiddenMsg({ message: "error email or password" });
         return false;
       }
     }
 
     if (ctx.actionMetadata.roles.includes("hl")) {
       if (!(await this.headerLoginAuth(ctx))) {
-        ctx.forbiddenMsg({ message: "error email or password" });
+        ctx.res.forbiddenMsg({ message: "error email or password" });
         return false;
       }
     }

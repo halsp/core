@@ -51,9 +51,9 @@ function runTest(executing: boolean) {
           })
         )
         .use(async (ctx, next) => {
-          ctx.setHeader("h1", 1);
+          ctx.res.set("h1", 1);
           await next();
-          ctx.setHeader("h2", 2);
+          ctx.res.set("h2", 2);
         })
         .useFilter()
         .add(TestAction)

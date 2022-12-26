@@ -57,7 +57,7 @@ Startup.prototype.useInject = function (): Startup {
 
   const singletons = [];
   return this.use(async (ctx, next) => {
-    ctx.bag(SINGLETON_BAG, singletons);
+    ctx.set(SINGLETON_BAG, singletons);
     await next();
   })
     .hook(HookType.Constructor, async (ctx, mh) => {
@@ -95,13 +95,13 @@ Startup.prototype.inject = function (...args: any[]): Startup {
 
   this.use(async (ctx, next) => {
     const injectType = type ?? InjectType.Scoped;
-    const injectMaps = ctx.bag<InjectMap[]>(MAP_BAG) ?? [];
+    const injectMaps = ctx.get<InjectMap[]>(MAP_BAG) ?? [];
     injectMaps.push({
       anestor,
       target,
       type: injectType,
     });
-    ctx.bag(MAP_BAG, injectMaps);
+    ctx.set(MAP_BAG, injectMaps);
 
     try {
       await next();

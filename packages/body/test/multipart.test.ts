@@ -25,7 +25,7 @@ test("useHttpMultipartBody", async () => {
       if (!multipartBody) return;
       const file = multipartBody.files.file as File;
 
-      ctx.ok({
+      ctx.res.ok({
         fields: multipartBody.fields,
         file: {
           name: file.originalFilename,
@@ -62,7 +62,7 @@ test("on file begin", async () => {
       if (!multipartBody) return;
       const file = multipartBody.files.file as File;
 
-      ctx.ok(file.originalFilename);
+      ctx.res.ok(file.originalFilename);
     })
     .listen();
   await request(server)
@@ -85,7 +85,7 @@ test("prase file error without callback", async () => {
     })
     .useHttpMultipartBody()
     .use(async (ctx) => {
-      ctx.noContent();
+      ctx.res.noContent();
     })
     .listen();
 
@@ -119,7 +119,7 @@ test("prase file error", async () => {
       ctx.res.set("parse-err", err.message);
     })
     .use(async (ctx) => {
-      ctx.noContent();
+      ctx.res.noContent();
     })
     .listen();
 

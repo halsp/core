@@ -47,7 +47,7 @@ test("set text type", async () => {
     .use(async (ctx, next) => {
       ctx.res.setHeader("content-type", "text/plain");
       ctx.res.setHeader("content-length", "10");
-      ctx.ok("BODY");
+      ctx.res.ok("BODY");
       await next();
     })
     .run({}, {});
@@ -61,7 +61,7 @@ test("set text type", async () => {
 test("html", async () => {
   const res = await new LambdaStartup()
     .use(async (ctx, next) => {
-      ctx.ok("<div></div>");
+      ctx.res.ok("<div></div>");
       await next();
     })
     .run({}, {});

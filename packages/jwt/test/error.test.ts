@@ -20,12 +20,12 @@ function testErrorSecret(isError: boolean) {
           undefined,
           customError
             ? (ctx, err) => {
-                ctx.bag("result", err.message);
+                ctx.set("result", err.message);
               }
             : undefined
         )
         .use((ctx) => {
-          ctx.bag("result", true);
+          ctx.set("result", true);
         });
 
       let ctx: Context | undefined;
@@ -45,10 +45,10 @@ function testErrorSecret(isError: boolean) {
         if (!ctx) throw new Error();
 
         if (!isError) {
-          expect(ctx.bag("result")).toBeTruthy();
+          expect(ctx.get("result")).toBeTruthy();
         } else {
           if (customError) {
-            expect(ctx.bag("result")).toBe("invalid signature");
+            expect(ctx.get("result")).toBe("invalid signature");
           }
         }
       }
