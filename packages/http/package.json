@@ -1,6 +1,6 @@
 {
   "name": "@ipare/http",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "支持 Ipare HTTP 请求",
   "engines": {
     "node": ">=12.14.0"
@@ -34,8 +34,8 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^3.1.0",
-    "@ipare/methods": "^3.1.0",
+    "@ipare/core": "^3.1.1",
+    "@ipare/methods": "^3.1.1",
     "http-status-codes": "^2.2.0",
     "mime-types": "^2.1.35"
   },
