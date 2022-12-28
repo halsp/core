@@ -43,7 +43,7 @@ export class NativeStartup<
     }
 
     this.server.on("listening", () => {
-      logAddress(this.server, this.logger);
+      logAddress(this.server, this.logger, "http://localhost");
     });
   }
 

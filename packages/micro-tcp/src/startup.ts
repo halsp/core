@@ -26,7 +26,7 @@ export class MicroTcpStartup extends MicroStartup {
     }
 
     this.#server.on("listening", () => {
-      logAddress(this.#server, this.logger);
+      logAddress(this.#server, this.logger, "localhost");
     });
   }
 

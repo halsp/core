@@ -62,7 +62,8 @@ describe("log", () => {
         info: (val: string) => {
           address = val;
         },
-      } as any
+      } as any,
+      ""
     );
     expect(address).toBe("Server started, listening address: string address");
   });
@@ -82,7 +83,8 @@ describe("log", () => {
         info: (val: string) => {
           address = val;
         },
-      } as any
+      } as any,
+      ""
     );
     expect(address).toBe("Server started, listening address: 127.0.0.1:2333");
   });
@@ -102,11 +104,10 @@ describe("log", () => {
         info: (val: string) => {
           address = val;
         },
-      } as any
+      } as any,
+      "def"
     );
-    expect(address).toBe(
-      "Server started, listening address: http://localhost:2333"
-    );
+    expect(address).toBe("Server started, listening address: def:2333");
   });
 });
 

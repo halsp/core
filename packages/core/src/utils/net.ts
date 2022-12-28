@@ -47,10 +47,14 @@ export async function dynamicListen(
   return await tryListen(getIparePort(port) ?? 9504);
 }
 
-export function logAddress(server: net.Server, logger: ILogger) {
+export function logAddress(
+  server: net.Server,
+  logger: ILogger,
+  defaultHost: string
+) {
   const address = server.address();
   if (isObject<net.AddressInfo>(address)) {
-    const host = address.address == "::" ? "http://localhost" : address.address;
+    const host = address.address == "::" ? defaultHost : address.address;
     logger.info(`Server started, listening address: ${host}:${address.port}`);
   } else {
     logger.info(`Server started, listening address: ${address}`);
