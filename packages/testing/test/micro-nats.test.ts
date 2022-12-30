@@ -20,7 +20,7 @@ describe("micro-nats", () => {
     );
     await startup.listen();
     const client = new MicroNatsClient();
-    await client.connect();
+    await client["connect"]();
 
     const result = await client.send("test_pattern", "test_body");
     expect(result.data).toBe("test_body");
@@ -51,7 +51,7 @@ describe("micro-nats", () => {
     );
     await startup.listen();
     const client = new MicroNatsClient();
-    await client.connect();
+    await client["connect"]();
 
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const natsPkg = require("nats");

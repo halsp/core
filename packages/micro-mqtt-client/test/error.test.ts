@@ -6,7 +6,7 @@ describe("error", () => {
 
   it("should log error if client emit error event", async () => {
     const client = new MicroMqttClient();
-    await client.connect();
+    await client["connect"]();
 
     let error: any;
     client.logger = {
@@ -22,7 +22,7 @@ describe("error", () => {
 
   it("should ignore error if logger is undefined", async () => {
     const client = new MicroMqttClient();
-    await client.connect();
+    await client["connect"]();
     client.logger = undefined as any;
 
     client["client"]?.emit("error", new Error("err"));

@@ -13,7 +13,7 @@ describe("micro-nats", () => {
     await startup.listen();
 
     const client = new MicroNatsClient();
-    await client.connect();
+    await client["connect"]();
 
     const result = await client.send("event:123", true);
 
@@ -32,7 +32,7 @@ describe("micro-nats", () => {
     startup.listen();
 
     const client = new MicroNatsClient();
-    await client.connect();
+    await client["connect"]();
 
     const result = await client.send("pf:event:123", true);
 

@@ -61,7 +61,7 @@ describe("stream", () => {
     client.close();
     await startup.close();
     await new Promise<void>((resolve) => {
-      setTimeout(() => resolve(), 5000);
+      setTimeout(() => resolve(), 500);
     });
 
     expect(result).toEqual([
@@ -132,7 +132,7 @@ describe("stream", () => {
     client.close();
     await startup.close();
     await new Promise<void>((resolve) => {
-      setTimeout(() => resolve(), 5000);
+      setTimeout(() => resolve(), 500);
     });
 
     expect(result).toEqual({
@@ -199,7 +199,7 @@ describe("stream", () => {
     client.close();
     await startup.close();
     await new Promise<void>((resolve) => {
-      setTimeout(() => resolve(), 5000);
+      setTimeout(() => resolve(), 500);
     });
 
     expect(result).toEqual([

@@ -5,7 +5,7 @@ describe("client", () => {
   it("should load default protos", async () => {
     await runin("test", async () => {
       const client = new MicroGrpcClient();
-      await client.connect();
+      await client["connect"]();
 
       let err!: Error;
       try {

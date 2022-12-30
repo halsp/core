@@ -13,7 +13,7 @@ describe("mock", () => {
     await startup.listen();
 
     const client = new MicroNatsClient();
-    await client.connect();
+    await client["connect"]();
     const result = await client.send("test_pattern", "test_body");
 
     await client.dispose();

@@ -16,9 +16,7 @@ export class MicroNatsClient extends IMicroClient {
     return this.options.prefix ?? "";
   }
 
-  async connect() {
-    await this.#close();
-
+  protected async connect() {
     const opt: MicroNatsClientOptions = { ...this.options };
     if (!("servers" in this.options) && !("port" in this.options)) {
       opt.port = 4222;
@@ -28,17 +26,10 @@ export class MicroNatsClient extends IMicroClient {
     this.connection = await require("nats").connect(opt);
   }
 
-  async #close() {
+  async dispose() {
     if (this.connection && !this.connection.isClosed()) {
       await this.connection.close();
     }
-  }
-
-  /**
-   * for @ipare/inject
-   */
-  async dispose() {
-    await this.#close();
   }
 
   async send<T = any>(

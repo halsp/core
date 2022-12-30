@@ -13,7 +13,7 @@ describe("micro-redis", () => {
     await startup.listen();
 
     const client = new MicroRedisClient();
-    await client.connect();
+    await client["connect"]();
 
     const result = await client.send("event:123", true);
 
@@ -29,12 +29,14 @@ describe("micro-redis", () => {
         prefix: "pf:",
       })
       .useRouter();
-    startup.listen();
+    await startup.listen();
 
-    const client = new MicroRedisClient();
-    await client.connect();
+    const client = new MicroRedisClient({
+      prefix: "pf:",
+    });
+    await client["connect"]();
 
-    const result = await client.send("pf:event:123", true);
+    const result = await client.send("event:123", true);
 
     await startup.close();
     await client.dispose();

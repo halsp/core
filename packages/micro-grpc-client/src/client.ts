@@ -18,26 +18,19 @@ export class MicroGrpcClient extends IMicroClient {
   }[] = [];
   #packages?: grpc.GrpcObject;
 
-  async connect() {
+  protected async connect() {
     this.#packages = await loadPackages({
       protoFiles: this.options.protoFiles,
       loaderOptions: this.options.loaderOptions,
     });
   }
 
-  #close() {
+  async dispose() {
     this.#services.forEach((svc) => {
       svc.client.close();
     });
     this.#services.splice(0);
     this.#packages = undefined;
-  }
-
-  /**
-   * for @ipare/inject
-   */
-  async dispose() {
-    this.#close();
   }
 
   getService<T extends object = any>(

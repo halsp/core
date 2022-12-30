@@ -19,7 +19,7 @@ describe("micro tcp startup", () => {
       protoFiles: "./test/test.proto",
       port: 5080,
     });
-    await client.connect();
+    await client["connect"]();
     const result = await client.send("test/TestService/testMethod", {
       reqMessage: "abc",
     });
@@ -27,7 +27,7 @@ describe("micro tcp startup", () => {
       resMessage: "abc",
     });
 
-    await new Promise<void>((resolve) => setTimeout(() => resolve(), 5000));
+    await new Promise<void>((resolve) => setTimeout(() => resolve(), 500));
 
     client.dispose();
     await startup.close();

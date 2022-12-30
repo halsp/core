@@ -21,7 +21,7 @@ describe("connect", () => {
       host: "127.0.0.1",
       port: 1000,
     });
-    await client.connect();
+    await client["connect"]();
 
     expect((client as any)["client"]["opt"]).toEqual({
       port: 1000,
@@ -31,7 +31,7 @@ describe("connect", () => {
 
   it("should connect with default host and port", async () => {
     const client = new MicroMqttClient();
-    await client.connect();
+    await client["connect"]();
 
     expect((client as any)["client"]["opt"]).toEqual({
       port: 1883,

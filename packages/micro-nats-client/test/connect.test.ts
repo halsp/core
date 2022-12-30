@@ -15,7 +15,7 @@ describe("connect", () => {
 
   it("should connect with default host and port", async () => {
     const client = new MicroNatsClient();
-    await client.connect();
+    await client["connect"]();
 
     expect((client as any)["connection"]["opt"]).toEqual({
       port: 4222,

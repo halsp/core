@@ -10,7 +10,7 @@ describe("micro-nats", () => {
     const { port } = await startup.dynamicListen();
 
     const client = new MicroTcpClient({ port });
-    await client.connect();
+    await client["connect"]();
 
     const result = await client.send("event:123", true);
 
@@ -29,7 +29,7 @@ describe("micro-nats", () => {
     const { port } = await startup.dynamicListen();
 
     const client = new MicroTcpClient({ port });
-    await client.connect();
+    await client["connect"]();
 
     const result = await client.send("pf:event:123", true);
 

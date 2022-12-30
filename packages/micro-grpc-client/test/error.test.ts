@@ -45,7 +45,7 @@ describe("error", () => {
       host: "localhost",
       port: 5030,
     });
-    await client.connect();
+    await client["connect"]();
 
     const testService = client.getService<ClientStreamService>(
       "clientStream",
@@ -73,7 +73,7 @@ describe("error", () => {
     server.forceShutdown();
     await client.dispose();
 
-    await new Promise<void>((resolve) => setTimeout(() => resolve(), 5000));
+    await new Promise<void>((resolve) => setTimeout(() => resolve(), 500));
 
     expect(err?.message?.includes("UNKNOWN: err")).toBeTruthy();
   }, 10000);
@@ -82,7 +82,7 @@ describe("error", () => {
     const client = new MicroGrpcClient({
       protoFiles: "./test/protos/stream.client.proto",
     });
-    await client.connect();
+    await client["connect"]();
 
     let err: Error | undefined;
     try {
@@ -99,7 +99,7 @@ describe("error", () => {
     const client = new MicroGrpcClient({
       protoFiles: "./test/protos/stream.server.proto",
     });
-    await client.connect();
+    await client["connect"]();
 
     let err: Error | undefined;
     try {
@@ -119,7 +119,7 @@ describe("error", () => {
     const client = new MicroGrpcClient({
       protoFiles: "./test/protos/test.proto",
     });
-    await client.connect();
+    await client["connect"]();
 
     let err: Error | undefined;
     try {
@@ -167,7 +167,7 @@ describe("emit error", () => {
       port: 5031,
     });
     client.logger = console as any;
-    await client.connect();
+    await client["connect"]();
 
     client.emit("test/TestService/testMethod", {});
     await new Promise<void>((resolve) => setTimeout(() => resolve(), 500));
@@ -175,7 +175,7 @@ describe("emit error", () => {
     server.forceShutdown();
     await client.dispose();
 
-    await new Promise<void>((resolve) => setTimeout(() => resolve(), 5000));
+    await new Promise<void>((resolve) => setTimeout(() => resolve(), 500));
 
     expect(called).toBeTruthy();
   }, 10000);
@@ -219,7 +219,7 @@ describe("emit error", () => {
       port: 5032,
     });
     client.logger = console as any;
-    await client.connect();
+    await client["connect"]();
 
     const writeIterator = new WriteIterator();
     writeIterator.push({
@@ -232,7 +232,7 @@ describe("emit error", () => {
     server.forceShutdown();
     await client.dispose();
 
-    await new Promise<void>((resolve) => setTimeout(() => resolve(), 5000));
+    await new Promise<void>((resolve) => setTimeout(() => resolve(), 500));
 
     expect(called).toBeTruthy();
   }, 10000);

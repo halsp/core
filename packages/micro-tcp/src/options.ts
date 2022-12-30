@@ -1,6 +1,5 @@
 import * as net from "net";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface MicroTcpOptions extends net.ListenOptions {
   serverOpts?: net.ServerOpts;
   /**

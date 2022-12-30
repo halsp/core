@@ -180,7 +180,7 @@ describe("socket", () => {
     const client = new MicroTcpClient({
       port,
     });
-    await client.connect();
+    await client["connect"]();
     const result = await client.send("test_pattern", true);
     await client.dispose();
     await startup.close();
@@ -204,7 +204,7 @@ describe("socket", () => {
     const client = new MicroTcpClient({
       port,
     });
-    await client.connect();
+    await client["connect"]();
 
     let err: any;
     const beforeError = console.error;
@@ -230,7 +230,7 @@ describe("socket", () => {
     const client = new MicroTcpClient({
       port,
     });
-    await client.connect();
+    await client["connect"]();
     const result = await client.send("test_pattern", true);
 
     await client.dispose();
@@ -250,7 +250,7 @@ describe("socket", () => {
     const client = new MicroTcpClient({
       port,
     });
-    await client.connect();
+    await client["connect"]();
     client.emit("test_pattern", true);
 
     await new Promise<void>((resolve) => {
@@ -270,7 +270,7 @@ describe("socket", () => {
     const client = new MicroTcpClient({
       port,
     });
-    await client.connect();
+    await client["connect"]();
 
     const beforeFilter = Array.prototype.filter;
     Array.prototype.filter = () => {

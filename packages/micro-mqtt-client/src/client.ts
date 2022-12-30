@@ -19,9 +19,7 @@ export class MicroMqttClient extends IMicroClient {
     return this.options.prefix ?? "";
   }
 
-  async connect() {
-    this.#close();
-
+  protected async connect() {
     const opt: MicroMqttClientOptions = { ...this.options };
     if (!("servers" in this.options) && !("port" in this.options)) {
       opt.port = 1883;
@@ -64,7 +62,10 @@ export class MicroMqttClient extends IMicroClient {
     return packet.data ?? packet.response;
   }
 
-  #close(force = false) {
+  /**
+   * for @ipare/inject
+   */
+  async dispose(force = false) {
     if (this.connectResolve) {
       this.connectResolve();
       this.connectResolve = undefined;
@@ -72,13 +73,6 @@ export class MicroMqttClient extends IMicroClient {
 
     this.client?.end(force);
     this.client?.removeAllListeners();
-  }
-
-  /**
-   * for @ipare/inject
-   */
-  async dispose(force = false) {
-    this.#close(force);
   }
 
   async send<T = any>(

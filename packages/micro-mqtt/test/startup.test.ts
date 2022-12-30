@@ -15,7 +15,7 @@ describe("startup", () => {
     await startup.listen();
 
     const client = new MicroMqttClient();
-    await client.connect();
+    await client["connect"]();
     const result = await client.send("test_pattern", "test_body");
 
     await startup.close(true);
@@ -38,7 +38,7 @@ describe("startup", () => {
     await startup.listen();
 
     const client = new MicroMqttClient();
-    await client.connect();
+    await client["connect"]();
     const result = await client.send("test_pattern_subscribe", "test_body");
 
     await startup.close(true);
@@ -61,7 +61,7 @@ describe("startup", () => {
     await startup.listen();
 
     const client = new MicroMqttClient();
-    await client.connect();
+    await client["connect"]();
     await client.send("test_pattern_not_matched1", "test_body", 1000);
 
     await startup.close(true);

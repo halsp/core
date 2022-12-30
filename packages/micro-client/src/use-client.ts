@@ -32,7 +32,7 @@ export function useMicroClient(
             this.logger = val;
           },
         });
-        await client.connect();
+        await client["connect"]();
         return client;
       },
       options.injectType ?? InjectType.Singleton

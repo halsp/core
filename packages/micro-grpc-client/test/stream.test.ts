@@ -51,7 +51,7 @@ describe("stream", () => {
       protoFiles: "./test/protos/stream.client.proto",
       port: 5020,
     });
-    await client.connect();
+    await client["connect"]();
 
     const testService = client.getService<ClientStreamService>(
       "clientStream",
@@ -74,7 +74,7 @@ describe("stream", () => {
     server.forceShutdown();
     await client.dispose();
 
-    await new Promise<void>((resolve) => setTimeout(() => resolve(), 5000));
+    await new Promise<void>((resolve) => setTimeout(() => resolve(), 500));
 
     expect(result).toEqual({
       resMessage: ["a", "b"],
@@ -130,7 +130,7 @@ describe("stream", () => {
       protoFiles: "./test/protos/stream.server.proto",
       port: 5021,
     });
-    await client.connect();
+    await client["connect"]();
 
     const testService = client.getService<ServerStreamService>(
       "serverStream",
@@ -148,7 +148,7 @@ describe("stream", () => {
     server.forceShutdown();
     await client.dispose();
 
-    await new Promise<void>((resolve) => setTimeout(() => resolve(), 5000));
+    await new Promise<void>((resolve) => setTimeout(() => resolve(), 500));
 
     expect(data).toEqual([
       {
@@ -208,7 +208,7 @@ describe("stream", () => {
       protoFiles: "./test/protos/stream.cs.proto",
       port: 5022,
     });
-    await client.connect();
+    await client["connect"]();
 
     const testService = client.getService<CSStreamService>(
       "csStream",
@@ -237,7 +237,7 @@ describe("stream", () => {
     server.forceShutdown();
     await client.dispose();
 
-    await new Promise<void>((resolve) => setTimeout(() => resolve(), 5000));
+    await new Promise<void>((resolve) => setTimeout(() => resolve(), 500));
 
     expect(data).toEqual([
       {

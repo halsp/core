@@ -14,9 +14,7 @@ export class MicroRedisClient extends IMicroClient {
     return this.options.prefix ?? "";
   }
 
-  async connect() {
-    await this.#close();
-
+  protected async connect() {
     const opt: MicroRedisClientOptions = { ...this.options };
     if (!("url" in opt)) {
       opt.url = `redis://localhost:6379`;
@@ -32,7 +30,7 @@ export class MicroRedisClient extends IMicroClient {
     await Promise.all([pub.connect(), sub.connect()]);
   }
 
-  async #close() {
+  async dispose() {
     async function disconnect(redis?: redis.RedisClientType) {
       if (redis?.isReady && redis.isOpen) {
         await redis.quit();
@@ -42,13 +40,6 @@ export class MicroRedisClient extends IMicroClient {
     this.pub = undefined;
     await disconnect(this.sub);
     this.sub = undefined;
-  }
-
-  /**
-   * for @ipare/inject
-   */
-  async dispose() {
-    await this.#close();
   }
 
   async send<T = any>(

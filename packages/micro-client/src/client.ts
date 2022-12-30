@@ -3,10 +3,10 @@ import { ServerPacket } from "@ipare/micro-common";
 import { v4 as uuid } from "uuid";
 
 export abstract class IMicroClient {
-  abstract connect(): Promise<any>;
+  protected abstract connect(): Promise<any>;
   abstract dispose(): void;
-  abstract send(pattern: string, data: any): Promise<any>;
-  abstract emit(pattern: string, data: any): void;
+  public abstract send(pattern: string, data: any): Promise<any>;
+  public abstract emit(pattern: string, data: any): void;
 
   public logger!: ILogger;
 

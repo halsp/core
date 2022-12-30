@@ -15,7 +15,7 @@ describe("client", () => {
     const client = new MicroTcpClient({
       port,
     });
-    await client.connect();
+    await client["connect"]();
     const result = await client.send("test_pattern", true);
     await client.dispose();
     await startup.close();
@@ -35,7 +35,7 @@ describe("client", () => {
       port,
       prefix: "pf",
     });
-    await client.connect();
+    await client["connect"]();
     const result = await client.send("test_pattern", "abc");
     await client.dispose();
     await startup.close();
@@ -56,7 +56,7 @@ describe("client", () => {
     const client = new MicroTcpClient({
       port,
     });
-    await client.connect();
+    await client["connect"]();
     const result = await client.send("test_pattern", undefined);
     await client.dispose();
     await startup.close();
@@ -78,7 +78,7 @@ describe("client", () => {
     const client = new MicroTcpClient({
       port,
     });
-    await client.connect();
+    await client["connect"]();
     client.emit("test_pattern", true);
 
     await new Promise<void>((resolve) => {
@@ -103,7 +103,7 @@ describe("client", () => {
       consoleError = true;
       console.error = beforeError;
     };
-    await client.connect();
+    await client["connect"]();
     console.error = beforeError;
     expect(consoleError).toBeTruthy();
 
@@ -128,7 +128,7 @@ describe("client", () => {
       host: "0.0.0.0",
     });
     try {
-      await client.connect();
+      await client["connect"]();
     } catch (err) {}
     await client.dispose();
   });
@@ -147,10 +147,10 @@ describe("client", () => {
     const client = new MicroTcpClient({
       port,
     });
-    await client.connect();
+    await client["connect"]();
 
     const waitResult = await new Promise<boolean>(async (resolve) => {
-      setTimeout(() => resolve(true), 5000);
+      setTimeout(() => resolve(true), 500);
       await client.send("test_pattern", "", 0);
       resolve(false);
     });
@@ -158,7 +158,7 @@ describe("client", () => {
     await startup.close();
 
     expect(waitResult).toBeTruthy();
-  }, 10000);
+  });
 
   it("should return error when send timeout and set timeout options", async () => {
     const startup = new MicroTcpStartup({
@@ -175,7 +175,7 @@ describe("client", () => {
       port,
       sendTimeout: 1000,
     });
-    await client.connect();
+    await client["connect"]();
 
     const result = await client.send("test_pattern", "");
     await client.dispose();
@@ -200,7 +200,7 @@ describe("client", () => {
     const client = new MicroTcpClient({
       port,
     });
-    await client.connect();
+    await client["connect"]();
 
     const result = await client.send("test_pattern", "", 1000);
     await client.dispose();
@@ -222,7 +222,7 @@ describe("client", () => {
     const client = new MicroTcpClient({
       port,
     });
-    const socket = await client.connect();
+    const socket = await client["connect"]();
     socket.emit("close");
 
     await client.dispose();

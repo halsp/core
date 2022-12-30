@@ -19,7 +19,7 @@ describe("micro-redis", () => {
     const client = new MicroRedisClient({
       password: "H",
     });
-    await client.connect();
+    await client["connect"]();
 
     const result = await client.send("test_pattern", "test_body");
     expect(result.data).toBe("test_body");

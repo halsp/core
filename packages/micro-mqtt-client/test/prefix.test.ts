@@ -17,7 +17,7 @@ describe("prefix", () => {
       subscribeOptions: { qos: 1 },
       publishOptions: {},
     });
-    await client.connect();
+    await client["connect"]();
     const result = await client.send("test_pattern", "test_body");
 
     await startup.close();

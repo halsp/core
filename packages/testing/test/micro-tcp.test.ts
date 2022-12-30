@@ -15,7 +15,7 @@ describe("micro tcp startup", () => {
     const client = new MicroTcpClient({
       port,
     });
-    await client.connect();
+    await client["connect"]();
     const result = await client.send("test_pattern", true);
     await client.dispose();
     await startup.close();

@@ -18,7 +18,7 @@ describe("micro-mqtt", () => {
     await startup.listen();
 
     const client = new MicroMqttClient();
-    await client.connect();
+    await client["connect"]();
 
     const result = await client.send("test_pattern", "test_body");
     expect(result.data).toBe("test_body");
@@ -45,7 +45,7 @@ describe("micro-mqtt", () => {
     const client = new MicroMqttClient({
       publishOptions: opt as any,
     });
-    await client.connect();
+    await client["connect"]();
 
     const result = await client.send("test_pattern_equal", "test_body", 1000);
     expect(result.error).toBe("Send timeout");

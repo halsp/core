@@ -42,7 +42,7 @@ describe("service", () => {
       port: 5010,
       credentials: grpc.ChannelCredentials.createInsecure(),
     });
-    await client.connect();
+    await client["connect"]();
 
     const testService = client.getService<TestService>(
       "test",
@@ -55,7 +55,7 @@ describe("service", () => {
     server.forceShutdown();
     await client.dispose();
 
-    await new Promise<void>((resolve) => setTimeout(() => resolve(), 5000));
+    await new Promise<void>((resolve) => setTimeout(() => resolve(), 500));
 
     expect(result).toEqual({
       resMessage: "abc",
@@ -66,7 +66,7 @@ describe("service", () => {
     const client = new MicroGrpcClient({
       protoFiles: "./test/protos/test.proto",
     });
-    await client.connect();
+    await client["connect"]();
 
     interface TestService {
       testMethod(data: { reqMessage: string }): Promise<{ resMessage: string }>;
@@ -82,7 +82,7 @@ describe("service", () => {
     const client = new MicroGrpcClient({
       protoFiles: "./test/protos/test.proto",
     });
-    await client.connect();
+    await client["connect"]();
 
     interface TestService {
       testMethod1(data: {

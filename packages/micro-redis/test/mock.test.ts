@@ -16,7 +16,7 @@ describe("mock", () => {
     const client = new MicroRedisClient({
       password: "H",
     });
-    await client.connect();
+    await client["connect"]();
     const result = await client.send("test_pattern", "test_body");
 
     await client.dispose();

@@ -201,7 +201,7 @@ describe("redis client", () => {
 
     it("should connect with default host and port", async () => {
       const client = new MicroRedisClient();
-      await client.connect();
+      await client["connect"]();
 
       expect((client as any)["sub"]["opt"]).toEqual({
         url: `redis://localhost:6379`,

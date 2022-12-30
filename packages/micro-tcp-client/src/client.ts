@@ -19,8 +19,7 @@ export class MicroTcpClient extends IMicroClient {
     return this.options.prefix ?? "";
   }
 
-  async connect(): Promise<net.Socket> {
-    this.#close();
+  protected async connect(): Promise<net.Socket> {
     const socket = new net.Socket();
     this.#socket = socket;
 
@@ -61,7 +60,7 @@ export class MicroTcpClient extends IMicroClient {
     callback && callback(packet.error, packet.data ?? packet.response);
   }
 
-  async #close() {
+  async dispose() {
     const socket = this.#socket;
     this.#socket = undefined;
     this.#tasks.clear();
@@ -74,13 +73,6 @@ export class MicroTcpClient extends IMicroClient {
       });
       socket.destroy();
     }
-  }
-
-  /**
-   * for @ipare/inject
-   */
-  async dispose() {
-    await this.#close();
   }
 
   async send<T = any>(
