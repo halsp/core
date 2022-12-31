@@ -2,13 +2,13 @@ import { Context } from "@ipare/core";
 import { parseInject } from "@ipare/inject";
 import { TestHttpStartup } from "@ipare/testing/dist/http";
 import "../src";
-import { InjectContext } from "../src";
+import { Ctx } from "../src";
 import { expectBody, getTestRequest } from "./TestMiddleware";
 
 class TestService {
-  @InjectContext
+  @Ctx
   private readonly ctx1!: Context;
-  @InjectContext
+  @Ctx
   private readonly ctx2!: Context;
 
   invoke() {
