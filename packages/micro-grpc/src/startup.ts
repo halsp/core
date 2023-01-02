@@ -48,9 +48,9 @@ export class MicroGrpcStartup extends MicroStartup {
         (err, port) => {
           if (err) {
             reject(err);
+          } else {
+            resolve(port);
           }
-
-          resolve(port);
         }
       );
     });
@@ -121,13 +121,17 @@ export class MicroGrpcStartup extends MicroStartup {
         await this.handleMessage(
           createServerPacket(call),
           async ({ result }) => {
-            if (result.data instanceof WriteIterator) {
-              for await (const item of result.data as WriteIterator) {
-                call.write(item);
-              }
+            if (result.error) {
+              call.emit("error", new Error(result.error));
             } else {
-              if (result.data) {
-                call.write(result.data);
+              if (result.data instanceof WriteIterator) {
+                for await (const item of result.data as WriteIterator) {
+                  call.write(item);
+                }
+              } else {
+                if (result.data) {
+                  call.write(result.data);
+                }
               }
             }
             call.end();
@@ -143,7 +147,10 @@ export class MicroGrpcStartup extends MicroStartup {
         await this.handleMessage(
           createServerPacket(call),
           ({ result }) => {
-            callback(null, result.data);
+            callback(
+              result.error ? new Error(result.error) : null,
+              result.data
+            );
           },
           async (ctx) => await prehook(ctx, call)
         );

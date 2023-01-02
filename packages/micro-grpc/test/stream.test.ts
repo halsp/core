@@ -142,6 +142,61 @@ describe("stream", () => {
     expect(!!req.metadata).toBeTruthy();
   }, 10000);
 
+  it("should return error when throw error in middleware", async () => {
+    const startup = new MicroGrpcStartup({
+      protoFiles: "./test/protos/stream.server.proto",
+      port: 5011,
+    })
+      .pattern("serverStream.ServerStreamService/testMethod", (ctx) => {
+        expect(ctx.res.body instanceof WriteIterator).toBeTruthy();
+        const body = ctx.res.body as WriteIterator;
+        body.push({
+          resMessage: "1",
+        });
+        body.end();
+      })
+      .use(() => {
+        throw new Error("err");
+      });
+    await startup.listen();
+
+    const definition = await grpcLoader.load(
+      "./test/protos/stream.server.proto"
+    );
+    const grpcObject = grpc.loadPackageDefinition(definition);
+    const service = grpcObject.serverStream[
+      "ServerStreamService"
+    ] as grpc.ServiceClientConstructor;
+    const client = new service(
+      "localhost:5011",
+      grpc.credentials.createInsecure()
+    );
+
+    const result = await new Promise((resolve) => {
+      const response: any[] = [];
+      const call: grpc.ClientWritableStream<any> = client.testMethod({
+        reqMessage: "test_startup",
+      });
+      call.on("data", (res) => {
+        response.push(res);
+      });
+      call.on("end", () => {
+        resolve(response);
+      });
+      call.on("error", (err) => {
+        resolve(err);
+      });
+    });
+
+    client.close();
+    await startup.close();
+    await new Promise<void>((resolve) => {
+      setTimeout(() => resolve(), 500);
+    });
+
+    expect((result as Error).message.includes("UNKNOWN: err")).toBeTruthy();
+  }, 10000);
+
   it("should handle client and server stream message", async () => {
     let req!: Request;
     const startup = new MicroGrpcStartup({

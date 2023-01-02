@@ -55,11 +55,59 @@ describe("startup", () => {
     });
     expect(!!req.call).toBeTruthy();
     expect(!!req.metadata).toBeTruthy();
-  }, 10000);
+  });
+
+  it("should return error when throw error in middleware", async () => {
+    const startup = new MicroGrpcStartup({
+      port: 5002,
+      host: "localhost",
+      protoFiles: "./test/protos/test.proto",
+      credentials: grpc.ServerCredentials.createInsecure(),
+    })
+      .patterns({
+        pattern: "test.TestService/testMethod",
+        handler: (ctx) => {
+          ctx.res.setBody({
+            resMessage: ctx.req.body.reqMessage,
+          });
+        },
+      })
+      .use(() => {
+        throw new Error("err");
+      });
+    await startup.listen();
+
+    const definition = await grpcLoader.load("./test/protos/test.proto");
+    const grpcObject = grpc.loadPackageDefinition(definition);
+    const service = grpcObject.test[
+      "TestService"
+    ] as grpc.ServiceClientConstructor;
+    const client = new service(
+      "localhost:5002",
+      grpc.credentials.createInsecure()
+    );
+
+    const result = await new Promise((resolve) => {
+      client.testMethod(
+        { reqMessage: "test_startup" },
+        (err: grpc.ServerErrorResponse | undefined, response: any) => {
+          resolve(err ?? response);
+        }
+      );
+    });
+
+    client.close();
+    await startup.close();
+    await new Promise<void>((resolve) => {
+      setTimeout(() => resolve(), 500);
+    });
+
+    expect((result as Error).message.includes("UNKNOWN: err")).toBeTruthy();
+  });
 
   it("should not add service when pattern is not exist", async () => {
     const startup = new MicroGrpcStartup({
-      port: 5001,
+      port: 5003,
       host: "localhost",
       protoFiles: "./test/protos/test.proto",
       credentials: grpc.ServerCredentials.createInsecure(),
@@ -83,7 +131,7 @@ describe("shutdown", () => {
     await new Promise<void>((resolve) => {
       setTimeout(() => resolve(), 2000);
     });
-  });
+  }, 10000);
 
   it("should invoke forceShutdown when tryShutdown error", async () => {
     const startup = new MicroGrpcStartup();
