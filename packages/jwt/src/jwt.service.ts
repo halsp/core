@@ -3,7 +3,7 @@ import {
   JwtSignOptions,
   JwtVerifyOptions,
 } from "./jwt-options";
-import * as jwt from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { Context } from "@ipare/core";
 import { OPTIONS } from "./constant";
 import { Inject } from "@ipare/inject";
