@@ -1,7 +1,7 @@
 import { Context, isObject, isUndefined } from "@ipare/core";
 import { PipeTransform, TransformArgs } from "@ipare/pipe";
 import { validate, ValidationError, ValidatorOptions } from "class-validator";
-import { ENABLE_METADATA, OPTIONS_METADATA, SCHAME_METADATA } from "./constant";
+import { ENABLE_METADATA, OPTIONS_METADATA } from "./constant";
 import { RuleRecord } from "./create-decorator";
 import { getRules } from "./decorators";
 import { createBadRequestError } from "./error";
@@ -34,22 +34,14 @@ export class ValidatePipe<T extends object = any, R extends T = any>
 
     const options = await this.getOptions(value, ctx, propertyType);
 
-    const schemaName = await this.getMetadata<string | undefined>(
-      ctx,
-      value,
-      SCHAME_METADATA,
-      undefined
-    );
-
-    await this.validateParent(args, schemaName, options);
-    await this.validateModel(args, schemaName, options);
+    await this.validateParent(args, options);
+    await this.validateModel(args, options);
 
     return value;
   }
 
   private async validateModel(
     args: TransformArgs<T | R>,
-    schemaName?: string,
     options?: ValidatorOptions
   ) {
     const { value, propertyType } = args;
@@ -61,7 +53,6 @@ export class ValidatePipe<T extends object = any, R extends T = any>
         [rule],
         isUndefined(value) ? undefined : value[rule.propertyKey as string],
         rule.propertyKey as string,
-        schemaName,
         options
       );
       errs.push(...propertyErrs);
@@ -86,7 +77,6 @@ export class ValidatePipe<T extends object = any, R extends T = any>
 
   private async validateParent(
     args: TransformArgs<T | R>,
-    schemaName?: string,
     options?: ValidatorOptions
   ) {
     const { parent, property, propertyKey, parameterIndex } = args;
@@ -99,7 +89,6 @@ export class ValidatePipe<T extends object = any, R extends T = any>
       rules,
       args.value,
       property as string,
-      schemaName,
       options
     );
     const msgs: (Record<string, string> | string)[] = errs
@@ -137,7 +126,6 @@ export class ValidatePipe<T extends object = any, R extends T = any>
     rules: RuleRecord[],
     value: any,
     property: string,
-    schemaName?: string,
     options?: ValidatorOptions
   ) {
     const result: ValidationError[] = [];
@@ -146,12 +134,7 @@ export class ValidatePipe<T extends object = any, R extends T = any>
         if (validateItem.createTempObj) {
           const obj = validateItem.createTempObj(property, value);
 
-          let msgs: ValidationError[];
-          if (schemaName) {
-            msgs = await validate(schemaName, obj, options);
-          } else {
-            msgs = await validate(obj, options);
-          }
+          const msgs = await validate(obj, options);
           result.push(...msgs);
         }
       }

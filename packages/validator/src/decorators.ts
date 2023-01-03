@@ -1,11 +1,6 @@
 import "reflect-metadata";
 import { Context, isUndefined } from "@ipare/core";
-import {
-  ENABLE_METADATA,
-  METADATA,
-  OPTIONS_METADATA,
-  SCHAME_METADATA,
-} from "./constant";
+import { ENABLE_METADATA, METADATA, OPTIONS_METADATA } from "./constant";
 import { createLib, ValidatorDecoratorReturnType } from "./validator-lib";
 import { createDecorator, RuleRecord } from "./create-decorator";
 import { isNumber, ValidatorOptions } from "class-validator";
@@ -20,16 +15,6 @@ export function UseValidatorOptions(options: ValidatorOptions): ClassDecorator;
 export function UseValidatorOptions(options: any): ClassDecorator {
   return function (target: any) {
     Reflect.defineMetadata(OPTIONS_METADATA, options, target.prototype);
-  };
-}
-
-export function UseValidatorSchema(
-  schemaName: (args: { ctx: Context; val: any }) => string | Promise<string>
-): ClassDecorator;
-export function UseValidatorSchema(schemaName: string): ClassDecorator;
-export function UseValidatorSchema(schemaName: any): ClassDecorator {
-  return function (target: any) {
-    Reflect.defineMetadata(SCHAME_METADATA, schemaName, target.prototype);
   };
 }
 
