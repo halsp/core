@@ -79,26 +79,22 @@ export class MicroTcpClient extends IMicroClient {
     pattern: string,
     data: any,
     timeout?: number
-  ): Promise<ClientPacket<T>> {
+  ): Promise<T> {
     if (!this.#socket || this.#socket.destroyed) {
-      return {
-        error: "The connection is not connected",
-      };
+      throw new Error("The connection is not connected");
     }
 
     pattern = this.prefix + pattern;
     const socket = this.#socket as net.Socket;
     const serverPacket = super.createServerPacket(pattern, data, true);
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       let timeoutInstance: NodeJS.Timeout | undefined;
       const sendTimeout = timeout ?? this.options.sendTimeout ?? 10000;
       if (sendTimeout != 0) {
         timeoutInstance = setTimeout(() => {
           this.#tasks.delete(serverPacket.id);
-          resolve({
-            error: "Send timeout",
-          });
+          reject(new Error("Send timeout"));
         }, sendTimeout);
       }
 
@@ -109,11 +105,11 @@ export class MicroTcpClient extends IMicroClient {
         }
         this.#tasks.delete(serverPacket.id);
 
-        resolve({
-          id: serverPacket.id,
-          data,
-          error,
-        });
+        if (error) {
+          reject(new Error(error));
+        } else {
+          resolve(data);
+        }
       });
       this.#sendPacket(socket, serverPacket);
     });

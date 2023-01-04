@@ -20,7 +20,7 @@ describe("client", () => {
     await client.dispose();
     await startup.close();
 
-    expect(result.data).toBe(true);
+    expect(result).toBe(true);
   });
 
   it("should send message and return value when use prefix", async () => {
@@ -40,7 +40,7 @@ describe("client", () => {
     await client.dispose();
     await startup.close();
 
-    expect(result.data).toBe("abc");
+    expect(result).toBe("abc");
   });
 
   it("should send message and return undefined value", async () => {
@@ -61,7 +61,7 @@ describe("client", () => {
     await client.dispose();
     await startup.close();
 
-    expect(result.data).toBeUndefined();
+    expect(result).toBeUndefined();
   });
 
   it("should emit message", async () => {
@@ -107,7 +107,12 @@ describe("client", () => {
     console.error = beforeError;
     expect(consoleError).toBeTruthy();
 
-    const sendResult = await client.send("", true);
+    let sendError: any;
+    try {
+      await client.send("", true);
+    } catch (err) {
+      sendError = err as Error;
+    }
     let emitError: any;
     try {
       client.emit("", "");
@@ -118,9 +123,7 @@ describe("client", () => {
     client.dispose();
 
     expect(emitError.message).toBe("The connection is not connected");
-    expect(sendResult).toEqual({
-      error: "The connection is not connected",
-    });
+    expect(sendError.message).toBe("The connection is not connected");
   });
 
   it("should listen with default port when port is undefined", async () => {
@@ -160,7 +163,7 @@ describe("client", () => {
     expect(waitResult).toBeTruthy();
   });
 
-  it("should return error when send timeout and set timeout options", async () => {
+  it("should throw error when send timeout and set timeout options", async () => {
     const startup = new MicroTcpStartup({
       port: 23334,
     })
@@ -177,16 +180,19 @@ describe("client", () => {
     });
     await client["connect"]();
 
-    const result = await client.send("test_pattern", "");
+    let error: any;
+    try {
+      await client.send("test_pattern", "");
+    } catch (err) {
+      error = err;
+    }
     await client.dispose();
     await startup.close();
 
-    expect(result).toEqual({
-      error: "Send timeout",
-    });
+    expect(error.message).toBe("Send timeout");
   }, 10000);
 
-  it("should return error when send timeout and set timeout argument", async () => {
+  it("should throw error when send timeout and set timeout argument", async () => {
     const startup = new MicroTcpStartup({
       port: 23334,
     })
@@ -202,18 +208,48 @@ describe("client", () => {
     });
     await client["connect"]();
 
-    const result = await client.send("test_pattern", "", 1000);
+    let error: any;
+    try {
+      await client.send("test_pattern", "", 1000);
+    } catch (err) {
+      error = err;
+    }
     await client.dispose();
     await startup.close();
 
-    expect(result).toEqual({
-      error: "Send timeout",
+    expect(error.message).toBe("Send timeout");
+  }, 10000);
+
+  it("should throw error when result.error is defined", async () => {
+    const startup = new MicroTcpStartup({
+      port: 23335,
+    })
+      .use((ctx) => {
+        ctx.res.setError("err");
+      })
+      .pattern("test_pattern", () => undefined);
+    const { port } = await startup.dynamicListen();
+
+    const client = new MicroTcpClient({
+      port,
     });
+    await client["connect"]();
+
+    let error: any;
+    try {
+      await client.send("test_pattern", "");
+    } catch (err) {
+      error = err;
+    }
+    await client.dispose();
+    await startup.close();
+
+    expect(error.message).toBe("err");
   }, 10000);
 
   it("should clouse when emit close event", async () => {
     const startup = new MicroTcpStartup({
-      port: 23334,
+      port: 23336,
     }).use((ctx) => {
       ctx.res.setBody(ctx.req.body);
     });
