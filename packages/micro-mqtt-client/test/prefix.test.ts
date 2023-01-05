@@ -1,29 +1,31 @@
 import { MicroMqttStartup } from "@ipare/micro-mqtt";
-import { createMock } from "@ipare/testing/dist/micro-mqtt";
 import { MicroMqttClient } from "../src";
+import { TestMqttOptions } from "@ipare/micro-common/test/utils";
 
 describe("prefix", () => {
-  jest.mock("mqtt", () => createMock());
-
   it("should subscribe and publish pattern with prefix", async () => {
-    const startup = new MicroMqttStartup().pattern("pt_test_pattern", (ctx) => {
-      ctx.res.body = ctx.req.body;
-      expect(!!ctx.req.packet).toBeTruthy();
-    });
+    const startup = new MicroMqttStartup(TestMqttOptions).pattern(
+      "pt_test_pattern",
+      (ctx) => {
+        ctx.res.body = ctx.req.body;
+        expect(!!ctx.req.packet).toBeTruthy();
+      }
+    );
     await startup.listen();
 
     const client = new MicroMqttClient({
+      ...TestMqttOptions,
       prefix: "pt_",
       subscribeOptions: { qos: 1 },
       publishOptions: {},
     });
     await client["connect"]();
     const result = await client.send("test_pattern", "test_body");
+    console.log("result", result);
 
-    await startup.close();
-    await client.dispose();
+    await startup.close(true);
+    await client.dispose(true);
 
-    expect(result.data).toBe("test_body");
-    expect(result.error).toBeUndefined();
+    expect(result).toBe("test_body");
   });
 });

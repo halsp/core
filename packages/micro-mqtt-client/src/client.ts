@@ -1,5 +1,5 @@
-import { ClientPacket, parseJsonBuffer } from "@ipare/micro-common";
-import type mqtt from "mqtt";
+import { parseJsonBuffer } from "@ipare/micro-common";
+import mqtt from "mqtt";
 import { IMicroClient } from "@ipare/micro-client";
 import { MicroMqttClientOptions } from "./options";
 
@@ -8,10 +8,7 @@ export class MicroMqttClient extends IMicroClient {
     super();
   }
 
-  #tasks = new Map<
-    string,
-    (err?: string, data?: any, packet?: mqtt.IPublishPacket) => void
-  >();
+  #tasks = new Map<string, (err?: string, data?: any) => void>();
 
   protected client?: mqtt.MqttClient;
   private connectResolve?: (err: void) => void;
@@ -27,9 +24,7 @@ export class MicroMqttClient extends IMicroClient {
 
     await new Promise<void>((resolve) => {
       this.connectResolve = resolve;
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const mqttPkg = require("mqtt") as typeof mqtt;
-      this.client = mqttPkg.connect(opt) as mqtt.MqttClient;
+      this.client = mqtt.connect(opt) as mqtt.MqttClient;
       this.client.on("connect", () => {
         resolve();
       });
@@ -40,22 +35,15 @@ export class MicroMqttClient extends IMicroClient {
     });
 
     const client = this.client as mqtt.MqttClient;
-    client.on(
-      "message",
-      (topic: string, payload: Buffer, publishPacket: mqtt.IPublishPacket) => {
-        const packet = parseJsonBuffer(payload);
-        const id = packet.id;
-        const callback = this.#tasks.get(id);
-        if (callback) {
-          callback(
-            packet.error,
-            this.getDataFromReturnPacket(packet),
-            publishPacket
-          );
-          this.#tasks.delete(id);
-        }
+    client.on("message", (topic: string, payload: Buffer) => {
+      const packet = parseJsonBuffer(payload);
+      const id = packet.id;
+      const callback = this.#tasks.get(id);
+      if (callback) {
+        callback(packet.error, this.getDataFromReturnPacket(packet));
+        this.#tasks.delete(id);
       }
-    );
+    });
   }
 
   private getDataFromReturnPacket(packet: any) {
@@ -65,36 +53,38 @@ export class MicroMqttClient extends IMicroClient {
   /**
    * for @ipare/inject
    */
-  async dispose(force = false) {
+  async dispose(force?: boolean) {
     if (this.connectResolve) {
       this.connectResolve();
       this.connectResolve = undefined;
     }
 
-    this.client?.end(force);
     this.client?.removeAllListeners();
+    await new Promise<void>((resolve, reject) => {
+      this.client?.end(force, undefined, (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
   }
 
   async send<T = any>(
     pattern: string,
     data: any,
     timeout?: number
-  ): Promise<
-    ClientPacket<T> & {
-      packet?: mqtt.IPublishPacket;
-    }
-  > {
+  ): Promise<T> {
     if (!this.client?.connected) {
-      return {
-        error: "The connection is not connected",
-      };
+      throw new Error("The connection is not connected");
     }
 
     pattern = this.prefix + pattern;
     const packet = super.createServerPacket(pattern, data, true);
 
     const client = this.client;
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const reply = pattern + "/" + packet.id;
 
       let timeoutInstance: NodeJS.Timeout | undefined;
@@ -103,9 +93,7 @@ export class MicroMqttClient extends IMicroClient {
         timeoutInstance = setTimeout(() => {
           timeoutInstance = undefined;
           client.unsubscribe(reply);
-          resolve({
-            error: "Send timeout",
-          });
+          reject(new Error("Send timeout"));
         }, sendTimeout);
       }
 
@@ -115,21 +103,18 @@ export class MicroMqttClient extends IMicroClient {
         client.subscribe(reply);
       }
 
-      this.#tasks.set(
-        packet.id,
-        (error?: string, data?: any, publishPacket?: mqtt.IPublishPacket) => {
-          if (timeoutInstance) {
-            clearTimeout(timeoutInstance);
-            timeoutInstance = undefined;
-          }
-          client.unsubscribe(reply);
-          resolve({
-            data,
-            error,
-            packet: publishPacket,
-          });
+      this.#tasks.set(packet.id, (error?: string, data?: any) => {
+        if (timeoutInstance) {
+          clearTimeout(timeoutInstance);
+          timeoutInstance = undefined;
         }
-      );
+        client.unsubscribe(reply);
+        if (error) {
+          reject(new Error(error));
+        } else {
+          resolve(data);
+        }
+      });
 
       this.#sendPacket(packet);
     });

@@ -10,7 +10,12 @@ describe("timeout", () => {
       publish: () => undefined,
     };
 
-    const result = await client.send("", "", 1000);
-    expect(result.error).toBe("Send timeout");
+    let error: any;
+    try {
+      await client.send("", "", 1000);
+    } catch (err) {
+      error = err;
+    }
+    expect(error.message).toBe("Send timeout");
   });
 });

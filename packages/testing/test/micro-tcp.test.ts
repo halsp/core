@@ -20,6 +20,6 @@ describe("micro tcp startup", () => {
     await client.dispose();
     await startup.close();
 
-    expect(result.data).toBe(true);
+    expect(result).toBe(true);
   });
 });

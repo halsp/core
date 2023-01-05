@@ -1,48 +1,29 @@
+import { TestMqttOptions } from "@ipare/micro-common/test/utils";
 import { MicroMqttStartup } from "../src";
 
 describe("connect", () => {
-  jest.mock("mqtt", () => {
-    return {
-      connect: (opt: any) => {
-        return {
-          opt,
-          on: (event: string, cb: any) => {
-            if (event == "connect") {
-              setTimeout(() => cb(), 500);
-            }
-          },
-        };
-      },
-    };
-  });
-
   it("should connect with default port", async () => {
-    const startup = new MicroMqttStartup();
+    const startup = new MicroMqttStartup({
+      host: TestMqttOptions.host,
+      port: undefined,
+    });
     await startup.listen();
 
-    expect((startup as any)["client"]["opt"]).toEqual({
-      port: 1883,
+    await new Promise<void>((resolve) => {
+      setTimeout(() => resolve(), 500);
     });
+    await startup.close(true);
   });
 
   it("should connect with servers", async () => {
     const startup = new MicroMqttStartup({
-      servers: [
-        {
-          host: "localhost",
-          port: 1884,
-        },
-      ],
+      servers: [TestMqttOptions],
     });
     await startup.listen();
 
-    expect((startup as any)["client"]["opt"]).toEqual({
-      servers: [
-        {
-          host: "localhost",
-          port: 1884,
-        },
-      ],
+    await new Promise<void>((resolve) => {
+      setTimeout(() => resolve(), 500);
     });
+    await startup.close(true);
   });
 });

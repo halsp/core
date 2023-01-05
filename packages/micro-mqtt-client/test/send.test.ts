@@ -3,9 +3,16 @@ import { MicroMqttClient } from "../src";
 describe("send", () => {
   it("should not send message before connect", async () => {
     const client = new MicroMqttClient();
-    const result = await client.send("", "");
+
+    let error: any;
+    try {
+      await client.send("", "");
+    } catch (err) {
+      error = err;
+    }
+
     await client.dispose();
-    expect(result.error).toBe("The connection is not connected");
+    expect(error.message).toBe("The connection is not connected");
   });
 
   it("should not send message if client is not connected", async () => {
@@ -15,9 +22,16 @@ describe("send", () => {
       end: () => undefined,
       removeAllListeners: () => undefined,
     };
-    const result = await client.send("", "");
+
+    let error: any;
+    try {
+      await client.send("", "");
+    } catch (err) {
+      error = err;
+    }
     await client.dispose();
-    expect(result.error).toBe("The connection is not connected");
+
+    expect(error.message).toBe("The connection is not connected");
   });
 
   it("should get data from return packet", async () => {

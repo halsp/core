@@ -1,6 +1,6 @@
 import { MicroStartup } from "@ipare/micro";
 import { MicroMqttOptions } from "./options";
-import type mqtt from "mqtt";
+import mqtt from "mqtt";
 import { Context, getIparePort } from "@ipare/core";
 import { matchTopic } from "./topic";
 import { parseJsonBuffer } from "@ipare/micro-common";
@@ -28,9 +28,7 @@ export class MicroMqttStartup extends MicroStartup {
 
     await new Promise<void>((resolve) => {
       this.connectResolve = resolve;
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const mqttPkg = require("mqtt") as typeof mqtt;
-      this.client = mqttPkg.connect(opt) as mqtt.MqttClient;
+      this.client = mqtt.connect(opt) as mqtt.MqttClient;
       this.client.on("connect", () => {
         resolve();
       });
@@ -76,13 +74,7 @@ export class MicroMqttStartup extends MicroStartup {
       }
     );
 
-    if (opt.port) {
-      this.logger.info(`Server started, listening port: ${opt.port}`);
-    } else {
-      this.logger.info(
-        `Server started, listening servers: ${JSON.stringify(opt.servers)}`
-      );
-    }
+    this.logger.info(`Server started, listening port: ${opt.port}`);
     return client;
   }
 
@@ -125,8 +117,8 @@ export class MicroMqttStartup extends MicroStartup {
       this.connectResolve = undefined;
     }
 
-    this.client?.end(force);
     this.client?.removeAllListeners();
+    this.client?.end(force);
     this.logger.info("Server shutdown success");
   }
 }
