@@ -1,36 +1,28 @@
+import { TestRedisOptions } from "@ipare/micro-common/test/utils";
 import { MicroRedisStartup } from "../src";
+import { MicroRedisClient } from "@ipare/micro-redis-client";
 
 describe("startup", () => {
-  it("should connect redis", async () => {
-    let connect = false;
-    let disconnect = false;
+  it("should subscribe and publish", async () => {
+    const startup = new MicroRedisStartup(TestRedisOptions).pattern(
+      "test_pattern",
+      (ctx) => {
+        ctx.res.body = ctx.req.body;
+      }
+    );
+    await startup.listen();
 
-    jest.mock("redis", () => {
-      return {
-        createClient: () => {
-          return {
-            connect: () => {
-              connect = true;
-            },
-            subscribe: () => undefined,
-            quit: () => {
-              disconnect = true;
-            },
-            isOpen: true,
-            isReady: true,
-          };
-        },
-      };
-    });
+    const client = new MicroRedisClient(TestRedisOptions);
+    await client["connect"]();
+    const result = await client.send("test_pattern", "test_body");
 
-    const startup = new MicroRedisStartup();
-    const { pub, sub } = await startup.listen();
+    await client.dispose();
     await startup.close();
 
-    expect(!!sub).toBeTruthy();
-    expect(!!pub).toBeTruthy();
-    expect(connect).toBeTruthy();
-    expect(disconnect).toBeTruthy();
+    expect(result).toEqual({
+      data: "test_body",
+      error: undefined,
+    });
   });
 
   it("should not publish when pub is undefined", async () => {
@@ -38,22 +30,22 @@ describe("startup", () => {
       let publishPattern = "";
       let subscribePattern = "";
       let subscribeCallback: any;
-      const startup = new MicroRedisStartup();
+      const startup = new MicroRedisStartup(TestRedisOptions);
       await startup.listen();
 
-      (startup as any).sub = {
-        isReady: true,
-        subscribe: (pattern: string, callback: any) => {
-          subscribePattern = pattern;
-          subscribeCallback = callback;
-        },
-        unsubscribe: () => undefined,
+      const sub = (startup as any).sub;
+      const subscribe = sub.subscribe;
+      sub.subscribe = (pattern: string, callback: any, ...args: any[]) => {
+        subscribePattern = pattern;
+        subscribeCallback = callback;
+        return subscribe.bind(sub)(pattern, callback, ...args);
       };
-      (startup as any).pub = {
-        isReady: true,
-        publish: (pattern: string) => {
-          publishPattern = pattern;
-        },
+
+      const pub = (startup as any).pub;
+      const publish = pub.publish;
+      pub.publish = (pattern: string, ...args: any[]) => {
+        publishPattern = pattern;
+        return publish.bind(pub)(pattern, ...args);
       };
 
       startup.patterns({
@@ -68,6 +60,7 @@ describe("startup", () => {
       });
 
       if (isPubUndefined) {
+        await (startup as any).pub.disconnect();
         (startup as any).pub = undefined;
       }
       await subscribeCallback(Buffer.from(str));
@@ -75,6 +68,7 @@ describe("startup", () => {
       await new Promise<void>((resolve) => {
         setTimeout(() => resolve(), 500);
       });
+      await startup.close();
       expect(subscribePattern).toBe("test_pattern");
       expect(publishPattern).toBe(isPubUndefined ? "" : "test_pattern.123");
     }
@@ -82,14 +76,19 @@ describe("startup", () => {
     await test(true);
     await test(false);
   });
+});
 
-  it("should listen with IPARE_DEBUG_PORT", async () => {
-    process.env.IPARE_DEBUG_PORT = "63791";
+describe("options", () => {
+  it("should not connect with default options", async () => {
     const startup = new MicroRedisStartup();
-    const { pub, sub } = await startup.listen();
-    await startup.close();
 
-    expect(!!sub).toBeTruthy();
-    expect(!!pub).toBeTruthy();
+    let error: any;
+    try {
+      await startup.listen();
+    } catch (err) {
+      error = err;
+    }
+
+    expect(!!error).toBeTruthy();
   });
 });

@@ -1,11 +1,17 @@
-export { TestMicroRedisStartup } from "./test-micro-redis-startup";
-export { createMock, mockPkgName } from "./mock";
+import { Context, Request, Response } from "@ipare/core";
+import { MicroRedisOptions, MicroRedisStartup } from "@ipare/micro-redis";
+import { initBaseTestStartup, ITestStartup } from "../test-startup";
 
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace NodeJS {
-    export interface ProcessEnv {
-      IS_LOCAL_TEST: "true" | "";
-    }
+export class TestMicroRedisStartup extends MicroRedisStartup {
+  constructor(options?: MicroRedisOptions) {
+    super(options);
+    initBaseTestStartup(this);
+  }
+
+  protected async invoke(ctx: Request | Context): Promise<Response> {
+    return await super.invoke(ctx);
   }
 }
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface TestMicroRedisStartup extends ITestStartup {}

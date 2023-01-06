@@ -1,4 +1,4 @@
-import { parseJsonBuffer } from "@ipare/micro-common";
+import { ClientPacket, parseJsonBuffer } from "@ipare/micro-common";
 import * as redis from "redis";
 import { IMicroClient } from "@ipare/micro-client";
 import { MicroRedisClientOptions } from "./options";
@@ -31,14 +31,9 @@ export class MicroRedisClient extends IMicroClient {
   }
 
   async dispose() {
-    async function disconnect(redis?: redis.RedisClientType) {
-      if (redis?.isReady && redis.isOpen) {
-        await redis.quit();
-      }
-    }
-    await disconnect(this.pub);
+    await this.pub?.disconnect();
     this.pub = undefined;
-    await disconnect(this.sub);
+    await this.sub?.disconnect();
     this.sub = undefined;
   }
 
@@ -46,14 +41,9 @@ export class MicroRedisClient extends IMicroClient {
     pattern: string,
     data: any,
     timeout?: number
-  ): Promise<{
-    data?: T;
-    error?: string;
-  }> {
+  ): Promise<T> {
     if (!this.sub?.isReady || !this.pub?.isReady) {
-      return {
-        error: "The connection is not connected",
-      };
+      throw new Error("The connection is not connected");
     }
 
     pattern = this.prefix + pattern;
@@ -61,15 +51,13 @@ export class MicroRedisClient extends IMicroClient {
     const reply = pattern + "." + packet.id;
 
     const sub = this.sub as Exclude<typeof this.pub, undefined>;
-    return new Promise(async (resolve) => {
+    return new Promise(async (resolve, reject) => {
       let timeoutInstance: NodeJS.Timeout | undefined;
       const sendTimeout = timeout ?? this.options.sendTimeout ?? 10000;
       if (sendTimeout != 0) {
         timeoutInstance = setTimeout(() => {
           sub.unsubscribe(reply);
-          resolve({
-            error: "Send timeout",
-          });
+          reject(new Error("Send timeout"));
         }, sendTimeout);
       }
 
@@ -82,11 +70,12 @@ export class MicroRedisClient extends IMicroClient {
           }
           sub.unsubscribe(reply);
 
-          const packet = parseJsonBuffer(buffer);
-          resolve({
-            data: packet.data ?? packet.response,
-            error: packet.error,
-          });
+          const packet: ClientPacket = parseJsonBuffer(buffer);
+          if (packet.error) {
+            reject(new Error(packet.error));
+          } else {
+            resolve(packet.data ?? packet["response"]);
+          }
         },
         true
       );

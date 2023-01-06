@@ -47,11 +47,16 @@ describe("redis client", () => {
   describe("send", () => {
     it("should not send message before connect", async () => {
       const client = new MicroRedisClient();
-      const result = await client.send("", "");
+
+      let error: any;
+      try {
+        await client.send("", "");
+      } catch (err) {
+        error = err;
+      }
+
       await client.dispose();
-      expect(result).toEqual({
-        error: "The connection is not connected",
-      });
+      expect(error.message).toBe("The connection is not connected");
     });
 
     it("should not send message if sub.isReady is false", async () => {
@@ -59,28 +64,38 @@ describe("redis client", () => {
       (client as any).sub = {
         isReady: true,
         isOpen: true,
-        quit: () => undefined,
+        disconnect: () => undefined,
       };
-      const result = await client.send("", "");
+      let error: any;
+      try {
+        await client.send("", "");
+      } catch (err) {
+        error = err;
+      }
+
       await client.dispose();
-      expect(result).toEqual({
-        error: "The connection is not connected",
-      });
+      expect(error.message).toBe("The connection is not connected");
     });
 
     it("should not send message if hub.isReady is false", async () => {
       const client = new MicroRedisClient();
       (client as any).sub = {
         isReady: true,
+        disconnect: () => undefined,
       };
       (client as any).pub = {
         isReady: false,
+        disconnect: () => undefined,
       };
-      const result = await client.send("", "");
+      let error: any;
+      try {
+        await client.send("", "");
+      } catch (err) {
+        error = err;
+      }
+
       await client.dispose();
-      expect(result).toEqual({
-        error: "The connection is not connected",
-      });
+      expect(error.message).toBe("The connection is not connected");
     });
   });
 
@@ -97,10 +112,13 @@ describe("redis client", () => {
         publish: () => undefined,
       };
 
-      const result = await client.send("", "", 1000);
-      expect(result).toEqual({
-        error: "Send timeout",
-      });
+      let error: any;
+      try {
+        await client.send("", "", 1000);
+      } catch (err) {
+        error = err;
+      }
+      expect(error.message).toBe("Send timeout");
     });
   });
 
@@ -125,7 +143,13 @@ describe("redis client", () => {
         },
       };
 
-      await client.send("test_pattern", "", 1000);
+      let error: any;
+      try {
+        await client.send("test_pattern", "", 1000);
+      } catch (err) {
+        error = err;
+      }
+      expect(error.message).toBe("Send timeout");
       expect(publishPattern).toBe("pt_test_pattern");
       expect(subscribePattern.startsWith("pt_test_pattern.")).toBeTruthy();
     });
@@ -145,18 +169,17 @@ describe("redis client", () => {
           callback(Buffer.from(str));
         },
         unsubscribe: () => undefined,
+        disconnect: () => undefined,
       };
       (client as any).pub = {
         isReady: true,
         publish: () => undefined,
+        disconnect: () => undefined,
       };
 
       const result = await client.send("", "");
       await client.dispose();
-      expect(result).toEqual({
-        data: "d",
-        error: undefined,
-      });
+      expect(result).toBe("d");
     });
 
     it("should return when subscribe callback response", async () => {
@@ -172,40 +195,64 @@ describe("redis client", () => {
           callback(Buffer.from(str));
         },
         unsubscribe: () => undefined,
+        disconnect: () => undefined,
       };
       (client as any).pub = {
         isReady: true,
         publish: () => undefined,
+        disconnect: () => undefined,
       };
 
       const result = await client.send("", "");
       await client.dispose();
-      expect(result).toEqual({
-        data: "d",
-        error: undefined,
-      });
+      expect(result).toBe("d");
+    });
+
+    it("should throw error when result.error is defined", async () => {
+      const client = new MicroRedisClient();
+      (client as any).sub = {
+        isReady: true,
+        subscribe: (pattern: string, callback: (buffer: Buffer) => void) => {
+          const str = JSON.stringify({
+            id: "123",
+            pattern: "test",
+            error: "err",
+          });
+          callback(Buffer.from(str));
+        },
+        unsubscribe: () => undefined,
+        disconnect: () => undefined,
+      };
+      (client as any).pub = {
+        isReady: true,
+        publish: () => undefined,
+        disconnect: () => undefined,
+      };
+
+      let error: any;
+      try {
+        await client.send("", "", 1000);
+      } catch (err) {
+        error = err;
+      }
+      expect(error.message).toBe("err");
+
+      await client.dispose();
     });
   });
+});
 
-  describe("connect", () => {
-    jest.mock("redis", () => {
-      return {
-        createClient: (opt: any) => {
-          return {
-            opt,
-            connect: () => undefined,
-          };
-        },
-      };
-    });
+describe("options", () => {
+  it("should not connect with default options", async () => {
+    const startup = new MicroRedisClient();
 
-    it("should connect with default host and port", async () => {
-      const client = new MicroRedisClient();
-      await client["connect"]();
+    let error: any;
+    try {
+      await startup["connect"]();
+    } catch (err) {
+      error = err;
+    }
 
-      expect((client as any)["sub"]["opt"]).toEqual({
-        url: `redis://localhost:6379`,
-      });
-    });
+    expect(!!error).toBeTruthy();
   });
 });

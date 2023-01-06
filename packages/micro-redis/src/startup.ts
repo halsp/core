@@ -1,7 +1,7 @@
 import { MicroStartup } from "@ipare/micro";
 import { MicroRedisOptions } from "./options";
 import { Context, getIparePort } from "@ipare/core";
-import type redis from "redis";
+import * as redis from "redis";
 import { parseJsonBuffer } from "@ipare/micro-common";
 
 export class MicroRedisStartup extends MicroStartup {
@@ -26,14 +26,9 @@ export class MicroRedisStartup extends MicroStartup {
       opt.url = `redis://localhost:${port}`;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const redisPkg = require("redis");
-    const pub = redisPkg.createClient(opt) as redis.RedisClientType;
-    const sub = redisPkg.createClient(opt) as redis.RedisClientType;
-
-    this.pub = pub;
-    this.sub = sub;
-    await Promise.all([pub.connect(), sub.connect()]);
+    this.pub = redis.createClient(opt) as redis.RedisClientType;
+    this.sub = redis.createClient(opt) as redis.RedisClientType;
+    await Promise.all([this.pub.connect(), this.sub.connect()]);
 
     this.#handlers.forEach((item) => {
       this.#pattern(item.pattern, item.handler);
@@ -86,15 +81,11 @@ export class MicroRedisStartup extends MicroStartup {
   }
 
   async close() {
-    async function disconnect(redis?: redis.RedisClientType) {
-      if (redis?.isReady && redis.isOpen) {
-        await redis.quit();
-      }
-    }
-    await disconnect(this.pub);
+    await this.pub?.disconnect();
     this.pub = undefined;
-    await disconnect(this.sub);
+    await this.sub?.disconnect();
     this.sub = undefined;
+
     this.logger.info("Server shutdown success");
   }
 }
