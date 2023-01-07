@@ -81,9 +81,9 @@ export class MicroRedisStartup extends MicroStartup {
   }
 
   async close() {
-    await this.pub?.disconnect();
+    await this.pub?.quit();
     this.pub = undefined;
-    await this.sub?.disconnect();
+    await this.sub?.quit();
     this.sub = undefined;
 
     this.logger.info("Server shutdown success");

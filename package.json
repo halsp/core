@@ -15,7 +15,8 @@
   "scripts": {
     "prebuild": "sh scripts/copy-package-files.sh",
     "build": "lerna run build",
-    "pretest": "npm run build",
+    "init-docker": "sh scripts/init-docker.sh",
+    "pretest": "npm run build && npm run init-docker",
     "test": "jest",
     "test-q": "npm run prebuild && jest",
     "bootstrap": "lerna bootstrap",

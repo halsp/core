@@ -1,28 +1,25 @@
-import { TestRedisOptions } from "@ipare/micro-common/test/utils";
 import { MicroRedisStartup } from "../src";
 import { MicroRedisClient } from "@ipare/micro-redis-client";
 
 describe("startup", () => {
   it("should subscribe and publish", async () => {
-    const startup = new MicroRedisStartup(TestRedisOptions).pattern(
-      "test_pattern",
-      (ctx) => {
-        ctx.res.body = ctx.req.body;
-      }
-    );
+    const startup = new MicroRedisStartup({
+      url: "redis://127.0.0.1:6003",
+    }).pattern("test_pattern", (ctx) => {
+      ctx.res.body = ctx.req.body;
+    });
     await startup.listen();
 
-    const client = new MicroRedisClient(TestRedisOptions);
+    const client = new MicroRedisClient({
+      url: "redis://127.0.0.1:6003",
+    });
     await client["connect"]();
     const result = await client.send("test_pattern", "test_body");
 
     await client.dispose();
     await startup.close();
 
-    expect(result).toEqual({
-      data: "test_body",
-      error: undefined,
-    });
+    expect(result).toBe("test_body");
   });
 
   it("should not publish when pub is undefined", async () => {
@@ -30,7 +27,9 @@ describe("startup", () => {
       let publishPattern = "";
       let subscribePattern = "";
       let subscribeCallback: any;
-      const startup = new MicroRedisStartup(TestRedisOptions);
+      const startup = new MicroRedisStartup({
+        url: "redis://127.0.0.1:6003",
+      });
       await startup.listen();
 
       const sub = (startup as any).sub;

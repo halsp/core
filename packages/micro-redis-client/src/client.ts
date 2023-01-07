@@ -31,9 +31,9 @@ export class MicroRedisClient extends IMicroClient {
   }
 
   async dispose() {
-    await this.pub?.disconnect();
+    await this.pub?.quit();
     this.pub = undefined;
-    await this.sub?.disconnect();
+    await this.sub?.quit();
     this.sub = undefined;
   }
 

@@ -64,7 +64,7 @@ describe("redis client", () => {
       (client as any).sub = {
         isReady: true,
         isOpen: true,
-        disconnect: () => undefined,
+        quit: () => undefined,
       };
       let error: any;
       try {
@@ -81,11 +81,11 @@ describe("redis client", () => {
       const client = new MicroRedisClient();
       (client as any).sub = {
         isReady: true,
-        disconnect: () => undefined,
+        quit: () => undefined,
       };
       (client as any).pub = {
         isReady: false,
-        disconnect: () => undefined,
+        quit: () => undefined,
       };
       let error: any;
       try {
@@ -169,12 +169,12 @@ describe("redis client", () => {
           callback(Buffer.from(str));
         },
         unsubscribe: () => undefined,
-        disconnect: () => undefined,
+        quit: () => undefined,
       };
       (client as any).pub = {
         isReady: true,
         publish: () => undefined,
-        disconnect: () => undefined,
+        quit: () => undefined,
       };
 
       const result = await client.send("", "");
@@ -195,12 +195,12 @@ describe("redis client", () => {
           callback(Buffer.from(str));
         },
         unsubscribe: () => undefined,
-        disconnect: () => undefined,
+        quit: () => undefined,
       };
       (client as any).pub = {
         isReady: true,
         publish: () => undefined,
-        disconnect: () => undefined,
+        quit: () => undefined,
       };
 
       const result = await client.send("", "");
@@ -221,12 +221,12 @@ describe("redis client", () => {
           callback(Buffer.from(str));
         },
         unsubscribe: () => undefined,
-        disconnect: () => undefined,
+        quit: () => undefined,
       };
       (client as any).pub = {
         isReady: true,
         publish: () => undefined,
-        disconnect: () => undefined,
+        quit: () => undefined,
       };
 
       let error: any;
