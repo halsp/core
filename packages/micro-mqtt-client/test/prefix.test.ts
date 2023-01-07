@@ -21,7 +21,6 @@ describe("prefix", () => {
     });
     await client["connect"]();
     const result = await client.send("test_pattern", "test_body");
-    console.log("result", result);
 
     await startup.close(true);
     await client.dispose(true);

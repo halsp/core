@@ -1,11 +1,17 @@
-export { TestMicroNatsStartup } from "./test-micro-nats-startup";
-export { createMock, mockPkgName, JSONCodec } from "./mock";
+import { Context, Request, Response } from "@ipare/core";
+import { MicroNatsOptions, MicroNatsStartup } from "@ipare/micro-nats";
+import { initBaseTestStartup, ITestStartup } from "../test-startup";
 
-declare global {
-  // eslint-disable-next-line @typescript-eslint/no-namespace
-  namespace NodeJS {
-    export interface ProcessEnv {
-      IS_LOCAL_TEST: "true" | "";
-    }
+export class TestMicroNatsStartup extends MicroNatsStartup {
+  constructor(options?: MicroNatsOptions) {
+    super(options);
+    initBaseTestStartup(this);
+  }
+
+  protected async invoke(ctx: Request | Context): Promise<Response> {
+    return await super.invoke(ctx);
   }
 }
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface TestMicroNatsStartup extends ITestStartup {}

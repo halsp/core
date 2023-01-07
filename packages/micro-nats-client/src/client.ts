@@ -1,5 +1,5 @@
-import { ServerPacket } from "@ipare/micro-common";
-import type nats from "nats";
+import { ClientPacket, ServerPacket } from "@ipare/micro-common";
+import * as nats from "nats";
 import { IMicroClient } from "@ipare/micro-client";
 import { MicroNatsClientOptions } from "./options";
 
@@ -22,8 +22,7 @@ export class MicroNatsClient extends IMicroClient {
       opt.port = 4222;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    this.connection = await require("nats").connect(opt);
+    this.connection = await nats.connect(opt);
   }
 
   async dispose() {
@@ -38,15 +37,11 @@ export class MicroNatsClient extends IMicroClient {
     headers?: nats.MsgHdrs,
     timeout?: number
   ): Promise<{
-    data?: T;
-    error?: string;
+    data: T;
     headers: nats.MsgHdrs;
   }> {
     if (!this.connection || this.connection.isClosed()) {
-      return {
-        error: "The connection is not connected",
-        headers: createHeaders(),
-      };
+      throw new Error("The connection is not connected");
     }
 
     pattern = this.prefix + pattern;
@@ -58,7 +53,7 @@ export class MicroNatsClient extends IMicroClient {
     >;
 
     let timeoutInstance: NodeJS.Timeout | undefined;
-    return await new Promise(async (resolve) => {
+    return await new Promise(async (resolve, reject) => {
       const reply = pattern + "." + packet.id;
       const sub = connection.subscribe(reply, {
         callback: (err, msg) => {
@@ -68,18 +63,19 @@ export class MicroNatsClient extends IMicroClient {
             clearTimeout(timeoutInstance);
           }
 
-          if (err && !msg.data) {
-            resolve({
-              error: err.message,
-              headers: createHeaders(),
-            });
+          if (err) {
+            reject(err);
             return;
           }
 
-          const clientPacket = this.#jsonCodec.decode(msg.data);
+          const clientPacket: ClientPacket = this.#jsonCodec.decode(msg.data);
+          if (clientPacket.error) {
+            reject(new Error(clientPacket.error));
+            return;
+          }
+
           resolve({
-            data: clientPacket.data ?? clientPacket.response,
-            error: err?.message ?? clientPacket.error,
+            data: clientPacket.data ?? clientPacket["response"],
             headers: msg.headers as nats.MsgHdrs,
           });
         },
@@ -90,10 +86,7 @@ export class MicroNatsClient extends IMicroClient {
         timeoutInstance = setTimeout(() => {
           timeoutInstance = undefined;
           sub.unsubscribe();
-          resolve({
-            error: "Send timeout",
-            headers: createHeaders(),
-          });
+          reject(new Error("Send timeout"));
         }, sendTimeout);
       }
 
@@ -119,10 +112,4 @@ export class MicroNatsClient extends IMicroClient {
       headers: headers,
     });
   }
-}
-
-function createHeaders() {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const natsPkg = require("nats");
-  return natsPkg.headers() as nats.MsgHdrs;
 }

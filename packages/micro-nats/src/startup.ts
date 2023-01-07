@@ -1,7 +1,7 @@
 import { MicroStartup } from "@ipare/micro";
 import { MicroNatsOptions } from "./options";
 import { Context, getIparePort } from "@ipare/core";
-import type nats from "nats";
+import * as nats from "nats";
 
 export class MicroNatsStartup extends MicroStartup {
   constructor(protected readonly options: MicroNatsOptions = {}) {
@@ -26,8 +26,7 @@ export class MicroNatsStartup extends MicroStartup {
       opt.port = getIparePort(4222);
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    this.connection = await require("nats").connect(opt);
+    this.connection = await nats.connect(opt);
 
     this.#handlers.forEach((item) => {
       this.#pattern(item.pattern, item.handler);
@@ -47,7 +46,6 @@ export class MicroNatsStartup extends MicroStartup {
           return;
         }
 
-        console.log("res.headers", this.#jsonCodec.decode(msg.data));
         this.handleMessage(
           this.#jsonCodec.decode(msg.data),
           async ({ result, res }) => {

@@ -32,7 +32,6 @@ describe("return", () => {
     });
     const result = await runTest(Buffer.from(str));
     expect(result.data).toBe("d");
-    expect(result.error).toBeUndefined();
   });
 
   it("should return when subscribe callback response", async () => {
@@ -43,25 +42,48 @@ describe("return", () => {
     });
     const result = await runTest(Buffer.from(str));
     expect(result.data).toBe("d");
-    expect(result.error).toBeUndefined();
   });
 
   it("should return error when callback error is not undefined", async () => {
-    const result = await runTest(undefined, new Error("err"));
+    let error: any;
+    try {
+      await runTest(undefined, new Error("err"));
+    } catch (err) {
+      error = err;
+    }
 
-    expect(result.data).toBeUndefined();
-    expect(result.error).toBe("err");
+    expect(error.message).toBe("err");
   });
 
-  it("should return error and data when callback error is not undefined", async () => {
+  it("should return error and data when callback error is defined", async () => {
     const str = JSON.stringify({
       id: "123",
       pattern: "test",
       data: "d",
     });
-    const result = await runTest(Buffer.from(str), new Error("err"));
 
-    expect(result.data).toBe("d");
-    expect(result.error).toBe("err");
+    let error: any;
+    try {
+      await runTest(Buffer.from(str), new Error("err"));
+    } catch (err) {
+      error = err;
+    }
+    expect(error.message).toBe("err");
+  });
+
+  it("should return error and data when result.error is defined", async () => {
+    const str = JSON.stringify({
+      id: "123",
+      pattern: "test",
+      error: "err",
+    });
+
+    let error: any;
+    try {
+      await runTest(Buffer.from(str));
+    } catch (err) {
+      error = err;
+    }
+    expect(error.message).toBe("err");
   });
 });

@@ -1,23 +1,6 @@
 import { MicroNatsStartup } from "../src";
 
 describe("headers", () => {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { JSONCodec } = require("@ipare/testing/dist/micro-nats");
-  jest.mock("nats", () => {
-    return {
-      connect: () => {
-        return {
-          connect: () => undefined,
-          subscribe: () => undefined,
-        };
-      },
-      headers: () => {
-        return {};
-      },
-      JSONCodec: JSONCodec,
-    };
-  });
-
   it("should create req headers", async () => {
     let subscribePattern = "";
     let subscribeCallback: any;
@@ -27,15 +10,12 @@ describe("headers", () => {
     });
     await startup.listen();
 
-    (startup as any).connection = {
-      isClosed: () => false,
-      subscribe: (pattern: string, opts) => {
-        subscribePattern = pattern;
-        subscribeCallback = opts.callback;
-        return {
-          unsubscribe: () => undefined,
-        };
-      },
+    const connection = (startup as any).connection;
+    const subscribe = connection.subscribe;
+    connection.subscribe = (pattern: string, opts: any) => {
+      subscribePattern = pattern;
+      subscribeCallback = opts.callback;
+      return subscribe.bind(connection)(pattern, opts);
     };
 
     startup.pattern("test_pattern", () => undefined);
@@ -54,13 +34,13 @@ describe("headers", () => {
       },
     });
 
+    await startup.close();
+
     await new Promise<void>((resolve) => {
       setTimeout(() => resolve(), 500);
     });
     expect(subscribePattern).toBe("test_pattern");
-    expect(reqHeaders).toEqual({
-      h: "1",
-    });
+    expect(reqHeaders["h"]).toBe("1");
   });
 
   it("should return res headers", async () => {
@@ -72,15 +52,12 @@ describe("headers", () => {
     });
     await startup.listen();
 
-    (startup as any).connection = {
-      isClosed: () => false,
-      subscribe: (pattern: string, opts) => {
-        subscribePattern = pattern;
-        subscribeCallback = opts.callback;
-        return {
-          unsubscribe: () => undefined,
-        };
-      },
+    const connection = (startup as any).connection;
+    const subscribe = connection.subscribe;
+    connection.subscribe = (pattern: string, opts: any) => {
+      subscribePattern = pattern;
+      subscribeCallback = opts.callback;
+      return subscribe.bind(connection)(pattern, opts);
     };
 
     startup.pattern("test_pattern", () => undefined);
@@ -101,12 +78,12 @@ describe("headers", () => {
       },
     });
 
+    await startup.close();
+
     await new Promise<void>((resolve) => {
       setTimeout(() => resolve(), 500);
     });
     expect(subscribePattern).toBe("test_pattern");
-    expect(resHeaders).toEqual({
-      h: "1",
-    });
+    expect(resHeaders["h"]).toBe("1");
   });
 });

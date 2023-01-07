@@ -1,38 +1,18 @@
 import { MicroNatsStartup } from "../src";
 
 describe("error", () => {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { JSONCodec } = require("@ipare/testing/dist/micro-nats");
-  jest.mock("nats", () => {
-    return {
-      connect: () => {
-        return {
-          connect: () => undefined,
-          subscribe: () => undefined,
-        };
-      },
-      headers: () => {
-        return {};
-      },
-      JSONCodec: JSONCodec,
-    };
-  });
-
   it("should log error when subscript callback err is defined", async () => {
     let subscribePattern = "";
     let subscribeCallback: any;
     const startup = new MicroNatsStartup();
     await startup.listen();
 
-    (startup as any).connection = {
-      isClosed: () => false,
-      subscribe: (pattern: string, opts) => {
-        subscribePattern = pattern;
-        subscribeCallback = opts.callback;
-        return {
-          unsubscribe: () => undefined,
-        };
-      },
+    const connection = (startup as any).connection;
+    const subscribe = connection.subscribe;
+    connection.subscribe = (pattern: string, opts: any) => {
+      subscribePattern = pattern;
+      subscribeCallback = opts.callback;
+      return subscribe.bind(connection)(pattern, opts);
     };
 
     startup.patterns({
@@ -47,6 +27,8 @@ describe("error", () => {
     };
     await subscribeCallback(new Error("err"));
     console.error = beforeError;
+
+    await startup.close();
 
     await new Promise<void>((resolve) => {
       setTimeout(() => resolve(), 500);

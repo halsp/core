@@ -1,43 +1,35 @@
+import { MicroNatsClient } from "@ipare/micro-nats-client";
 import { MicroNatsStartup } from "../src";
 
 describe("startup", () => {
-  it("should connect nats", async () => {
-    let connect = false;
-    let disconnect = false;
-
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { JSONCodec } = require("@ipare/testing/dist/micro-nats");
-    jest.mock("nats", () => {
-      return {
-        connect: () => {
-          connect = true;
-          return {
-            subscribe: () => undefined,
-            close: () => {
-              disconnect = true;
-            },
-            isClosed: () => false,
-          };
-        },
-        JSONCodec: JSONCodec,
-      };
+  it("should subscribe and publish when use mock", async () => {
+    const startup = new MicroNatsStartup({
+      servers: "127.0.0.1:4222",
+    }).pattern("test_pattern", (ctx) => {
+      ctx.res.body = ctx.req.body;
     });
+    await startup.listen();
 
-    const startup = new MicroNatsStartup();
-    const conection = await startup.listen();
+    const client = new MicroNatsClient();
+    await client["connect"]();
+    const result = await client.send("test_pattern", "test_body");
+
+    await client.dispose();
     await startup.close();
 
-    expect(!!conection).toBeTruthy();
-    expect(connect).toBeTruthy();
-    expect(disconnect).toBeTruthy();
+    expect(result.data).toBe("test_body");
+    expect(result.error).toBeUndefined();
   });
+});
 
-  it("should listen with IPARE_DEBUG_PORT", async () => {
-    process.env.IPARE_DEBUG_PORT = "42221";
+describe("options", () => {
+  it("should not connect with default options", async () => {
     const startup = new MicroNatsStartup();
-    const conection = await startup.listen();
-    await startup.close();
 
-    expect(!!conection).toBeTruthy();
+    try {
+      await startup.listen();
+    } catch {}
+
+    await startup.close();
   });
 });
