@@ -26,15 +26,21 @@ export class MicroMqttStartup extends MicroStartup {
       opt.port = getIparePort(1883);
     }
 
-    await new Promise<void>((resolve) => {
+    await new Promise<void>((resolve, reject) => {
       this.connectResolve = resolve;
       this.client = mqtt.connect(opt) as mqtt.MqttClient;
+
+      let handled = false;
+      const handler = (cb: () => void) => {
+        if (handled) return;
+        handled = true;
+        cb();
+      };
       this.client.on("connect", () => {
-        resolve();
+        handler(() => resolve());
       });
       this.client.on("error", (err) => {
-        this.logger.error(err);
-        resolve();
+        handler(() => reject(err));
       });
     });
 
@@ -117,8 +123,19 @@ export class MicroMqttStartup extends MicroStartup {
       this.connectResolve = undefined;
     }
 
-    this.client?.removeAllListeners();
-    this.client?.end(force);
-    this.logger.info("Server shutdown success");
+    if (this.client) {
+      const client = this.client;
+      client.removeAllListeners();
+      await new Promise<void>((resolve, reject) => {
+        client.end(force, {}, (err) => {
+          if (err) {
+            reject(err);
+          } else {
+            this.logger.info("Server shutdown success");
+            resolve();
+          }
+        });
+      });
+    }
   }
 }

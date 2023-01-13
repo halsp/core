@@ -1,42 +1,75 @@
 import { MicroMqttStartup } from "@ipare/micro-mqtt";
 import { MicroMqttClient } from "../src";
-import { TestMqttOptions } from "@ipare/micro-common/test/utils";
+import * as mqtt from "mqtt";
 
 describe("error", () => {
-  it("should log error if client emit error event", async () => {
-    const client = new MicroMqttClient();
-    await client["connect"]();
+  it("should throw error when client close error", async () => {
+    const mqttClient = new MicroMqttClient({
+      host: "127.0.0.1",
+      port: 6002,
+    });
+    await mqttClient["connect"]();
+
+    const client = mqttClient["client"] as mqtt.MqttClient;
+    const end = client.end;
+    client.end = (force: boolean, obj: any, cb: any) => {
+      try {
+        cb(new Error("err"));
+      } finally {
+        return end.bind(client)(force, obj, cb);
+      }
+    };
+
+    await new Promise<void>((resolve) => {
+      setTimeout(() => resolve(), 500);
+    });
 
     let error: any;
-    client.logger = {
-      error: (err: any) => {
-        error = err;
-      },
-    } as any;
+    try {
+      await mqttClient.dispose(true);
+    } catch (err) {
+      error = err;
+    }
 
-    client["client"]?.emit("error", new Error("err"));
+    await new Promise<void>((resolve) => {
+      setTimeout(() => resolve(), 500);
+    });
 
     expect(error.message).toBe("err");
   });
 
-  it("should ignore error if logger is undefined", async () => {
-    const client = new MicroMqttClient();
-    await client["connect"]();
-    client.logger = undefined as any;
+  it("should throw error when host is invalid", async () => {
+    const client = new MicroMqttClient({
+      host: "not-exist.ipare.org",
+      connectTimeout: 500,
+    });
 
-    client["client"]?.emit("error", new Error("err"));
+    let error: any;
+    try {
+      await client["connect"]();
+    } catch (err) {
+      error = err;
+    }
+
+    await client.dispose(true);
+    expect(error.message).toBe("getaddrinfo ENOTFOUND not-exist.ipare.org");
   });
 
   it("should throw error when result.error is defined", async () => {
-    const startup = new MicroMqttStartup(TestMqttOptions)
+    const startup = new MicroMqttStartup({
+      port: 6002,
+    })
       .pattern("test_pattern", () => undefined)
       .use((ctx) => {
         ctx.res.setError("err");
       });
     await startup.listen();
 
-    const client = new MicroMqttClient(TestMqttOptions);
+    const client = new MicroMqttClient({
+      port: 6002,
+    });
     await client["connect"]();
+    client["client"]?.emit("error", new Error("err")); // Not working
 
     let error: any;
     try {
@@ -49,5 +82,5 @@ describe("error", () => {
     await client.dispose(true);
 
     expect(error.message).toBe("err");
-  }, 10000);
+  });
 });

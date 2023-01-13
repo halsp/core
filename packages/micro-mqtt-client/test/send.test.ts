@@ -19,7 +19,7 @@ describe("send", () => {
     const client = new MicroMqttClient();
     (client as any).client = {
       connected: false,
-      end: () => undefined,
+      end: (force: any, obj: any, cb: any) => cb(),
       removeAllListeners: () => undefined,
     };
 
