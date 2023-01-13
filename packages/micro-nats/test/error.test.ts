@@ -4,7 +4,9 @@ describe("error", () => {
   it("should log error when subscript callback err is defined", async () => {
     let subscribePattern = "";
     let subscribeCallback: any;
-    const startup = new MicroNatsStartup();
+    const startup = new MicroNatsStartup({
+      port: 6001,
+    });
     await startup.listen();
 
     const connection = (startup as any).connection;

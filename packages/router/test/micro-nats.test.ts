@@ -1,21 +1,22 @@
-import {
-  createMock,
-  TestMicroNatsStartup,
-} from "@ipare/testing/dist/micro-nats";
+import { TestMicroNatsStartup } from "@ipare/testing/dist/micro-nats";
 import "./utils-micro";
 import { MicroNatsClient } from "@ipare/micro-nats-client";
 
 describe("micro-nats", () => {
-  jest.mock("nats", () => createMock(true));
-
   it("should add pattern handlers when use micro nats", async () => {
-    const startup = new TestMicroNatsStartup().useTestRouter().useRouter();
+    const startup = new TestMicroNatsStartup({
+      port: 6001,
+    })
+      .useTestRouter()
+      .useRouter();
     await startup.listen();
 
-    const client = new MicroNatsClient();
+    const client = new MicroNatsClient({
+      port: 6001,
+    });
     await client["connect"]();
 
-    const result = await client.send("event:123", true);
+    const result = await client.send("event:123", { val: true });
 
     await startup.close();
     await client.dispose();
@@ -24,17 +25,21 @@ describe("micro-nats", () => {
   });
 
   it("should match pattern with prefix", async () => {
-    const startup = new TestMicroNatsStartup()
+    const startup = new TestMicroNatsStartup({
+      port: 6001,
+    })
       .useTestRouter({
         prefix: "pf:",
       })
       .useRouter();
     startup.listen();
 
-    const client = new MicroNatsClient();
+    const client = new MicroNatsClient({
+      port: 6001,
+    });
     await client["connect"]();
 
-    const result = await client.send("pf:event:123", true);
+    const result = await client.send("pf:event:123", { val: true });
 
     await startup.close();
     await client.dispose();

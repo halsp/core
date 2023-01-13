@@ -5,7 +5,9 @@ describe("headers", () => {
     let subscribePattern = "";
     let subscribeCallback: any;
     let reqHeaders: any;
-    const startup = new MicroNatsStartup().use((ctx) => {
+    const startup = new MicroNatsStartup({
+      port: 6001,
+    }).use((ctx) => {
       reqHeaders = ctx.req.headers;
     });
     await startup.listen();
@@ -47,7 +49,9 @@ describe("headers", () => {
     let subscribePattern = "";
     let subscribeCallback: any;
     let resHeaders: any;
-    const startup = new MicroNatsStartup().use((ctx) => {
+    const startup = new MicroNatsStartup({
+      port: 6001,
+    }).use((ctx) => {
       ctx.res.headers["h"] = "1";
     });
     await startup.listen();

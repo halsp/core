@@ -1,18 +1,19 @@
-import {
-  createMock,
-  TestMicroRedisStartup,
-} from "@ipare/testing/dist/micro-redis";
+import { TestMicroRedisStartup } from "@ipare/testing/dist/micro-redis";
 import "./utils-micro";
 import { MicroRedisClient } from "@ipare/micro-redis-client";
 
 describe("micro-redis", () => {
-  jest.mock("redis", () => createMock());
-
   it("should add pattern handlers when use micro redis", async () => {
-    const startup = new TestMicroRedisStartup().useTestRouter().useRouter();
+    const startup = new TestMicroRedisStartup({
+      url: "redis://127.0.0.1:6003",
+    })
+      .useTestRouter()
+      .useRouter();
     await startup.listen();
 
-    const client = new MicroRedisClient();
+    const client = new MicroRedisClient({
+      url: "redis://127.0.0.1:6003",
+    });
     await client["connect"]();
 
     const result = await client.send("event:123", true);
@@ -20,11 +21,13 @@ describe("micro-redis", () => {
     await startup.close();
     await client.dispose();
 
-    expect(result.data).toBe("event-pattern-test");
+    expect(result).toBe("event-pattern-test");
   });
 
   it("should match pattern with prefix", async () => {
-    const startup = new TestMicroRedisStartup()
+    const startup = new TestMicroRedisStartup({
+      url: "redis://127.0.0.1:6003",
+    })
       .useTestRouter({
         prefix: "pf:",
       })
@@ -32,6 +35,7 @@ describe("micro-redis", () => {
     await startup.listen();
 
     const client = new MicroRedisClient({
+      url: "redis://127.0.0.1:6003",
       prefix: "pf:",
     });
     await client["connect"]();
@@ -41,6 +45,6 @@ describe("micro-redis", () => {
     await startup.close();
     await client.dispose();
 
-    expect(result.data).toBe("event-pattern-test");
+    expect(result).toBe("event-pattern-test");
   });
 });

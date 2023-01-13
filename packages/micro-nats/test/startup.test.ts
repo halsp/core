@@ -4,13 +4,15 @@ import { MicroNatsStartup } from "../src";
 describe("startup", () => {
   it("should subscribe and publish when use mock", async () => {
     const startup = new MicroNatsStartup({
-      servers: "127.0.0.1:4222",
+      servers: "127.0.0.1:6001",
     }).pattern("test_pattern", (ctx) => {
       ctx.res.body = ctx.req.body;
     });
     await startup.listen();
 
-    const client = new MicroNatsClient();
+    const client = new MicroNatsClient({
+      servers: "127.0.0.1:6001",
+    });
     await client["connect"]();
     const result = await client.send("test_pattern", "test_body");
 
@@ -18,7 +20,6 @@ describe("startup", () => {
     await startup.close();
 
     expect(result.data).toBe("test_body");
-    expect(result.error).toBeUndefined();
   });
 });
 

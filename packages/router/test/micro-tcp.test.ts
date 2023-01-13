@@ -17,7 +17,7 @@ describe("micro-nats", () => {
     await client.dispose();
     await startup.close();
 
-    expect(result.data).toBe("event-pattern-test");
+    expect(result).toBe("event-pattern-test");
   });
 
   it("should match pattern with prefix", async () => {
@@ -36,6 +36,6 @@ describe("micro-nats", () => {
     await client.dispose();
     await startup.close();
 
-    expect(result.data).toBe("event-pattern-test");
+    expect(result).toBe("event-pattern-test");
   });
 });
