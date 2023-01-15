@@ -32,7 +32,7 @@ describe("micro-nats", () => {
         prefix: "pf:",
       })
       .useRouter();
-    startup.listen();
+    await startup.listen();
 
     const client = new MicroNatsClient({
       port: 6001,

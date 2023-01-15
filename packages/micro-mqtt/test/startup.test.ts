@@ -144,4 +144,21 @@ describe("startup", () => {
 
     expect(error.message).toBe("err");
   });
+
+  it("should throw error when host is invalid", async () => {
+    const client = new MicroMqttStartup({
+      host: "not-exist.ipare.org",
+      connectTimeout: 500,
+    });
+
+    let error: any;
+    try {
+      await client.listen();
+    } catch (err) {
+      error = err;
+    }
+
+    await client.close(true);
+    expect(error.message).toBe("getaddrinfo ENOTFOUND not-exist.ipare.org");
+  });
 });
