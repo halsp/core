@@ -1,25 +1,24 @@
 import { Context, isNil, isObject, Request, Response } from "@ipare/core";
-import { CTX_INITED, REQUEST_ID, RESPONSE_ERROR } from "./constant";
 import { MicroException } from "./exception";
 
+let inited = false;
 export function initContext() {
-  if (Context.prototype[CTX_INITED]) {
-    return;
-  }
-  Context.prototype[CTX_INITED] = true;
+  if (inited) return;
+  inited = true;
 
+  const idMap = new WeakMap<Request, string>();
   Object.defineProperty(Request.prototype, "id", {
     configurable: true,
     enumerable: true,
     get: function () {
-      if (!(REQUEST_ID in this)) {
-        this[REQUEST_ID] = "";
+      if (!idMap.has(this)) {
+        idMap.set(this, "");
       }
-      return this[REQUEST_ID];
+      return idMap.get(this);
     },
   });
   Request.prototype.setId = function (id: string) {
-    this[REQUEST_ID] = id;
+    idMap.set(this, id);
     return this;
   };
 
@@ -32,17 +31,18 @@ export function initContext() {
     },
   });
 
+  const errorMap = new WeakMap<Response, string | undefined>();
   Object.defineProperty(Response.prototype, "error", {
     configurable: true,
     enumerable: true,
     get: function () {
-      if (!(RESPONSE_ERROR in this)) {
-        this[RESPONSE_ERROR] = undefined;
+      if (!errorMap.has(this)) {
+        errorMap.set(this, undefined);
       }
-      return this[RESPONSE_ERROR];
+      return errorMap.get(this);
     },
     set: function (val) {
-      this[RESPONSE_ERROR] = val;
+      errorMap.set(this, val);
     },
   });
   Response.prototype.setError = function (error?: string) {
