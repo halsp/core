@@ -1,25 +1,27 @@
-import { Dict, Request } from "@ipare/core";
+import { Dict, ReadonlyDict, Request } from "@ipare/core";
 import { HttpMethods } from "@ipare/methods";
 import { initHeaderHandler } from "./header-handler";
-import { REQUEST_HEADERS, REQUEST_METHOD, REQUEST_QUERY } from "../constant";
+import { ReadonlyHeadersDict } from "../types";
 
 export function initRequest(req: typeof Request.prototype) {
+  const headersMap = new WeakMap<Request, ReadonlyHeadersDict>();
   Object.defineProperty(req, "headers", {
     configurable: true,
     enumerable: true,
     get: function () {
-      if (!(REQUEST_HEADERS in this)) {
-        this[REQUEST_HEADERS] = {};
+      if (!headersMap.has(this)) {
+        headersMap.set(this, {});
       }
-      return this[REQUEST_HEADERS];
+      return headersMap.get(this);
     },
   });
 
+  const methodMap = new WeakMap<Request, string>();
   Object.defineProperty(req, "overrideMethod", {
     configurable: true,
     enumerable: true,
     get: function () {
-      const method = this[REQUEST_METHOD] as string;
+      const method = methodMap.get(this);
 
       if (method && method.toUpperCase() != this.method.toUpperCase()) {
         return method;
@@ -31,8 +33,8 @@ export function initRequest(req: typeof Request.prototype) {
     configurable: true,
     enumerable: true,
     get: function () {
-      if (!(REQUEST_METHOD in this)) {
-        this[REQUEST_METHOD] = HttpMethods.any;
+      if (!methodMap.has(this)) {
+        methodMap.set(this, HttpMethods.any);
       }
 
       const ovrdHeader = this.getHeader("X-HTTP-Method-Override");
@@ -43,22 +45,23 @@ export function initRequest(req: typeof Request.prototype) {
           return ovrdHeader.toUpperCase();
         }
       }
-      return this[REQUEST_METHOD];
+      return methodMap.get(this);
     },
   });
   req.setMethod = function (val: string) {
-    this[REQUEST_METHOD] = val?.toUpperCase();
+    methodMap.set(this, val?.toUpperCase());
     return this;
   };
 
+  const queryMap = new WeakMap<Request, ReadonlyDict<string>>();
   Object.defineProperty(req, "query", {
     configurable: true,
     enumerable: true,
     get: function () {
-      if (!(REQUEST_QUERY in this)) {
-        this[REQUEST_QUERY] = {};
+      if (!queryMap.has(this)) {
+        queryMap.set(this, {});
       }
-      return this[REQUEST_QUERY];
+      return queryMap.get(this);
     },
   });
   req.setQuery = function (

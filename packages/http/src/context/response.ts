@@ -1,8 +1,8 @@
 import { StatusCodes } from "http-status-codes";
 import { Response } from "@ipare/core";
 import { initResultHandler } from "./result-handler";
-import { RESPONSE_HEADERS, RESPONSE_STATUS } from "../constant";
 import { initHeaderHandler } from "./header-handler";
+import { ReadonlyHeadersDict } from "../types";
 
 export function initResponse(res: typeof Response.prototype) {
   Object.defineProperty(res, "isSuccess", {
@@ -12,28 +12,31 @@ export function initResponse(res: typeof Response.prototype) {
       return this.status >= 200 && this.status < 300;
     },
   });
+
+  const headersMap = new WeakMap<Response, ReadonlyHeadersDict>();
   Object.defineProperty(res, "headers", {
     configurable: true,
     enumerable: true,
     get: function () {
-      if (!(RESPONSE_HEADERS in this)) {
-        this[RESPONSE_HEADERS] = {};
+      if (!headersMap.has(this)) {
+        headersMap.set(this, {});
       }
-      return this[RESPONSE_HEADERS];
+      return headersMap.get(this);
     },
   });
 
+  const statusMap = new WeakMap<Response, number>();
   Object.defineProperty(res, "status", {
     configurable: true,
     enumerable: true,
     get: function () {
-      if (!(RESPONSE_STATUS in this)) {
-        this[RESPONSE_STATUS] = StatusCodes.NOT_FOUND;
+      if (!statusMap.has(this)) {
+        statusMap.set(this, StatusCodes.NOT_FOUND);
       }
-      return this[RESPONSE_STATUS];
+      return statusMap.get(this);
     },
     set: function (val) {
-      this[RESPONSE_STATUS] = val;
+      statusMap.set(this, val);
     },
   });
   res.setStatus = function (status: number) {

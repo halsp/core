@@ -6,7 +6,6 @@ import {
   Request,
   Response,
 } from "@ipare/core";
-import { CTX_INITED } from "../constant";
 import { HttpException, InternalServerErrorException } from "../exceptions";
 import { initHeaderHandler } from "./header-handler";
 import { initRequest } from "./request";
@@ -16,11 +15,10 @@ import { initResultHandler } from "./result-handler";
 export { ResultHandler, initResultHandler } from "./result-handler";
 export { HeaderHandler, initHeaderHandler } from "./header-handler";
 
+let inited = false;
 export function initContext() {
-  if (Context.prototype[CTX_INITED]) {
-    return;
-  }
-  Context.prototype[CTX_INITED] = true;
+  if (inited) return;
+  inited = true;
 
   initRequest(Request.prototype);
   initResponse(Response.prototype);
