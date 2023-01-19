@@ -34,8 +34,11 @@ export class MicroNatsClient extends IMicroClient {
   async send<T = any>(
     pattern: string,
     data: any,
-    headers?: nats.MsgHdrs,
-    timeout?: number
+    options: {
+      subscribeOptions?: Omit<nats.SubscriptionOptions, "callback">;
+      timeout?: number;
+      headers?: nats.MsgHdrs;
+    } = {}
   ): Promise<{
     data: T;
     headers: nats.MsgHdrs;
@@ -56,6 +59,8 @@ export class MicroNatsClient extends IMicroClient {
     return await new Promise(async (resolve, reject) => {
       const reply = pattern + "." + packet.id;
       const sub = connection.subscribe(reply, {
+        ...this.options.subscribeOptions,
+        ...options.subscribeOptions,
         callback: (err, msg) => {
           sub.unsubscribe();
 
@@ -81,7 +86,7 @@ export class MicroNatsClient extends IMicroClient {
         },
       });
 
-      const sendTimeout = timeout ?? this.options.sendTimeout ?? 10000;
+      const sendTimeout = options.timeout ?? this.options.sendTimeout ?? 10000;
       if (sendTimeout != 0) {
         timeoutInstance = setTimeout(() => {
           timeoutInstance = undefined;
@@ -90,18 +95,24 @@ export class MicroNatsClient extends IMicroClient {
         }, sendTimeout);
       }
 
-      this.#sendPacket(packet, headers, reply);
+      this.#sendPacket(packet, options.headers, reply);
     });
   }
 
-  emit(pattern: string, data: any, headers?: nats.MsgHdrs): void {
+  emit(
+    pattern: string,
+    data: any,
+    options: {
+      headers?: nats.MsgHdrs;
+    } = {}
+  ): void {
     if (!this.connection || this.connection.isClosed()) {
       throw new Error("The connection is not connected");
     }
 
     pattern = this.prefix + pattern;
     const packet = super.createServerPacket(pattern, data, false);
-    this.#sendPacket(packet, headers);
+    this.#sendPacket(packet, options.headers);
   }
 
   #sendPacket(packet: ServerPacket, headers?: nats.MsgHdrs, reply?: string) {

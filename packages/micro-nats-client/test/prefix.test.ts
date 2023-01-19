@@ -31,7 +31,9 @@ describe("prefix", () => {
           data: Uint8Array.from(Buffer.from("{}")),
         });
       }, 500);
-      await client.send("test_pattern", "", undefined, 1000);
+      await client.send("test_pattern", "", {
+        timeout: 1000,
+      });
       resolve();
     });
     expect(publishPattern).toBe("pt_test_pattern");
