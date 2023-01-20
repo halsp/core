@@ -1,6 +1,6 @@
 {
   "name": "@ipare/jwt",
-  "version": "3.1.1",
+  "version": "3.2.0",
   "description": "基于 jsonwebtoken 和 @ipare/inject 的 JWT 中间件",
   "engines": {
     "node": ">=12.14.0"
@@ -35,8 +35,8 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^3.1.1",
-    "@ipare/inject": "^3.1.1",
+    "@ipare/core": "^3.2.0",
+    "@ipare/inject": "^3.2.0",
     "@types/jsonwebtoken": "^9.0.1",
     "jsonwebtoken": "^9.0.0",
     "reflect-metadata": "^0.1.13"

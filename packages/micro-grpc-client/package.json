@@ -1,6 +1,6 @@
 {
   "name": "@ipare/micro-grpc-client",
-  "version": "3.1.1",
+  "version": "3.2.0",
   "description": "Ipare 微服务 gRPC 通信客户端",
   "engines": {
     "node": ">=12.14.0"
@@ -39,10 +39,10 @@
   "dependencies": {
     "@grpc/grpc-js": "^1.8.4",
     "@grpc/proto-loader": "^0.7.4",
-    "@ipare/core": "^3.1.1",
-    "@ipare/inject": "^3.1.1",
-    "@ipare/micro-client": "^3.1.1",
-    "@ipare/micro-common": "^3.1.1"
+    "@ipare/core": "^3.2.0",
+    "@ipare/inject": "^3.2.0",
+    "@ipare/micro-client": "^3.2.0",
+    "@ipare/micro-common": "^3.2.0"
   },
   "files": [
     "/dist/*",

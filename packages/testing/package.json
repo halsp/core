@@ -1,6 +1,6 @@
 {
   "name": "@ipare/testing",
-  "version": "3.1.1",
+  "version": "3.2.0",
   "description": "Ipare 的测试插件，用于单元测试、本地测试等",
   "engines": {
     "node": ">=12.14.0"
@@ -34,19 +34,19 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^3.1.1"
+    "@ipare/core": "^3.2.0"
   },
   "devDependencies": {
-    "@ipare/http": "^3.1.1",
-    "@ipare/micro": "^3.1.1",
-    "@ipare/micro-client": "^3.1.1",
-    "@ipare/micro-common": "^3.1.1",
-    "@ipare/micro-grpc": "^3.1.1",
-    "@ipare/micro-mqtt": "^3.1.1",
-    "@ipare/micro-nats": "^3.1.1",
-    "@ipare/micro-redis": "^3.1.1",
-    "@ipare/micro-tcp": "^3.1.1",
-    "@ipare/native": "^3.1.1",
+    "@ipare/http": "^3.2.0",
+    "@ipare/micro": "^3.2.0",
+    "@ipare/micro-client": "^3.2.0",
+    "@ipare/micro-common": "^3.2.0",
+    "@ipare/micro-grpc": "^3.2.0",
+    "@ipare/micro-mqtt": "^3.2.0",
+    "@ipare/micro-nats": "^3.2.0",
+    "@ipare/micro-redis": "^3.2.0",
+    "@ipare/micro-tcp": "^3.2.0",
+    "@ipare/native": "^3.2.0",
     "supertest": "^6.3.3"
   },
   "files": [
