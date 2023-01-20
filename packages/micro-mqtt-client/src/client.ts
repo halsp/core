@@ -83,7 +83,9 @@ export class MicroMqttClient extends IMicroClient {
   async send<T = any>(
     pattern: string,
     data: any,
-    timeout?: number
+    options?: Partial<mqtt.IClientSubscribeOptions> & {
+      timeout?: number;
+    }
   ): Promise<T> {
     if (!this.client?.connected) {
       throw new Error("The connection is not connected");
@@ -97,7 +99,7 @@ export class MicroMqttClient extends IMicroClient {
       const reply = pattern + "/" + packet.id;
 
       let timeoutInstance: NodeJS.Timeout | undefined;
-      const sendTimeout = timeout ?? this.options.sendTimeout ?? 10000;
+      const sendTimeout = options?.timeout ?? this.options.sendTimeout ?? 10000;
       if (sendTimeout != 0) {
         timeoutInstance = setTimeout(() => {
           timeoutInstance = undefined;
@@ -106,11 +108,11 @@ export class MicroMqttClient extends IMicroClient {
         }, sendTimeout);
       }
 
-      if (this.options.subscribeOptions) {
-        client.subscribe(reply, this.options.subscribeOptions);
-      } else {
-        client.subscribe(reply);
-      }
+      const subscribeOptions = {
+        ...this.options.subscribeOptions,
+        ...options,
+      } as mqtt.IClientSubscribeOptions;
+      client.subscribe(reply, subscribeOptions);
 
       this.#tasks.set(packet.id, (error?: string, data?: any) => {
         if (timeoutInstance) {

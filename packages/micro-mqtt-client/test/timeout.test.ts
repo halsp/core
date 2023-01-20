@@ -12,7 +12,9 @@ describe("timeout", () => {
 
     let error: any;
     try {
-      await client.send("", "", 1000);
+      await client.send("", "", {
+        timeout: 1000,
+      });
     } catch (err) {
       error = err;
     }

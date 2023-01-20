@@ -72,7 +72,9 @@ describe("startup", () => {
 
     let error: any;
     try {
-      await client.send("test_pattern_not_matched", "test_body", 1000);
+      await client.send("test_pattern_not_matched", "test_body", {
+        timeout: 1000,
+      });
     } catch (err) {
       error = err;
     }
