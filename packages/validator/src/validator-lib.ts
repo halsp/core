@@ -132,15 +132,15 @@ export interface ValidatorLib {
 }
 
 type ValidatorDecorators = {
-  [K in typeof validatorMethods[number]]: ((
-    ...args: Parameters<typeof cv[K]>
+  [K in (typeof validatorMethods)[number]]: ((
+    ...args: Parameters<(typeof cv)[K]>
   ) => ValidatorDecoratorReturnType) &
-    typeof cv[K];
+    (typeof cv)[K];
 } & {
   [K in keyof typeof extendMap]: ((
-    ...args: Parameters<typeof cv[typeof extendMap[K]]>
+    ...args: Parameters<(typeof cv)[(typeof extendMap)[K]]>
   ) => ValidatorDecoratorReturnType) &
-    typeof cv[typeof extendMap[K]];
+    (typeof cv)[(typeof extendMap)[K]];
 };
 
 export type ValidatorDecoratorReturnType = PropertyDecorator &

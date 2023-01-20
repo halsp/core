@@ -37,7 +37,7 @@
   "dependencies": {
     "@ipare/core": "^3.1.1",
     "@ipare/inject": "^3.1.1",
-    "@types/jsonwebtoken": "^9.0.0",
+    "@types/jsonwebtoken": "^9.0.1",
     "jsonwebtoken": "^9.0.0",
     "reflect-metadata": "^0.1.13"
   },

@@ -41,7 +41,7 @@
     "@ipare/core": "^3.1.1",
     "@ipare/micro-client": "^3.1.1",
     "@ipare/micro-common": "^3.1.1",
-    "nats": "^2.10.2"
+    "nats": "^2.11.0"
   },
   "files": [
     "/dist/*",
