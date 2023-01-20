@@ -154,7 +154,9 @@ describe("client", () => {
 
     const waitResult = await new Promise<boolean>(async (resolve) => {
       setTimeout(() => resolve(true), 500);
-      await client.send("test_pattern", "", 0);
+      await client.send("test_pattern", "", {
+        timeout: 0,
+      });
       resolve(false);
     });
     await client.dispose();
@@ -210,7 +212,9 @@ describe("client", () => {
 
     let error: any;
     try {
-      await client.send("test_pattern", "", 1000);
+      await client.send("test_pattern", "", {
+        timeout: 1000,
+      });
     } catch (err) {
       error = err;
     }

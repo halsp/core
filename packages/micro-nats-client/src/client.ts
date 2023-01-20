@@ -34,8 +34,7 @@ export class MicroNatsClient extends IMicroClient {
   async send<T = any>(
     pattern: string,
     data: any,
-    options: {
-      subscribeOptions?: Omit<nats.SubscriptionOptions, "callback">;
+    options: Omit<nats.SubscriptionOptions, "callback"> & {
       timeout?: number;
       headers?: nats.MsgHdrs;
     } = {}
@@ -60,7 +59,7 @@ export class MicroNatsClient extends IMicroClient {
       const reply = pattern + "." + packet.id;
       const sub = connection.subscribe(reply, {
         ...this.options.subscribeOptions,
-        ...options.subscribeOptions,
+        ...options,
         callback: (err, msg) => {
           sub.unsubscribe();
 

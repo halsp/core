@@ -78,7 +78,9 @@ export class MicroTcpClient extends IMicroClient {
   async send<T = any>(
     pattern: string,
     data: any,
-    timeout?: number
+    options: {
+      timeout?: number;
+    } = {}
   ): Promise<T> {
     if (!this.#socket || this.#socket.destroyed) {
       throw new Error("The connection is not connected");
@@ -90,7 +92,7 @@ export class MicroTcpClient extends IMicroClient {
 
     return new Promise((resolve, reject) => {
       let timeoutInstance: NodeJS.Timeout | undefined;
-      const sendTimeout = timeout ?? this.options.sendTimeout ?? 10000;
+      const sendTimeout = options.timeout ?? this.options.sendTimeout ?? 10000;
       if (sendTimeout != 0) {
         timeoutInstance = setTimeout(() => {
           this.#tasks.delete(serverPacket.id);
