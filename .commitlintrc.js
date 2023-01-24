@@ -18,8 +18,7 @@ module.exports = {
         "revert",
         "style",
         "test",
-        "typo",
-        "test",
+        "typo"
       ],
     ],
     "scope-enum": [2, "always", ["release", ...getPackages()]],

@@ -1,7 +1,7 @@
 const name = __dirname.replace(/\\/g, "/").replace(/^.*\//, "");
 
 module.exports = {
-  rootDir: __dirname,
+  roots: ["<rootDir>/test"],
   testRegex: "test/(.+)\\.test\\.(jsx?|tsx?)$",
   transform: {
     "^.+\\.tsx?$": "ts-jest",
