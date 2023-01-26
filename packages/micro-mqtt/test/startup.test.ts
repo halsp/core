@@ -3,10 +3,14 @@ import { MicroMqttClient } from "@ipare/micro-mqtt-client";
 import * as mqtt from "mqtt";
 
 describe("startup", () => {
-  it("should subscribe and publish ", async () => {
+  it("should subscribe and publish", async () => {
     const startup = new MicroMqttStartup({
-      host: "127.0.0.1",
-      port: 6002,
+      servers: [
+        {
+          host: "127.0.0.1",
+          port: 6002,
+        },
+      ],
     }).pattern("test_pattern", (ctx) => {
       ctx.res.body = ctx.req.body;
       expect(!!ctx.req.packet).toBeTruthy();
@@ -84,7 +88,25 @@ describe("startup", () => {
 
     expect(error.message).toBe("Send timeout");
   });
+});
 
+describe("IPARE_DEBUG_PORT", () => {
+  it("should listen with IPARE_DEBUG_PORT", async () => {
+    process.env.IPARE_DEBUG_PORT = "6002";
+    const startup = new MicroMqttStartup();
+    const client = await startup.listen();
+    process.env.IPARE_DEBUG_PORT = "";
+
+    await new Promise<void>((resolve) => {
+      setTimeout(() => resolve(), 500);
+    });
+    await startup.close(true);
+
+    expect(!!client).toBeTruthy();
+  });
+});
+
+describe("error", () => {
   it("should reject error when client emit error", async () => {
     const startup = new MicroMqttStartup({
       host: "127.0.0.1",
@@ -97,19 +119,6 @@ describe("startup", () => {
       setTimeout(() => resolve(), 500);
     });
     await startup.close(true);
-  });
-
-  it("should listen with IPARE_DEBUG_PORT", async () => {
-    process.env.IPARE_DEBUG_PORT = "6002";
-    const startup = new MicroMqttStartup();
-    const client = await startup.listen();
-
-    await new Promise<void>((resolve) => {
-      setTimeout(() => resolve(), 500);
-    });
-    await startup.close(true);
-
-    expect(!!client).toBeTruthy();
   });
 
   it("should throw error when client close error", async () => {
@@ -160,7 +169,12 @@ describe("startup", () => {
       error = err;
     }
 
+    await new Promise<void>((resolve) => {
+      setTimeout(() => resolve(), 600);
+    });
+
     await client.close(true);
+
     expect(error.message).toBe("getaddrinfo ENOTFOUND not-exist.ipare.org");
   });
 });

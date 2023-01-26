@@ -11,7 +11,7 @@ export class MicroMqttClient extends IMicroClient {
   #tasks = new Map<string, (err?: string, data?: any) => void>();
 
   protected client?: mqtt.MqttClient;
-  private connectResolve?: (err: void) => void;
+  #connectResolve?: (err: void) => void;
   protected get prefix() {
     return this.options.prefix ?? "";
   }
@@ -23,7 +23,7 @@ export class MicroMqttClient extends IMicroClient {
     }
 
     await new Promise<void>((resolve, reject) => {
-      this.connectResolve = resolve;
+      this.#connectResolve = resolve;
       this.client = mqtt.connect(opt) as mqtt.MqttClient;
 
       let handled = false;
@@ -60,9 +60,9 @@ export class MicroMqttClient extends IMicroClient {
    * for @ipare/inject
    */
   async dispose(force?: boolean) {
-    if (this.connectResolve) {
-      this.connectResolve();
-      this.connectResolve = undefined;
+    if (this.#connectResolve) {
+      this.#connectResolve();
+      this.#connectResolve = undefined;
     }
 
     if (this.client) {
