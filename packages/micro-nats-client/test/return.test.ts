@@ -1,7 +1,7 @@
 import { MicroNatsClient } from "../src";
 
 describe("return", () => {
-  async function runTest(data?: Buffer, err?: Error) {
+  async function runTest(data?: Buffer, err?: Error, returnHeaders?: true) {
     const client = new MicroNatsClient();
     (client as any).connection = {
       isClosed: () => false,
@@ -9,6 +9,7 @@ describe("return", () => {
         setTimeout(() => {
           opts.callback(err, {
             data: data,
+            headers: {},
           });
         }, 500);
         return {
@@ -19,7 +20,9 @@ describe("return", () => {
       close: () => undefined,
     };
 
-    const result = await client.send("", "");
+    const result = await client.send("", "", {
+      returnHeaders,
+    });
     await client.dispose();
     return result;
   }
@@ -31,7 +34,7 @@ describe("return", () => {
       data: "d",
     });
     const result = await runTest(Buffer.from(str));
-    expect(result.data).toBe("d");
+    expect(result).toBe("d");
   });
 
   it("should return when subscribe callback response", async () => {
@@ -41,7 +44,18 @@ describe("return", () => {
       response: "d",
     });
     const result = await runTest(Buffer.from(str));
+    expect(result).toBe("d");
+  });
+
+  it("should return with headers when options.returnHeaders is true", async () => {
+    const str = JSON.stringify({
+      id: "123",
+      pattern: "test",
+      data: "d",
+    });
+    const result = await runTest(Buffer.from(str), undefined, true);
     expect(result.data).toBe("d");
+    expect(!!result.headers).toBeTruthy();
   });
 
   it("should return error when callback error is not undefined", async () => {

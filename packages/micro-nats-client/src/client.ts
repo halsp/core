@@ -3,6 +3,11 @@ import * as nats from "nats";
 import { IMicroClient } from "@ipare/micro-client";
 import { MicroNatsClientOptions } from "./options";
 
+type SendOptions = Omit<nats.SubscriptionOptions, "callback"> & {
+  timeout?: number;
+  headers?: nats.MsgHdrs;
+};
+
 export class MicroNatsClient extends IMicroClient {
   constructor(protected readonly options: MicroNatsClientOptions = {}) {
     super();
@@ -31,17 +36,36 @@ export class MicroNatsClient extends IMicroClient {
     }
   }
 
-  async send<T = any>(
+  send<T = any>(
     pattern: string,
     data: any,
-    options: Omit<nats.SubscriptionOptions, "callback"> & {
-      timeout?: number;
-      headers?: nats.MsgHdrs;
-    } = {}
+    options: SendOptions & {
+      returnHeaders: true;
+    }
   ): Promise<{
     data: T;
     headers: nats.MsgHdrs;
-  }> {
+  }>;
+  send<T = any>(
+    pattern: string,
+    data: any,
+    options?: SendOptions & {
+      returnHeaders?: boolean;
+    }
+  ): Promise<T>;
+  async send<T = any>(
+    pattern: string,
+    data: any,
+    options: SendOptions & {
+      returnHeaders?: boolean;
+    } = {}
+  ): Promise<
+    | T
+    | {
+        data: T;
+        headers: nats.MsgHdrs;
+      }
+  > {
     if (!this.connection || this.connection.isClosed()) {
       throw new Error("The connection is not connected");
     }
@@ -78,10 +102,16 @@ export class MicroNatsClient extends IMicroClient {
             return;
           }
 
-          resolve({
-            data: clientPacket.data ?? clientPacket["response"],
-            headers: msg.headers as nats.MsgHdrs,
-          });
+          const result = clientPacket.data ?? clientPacket["response"];
+          const headers = msg.headers as nats.MsgHdrs;
+          if (options.returnHeaders) {
+            resolve({
+              data: result,
+              headers: headers,
+            });
+          } else {
+            resolve(result);
+          }
         },
       });
 

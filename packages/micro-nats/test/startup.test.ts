@@ -19,7 +19,7 @@ describe("startup", () => {
     await client.dispose();
     await startup.close();
 
-    expect(result.data).toBe("test_body");
+    expect(result).toBe("test_body");
   });
 });
 
