@@ -11,7 +11,7 @@ describe("service", () => {
     const server = new grpc.Server();
     await new Promise<number>((resolve, reject) => {
       server.bindAsync(
-        "localhost:5010",
+        "0.0.0.0:5010",
         grpc.ServerCredentials.createInsecure(),
         (err, port) => {
           if (err) {
@@ -38,7 +38,7 @@ describe("service", () => {
 
     const client = new MicroGrpcClient({
       protoFiles: "./test/protos/test.proto",
-      host: "localhost",
+      host: "0.0.0.0",
       port: 5010,
       credentials: grpc.ChannelCredentials.createInsecure(),
     });

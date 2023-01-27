@@ -8,7 +8,7 @@ describe("startup", () => {
     let req!: Request;
     const startup = new MicroGrpcStartup({
       port: 5001,
-      host: "localhost",
+      host: "0.0.0.0",
       protoFiles: "./test/protos/test.proto",
       credentials: grpc.ServerCredentials.createInsecure(),
     })
@@ -31,7 +31,7 @@ describe("startup", () => {
       "TestService"
     ] as grpc.ServiceClientConstructor;
     const client = new service(
-      "localhost:5001",
+      "0.0.0.0:5001",
       grpc.credentials.createInsecure()
     );
 
@@ -60,7 +60,7 @@ describe("startup", () => {
   it("should return error when throw error in middleware", async () => {
     const startup = new MicroGrpcStartup({
       port: 5002,
-      host: "localhost",
+      host: "0.0.0.0",
       protoFiles: "./test/protos/test.proto",
       credentials: grpc.ServerCredentials.createInsecure(),
     })
@@ -83,7 +83,7 @@ describe("startup", () => {
       "TestService"
     ] as grpc.ServiceClientConstructor;
     const client = new service(
-      "localhost:5002",
+      "0.0.0.0:5002",
       grpc.credentials.createInsecure()
     );
 
@@ -108,7 +108,7 @@ describe("startup", () => {
   it("should not add service when pattern is not exist", async () => {
     const startup = new MicroGrpcStartup({
       port: 5003,
-      host: "localhost",
+      host: "0.0.0.0",
       protoFiles: "./test/protos/test.proto",
       credentials: grpc.ServerCredentials.createInsecure(),
     }).pattern("test.TestService/not-exist", () => undefined);

@@ -13,7 +13,7 @@ describe("error", () => {
     const server = new grpc.Server();
     await new Promise<number>((resolve, reject) => {
       server.bindAsync(
-        "localhost:5030",
+        "0.0.0.0:5030",
         grpc.ServerCredentials.createInsecure(),
         (err, port) => {
           if (err) {
@@ -42,7 +42,7 @@ describe("error", () => {
 
     const client = new MicroGrpcClient({
       protoFiles: "./test/protos/stream.client.proto",
-      host: "localhost",
+      host: "0.0.0.0",
       port: 5030,
     });
     await client["connect"]();
@@ -138,7 +138,7 @@ describe("emit error", () => {
     const server = new grpc.Server();
     await new Promise<number>((resolve, reject) => {
       server.bindAsync(
-        "localhost:5031",
+        "0.0.0.0:5031",
         grpc.ServerCredentials.createInsecure(),
         (err, port) => {
           if (err) {
@@ -186,7 +186,7 @@ describe("emit error", () => {
     const server = new grpc.Server();
     await new Promise<number>((resolve, reject) => {
       server.bindAsync(
-        "localhost:5032",
+        "0.0.0.0:5032",
         grpc.ServerCredentials.createInsecure(),
         (err, port) => {
           if (err) {

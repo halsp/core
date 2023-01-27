@@ -55,5 +55,7 @@ describe("client", () => {
       err = e as Error;
     }
     expect(err.message).toBe("Should invoke .connect() first");
+
+    await client.dispose();
   });
 });

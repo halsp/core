@@ -13,7 +13,7 @@ describe("stream", () => {
     const server = new grpc.Server();
     await new Promise<number>((resolve, reject) => {
       server.bindAsync(
-        "localhost:5020",
+        "0.0.0.0:5020",
         grpc.ServerCredentials.createInsecure(),
         (err, port) => {
           if (err) {
@@ -91,7 +91,7 @@ describe("stream", () => {
     const server = new grpc.Server();
     await new Promise<number>((resolve, reject) => {
       server.bindAsync(
-        "localhost:5021",
+        "0.0.0.0:5021",
         grpc.ServerCredentials.createInsecure(),
         (err, port) => {
           if (err) {
@@ -175,7 +175,7 @@ describe("stream", () => {
     const server = new grpc.Server();
     await new Promise<number>((resolve, reject) => {
       server.bindAsync(
-        "localhost:5022",
+        "0.0.0.0:5022",
         grpc.ServerCredentials.createInsecure(),
         (err, port) => {
           if (err) {

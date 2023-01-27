@@ -41,7 +41,7 @@ describe("stream", () => {
       "ServerStreamService"
     ] as grpc.ServiceClientConstructor;
     const client = new service(
-      "localhost:5011",
+      "0.0.0.0:5011",
       grpc.credentials.createInsecure()
     );
 
@@ -107,7 +107,7 @@ describe("stream", () => {
       "ClientStreamService"
     ] as grpc.ServiceClientConstructor;
     const client = new service(
-      "localhost:5012",
+      "0.0.0.0:5012",
       grpc.credentials.createInsecure()
     );
 
@@ -168,7 +168,7 @@ describe("stream", () => {
       "ServerStreamService"
     ] as grpc.ServiceClientConstructor;
     const client = new service(
-      "localhost:5011",
+      "0.0.0.0:5011",
       grpc.credentials.createInsecure()
     );
 
@@ -225,7 +225,7 @@ describe("stream", () => {
       "CSStreamService"
     ] as grpc.ServiceClientConstructor;
     const client = new service(
-      "localhost:5013",
+      "0.0.0.0:5013",
       grpc.credentials.createInsecure()
     );
 
