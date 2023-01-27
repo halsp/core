@@ -1,6 +1,6 @@
 {
   "name": "@ipare/micro-redis-client",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "description": "Ipare 微服务 Redis 通信请求客户端",
   "engines": {
     "node": ">=12.14.0"
@@ -39,9 +39,9 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^3.2.0",
-    "@ipare/micro-client": "^3.2.0",
-    "@ipare/micro-common": "^3.2.0",
+    "@ipare/core": "^3.2.1",
+    "@ipare/micro-client": "^3.2.1",
+    "@ipare/micro-common": "^3.2.1",
     "redis": "^4.5.1"
   },
   "files": [

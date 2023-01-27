@@ -1,6 +1,6 @@
 {
   "name": "@ipare/micro-grpc",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "description": "Ipare 微服务 gRPC 通信",
   "engines": {
     "node": ">=12.14.0"
@@ -40,9 +40,9 @@
   "dependencies": {
     "@grpc/grpc-js": "^1.8.5",
     "@grpc/proto-loader": "^0.7.4",
-    "@ipare/core": "^3.2.0",
-    "@ipare/micro": "^3.2.0",
-    "@ipare/micro-common": "^3.2.0"
+    "@ipare/core": "^3.2.1",
+    "@ipare/micro": "^3.2.1",
+    "@ipare/micro-common": "^3.2.1"
   },
   "files": [
     "/dist/*",
