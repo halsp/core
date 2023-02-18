@@ -35,7 +35,7 @@
   "dependencies": {
     "@ipare/core": "^3.2.1",
     "@ipare/inject": "^3.2.1",
-    "mongoose": "^6.8.4",
+    "mongoose": "^6.9.2",
     "reflect-metadata": "^0.1.13"
   },
   "files": [

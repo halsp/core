@@ -42,7 +42,7 @@
     "@ipare/core": "^3.2.1",
     "@ipare/micro-client": "^3.2.1",
     "@ipare/micro-common": "^3.2.1",
-    "redis": "^4.5.1"
+    "redis": "^4.6.4"
   },
   "files": [
     "/dist/*",
