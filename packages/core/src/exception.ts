@@ -1,3 +1,4 @@
+import * as honion from "honion";
 import { isObject, isString } from "./utils";
 
 export type ExceptionMessage = object & {
@@ -13,22 +14,8 @@ export function isExceptionMessage(
   return isString(error) || (isObject(error) && !!error.message);
 }
 
-export class IpareException extends Error {
+export class IpareException extends honion.HonionException {
   constructor(public readonly error?: string | ExceptionMessage) {
-    super("");
-
-    this.name = this.constructor.name;
-
-    if (isString(error)) {
-      this.message = error;
-    } else if (error && isObject(error)) {
-      this.message = error.message ?? "";
-    }
-  }
-
-  public breakthrough = false;
-  public setBreakthrough(breakthrough = true): this {
-    this.breakthrough = breakthrough;
-    return this;
+    super(error);
   }
 }

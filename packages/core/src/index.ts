@@ -28,13 +28,13 @@ export {
 
 export { Context, Request, Response } from "./context";
 export { Startup } from "./startup";
-export { Middleware, ComposeMiddleware, HookType } from "./middlewares";
+export { Middleware, ComposeMiddleware } from "./middleware";
 export {
   IpareException,
   ExceptionMessage,
   isExceptionMessage,
 } from "./exception";
-export { ILogger } from "./logger";
+export { ILogger, HookType } from "honion";
 
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace

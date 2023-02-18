@@ -3,6 +3,7 @@ import {
   HookType,
   isClass,
   isUndefined,
+  Middleware,
   ObjectConstructor,
   Startup,
 } from "@ipare/core";
@@ -85,7 +86,7 @@ Startup.prototype.useFilter = function () {
       if (isUndefined(execResult)) return false;
       return execResult == true;
     })
-    .hook(HookType.BeforeInvoke, async (ctx, md) => {
+    .hook<Middleware>(HookType.BeforeInvoke, async (ctx, md) => {
       if (!(md instanceof Action)) return;
 
       async function exec(funcName: string) {
@@ -112,7 +113,7 @@ Startup.prototype.useFilter = function () {
 
       return true;
     })
-    .hook(HookType.AfterInvoke, async (ctx, md) => {
+    .hook<Middleware>(HookType.AfterInvoke, async (ctx, md) => {
       if (!(md instanceof Action)) return;
 
       async function exec(funcName: string) {

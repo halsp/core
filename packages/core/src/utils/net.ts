@@ -1,5 +1,5 @@
 import * as net from "net";
-import { ILogger } from "../logger";
+import { ILogger } from "honion";
 import { isObject } from "./typeis";
 
 export function getIparePort(port: number): number;

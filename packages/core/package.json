@@ -33,6 +33,9 @@
   },
   "author": "hal-wang",
   "license": "MIT",
+  "dependencies": {
+    "honion": "^0.0.1"
+  },
   "files": [
     "/dist/*",
     "/src/*",

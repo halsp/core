@@ -1,6 +1,6 @@
 import "@ipare/core";
 import { Startup, ObjectConstructor, Context, isFunction } from "@ipare/core";
-import { HookType } from "@ipare/core/dist/middlewares";
+import { HookType } from "@ipare/core";
 import { USED, MAP_BAG, SINGLETON_BAG } from "./constant";
 import { KeyTargetType, InjectMap } from "./interfaces";
 import {
