@@ -1,0 +1,56 @@
+{
+  "name": "@ipare/knex",
+  "version": "3.2.1",
+  "description": "Ipare Knex 插件",
+  "engines": {
+    "node": ">=12.14.0"
+  },
+  "homepage": "https://ipare.org",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ipare/ipare"
+  },
+  "keywords": [
+    "ipare"
+  ],
+  "bugs": {
+    "url": "https://github.com/ipare/ipare/issues",
+    "email": "support@hal.wang"
+  },
+  "private": false,
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "main": "dist/index.js",
+  "scripts": {
+    "prebuild": "npm run lint",
+    "build": "rimraf ./dist/* && tsc",
+    "lint": "eslint src test --ext .ts",
+    "pretest": "npm run build",
+    "test": "jest"
+  },
+  "author": "hal-wang",
+  "license": "MIT",
+  "dependencies": {
+    "@ipare/core": "^3.2.1",
+    "@ipare/inject": "^3.2.1",
+    "knex": "^2.4.2",
+    "reflect-metadata": "^0.1.13"
+  },
+  "devDependencies": {
+    "sqlite3": "^5.1.4"
+  },
+  "files": [
+    "/dist/*",
+    "/src/*",
+    "/test/*",
+    ".eslintignore",
+    ".eslintrc.js",
+    ".gitignore",
+    "LICENSE",
+    "package.json",
+    "README.md",
+    "tsconfig.json"
+  ]
+}
