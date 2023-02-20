@@ -1,9 +1,7 @@
 import * as honion from "honion";
 import { Context } from "./context";
 
-export abstract class Middleware<
-  TC extends Context = Context
-> extends honion.Middleware<TC> {
+export abstract class Middleware extends honion.Middleware<Context> {
   get req() {
     return this.ctx.req;
   }
@@ -17,6 +15,4 @@ export abstract class Middleware<
     return this.ctx.response;
   }
 }
-export class ComposeMiddleware<
-  TC extends Context = Context
-> extends honion.ComposeMiddleware<TC> {}
+export class ComposeMiddleware extends honion.ComposeMiddleware<Context> {}
