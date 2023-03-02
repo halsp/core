@@ -1,6 +1,6 @@
 import { PipeItem, PipeReqType } from "./pipes";
 import { PIPE_RECORDS_METADATA } from "./constant";
-import { isClass } from "@halsp/core";
+import { isClass } from "@halsp/common";
 
 export interface PipeReqRecord {
   pipes: PipeItem[];

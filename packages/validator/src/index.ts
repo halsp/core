@@ -1,4 +1,4 @@
-import { Context, Startup } from "@halsp/core";
+import { Context, Startup } from "@halsp/common";
 import "@halsp/pipe";
 import { GlobalPipeType } from "@halsp/pipe/dist/global-pipe-type";
 import { ValidatorOptions } from "class-validator";
@@ -20,7 +20,7 @@ export {
   getCustomValidators,
 } from "./validator-lib";
 
-declare module "@halsp/core" {
+declare module "@halsp/common" {
   interface Startup {
     useValidator(): this;
     useValidator(validatorOptions: ValidatorOptions): this;

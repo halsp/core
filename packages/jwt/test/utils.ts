@@ -3,7 +3,7 @@ import { JwtOptions, JwtService } from "../src";
 import "../src";
 import "@halsp/inject";
 import { TestStartup } from "@halsp/testing";
-import { Context } from "@halsp/core";
+import { Context } from "@halsp/common";
 
 export async function createTestContext(
   options: JwtOptions,

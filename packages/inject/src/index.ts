@@ -1,6 +1,6 @@
-import "@halsp/core";
-import { Startup, ObjectConstructor, Context, isFunction } from "@halsp/core";
-import { HookType } from "@halsp/core";
+import "@halsp/common";
+import { Startup, ObjectConstructor, Context, isFunction } from "@halsp/common";
+import { HookType } from "@halsp/common";
 import { USED, MAP_BAG, SINGLETON_BAG } from "./constant";
 import { KeyTargetType, InjectMap } from "./interfaces";
 import {
@@ -12,7 +12,7 @@ import {
 import { InjectType } from "./inject-type";
 import { IService } from "./interfaces/service";
 
-declare module "@halsp/core" {
+declare module "@halsp/common" {
   interface Startup {
     useInject(): this;
 

@@ -1,4 +1,4 @@
-import { Context } from "@halsp/core";
+import { Context } from "@halsp/common";
 import { parseInject } from "@halsp/inject";
 import { TestHttpStartup } from "@halsp/testing/dist/http";
 import "../src";

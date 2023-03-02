@@ -1,4 +1,4 @@
-declare module "@halsp/core" {
+declare module "@halsp/common" {
   interface Request {
     id?: string;
     setId(id?: string): this;

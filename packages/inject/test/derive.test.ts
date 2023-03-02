@@ -1,4 +1,4 @@
-import { Middleware } from "@halsp/core";
+import { Middleware } from "@halsp/common";
 import "../src";
 import { Service2, Service3 } from "./services";
 import { Inject } from "../src";

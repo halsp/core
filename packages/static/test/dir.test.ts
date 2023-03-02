@@ -1,6 +1,6 @@
 import { TestHttpStartup } from "@halsp/testing/dist/http";
 import "../src";
-import { Request } from "@halsp/core";
+import { Request } from "@halsp/common";
 import { HttpMethods } from "@halsp/methods";
 import path from "path";
 

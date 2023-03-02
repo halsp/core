@@ -1,7 +1,7 @@
-import "@halsp/core";
-import { Context, ObjectConstructor, Startup } from "@halsp/core";
+import "@halsp/common";
+import { Context, ObjectConstructor, Startup } from "@halsp/common";
 
-declare module "@halsp/core" {
+declare module "@halsp/common" {
   interface Startup {
     expectInject<T extends object>(
       key: string,

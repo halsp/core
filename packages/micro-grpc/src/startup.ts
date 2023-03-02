@@ -1,7 +1,7 @@
 import { MicroStartup } from "@halsp/micro";
 import { MicroGrpcOptions } from "./options";
 import * as grpc from "@grpc/grpc-js";
-import { Context, getHalspPort, isClass, normalizePath } from "@halsp/core";
+import { Context, getHalspPort, isClass, normalizePath } from "@halsp/common";
 import { loadPackages, ReadIterator, WriteIterator } from "@halsp/micro-common";
 
 export class MicroGrpcStartup extends MicroStartup {

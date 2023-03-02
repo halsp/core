@@ -1,4 +1,4 @@
-import { Context, Middleware, Request } from "@halsp/core";
+import { Context, Middleware, Request } from "@halsp/common";
 import { TestMicroStartup } from "@halsp/testing/dist/micro";
 import { Body, ParseBoolPipe } from "../../src";
 

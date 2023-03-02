@@ -36,7 +36,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^3.2.1",
+    "@halsp/common": "^3.2.1",
     "@halsp/http": "^3.2.1",
     "co-body": "^6.1.0",
     "formidable": "^2.1.1",

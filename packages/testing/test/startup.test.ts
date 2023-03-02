@@ -1,4 +1,4 @@
-import { Context, Startup } from "@halsp/core";
+import { Context, Startup } from "@halsp/common";
 import { initBaseTestStartup, ITestStartup, TestStartup } from "../src";
 
 describe("startup", () => {

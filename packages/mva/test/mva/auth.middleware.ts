@@ -1,5 +1,5 @@
 import { users } from "./mock";
-import { Context } from "@halsp/core";
+import { Context } from "@halsp/common";
 import "../../src";
 import "@halsp/router";
 import { AuthorizationFilter } from "@halsp/filter";

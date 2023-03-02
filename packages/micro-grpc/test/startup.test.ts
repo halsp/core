@@ -1,7 +1,7 @@
 import { MicroGrpcStartup } from "../src";
 import * as grpc from "@grpc/grpc-js";
 import * as grpcLoader from "@grpc/proto-loader";
-import { Request } from "@halsp/core";
+import { Request } from "@halsp/common";
 
 describe("startup", () => {
   it("should handle middlewares", async () => {

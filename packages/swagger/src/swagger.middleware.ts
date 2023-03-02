@@ -1,4 +1,4 @@
-import { isUndefined, Middleware, normalizePath } from "@halsp/core";
+import { isUndefined, Middleware, normalizePath } from "@halsp/common";
 import { Parser } from "./parser";
 import { SwaggerOptions } from "./options";
 import { OpenApiBuilder } from "openapi3-ts-remove-yaml";

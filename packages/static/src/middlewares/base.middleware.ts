@@ -1,4 +1,4 @@
-import { Middleware } from "@halsp/core";
+import { Middleware } from "@halsp/common";
 import { FILE_ERROR_STATUS_BAG, FILE_BAG, DIR_RESULT_BAG } from "../constant";
 import { FileOptions, DirectoryOptions } from "../options";
 import * as fs from "fs";

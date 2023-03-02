@@ -6,7 +6,7 @@ import {
   isClass,
   isUndefined,
   ObjectConstructor,
-} from "@halsp/core";
+} from "@halsp/common";
 import { GlobalPipeItem, LambdaPipe, PipeItem } from ".";
 import { GLOBAL_PIPE_BAG } from "../constant";
 import { GlobalPipeType } from "../global-pipe-type";

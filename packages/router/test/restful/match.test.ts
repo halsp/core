@@ -2,7 +2,7 @@ import "../../src";
 import { HttpMethods } from "@halsp/methods";
 import { TestHttpStartup } from "@halsp/testing/dist/http";
 import "../utils-http";
-import { Context, Request } from "@halsp/core";
+import { Context, Request } from "@halsp/common";
 
 test(`find next`, async () => {
   const result = await new TestHttpStartup()

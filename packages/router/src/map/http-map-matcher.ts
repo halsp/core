@@ -1,5 +1,5 @@
 import MapItem from "./map-item";
-import { Context } from "@halsp/core";
+import { Context } from "@halsp/common";
 import { HttpMethods } from "@halsp/methods";
 
 export class MapMatcher {

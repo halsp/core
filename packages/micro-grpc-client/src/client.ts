@@ -1,7 +1,7 @@
 import * as grpc from "@grpc/grpc-js";
 import { IMicroClient } from "@halsp/micro-client";
 import { loadPackages, ReadIterator, WriteIterator } from "@halsp/micro-common";
-import { isClass } from "@halsp/core";
+import { isClass } from "@halsp/common";
 import { MicroGrpcClientOptions } from "./options";
 
 export { MicroGrpcClientOptions } from "./options";

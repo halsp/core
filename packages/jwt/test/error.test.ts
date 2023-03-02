@@ -1,7 +1,7 @@
 import { TestStartup } from "@halsp/testing";
 import { createTestContext } from "./utils";
 import "../src";
-import { Context } from "@halsp/core";
+import { Context } from "@halsp/common";
 
 function testErrorSecret(isError: boolean) {
   function runTest(customError: boolean) {

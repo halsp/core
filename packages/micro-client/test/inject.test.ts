@@ -1,4 +1,4 @@
-import { Middleware } from "@halsp/core";
+import { Middleware } from "@halsp/common";
 import { TestStartup } from "@halsp/testing";
 import "../src";
 import {
@@ -25,7 +25,7 @@ class TestClient extends IMicroClient {
   }
 }
 
-declare module "@halsp/core" {
+declare module "@halsp/common" {
   interface Startup {
     useTestClient(options?: InjectMicroClient): this;
   }

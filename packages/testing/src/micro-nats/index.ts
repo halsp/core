@@ -1,4 +1,4 @@
-import { Context, Request, Response } from "@halsp/core";
+import { Context, Request, Response } from "@halsp/common";
 import { MicroNatsOptions, MicroNatsStartup } from "@halsp/micro-nats";
 import { initBaseTestStartup, ITestStartup } from "../test-startup";
 

@@ -1,4 +1,4 @@
-import { Middleware } from "@halsp/core";
+import { Middleware } from "@halsp/common";
 import { HttpMethods } from "@halsp/methods";
 import { Options } from "./options";
 

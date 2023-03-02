@@ -1,4 +1,4 @@
-import { isClass, ObjectConstructor } from "@halsp/core";
+import { isClass, ObjectConstructor } from "@halsp/common";
 import {
   RuleRecord,
   ValidateItem,

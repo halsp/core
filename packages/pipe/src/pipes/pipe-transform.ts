@@ -1,4 +1,4 @@
-import { Context, ObjectConstructor } from "@halsp/core";
+import { Context, ObjectConstructor } from "@halsp/common";
 import { PipeItem } from "./pipe";
 
 export interface TransformArgs<T = any, U extends object = any> {

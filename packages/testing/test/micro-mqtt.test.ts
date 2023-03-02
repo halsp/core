@@ -1,4 +1,4 @@
-import { Context } from "@halsp/core";
+import { Context } from "@halsp/common";
 import { TestMicroMqttStartup } from "../src/micro-mqtt";
 
 describe("micro-mqtt", () => {

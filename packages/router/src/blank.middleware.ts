@@ -1,4 +1,4 @@
-import { Middleware } from "@halsp/core";
+import { Middleware } from "@halsp/common";
 
 export class BlankMiddleware extends Middleware {
   async invoke(): Promise<void> {

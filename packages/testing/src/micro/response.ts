@@ -1,6 +1,6 @@
-import { isFunction, Response } from "@halsp/core";
+import { isFunction, Response } from "@halsp/common";
 
-declare module "@halsp/core" {
+declare module "@halsp/common" {
   interface Response {
     expect(status: string | undefined): this;
     expect(status: string | undefined, body: any): this;

@@ -5,7 +5,7 @@ import {
   Middleware,
   Request,
   Response,
-} from "@halsp/core";
+} from "@halsp/common";
 import { HttpException, InternalServerErrorException } from "../exceptions";
 import { initHeaderHandler } from "./header-handler";
 import { initRequest } from "./request";

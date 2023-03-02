@@ -1,4 +1,4 @@
-import { isFunction, ObjectConstructor } from "@halsp/core";
+import { isFunction, ObjectConstructor } from "@halsp/common";
 import { existsSync, lstatSync, readdirSync } from "fs";
 import path from "path";
 import { Action } from "../action";

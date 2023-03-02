@@ -1,4 +1,4 @@
-import { Middleware } from "@halsp/core";
+import { Middleware } from "@halsp/common";
 import Koa from "koa";
 import compose from "koa-compose";
 import { KOA_MIDDLEWARES_BAG } from "./constant";

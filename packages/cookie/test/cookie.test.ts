@@ -1,4 +1,4 @@
-import { Request } from "@halsp/core";
+import { Request } from "@halsp/common";
 import "../src";
 import { REQUEST_HEADER_NAME, RESPONSE_HEADER_NAME } from "../src/constant";
 import { TestHttpStartup } from "@halsp/testing/dist/http";

@@ -1,4 +1,4 @@
-import { Context } from "@halsp/core";
+import { Context } from "@halsp/common";
 import { OpenApiBuilder } from "openapi3-ts-remove-yaml";
 import type swaggerUi from "swagger-ui-dist";
 

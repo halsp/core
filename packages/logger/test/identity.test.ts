@@ -1,5 +1,5 @@
 import "../src";
-import { Middleware, ILogger } from "@halsp/core";
+import { Middleware, ILogger } from "@halsp/common";
 import { Logger, winston } from "../src";
 import { CustomTransport } from "./utils";
 import { TestStartup } from "@halsp/testing";

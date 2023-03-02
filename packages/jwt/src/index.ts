@@ -1,5 +1,5 @@
 import "@halsp/inject";
-import { Startup, Context } from "@halsp/core";
+import { Startup, Context } from "@halsp/common";
 import { OPTIONS, USED } from "./constant";
 import { JwtOptions } from "./jwt-options";
 import { JwtService } from "./jwt.service";
@@ -15,12 +15,12 @@ export {
 } from "./jwt-options";
 export { JwtService };
 
-declare module "@halsp/core" {
+declare module "@halsp/common" {
   interface Context {
     get jwtToken(): string;
   }
 }
-declare module "@halsp/core" {
+declare module "@halsp/common" {
   interface Startup {
     useJwt(options: JwtOptions): this;
     useJwtVerify(

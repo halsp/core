@@ -1,4 +1,4 @@
-import { Context } from "@halsp/core";
+import { Context } from "@halsp/common";
 import { Action } from "@halsp/router";
 import { TestHttpStartup } from "@halsp/testing/dist/http";
 import { execFilters, Filter, UseFilters } from "../src";

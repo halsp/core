@@ -1,7 +1,7 @@
-import "@halsp/core";
+import "@halsp/common";
 import type grpc from "@grpc/grpc-js";
 
-declare module "@halsp/core" {
+declare module "@halsp/common" {
   interface Request {
     get call(): grpc.ServerUnaryCall<any, any>;
     get metadata(): grpc.Metadata;

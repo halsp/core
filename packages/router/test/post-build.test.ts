@@ -1,6 +1,6 @@
 import { postbuild } from "../src";
 import * as fs from "fs";
-import { Request } from "@halsp/core";
+import { Request } from "@halsp/common";
 import { CONFIG_FILE_NAME } from "../src/constant";
 import { TestHttpStartup } from "@halsp/testing/dist/http";
 

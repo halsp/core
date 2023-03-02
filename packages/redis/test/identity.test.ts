@@ -1,5 +1,5 @@
 import "../src";
-import { Middleware } from "@halsp/core";
+import { Middleware } from "@halsp/common";
 import { RedisConnection, RedisInject } from "../src";
 import { TestStartup } from "@halsp/testing";
 import RedisClient from "@redis/client/dist/lib/client";

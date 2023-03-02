@@ -1,5 +1,5 @@
 import { Action } from "../action";
-import { Dict, ObjectConstructor } from "@halsp/core";
+import { Dict, ObjectConstructor } from "@halsp/common";
 import { ACTION_METADATA } from "../constant";
 
 export function getActionMetadata(

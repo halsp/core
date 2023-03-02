@@ -1,4 +1,4 @@
-import { ObjectConstructor } from "@halsp/core";
+import { ObjectConstructor } from "@halsp/common";
 import { Action, getActionMetadata, ActionMetadata } from "../../../src";
 
 const Admin = ActionMetadata("admin", true);

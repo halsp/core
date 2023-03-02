@@ -1,4 +1,4 @@
-import { normalizePath, ObjectConstructor } from "@halsp/core";
+import { normalizePath, ObjectConstructor } from "@halsp/common";
 import path from "path";
 import { Action } from "../action";
 

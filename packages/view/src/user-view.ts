@@ -1,4 +1,4 @@
-import { Context, Response, Startup } from "@halsp/core";
+import { Context, Response, Startup } from "@halsp/common";
 import {
   consolidate,
   Engine,

@@ -1,11 +1,11 @@
-import "@halsp/core";
-import { Context, Startup } from "@halsp/core";
+import "@halsp/common";
+import { Context, Startup } from "@halsp/common";
 import { IService, parseInject } from "@halsp/inject";
 import * as knex from "knex";
 import { OPTIONS_IDENTITY } from "./constant";
 import { Options } from "./options";
 
-declare module "@halsp/core" {
+declare module "@halsp/common" {
   interface Startup {
     useKnex(options: Options): this;
   }

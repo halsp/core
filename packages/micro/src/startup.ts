@@ -1,4 +1,4 @@
-import { Context, Request, Response, Startup } from "@halsp/core";
+import { Context, Request, Response, Startup } from "@halsp/common";
 import { initCatchError, initContext } from "./context";
 import { ClientPacket, ServerPacket } from "@halsp/micro-common";
 

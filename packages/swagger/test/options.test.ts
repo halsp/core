@@ -1,5 +1,5 @@
 import { HttpMethods } from "@halsp/methods";
-import { Request } from "@halsp/core";
+import { Request } from "@halsp/common";
 import { TestHttpStartup } from "@halsp/testing/dist/http";
 import "../src";
 import { TEST_ACTION_DIR } from "@halsp/router/dist/constant";
@@ -7,7 +7,7 @@ import { OpenApiBuilder } from "openapi3-ts-remove-yaml";
 import { SwaggerMiddlware } from "../src/swagger.middleware";
 import * as fs from "fs";
 
-declare module "@halsp/core" {
+declare module "@halsp/common" {
   interface Startup {
     setTestDir(dir: string): this;
   }

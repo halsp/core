@@ -1,4 +1,4 @@
-import { Context, isNil, isObject, Request, Response } from "@halsp/core";
+import { Context, isNil, isObject, Request, Response } from "@halsp/common";
 import { MicroException } from "./exception";
 
 let inited = false;

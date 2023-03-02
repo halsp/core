@@ -1,4 +1,4 @@
-import { Middleware } from "@halsp/core";
+import { Middleware } from "@halsp/common";
 import { TestStartup } from "@halsp/testing";
 import "../../src";
 import { Inject, InjectType } from "../../src";

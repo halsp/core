@@ -1,9 +1,9 @@
-import "@halsp/core";
-import { Startup } from "@halsp/core";
+import "@halsp/common";
+import { Startup } from "@halsp/common";
 import { ViewOptions } from "./view-options";
 import { useView } from "./user-view";
 
-declare module "@halsp/core" {
+declare module "@halsp/common" {
   interface Startup {
     useView(options?: ViewOptions): this;
   }

@@ -1,4 +1,4 @@
-import { Dict, Context, isObject, ReadonlyDict } from "@halsp/core";
+import { Dict, Context, isObject, ReadonlyDict } from "@halsp/common";
 import { HttpStartup } from "@halsp/http";
 import cookie from "cookie";
 import setCookieParser from "set-cookie-parser";
@@ -20,7 +20,7 @@ export type SetCookieValue = SetCookieValueWithArgs | string;
 
 export { Options };
 
-declare module "@halsp/core" {
+declare module "@halsp/common" {
   interface Context {
     get cookies(): ReadonlyDict<string>;
     set cookies(val: Dict<SetCookieValue>);

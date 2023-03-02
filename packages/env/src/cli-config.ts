@@ -1,4 +1,4 @@
-import { getCliAssets, isCliAssetExist } from "@halsp/core";
+import { getCliAssets, isCliAssetExist } from "@halsp/common";
 
 export const cliConfigHook = (config: any, { command }) => {
   const assets = getCliAssets(config);

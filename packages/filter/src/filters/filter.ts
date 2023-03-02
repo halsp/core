@@ -1,4 +1,4 @@
-import { ObjectConstructor } from "@halsp/core";
+import { ObjectConstructor } from "@halsp/common";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 export interface Filter {}

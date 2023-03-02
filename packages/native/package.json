@@ -37,7 +37,7 @@
   "license": "MIT",
   "dependencies": {
     "@halsp/body": "^3.2.1",
-    "@halsp/core": "^3.2.1",
+    "@halsp/common": "^3.2.1",
     "@halsp/http": "^3.2.1",
     "qs": "^6.11.0"
   },

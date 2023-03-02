@@ -1,4 +1,4 @@
-import { Startup } from "@halsp/core";
+import { Startup } from "@halsp/common";
 import { GLOBAL_PIPE_BAG } from "./constant";
 import { GlobalPipeType } from "./global-pipe-type";
 import { GlobalPipeItem, PipeItem } from "./pipes";
@@ -21,7 +21,7 @@ export {
 
 export { PipeReqRecord, getPipeRecords } from "./pipe-req-record";
 
-declare module "@halsp/core" {
+declare module "@halsp/common" {
   interface Startup {
     useGlobalPipe<T = any, R = any>(
       type: GlobalPipeType,

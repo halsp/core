@@ -1,4 +1,4 @@
-import { Context, Request } from "@halsp/core";
+import { Context, Request } from "@halsp/common";
 import { BadRequestException, HttpException } from "@halsp/http";
 import "../src";
 import { Action } from "@halsp/router";

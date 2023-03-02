@@ -1,4 +1,4 @@
-import { ObjectConstructor, Startup } from "@halsp/core";
+import { ObjectConstructor, Startup } from "@halsp/common";
 import { InjectType } from "@halsp/inject";
 import { IMicroClient } from "./client";
 import { MICRO_IDENTITY_KEY } from "./constant";

@@ -1,6 +1,6 @@
 import { TestHttpStartup } from "@halsp/testing/dist/http";
 import { HttpMethods } from "@halsp/methods";
-import { Request } from "@halsp/core";
+import { Request } from "@halsp/common";
 import "../src";
 
 it("should set cors headers when options.origin is empty string", async () => {

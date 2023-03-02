@@ -1,5 +1,5 @@
-import { Context } from "@halsp/core";
-import { Request } from "@halsp/core";
+import { Context } from "@halsp/common";
+import { Request } from "@halsp/common";
 import "../src";
 import { ActionFilter, UseFilters } from "../src";
 import "@halsp/inject";

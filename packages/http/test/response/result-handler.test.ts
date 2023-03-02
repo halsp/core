@@ -1,4 +1,4 @@
-import { Response } from "@halsp/core";
+import { Response } from "@halsp/common";
 import { initResultHandler, ResultHandler } from "../../src";
 
 class CustomResultHandler {

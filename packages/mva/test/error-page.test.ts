@@ -2,7 +2,7 @@ import { NotFoundException } from "@halsp/http";
 import "../src";
 import { AutFilter } from "./mva/auth.middleware";
 import { runMva } from "./global";
-import { Request, Response } from "@halsp/core";
+import { Request, Response } from "@halsp/common";
 import { TestHttpStartup } from "@halsp/testing/dist/http";
 
 function expect404(res: Response, isPage: boolean, replaceCode = 404) {

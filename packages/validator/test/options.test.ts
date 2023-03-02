@@ -1,4 +1,4 @@
-import { Middleware, Request } from "@halsp/core";
+import { Middleware, Request } from "@halsp/common";
 import { Body } from "@halsp/pipe";
 import "@halsp/inject";
 import "../src";

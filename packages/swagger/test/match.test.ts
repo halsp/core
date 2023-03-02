@@ -1,10 +1,10 @@
-import { Request } from "@halsp/core";
+import { Request } from "@halsp/common";
 import { TEST_ACTION_DIR } from "@halsp/router/dist/constant";
 import { TestHttpStartup } from "@halsp/testing/dist/http";
 import "../src";
 import { SwaggerOptions } from "../src";
 
-declare module "@halsp/core" {
+declare module "@halsp/common" {
   interface Startup {
     setTestDir(dir: string): this;
   }
@@ -158,7 +158,7 @@ describe("match path", () => {
           new Request().setPath("swagger/index.json").setMethod("get")
         )
         .useSwagger()
-        .setTestDir("halsp/packages/swagger/test/parser")
+        .setTestDir("core/packages/swagger/test/parser")
         .useRouter()
         .run();
 

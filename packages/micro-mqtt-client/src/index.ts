@@ -5,7 +5,7 @@ import { MicroMqttClientOptions } from "./options";
 export { MicroMqttClient } from "./client";
 export { MicroMqttClientOptions } from "./options";
 
-declare module "@halsp/core" {
+declare module "@halsp/common" {
   interface Startup {
     useMicroMqtt(options?: MicroMqttClientOptions & InjectMicroClient): this;
   }

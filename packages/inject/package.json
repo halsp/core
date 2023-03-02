@@ -35,7 +35,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^3.2.1",
+    "@halsp/common": "^3.2.1",
     "reflect-metadata": "^0.1.13"
   },
   "files": [

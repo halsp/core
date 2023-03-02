@@ -1,5 +1,5 @@
 import { TestHttpStartup } from "@halsp/testing/dist/http";
-import { Request } from "@halsp/core";
+import { Request } from "@halsp/common";
 import "../src";
 
 describe("exclude", () => {

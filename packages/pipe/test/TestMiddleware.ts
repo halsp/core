@@ -1,4 +1,4 @@
-import { Middleware, ReadonlyDict, Request } from "@halsp/core";
+import { Middleware, ReadonlyDict, Request } from "@halsp/common";
 import { Header, Query, Param, Body } from "../src";
 
 export class TestMiddleware extends Middleware {

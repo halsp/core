@@ -1,4 +1,4 @@
-import { ObjectConstructor } from "@halsp/core";
+import { ObjectConstructor } from "@halsp/common";
 import {
   Action,
   getActionMetadata,

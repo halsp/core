@@ -1,5 +1,5 @@
 import { TestMicroRedisStartup } from "../src/micro-redis";
-import { Context } from "@halsp/core";
+import { Context } from "@halsp/common";
 
 describe("micro-redis", () => {
   it("should subscribe and publish", async () => {

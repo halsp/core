@@ -1,4 +1,4 @@
-import { Context } from "@halsp/core";
+import { Context } from "@halsp/common";
 import { Filter } from "./filter";
 
 export interface ExceptionFilter<T extends Error = Error> extends Filter {

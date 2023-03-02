@@ -1,6 +1,6 @@
 import "@halsp/router";
 import "@halsp/static";
-import { normalizePath } from "@halsp/core";
+import { normalizePath } from "@halsp/common";
 import { HttpStartup } from "@halsp/http";
 import { USED } from "./constant";
 import { SwaggerOptions } from "./options";
@@ -9,7 +9,7 @@ import { SwaggerMiddlware } from "./swagger.middleware";
 import { getAbsoluteFSPath } from "swagger-ui-dist";
 import { ArrayItemType } from "./parser/schema-dict";
 
-declare module "@halsp/core" {
+declare module "@halsp/common" {
   interface Context {
     get swaggerOptions(): SwaggerOptions;
   }

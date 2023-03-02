@@ -1,4 +1,4 @@
-import { Context, ReadonlyDict } from "@halsp/core";
+import { Context, ReadonlyDict } from "@halsp/common";
 import "../../src";
 import { TestStartup } from "../test-startup";
 

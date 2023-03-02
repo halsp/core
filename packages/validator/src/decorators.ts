@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { Context, isUndefined } from "@halsp/core";
+import { Context, isUndefined } from "@halsp/common";
 import { ENABLE_METADATA, METADATA, OPTIONS_METADATA } from "./constant";
 import { createLib, ValidatorDecoratorReturnType } from "./validator-lib";
 import { createDecorator, RuleRecord } from "./create-decorator";

@@ -1,6 +1,6 @@
 import "../src";
 import { TestHttpStartup } from "@halsp/testing/dist/http";
-import { Request } from "@halsp/core";
+import { Request } from "@halsp/common";
 
 describe("request body", () => {
   it("should parse text body", async function () {

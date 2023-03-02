@@ -1,7 +1,7 @@
 import { MicroStartup } from "@halsp/micro";
 import { MicroMqttOptions } from "./options";
 import mqtt from "mqtt";
-import { Context, getHalspPort } from "@halsp/core";
+import { Context, getHalspPort } from "@halsp/common";
 import { matchTopic } from "./topic";
 import { parseJsonBuffer } from "@halsp/micro-common";
 

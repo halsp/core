@@ -1,4 +1,4 @@
-import { tryAddCliAssets } from "@halsp/core";
+import { tryAddCliAssets } from "@halsp/common";
 
 export const cliConfigHook = (config: any) => {
   return tryAddCliAssets(

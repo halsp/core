@@ -1,4 +1,4 @@
-import { Context, ObjectConstructor } from "@halsp/core";
+import { Context, ObjectConstructor } from "@halsp/common";
 import { InjectType } from "../inject-type";
 
 export interface InjectMap<T extends object = any, U extends T = any> {

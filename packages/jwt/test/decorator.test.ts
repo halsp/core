@@ -1,4 +1,4 @@
-import { Middleware } from "@halsp/core";
+import { Middleware } from "@halsp/common";
 import * as jwt from "jsonwebtoken";
 import { JwtObject, JwtPayload, JwtToken } from "../src";
 import "../src";

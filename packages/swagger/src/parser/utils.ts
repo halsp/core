@@ -1,4 +1,4 @@
-import { isClass, isUndefined, ObjectConstructor } from "@halsp/core";
+import { isClass, isUndefined, ObjectConstructor } from "@halsp/common";
 import { PipeReqType } from "@halsp/pipe";
 import {
   getRules,

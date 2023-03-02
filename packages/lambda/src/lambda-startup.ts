@@ -3,7 +3,7 @@ import { HttpMethods } from "@halsp/methods";
 import { ResponseStruct } from "./response-struct";
 import { Readable } from "stream";
 import { HttpStartup } from "@halsp/http";
-import { Context, Dict, isObject, Request } from "@halsp/core";
+import { Context, Dict, isObject, Request } from "@halsp/common";
 
 export class LambdaStartup extends HttpStartup {
   async run(event: Dict, context: Dict): Promise<ResponseStruct> {
