@@ -1,6 +1,6 @@
 {
   "name": "@halsp/micro-grpc-client",
-  "version": "3.2.1",
+  "version": "1.0.0",
   "description": "Halsp 微服务 gRPC 通信客户端",
   "engines": {
     "node": ">=12.14.0"
@@ -39,10 +39,10 @@
   "dependencies": {
     "@grpc/grpc-js": "^1.8.9",
     "@grpc/proto-loader": "^0.7.5",
-    "@halsp/common": "^3.2.1",
-    "@halsp/inject": "^3.2.1",
-    "@halsp/micro-client": "^3.2.1",
-    "@halsp/micro-common": "^3.2.1"
+    "@halsp/common": "^1.0.0",
+    "@halsp/inject": "^1.0.0",
+    "@halsp/micro-client": "^1.0.0",
+    "@halsp/micro-common": "^1.0.0"
   },
   "files": [
     "/dist/*",
