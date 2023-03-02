@@ -1,21 +1,21 @@
 {
-  "name": "@ipare/env",
+  "name": "@halsp/env",
   "version": "3.2.1",
-  "description": "Ipare 的环境配置插件，可以根据运行环境加载不同的配置",
+  "description": "Halsp 的环境配置插件，可以根据运行环境加载不同的配置",
   "engines": {
     "node": ">=12.14.0"
   },
-  "homepage": "https://ipare.org",
+  "homepage": "https://halsp.org",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ipare/ipare"
+    "url": "https://github.com/halsp/core"
   },
   "keywords": [
-    "ipare",
+    "halsp",
     "dotenv"
   ],
   "bugs": {
-    "url": "https://github.com/ipare/ipare/issues",
+    "url": "https://github.com/halsp/core/issues",
     "email": "support@hal.wang"
   },
   "private": false,
@@ -34,7 +34,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^3.2.1",
+    "@halsp/core": "^3.2.1",
     "dotenv": "^16.0.3"
   },
   "files": [

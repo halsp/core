@@ -1,7 +1,7 @@
 import "../src";
-import { Middleware } from "@ipare/core";
+import { Middleware } from "@halsp/core";
 import { RedisConnection, RedisInject } from "../src";
-import { TestStartup } from "@ipare/testing";
+import { TestStartup } from "@halsp/testing";
 import RedisClient from "@redis/client/dist/lib/client";
 
 class TestMiddleware extends Middleware {

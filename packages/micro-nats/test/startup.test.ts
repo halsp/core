@@ -1,4 +1,4 @@
-import { MicroNatsClient } from "@ipare/micro-nats-client";
+import { MicroNatsClient } from "@halsp/micro-nats-client";
 import { MicroNatsStartup } from "../src";
 
 describe("startup", () => {

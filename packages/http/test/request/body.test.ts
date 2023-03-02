@@ -1,4 +1,4 @@
-import { Request } from "@ipare/core";
+import { Request } from "@halsp/core";
 import "../../src";
 import { TestStartup } from "../test-startup";
 

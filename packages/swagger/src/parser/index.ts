@@ -1,7 +1,7 @@
-import { isClass, isUndefined, ObjectConstructor } from "@ipare/core";
-import { getPipeRecords, PipeReqRecord } from "@ipare/pipe";
-import { Action, MapItem, RouterOptions } from "@ipare/router";
-import { getRules, RuleRecord } from "@ipare/validator";
+import { isClass, isUndefined, ObjectConstructor } from "@halsp/core";
+import { getPipeRecords, PipeReqRecord } from "@halsp/pipe";
+import { Action, MapItem, RouterOptions } from "@halsp/router";
+import { getRules, RuleRecord } from "@halsp/validator";
 import {
   OpenApiBuilder,
   OperationObject,

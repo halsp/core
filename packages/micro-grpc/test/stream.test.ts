@@ -1,7 +1,7 @@
 import { MicroGrpcStartup, ReadIterator, WriteIterator } from "../src";
 import * as grpc from "@grpc/grpc-js";
 import * as grpcLoader from "@grpc/proto-loader";
-import { Request } from "@ipare/core";
+import { Request } from "@halsp/core";
 
 describe("stream", () => {
   it("should handle server stream message", async () => {

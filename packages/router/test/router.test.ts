@@ -1,10 +1,10 @@
-import { HttpStartup } from "@ipare/http";
-import { Request } from "@ipare/core";
+import { HttpStartup } from "@halsp/http";
+import { Request } from "@halsp/core";
 import "../src";
 import "./utils-http";
-import { TestHttpStartup } from "@ipare/testing/dist/http";
+import { TestHttpStartup } from "@halsp/testing/dist/http";
 import { DEFAULT_ACTION_DIR } from "../src/constant";
-import { runin, TestStartup } from "@ipare/testing";
+import { runin, TestStartup } from "@halsp/testing";
 
 test("startup test", async () => {
   const result = await new TestHttpStartup()

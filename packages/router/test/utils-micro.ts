@@ -1,35 +1,35 @@
 import { RouterOptions } from "../src";
-import "@ipare/core";
-import { TestMicroStartup } from "@ipare/testing/dist/micro";
-import { TestMicroRedisStartup } from "@ipare/testing/dist/micro-redis";
-import { TestMicroNatsStartup } from "@ipare/testing/dist/micro-nats";
+import "@halsp/core";
+import { TestMicroStartup } from "@halsp/testing/dist/micro";
+import { TestMicroRedisStartup } from "@halsp/testing/dist/micro-redis";
+import { TestMicroNatsStartup } from "@halsp/testing/dist/micro-nats";
 import "../src";
 import { TEST_ACTION_DIR } from "../src/constant";
-import { TestMicroTcpStartup } from "@ipare/testing/dist/micro-tcp";
+import { TestMicroTcpStartup } from "@halsp/testing/dist/micro-tcp";
 
 export const testDir = "test/micro";
 
-declare module "@ipare/testing/dist/micro" {
+declare module "@halsp/testing/dist/micro" {
   interface TestMicroStartup {
     useTestRouter(config?: RouterOptions): this;
     useTestRouterParser(config?: RouterOptions): this;
   }
 }
 
-declare module "@ipare/testing/dist/micro-redis" {
+declare module "@halsp/testing/dist/micro-redis" {
   interface TestMicroRedisStartup {
     useTestRouter(config?: RouterOptions): this;
     useTestRouterParser(config?: RouterOptions): this;
   }
 }
 
-declare module "@ipare/testing/dist/micro-nats" {
+declare module "@halsp/testing/dist/micro-nats" {
   interface TestMicroNatsStartup {
     useTestRouter(config?: RouterOptions): this;
     useTestRouterParser(config?: RouterOptions): this;
   }
 }
-declare module "@ipare/testing/dist/micro-tcp" {
+declare module "@halsp/testing/dist/micro-tcp" {
   interface TestMicroTcpStartup {
     useTestRouter(config?: RouterOptions): this;
     useTestRouterParser(config?: RouterOptions): this;

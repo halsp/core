@@ -1,5 +1,5 @@
-import { TestHttpStartup } from "@ipare/testing/dist/http";
-import "@ipare/inject";
+import { TestHttpStartup } from "@halsp/testing/dist/http";
+import "@halsp/inject";
 import "../src";
 import { expectBody, getTestRequest, TestMiddleware } from "./TestMiddleware";
 

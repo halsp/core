@@ -1,8 +1,8 @@
-import { Response, Request, Context } from "@ipare/core";
+import { Response, Request, Context } from "@halsp/core";
 import { HttpStartup } from "../src";
 import { initCatchError } from "../src/context";
 
-declare module "@ipare/core" {
+declare module "@halsp/core" {
   interface Context {
     initCatchError(): this;
   }

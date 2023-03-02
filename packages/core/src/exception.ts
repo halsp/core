@@ -14,7 +14,7 @@ export function isExceptionMessage(
   return isString(error) || (isObject(error) && !!error.message);
 }
 
-export class IpareException extends honion.HonionException {
+export class HalspException extends honion.HonionException {
   constructor(public readonly error?: string | ExceptionMessage) {
     super(error);
   }

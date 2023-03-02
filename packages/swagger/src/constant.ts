@@ -1,1 +1,1 @@
-export const USED = "@ipare/swagger/used";
+export const USED = "@halsp/swagger/used";

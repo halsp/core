@@ -1,9 +1,9 @@
-import { Context } from "@ipare/core";
-import { Request } from "@ipare/core";
+import { Context } from "@halsp/core";
+import { Request } from "@halsp/core";
 import "../src";
 import { ActionFilter, ResourceFilter, UseFilters } from "../src";
-import { Action } from "@ipare/router";
-import { TestHttpStartup } from "@ipare/testing/dist/http";
+import { Action } from "@halsp/router";
+import { TestHttpStartup } from "@halsp/testing/dist/http";
 
 class TestResourceFilter implements ResourceFilter {
   onResourceExecuted(ctx: Context): void | Promise<void> {

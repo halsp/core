@@ -1,13 +1,13 @@
-import { HttpMethods } from "@ipare/methods";
-import { Request } from "@ipare/core";
-import { TestHttpStartup } from "@ipare/testing/dist/http";
+import { HttpMethods } from "@halsp/methods";
+import { Request } from "@halsp/core";
+import { TestHttpStartup } from "@halsp/testing/dist/http";
 import "../src";
-import { TEST_ACTION_DIR } from "@ipare/router/dist/constant";
+import { TEST_ACTION_DIR } from "@halsp/router/dist/constant";
 import { OpenApiBuilder } from "openapi3-ts-remove-yaml";
 import { SwaggerMiddlware } from "../src/swagger.middleware";
 import * as fs from "fs";
 
-declare module "@ipare/core" {
+declare module "@halsp/core" {
   interface Startup {
     setTestDir(dir: string): this;
   }

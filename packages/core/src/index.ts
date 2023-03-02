@@ -23,14 +23,14 @@ export {
   dynamicListen,
   closeServer,
   logAddress,
-  getIparePort,
+  getHalspPort,
 } from "./utils";
 
 export { Context, Request, Response } from "./context";
 export { Startup } from "./startup";
 export { Middleware, ComposeMiddleware } from "./middleware";
 export {
-  IpareException,
+  HalspException,
   ExceptionMessage,
   isExceptionMessage,
 } from "./exception";
@@ -41,7 +41,7 @@ declare global {
   namespace NodeJS {
     export interface ProcessEnv {
       NODE_ENV: string;
-      IPARE_ENV: "http" | "micro";
+      HALSP_ENV: "http" | "micro";
     }
   }
 }

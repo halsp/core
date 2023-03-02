@@ -1,10 +1,10 @@
 import * as net from "net";
-import { IMicroClient } from "@ipare/micro-client";
+import { IMicroClient } from "@halsp/micro-client";
 import {
   ClientPacket,
   parseTcpBuffer,
   ServerPacket,
-} from "@ipare/micro-common";
+} from "@halsp/micro-common";
 import { MicroTcpClientOptions } from "./options";
 
 export class MicroTcpClient extends IMicroClient {

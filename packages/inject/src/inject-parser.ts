@@ -6,7 +6,7 @@ import {
   isClass,
   ObjectConstructor,
   isUndefined,
-} from "@ipare/core";
+} from "@halsp/core";
 import {
   CUSTOM_METADATA,
   SCOPED_BAG,

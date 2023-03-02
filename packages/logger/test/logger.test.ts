@@ -1,9 +1,9 @@
 import "../src";
-import { Middleware, ILogger } from "@ipare/core";
+import { Middleware, ILogger } from "@halsp/core";
 import { Logger, winston } from "../src";
 import { CustomTransport } from "./utils";
-import { TestStartup } from "@ipare/testing";
-import { InjectType } from "@ipare/inject";
+import { TestStartup } from "@halsp/testing";
+import { InjectType } from "@halsp/inject";
 
 class TestMiddleware extends Middleware {
   @Logger()

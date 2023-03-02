@@ -1,9 +1,9 @@
-import { parseInject } from "@ipare/inject";
+import { parseInject } from "@halsp/inject";
 import { JwtOptions, JwtService } from "../src";
 import "../src";
-import "@ipare/inject";
-import { TestStartup } from "@ipare/testing";
-import { Context } from "@ipare/core";
+import "@halsp/inject";
+import { TestStartup } from "@halsp/testing";
+import { Context } from "@halsp/core";
 
 export async function createTestContext(
   options: JwtOptions,

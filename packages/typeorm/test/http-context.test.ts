@@ -1,5 +1,5 @@
 import "../src";
-import { TestStartup } from "@ipare/testing";
+import { TestStartup } from "@halsp/testing";
 
 it("should get typeorm by ctx", async () => {
   await new TestStartup()

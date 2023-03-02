@@ -1,5 +1,5 @@
-import { Request } from "@ipare/core";
-import { TestHttpStartup } from "@ipare/testing/dist/http";
+import { Request } from "@halsp/core";
+import { TestHttpStartup } from "@halsp/testing/dist/http";
 import "../src";
 import { runMva } from "./global";
 
@@ -12,7 +12,7 @@ test("default", async function () {
 
     expect(res.getHeader("content-type")).toBe("text/html");
     expect(res.status).toBe(200);
-    expect(res.body).toBe("<p>@ipare/mva</p>");
+    expect(res.body).toBe("<p>@halsp/mva</p>");
   });
 });
 
@@ -26,6 +26,6 @@ test("use again", async function () {
 
     expect(res.getHeader("content-type")).toBe("text/html");
     expect(res.status).toBe(200);
-    expect(res.body).toBe("<p>@ipare/mva</p>");
+    expect(res.body).toBe("<p>@halsp/mva</p>");
   });
 });

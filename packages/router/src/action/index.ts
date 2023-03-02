@@ -1,4 +1,4 @@
-import { Middleware } from "@ipare/core";
+import { Middleware } from "@halsp/core";
 
 export abstract class Action extends Middleware {}
 

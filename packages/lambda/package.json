@@ -1,17 +1,17 @@
 {
-  "name": "@ipare/lambda",
+  "name": "@halsp/lambda",
   "version": "3.2.1",
-  "description": "将 Ipare 托管到 serverless 云函数，如腾讯云云函数、阿里云云函数、awa lambda、azure functions 等",
+  "description": "将 Halsp 托管到 serverless 云函数，如腾讯云云函数、阿里云云函数、awa lambda、azure functions 等",
   "engines": {
     "node": ">=12.14.0"
   },
-  "homepage": "https://ipare.org",
+  "homepage": "https://halsp.org",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ipare/ipare"
+    "url": "https://github.com/halsp/core"
   },
   "keywords": [
-    "ipare",
+    "halsp",
     "lambda",
     "serverless",
     "cloudbase",
@@ -20,7 +20,7 @@
     "function compute"
   ],
   "bugs": {
-    "url": "https://github.com/ipare/ipare/issues",
+    "url": "https://github.com/halsp/core/issues",
     "email": "support@hal.wang"
   },
   "private": false,
@@ -39,9 +39,9 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^3.2.1",
-    "@ipare/http": "^3.2.1",
-    "@ipare/methods": "^3.2.1"
+    "@halsp/core": "^3.2.1",
+    "@halsp/http": "^3.2.1",
+    "@halsp/methods": "^3.2.1"
   },
   "devDependencies": {
     "@types/shelljs": "^0.8.11"

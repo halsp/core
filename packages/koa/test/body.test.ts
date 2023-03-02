@@ -1,5 +1,5 @@
 import "../src";
-import { TestHttpStartup } from "@ipare/testing/dist/http";
+import { TestHttpStartup } from "@halsp/testing/dist/http";
 
 test("default", async function () {
   const res = await new TestHttpStartup().koa(() => undefined).run();
@@ -12,14 +12,14 @@ test("default", async function () {
 test("text", async function () {
   const res = await new TestHttpStartup()
     .koa(async (ctx, next) => {
-      ctx.body = "ipare";
+      ctx.body = "halsp";
       ctx.status = 201;
       await next();
     })
     .run();
 
   expect(res.status).toBe(201);
-  expect(res.body).toBe("ipare");
+  expect(res.body).toBe("halsp");
   expect(res.getHeader("content-type")).toBe("text/plain; charset=utf-8");
 });
 
@@ -41,7 +41,7 @@ test("json", async function () {
   const res = await new TestHttpStartup()
     .koa(async (ctx, next) => {
       ctx.body = {
-        ipare: "koa",
+        halsp: "koa",
       };
       ctx.status = 200;
       await next();
@@ -50,7 +50,7 @@ test("json", async function () {
 
   expect(res.status).toBe(200);
   expect(res.body).toEqual({
-    ipare: "koa",
+    halsp: "koa",
   });
   expect(res.getHeader("content-type")).toBe("application/json; charset=utf-8");
 });
@@ -58,13 +58,13 @@ test("json", async function () {
 test("buffer", async function () {
   const res = await new TestHttpStartup()
     .koa(async (ctx, next) => {
-      ctx.body = Buffer.from("ipare", "utf-8");
+      ctx.body = Buffer.from("halsp", "utf-8");
       ctx.status = 200;
       await next();
     })
     .run();
 
   expect(res.status).toBe(200);
-  expect(res.body).toEqual(Buffer.from("ipare", "utf-8"));
+  expect(res.body).toEqual(Buffer.from("halsp", "utf-8"));
   expect(res.getHeader("content-type")).toBe("application/octet-stream");
 });

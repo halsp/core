@@ -1,7 +1,7 @@
 import "../../src";
-import { HttpMethods } from "@ipare/methods";
-import { Request } from "@ipare/core";
-import { TestHttpStartup } from "@ipare/testing/dist/http";
+import { HttpMethods } from "@halsp/methods";
+import { Request } from "@halsp/core";
+import { TestHttpStartup } from "@halsp/testing/dist/http";
 import "../utils-http";
 
 test(`action name error`, async () => {

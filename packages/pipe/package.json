@@ -1,20 +1,20 @@
 {
-  "name": "@ipare/pipe",
+  "name": "@halsp/pipe",
   "version": "3.2.1",
-  "description": "Ipare 的管道插件，用于校验、转换、格式化请求参数",
+  "description": "Halsp 的管道插件，用于校验、转换、格式化请求参数",
   "engines": {
     "node": ">=12.14.0"
   },
-  "homepage": "https://ipare.org",
+  "homepage": "https://halsp.org",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ipare/ipare"
+    "url": "https://github.com/halsp/core"
   },
   "keywords": [
-    "ipare"
+    "halsp"
   ],
   "bugs": {
-    "url": "https://github.com/ipare/ipare/issues",
+    "url": "https://github.com/halsp/core/issues",
     "email": "support@hal.wang"
   },
   "private": false,
@@ -33,8 +33,8 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^3.2.1",
-    "@ipare/inject": "^3.2.1",
+    "@halsp/core": "^3.2.1",
+    "@halsp/inject": "^3.2.1",
     "class-transformer": "^0.5.1",
     "reflect-metadata": "^0.1.13"
   },

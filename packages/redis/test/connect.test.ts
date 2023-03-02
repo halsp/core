@@ -1,6 +1,6 @@
 import "../src";
-import { TestStartup } from "@ipare/testing";
-import { parseInject } from "@ipare/inject";
+import { TestStartup } from "@halsp/testing";
+import { parseInject } from "@halsp/inject";
 import { RedisConnection } from "../src";
 import { OPTIONS_IDENTITY } from "../src/constant";
 import RedisClient from "@redis/client/dist/lib/client";

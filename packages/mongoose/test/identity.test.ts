@@ -1,7 +1,7 @@
 import "../src";
-import { Middleware } from "@ipare/core";
+import { Middleware } from "@halsp/core";
 import { mongoose, MongooseConnection, Mongoose } from "../src";
-import { TestStartup } from "@ipare/testing";
+import { TestStartup } from "@halsp/testing";
 
 class TestMiddleware extends Middleware {
   @Mongoose("app")

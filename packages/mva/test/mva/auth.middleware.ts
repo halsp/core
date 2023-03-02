@@ -1,8 +1,8 @@
 import { users } from "./mock";
-import { Context } from "@ipare/core";
+import { Context } from "@halsp/core";
 import "../../src";
-import "@ipare/router";
-import { AuthorizationFilter } from "@ipare/filter";
+import "@halsp/router";
+import { AuthorizationFilter } from "@halsp/filter";
 
 export class AutFilter implements AuthorizationFilter {
   async onAuthorization(ctx: Context): Promise<boolean> {

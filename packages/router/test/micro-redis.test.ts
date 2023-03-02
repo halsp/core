@@ -1,6 +1,6 @@
-import { TestMicroRedisStartup } from "@ipare/testing/dist/micro-redis";
+import { TestMicroRedisStartup } from "@halsp/testing/dist/micro-redis";
 import "./utils-micro";
-import { MicroRedisClient } from "@ipare/micro-redis-client";
+import { MicroRedisClient } from "@halsp/micro-redis-client";
 
 describe("micro-redis", () => {
   it("should add pattern handlers when use micro redis", async () => {

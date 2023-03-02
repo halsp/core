@@ -1,7 +1,7 @@
-import "@ipare/core";
-import { Context, ObjectConstructor, Startup } from "@ipare/core";
+import "@halsp/core";
+import { Context, ObjectConstructor, Startup } from "@halsp/core";
 
-declare module "@ipare/core" {
+declare module "@halsp/core" {
   interface Startup {
     expectInject<T extends object>(
       key: string,
@@ -23,7 +23,7 @@ Startup.prototype.expectInject = function <T extends object>(
 
     const parseInject = getDepFunc<
       <T>(ctx: Context, service: any) => Promise<T>
-    >("@ipare/inject", "parseInject");
+    >("@halsp/inject", "parseInject");
 
     const sv = await parseInject<T>(ctx, service as any);
     if (!sv) throw new Error("Create service failed");

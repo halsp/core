@@ -1,5 +1,5 @@
 import { TestMicroGrpcStartup } from "../src/micro-grpc";
-import { MicroGrpcClient } from "@ipare/micro-grpc-client";
+import { MicroGrpcClient } from "@halsp/micro-grpc-client";
 
 describe("micro tcp startup", () => {
   it("should send message and return value", async () => {

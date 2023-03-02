@@ -1,23 +1,23 @@
 {
-  "name": "@ipare/body",
+  "name": "@halsp/body",
   "version": "3.2.1",
-  "description": "Ipare 的 Http Body 解析插件",
+  "description": "Halsp 的 Http Body 解析插件",
   "engines": {
     "node": ">=12.14.0"
   },
-  "homepage": "https://ipare.org",
+  "homepage": "https://halsp.org",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ipare/ipare"
+    "url": "https://github.com/halsp/core"
   },
   "keywords": [
-    "ipare",
+    "halsp",
     "nodejs",
     "http",
     "https"
   ],
   "bugs": {
-    "url": "https://github.com/ipare/ipare/issues",
+    "url": "https://github.com/halsp/core/issues",
     "email": "support@hal.wang"
   },
   "private": false,
@@ -36,8 +36,8 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^3.2.1",
-    "@ipare/http": "^3.2.1",
+    "@halsp/core": "^3.2.1",
+    "@halsp/http": "^3.2.1",
     "co-body": "^6.1.0",
     "formidable": "^2.1.1",
     "type-is": "^1.6.18"

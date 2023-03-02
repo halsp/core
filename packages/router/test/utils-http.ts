@@ -1,12 +1,12 @@
 import { RouterOptions } from "../src";
-import "@ipare/core";
-import { TestHttpStartup } from "@ipare/testing/dist/http";
+import "@halsp/core";
+import { TestHttpStartup } from "@halsp/testing/dist/http";
 import "../src";
 import { TEST_ACTION_DIR } from "../src/constant";
 
 export const testDir = "test/actions";
 
-declare module "@ipare/testing/dist/http" {
+declare module "@halsp/testing/dist/http" {
   interface TestHttpStartup {
     useTestRouter(config?: RouterOptions): this;
     useTestRouterParser(config?: RouterOptions): this;

@@ -1,10 +1,10 @@
 import Koa from "koa";
 import request from "supertest";
-import { koaIpare } from "../src";
+import { koaHalsp } from "../src";
 import path from "path";
-import { TestHttpStartup } from "@ipare/testing/dist/http";
+import { TestHttpStartup } from "@halsp/testing/dist/http";
 
-describe("koa-ipare", () => {
+describe("koa-halsp", () => {
   it("should connect middlewares", async () => {
     let index = 1;
 
@@ -21,7 +21,7 @@ describe("koa-ipare", () => {
         ctx.set("h5", getIndexValue());
       })
       .use(
-        koaIpare((startup) => {
+        koaHalsp((startup) => {
           startup.use(async (ctx, next) => {
             ctx.res.created("created").setBody({
               b: 1,
@@ -54,7 +54,7 @@ describe("koa-ipare", () => {
     let working = false;
     const koa = new Koa()
       .use(
-        koaIpare((startup) => {
+        koaHalsp((startup) => {
           startup
             .koa(async (ctx, next) => {
               ctx.body = ctx.req.read(100);

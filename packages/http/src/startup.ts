@@ -1,12 +1,12 @@
 import { Stream } from "stream";
 import * as mime from "mime-types";
-import { Context, isString, Request, Response, Startup } from "@ipare/core";
+import { Context, isString, Request, Response, Startup } from "@halsp/core";
 import { initCatchError, initContext } from "./context";
 
 export abstract class HttpStartup extends Startup {
   constructor() {
     super();
-    process.env.IPARE_ENV = "http";
+    process.env.HALSP_ENV = "http";
     initContext();
   }
 

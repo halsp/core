@@ -1,6 +1,6 @@
-import { ExceptionMessage, IpareException } from "@ipare/core";
+import { ExceptionMessage, HalspException } from "@halsp/core";
 
-export class MicroException extends IpareException {
+export class MicroException extends HalspException {
   constructor(error?: string | ExceptionMessage) {
     super(error);
   }

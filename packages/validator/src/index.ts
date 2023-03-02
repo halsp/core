@@ -1,6 +1,6 @@
-import { Context, Startup } from "@ipare/core";
-import "@ipare/pipe";
-import { GlobalPipeType } from "@ipare/pipe/dist/global-pipe-type";
+import { Context, Startup } from "@halsp/core";
+import "@halsp/pipe";
+import { GlobalPipeType } from "@halsp/pipe/dist/global-pipe-type";
 import { ValidatorOptions } from "class-validator";
 import { ValidatePipe } from "./validate.pipe";
 
@@ -20,7 +20,7 @@ export {
   getCustomValidators,
 } from "./validator-lib";
 
-declare module "@ipare/core" {
+declare module "@halsp/core" {
   interface Startup {
     useValidator(): this;
     useValidator(validatorOptions: ValidatorOptions): this;

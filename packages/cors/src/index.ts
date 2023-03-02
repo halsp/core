@@ -1,8 +1,8 @@
-import { HttpStartup } from "@ipare/http";
+import { HttpStartup } from "@halsp/http";
 import { CorsMiddleware } from "./cors.middleware";
 import { Options } from "./options";
 
-declare module "@ipare/http" {
+declare module "@halsp/http" {
   interface HttpStartup {
     useCors(options?: Options): this;
   }

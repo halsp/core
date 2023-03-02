@@ -1,4 +1,4 @@
-import { InjectType } from "@ipare/inject";
+import { InjectType } from "@halsp/inject";
 import mongoose from "mongoose";
 
 export type Options = mongoose.ConnectOptions & {

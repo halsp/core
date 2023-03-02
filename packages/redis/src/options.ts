@@ -1,4 +1,4 @@
-import { InjectType } from "@ipare/inject";
+import { InjectType } from "@halsp/inject";
 import redis from "redis";
 
 export type Options<

@@ -1,5 +1,5 @@
-import { Middleware } from "@ipare/core";
-import { TestStartup } from "@ipare/testing";
+import { Middleware } from "@halsp/core";
+import { TestStartup } from "@halsp/testing";
 import "../src";
 import {
   IMicroClient,
@@ -8,7 +8,7 @@ import {
   useMicroClient,
 } from "../src";
 import * as net from "net";
-import { InjectType } from "@ipare/inject";
+import { InjectType } from "@halsp/inject";
 
 class TestClient extends IMicroClient {
   async connect() {
@@ -25,7 +25,7 @@ class TestClient extends IMicroClient {
   }
 }
 
-declare module "@ipare/core" {
+declare module "@halsp/core" {
   interface Startup {
     useTestClient(options?: InjectMicroClient): this;
   }

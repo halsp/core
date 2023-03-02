@@ -1,22 +1,22 @@
 {
-  "name": "@ipare/koa",
+  "name": "@halsp/koa",
   "version": "3.2.1",
-  "description": "让 Koa 成为 Ipare 的中间件，或 Ipare 成为 Koa 的中间件，并打通二者中间件管道",
+  "description": "让 Koa 成为 Halsp 的中间件，或 Halsp 成为 Koa 的中间件，并打通二者中间件管道",
   "engines": {
     "node": ">=12.14.0"
   },
-  "homepage": "https://ipare.org",
+  "homepage": "https://halsp.org",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ipare/ipare"
+    "url": "https://github.com/halsp/core"
   },
   "keywords": [
-    "ipare",
+    "halsp",
     "middleware",
     "koa"
   ],
   "bugs": {
-    "url": "https://github.com/ipare/ipare/issues",
+    "url": "https://github.com/halsp/core/issues",
     "email": "support@hal.wang"
   },
   "private": false,
@@ -35,9 +35,9 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^3.2.1",
-    "@ipare/http": "^3.2.1",
-    "@ipare/methods": "^3.2.1",
+    "@halsp/core": "^3.2.1",
+    "@halsp/http": "^3.2.1",
+    "@halsp/methods": "^3.2.1",
     "koa": "^2.14.1",
     "koa-compose": "^4.1.0",
     "qs": "^6.11.0"

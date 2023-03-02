@@ -1,12 +1,12 @@
-import { Context, ILogger, Startup } from "@ipare/core";
-import { IService, parseInject } from "@ipare/inject";
+import { Context, ILogger, Startup } from "@halsp/core";
+import { IService, parseInject } from "@halsp/inject";
 import winston from "winston";
 import Transport from "winston-transport";
 import { FileTransportOptions } from "winston/lib/winston/transports";
 import { OPTIONS_IDENTITY } from "./constant";
 import { FileOptions, Options } from "./options";
 
-declare module "@ipare/core" {
+declare module "@halsp/core" {
   interface Startup {
     useLogger(options?: Options): this;
     useLogger(identity: string, options?: Options): this;

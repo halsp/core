@@ -1,9 +1,9 @@
-import { TestStartup } from "@ipare/testing";
+import { TestStartup } from "@halsp/testing";
 import { createTestContext } from "./utils";
 import "../src";
 
 test("prefix", async function () {
-  process.env.IPARE_ENV = "http";
+  process.env.HALSP_ENV = "http";
   const { ctx } = await new TestStartup()
     .setContext(
       await createTestContext(

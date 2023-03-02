@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
   - name: Document
-    url: https://ipare.org
+    url: https://halsp.org
     about: Find the answer in the document first.
   - name: Questions & Discussions
-    url: https://github.com/ipare/ipare/discussions
+    url: https://github.com/halsp/core/discussions
     about: Use GitHub discussions for message-board style questions and discussions.

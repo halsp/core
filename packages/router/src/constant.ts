@@ -1,8 +1,8 @@
 export const DEFAULT_ACTION_DIR = "actions";
-export const TEST_ACTION_DIR = "@ipare/router/testActionDir";
-export const CONFIG_FILE_NAME = "ipare-router.config";
-export const ACTION_METADATA = "@ipare/router/actionMetadata";
-export const ACTION_METHOD_METADATA = "@ipare/router/actionMethodMetadata";
-export const ACTION_PATTERN_METADATA = "@ipare/router/actionPatternMetadata";
-export const USED = "@ipare/router/used";
-export const PARSER_USED = "@ipare/router/parserUsed";
+export const TEST_ACTION_DIR = "@halsp/router/testActionDir";
+export const CONFIG_FILE_NAME = "halsp-router.config";
+export const ACTION_METADATA = "@halsp/router/actionMetadata";
+export const ACTION_METHOD_METADATA = "@halsp/router/actionMethodMetadata";
+export const ACTION_PATTERN_METADATA = "@halsp/router/actionPatternMetadata";
+export const USED = "@halsp/router/used";
+export const PARSER_USED = "@halsp/router/parserUsed";

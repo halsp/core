@@ -1,8 +1,8 @@
 import "../../src";
-import { HttpMethods } from "@ipare/methods";
-import { TestHttpStartup } from "@ipare/testing/dist/http";
+import { HttpMethods } from "@halsp/methods";
+import { TestHttpStartup } from "@halsp/testing/dist/http";
 import "../utils-http";
-import { Request } from "@ipare/core";
+import { Request } from "@halsp/core";
 
 const methods = ["test", "aaa", "NO"];
 

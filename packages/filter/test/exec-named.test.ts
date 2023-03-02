@@ -1,6 +1,6 @@
-import { Context } from "@ipare/core";
-import { Action } from "@ipare/router";
-import { TestHttpStartup } from "@ipare/testing/dist/http";
+import { Context } from "@halsp/core";
+import { Action } from "@halsp/router";
+import { TestHttpStartup } from "@halsp/testing/dist/http";
 import { execFilters, Filter, UseFilters } from "../src";
 
 class CustomFilter implements Filter {

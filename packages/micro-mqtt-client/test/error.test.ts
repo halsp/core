@@ -1,4 +1,4 @@
-import { MicroMqttStartup } from "@ipare/micro-mqtt";
+import { MicroMqttStartup } from "@halsp/micro-mqtt";
 import { MicroMqttClient } from "../src";
 import * as mqtt from "mqtt";
 
@@ -40,7 +40,7 @@ describe("error", () => {
 
   it("should throw error when host is invalid", async () => {
     const client = new MicroMqttClient({
-      host: "not-exist.ipare.org",
+      host: "not-exist.halsp.org",
       connectTimeout: 500,
     });
 
@@ -52,7 +52,7 @@ describe("error", () => {
     }
 
     await client.dispose(true);
-    expect(error.message).toBe("getaddrinfo ENOTFOUND not-exist.ipare.org");
+    expect(error.message).toBe("getaddrinfo ENOTFOUND not-exist.halsp.org");
   });
 
   it("should throw error when result.error is defined", async () => {

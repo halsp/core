@@ -1,9 +1,9 @@
-import { Middleware } from "@ipare/core";
+import { Middleware } from "@halsp/core";
 import * as jwt from "jsonwebtoken";
 import { JwtObject, JwtPayload, JwtToken } from "../src";
 import "../src";
 import { createTestContext } from "./utils";
-import { TestStartup } from "@ipare/testing";
+import { TestStartup } from "@halsp/testing";
 
 class TestMiddleware extends Middleware {
   @JwtObject
@@ -25,7 +25,7 @@ class TestMiddleware extends Middleware {
 
 test("decorator", async function () {
   let jwt = "";
-  process.env.IPARE_ENV = "http";
+  process.env.HALSP_ENV = "http";
   const { ctx } = await new TestStartup()
     .setContext(
       await createTestContext({

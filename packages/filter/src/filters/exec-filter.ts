@@ -1,6 +1,6 @@
-import { isClass, ObjectConstructor } from "@ipare/core";
-import { parseInject } from "@ipare/inject";
-import { Action } from "@ipare/router";
+import { isClass, ObjectConstructor } from "@halsp/core";
+import { parseInject } from "@halsp/inject";
+import { Action } from "@halsp/router";
 import {
   FILTERS_METADATA,
   FILTERS_ORDER_BAG,

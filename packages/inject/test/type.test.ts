@@ -1,8 +1,8 @@
-import { Middleware } from "@ipare/core";
+import { Middleware } from "@halsp/core";
 import "../src";
 import { Service1, Service2 } from "./services";
 import { Inject, InjectType } from "../src";
-import { TestStartup } from "@ipare/testing";
+import { TestStartup } from "@halsp/testing";
 
 class TestMiddleware extends Middleware {
   @Inject

@@ -1,15 +1,15 @@
 {
-  "name": "ipare",
+  "name": "halsp",
   "private": true,
   "license": "MIT",
   "author": "Hal Wang",
-  "homepage": "https://ipare.org",
+  "homepage": "https://halsp.org",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ipare/ipare"
+    "url": "https://github.com/halsp/core"
   },
   "bugs": {
-    "url": "https://github.com/ipare/ipare/issues",
+    "url": "https://github.com/halsp/core/issues",
     "email": "support@hal.wang"
   },
   "scripts": {

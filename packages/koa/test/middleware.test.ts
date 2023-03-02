@@ -1,16 +1,16 @@
 import "../src";
-import { HttpMethods } from "@ipare/methods";
-import { Request, Response } from "@ipare/core";
+import { HttpMethods } from "@halsp/methods";
+import { Request, Response } from "@halsp/core";
 import cors from "@koa/cors";
 import Router from "@koa/router";
-import { TestHttpStartup } from "@ipare/testing/dist/http";
+import { TestHttpStartup } from "@halsp/testing/dist/http";
 
 test("@koa/cors", async function () {
   const res = await new TestHttpStartup()
     .setContext(
       new Request()
         .setMethod(HttpMethods.get)
-        .set("origin", "https://ipare.org")
+        .set("origin", "https://halsp.org")
     )
     .koa(
       cors({
@@ -18,14 +18,14 @@ test("@koa/cors", async function () {
       })
     )
     .use(async (ctx) => {
-      ctx.res.ok("ipare");
+      ctx.res.ok("halsp");
     })
     .run();
 
   expect(res.status).toBe(200);
-  expect(res.body).toBe("ipare");
+  expect(res.body).toBe("halsp");
   expect(res.getHeader("Access-Control-Allow-Origin")).toBe(
-    "https://ipare.org"
+    "https://halsp.org"
   );
 });
 

@@ -1,10 +1,10 @@
-import { Middleware, Request } from "@ipare/core";
-import { TestStartup } from "@ipare/testing";
-import { Body } from "@ipare/pipe";
-import "@ipare/inject";
+import { Middleware, Request } from "@halsp/core";
+import { TestStartup } from "@halsp/testing";
+import { Body } from "@halsp/pipe";
+import "@halsp/inject";
 import "../src";
 import { V } from "../src";
-import { Inject } from "@ipare/inject";
+import { Inject } from "@halsp/inject";
 
 describe("parent validate", () => {
   it("should validate property pipe", async () => {

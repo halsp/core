@@ -1,4 +1,4 @@
-import { Context, Dict, isFunction, ReadonlyDict, Startup } from "@ipare/core";
+import { Context, Dict, isFunction, ReadonlyDict, Startup } from "@halsp/core";
 import { Action } from "./action";
 import MapParser from "./map/map-parser";
 import path = require("path");
@@ -44,7 +44,7 @@ export {
 } from "./action";
 export { postbuild } from "./postbuild";
 
-declare module "@ipare/core" {
+declare module "@halsp/core" {
   interface Startup {
     useRouter(options?: RouterOptions): this;
     useRouterParser(options?: RouterOptions): this;
@@ -110,7 +110,7 @@ Startup.prototype.useRouterParser = function (options?: RouterOptions) {
   });
 
   if (
-    process.env.IPARE_ENV == "micro" &&
+    process.env.HALSP_ENV == "micro" &&
     "patterns" in this &&
     isFunction(this["patterns"])
   ) {
@@ -150,7 +150,7 @@ Startup.prototype.useRouterParser = function (options?: RouterOptions) {
     await next();
   })
     .use(async (ctx, next) => {
-      if (process.env.IPARE_ENV != "http") {
+      if (process.env.HALSP_ENV != "http") {
         return await next();
       }
       if (!!ctx.actionMetadata) {

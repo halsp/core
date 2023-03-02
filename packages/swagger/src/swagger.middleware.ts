@@ -1,11 +1,11 @@
-import { isUndefined, Middleware, normalizePath } from "@ipare/core";
+import { isUndefined, Middleware, normalizePath } from "@halsp/core";
 import { Parser } from "./parser";
 import { SwaggerOptions } from "./options";
 import { OpenApiBuilder } from "openapi3-ts-remove-yaml";
 import path from "path";
 import * as fs from "fs";
-import { HttpStartup, StatusCodes } from "@ipare/http";
-import { HttpMethods } from "@ipare/methods";
+import { HttpStartup, StatusCodes } from "@halsp/http";
+import { HttpMethods } from "@halsp/methods";
 import { Readable } from "stream";
 
 export class SwaggerMiddlware extends Middleware {

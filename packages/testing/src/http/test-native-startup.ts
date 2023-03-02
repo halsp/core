@@ -1,6 +1,6 @@
-import { NativeStartup } from "@ipare/native";
+import { NativeStartup } from "@halsp/native";
 import supertest from "supertest";
-import { Context, Request, Response } from "@ipare/core";
+import { Context, Request, Response } from "@halsp/core";
 import { initBaseTestStartup, ITestStartup } from "../test-startup";
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const { Test } = require("supertest");

@@ -14,7 +14,7 @@ class CustomHeader {
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface CustomHeader extends HeaderHandler {}
 
-test("custom ipare headers", async () => {
+test("custom halsp headers", async () => {
   const header = new CustomHeader()
     .setHeader("h1", "1")
     .setHeaders({

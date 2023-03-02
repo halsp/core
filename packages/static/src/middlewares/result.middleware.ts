@@ -1,4 +1,4 @@
-import { ComposeMiddleware } from "@ipare/core";
+import { ComposeMiddleware } from "@halsp/core";
 import path from "path";
 import { IS_METHOD_VALID_BAG, MATCH_RESULT_BAG } from "../constant";
 import { DirectoryOptions, FileOptions } from "../options";

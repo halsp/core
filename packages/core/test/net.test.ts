@@ -1,5 +1,5 @@
 import { Server, AddressInfo } from "net";
-import { dynamicListen, closeServer, logAddress, getIparePort } from "../src";
+import { dynamicListen, closeServer, logAddress, getHalspPort } from "../src";
 
 describe("dynamic listen", () => {
   it("should dynamic with default port", async () => {
@@ -39,7 +39,7 @@ describe("dynamic listen", () => {
     const server = new Server();
     let error: any;
     try {
-      await dynamicListen(server, 80, "ipare.org");
+      await dynamicListen(server, 80, "hal.wang");
     } catch (err) {
       error = err;
     }
@@ -112,17 +112,17 @@ describe("log", () => {
 });
 
 describe("port", () => {
-  it("should get port without change when IPARE_DEBUG_PORT is undefined", async () => {
+  it("should get port without change when HALSP_DEBUG_PORT is undefined", async () => {
     const port = 23431;
-    const realPort = getIparePort(port);
+    const realPort = getHalspPort(port);
     expect(realPort).toBe(port);
   });
 
-  it("should get debug port when IPARE_DEBUG_PORT is defined", async () => {
+  it("should get debug port when HALSP_DEBUG_PORT is defined", async () => {
     const port = 23432;
-    process.env.IPARE_DEBUG_PORT = port.toString();
-    const realPort = getIparePort(port - 1);
-    process.env.IPARE_DEBUG_PORT = "";
+    process.env.HALSP_DEBUG_PORT = port.toString();
+    const realPort = getHalspPort(port - 1);
+    process.env.HALSP_DEBUG_PORT = "";
     expect(realPort).toBe(port);
   });
 });

@@ -1,4 +1,4 @@
-import { Inject } from "@ipare/inject";
+import { Inject } from "@halsp/inject";
 import { TestStartup } from "../src";
 
 class TestService1 {
@@ -16,7 +16,7 @@ class TestService2 {
 }
 
 describe("service", () => {
-  it("should create service by @ipare/inject", async () => {
+  it("should create service by @halsp/inject", async () => {
     await new TestStartup()
       .expectInject(TestService2, (service) => {
         expect(service.fn()).toBe(1);

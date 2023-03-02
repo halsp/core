@@ -1,5 +1,5 @@
-import { Header } from "@ipare/pipe";
-import { Action } from "@ipare/router";
+import { Header } from "@halsp/pipe";
+import { Action } from "@halsp/router";
 
 function Property(target: any, propertyKey: string) {
   //

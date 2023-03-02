@@ -1,9 +1,9 @@
-import { MicroStartup } from "@ipare/micro";
+import { MicroStartup } from "@halsp/micro";
 import { MicroMqttOptions } from "./options";
 import mqtt from "mqtt";
-import { Context, getIparePort } from "@ipare/core";
+import { Context, getHalspPort } from "@halsp/core";
 import { matchTopic } from "./topic";
-import { parseJsonBuffer } from "@ipare/micro-common";
+import { parseJsonBuffer } from "@halsp/micro-common";
 
 export class MicroMqttStartup extends MicroStartup {
   constructor(protected readonly options: MicroMqttOptions = {}) {
@@ -23,7 +23,7 @@ export class MicroMqttStartup extends MicroStartup {
 
     const opt: MicroMqttOptions = { ...this.options };
     if (!("servers" in this.options) && !("port" in this.options)) {
-      opt.port = getIparePort(1883);
+      opt.port = getHalspPort(1883);
     }
 
     await new Promise<void>((resolve, reject) => {

@@ -1,4 +1,4 @@
-import { HttpStartup } from "@ipare/http";
+import { HttpStartup } from "@halsp/http";
 import { MatchMiddleware } from "./middlewares/match.middleware";
 import { MethodMiddleware } from "./middlewares/method.middleware";
 import { ResultMiddleware } from "./middlewares/result.middleware";
@@ -9,7 +9,7 @@ import { FileOptions, DirectoryOptions } from "./options";
 export { FileOptions, DirectoryOptions };
 export { cliConfigHook } from "./cli-config";
 
-declare module "@ipare/http" {
+declare module "@halsp/http" {
   interface HttpStartup {
     useStatic(): this;
     useStatic(options: DirectoryOptions): this;

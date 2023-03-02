@@ -1,4 +1,4 @@
-import { Context, Middleware, Response } from "@ipare/core";
+import { Context, Middleware, Response } from "@halsp/core";
 import {
   getReasonPhrase,
   getStatusCode,

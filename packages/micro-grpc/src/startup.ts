@@ -1,8 +1,8 @@
-import { MicroStartup } from "@ipare/micro";
+import { MicroStartup } from "@halsp/micro";
 import { MicroGrpcOptions } from "./options";
 import * as grpc from "@grpc/grpc-js";
-import { Context, getIparePort, isClass, normalizePath } from "@ipare/core";
-import { loadPackages, ReadIterator, WriteIterator } from "@ipare/micro-common";
+import { Context, getHalspPort, isClass, normalizePath } from "@halsp/core";
+import { loadPackages, ReadIterator, WriteIterator } from "@halsp/micro-common";
 
 export class MicroGrpcStartup extends MicroStartup {
   constructor(protected readonly options: MicroGrpcOptions = {}) {
@@ -20,7 +20,7 @@ export class MicroGrpcStartup extends MicroStartup {
     this.close();
 
     const opt: MicroGrpcOptions = { ...this.options };
-    opt.port = this.options.port ?? getIparePort(5000);
+    opt.port = this.options.port ?? getHalspPort(5000);
     opt.host = this.options.host ?? "0.0.0.0";
     const url = `${opt.host}:${opt.port}`;
 

@@ -1,5 +1,5 @@
-import { Context, Request, Response } from "@ipare/core";
-import { MicroMqttStartup, MicroMqttOptions } from "@ipare/micro-mqtt";
+import { Context, Request, Response } from "@halsp/core";
+import { MicroMqttStartup, MicroMqttOptions } from "@halsp/micro-mqtt";
 import { initBaseTestStartup, ITestStartup } from "../test-startup";
 
 export class TestMicroMqttStartup extends MicroMqttStartup {

@@ -1,5 +1,5 @@
-import { Middleware } from "@ipare/core";
-import { HttpMethods } from "@ipare/methods";
+import { Middleware } from "@halsp/core";
+import { HttpMethods } from "@halsp/methods";
 import { Options } from "./options";
 
 export class CorsMiddleware extends Middleware {

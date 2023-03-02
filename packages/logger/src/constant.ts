@@ -1,1 +1,1 @@
-export const OPTIONS_IDENTITY = "@ipare/logger/optionsIdentity";
+export const OPTIONS_IDENTITY = "@halsp/logger/optionsIdentity";

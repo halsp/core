@@ -1,8 +1,8 @@
-import { Context, Dict, Request } from "@ipare/core";
-import { HttpStartup, NumericalHeadersDict } from "@ipare/http";
+import { Context, Dict, Request } from "@halsp/core";
+import { HttpStartup, NumericalHeadersDict } from "@halsp/http";
 import { Context as KoaContext, Next } from "koa";
 import { KOA_CTX, KOA_NEXT } from "./constant";
-import { koaResToIpareRes, ipareResToKoaRes } from "./res-transform";
+import { koaResToHalspRes, halspResToKoaRes } from "./res-transform";
 
 class KoaStartup extends HttpStartup {
   public async run(koaCtx: KoaContext, koaNext: Next): Promise<void> {
@@ -25,21 +25,21 @@ class KoaStartup extends HttpStartup {
     ctx[KOA_CTX] = koaCtx;
     ctx[KOA_NEXT] = koaNext;
 
-    await koaResToIpareRes(koaCtx, ctx.res);
+    await koaResToHalspRes(koaCtx, ctx.res);
     const res = await super.invoke(ctx);
-    await ipareResToKoaRes(res, koaCtx);
+    await halspResToKoaRes(res, koaCtx);
   }
 }
 
-export function koaIpare(useMiddlewares: (startup: HttpStartup) => void) {
+export function koaHalsp(useMiddlewares: (startup: HttpStartup) => void) {
   const startup = new KoaStartup();
   useMiddlewares(startup);
-  startup.use(async (ipareCtx) => {
-    const koaCtx: KoaContext = ipareCtx[KOA_CTX];
-    const koaNext: Next = ipareCtx[KOA_NEXT];
-    await ipareResToKoaRes(ipareCtx.res, koaCtx);
+  startup.use(async (halspCtx) => {
+    const koaCtx: KoaContext = halspCtx[KOA_CTX];
+    const koaNext: Next = halspCtx[KOA_NEXT];
+    await halspResToKoaRes(halspCtx.res, koaCtx);
     await koaNext();
-    await koaResToIpareRes(koaCtx, ipareCtx.res);
+    await koaResToHalspRes(koaCtx, halspCtx.res);
   });
 
   return async function (koaCtx: KoaContext, koaNext: Next) {

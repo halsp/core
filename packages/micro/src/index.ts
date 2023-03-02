@@ -1,4 +1,4 @@
-declare module "@ipare/core" {
+declare module "@halsp/core" {
   interface Request {
     id?: string;
     setId(id?: string): this;

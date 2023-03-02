@@ -1,5 +1,5 @@
-import { Context, isObject, isUndefined } from "@ipare/core";
-import { PipeTransform, TransformArgs } from "@ipare/pipe";
+import { Context, isObject, isUndefined } from "@halsp/core";
+import { PipeTransform, TransformArgs } from "@halsp/pipe";
 import { validate, ValidationError, ValidatorOptions } from "class-validator";
 import { ENABLE_METADATA, OPTIONS_METADATA } from "./constant";
 import { RuleRecord } from "./create-decorator";

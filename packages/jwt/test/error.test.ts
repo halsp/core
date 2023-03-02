@@ -1,12 +1,12 @@
-import { TestStartup } from "@ipare/testing";
+import { TestStartup } from "@halsp/testing";
 import { createTestContext } from "./utils";
 import "../src";
-import { Context } from "@ipare/core";
+import { Context } from "@halsp/core";
 
 function testErrorSecret(isError: boolean) {
   function runTest(customError: boolean) {
     test(`error secret ${isError} ${customError}`, async function () {
-      process.env.IPARE_ENV = "http";
+      process.env.HALSP_ENV = "http";
       const startup = new TestStartup()
         .setContext(
           await createTestContext({

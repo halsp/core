@@ -1,6 +1,6 @@
 import MapItem from "./map-item";
-import { Context } from "@ipare/core";
-import { HttpMethods } from "@ipare/methods";
+import { Context } from "@halsp/core";
+import { HttpMethods } from "@halsp/methods";
 
 export class MapMatcher {
   constructor(private readonly ctx: Context) {

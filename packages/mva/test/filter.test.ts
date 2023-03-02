@@ -1,8 +1,8 @@
-import { Request } from "@ipare/core";
-import { TestHttpStartup } from "@ipare/testing/dist/http";
+import { Request } from "@halsp/core";
+import { TestHttpStartup } from "@halsp/testing/dist/http";
 import "../src";
 import { runMva } from "./global";
-import "@ipare/filter";
+import "@halsp/filter";
 
 function runTest(executing: boolean) {
   test(`filter ${executing}`, async () => {

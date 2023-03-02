@@ -1,5 +1,5 @@
 import { loadPackages } from "../../src";
-import { runin } from "@ipare/testing";
+import { runin } from "@halsp/testing";
 
 describe("load packages", () => {
   it("should load default empty packages", async () => {

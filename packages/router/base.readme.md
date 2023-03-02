@@ -1,6 +1,6 @@
 <!--intro-->
 
-`@ipare/router` 是 `Ipare` 的路由插件
+`@halsp/router` 是 `Halsp` 的路由插件
 
 - 支持 RESTful 规范
 - 根据文件系统映射访问路径，彻底解耦无关联功能

@@ -1,4 +1,4 @@
-import { isNull, isNumber, isUndefined } from "@ipare/core";
+import { isNull, isNumber, isUndefined } from "@halsp/core";
 import { PipeTransform } from "./pipe-transform";
 
 export interface DefaultValuePipeOptions {

@@ -1,1 +1,1 @@
-export const OPTIONS_IDENTITY = "@ipare/mongoose/optionsIdentity";
+export const OPTIONS_IDENTITY = "@halsp/mongoose/optionsIdentity";

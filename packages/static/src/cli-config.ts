@@ -1,4 +1,4 @@
-import { tryAddCliAssets } from "@ipare/core";
+import { tryAddCliAssets } from "@halsp/core";
 
 export const cliConfigHook = (config: any) => {
   return tryAddCliAssets(

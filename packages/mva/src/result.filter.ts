@@ -1,5 +1,5 @@
-import { Context } from "@ipare/core";
-import { Filter } from "@ipare/filter";
+import { Context } from "@halsp/core";
+import { Filter } from "@halsp/filter";
 
 export interface ResultFilter extends Filter {
   onResultExecuted(ctx: Context): void | Promise<void>;

@@ -1,6 +1,6 @@
-import { TestMicroTcpStartup } from "@ipare/testing/dist/micro-tcp";
+import { TestMicroTcpStartup } from "@halsp/testing/dist/micro-tcp";
 import "./utils-micro";
-import { MicroTcpClient } from "@ipare/micro-tcp-client";
+import { MicroTcpClient } from "@halsp/micro-tcp-client";
 
 describe("micro-nats", () => {
   it("should add pattern handlers when use micro tcp", async () => {

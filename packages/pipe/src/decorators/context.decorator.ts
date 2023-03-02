@@ -1,4 +1,4 @@
 import "reflect-metadata";
-import { Inject } from "@ipare/inject";
+import { Inject } from "@halsp/inject";
 
 export const Ctx = Inject((ctx) => ctx);

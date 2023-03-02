@@ -1,9 +1,9 @@
-import { StatusCodes } from "@ipare/http";
-import { HttpMethods } from "@ipare/methods";
-import { TestHttpStartup } from "@ipare/testing/dist/http";
+import { StatusCodes } from "@halsp/http";
+import { HttpMethods } from "@halsp/methods";
+import { TestHttpStartup } from "@halsp/testing/dist/http";
 import "../src";
 import "./utils-http";
-import { Request } from "@ipare/core";
+import { Request } from "@halsp/core";
 
 function runTest(method: string, success: boolean) {
   test(`${method} ${success}`, async () => {

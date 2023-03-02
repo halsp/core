@@ -1,5 +1,5 @@
-import { HookType } from "@ipare/core";
-import { TestHttpStartup } from "@ipare/testing/dist/http";
+import { HookType } from "@halsp/core";
+import { TestHttpStartup } from "@halsp/testing/dist/http";
 import { getPipeRecords } from "../src";
 import { expectBody, getTestRequest, TestMiddleware } from "./TestMiddleware";
 

@@ -1,6 +1,6 @@
-import { Body } from "@ipare/pipe";
-import { Action } from "@ipare/router";
-import { V } from "@ipare/validator";
+import { Body } from "@halsp/pipe";
+import { Action } from "@halsp/router";
+import { V } from "@halsp/validator";
 
 class TestDto {
   @V.Description("test")

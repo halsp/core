@@ -1,7 +1,7 @@
-import { Inject } from "@ipare/inject";
-import { Body, Header } from "@ipare/pipe";
-import { Action } from "@ipare/router";
-import { V } from "@ipare/validator";
+import { Inject } from "@halsp/inject";
+import { Body, Header } from "@halsp/pipe";
+import { Action } from "@halsp/router";
+import { V } from "@halsp/validator";
 
 export class TestEmptyDto {}
 

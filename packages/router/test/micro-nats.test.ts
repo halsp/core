@@ -1,6 +1,6 @@
-import { TestMicroNatsStartup } from "@ipare/testing/dist/micro-nats";
+import { TestMicroNatsStartup } from "@halsp/testing/dist/micro-nats";
 import "./utils-micro";
-import { MicroNatsClient } from "@ipare/micro-nats-client";
+import { MicroNatsClient } from "@halsp/micro-nats-client";
 
 describe("micro-nats", () => {
   it("should add pattern handlers when use micro nats", async () => {

@@ -1,64 +1,64 @@
 import Koa from "koa";
 import http from "http";
 import net from "net";
-import { Context, isPlainObject, Response } from "@ipare/core";
+import { Context, isPlainObject, Response } from "@halsp/core";
 import { TransResponse } from "./trans-response";
 import qs from "qs";
 
-export async function koaResToIpareRes(
+export async function koaResToHalspRes(
   koaCtx: Koa.ParameterizedContext,
-  ipareRes: Response
+  halspRes: Response
 ) {
-  Object.keys(ipareRes.headers).forEach((key) => {
-    ipareRes.removeHeader(key);
+  Object.keys(halspRes.headers).forEach((key) => {
+    halspRes.removeHeader(key);
   });
   Object.keys(koaCtx.response.headers).forEach((key) => {
     const value = koaCtx.res.getHeader(key);
     if (value) {
-      ipareRes.setHeader(key, value);
+      halspRes.setHeader(key, value);
     }
   });
 
-  ipareRes.body = koaCtx.body ?? undefined;
-  ipareRes.status = koaCtx.status;
+  halspRes.body = koaCtx.body ?? undefined;
+  halspRes.status = koaCtx.status;
 }
 
-export async function ipareResToKoaRes(
-  ipareRes: Response,
+export async function halspResToKoaRes(
+  halspRes: Response,
   koaCtx: Koa.ParameterizedContext
 ) {
-  koaCtx.body = ipareRes.body ?? null;
+  koaCtx.body = halspRes.body ?? null;
   Object.keys(koaCtx.response.headers).forEach((key) => {
     koaCtx.remove(key);
   });
-  for (const key in ipareRes.headers) {
-    const value = ipareRes.getHeader(key);
+  for (const key in halspRes.headers) {
+    const value = halspRes.getHeader(key);
     if (value) {
       koaCtx.set(key, value);
     }
   }
-  koaCtx.status = ipareRes.status;
+  koaCtx.status = halspRes.status;
 }
 
 export async function createContext(
   koaApp: Koa,
-  ipareCtx: Context
+  halspCtx: Context
 ): Promise<Koa.ParameterizedContext> {
-  const reqStream = await getReqStream(ipareCtx);
+  const reqStream = await getReqStream(halspCtx);
   const resStream = new TransResponse(reqStream);
 
   const koaCtx = koaApp.createContext(reqStream, resStream);
-  await ipareResToKoaRes(ipareCtx.res, koaCtx);
+  await halspResToKoaRes(halspCtx.res, koaCtx);
   return koaCtx;
 }
 
-async function getReqStream(ipareCtx: Context): Promise<http.IncomingMessage> {
+async function getReqStream(halspCtx: Context): Promise<http.IncomingMessage> {
   let reqStream: http.IncomingMessage;
-  if (ipareCtx["reqStream"]) {
-    reqStream = ipareCtx["reqStream"] as http.IncomingMessage;
+  if (halspCtx["reqStream"]) {
+    reqStream = halspCtx["reqStream"] as http.IncomingMessage;
   } else {
     reqStream = new http.IncomingMessage(new net.Socket());
-    const body = ipareCtx.req.body;
+    const body = halspCtx.req.body;
     if (Buffer.isBuffer(body)) {
       reqStream.push(body);
     } else if (typeof body == "string") {
@@ -70,15 +70,15 @@ async function getReqStream(ipareCtx: Context): Promise<http.IncomingMessage> {
     }
   }
 
-  reqStream.headers = Object.assign({}, ipareCtx.req.headers);
+  reqStream.headers = Object.assign({}, halspCtx.req.headers);
 
   reqStream.url =
     "/" +
-    ipareCtx.req.path +
-    qs.stringify(ipareCtx.req.query, {
+    halspCtx.req.path +
+    qs.stringify(halspCtx.req.query, {
       addQueryPrefix: true,
     });
-  reqStream.method = ipareCtx.req.method;
+  reqStream.method = halspCtx.req.method;
   reqStream.complete = true;
   reqStream.httpVersion = "1.1";
   reqStream.httpVersionMajor = 1;

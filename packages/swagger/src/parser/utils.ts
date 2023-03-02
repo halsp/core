@@ -1,12 +1,12 @@
-import { isClass, isUndefined, ObjectConstructor } from "@ipare/core";
-import { PipeReqType } from "@ipare/pipe";
+import { isClass, isUndefined, ObjectConstructor } from "@halsp/core";
+import { PipeReqType } from "@halsp/pipe";
 import {
   getRules,
   RuleRecord,
   V,
   ValidateItem,
   ValidatorDecoratorReturnType,
-} from "@ipare/validator";
+} from "@halsp/validator";
 import {
   ComponentsObject,
   OpenApiBuilder,

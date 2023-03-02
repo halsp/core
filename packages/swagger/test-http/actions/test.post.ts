@@ -1,6 +1,6 @@
-import { Body, Header, Param, Query } from "@ipare/pipe";
-import { Action, HttpPost } from "@ipare/router";
-import { V } from "@ipare/validator";
+import { Body, Header, Param, Query } from "@halsp/pipe";
+import { Action, HttpPost } from "@halsp/router";
+import { V } from "@halsp/validator";
 
 export class HeaderDto {
   @V.Description("header-h1")

@@ -1,21 +1,21 @@
 {
-  "name": "@ipare/testing",
+  "name": "@halsp/testing",
   "version": "3.2.1",
-  "description": "Ipare 的测试插件，用于单元测试、本地测试等",
+  "description": "Halsp 的测试插件，用于单元测试、本地测试等",
   "engines": {
     "node": ">=12.14.0"
   },
-  "homepage": "https://ipare.org",
+  "homepage": "https://halsp.org",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ipare/ipare"
+    "url": "https://github.com/halsp/core"
   },
   "keywords": [
-    "ipare",
+    "halsp",
     "test"
   ],
   "bugs": {
-    "url": "https://github.com/ipare/ipare/issues",
+    "url": "https://github.com/halsp/core/issues",
     "email": "support@hal.wang"
   },
   "private": false,
@@ -34,19 +34,19 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^3.2.1"
+    "@halsp/core": "^3.2.1"
   },
   "devDependencies": {
-    "@ipare/http": "^3.2.1",
-    "@ipare/micro": "^3.2.1",
-    "@ipare/micro-client": "^3.2.1",
-    "@ipare/micro-common": "^3.2.1",
-    "@ipare/micro-grpc": "^3.2.1",
-    "@ipare/micro-mqtt": "^3.2.1",
-    "@ipare/micro-nats": "^3.2.1",
-    "@ipare/micro-redis": "^3.2.1",
-    "@ipare/micro-tcp": "^3.2.1",
-    "@ipare/native": "^3.2.1",
+    "@halsp/http": "^3.2.1",
+    "@halsp/micro": "^3.2.1",
+    "@halsp/micro-client": "^3.2.1",
+    "@halsp/micro-common": "^3.2.1",
+    "@halsp/micro-grpc": "^3.2.1",
+    "@halsp/micro-mqtt": "^3.2.1",
+    "@halsp/micro-nats": "^3.2.1",
+    "@halsp/micro-redis": "^3.2.1",
+    "@halsp/micro-tcp": "^3.2.1",
+    "@halsp/native": "^3.2.1",
     "supertest": "^6.3.3"
   },
   "files": [

@@ -1,5 +1,5 @@
-import { Middleware } from "@ipare/core";
-import { TestStartup } from "@ipare/testing";
+import { Middleware } from "@halsp/core";
+import { TestStartup } from "@halsp/testing";
 import { Inject, InjectType, parseInject } from "../src";
 
 export class Service1 extends Object {

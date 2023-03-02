@@ -1,5 +1,5 @@
-import { Middleware } from "@ipare/core";
-import { TestStartup } from "@ipare/testing";
+import { Middleware } from "@halsp/core";
+import { TestStartup } from "@halsp/testing";
 import "../../src";
 import { Inject, InjectType } from "../../src";
 

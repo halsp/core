@@ -1,9 +1,9 @@
-import { isClass, ObjectConstructor } from "@ipare/core";
+import { isClass, ObjectConstructor } from "@halsp/core";
 import {
   RuleRecord,
   ValidateItem,
   ValidatorDecoratorReturnType,
-} from "@ipare/validator";
+} from "@halsp/validator";
 import {
   ContentObject,
   MediaTypeObject,

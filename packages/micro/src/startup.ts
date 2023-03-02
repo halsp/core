@@ -1,11 +1,11 @@
-import { Context, Request, Response, Startup } from "@ipare/core";
+import { Context, Request, Response, Startup } from "@halsp/core";
 import { initCatchError, initContext } from "./context";
-import { ClientPacket, ServerPacket } from "@ipare/micro-common";
+import { ClientPacket, ServerPacket } from "@halsp/micro-common";
 
 export abstract class MicroStartup extends Startup {
   constructor() {
     super();
-    process.env.IPARE_ENV = "micro";
+    process.env.HALSP_ENV = "micro";
     initContext();
   }
 

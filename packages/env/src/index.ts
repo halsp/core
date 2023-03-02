@@ -1,10 +1,10 @@
-import { Startup } from "@ipare/core";
+import { Startup } from "@halsp/core";
 import { EnvOptions } from "./options";
 import dotenv from "dotenv";
 import { BASE_USED } from "./constant";
 import path from "path";
 
-declare module "@ipare/core" {
+declare module "@halsp/core" {
   interface Startup {
     useEnv(options?: EnvOptions): this;
   }

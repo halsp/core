@@ -1,5 +1,5 @@
-import { Middleware } from "@ipare/core";
-import { TestStartup } from "@ipare/testing";
+import { Middleware } from "@halsp/core";
+import { TestStartup } from "@halsp/testing";
 import {
   addCustomValidator,
   getCustomValidators,
@@ -8,8 +8,8 @@ import {
   ValidatorDecoratorReturnType,
   validatorMethods,
 } from "../src";
-import "@ipare/inject";
-import { Body } from "@ipare/pipe";
+import "@halsp/inject";
+import { Body } from "@halsp/pipe";
 import { isArray } from "class-validator";
 
 declare module "../src" {

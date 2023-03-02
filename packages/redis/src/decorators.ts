@@ -1,4 +1,4 @@
-import { Inject } from "@ipare/inject";
+import { Inject } from "@halsp/inject";
 import { OPTIONS_IDENTITY } from "./constant";
 
 export const RedisInject = (identity?: string) =>

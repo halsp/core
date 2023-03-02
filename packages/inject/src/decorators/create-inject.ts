@@ -1,4 +1,4 @@
-import { Context } from "@ipare/core";
+import { Context } from "@halsp/core";
 import { CUSTOM_METADATA } from "../constant";
 import { InjectType } from "../inject-type";
 import { InjectCustom } from "../interfaces";

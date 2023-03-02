@@ -1,21 +1,21 @@
 {
-  "name": "@ipare/swagger",
+  "name": "@halsp/swagger",
   "version": "3.2.1",
-  "description": "使用 swagger 自动生成你的 Ipare 文档",
+  "description": "使用 swagger 自动生成你的 Halsp 文档",
   "engines": {
     "node": ">=12.14.0"
   },
-  "homepage": "https://ipare.org",
+  "homepage": "https://halsp.org",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ipare/ipare"
+    "url": "https://github.com/halsp/core"
   },
   "keywords": [
-    "ipare",
+    "halsp",
     "swagger"
   ],
   "bugs": {
-    "url": "https://github.com/ipare/ipare/issues",
+    "url": "https://github.com/halsp/core/issues",
     "email": "support@hal.wang"
   },
   "private": false,
@@ -34,14 +34,14 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^3.2.1",
-    "@ipare/http": "^3.2.1",
-    "@ipare/inject": "^3.2.1",
-    "@ipare/methods": "^3.2.1",
-    "@ipare/pipe": "^3.2.1",
-    "@ipare/router": "^3.2.1",
-    "@ipare/static": "^3.2.1",
-    "@ipare/validator": "^3.2.1",
+    "@halsp/core": "^3.2.1",
+    "@halsp/http": "^3.2.1",
+    "@halsp/inject": "^3.2.1",
+    "@halsp/methods": "^3.2.1",
+    "@halsp/pipe": "^3.2.1",
+    "@halsp/router": "^3.2.1",
+    "@halsp/static": "^3.2.1",
+    "@halsp/validator": "^3.2.1",
     "openapi3-ts-remove-yaml": "^3.0.2",
     "reflect-metadata": "^0.1.13",
     "swagger-ui-dist": "^4.15.5"

@@ -1,4 +1,4 @@
-import { TestStartup } from "@ipare/testing";
+import { TestStartup } from "@halsp/testing";
 import "../src";
 
 test("run multiple", async () => {

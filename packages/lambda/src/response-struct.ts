@@ -1,4 +1,4 @@
-import { HeadersDict } from "@ipare/http";
+import { HeadersDict } from "@halsp/http";
 
 export interface ResponseStruct {
   readonly isBase64Encoded: boolean;

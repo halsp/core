@@ -1,4 +1,4 @@
-import { MicroTcpClient } from "@ipare/micro-tcp-client";
+import { MicroTcpClient } from "@halsp/micro-tcp-client";
 import { TestMicroTcpStartup } from "../src/micro-tcp";
 
 describe("micro tcp startup", () => {

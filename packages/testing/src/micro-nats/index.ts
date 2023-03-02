@@ -1,5 +1,5 @@
-import { Context, Request, Response } from "@ipare/core";
-import { MicroNatsOptions, MicroNatsStartup } from "@ipare/micro-nats";
+import { Context, Request, Response } from "@halsp/core";
+import { MicroNatsOptions, MicroNatsStartup } from "@halsp/micro-nats";
 import { initBaseTestStartup, ITestStartup } from "../test-startup";
 
 export class TestMicroNatsStartup extends MicroNatsStartup {

@@ -1,8 +1,8 @@
-import { Request } from "@ipare/core";
-import { TestHttpStartup } from "@ipare/testing/dist/http";
+import { Request } from "@halsp/core";
+import { TestHttpStartup } from "@halsp/testing/dist/http";
 import { runMva } from "./global";
 import "../src";
-import { HttpMethods } from "@ipare/methods";
+import { HttpMethods } from "@halsp/methods";
 
 test("not allowed method", async function () {
   await runMva(async () => {

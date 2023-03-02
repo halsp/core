@@ -1,6 +1,5 @@
-import { TestStartup } from "@ipare/testing";
-import { parseInject } from "@ipare/inject";
-import path from "path";
+import { TestStartup } from "@halsp/testing";
+import { parseInject } from "@halsp/inject";
 import "../src";
 import { TypeormConnection } from "../src";
 import { OPTIONS_IDENTITY } from "../src/constant";
@@ -12,7 +11,7 @@ it("should insert entity to sqlite", async () => {
       type: "sqlite",
       database: "test/sqlite.db",
       synchronize: true,
-      entities: [path.join(__dirname, "entities/*.ts")],
+      entities: [TestEntity],
     })
     .use(async (ctx) => {
       const connection = await parseInject<TypeormConnection>(

@@ -1,16 +1,16 @@
-import { MicroStartup } from "@ipare/micro";
-import { parseTcpBuffer, ServerPacket } from "@ipare/micro-common";
+import { MicroStartup } from "@halsp/micro";
+import { parseTcpBuffer, ServerPacket } from "@halsp/micro-common";
 import { MicroTcpOptions } from "./options";
 import * as net from "net";
 import {
   closeServer,
   Context,
   dynamicListen,
-  getIparePort,
+  getHalspPort,
   logAddress,
-} from "@ipare/core";
+} from "@halsp/core";
 
-const defaultPort = getIparePort(2333);
+const defaultPort = getHalspPort(2333);
 
 export class MicroTcpStartup extends MicroStartup {
   constructor(readonly options: MicroTcpOptions = {}) {

@@ -1,10 +1,10 @@
 import { createBadRequestError } from "../../src/pipes/error";
-import { BadRequestException } from "@ipare/http";
-import { MicroException } from "@ipare/micro";
+import { BadRequestException } from "@halsp/http";
+import { MicroException } from "@halsp/micro";
 
 describe("parse failed", () => {
   it("should create BadRequestException if env is http", async () => {
-    process.env.IPARE_ENV = "http";
+    process.env.HALSP_ENV = "http";
     const err = createBadRequestError("test");
 
     expect(err instanceof BadRequestException).toBeTruthy();
@@ -12,7 +12,7 @@ describe("parse failed", () => {
   });
 
   it("should create BadRequestException if env is micro", async () => {
-    process.env.IPARE_ENV = "micro";
+    process.env.HALSP_ENV = "micro";
     const err = createBadRequestError("test");
 
     expect(err instanceof MicroException).toBeTruthy();
@@ -20,7 +20,7 @@ describe("parse failed", () => {
   });
 
   it("should create BadRequestException if env is unknow", async () => {
-    process.env.IPARE_ENV = "" as any;
+    process.env.HALSP_ENV = "" as any;
     const err = createBadRequestError("test");
 
     expect(err instanceof Error).toBeTruthy();

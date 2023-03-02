@@ -1,4 +1,4 @@
-import { MapItem } from "@ipare/router";
+import { MapItem } from "@halsp/router";
 import { OpenApiBuilder } from "openapi3-ts-remove-yaml";
 import { Parser } from "../src/parser";
 

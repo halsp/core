@@ -1,6 +1,6 @@
 import "../src";
-import { Middleware } from "@ipare/core";
-import { TestStartup } from "@ipare/testing";
+import { Middleware } from "@halsp/core";
+import { TestStartup } from "@halsp/testing";
 import { Typeorm, TypeormConnection } from "../src";
 
 class TestMiddleware extends Middleware {

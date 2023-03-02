@@ -1,5 +1,5 @@
-import { Context, Middleware, Request } from "@ipare/core";
-import { TestMicroStartup } from "@ipare/testing/dist/micro";
+import { Context, Middleware, Request } from "@halsp/core";
+import { TestMicroStartup } from "@halsp/testing/dist/micro";
 import { Body, ParseBoolPipe } from "../../src";
 
 beforeAll(() => {

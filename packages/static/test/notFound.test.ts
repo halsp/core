@@ -1,6 +1,6 @@
-import { Request } from "@ipare/core";
-import { HttpMethods } from "@ipare/methods";
-import { TestHttpStartup } from "@ipare/testing/dist/http";
+import { Request } from "@halsp/core";
+import { HttpMethods } from "@halsp/methods";
+import { TestHttpStartup } from "@halsp/testing/dist/http";
 import "../src";
 import { FILE_ERROR_STATUS_BAG, FILE_BAG } from "../src/constant";
 import { readStream } from "./utils";

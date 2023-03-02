@@ -1,5 +1,5 @@
-import { Context, Request, Response } from "@ipare/core";
-import { MicroGrpcOptions, MicroGrpcStartup } from "@ipare/micro-grpc";
+import { Context, Request, Response } from "@halsp/core";
+import { MicroGrpcOptions, MicroGrpcStartup } from "@halsp/micro-grpc";
 import { initBaseTestStartup, ITestStartup } from "../test-startup";
 
 export class TestMicroGrpcStartup extends MicroGrpcStartup {

@@ -1,9 +1,9 @@
-import { HeadersDict } from "@ipare/http";
-import { HttpMethods } from "@ipare/methods";
+import { HeadersDict } from "@halsp/http";
+import { HttpMethods } from "@halsp/methods";
 import { ResponseStruct } from "./response-struct";
 import { Readable } from "stream";
-import { HttpStartup } from "@ipare/http";
-import { Context, Dict, isObject, Request } from "@ipare/core";
+import { HttpStartup } from "@halsp/http";
+import { Context, Dict, isObject, Request } from "@halsp/core";
 
 export class LambdaStartup extends HttpStartup {
   async run(event: Dict, context: Dict): Promise<ResponseStruct> {

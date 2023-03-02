@@ -1,5 +1,5 @@
 import "../src";
-import { TestStartup } from "@ipare/testing";
+import { TestStartup } from "@halsp/testing";
 import RedisClient from "@redis/client/dist/lib/client";
 
 it("should get redis by ctx", async () => {

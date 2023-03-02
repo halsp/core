@@ -1,4 +1,4 @@
-import { ObjectConstructor } from "@ipare/core";
+import { ObjectConstructor } from "@halsp/core";
 import { Action, getActionMetadata, ActionMetadata } from "../../../src";
 
 const Admin = ActionMetadata("admin", true);

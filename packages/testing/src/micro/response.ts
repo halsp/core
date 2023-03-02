@@ -1,6 +1,6 @@
-import { isFunction, Response } from "@ipare/core";
+import { isFunction, Response } from "@halsp/core";
 
-declare module "@ipare/core" {
+declare module "@halsp/core" {
   interface Response {
     expect(status: string | undefined): this;
     expect(status: string | undefined, body: any): this;

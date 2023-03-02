@@ -1,4 +1,4 @@
-import { Request, Response } from "@ipare/core";
+import { Request, Response } from "@halsp/core";
 import { TestMicroStartup } from "../src/micro";
 
 describe("micro response.expect", () => {

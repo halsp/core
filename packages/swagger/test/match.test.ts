@@ -1,10 +1,10 @@
-import { Request } from "@ipare/core";
-import { TEST_ACTION_DIR } from "@ipare/router/dist/constant";
-import { TestHttpStartup } from "@ipare/testing/dist/http";
+import { Request } from "@halsp/core";
+import { TEST_ACTION_DIR } from "@halsp/router/dist/constant";
+import { TestHttpStartup } from "@halsp/testing/dist/http";
 import "../src";
 import { SwaggerOptions } from "../src";
 
-declare module "@ipare/core" {
+declare module "@halsp/core" {
   interface Startup {
     setTestDir(dir: string): this;
   }
@@ -158,7 +158,7 @@ describe("match path", () => {
           new Request().setPath("swagger/index.json").setMethod("get")
         )
         .useSwagger()
-        .setTestDir("ipare/packages/swagger/test/parser")
+        .setTestDir("halsp/packages/swagger/test/parser")
         .useRouter()
         .run();
 

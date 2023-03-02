@@ -1,2 +1,2 @@
-export const OPTIONS = "@ipare/jwt/options";
-export const USED = "@ipare/jwt/used";
+export const OPTIONS = "@halsp/jwt/options";
+export const USED = "@halsp/jwt/used";

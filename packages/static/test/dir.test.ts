@@ -1,7 +1,7 @@
-import { TestHttpStartup } from "@ipare/testing/dist/http";
+import { TestHttpStartup } from "@halsp/testing/dist/http";
 import "../src";
-import { Request } from "@ipare/core";
-import { HttpMethods } from "@ipare/methods";
+import { Request } from "@halsp/core";
+import { HttpMethods } from "@halsp/methods";
 import path from "path";
 
 describe("dir", () => {

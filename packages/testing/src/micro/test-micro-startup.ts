@@ -1,5 +1,5 @@
-import { Context, Request, Response } from "@ipare/core";
-import { MicroStartup } from "@ipare/micro";
+import { Context, Request, Response } from "@halsp/core";
+import { MicroStartup } from "@halsp/micro";
 import { initBaseTestStartup, ITestStartup } from "../test-startup";
 
 export class TestMicroStartup extends MicroStartup {

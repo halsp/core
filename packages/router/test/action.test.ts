@@ -1,7 +1,7 @@
-import { Context, Dict, Request } from "@ipare/core";
-import { StatusCodes } from "@ipare/http";
-import { HttpMethods } from "@ipare/methods";
-import { TestHttpStartup } from "@ipare/testing/dist/http";
+import { Context, Dict, Request } from "@halsp/core";
+import { StatusCodes } from "@halsp/http";
+import { HttpMethods } from "@halsp/methods";
+import { TestHttpStartup } from "@halsp/testing/dist/http";
 import { Action } from "../src";
 import "./utils-http";
 

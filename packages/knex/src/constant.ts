@@ -1,1 +1,1 @@
-export const OPTIONS_IDENTITY = "@ipare/knex/optionsIdentity";
+export const OPTIONS_IDENTITY = "@halsp/knex/optionsIdentity";

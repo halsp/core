@@ -1,9 +1,9 @@
-import { NotFoundException } from "@ipare/http";
+import { NotFoundException } from "@halsp/http";
 import "../src";
 import { AutFilter } from "./mva/auth.middleware";
 import { runMva } from "./global";
-import { Request, Response } from "@ipare/core";
-import { TestHttpStartup } from "@ipare/testing/dist/http";
+import { Request, Response } from "@halsp/core";
+import { TestHttpStartup } from "@halsp/testing/dist/http";
 
 function expect404(res: Response, isPage: boolean, replaceCode = 404) {
   expect(res.status).toBe(replaceCode);

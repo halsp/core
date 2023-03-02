@@ -1,4 +1,4 @@
-import { ValidatorDecoratorReturnType } from "@ipare/validator";
+import { ValidatorDecoratorReturnType } from "@halsp/validator";
 import {
   DiscriminatorObject,
   ExampleObject,
@@ -13,7 +13,7 @@ import { ArrayItemType } from "./parser/schema-dict";
 
 type RT = ValidatorDecoratorReturnType;
 
-declare module "@ipare/validator" {
+declare module "@halsp/validator" {
   interface ValidatorLib {
     Ignore: () => RT;
 

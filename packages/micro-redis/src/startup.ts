@@ -1,8 +1,8 @@
-import { MicroStartup } from "@ipare/micro";
+import { MicroStartup } from "@halsp/micro";
 import { MicroRedisOptions } from "./options";
-import { Context, getIparePort } from "@ipare/core";
+import { Context, getHalspPort } from "@halsp/core";
 import * as redis from "redis";
-import { parseJsonBuffer } from "@ipare/micro-common";
+import { parseJsonBuffer } from "@halsp/micro-common";
 
 export class MicroRedisStartup extends MicroStartup {
   constructor(protected readonly options: MicroRedisOptions = {}) {
@@ -22,7 +22,7 @@ export class MicroRedisStartup extends MicroStartup {
 
     const opt: MicroRedisOptions = { ...this.options };
     if (!("url" in opt)) {
-      const port = getIparePort(6379);
+      const port = getHalspPort(6379);
       opt.url = `redis://localhost:${port}`;
     }
 

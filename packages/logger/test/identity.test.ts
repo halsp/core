@@ -1,8 +1,8 @@
 import "../src";
-import { Middleware, ILogger } from "@ipare/core";
+import { Middleware, ILogger } from "@halsp/core";
 import { Logger, winston } from "../src";
 import { CustomTransport } from "./utils";
-import { TestStartup } from "@ipare/testing";
+import { TestStartup } from "@halsp/testing";
 
 describe("identity", () => {
   class TestMiddleware extends Middleware {

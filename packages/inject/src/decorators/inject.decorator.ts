@@ -1,4 +1,4 @@
-import { Context, isClass } from "@ipare/core";
+import { Context, isClass } from "@halsp/core";
 import { PROPERTY_METADATA, KEY_METADATA } from "../constant";
 import { InjectType } from "../inject-type";
 import { InjectKey } from "../interfaces";

@@ -1,7 +1,7 @@
 import { MicroGrpcStartup } from "../src";
 import * as grpc from "@grpc/grpc-js";
 import * as grpcLoader from "@grpc/proto-loader";
-import { Request } from "@ipare/core";
+import { Request } from "@halsp/core";
 
 describe("startup", () => {
   it("should handle middlewares", async () => {
@@ -163,8 +163,8 @@ describe("shutdown", () => {
     expect(err).toBeTruthy();
   });
 
-  it("should listen with IPARE_DEBUG_PORT", async () => {
-    process.env.IPARE_DEBUG_PORT = "50001";
+  it("should listen with HALSP_DEBUG_PORT", async () => {
+    process.env.HALSP_DEBUG_PORT = "50001";
     const startup = new MicroGrpcStartup();
     const server = await startup.listen();
     await startup.close();

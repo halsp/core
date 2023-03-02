@@ -1,15 +1,15 @@
 import { postbuild } from "../src";
 import * as fs from "fs";
-import { Request } from "@ipare/core";
+import { Request } from "@halsp/core";
 import { CONFIG_FILE_NAME } from "../src/constant";
-import { TestHttpStartup } from "@ipare/testing/dist/http";
+import { TestHttpStartup } from "@halsp/testing/dist/http";
 
 test("empty config", async () => {
   let count = 0;
   try {
     await postbuild({
       config: {},
-      cacheDir: ".ipare-cache",
+      cacheDir: ".halsp-cache",
     });
   } catch (err) {
     count++;

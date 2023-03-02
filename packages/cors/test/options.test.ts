@@ -1,11 +1,11 @@
-import { TestHttpStartup } from "@ipare/testing/dist/http";
-import { HttpMethods } from "@ipare/methods";
-import { Request } from "@ipare/core";
+import { TestHttpStartup } from "@halsp/testing/dist/http";
+import { HttpMethods } from "@halsp/methods";
+import { Request } from "@halsp/core";
 import "../src";
 
 it("should set cors headers when options.origin is empty string", async () => {
   const res = await new TestHttpStartup()
-    .setContext(new Request().set("Origin", "https://ipare.org"))
+    .setContext(new Request().set("Origin", "https://halsp.org"))
     .useCors({
       origin: () => "",
     })
@@ -16,7 +16,7 @@ it("should set cors headers when options.origin is empty string", async () => {
 
 it("should set Access-Control-Allow-Credentials when credentials is true", async () => {
   const res = await new TestHttpStartup()
-    .setContext(new Request().set("Origin", "https://ipare.org"))
+    .setContext(new Request().set("Origin", "https://halsp.org"))
     .useCors({
       credentials: () => true,
     })
@@ -28,7 +28,7 @@ it("should set Access-Control-Allow-Headers when set allowHeaders option", async
   const res = await new TestHttpStartup()
     .setContext(
       new Request()
-        .set("Origin", "https://ipare.org")
+        .set("Origin", "https://halsp.org")
         .set("Access-Control-Request-Method", "POST")
         .setMethod(HttpMethods.options)
     )
@@ -44,7 +44,7 @@ describe("privateNetworkAccess", () => {
     const res = await new TestHttpStartup()
       .setContext(
         new Request()
-          .set("Origin", "https://ipare.org")
+          .set("Origin", "https://halsp.org")
           .set("Access-Control-Request-Method", "POST")
           .setMethod(HttpMethods.options)
       )
@@ -59,7 +59,7 @@ describe("privateNetworkAccess", () => {
     const res = await new TestHttpStartup()
       .setContext(
         new Request()
-          .set("Origin", "https://ipare.org")
+          .set("Origin", "https://halsp.org")
           .set("Access-Control-Request-Method", "POST")
           .setMethod(HttpMethods.options)
       )
@@ -74,7 +74,7 @@ describe("privateNetworkAccess", () => {
     const res = await new TestHttpStartup()
       .setContext(
         new Request()
-          .set("Origin", "https://ipare.org")
+          .set("Origin", "https://halsp.org")
           .set("Access-Control-Request-Method", "POST")
           .set("Access-Control-Request-Private-Network", "true")
           .setMethod(HttpMethods.options)
@@ -90,7 +90,7 @@ describe("privateNetworkAccess", () => {
 describe("allowMethods", () => {
   it("should not set Access-Control-Allow-Methods when the method is not OPTIONS", async () => {
     const res = await new TestHttpStartup()
-      .setContext(new Request().set("Origin", "https://ipare.org"))
+      .setContext(new Request().set("Origin", "https://halsp.org"))
       .useCors()
       .run();
     expect(res.get("Access-Control-Allow-Methods")).toBeUndefined();
@@ -100,7 +100,7 @@ describe("allowMethods", () => {
     const res = await new TestHttpStartup()
       .setContext(
         new Request()
-          .set("Origin", "https://ipare.org")
+          .set("Origin", "https://halsp.org")
           .set("Access-Control-Request-Method", "POST")
           .setMethod(HttpMethods.options)
       )
@@ -121,7 +121,7 @@ describe("allowMethods", () => {
     const res = await new TestHttpStartup()
       .setContext(
         new Request()
-          .set("Origin", "https://ipare.org")
+          .set("Origin", "https://halsp.org")
           .set("Access-Control-Request-Method", "POST")
           .setMethod(HttpMethods.options)
       )

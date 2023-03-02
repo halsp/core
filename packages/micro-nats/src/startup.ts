@@ -1,6 +1,6 @@
-import { MicroStartup } from "@ipare/micro";
+import { MicroStartup } from "@halsp/micro";
 import { MicroNatsOptions } from "./options";
-import { Context, getIparePort } from "@ipare/core";
+import { Context, getHalspPort } from "@halsp/core";
 import * as nats from "nats";
 
 export class MicroNatsStartup extends MicroStartup {
@@ -23,7 +23,7 @@ export class MicroNatsStartup extends MicroStartup {
 
     const opt: MicroNatsOptions = { ...this.options };
     if (!("servers" in this.options) && !("port" in this.options)) {
-      opt.port = getIparePort(4222);
+      opt.port = getHalspPort(4222);
     }
 
     this.connection = await nats.connect(opt);

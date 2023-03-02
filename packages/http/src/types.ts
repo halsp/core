@@ -1,4 +1,4 @@
-import { Dict, ReadonlyDict } from "@ipare/core";
+import { Dict, ReadonlyDict } from "@halsp/core";
 
 export type HeaderValue = string | string[];
 export type NumericalHeaderValue = string | number | (number | string)[];

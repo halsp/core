@@ -1,5 +1,5 @@
-import { Context } from "@ipare/core";
-import { HttpMethods } from "@ipare/methods";
+import { Context } from "@halsp/core";
+import { HttpMethods } from "@halsp/methods";
 import "../src";
 import { initContext } from "../src/context";
 

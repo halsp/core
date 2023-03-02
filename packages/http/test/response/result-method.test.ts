@@ -1,4 +1,4 @@
-import { Context, Middleware } from "@ipare/core";
+import { Context, Middleware } from "@halsp/core";
 import { getReasonPhrase } from "../../src";
 import { TestStartup } from "../test-startup";
 

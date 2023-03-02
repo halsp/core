@@ -2,11 +2,11 @@ import * as net from "net";
 import { ILogger } from "honion";
 import { isObject } from "./typeis";
 
-export function getIparePort(port: number): number;
-export function getIparePort(port?: number): number | undefined;
-export function getIparePort(port?: number) {
-  if (process.env.IPARE_DEBUG_PORT) {
-    return Number(process.env.IPARE_DEBUG_PORT);
+export function getHalspPort(port: number): number;
+export function getHalspPort(port?: number): number | undefined;
+export function getHalspPort(port?: number) {
+  if (process.env.HALSP_DEBUG_PORT) {
+    return Number(process.env.HALSP_DEBUG_PORT);
   } else {
     return port;
   }
@@ -44,7 +44,7 @@ export async function dynamicListen(
     });
   }
 
-  return await tryListen(getIparePort(port) ?? 9504);
+  return await tryListen(getHalspPort(port) ?? 9504);
 }
 
 export function logAddress(

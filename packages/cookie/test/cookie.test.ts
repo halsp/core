@@ -1,7 +1,7 @@
-import { Request } from "@ipare/core";
+import { Request } from "@halsp/core";
 import "../src";
 import { REQUEST_HEADER_NAME, RESPONSE_HEADER_NAME } from "../src/constant";
-import { TestHttpStartup } from "@ipare/testing/dist/http";
+import { TestHttpStartup } from "@halsp/testing/dist/http";
 
 describe("get cookie", () => {
   it("should get cookies from request", async () => {

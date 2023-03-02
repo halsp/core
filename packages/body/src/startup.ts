@@ -1,9 +1,9 @@
-import { Context } from "@ipare/core";
+import { Context } from "@halsp/core";
 import typeis from "type-is";
 import cobody from "co-body";
 import formidable from "formidable";
 import http from "http";
-import { HttpStartup, StatusCodes } from "@ipare/http";
+import { HttpStartup, StatusCodes } from "@halsp/http";
 import { MultipartBody } from "./multipart";
 
 export abstract class BodyPraserStartup extends HttpStartup {

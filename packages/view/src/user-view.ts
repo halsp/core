@@ -1,4 +1,4 @@
-import { Context, Response, Startup } from "@ipare/core";
+import { Context, Response, Startup } from "@halsp/core";
 import {
   consolidate,
   Engine,
@@ -22,7 +22,7 @@ export function useView(startup: Startup, options: ViewOptions) {
     const html = await render(this.ctx, options, tmpPath, locals);
     if (!html) return this;
 
-    if (process.env.IPARE_ENV == "http") {
+    if (process.env.HALSP_ENV == "http") {
       this["ok"](html);
       this["set"]("content-type", "text/html");
     } else {

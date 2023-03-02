@@ -1,6 +1,6 @@
-import { parseJsonBuffer } from "@ipare/micro-common";
+import { parseJsonBuffer } from "@halsp/micro-common";
 import mqtt from "mqtt";
-import { IMicroClient } from "@ipare/micro-client";
+import { IMicroClient } from "@halsp/micro-client";
 import { MicroMqttClientOptions } from "./options";
 
 export class MicroMqttClient extends IMicroClient {
@@ -57,7 +57,7 @@ export class MicroMqttClient extends IMicroClient {
   }
 
   /**
-   * for @ipare/inject
+   * for @halsp/inject
    */
   async dispose(force?: boolean) {
     if (this.#connectResolve) {

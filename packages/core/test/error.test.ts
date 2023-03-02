@@ -1,11 +1,11 @@
-import { IpareException, isExceptionMessage } from "../src";
+import { HalspException, isExceptionMessage } from "../src";
 import { TestStartup } from "./test-startup";
 
 describe("error", () => {
   it("should push error stack when throw error", async () => {
     const { ctx } = await new TestStartup()
       .use(async () => {
-        throw new IpareException();
+        throw new HalspException();
       })
       .run();
     expect(ctx.errorStack.length).toBe(1);

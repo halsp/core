@@ -1,5 +1,5 @@
 import { MicroRedisStartup } from "../src";
-import { MicroRedisClient } from "@ipare/micro-redis-client";
+import { MicroRedisClient } from "@halsp/micro-redis-client";
 
 describe("startup", () => {
   it("should subscribe and publish", async () => {

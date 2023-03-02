@@ -1,5 +1,5 @@
 import "../src";
-import { TestStartup } from "@ipare/testing";
+import { TestStartup } from "@halsp/testing";
 
 describe("call", () => {
   it("should set body when 'res.view' called", async () => {
@@ -30,12 +30,12 @@ describe("call", () => {
     expect(ctx.res.body).toBeUndefined();
   });
 
-  it("should call res.ok and set content-type when IPARE_ENV = http", async () => {
+  it("should call res.ok and set content-type when HALSP_ENV = http", async () => {
     let okCalled = false;
     let setCalled = false;
 
-    const beforeEnv = process.env.IPARE_ENV;
-    process.env.IPARE_ENV = "http";
+    const beforeEnv = process.env.HALSP_ENV;
+    process.env.HALSP_ENV = "http";
     await new TestStartup()
       .useView({
         dir: "test/views",
@@ -52,7 +52,7 @@ describe("call", () => {
         });
       })
       .run();
-    process.env.IPARE_ENV = beforeEnv;
+    process.env.HALSP_ENV = beforeEnv;
 
     expect(okCalled).toBeTruthy();
     expect(setCalled).toBeTruthy();

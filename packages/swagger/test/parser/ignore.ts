@@ -1,6 +1,6 @@
-import { Body, Header } from "@ipare/pipe";
-import { Action } from "@ipare/router";
-import { V } from "@ipare/validator";
+import { Body, Header } from "@halsp/pipe";
+import { Action } from "@halsp/router";
+import { V } from "@halsp/validator";
 
 @V.Tags("test").Ignore()
 export class IgnoreAction extends Action {

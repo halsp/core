@@ -1,4 +1,4 @@
-import { TestStartup } from "@ipare/testing";
+import { TestStartup } from "@halsp/testing";
 import "../src";
 import { Service2 } from "./services";
 import {

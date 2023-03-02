@@ -1,5 +1,5 @@
 import { MicroMqttStartup } from "../src";
-import { MicroMqttClient } from "@ipare/micro-mqtt-client";
+import { MicroMqttClient } from "@halsp/micro-mqtt-client";
 import * as mqtt from "mqtt";
 
 describe("startup", () => {
@@ -90,12 +90,12 @@ describe("startup", () => {
   });
 });
 
-describe("IPARE_DEBUG_PORT", () => {
-  it("should listen with IPARE_DEBUG_PORT", async () => {
-    process.env.IPARE_DEBUG_PORT = "6002";
+describe("HALSP_DEBUG_PORT", () => {
+  it("should listen with HALSP_DEBUG_PORT", async () => {
+    process.env.HALSP_DEBUG_PORT = "6002";
     const startup = new MicroMqttStartup();
     const client = await startup.listen();
-    process.env.IPARE_DEBUG_PORT = "";
+    process.env.HALSP_DEBUG_PORT = "";
 
     await new Promise<void>((resolve) => {
       setTimeout(() => resolve(), 500);
@@ -158,7 +158,7 @@ describe("error", () => {
 
   it("should throw error when host is invalid", async () => {
     const client = new MicroMqttStartup({
-      host: "not-exist.ipare.org",
+      host: "not-exist.halsp.org",
       connectTimeout: 500,
     });
 
@@ -175,6 +175,6 @@ describe("error", () => {
 
     await client.close(true);
 
-    expect(error.message).toBe("getaddrinfo ENOTFOUND not-exist.ipare.org");
+    expect(error.message).toBe("getaddrinfo ENOTFOUND not-exist.halsp.org");
   });
 });

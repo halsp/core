@@ -1,8 +1,8 @@
-import { HttpStartup } from "@ipare/http";
+import { HttpStartup } from "@halsp/http";
 import Koa from "koa";
 import { KoaMiddleware, KoaOptions } from "./koa.middleware";
 
-declare module "@ipare/http" {
+declare module "@halsp/http" {
   interface HttpStartup {
     koa(
       middleware: Parameters<typeof Koa.prototype.use>[0],
@@ -20,4 +20,4 @@ HttpStartup.prototype.koa = function (
 };
 
 export { Koa };
-export { koaIpare } from "./koa-ipare";
+export { koaHalsp } from "./koa-halsp";

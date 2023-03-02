@@ -1,12 +1,12 @@
 import "reflect-metadata";
-import { createInject, parseInject } from "@ipare/inject";
+import { createInject, parseInject } from "@halsp/inject";
 import {
   Dict,
   Context,
   isClass,
   isUndefined,
   ObjectConstructor,
-} from "@ipare/core";
+} from "@halsp/core";
 import { GlobalPipeItem, LambdaPipe, PipeItem } from ".";
 import { GLOBAL_PIPE_BAG } from "../constant";
 import { GlobalPipeType } from "../global-pipe-type";

@@ -1,4 +1,4 @@
-import { Context, Request } from "@ipare/core";
+import { Context, Request } from "@halsp/core";
 import { MicroStartup } from "../src";
 
 export class TestStartup extends MicroStartup {

@@ -1,4 +1,4 @@
-import { HookType, Middleware } from "@ipare/core";
+import { HookType, Middleware } from "@halsp/core";
 import { TestStartup } from "../src";
 
 class TestMiddleware extends Middleware {

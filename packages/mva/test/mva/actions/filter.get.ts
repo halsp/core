@@ -1,6 +1,6 @@
-import { Context } from "@ipare/core";
-import { UseFilters } from "@ipare/filter";
-import { Action } from "@ipare/router";
+import { Context } from "@halsp/core";
+import { UseFilters } from "@halsp/filter";
+import { Action } from "@halsp/router";
 import { ResultFilter } from "../../../src";
 
 class TestFilter implements ResultFilter {

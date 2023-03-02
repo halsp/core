@@ -1,9 +1,9 @@
-import "@ipare/inject";
-import { Startup, Context } from "@ipare/core";
+import "@halsp/inject";
+import { Startup, Context } from "@halsp/core";
 import { OPTIONS, USED } from "./constant";
 import { JwtOptions } from "./jwt-options";
 import { JwtService } from "./jwt.service";
-import { parseInject } from "@ipare/inject";
+import { parseInject } from "@halsp/inject";
 import * as jwt from "jsonwebtoken";
 
 export { JwtObject, JwtPayload, JwtToken } from "./decorators";
@@ -15,12 +15,12 @@ export {
 } from "./jwt-options";
 export { JwtService };
 
-declare module "@ipare/core" {
+declare module "@halsp/core" {
   interface Context {
     get jwtToken(): string;
   }
 }
-declare module "@ipare/core" {
+declare module "@halsp/core" {
   interface Startup {
     useJwt(options: JwtOptions): this;
     useJwtVerify(
@@ -49,9 +49,9 @@ Startup.prototype.useJwtVerify = function (
       const error = err as jwt.VerifyErrors;
       if (onError) {
         await onError(ctx, error);
-      } else if (process.env.IPARE_ENV == "http") {
+      } else if (process.env.HALSP_ENV == "http") {
         ctx["unauthorizedMsg"](error.message);
-      } else if (process.env.IPARE_ENV == "micro") {
+      } else if (process.env.HALSP_ENV == "micro") {
         ctx.res["error"] = error;
       } else {
         throw err;
@@ -68,9 +68,9 @@ Startup.prototype.useJwtExtraAuth = function (
       return await next();
     }
 
-    if (process.env.IPARE_ENV == "http") {
+    if (process.env.HALSP_ENV == "http") {
       ctx["unauthorizedMsg"]("JWT validation failed");
-    } else if (process.env.IPARE_ENV == "micro") {
+    } else if (process.env.HALSP_ENV == "micro") {
       ctx.res["error"] = "JWT validation failed";
     }
   });
@@ -93,9 +93,9 @@ Startup.prototype.useJwt = function (options: JwtOptions) {
         get: () => {
           if (options.tokenProvider) {
             return options.tokenProvider(ctx);
-          } else if (process.env.IPARE_ENV == "http") {
+          } else if (process.env.HALSP_ENV == "http") {
             return ctx.req["get"]("Authorization");
-          } else if (process.env.IPARE_ENV == "micro") {
+          } else if (process.env.HALSP_ENV == "micro") {
             return ctx.req.body ? ctx.req.body["token"] : undefined;
           } else {
             return undefined;

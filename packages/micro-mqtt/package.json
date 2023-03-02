@@ -1,17 +1,17 @@
 {
-  "name": "@ipare/micro-mqtt",
+  "name": "@halsp/micro-mqtt",
   "version": "3.2.1",
-  "description": "Ipare 微服务 MQTT 通信",
+  "description": "Halsp 微服务 MQTT 通信",
   "engines": {
     "node": ">=12.14.0"
   },
-  "homepage": "https://ipare.org",
+  "homepage": "https://halsp.org",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ipare/ipare"
+    "url": "https://github.com/halsp/core"
   },
   "keywords": [
-    "ipare",
+    "halsp",
     "micro",
     "pubsub",
     "microservice",
@@ -19,7 +19,7 @@
     "mqtt"
   ],
   "bugs": {
-    "url": "https://github.com/ipare/ipare/issues",
+    "url": "https://github.com/halsp/core/issues",
     "email": "support@hal.wang"
   },
   "private": false,
@@ -38,9 +38,9 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^3.2.1",
-    "@ipare/micro": "^3.2.1",
-    "@ipare/micro-common": "^3.2.1",
+    "@halsp/core": "^3.2.1",
+    "@halsp/micro": "^3.2.1",
+    "@halsp/micro-common": "^3.2.1",
     "mqtt": "^4.3.7"
   },
   "files": [

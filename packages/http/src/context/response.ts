@@ -1,5 +1,5 @@
 import { StatusCodes } from "http-status-codes";
-import { Response } from "@ipare/core";
+import { Response } from "@halsp/core";
 import { initResultHandler } from "./result-handler";
 import { initHeaderHandler } from "./header-handler";
 import { ReadonlyHeadersDict } from "../types";

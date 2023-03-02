@@ -1,6 +1,6 @@
 <!--intro-->
 
-`@ipare/mva` 是 `Ipare` 的 MVA 框架
+`@halsp/mva` 是 `Halsp` 的 MVA 框架
 
 - 支持 RESTful 规范
 - 根据文件系统映射访问路径，彻底解耦无关联功能

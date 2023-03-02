@@ -1,5 +1,5 @@
 import { StatusCodes } from "http-status-codes";
-import { ExceptionMessage } from "@ipare/core";
+import { ExceptionMessage } from "@halsp/core";
 import { HttpException } from "./http-exception";
 
 export class InternalServerErrorException extends HttpException {

@@ -1,22 +1,22 @@
 {
-  "name": "@ipare/validator",
+  "name": "@halsp/validator",
   "version": "3.2.1",
-  "description": "Ipare 的参数校验插件",
+  "description": "Halsp 的参数校验插件",
   "engines": {
     "node": ">=12.14.0"
   },
-  "homepage": "https://ipare.org",
+  "homepage": "https://halsp.org",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ipare/ipare"
+    "url": "https://github.com/halsp/core"
   },
   "keywords": [
-    "ipare",
+    "halsp",
     "pipe",
     "class-validator"
   ],
   "bugs": {
-    "url": "https://github.com/ipare/ipare/issues",
+    "url": "https://github.com/halsp/core/issues",
     "email": "support@hal.wang"
   },
   "private": false,
@@ -35,9 +35,9 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^3.2.1",
-    "@ipare/inject": "^3.2.1",
-    "@ipare/pipe": "^3.2.1",
+    "@halsp/core": "^3.2.1",
+    "@halsp/inject": "^3.2.1",
+    "@halsp/pipe": "^3.2.1",
     "class-validator": "^0.14.0",
     "reflect-metadata": "^0.1.13"
   },

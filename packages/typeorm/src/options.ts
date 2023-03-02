@@ -1,4 +1,4 @@
-import { InjectType } from "@ipare/inject";
+import { InjectType } from "@halsp/inject";
 import typeorm from "typeorm";
 
 export type Options = typeorm.DataSourceOptions & {

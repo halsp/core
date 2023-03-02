@@ -1,4 +1,4 @@
-import { Request, Response } from "@ipare/core";
+import { Request, Response } from "@halsp/core";
 import { TestStartup } from "./utils";
 
 beforeAll(() => {

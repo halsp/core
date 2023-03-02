@@ -1,20 +1,20 @@
 import "../src";
-import { TestHttpStartup } from "@ipare/testing/dist/http";
-import { Request } from "@ipare/core";
+import { TestHttpStartup } from "@halsp/testing/dist/http";
+import { Request } from "@halsp/core";
 
 describe("request body", () => {
   it("should parse text body", async function () {
     const res = await new TestHttpStartup()
-      .setContext(new Request().setBody("ipare"))
+      .setContext(new Request().setBody("halsp"))
       .koa(async (ctx, next) => {
-        ctx.body = ctx.ipareCtx.req.body;
+        ctx.body = ctx.halspCtx.req.body;
         ctx.status = 200;
         await next();
       })
       .run();
 
     expect(res.status).toBe(200);
-    expect(res.body).toBe("ipare");
+    expect(res.body).toBe("halsp");
     expect(res.getHeader("content-type")).toBe("text/plain; charset=utf-8");
   });
 
@@ -22,11 +22,11 @@ describe("request body", () => {
     const res = await new TestHttpStartup()
       .setContext(
         new Request().setBody({
-          ipare: "koa",
+          halsp: "koa",
         })
       )
       .koa(async (ctx, next) => {
-        ctx.body = ctx.ipareCtx.req.body;
+        ctx.body = ctx.halspCtx.req.body;
         ctx.status = 200;
         await next();
       })
@@ -34,7 +34,7 @@ describe("request body", () => {
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual({
-      ipare: "koa",
+      halsp: "koa",
     });
     expect(res.getHeader("content-type")).toBe(
       "application/json; charset=utf-8"
@@ -43,16 +43,16 @@ describe("request body", () => {
 
   it("should parse buffer body", async function () {
     const res = await new TestHttpStartup()
-      .setContext(new Request().setBody(Buffer.from("ipare", "utf-8")))
+      .setContext(new Request().setBody(Buffer.from("halsp", "utf-8")))
       .koa(async (ctx, next) => {
-        ctx.body = ctx.ipareCtx.req.body;
+        ctx.body = ctx.halspCtx.req.body;
         ctx.status = 200;
         await next();
       })
       .run();
 
     expect(res.status).toBe(200);
-    expect(res.body).toEqual(Buffer.from("ipare", "utf-8"));
+    expect(res.body).toEqual(Buffer.from("halsp", "utf-8"));
     expect(res.getHeader("content-type")).toBe("application/octet-stream");
   });
 });

@@ -1,4 +1,4 @@
-import { Action, SetActionMetadata } from "@ipare/router";
+import { Action, SetActionMetadata } from "@halsp/router";
 import { users } from "../../mock";
 
 @SetActionMetadata("roles", ["pl"])

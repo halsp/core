@@ -1,4 +1,4 @@
-import { Context } from "@ipare/core";
+import { Context } from "@halsp/core";
 import * as jwt from "jsonwebtoken";
 
 export enum JwtSecretRequestType {

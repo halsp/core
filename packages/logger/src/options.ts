@@ -1,4 +1,4 @@
-import { InjectType } from "@ipare/inject";
+import { InjectType } from "@halsp/inject";
 import winston from "winston";
 import { FileTransportOptions } from "winston/lib/winston/transports";
 

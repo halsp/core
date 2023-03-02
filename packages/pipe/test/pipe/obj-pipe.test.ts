@@ -1,5 +1,5 @@
-import { Middleware, Request } from "@ipare/core";
-import { TestHttpStartup } from "@ipare/testing/dist/http";
+import { Middleware, Request } from "@halsp/core";
+import { TestHttpStartup } from "@halsp/testing/dist/http";
 import { Body } from "../../src";
 
 class TestMiddleware extends Middleware {

@@ -1,5 +1,5 @@
 import { MicroTcpClient } from "../src";
-import { MicroTcpStartup } from "@ipare/micro-tcp";
+import { MicroTcpStartup } from "@halsp/micro-tcp";
 
 describe("client", () => {
   it("should send message and return boolean value", async () => {

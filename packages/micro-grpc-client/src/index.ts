@@ -1,11 +1,11 @@
-import { useMicroClient, InjectMicroClient } from "@ipare/micro-client";
+import { useMicroClient, InjectMicroClient } from "@halsp/micro-client";
 import { MicroGrpcClient, MicroGrpcClientOptions } from "./client";
 
 export { cliConfigHook } from "./cli-config";
 export { MicroGrpcClientOptions, MicroGrpcClient } from "./client";
-export { WriteIterator, ReadIterator } from "@ipare/micro-common";
+export { WriteIterator, ReadIterator } from "@halsp/micro-common";
 
-declare module "@ipare/core" {
+declare module "@halsp/core" {
   interface Startup {
     useMicroGrpc(options?: MicroGrpcClientOptions & InjectMicroClient): this;
   }

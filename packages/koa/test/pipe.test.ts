@@ -1,5 +1,5 @@
 import "../src";
-import { TestHttpStartup } from "@ipare/testing/dist/http";
+import { TestHttpStartup } from "@halsp/testing/dist/http";
 import { TransResponse } from "../src/trans-response";
 
 test("middleware pipe", async function () {
@@ -9,7 +9,7 @@ test("middleware pipe", async function () {
       await next();
     })
     .koa(async (ctx, next) => {
-      ctx.body = "ipare";
+      ctx.body = "halsp";
       ctx.set("h", "h");
       await next();
     })
@@ -31,7 +31,7 @@ test("middleware pipe", async function () {
     })
     .run();
 
-  expect(res.body).toBe("ipareaaa");
+  expect(res.body).toBe("halspaaa");
   expect(res.getHeader("h")).toBe("hhhh");
   expect(res.status).toBe(201);
 });
@@ -42,7 +42,7 @@ test("koa break", async function () {
       await next();
     })
     .koa(async (ctx) => {
-      ctx.body = "ipare";
+      ctx.body = "halsp";
       ctx.status = 201;
       ctx.set("h", "h");
     })
@@ -53,7 +53,7 @@ test("koa break", async function () {
     })
     .run();
 
-  expect(res.body).toBe("ipare");
+  expect(res.body).toBe("halsp");
   expect(res.getHeader("h")).toBe("h");
   expect(res.status).toBe(201);
 });

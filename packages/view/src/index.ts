@@ -1,9 +1,9 @@
-import "@ipare/core";
-import { Startup } from "@ipare/core";
+import "@halsp/core";
+import { Startup } from "@halsp/core";
 import { ViewOptions } from "./view-options";
 import { useView } from "./user-view";
 
-declare module "@ipare/core" {
+declare module "@halsp/core" {
   interface Startup {
     useView(options?: ViewOptions): this;
   }

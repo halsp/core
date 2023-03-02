@@ -1,4 +1,4 @@
-import { Context } from "@ipare/core";
+import { Context } from "@halsp/core";
 import { TestMicroNatsStartup } from "../src/micro-nats";
 
 describe("micro-nats", () => {

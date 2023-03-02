@@ -1,4 +1,4 @@
-import { Context, isNil, isObject, Request, Response } from "@ipare/core";
+import { Context, isNil, isObject, Request, Response } from "@halsp/core";
 import { MicroException } from "./exception";
 
 let inited = false;

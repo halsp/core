@@ -1,2 +1,2 @@
-export const USED = "__@ipare/mva_used__";
-export const ERROR_CODES = "__@ipare/mva_errorCodes__";
+export const USED = "__@halsp/mva_used__";
+export const ERROR_CODES = "__@halsp/mva_errorCodes__";

@@ -12,7 +12,7 @@ function getInstallIntro(name: string) {
 ## 安装
 
 \`\`\`
-npm install @ipare/${name}
+npm install @halsp/${name}
 \`\`\`
   `;
 }

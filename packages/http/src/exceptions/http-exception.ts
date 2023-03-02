@@ -1,9 +1,9 @@
 import { getReasonPhrase, StatusCodes } from "http-status-codes";
 import { HeaderHandler, initHeaderHandler } from "../context/header-handler";
-import { ExceptionMessage, IpareException, isString } from "@ipare/core";
+import { ExceptionMessage, HalspException, isString } from "@halsp/core";
 import { HeadersDict } from "../types";
 
-export class HttpException extends IpareException {
+export class HttpException extends HalspException {
   constructor(
     public readonly status: StatusCodes,
     error?: string | ExceptionMessage

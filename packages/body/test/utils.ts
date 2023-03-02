@@ -1,10 +1,10 @@
 import { BodyPraserStartup } from "../src";
 import * as http from "http";
-import { Context, Dict, Request } from "@ipare/core";
-import { NumericalHeadersDict } from "@ipare/http";
+import { Context, Dict, Request } from "@halsp/core";
+import { NumericalHeadersDict } from "@halsp/http";
 import qs from "qs";
 
-declare module "@ipare/core" {
+declare module "@halsp/core" {
   interface Context {
     get reqStream(): http.IncomingMessage;
     get resStream(): http.ServerResponse;

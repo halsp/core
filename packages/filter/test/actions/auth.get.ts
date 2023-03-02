@@ -1,5 +1,5 @@
-import { Context } from "@ipare/core";
-import { Action, ActionMetadata } from "@ipare/router";
+import { Context } from "@halsp/core";
+import { Action, ActionMetadata } from "@halsp/router";
 import { AuthorizationFilter, UseFilters } from "../../src";
 
 const Admin = ActionMetadata("admin", "true");

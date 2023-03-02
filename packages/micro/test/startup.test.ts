@@ -1,13 +1,13 @@
-import { Context, Request } from "@ipare/core";
-import { ClientPacket } from "@ipare/micro-common";
+import { Context, Request } from "@halsp/core";
+import { ClientPacket } from "@halsp/micro-common";
 import { MicroException, MicroStartup } from "../src";
 import { TestStartup } from "./utils";
 
 describe("startup", () => {
   it("should set env", () => {
-    process.env.IPARE_ENV = "" as any;
+    process.env.HALSP_ENV = "" as any;
     new TestStartup();
-    expect(process.env.IPARE_ENV).toBe("micro");
+    expect(process.env.HALSP_ENV).toBe("micro");
   });
 
   it("should set error if throw MicroException", async () => {

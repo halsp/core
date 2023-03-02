@@ -1,4 +1,4 @@
-import { Response, Request } from "@ipare/core";
+import { Response, Request } from "@halsp/core";
 import { TestHttpStartup, TestNativeStartup } from "../src/http";
 new TestHttpStartup();
 

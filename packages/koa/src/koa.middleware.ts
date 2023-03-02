@@ -1,11 +1,11 @@
-import { Middleware } from "@ipare/core";
+import { Middleware } from "@halsp/core";
 import Koa from "koa";
 import compose from "koa-compose";
 import { KOA_MIDDLEWARES_BAG } from "./constant";
 import {
   createContext,
-  ipareResToKoaRes,
-  koaResToIpareRes,
+  halspResToKoaRes,
+  koaResToHalspRes,
 } from "./res-transform";
 
 export interface KoaOptions {
@@ -24,7 +24,7 @@ export class KoaMiddleware extends Middleware {
     super();
   }
 
-  // step: ipare -> koa -> ipare ->koa ->ipare
+  // step: halsp -> koa -> halsp ->koa ->halsp
   async invoke() {
     const middlewares =
       this.ctx.get<Parameters<typeof Koa.prototype.use>[0][]>(
@@ -40,7 +40,7 @@ export class KoaMiddleware extends Middleware {
 
     const app = new Koa(this.options);
     middlewares.splice(0, 0, async (koaCtx, next) => {
-      koaCtx.status = koaCtx.ipareInStatus;
+      koaCtx.status = koaCtx.halspInStatus;
       await next();
     });
     middlewares.forEach((md) => app.use(md));
@@ -49,18 +49,18 @@ export class KoaMiddleware extends Middleware {
     if (!app.listenerCount("error")) app.on("error", app.onerror);
 
     app.use(async (koaCtx) => {
-      await koaResToIpareRes(koaCtx, koaCtx.ipareCtx.res); // step 2. koa -> ipare
-      await koaCtx.ipareNext();
-      await ipareResToKoaRes(koaCtx.ipareCtx.res, koaCtx); // step 3. ipare-> koa
+      await koaResToHalspRes(koaCtx, koaCtx.halspCtx.res); // step 2. koa -> halsp
+      await koaCtx.halspNext();
+      await halspResToKoaRes(koaCtx.halspCtx.res, koaCtx); // step 3. halsp-> koa
     });
 
-    const koaCtx = await createContext(app, this.ctx); // step 1. ipare-> koa
-    koaCtx.ipareNext = this.next.bind(this);
-    koaCtx.ipareCtx = this.ctx;
+    const koaCtx = await createContext(app, this.ctx); // step 1. halsp-> koa
+    koaCtx.halspNext = this.next.bind(this);
+    koaCtx.halspCtx = this.ctx;
 
-    koaCtx.ipareInStatus = koaCtx.status; // status will be set to 404 in 'handleRequest'
+    koaCtx.halspInStatus = koaCtx.status; // status will be set to 404 in 'handleRequest'
 
     await (app as any).handleRequest(koaCtx, fn);
-    await koaResToIpareRes(koaCtx, this.ctx.res); // step 4. koa -> ipare
+    await koaResToHalspRes(koaCtx, this.ctx.res); // step 4. koa -> halsp
   }
 }

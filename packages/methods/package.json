@@ -1,21 +1,21 @@
 {
-  "name": "@ipare/methods",
+  "name": "@halsp/methods",
   "version": "3.2.1",
-  "description": "Ipare http methods",
+  "description": "Halsp http methods",
   "engines": {
     "node": ">=12.14.0"
   },
-  "homepage": "https://ipare.org",
+  "homepage": "https://halsp.org",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ipare/ipare"
+    "url": "https://github.com/halsp/core"
   },
   "keywords": [
-    "ipare",
+    "halsp",
     "http"
   ],
   "bugs": {
-    "url": "https://github.com/ipare/ipare/issues",
+    "url": "https://github.com/halsp/core/issues",
     "email": "support@hal.wang"
   },
   "private": false,
@@ -34,7 +34,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^3.2.1"
+    "@halsp/core": "^3.2.1"
   },
   "files": [
     "/dist/*",

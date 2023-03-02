@@ -1,6 +1,6 @@
-import { Dict } from "@ipare/core";
+import { Dict } from "@halsp/core";
 
-declare module "@ipare/core" {
+declare module "@halsp/core" {
   interface Context {
     get lambdaContext(): Dict;
     get lambdaEvent(): Dict;

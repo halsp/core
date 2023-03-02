@@ -1,5 +1,5 @@
-import { Context, isString, Request, Response } from "@ipare/core";
-import { BodyPraserStartup } from "@ipare/body";
+import { Context, isString, Request, Response } from "@halsp/core";
+import { BodyPraserStartup } from "@halsp/body";
 import { Stream } from "stream";
 import { AliReq } from "./ali-req";
 import { AliRes } from "./ali-res";
@@ -49,31 +49,31 @@ export class AlifcStartup extends BodyPraserStartup {
       get: () => aliRes,
     });
 
-    const ipareRes = await this.invoke(ctx);
-    aliRes.statusCode = ipareRes.status;
-    Object.keys(ipareRes.headers)
-      .filter((key) => !!ipareRes.headers[key])
+    const halspRes = await this.invoke(ctx);
+    aliRes.statusCode = halspRes.status;
+    Object.keys(halspRes.headers)
+      .filter((key) => !!halspRes.headers[key])
       .forEach((key) => {
-        aliRes.setHeader(key, ipareRes.headers[key] as string);
+        aliRes.setHeader(key, halspRes.headers[key] as string);
       });
-    await this.#writeBody(ipareRes, aliRes);
+    await this.#writeBody(halspRes, aliRes);
     return;
   }
 
-  async #writeBody(ipareRes: Response, aliRes: AliRes) {
-    if (!ipareRes.body) {
+  async #writeBody(halspRes: Response, aliRes: AliRes) {
+    if (!halspRes.body) {
       aliRes.send("");
       return;
     }
 
-    if (ipareRes.body instanceof Stream) {
-      aliRes.send(await this.#streamToBuffer(ipareRes.body));
-    } else if (Buffer.isBuffer(ipareRes.body)) {
-      aliRes.send(ipareRes.body);
-    } else if (isString(ipareRes.body)) {
-      aliRes.send(ipareRes.body);
+    if (halspRes.body instanceof Stream) {
+      aliRes.send(await this.#streamToBuffer(halspRes.body));
+    } else if (Buffer.isBuffer(halspRes.body)) {
+      aliRes.send(halspRes.body);
+    } else if (isString(halspRes.body)) {
+      aliRes.send(halspRes.body);
     } else {
-      aliRes.send(JSON.stringify(ipareRes.body));
+      aliRes.send(JSON.stringify(halspRes.body));
     }
   }
 

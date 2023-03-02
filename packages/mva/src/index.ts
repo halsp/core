@@ -1,17 +1,17 @@
-import { Context, HookType } from "@ipare/core";
-import "@ipare/view";
-import "@ipare/router";
+import { Context, HookType } from "@halsp/core";
+import "@halsp/view";
+import "@halsp/router";
 import { MvaOptions, CodeType } from "./mva-options";
 import { ERROR_CODES, USED } from "./constant";
-import { execFilters } from "@ipare/filter";
-import { Action } from "@ipare/router";
-import { HttpException, HttpStartup } from "@ipare/http";
-import { HttpMethods } from "@ipare/methods";
+import { execFilters } from "@halsp/filter";
+import { Action } from "@halsp/router";
+import { HttpException, HttpStartup } from "@halsp/http";
+import { HttpMethods } from "@halsp/methods";
 
 export { MvaOptions };
 export { ResultFilter } from "./result.filter";
 
-declare module "@ipare/http" {
+declare module "@halsp/http" {
   interface HttpStartup {
     useMva(options?: MvaOptions): this;
     useErrorPage(...codes: CodeType[]): this;

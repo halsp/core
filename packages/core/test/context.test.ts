@@ -54,43 +54,43 @@ describe("req.path", () => {
   });
 
   it("should set path with https", async () => {
-    const req = new Request().setPath("https://ipare.org/a/b");
+    const req = new Request().setPath("https://halsp.org/a/b");
     expect(req.path).toBe("a/b");
     expect(req.originalPath).toBe("/a/b");
   });
 
   it("should set empty path with https", async () => {
-    const req = new Request().setPath("https://ipare.org");
+    const req = new Request().setPath("https://halsp.org");
     expect(req.path).toBe("");
     expect(req.originalPath).toBe("");
   });
 
   it("should set empty path with https and end with /", async () => {
-    const req = new Request().setPath("https://ipare.org/");
+    const req = new Request().setPath("https://halsp.org/");
     expect(req.path).toBe("");
     expect(req.originalPath).toBe("/");
   });
 
   it("should set path with http", async () => {
-    const req = new Request().setPath("http://ipare.org/a/b");
+    const req = new Request().setPath("http://halsp.org/a/b");
     expect(req.path).toBe("a/b");
     expect(req.originalPath).toBe("/a/b");
   });
 
   it("should set path with http and port", async () => {
-    const req = new Request().setPath("http://ipare.org:8080/a/b");
+    const req = new Request().setPath("http://halsp.org:8080/a/b");
     expect(req.path).toBe("a/b");
     expect(req.originalPath).toBe("/a/b");
   });
 
   it("should set path with http,port,query", async () => {
-    const req = new Request().setPath("http://ipare.org:8080/a/b?c=1");
+    const req = new Request().setPath("http://halsp.org:8080/a/b?c=1");
     expect(req.path).toBe("a/b");
     expect(req.originalPath).toBe("/a/b");
   });
 
   it("should set path with http:/", async () => {
-    const req = new Request().setPath("http:/ipare.org/a/b");
+    const req = new Request().setPath("http:/halsp.org/a/b");
     expect(req.path).toBe("a/b");
     expect(req.originalPath).toBe("/a/b");
   });

@@ -1,2 +1,2 @@
-export const BASE_USED = "@ipare/env/baseUsed";
-export const VERSION = "@ipare/env/version";
+export const BASE_USED = "@halsp/env/baseUsed";
+export const VERSION = "@halsp/env/version";

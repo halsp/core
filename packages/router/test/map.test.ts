@@ -1,4 +1,4 @@
-import { TestHttpStartup } from "@ipare/testing/dist/http";
+import { TestHttpStartup } from "@halsp/testing/dist/http";
 import MapCreater from "../src/map/map-creater";
 import "./utils-http";
 import MapParser from "../src/map/map-parser";

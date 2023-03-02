@@ -1,8 +1,8 @@
-import { NativeStartup } from "@ipare/native";
+import { NativeStartup } from "@halsp/native";
 import chalk from "chalk";
 import "../src";
-import "@ipare/router";
-import { TEST_ACTION_DIR } from "@ipare/router/dist/constant";
+import "@halsp/router";
+import { TEST_ACTION_DIR } from "@halsp/router/dist/constant";
 
 async function bootstrap() {
   // const startup = new NativeStartup()

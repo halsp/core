@@ -1,4 +1,4 @@
-import { Context } from "@ipare/core";
+import { Context } from "@halsp/core";
 import { TestMicroMqttStartup } from "../src/micro-mqtt";
 
 describe("micro-mqtt", () => {

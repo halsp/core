@@ -1,6 +1,6 @@
 import * as net from "net";
 
-declare module "@ipare/core" {
+declare module "@halsp/core" {
   interface Context {
     get socket(): net.Socket;
   }

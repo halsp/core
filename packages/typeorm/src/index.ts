@@ -1,6 +1,6 @@
-import "@ipare/core";
-import { Context, Startup } from "@ipare/core";
-import { IService, parseInject } from "@ipare/inject";
+import "@halsp/core";
+import { Context, Startup } from "@halsp/core";
+import { IService, parseInject } from "@halsp/inject";
 import path from "path";
 import * as typeorm from "typeorm";
 import { OPTIONS_IDENTITY } from "./constant";
@@ -8,7 +8,7 @@ import { Options } from "./options";
 
 export type TypeormConnection = typeorm.DataSource;
 
-declare module "@ipare/core" {
+declare module "@halsp/core" {
   interface Startup {
     useTypeorm(options: Options): this;
   }

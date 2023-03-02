@@ -1,6 +1,6 @@
-import { Context } from "@ipare/core";
-import { parseInject } from "@ipare/inject";
-import { TestHttpStartup } from "@ipare/testing/dist/http";
+import { Context } from "@halsp/core";
+import { parseInject } from "@halsp/inject";
+import { TestHttpStartup } from "@halsp/testing/dist/http";
 import "../src";
 import { Ctx } from "../src";
 import { expectBody, getTestRequest } from "./TestMiddleware";

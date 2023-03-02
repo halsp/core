@@ -1,4 +1,4 @@
-import { BodyPraserStartup } from "@ipare/body";
+import { BodyPraserStartup } from "@halsp/body";
 import * as net from "net";
 import * as http from "http";
 import * as https from "https";
@@ -11,8 +11,8 @@ import {
   closeServer,
   dynamicListen,
   logAddress,
-} from "@ipare/core";
-import { NumericalHeadersDict } from "@ipare/http";
+} from "@halsp/core";
+import { NumericalHeadersDict } from "@halsp/http";
 import qs from "qs";
 import { Stream } from "stream";
 
@@ -140,29 +140,29 @@ export class NativeStartup<
     }
   };
 
-  #writeHead(ipareRes: Response, resStream: http.ServerResponse) {
+  #writeHead(halspRes: Response, resStream: http.ServerResponse) {
     if (resStream.headersSent) return;
-    Object.keys(ipareRes.headers)
-      .filter((key) => !!ipareRes.headers[key])
+    Object.keys(halspRes.headers)
+      .filter((key) => !!halspRes.headers[key])
       .forEach((key) => {
-        resStream.setHeader(key, ipareRes.headers[key] as string | string[]);
+        resStream.setHeader(key, halspRes.headers[key] as string | string[]);
       });
   }
 
-  #writeBody(ipareRes: Response, resStream: http.ServerResponse) {
-    if (!ipareRes.body) {
+  #writeBody(halspRes: Response, resStream: http.ServerResponse) {
+    if (!halspRes.body) {
       resStream.end();
       return;
     }
 
-    if (ipareRes.body instanceof Stream) {
-      ipareRes.body.pipe(resStream);
-    } else if (Buffer.isBuffer(ipareRes.body)) {
-      resStream.end(ipareRes.body);
-    } else if (isString(ipareRes.body)) {
-      resStream.end(ipareRes.body);
+    if (halspRes.body instanceof Stream) {
+      halspRes.body.pipe(resStream);
+    } else if (Buffer.isBuffer(halspRes.body)) {
+      resStream.end(halspRes.body);
+    } else if (isString(halspRes.body)) {
+      resStream.end(halspRes.body);
     } else {
-      resStream.end(JSON.stringify(ipareRes.body));
+      resStream.end(JSON.stringify(halspRes.body));
     }
   }
 

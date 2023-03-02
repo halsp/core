@@ -1,7 +1,7 @@
-import { Context } from "@ipare/core";
+import { Context } from "@halsp/core";
 import { InjectType, parseInject } from "../src";
 import "../src";
-import { TestStartup } from "@ipare/testing";
+import { TestStartup } from "@halsp/testing";
 
 export class Service extends Object {
   public count = 0;

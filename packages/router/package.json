@@ -1,22 +1,22 @@
 {
-  "name": "@ipare/router",
+  "name": "@halsp/router",
   "version": "3.2.1",
   "engines": {
     "node": ">=12.14.0"
   },
-  "description": "Ipare 的路由插件",
-  "homepage": "https://ipare.org",
+  "description": "Halsp 的路由插件",
+  "homepage": "https://halsp.org",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ipare/ipare"
+    "url": "https://github.com/halsp/core"
   },
   "keywords": [
-    "ipare",
+    "halsp",
     "restful",
     "router"
   ],
   "bugs": {
-    "url": "https://github.com/ipare/ipare/issues",
+    "url": "https://github.com/halsp/core/issues",
     "email": "support@hal.wang"
   },
   "private": false,
@@ -35,8 +35,8 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@ipare/core": "^3.2.1",
-    "@ipare/methods": "^3.2.1",
+    "@halsp/core": "^3.2.1",
+    "@halsp/methods": "^3.2.1",
     "reflect-metadata": "^0.1.13"
   },
   "files": [

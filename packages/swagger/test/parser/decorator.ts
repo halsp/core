@@ -1,6 +1,6 @@
-import { Body, Header, Query } from "@ipare/pipe";
-import { Action, HttpDelete, HttpPost, HttpPut } from "@ipare/router";
-import { V } from "@ipare/validator";
+import { Body, Header, Query } from "@halsp/pipe";
+import { Action, HttpDelete, HttpPost, HttpPut } from "@halsp/router";
+import { V } from "@halsp/validator";
 
 class TestClassDto {}
 
@@ -79,14 +79,14 @@ export class TestDecoratorQueryDto {
 @HttpPost("test")
 @V.Tags("test")
 @V.ExternalDocs({
-  url: "https://ipare.org",
+  url: "https://halsp.org",
 })
   .Description("desc")
   .OperationId("opt-id")
   .Summary("test summary")
   .Security({ jwt: ["123", "456"] })
 @V.Servers({
-  url: "https://ipare.org",
+  url: "https://halsp.org",
   description: "servers",
 })
 export class TestDecorator extends Action {

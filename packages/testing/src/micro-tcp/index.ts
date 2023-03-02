@@ -1,5 +1,5 @@
-import { Context, Request, Response } from "@ipare/core";
-import { MicroTcpOptions, MicroTcpStartup } from "@ipare/micro-tcp";
+import { Context, Request, Response } from "@halsp/core";
+import { MicroTcpOptions, MicroTcpStartup } from "@halsp/micro-tcp";
 import { initBaseTestStartup, ITestStartup } from "../test-startup";
 
 export class TestMicroTcpStartup extends MicroTcpStartup {

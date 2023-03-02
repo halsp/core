@@ -1,6 +1,6 @@
-import { Context } from "@ipare/core";
-import { RouterOptions } from "@ipare/router";
-import { ViewOptions } from "@ipare/view";
+import { Context } from "@halsp/core";
+import { RouterOptions } from "@halsp/router";
+import { ViewOptions } from "@halsp/view";
 
 export type CodeType =
   | { code: number; path?: string; replace?: number }

@@ -1,7 +1,7 @@
-import "@ipare/router";
-import "@ipare/static";
-import { normalizePath } from "@ipare/core";
-import { HttpStartup } from "@ipare/http";
+import "@halsp/router";
+import "@halsp/static";
+import { normalizePath } from "@halsp/core";
+import { HttpStartup } from "@halsp/http";
 import { USED } from "./constant";
 import { SwaggerOptions } from "./options";
 import "./validator.decorator";
@@ -9,12 +9,12 @@ import { SwaggerMiddlware } from "./swagger.middleware";
 import { getAbsoluteFSPath } from "swagger-ui-dist";
 import { ArrayItemType } from "./parser/schema-dict";
 
-declare module "@ipare/core" {
+declare module "@halsp/core" {
   interface Context {
     get swaggerOptions(): SwaggerOptions;
   }
 }
-declare module "@ipare/http" {
+declare module "@halsp/http" {
   interface HttpStartup {
     useSwagger(options?: SwaggerOptions): this;
   }

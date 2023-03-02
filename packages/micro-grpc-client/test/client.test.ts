@@ -1,4 +1,4 @@
-import { runin } from "@ipare/testing";
+import { runin } from "@halsp/testing";
 import { MicroGrpcClient } from "../src";
 
 describe("client", () => {

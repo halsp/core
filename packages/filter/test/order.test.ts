@@ -1,10 +1,10 @@
-import { Context } from "@ipare/core";
-import { Request } from "@ipare/core";
+import { Context } from "@halsp/core";
+import { Request } from "@halsp/core";
 import "../src";
 import { ActionFilter, UseFilters } from "../src";
-import "@ipare/inject";
-import { Action } from "@ipare/router";
-import { TestHttpStartup } from "@ipare/testing/dist/http";
+import "@halsp/inject";
+import { Action } from "@halsp/router";
+import { TestHttpStartup } from "@halsp/testing/dist/http";
 
 export class TestActionFilter1 implements ActionFilter {
   onActionExecuted(ctx: Context): void | Promise<void> {
