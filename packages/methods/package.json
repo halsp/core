@@ -1,6 +1,6 @@
 {
   "name": "@halsp/methods",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Halsp http methods",
   "engines": {
     "node": ">=12.14.0"
@@ -34,7 +34,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/common": "^1.0.0"
+    "@halsp/common": "^1.0.1"
   },
   "files": [
     "/dist/*",
