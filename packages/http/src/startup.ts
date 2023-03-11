@@ -1,25 +1,29 @@
 import { Stream } from "stream";
 import * as mime from "mime-types";
-import { Context, isString, Request, Response, Startup } from "@halsp/common";
-import { initCatchError, initContext } from "./context";
+import { isString, Startup } from "@halsp/common";
+import { HttpContext, HttpRequest, HttpResponse } from "./context";
 
-export abstract class HttpStartup extends Startup {
+export abstract class HttpStartup extends Startup<
+  HttpRequest,
+  HttpResponse,
+  HttpContext
+> {
   constructor() {
     super();
-    process.env.HALSP_ENV = "http";
-    initContext();
+    process.env.IPARE_ENV = "http";
   }
 
-  protected async invoke(ctx: Request | Context): Promise<Response> {
-    ctx = ctx instanceof Request ? new Context(ctx) : ctx;
-    initCatchError(ctx);
+  protected async invoke(
+    ctx: HttpRequest | HttpContext
+  ): Promise<HttpResponse> {
+    ctx = ctx instanceof HttpRequest ? new HttpContext(ctx) : ctx;
 
-    const res = await super.invoke(ctx);
+    const res = (await super.invoke(ctx)) as HttpResponse;
     this.#setType(res);
     return res;
   }
 
-  #setType(res: Response) {
+  #setType(res: HttpResponse) {
     const body = res.body;
 
     if (!body) {

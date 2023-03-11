@@ -1,8 +1,3 @@
-import { Dict, ReadonlyDict } from "@halsp/common";
-import { StatusCodes } from "http-status-codes";
-import { ResultHandler, HeaderHandler } from "./context";
-import { ReadonlyHeadersDict } from "./types";
-
 export {
   StatusCodes,
   getStatusCode,
@@ -44,36 +39,13 @@ export {
 } from "./types";
 
 export { HttpStartup } from "./startup";
-
 export {
-  initHeaderHandler,
+  HttpRequest,
+  HttpResponse,
+  HttpContext,
+  ResultHandler,
   initResultHandler,
   HeaderHandler,
-  ResultHandler,
+  initHeaderHandler,
 } from "./context";
-
-declare module "@halsp/common" {
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface Middleware extends ResultHandler, HeaderHandler {}
-
-  interface Request extends HeaderHandler {
-    get headers(): ReadonlyHeadersDict;
-
-    get overrideMethod(): string | undefined;
-    get method(): string;
-    setMethod(method: string): this;
-
-    get query(): ReadonlyDict<string>;
-    setQuery(key: string, value: string): this;
-    setQuery(query: Dict<string>): this;
-  }
-
-  interface Response extends ResultHandler, HeaderHandler {
-    get isSuccess(): boolean;
-    get headers(): ReadonlyHeadersDict;
-
-    get status(): number;
-    set status(val: number);
-    setStatus(status: StatusCodes): this;
-  }
-}
+export { HttpMiddleware } from "./middleware";

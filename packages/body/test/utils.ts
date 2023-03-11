@@ -1,11 +1,11 @@
 import { BodyPraserStartup } from "../src";
 import * as http from "http";
-import { Context, Dict, Request } from "@halsp/common";
-import { NumericalHeadersDict } from "@halsp/http";
+import { Dict } from "@halsp/common";
+import { HttpContext, HttpRequest, NumericalHeadersDict } from "@halsp/http";
 import qs from "qs";
 
-declare module "@halsp/common" {
-  interface Context {
+declare module "@halsp/http" {
+  interface HttpContext {
     get reqStream(): http.IncomingMessage;
     get resStream(): http.ServerResponse;
   }
@@ -27,12 +27,12 @@ export class TestBodyParserStartup extends BodyPraserStartup {
   ): Promise<void> => {
     const pathname = (reqStream.url as string).split("?")[0];
     const query = qs.parse((reqStream.url as string).split("?")[1] ?? "");
-    const req = new Request()
+    const req = new HttpRequest()
       .setPath(pathname)
       .setMethod(reqStream.method as string)
       .setQuery(query as Dict<string>)
       .setHeaders(reqStream.headers as NumericalHeadersDict);
-    const ctx = new Context(req);
+    const ctx = new HttpContext(req);
     Object.defineProperty(ctx, "resStream", {
       get: () => resStream,
     });

@@ -1,8 +1,10 @@
-import { Context, Middleware, Response } from "@halsp/common";
 import {
   getReasonPhrase,
   getStatusCode,
   HeadersDict,
+  HttpContext,
+  HttpMiddleware,
+  HttpResponse,
   ReasonPhrases,
   StatusCodes,
 } from "../src";
@@ -13,7 +15,7 @@ beforeAll(() => {
 });
 
 test("setHeader", async () => {
-  const req = new Response()
+  const req = new HttpResponse()
     .setHeader("h1", "1")
     .setHeader("h2", "2")
     .setHeader("h3", "3")
@@ -23,7 +25,7 @@ test("setHeader", async () => {
 });
 
 test("setHeaders", async () => {
-  const req = new Response().setHeaders({
+  const req = new HttpResponse().setHeaders({
     h1: "1",
     h2: "2",
     h3: "3",
@@ -32,7 +34,7 @@ test("setHeaders", async () => {
 });
 
 test("removeHeader", async () => {
-  const res = new Response()
+  const res = new HttpResponse()
     .setHeader("h1", "1")
     .setHeader("h2", "2")
     .setHeader("h3", "3")
@@ -52,7 +54,7 @@ function expectHeaders(headers: HeadersDict) {
 }
 
 test("array headers", async () => {
-  const res = new Response().setHeaders({
+  const res = new HttpResponse().setHeaders({
     h1: 1,
     h2: ["2.1", 2.2],
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -64,11 +66,23 @@ test("array headers", async () => {
 });
 
 test("append header", async () => {
-  const res = new Response()
+  const res = new HttpResponse()
     .appendHeader("h1", 1)
     .appendHeader("h1", "2")
     .appendHeader("h1", [3, "4"]);
   expect(res.headers.h1).toEqual(["1", "2", "3", "4"]);
+});
+
+it("shoult init res with headers", async () => {
+  const res = new HttpResponse(undefined, undefined, {
+    h1: 1,
+    h2: ["2.1", 2.2],
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    h3: undefined as any,
+  });
+  expect(res.headers.h1).toBe("1");
+  expect(res.headers.h2).toEqual(["2.1", "2.2"]);
+  expect(res.headers.h3).toBeUndefined();
 });
 
 test("status code", () => {
@@ -79,7 +93,7 @@ test("status code", () => {
 });
 
 it("should get from md.req and set to md.res", async () => {
-  class TestMiddleware extends Middleware {
+  class TestMiddleware extends HttpMiddleware {
     invoke(): void | Promise<void> {
       this.set("h1", 1);
       this.response.set("h2", 2);
@@ -94,7 +108,7 @@ it("should get from md.req and set to md.res", async () => {
 });
 
 it("should append to ctx.res", async () => {
-  const ctx = new Context();
+  const ctx = new HttpContext();
   ctx.res.append("h1", 1);
   ctx.res.append("h1", 2);
 
@@ -102,7 +116,7 @@ it("should append to ctx.res", async () => {
 });
 
 it("should remove to ctx.res", async () => {
-  const ctx = new Context();
+  const ctx = new HttpContext();
   ctx.res.set("h1", 1);
   expect(ctx.response.get("h1")).toBe("1");
   ctx.res.remove("h1");
@@ -110,7 +124,7 @@ it("should remove to ctx.res", async () => {
 });
 
 it("should has from ctx.req", async () => {
-  const ctx = new Context();
+  const ctx = new HttpContext();
   ctx.req.set("h1", 1);
 
   expect(ctx.req.has("h1")).toBeTruthy();

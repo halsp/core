@@ -1,5 +1,5 @@
-import { Context, ReadonlyDict } from "@halsp/common";
-import "../../src";
+import { ReadonlyDict } from "@halsp/common";
+import { HttpContext } from "../../src";
 import { TestStartup } from "../test-startup";
 
 beforeAll(() => {
@@ -7,7 +7,7 @@ beforeAll(() => {
 });
 
 test("request setQuery", async () => {
-  const req = new Context().req
+  const req = new HttpContext().req
     .setQuery("p1", "1")
     .setQuery("p2", "2")
     .setQuery("p3", "3")
@@ -17,7 +17,7 @@ test("request setQuery", async () => {
 });
 
 test("request setQuery", async () => {
-  const req = new Context().req.setQuery({
+  const req = new HttpContext().req.setQuery({
     p1: "1",
     p2: "2",
     p3: "3",

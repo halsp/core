@@ -1,6 +1,7 @@
 import { StatusCodes, getReasonPhrase } from "http-status-codes";
 import { HttpErrorMessage } from "./http-error-message";
-import { isString, Response } from "@halsp/common";
+import { isString } from "@halsp/common";
+import { HttpResponse } from "./response";
 
 export interface ResultHandler {
   // 200
@@ -112,7 +113,7 @@ export interface ResultHandler {
 
 export function initResultHandler<T extends ResultHandler>(
   target: T,
-  getRes: (this: any) => Response
+  getRes: (this: any) => HttpResponse
 ) {
   function setResult(this: any, status: StatusCodes, body?: unknown): T {
     const res = getRes.bind(this)();

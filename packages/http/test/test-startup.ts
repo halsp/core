@@ -1,26 +1,13 @@
-import { Response, Request, Context } from "@halsp/common";
-import { HttpStartup } from "../src";
-import { initCatchError } from "../src/context";
-
-declare module "@halsp/common" {
-  interface Context {
-    initCatchError(): this;
-  }
-}
+import { HttpContext, HttpRequest, HttpResponse, HttpStartup } from "../src";
 
 export class TestStartup extends HttpStartup {
-  readonly #req?: Request;
-  constructor(req?: Request) {
+  readonly #req?: HttpRequest;
+  constructor(req?: HttpRequest) {
     super();
     this.#req = req;
-
-    Context.prototype.initCatchError = function () {
-      initCatchError(this);
-      return this;
-    };
   }
 
-  async run(): Promise<Response> {
-    return await super.invoke(this.#req ?? new Context());
+  async run(): Promise<HttpResponse> {
+    return await super.invoke(this.#req ?? new HttpContext());
   }
 }

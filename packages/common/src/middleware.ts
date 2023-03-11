@@ -1,18 +1,14 @@
 import * as honion from "honion";
-import { Context } from "./context";
+import { Context, Request, Response } from "./context";
 
-export abstract class Middleware extends honion.Middleware<Context> {
-  get req() {
-    return this.ctx.req;
-  }
-  get request() {
-    return this.ctx.req;
-  }
-  get res() {
-    return this.ctx.res;
-  }
-  get response() {
-    return this.ctx.response;
-  }
-}
-export class ComposeMiddleware extends honion.ComposeMiddleware<Context> {}
+export abstract class Middleware<
+  TReq extends Request = Request,
+  TRes extends Response = Response,
+  TC extends Context<TReq, TRes> = Context<TReq, TRes>
+> extends honion.Middleware<TC> {}
+
+export class ComposeMiddleware<
+  TReq extends Request = Request,
+  TRes extends Response = Response,
+  TC extends Context<TReq, TRes> = Context<TReq, TRes>
+> extends honion.ComposeMiddleware<TC> {}

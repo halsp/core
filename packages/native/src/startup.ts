@@ -3,16 +3,18 @@ import * as net from "net";
 import * as http from "http";
 import * as https from "https";
 import {
-  Request,
-  Response,
   Dict,
   isString,
-  Context,
   closeServer,
   dynamicListen,
   logAddress,
 } from "@halsp/common";
-import { NumericalHeadersDict } from "@halsp/http";
+import {
+  HttpContext,
+  HttpRequest,
+  HttpResponse,
+  NumericalHeadersDict,
+} from "@halsp/http";
 import qs from "qs";
 import { Stream } from "stream";
 
@@ -114,8 +116,8 @@ export class NativeStartup<
   ): Promise<void> => {
     const pathname = (reqStream.url as string).split("?")[0];
     const query = qs.parse((reqStream.url as string).split("?")[1]);
-    const ctx = new Context(
-      new Request()
+    const ctx = new HttpContext(
+      new HttpRequest()
         .setPath(pathname)
         .setMethod(reqStream.method as string)
         .setQuery(query as Dict<string>)
@@ -140,7 +142,7 @@ export class NativeStartup<
     }
   };
 
-  #writeHead(halspRes: Response, resStream: http.ServerResponse) {
+  #writeHead(halspRes: HttpResponse, resStream: http.ServerResponse) {
     if (resStream.headersSent) return;
     Object.keys(halspRes.headers)
       .filter((key) => !!halspRes.headers[key])
@@ -149,7 +151,7 @@ export class NativeStartup<
       });
   }
 
-  #writeBody(halspRes: Response, resStream: http.ServerResponse) {
+  #writeBody(halspRes: HttpResponse, resStream: http.ServerResponse) {
     if (!halspRes.body) {
       resStream.end();
       return;

@@ -1,5 +1,4 @@
-import { Context, Middleware } from "@halsp/common";
-import { getReasonPhrase } from "../../src";
+import { getReasonPhrase, HttpContext, HttpMiddleware } from "../../src";
 import { TestStartup } from "../test-startup";
 
 const normalMethod = [
@@ -214,7 +213,7 @@ for (let i = 0; i < msgMethods.length; i++) {
   const methodItem = msgMethods[i];
   const errorMsgTest = `error message ${methodItem.method}`;
 
-  class Md extends Middleware {
+  class Md extends HttpMiddleware {
     async invoke(): Promise<void> {
       new TestStartup();
       (this as any)[methodItem.method](
@@ -227,7 +226,7 @@ for (let i = 0; i < msgMethods.length; i++) {
     }
     constructor(private existMsg: boolean) {
       super();
-      (this as any).init(new Context(), 0);
+      (this as any).init(new HttpContext(), 0);
     }
   }
 
@@ -266,11 +265,11 @@ for (let i = 0; i < redirectCodes.length; i++) {
   });
 }
 
-class RedirectMd extends Middleware {
+class RedirectMd extends HttpMiddleware {
   constructor(readonly code: number | undefined, readonly location: string) {
     super();
 
-    (this as any).init(new Context(), 0);
+    (this as any).init(new HttpContext(), 0);
   }
 
   async invoke(): Promise<void> {

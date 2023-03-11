@@ -1,59 +1,58 @@
 import { StatusCodes } from "http-status-codes";
 import { Response } from "@halsp/common";
-import { initResultHandler } from "./result-handler";
-import { initHeaderHandler } from "./header-handler";
-import { ReadonlyHeadersDict } from "../types";
+import { initResultHandler, ResultHandler } from "./result-handler";
+import { HeaderHandler, initHeaderHandler } from "./header-handler";
+import {
+  HeadersDict,
+  NumericalHeadersDict,
+  ReadonlyHeadersDict,
+} from "../types";
+import { HttpRequest } from "./request";
 
-export function initResponse(res: typeof Response.prototype) {
-  Object.defineProperty(res, "isSuccess", {
-    configurable: true,
-    enumerable: true,
-    get: function () {
-      return this.status >= 200 && this.status < 300;
-    },
-  });
+export class HttpResponse extends Response<HttpRequest> {
+  constructor(
+    public status: StatusCodes = StatusCodes.NOT_FOUND,
+    public body: any = undefined,
+    headers?: NumericalHeadersDict
+  ) {
+    super();
 
-  const headersMap = new WeakMap<Response, ReadonlyHeadersDict>();
-  Object.defineProperty(res, "headers", {
-    configurable: true,
-    enumerable: true,
-    get: function () {
-      if (!headersMap.has(this)) {
-        headersMap.set(this, {});
+    initResultHandler(this, function () {
+      return this;
+    });
+    initHeaderHandler(
+      this,
+      function () {
+        return this.headers;
+      },
+      function () {
+        return this.headers;
       }
-      return headersMap.get(this);
-    },
-  });
+    );
 
-  const statusMap = new WeakMap<Response, number>();
-  Object.defineProperty(res, "status", {
-    configurable: true,
-    enumerable: true,
-    get: function () {
-      if (!statusMap.has(this)) {
-        statusMap.set(this, StatusCodes.NOT_FOUND);
-      }
-      return statusMap.get(this);
-    },
-    set: function (val) {
-      statusMap.set(this, val);
-    },
-  });
-  res.setStatus = function (status: number) {
+    if (headers) this.setHeaders(headers);
+  }
+
+  readonly #headers: HeadersDict = {};
+
+  get isSuccess(): boolean {
+    return this.status >= 200 && this.status < 300;
+  }
+
+  get headers(): ReadonlyHeadersDict {
+    return this.#headers;
+  }
+
+  setBody(body: unknown): this {
+    this.body = body;
+    return this;
+  }
+
+  setStatus(status: StatusCodes): this {
     this.status = status;
     return this;
-  };
-
-  initResultHandler(res, function () {
-    return this;
-  });
-  initHeaderHandler(
-    res,
-    function () {
-      return this.headers;
-    },
-    function () {
-      return this.headers;
-    }
-  );
+  }
 }
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface HttpResponse extends ResultHandler, HeaderHandler {}

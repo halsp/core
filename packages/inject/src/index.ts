@@ -1,6 +1,6 @@
 import "@halsp/common";
 import { Startup, ObjectConstructor, Context, isFunction } from "@halsp/common";
-import { HookType } from "@halsp/common";
+import { HookType, Response, Request } from "@halsp/common";
 import { USED, MAP_BAG, SINGLETON_BAG } from "./constant";
 import { KeyTargetType, InjectMap } from "./interfaces";
 import {
@@ -11,15 +11,20 @@ import {
 } from "./inject-parser";
 import { InjectType } from "./inject-type";
 import { IService } from "./interfaces/service";
+import * as honion from "honion";
 
 declare module "@halsp/common" {
-  interface Startup {
+  interface Startup<
+    TReq extends Request,
+    TRes extends Response,
+    TC extends Context<TReq, TRes>
+  > extends honion.Honion<TC> {
     useInject(): this;
 
     inject<T extends KeyTargetType>(key: string, target: T): this;
     inject<T extends KeyTargetType>(
       key: string,
-      target: (ctx: Context) => T | Promise<T>,
+      target: (ctx: TC) => T | Promise<T>,
       type?: InjectType
     ): this;
     inject<TTarget extends object>(
@@ -38,7 +43,7 @@ declare module "@halsp/common" {
     ): this;
     inject<TAnestor extends object, TTarget extends TAnestor>(
       anestor: ObjectConstructor<TAnestor>,
-      target: (ctx: Context) => TTarget | Promise<TTarget>,
+      target: (ctx: TC) => TTarget | Promise<TTarget>,
       type?: InjectType
     ): this;
     inject<TAnestor extends object, TTarget extends TAnestor>(
@@ -70,9 +75,13 @@ Startup.prototype.useInject = function (): Startup {
     });
 };
 
-Startup.prototype.inject = function (...args: any[]): Startup {
+Startup.prototype.inject = function <
+  TReq extends Request = any,
+  TRes extends Response = any,
+  TC extends Context<TReq, TRes> = any
+>(this: Startup<TReq, TRes, TC>, ...args: any[]): Startup {
   let anestor: ObjectConstructor | string;
-  let target: ObjectConstructor | any | ((ctx: Context) => any);
+  let target: ObjectConstructor | any | ((ctx: TC) => any);
   let type: InjectType | undefined;
   if (typeof args[0] == "string") {
     anestor = args[0];

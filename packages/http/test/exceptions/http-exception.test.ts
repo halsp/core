@@ -1,4 +1,3 @@
-import { Context } from "@halsp/common";
 import {
   HttpException,
   StatusCodes,
@@ -24,6 +23,7 @@ import {
   UnauthorizedException,
   UnprocessableEntityException,
   UnsupportedMediaTypeException,
+  HttpContext,
 } from "../../src";
 import { TestStartup } from "../test-startup";
 
@@ -37,7 +37,7 @@ describe("http exception", () => {
     expect(ex.error).toBeUndefined();
     expect(ex.message).toBe(getReasonPhrase(StatusCodes.BAD_REQUEST));
 
-    const ctx = new Context().initCatchError().catchError(ex);
+    const ctx = new HttpContext().catchError(ex);
     expect(ctx.res.headers["h1"]).toBe("1");
     expect(ctx.res.headers["h2"]).toBe("2");
     expect(ctx.res.status).toBe(StatusCodes.BAD_REQUEST);
@@ -53,7 +53,7 @@ describe("http exception", () => {
     expect(ex.error).toBe("err");
     expect(ex.message).toBe("err");
 
-    const ctx = new Context().initCatchError().catchError(ex);
+    const ctx = new HttpContext().catchError(ex);
     expect(ctx.res.body).toEqual({
       message: "err",
       status: StatusCodes.BAD_REQUEST,
@@ -68,7 +68,7 @@ describe("http exception", () => {
     expect(ex.error).toEqual({ a: 1 });
     expect(ex.message).toBe(getReasonPhrase(StatusCodes.BAD_REQUEST));
 
-    const ctx = new Context().initCatchError().catchError(ex);
+    const ctx = new HttpContext().catchError(ex);
     expect(ctx.res.body).toEqual({
       message: getReasonPhrase(StatusCodes.BAD_REQUEST),
       status: StatusCodes.BAD_REQUEST,

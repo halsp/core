@@ -1,9 +1,7 @@
 import { NativeStartup } from "@halsp/native";
 import supertest from "supertest";
-import { Context, Request, Response } from "@halsp/common";
 import { initBaseTestStartup, ITestStartup } from "../test-startup";
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { Test } = require("supertest");
+import { HttpContext, HttpRequest, HttpResponse } from "@halsp/http";
 
 export class TestNativeStartup extends NativeStartup {
   #errorStack?: Error[];
@@ -21,7 +19,9 @@ export class TestNativeStartup extends NativeStartup {
     });
   }
 
-  protected async invoke(ctx: Request | Context): Promise<Response> {
+  protected async invoke(
+    ctx: HttpRequest | HttpContext
+  ): Promise<HttpResponse> {
     return await super.invoke(ctx);
   }
 
@@ -33,6 +33,8 @@ export class TestNativeStartup extends NativeStartup {
         return this.#errorStack[0];
       }
     };
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { Test } = require("supertest");
     const callback: any = Test.prototype.callback;
     Test.prototype.callback = function (err: any, res: any) {
       if (this.constructor == Test && !err) {
@@ -48,4 +50,5 @@ export class TestNativeStartup extends NativeStartup {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-export interface TestNativeStartup extends ITestStartup {}
+export interface TestNativeStartup
+  extends ITestStartup<HttpRequest, HttpResponse, HttpContext> {}
