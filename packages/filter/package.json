@@ -1,6 +1,6 @@
 {
   "name": "@halsp/filter",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Halsp 的请求过滤器插件",
   "engines": {
     "node": ">=12.14.0"
@@ -33,9 +33,9 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^1.0.1",
-    "@halsp/inject": "^1.0.1",
-    "@halsp/router": "^1.0.1",
+    "@halsp/core": "^1.0.2",
+    "@halsp/inject": "^1.0.2",
+    "@halsp/router": "^1.0.2",
     "reflect-metadata": "^0.1.13"
   },
   "files": [

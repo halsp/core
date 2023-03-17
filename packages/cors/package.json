@@ -1,6 +1,6 @@
 {
   "name": "@halsp/cors",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Halsp 跨域插件",
   "engines": {
     "node": ">=12.14.0"
@@ -33,9 +33,9 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^1.0.1",
-    "@halsp/http": "^1.0.1",
-    "@halsp/methods": "^1.0.1"
+    "@halsp/core": "^1.0.2",
+    "@halsp/http": "^1.0.2",
+    "@halsp/methods": "^1.0.2"
   },
   "files": [
     "/dist/*",
