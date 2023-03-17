@@ -1,8 +1,8 @@
-import { Middleware, Request } from "@halsp/common";
+import { HttpMiddleware, HttpRequest } from "@halsp/http";
 import { TestHttpStartup } from "@halsp/testing/dist/http";
 import { Body } from "../../src";
 
-class TestMiddleware extends Middleware {
+class TestMiddleware extends HttpMiddleware {
   @Body(({ value }) => JSON.stringify(value))
   readonly body!: any;
 
@@ -14,7 +14,7 @@ class TestMiddleware extends Middleware {
 test("simple test", async () => {
   const res = await new TestHttpStartup()
     .setContext(
-      new Request().setBody({
+      new HttpRequest().setBody({
         b1: 1,
       })
     )

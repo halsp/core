@@ -1,9 +1,9 @@
-import { HeadersDict } from "@halsp/http";
+import { HeadersDict, HttpContext, HttpRequest } from "@halsp/http";
 import { HttpMethods } from "@halsp/methods";
 import { ResponseStruct } from "./response-struct";
 import { Readable } from "stream";
 import { HttpStartup } from "@halsp/http";
-import { Context, Dict, isObject, Request } from "@halsp/common";
+import { Dict, isObject } from "@halsp/common";
 
 export class LambdaStartup extends HttpStartup {
   async run(event: Dict, context: Dict): Promise<ResponseStruct> {
@@ -12,9 +12,9 @@ export class LambdaStartup extends HttpStartup {
     return await this.#getStruct(ctx);
   }
 
-  private createContext(event: Dict, context: Dict): Context {
-    const ctx = new Context(
-      new Request()
+  private createContext(event: Dict, context: Dict): HttpContext {
+    const ctx = new HttpContext(
+      new HttpRequest()
         .setBody(this.#getBody(event))
         .setMethod(
           event.httpMethod ||
@@ -33,7 +33,7 @@ export class LambdaStartup extends HttpStartup {
     return ctx;
   }
 
-  #defineCtxProperty(ctx: Context, event: Dict, context: Dict) {
+  #defineCtxProperty(ctx: HttpContext, event: Dict, context: Dict) {
     Object.defineProperty(ctx.req, "lambdaContext", {
       configurable: false,
       enumerable: false,
@@ -59,7 +59,7 @@ export class LambdaStartup extends HttpStartup {
     });
   }
 
-  async #getStruct(ctx: Context): Promise<ResponseStruct> {
+  async #getStruct(ctx: HttpContext): Promise<ResponseStruct> {
     let body = ctx.res.body;
     let isBase64Encoded = false;
     if (Buffer.isBuffer(body)) {

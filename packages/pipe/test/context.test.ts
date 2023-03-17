@@ -1,4 +1,4 @@
-import { Context } from "@halsp/common";
+import { HttpContext } from "@halsp/http";
 import { parseInject } from "@halsp/inject";
 import { TestHttpStartup } from "@halsp/testing/dist/http";
 import "../src";
@@ -7,9 +7,9 @@ import { expectBody, getTestRequest } from "./TestMiddleware";
 
 class TestService {
   @Ctx
-  private readonly ctx1!: Context;
+  private readonly ctx1!: HttpContext;
   @Ctx
-  private readonly ctx2!: Context;
+  private readonly ctx2!: HttpContext;
 
   invoke() {
     return {

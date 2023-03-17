@@ -177,6 +177,6 @@ function getReqHandler(type: PipeReqType): (ctx: Context) => Dict | undefined {
     case "param":
       return (ctx) => ctx.req["params"] ?? ctx.req["param"];
     default:
-      return (ctx) => ctx.req.body;
+      return (ctx) => ctx.req["body"] ?? ctx.req["payload"] ?? ctx.req["data"];
   }
 }

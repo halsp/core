@@ -1,9 +1,9 @@
-import { Startup } from "@halsp/common";
+import { Context, Request, Response, Startup } from "@halsp/common";
 import { GLOBAL_PIPE_BAG } from "./constant";
 import { GlobalPipeType } from "./global-pipe-type";
 import { GlobalPipeItem, PipeItem } from "./pipes";
 
-export { Query, Body, Param, Header, Ctx } from "./decorators";
+export { Query, Body, Payload, Param, Header, Ctx } from "./decorators";
 export {
   PipeTransform,
   PipeItem,
@@ -31,6 +31,7 @@ declare module "@halsp/common" {
 }
 
 Startup.prototype.useGlobalPipe = function <T = any, R = any>(
+  this: Startup<Request, Response, Context<Request, Response>>,
   type: GlobalPipeType,
   pipe: PipeItem<T, R>
 ) {

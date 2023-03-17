@@ -6,7 +6,7 @@ describe("middleware", () => {
   it("should not render empty string", async () => {
     class Md extends Middleware {
       async invoke(): Promise<void> {
-        this.ctx.set("view", await this.ctx.view(""));
+        this.ctx.set("view", await this.res.view(""));
       }
     }
 

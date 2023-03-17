@@ -19,16 +19,7 @@ export function useView(startup: Startup, options: ViewOptions) {
     tmpPath,
     locals: Record<string, unknown> = {}
   ) {
-    const html = await render(this.ctx, options, tmpPath, locals);
-    if (!html) return this;
-
-    if (process.env.HALSP_ENV == "http") {
-      this["ok"](html);
-      this["set"]("content-type", "text/html");
-    } else {
-      this.setBody(html);
-    }
-    return this;
+    return await render(this.ctx, options, tmpPath, locals);
   };
 
   return startup.use(async (ctx, next) => {

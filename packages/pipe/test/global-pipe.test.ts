@@ -1,4 +1,4 @@
-import { Middleware, Request } from "@halsp/common";
+import { HttpMiddleware, HttpRequest } from "@halsp/http";
 import { Inject } from "@halsp/inject";
 import { TestHttpStartup } from "@halsp/testing/dist/http";
 import { Header, PipeTransform } from "../src";
@@ -16,7 +16,7 @@ test("global pipe property", async () => {
   }
 
   @Inject
-  class TestMiddleware extends Middleware {
+  class TestMiddleware extends HttpMiddleware {
     @Header("h1")
     private readonly h1!: string;
 
@@ -28,7 +28,7 @@ test("global pipe property", async () => {
   }
 
   const startup = new TestHttpStartup()
-    .setContext(new Request().setHeader("h1", "5"))
+    .setContext(new HttpRequest().setHeader("h1", "5"))
     .useInject()
     .useGlobalPipe(GlobalPipeType.before, TestGlobalPipe)
     .useGlobalPipe(GlobalPipeType.after, TestGlobalPipe)
@@ -55,7 +55,7 @@ test("global pipe params", async () => {
   }
 
   @Inject
-  class TestMiddleware extends Middleware {
+  class TestMiddleware extends HttpMiddleware {
     constructor(@Header("h1") readonly h1: number) {
       super();
     }
@@ -68,7 +68,7 @@ test("global pipe params", async () => {
   }
 
   const startup = new TestHttpStartup()
-    .setContext(new Request().setHeader("h1", "5"))
+    .setContext(new HttpRequest().set("h1", "5"))
     .useInject()
     .useGlobalPipe(GlobalPipeType.before, TestGlobalPipe)
     .useGlobalPipe(GlobalPipeType.after, TestGlobalPipe)

@@ -1,4 +1,4 @@
-import { Middleware, Request } from "@halsp/common";
+import { HttpMiddleware, HttpRequest } from "@halsp/http";
 import { TestHttpStartup } from "@halsp/testing/dist/http";
 import { Body } from "../src";
 
@@ -11,7 +11,7 @@ test("plain to class", async () => {
       return this.h1 + this.h2;
     }
   }
-  class TestMiddleware extends Middleware {
+  class TestMiddleware extends HttpMiddleware {
     @Body
     private readonly body!: TestDto;
 
@@ -22,7 +22,7 @@ test("plain to class", async () => {
 
   const res = await new TestHttpStartup()
     .setContext(
-      new Request().setBody({
+      new HttpRequest().setBody({
         h1: "a",
         h2: 1,
       })

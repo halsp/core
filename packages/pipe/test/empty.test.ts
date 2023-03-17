@@ -1,9 +1,9 @@
-import { Middleware, Request } from "@halsp/common";
+import { HttpMiddleware, HttpRequest } from "@halsp/http";
 import { TestHttpStartup } from "@halsp/testing/dist/http";
 import { Body, Param } from "../src";
 
 test("null body", async () => {
-  class TestMiddleware extends Middleware {
+  class TestMiddleware extends HttpMiddleware {
     @Body
     readonly body!: any;
     @Body("field")
@@ -21,12 +21,12 @@ test("null body", async () => {
   }
 
   const res = await new TestHttpStartup()
-    .setContext(new Request().setBody(null))
+    .setContext(new HttpRequest().setBody(null))
     .useInject()
     .add(TestMiddleware)
     .run();
   expect(res.body).toEqual({
-    body: null,
+    body: undefined,
     field: undefined,
     param: undefined,
   });

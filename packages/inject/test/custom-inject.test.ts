@@ -158,6 +158,7 @@ describe("inject custom type", () => {
 
       res = await startup.run();
       ctx = res.ctx;
+
       if (type == InjectType.Transient) {
         expect(ctx.get("result")).toEqual({
           count1: 1,
@@ -227,6 +228,7 @@ describe("inject custom type", () => {
 
       res = await startup.run();
       ctx = res.ctx;
+
       if (type == InjectType.Transient) {
         expect(ctx.get("result")).toEqual({
           count1: 1,

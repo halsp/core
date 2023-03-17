@@ -1,6 +1,13 @@
 import "@halsp/common";
-import { Startup, ObjectConstructor, Context, isFunction } from "@halsp/common";
-import { HookType, Response, Request } from "@halsp/common";
+import {
+  Startup,
+  ObjectConstructor,
+  Context,
+  isFunction,
+  Request,
+  Response,
+} from "@halsp/common";
+import { HookType } from "@halsp/common";
 import { USED, MAP_BAG, SINGLETON_BAG } from "./constant";
 import { KeyTargetType, InjectMap } from "./interfaces";
 import {
@@ -15,9 +22,9 @@ import * as honion from "honion";
 
 declare module "@halsp/common" {
   interface Startup<
-    TReq extends Request,
-    TRes extends Response,
-    TC extends Context<TReq, TRes>
+    TReq extends Request = Request,
+    TRes extends Response = Response,
+    TC extends Context<TReq, TRes> = Context<TReq, TRes>
   > extends honion.Honion<TC> {
     useInject(): this;
 
@@ -75,13 +82,12 @@ Startup.prototype.useInject = function (): Startup {
     });
 };
 
-Startup.prototype.inject = function <
-  TReq extends Request = any,
-  TRes extends Response = any,
-  TC extends Context<TReq, TRes> = any
->(this: Startup<TReq, TRes, TC>, ...args: any[]): Startup {
+Startup.prototype.inject = function (
+  this: Startup<Request, Response, Context<Request, Response>>,
+  ...args: any[]
+): Startup {
   let anestor: ObjectConstructor | string;
-  let target: ObjectConstructor | any | ((ctx: TC) => any);
+  let target: ObjectConstructor | any | ((ctx: Context) => any);
   let type: InjectType | undefined;
   if (typeof args[0] == "string") {
     anestor = args[0];

@@ -1,6 +1,10 @@
-import { Context, Request } from "@halsp/common";
 import { ClientPacket } from "@halsp/micro-common";
-import { MicroException, MicroStartup } from "../src";
+import {
+  MicroContext,
+  MicroException,
+  MicroRequest,
+  MicroStartup,
+} from "../src";
 import { TestStartup } from "./utils";
 
 describe("startup", () => {
@@ -18,7 +22,7 @@ describe("startup", () => {
       .run();
 
     expect(res.error).toBe("err");
-    expect(res.body).toBeUndefined();
+    expect(res.payload).toBeUndefined();
   });
 });
 
@@ -27,10 +31,10 @@ describe("handle message", () => {
   async function handleMessage<T = object>(
     text: string,
     onSend: (arg: {
-      req: Request;
+      req: MicroRequest;
       result: ClientPacket<T>;
     }) => void | Promise<void>,
-    prehook?: (ctx: Context) => Promise<void> | void
+    prehook?: (ctx: MicroContext) => Promise<void> | void
   ) {
     await new TestClass()["handleMessage"](JSON.parse(text), onSend, prehook);
   }

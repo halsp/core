@@ -1,12 +1,12 @@
 import { Startup } from "./startup";
 import * as honion from "honion";
 
-export class Request<TRes extends Response = Response<any>> {
-  readonly ctx!: Context<this, TRes>;
+export class Request {
+  readonly ctx!: Context<this, any>;
 }
 
-export class Response<TReq extends Request = Request<any>> {
-  readonly ctx!: Context<TReq, this>;
+export class Response {
+  readonly ctx!: Context<any, this>;
 }
 
 export class Context<

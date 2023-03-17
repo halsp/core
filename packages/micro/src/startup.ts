@@ -1,17 +1,23 @@
-import { Context, Request, Response, Startup } from "@halsp/common";
-import { initCatchError, initContext } from "./context";
+import { Startup } from "@halsp/common";
+import { MicroContext } from "./context";
 import { ClientPacket, ServerPacket } from "@halsp/micro-common";
+import { MicroRequest } from "./context/request";
+import { MicroResponse } from "./context/response";
 
-export abstract class MicroStartup extends Startup {
+export abstract class MicroStartup extends Startup<
+  MicroRequest,
+  MicroResponse,
+  MicroContext
+> {
   constructor() {
     super();
     process.env.HALSP_ENV = "micro";
-    initContext();
   }
 
-  protected async invoke(ctx: Request | Context): Promise<Response> {
-    ctx = ctx instanceof Context ? ctx : new Context(ctx);
-    initCatchError(ctx);
+  protected async invoke(
+    ctx: MicroRequest | MicroContext
+  ): Promise<MicroResponse> {
+    ctx = ctx instanceof MicroContext ? ctx : new MicroContext(ctx);
 
     return await super.invoke(ctx);
   }
@@ -19,17 +25,17 @@ export abstract class MicroStartup extends Startup {
   protected async handleMessage<T = object>(
     packet: ServerPacket,
     onSend: (arg: {
-      req: Request;
+      req: MicroRequest;
       result: ClientPacket<T>;
-      res: Response;
+      res: MicroResponse;
     }) => void | Promise<void>,
-    prehook?: (ctx: Context) => Promise<void> | void
+    prehook?: (ctx: MicroContext) => Promise<void> | void
   ) {
-    const req = new Request()
-      .setPath(packet.pattern)
-      .setBody(parseMicroBody(packet.data))
+    const req = new MicroRequest()
+      .setPattern(packet.pattern)
+      .setPayload(parseMicroPayload(packet.data))
       .setId(packet.id);
-    const ctx = new Context(req);
+    const ctx = new MicroContext(req);
     prehook && (await prehook(ctx));
     const res = await this.invoke(ctx);
     if (!req.id) return; // event
@@ -38,7 +44,7 @@ export abstract class MicroStartup extends Startup {
     if (res.error) {
       result.error = res.error;
     } else {
-      result.data = res.body;
+      result.data = res.payload;
     }
     await onSend({
       res,
@@ -48,7 +54,7 @@ export abstract class MicroStartup extends Startup {
   }
 }
 
-export function parseMicroBody(data: any) {
+export function parseMicroPayload(data: any) {
   if (typeof data == "string") {
     if (data.startsWith("{") || data.startsWith("[")) {
       try {

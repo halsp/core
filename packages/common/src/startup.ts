@@ -13,7 +13,7 @@ export abstract class Startup<
     }
   }
 
-  protected async invoke(ctx: TReq | TC): Promise<TRes> {
+  protected async invoke(ctx?: TReq | TC): Promise<TRes> {
     ctx = ctx instanceof Context ? ctx : (new Context(ctx) as TC);
     await super.invoke(ctx);
     return ctx.res;

@@ -1,10 +1,4 @@
-import { Context } from "@halsp/common";
-import { MicroException } from "../src";
-import { initCatchError, initContext } from "../src/context";
-
-beforeAll(() => {
-  initContext();
-});
+import { MicroContext, MicroException } from "../src";
 
 describe("exception", () => {
   it("should trans to plain object", async () => {
@@ -13,29 +7,25 @@ describe("exception", () => {
   });
 
   it("should set string error from MicroException.message ", () => {
-    const ctx = new Context();
-    initCatchError(ctx);
+    const ctx = new MicroContext();
     ctx.catchError(new MicroException("abc"));
     expect(ctx.res.error).toBe("abc");
   });
 
   it("should set string error from string ", () => {
-    const ctx = new Context();
-    initCatchError(ctx);
+    const ctx = new MicroContext();
     ctx.catchError("abc");
     expect(ctx.res.error).toBe("abc");
   });
 
   it("should set string error from Error", () => {
-    const ctx = new Context();
-    initCatchError(ctx);
+    const ctx = new MicroContext();
     ctx.catchError(new Error("abc"));
     expect(ctx.res.error).toBe("abc");
   });
 
   it("should set string error from object with message property", () => {
-    const ctx = new Context();
-    initCatchError(ctx);
+    const ctx = new MicroContext();
     ctx.catchError({
       message: "abc",
     });
@@ -43,15 +33,13 @@ describe("exception", () => {
   });
 
   it("should set empty error from empty object", () => {
-    const ctx = new Context();
-    initCatchError(ctx);
+    const ctx = new MicroContext();
     ctx.catchError({});
     expect(ctx.res.error).toBe("");
   });
 
   it("should set empty error from null", () => {
-    const ctx = new Context();
-    initCatchError(ctx);
+    const ctx = new MicroContext();
     ctx.catchError(null);
     expect(ctx.res.error).toBe("");
   });

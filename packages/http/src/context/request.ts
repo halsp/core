@@ -1,12 +1,10 @@
 import { Dict, normalizePath, ReadonlyDict, Request } from "@halsp/common";
 import { HeadersDict, ReadonlyHeadersDict } from "../types";
 import { HeaderHandler, initHeaderHandler } from "./header-handler";
-import { HttpResponse } from "./response";
 
-export class HttpRequest extends Request<HttpResponse> {
+export class HttpRequest extends Request {
   constructor() {
     super();
-
     initHeaderHandler(
       this,
       () => this.headers,

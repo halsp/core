@@ -1,7 +1,8 @@
-import { Middleware, ReadonlyDict, Request } from "@halsp/common";
+import { ReadonlyDict } from "@halsp/common";
+import { HttpMiddleware, HttpRequest } from "@halsp/http";
 import { Header, Query, Param, Body } from "../src";
 
-export class TestMiddleware extends Middleware {
+export class TestMiddleware extends HttpMiddleware {
   @Header
   private readonly header!: ReadonlyDict;
   @Query
@@ -42,7 +43,7 @@ export const expectBody = {
 };
 
 export function getTestRequest() {
-  const req = new Request()
+  const req = new HttpRequest()
     .setMethod("GET")
     .setBody([0, 1])
     .setHeader("h1", 1)

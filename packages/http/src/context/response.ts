@@ -7,9 +7,8 @@ import {
   NumericalHeadersDict,
   ReadonlyHeadersDict,
 } from "../types";
-import { HttpRequest } from "./request";
 
-export class HttpResponse extends Response<HttpRequest> {
+export class HttpResponse extends Response {
   constructor(
     public status: StatusCodes = StatusCodes.NOT_FOUND,
     public body: any = undefined,

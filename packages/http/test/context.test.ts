@@ -5,7 +5,9 @@ describe("context", () => {
   it("default instance", async () => {
     const ctx = new HttpContext();
     expect(ctx.req).not.toBeUndefined();
+    expect(ctx.request).not.toBeUndefined();
     expect(ctx.res).not.toBeUndefined();
+    expect(ctx.response).not.toBeUndefined();
   });
 
   it("should set req", async () => {

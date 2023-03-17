@@ -35,6 +35,8 @@ export function Body(...args: any[]): any {
   return createDecorator("body", args);
 }
 
+export const Payload = Body;
+
 export function Param(
   property: string,
   ...pipes: PipeItem[]

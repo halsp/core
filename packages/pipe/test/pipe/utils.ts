@@ -1,4 +1,4 @@
-import { Middleware, Request } from "@halsp/common";
+import { HttpMiddleware, HttpRequest } from "@halsp/http";
 import { TestHttpStartup } from "@halsp/testing/dist/http";
 import { Body, PipeItem } from "../../src";
 
@@ -8,7 +8,7 @@ function runPipeTest(
   success: boolean,
   target?: any
 ) {
-  class TestMiddleware extends Middleware {
+  class TestMiddleware extends HttpMiddleware {
     @Body("b1", ...pipes)
     readonly b1!: any;
 
@@ -23,7 +23,7 @@ function runPipeTest(
     const res = await new TestHttpStartup()
       .setSkipThrow()
       .setContext(
-        new Request().setBody({
+        new HttpRequest().setBody({
           b1: source,
         })
       )

@@ -1,10 +1,15 @@
 import "@halsp/common";
-import { Startup } from "@halsp/common";
+import { Startup, Request } from "@halsp/common";
 import { ViewOptions } from "./view-options";
 import { useView } from "./user-view";
+import * as honion from "honion";
 
 declare module "@halsp/common" {
-  interface Startup {
+  interface Startup<
+    TReq extends Request = Request,
+    TRes extends Response = Response,
+    TC extends Context<TReq, TRes> = Context<TReq, TRes>
+  > extends honion.Honion<TC> {
     useView(options?: ViewOptions): this;
   }
 
@@ -17,7 +22,10 @@ declare module "@halsp/common" {
   }
 
   interface Response {
-    view(tmpPath: string, locals?: Record<string, unknown>): Promise<this>;
+    view(
+      tmpPath: string,
+      locals?: Record<string, unknown>
+    ): Promise<string | undefined>;
   }
 }
 

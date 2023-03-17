@@ -1,11 +1,11 @@
 import { Dict } from "@halsp/common";
 
-declare module "@halsp/common" {
-  interface Context {
+declare module "@halsp/http" {
+  interface HttpContext {
     get lambdaContext(): Dict;
     get lambdaEvent(): Dict;
   }
-  interface Request {
+  interface HttpRequest {
     get lambdaContext(): Dict;
     get lambdaEvent(): Dict;
   }
