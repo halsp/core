@@ -21,6 +21,9 @@ export function initContext() {
     idMap.set(this, id);
     return this;
   };
+  Request.prototype.setPayload = function (val: any) {
+    return this.setBody(val);
+  };
 
   Object.defineProperty(Request.prototype, "pattern", {
     configurable: true,
@@ -28,6 +31,15 @@ export function initContext() {
     get: function () {
       const req = this as Request;
       return req.path;
+    },
+  });
+
+  Object.defineProperty(Request.prototype, "payload", {
+    configurable: true,
+    enumerable: true,
+    get: function () {
+      const req = this as Request;
+      return req.body;
     },
   });
 
@@ -49,6 +61,22 @@ export function initContext() {
     this.error = error;
     return this;
   };
+  Response.prototype.setPayload = function (val: any) {
+    this.payload = val;
+    return this;
+  };
+  Object.defineProperty(Response.prototype, "payload", {
+    configurable: true,
+    enumerable: true,
+    get: function () {
+      const req = this as Response;
+      return req.body;
+    },
+    set: function (val) {
+      const req = this as Response;
+      req.body = val;
+    },
+  });
 }
 
 export function initCatchError(ctx: Context) {

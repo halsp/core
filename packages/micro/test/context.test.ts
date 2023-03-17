@@ -19,6 +19,19 @@ describe("context", () => {
   });
 });
 
+describe("payload", () => {
+  it("should get req.payload from req.body", () => {
+    const req = new Request().setPayload("test");
+    expect(req.payload).toBe(req.body);
+    expect(req.payload).toBe("test");
+  });
+  it("should get res.payload from res.body", () => {
+    const res = new Response().setPayload("test");
+    expect(res.payload).toBe(res.body);
+    expect(res.payload).toBe("test");
+  });
+});
+
 describe("parse pattern", () => {
   it("should parse pattern from path", async () => {
     await new TestStartup(new Request().setPath("{a:1}"))
