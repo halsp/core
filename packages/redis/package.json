@@ -33,7 +33,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/common": "^1.0.1",
+    "@halsp/core": "^1.0.1",
     "@halsp/inject": "^1.0.1",
     "redis": "^4.6.4",
     "reflect-metadata": "^0.1.13"

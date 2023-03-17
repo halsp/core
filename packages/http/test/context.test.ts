@@ -1,4 +1,4 @@
-import { Context } from "@halsp/common";
+import { Context } from "@halsp/core";
 import { HttpMethods } from "@halsp/methods";
 import "../src";
 import { initContext } from "../src/context";

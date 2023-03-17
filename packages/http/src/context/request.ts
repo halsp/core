@@ -1,4 +1,4 @@
-import { Dict, ReadonlyDict, Request } from "@halsp/common";
+import { Dict, ReadonlyDict, Request } from "@halsp/core";
 import { HttpMethods } from "@halsp/methods";
 import { initHeaderHandler } from "./header-handler";
 import { ReadonlyHeadersDict } from "../types";

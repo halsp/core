@@ -1,4 +1,4 @@
-import { ILogger } from "@halsp/common";
+import { ILogger } from "@halsp/core";
 import { ServerPacket } from "@halsp/micro-common";
 import { v4 as uuid } from "uuid";
 

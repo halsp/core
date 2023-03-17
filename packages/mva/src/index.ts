@@ -1,4 +1,4 @@
-import { Context, HookType } from "@halsp/common";
+import { Context, HookType } from "@halsp/core";
 import "@halsp/view";
 import "@halsp/router";
 import { MvaOptions, CodeType } from "./mva-options";

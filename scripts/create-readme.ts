@@ -49,7 +49,7 @@ function getPackageBaseReadme(name: string) {
     return fs.readFileSync(readmePath, "utf-8");
   } else {
     let result = "<!--intro-desc-->";
-    if (name != "common") {
+    if (name != "core") {
       result += "\n<!--install-->";
     }
     return result;

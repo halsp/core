@@ -1,5 +1,5 @@
-import "@halsp/common";
-import { Context, Startup } from "@halsp/common";
+import "@halsp/core";
+import { Context, Startup } from "@halsp/core";
 import { IService, parseInject } from "@halsp/inject";
 import * as redis from "redis";
 import { OPTIONS_IDENTITY } from "./constant";
@@ -7,7 +7,7 @@ import { Options } from "./options";
 
 export type RedisConnection = redis.RedisClientType;
 
-declare module "@halsp/common" {
+declare module "@halsp/core" {
   interface Startup {
     useRedis(options?: Options): this;
   }

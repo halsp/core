@@ -1,5 +1,5 @@
-import "@halsp/common";
-import { Context, Startup } from "@halsp/common";
+import "@halsp/core";
+import { Context, Startup } from "@halsp/core";
 import { IService, parseInject } from "@halsp/inject";
 import path from "path";
 import * as typeorm from "typeorm";
@@ -8,7 +8,7 @@ import { Options } from "./options";
 
 export type TypeormConnection = typeorm.DataSource;
 
-declare module "@halsp/common" {
+declare module "@halsp/core" {
   interface Startup {
     useTypeorm(options: Options): this;
   }

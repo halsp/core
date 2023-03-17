@@ -1,4 +1,4 @@
-import { Response } from "@halsp/common";
+import { Response } from "@halsp/core";
 import { AlifcStartup } from "../src";
 
 const req: any = {

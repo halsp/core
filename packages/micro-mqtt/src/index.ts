@@ -1,7 +1,7 @@
 import type mqtt from "mqtt";
-import "@halsp/common";
+import "@halsp/core";
 
-declare module "@halsp/common" {
+declare module "@halsp/core" {
   interface Request {
     get packet(): mqtt.IPublishPacket;
   }

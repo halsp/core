@@ -1,4 +1,4 @@
-import { Context } from "@halsp/common";
+import { Context } from "@halsp/core";
 import { MicroException } from "../src";
 import { initCatchError, initContext } from "../src/context";
 

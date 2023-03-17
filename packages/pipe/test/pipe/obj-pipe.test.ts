@@ -1,4 +1,4 @@
-import { Middleware, Request } from "@halsp/common";
+import { Middleware, Request } from "@halsp/core";
 import { TestHttpStartup } from "@halsp/testing/dist/http";
 import { Body } from "../../src";
 

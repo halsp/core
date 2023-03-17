@@ -1,6 +1,6 @@
 import "../src";
 import { HttpMethods } from "@halsp/methods";
-import { Request, Response } from "@halsp/common";
+import { Request, Response } from "@halsp/core";
 import cors from "@koa/cors";
 import Router from "@koa/router";
 import { TestHttpStartup } from "@halsp/testing/dist/http";

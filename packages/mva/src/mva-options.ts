@@ -1,4 +1,4 @@
-import { Context } from "@halsp/common";
+import { Context } from "@halsp/core";
 import { RouterOptions } from "@halsp/router";
 import { ViewOptions } from "@halsp/view";
 

@@ -1,4 +1,4 @@
-import { Context, isObject, isUndefined } from "@halsp/common";
+import { Context, isObject, isUndefined } from "@halsp/core";
 import { PipeTransform, TransformArgs } from "@halsp/pipe";
 import { validate, ValidationError, ValidatorOptions } from "class-validator";
 import { ENABLE_METADATA, OPTIONS_METADATA } from "./constant";

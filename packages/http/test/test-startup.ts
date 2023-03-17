@@ -1,8 +1,8 @@
-import { Response, Request, Context } from "@halsp/common";
+import { Response, Request, Context } from "@halsp/core";
 import { HttpStartup } from "../src";
 import { initCatchError } from "../src/context";
 
-declare module "@halsp/common" {
+declare module "@halsp/core" {
   interface Context {
     initCatchError(): this;
   }

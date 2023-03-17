@@ -1,6 +1,6 @@
 import * as nats from "nats";
 
-declare module "@halsp/common" {
+declare module "@halsp/core" {
   interface Request {
     get headers(): nats.MsgHdrs;
   }

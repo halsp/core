@@ -1,6 +1,6 @@
-# Contributing to @halsp/common
+# Contributing to Halsp
 
-We would love for you to contribute to @halsp/common and help make it even better than it is
+We would love for you to contribute to Halsp and help make it even better than it is
 today! As a contributor, here are the guidelines we would like you to follow:
 
 - [Question or Problem?](#question)
@@ -41,7 +41,7 @@ Before you submit an issue, please search the issue tracker, maybe an issue for 
 
 We want to fix all the issues as soon as possible, but before fixing a bug we need to reproduce and confirm it. In order to reproduce bugs we will systematically ask you to provide a minimal reproduction scenario using a repository or [Gist](https://gist.github.com/). Having a live, reproducible scenario gives us wealth of important information without going back & forth to you with additional questions like:
 
-- version of @halsp/common used
+- version of @halsp/core used
 - plugins and their versions
 - 3rd-party libraries and their versions
 - and most importantly - a use-case that fails
@@ -56,7 +56,7 @@ Before you submit your Pull Request (PR) consider the following guidelines:
 
 1. Search [GitHub](https://github.com/halsp/core/pulls) for an open or closed PR
    that relates to your submission. You don't want to duplicate effort.
-1. Fork the @halsp/common repo.
+1. Fork the halsp/core repo.
 1. Make your changes in a new git branch:
 
    ```shell
@@ -65,7 +65,7 @@ Before you submit your Pull Request (PR) consider the following guidelines:
 
 1. Create your patch, **including appropriate test cases**.
 1. Follow our [Coding Rules](#rules).
-1. Run the full @halsp/common test suite (see [common scripts](#common-scripts)),
+1. Run the full halsp/core test suite (see [common scripts](#common-scripts)),
    and ensure that all tests pass.
 1. Commit your changes using a descriptive commit message that follows our
    [commit message conventions](#commit). Adherence to these conventions
@@ -88,7 +88,7 @@ Before you submit your Pull Request (PR) consider the following guidelines:
 - If we suggest changes then:
 
   - Make the required updates.
-  - Re-run the @halsp/common test suites to ensure tests are still passing.
+  - Re-run the halsp/core test suites to ensure tests are still passing.
   - Rebase your branch and force push to your GitHub repository (this will update your Pull Request):
 
     ```shell
@@ -165,7 +165,7 @@ To ensure consistency throughout the source code, keep these rules in mind as yo
 
 We have very precise rules over how our git commit messages can be formatted. This leads to **more
 readable messages** that are easy to follow when looking through the **project history**. But also,
-we use the git commit messages to **generate the @halsp/common change log**.
+we use the git commit messages to **generate the halsp/core change log**.
 
 ### Commit Message Format
 
@@ -215,12 +215,12 @@ The scope should have the name of the npm package affected (as perceived by pers
 
 The following is the list of supported scopes:
 
-- **common**: for changes made on `packages/common` directory
+- **core**: for changes made on `packages/core` directory
 - **inject**: for changes made on `packages/inject` directory
 - **router**: for changes made on `packages/router` directory
 - ...
 
-If your change affect more than one package, separate the scopes with a comma (e.g. `common,inject`).
+If your change affect more than one package, separate the scopes with a comma (e.g. `core,inject`).
 
 There are currently a few exceptions to the "use package name" rule:
 

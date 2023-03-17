@@ -3,7 +3,7 @@ import { HttpMethods } from "@halsp/methods";
 import { TestHttpStartup } from "@halsp/testing/dist/http";
 import "../src";
 import "./utils-http";
-import { Request } from "@halsp/common";
+import { Request } from "@halsp/core";
 
 function runTest(method: string, success: boolean) {
   test(`${method} ${success}`, async () => {

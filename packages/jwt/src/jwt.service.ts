@@ -4,7 +4,7 @@ import {
   JwtVerifyOptions,
 } from "./jwt-options";
 import jwt from "jsonwebtoken";
-import { Context } from "@halsp/common";
+import { Context } from "@halsp/core";
 import { OPTIONS } from "./constant";
 import { Inject } from "@halsp/inject";
 

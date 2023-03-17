@@ -6,7 +6,7 @@ import {
   isClass,
   ObjectConstructor,
   isUndefined,
-} from "@halsp/common";
+} from "@halsp/core";
 import {
   CUSTOM_METADATA,
   SCOPED_BAG,

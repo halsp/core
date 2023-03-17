@@ -1,5 +1,5 @@
 import { RouterOptions } from "../src";
-import "@halsp/common";
+import "@halsp/core";
 import { TestMicroStartup } from "@halsp/testing/dist/micro";
 import { TestMicroRedisStartup } from "@halsp/testing/dist/micro-redis";
 import { TestMicroNatsStartup } from "@halsp/testing/dist/micro-nats";

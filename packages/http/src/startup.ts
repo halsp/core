@@ -1,6 +1,6 @@
 import { Stream } from "stream";
 import * as mime from "mime-types";
-import { Context, isString, Request, Response, Startup } from "@halsp/common";
+import { Context, isString, Request, Response, Startup } from "@halsp/core";
 import { initCatchError, initContext } from "./context";
 
 export abstract class HttpStartup extends Startup {

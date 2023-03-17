@@ -5,7 +5,7 @@ export { cliConfigHook } from "./cli-config";
 export { MicroGrpcClientOptions, MicroGrpcClient } from "./client";
 export { WriteIterator, ReadIterator } from "@halsp/micro-common";
 
-declare module "@halsp/common" {
+declare module "@halsp/core" {
   interface Startup {
     useMicroGrpc(options?: MicroGrpcClientOptions & InjectMicroClient): this;
   }

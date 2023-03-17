@@ -38,7 +38,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/common": "^1.0.1",
+    "@halsp/core": "^1.0.1",
     "@halsp/micro-client": "^1.0.1",
     "@halsp/micro-common": "^1.0.1",
     "nats": "^2.12.0"

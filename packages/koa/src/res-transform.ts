@@ -1,7 +1,7 @@
 import Koa from "koa";
 import http from "http";
 import net from "net";
-import { Context, isPlainObject, Response } from "@halsp/common";
+import { Context, isPlainObject, Response } from "@halsp/core";
 import { TransResponse } from "./trans-response";
 import qs from "qs";
 

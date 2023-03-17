@@ -1,6 +1,6 @@
 import { MicroStartup } from "@halsp/micro";
 import { MicroNatsOptions } from "./options";
-import { Context, getHalspPort } from "@halsp/common";
+import { Context, getHalspPort } from "@halsp/core";
 import * as nats from "nats";
 
 export class MicroNatsStartup extends MicroStartup {

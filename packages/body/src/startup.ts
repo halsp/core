@@ -1,4 +1,4 @@
-import { Context } from "@halsp/common";
+import { Context } from "@halsp/core";
 import typeis from "type-is";
 import cobody from "co-body";
 import formidable from "formidable";

@@ -1,6 +1,6 @@
-import { Dict } from "@halsp/common";
+import { Dict } from "@halsp/core";
 
-declare module "@halsp/common" {
+declare module "@halsp/core" {
   interface Context {
     get lambdaContext(): Dict;
     get lambdaEvent(): Dict;

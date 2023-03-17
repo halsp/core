@@ -1,4 +1,4 @@
-import { Context, Request, Response, Startup } from "@halsp/common";
+import { Context, Request, Response, Startup } from "@halsp/core";
 
 export interface ITestStartup extends Startup {
   skipThrow?: boolean;

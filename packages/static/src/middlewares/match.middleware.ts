@@ -5,7 +5,7 @@ import {
   isUndefined,
   Middleware,
   normalizePath,
-} from "@halsp/common";
+} from "@halsp/core";
 import * as fs from "fs";
 import { MATCH_RESULT_BAG, IS_METHOD_VALID_BAG } from "../constant";
 import { isIgnore } from "./utils";

@@ -1,4 +1,4 @@
-import { Dict, ReadonlyDict } from "@halsp/common";
+import { Dict, ReadonlyDict } from "@halsp/core";
 
 export type HeaderValue = string | string[];
 export type NumericalHeaderValue = string | number | (number | string)[];

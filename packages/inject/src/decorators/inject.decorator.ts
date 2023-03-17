@@ -1,4 +1,4 @@
-import { Context, isClass } from "@halsp/common";
+import { Context, isClass } from "@halsp/core";
 import { PROPERTY_METADATA, KEY_METADATA } from "../constant";
 import { InjectType } from "../inject-type";
 import { InjectKey } from "../interfaces";

@@ -1,5 +1,5 @@
 import "../src";
-import { Middleware } from "@halsp/common";
+import { Middleware } from "@halsp/core";
 import { mongoose, MongooseConnection, Mongoose } from "../src";
 import { TestStartup } from "@halsp/testing";
 

@@ -1,4 +1,4 @@
-import { Context, Request, Response } from "@halsp/common";
+import { Context, Request, Response } from "@halsp/core";
 import { MicroRedisOptions, MicroRedisStartup } from "@halsp/micro-redis";
 import { initBaseTestStartup, ITestStartup } from "../test-startup";
 

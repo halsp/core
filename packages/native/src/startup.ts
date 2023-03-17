@@ -11,7 +11,7 @@ import {
   closeServer,
   dynamicListen,
   logAddress,
-} from "@halsp/common";
+} from "@halsp/core";
 import { NumericalHeadersDict } from "@halsp/http";
 import qs from "qs";
 import { Stream } from "stream";

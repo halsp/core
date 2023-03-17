@@ -1,4 +1,4 @@
-import { Context } from "@halsp/common";
+import { Context } from "@halsp/core";
 import { parseInject } from "@halsp/inject";
 import { MICRO_IDENTITY_KEY } from "./constant";
 
@@ -6,7 +6,7 @@ export { MicroClient } from "./decorators";
 export { IMicroClient } from "./client";
 export { useMicroClient, InjectMicroClient } from "./use-client";
 
-declare module "@halsp/common" {
+declare module "@halsp/core" {
   interface Context {
     getMicroClient<T = any>(identity?: string): Promise<T>;
   }

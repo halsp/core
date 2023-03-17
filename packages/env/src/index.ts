@@ -1,10 +1,10 @@
-import { Startup } from "@halsp/common";
+import { Startup } from "@halsp/core";
 import { EnvOptions } from "./options";
 import dotenv from "dotenv";
 import { BASE_USED } from "./constant";
 import path from "path";
 
-declare module "@halsp/common" {
+declare module "@halsp/core" {
   interface Startup {
     useEnv(options?: EnvOptions): this;
   }

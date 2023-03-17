@@ -1,4 +1,4 @@
-import { Dict, ReadonlyDict } from "@halsp/common";
+import { Dict, ReadonlyDict } from "@halsp/core";
 import { StatusCodes } from "http-status-codes";
 import { ResultHandler, HeaderHandler } from "./context";
 import { ReadonlyHeadersDict } from "./types";
@@ -52,7 +52,7 @@ export {
   ResultHandler,
 } from "./context";
 
-declare module "@halsp/common" {
+declare module "@halsp/core" {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface Middleware extends ResultHandler, HeaderHandler {}
 

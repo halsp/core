@@ -6,7 +6,7 @@ import {
   Middleware,
   ObjectConstructor,
   Startup,
-} from "@halsp/common";
+} from "@halsp/core";
 import { FILTERS_ORDER_BAG, GLOBAL_FILTERS_BAG, USE_FILTER } from "./constant";
 import { Action } from "@halsp/router";
 
@@ -21,7 +21,7 @@ export {
 } from "./filters";
 export { UseFilters } from "./use-filters.decorator";
 
-declare module "@halsp/common" {
+declare module "@halsp/core" {
   interface Startup {
     useFilter(): this;
     useGlobalFilter<T extends Filter = Filter>(

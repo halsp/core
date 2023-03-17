@@ -1,4 +1,4 @@
-import { Context } from "@halsp/common";
+import { Context } from "@halsp/core";
 
 export interface Options {
   allowMethods?: string | string[];

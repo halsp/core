@@ -1,4 +1,4 @@
-import { Context, Dict, Request } from "@halsp/common";
+import { Context, Dict, Request } from "@halsp/core";
 import { StatusCodes } from "@halsp/http";
 import { HttpMethods } from "@halsp/methods";
 import { TestHttpStartup } from "@halsp/testing/dist/http";

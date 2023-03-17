@@ -1,4 +1,4 @@
-import { Context } from "@halsp/common";
+import { Context } from "@halsp/core";
 import { InjectType } from "../inject-type";
 
 export type InjectCustom<T = any> =

@@ -34,7 +34,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/common": "^1.0.1",
+    "@halsp/core": "^1.0.1",
     "@halsp/http": "^1.0.1",
     "@halsp/inject": "^1.0.1",
     "@halsp/methods": "^1.0.1",

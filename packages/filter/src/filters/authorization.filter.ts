@@ -1,4 +1,4 @@
-import { Context } from "@halsp/common";
+import { Context } from "@halsp/core";
 import { Filter } from "./filter";
 
 export interface AuthorizationFilter extends Filter {

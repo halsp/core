@@ -40,7 +40,7 @@
   "dependencies": {
     "@grpc/grpc-js": "^1.8.9",
     "@grpc/proto-loader": "^0.7.5",
-    "@halsp/common": "^1.0.1",
+    "@halsp/core": "^1.0.1",
     "@halsp/micro": "^1.0.1",
     "@halsp/micro-common": "^1.0.1"
   },

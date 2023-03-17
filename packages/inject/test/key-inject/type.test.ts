@@ -1,4 +1,4 @@
-import { isUndefined, Middleware } from "@halsp/common";
+import { isUndefined, Middleware } from "@halsp/core";
 import "../../src";
 import { Service1 } from "../services";
 import { Inject, InjectType } from "../../src";

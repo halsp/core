@@ -1,6 +1,6 @@
 import { MicroStartup } from "@halsp/micro";
 import { MicroRedisOptions } from "./options";
-import { Context, getHalspPort } from "@halsp/common";
+import { Context, getHalspPort } from "@halsp/core";
 import * as redis from "redis";
 import { parseJsonBuffer } from "@halsp/micro-common";
 

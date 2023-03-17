@@ -8,4 +8,4 @@ ts-node scripts/copy-package-file.ts ../.eslintrc.js .eslintrc.js
 
 ts-node scripts/create-readme.ts
 
-cp README.md packages/common/README.md
+cp README.md packages/core/README.md

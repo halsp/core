@@ -1,5 +1,5 @@
 import { RouterOptions } from "../src";
-import "@halsp/common";
+import "@halsp/core";
 import { TestHttpStartup } from "@halsp/testing/dist/http";
 import "../src";
 import { TEST_ACTION_DIR } from "../src/constant";

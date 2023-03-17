@@ -1,4 +1,4 @@
-import { Context, isString, Request, Response } from "@halsp/common";
+import { Context, isString, Request, Response } from "@halsp/core";
 import { BodyPraserStartup } from "@halsp/body";
 import { Stream } from "stream";
 import { AliReq } from "./ali-req";

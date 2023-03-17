@@ -2,7 +2,7 @@ import "../../src";
 import { HttpMethods } from "@halsp/methods";
 import { TestHttpStartup } from "@halsp/testing/dist/http";
 import "../utils-http";
-import { Request } from "@halsp/common";
+import { Request } from "@halsp/core";
 
 const methods = ["test", "aaa", "NO"];
 

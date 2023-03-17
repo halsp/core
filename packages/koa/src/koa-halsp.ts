@@ -1,4 +1,4 @@
-import { Context, Dict, Request } from "@halsp/common";
+import { Context, Dict, Request } from "@halsp/core";
 import { HttpStartup, NumericalHeadersDict } from "@halsp/http";
 import { Context as KoaContext, Next } from "koa";
 import { KOA_CTX, KOA_NEXT } from "./constant";

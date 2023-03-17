@@ -1,4 +1,4 @@
-import { Context, Middleware } from "@halsp/common";
+import { Context, Middleware } from "@halsp/core";
 import { TestStartup } from "@halsp/testing";
 import { createInject, Inject, InjectType } from "../src";
 import "reflect-metadata";

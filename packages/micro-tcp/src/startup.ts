@@ -8,7 +8,7 @@ import {
   dynamicListen,
   getHalspPort,
   logAddress,
-} from "@halsp/common";
+} from "@halsp/core";
 
 const defaultPort = getHalspPort(2333);
 

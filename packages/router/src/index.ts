@@ -1,10 +1,4 @@
-import {
-  Context,
-  Dict,
-  isFunction,
-  ReadonlyDict,
-  Startup,
-} from "@halsp/common";
+import { Context, Dict, isFunction, ReadonlyDict, Startup } from "@halsp/core";
 import { Action } from "./action";
 import MapParser from "./map/map-parser";
 import path = require("path");
@@ -50,7 +44,7 @@ export {
 } from "./action";
 export { postbuild } from "./postbuild";
 
-declare module "@halsp/common" {
+declare module "@halsp/core" {
   interface Startup {
     useRouter(options?: RouterOptions): this;
     useRouterParser(options?: RouterOptions): this;

@@ -1,4 +1,4 @@
-import { Request, Response } from "@halsp/common";
+import { Request, Response } from "@halsp/core";
 import { TestStartup } from "./utils";
 
 beforeAll(() => {

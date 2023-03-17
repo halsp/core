@@ -1,4 +1,4 @@
-import { isClass, isUndefined, ObjectConstructor } from "@halsp/common";
+import { isClass, isUndefined, ObjectConstructor } from "@halsp/core";
 import { getPipeRecords, PipeReqRecord } from "@halsp/pipe";
 import { Action, MapItem, RouterOptions } from "@halsp/router";
 import { getRules, RuleRecord } from "@halsp/validator";

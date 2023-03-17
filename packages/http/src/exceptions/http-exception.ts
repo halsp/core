@@ -1,6 +1,6 @@
 import { getReasonPhrase, StatusCodes } from "http-status-codes";
 import { HeaderHandler, initHeaderHandler } from "../context/header-handler";
-import { ExceptionMessage, HalspException, isString } from "@halsp/common";
+import { ExceptionMessage, HalspException, isString } from "@halsp/core";
 import { HeadersDict } from "../types";
 
 export class HttpException extends HalspException {

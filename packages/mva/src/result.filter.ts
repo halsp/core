@@ -1,4 +1,4 @@
-import { Context } from "@halsp/common";
+import { Context } from "@halsp/core";
 import { Filter } from "@halsp/filter";
 
 export interface ResultFilter extends Filter {

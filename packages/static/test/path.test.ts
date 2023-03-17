@@ -1,4 +1,4 @@
-import { Request } from "@halsp/common";
+import { Request } from "@halsp/core";
 import { TestHttpStartup } from "@halsp/testing/dist/http";
 import "../src";
 import { FILE_BAG } from "../src/constant";

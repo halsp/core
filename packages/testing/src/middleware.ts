@@ -4,7 +4,7 @@ import {
   Middleware,
   ObjectConstructor,
   Startup,
-} from "@halsp/common";
+} from "@halsp/core";
 
 export type TestMiddlewareFn<T extends Middleware> = (
   md: T,
@@ -16,7 +16,7 @@ export type ExpectMiddlewareType =
   | HookType.AfterInvoke
   | HookType.BeforeNext;
 
-declare module "@halsp/common" {
+declare module "@halsp/core" {
   interface Startup {
     expectMiddleware<T extends Middleware>(
       mdCls: ObjectConstructor<T>,

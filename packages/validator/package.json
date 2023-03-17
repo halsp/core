@@ -35,7 +35,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/common": "^1.0.1",
+    "@halsp/core": "^1.0.1",
     "@halsp/inject": "^1.0.1",
     "@halsp/pipe": "^1.0.1",
     "class-validator": "^0.14.0",

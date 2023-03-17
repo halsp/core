@@ -1,6 +1,6 @@
 import { StatusCodes, getReasonPhrase } from "http-status-codes";
 import { HttpErrorMessage } from "./http-error-message";
-import { isString, Response } from "@halsp/common";
+import { isString, Response } from "@halsp/core";
 
 export interface ResultHandler {
   // 200

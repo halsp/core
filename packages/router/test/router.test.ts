@@ -1,5 +1,5 @@
 import { HttpStartup } from "@halsp/http";
-import { Request } from "@halsp/common";
+import { Request } from "@halsp/core";
 import "../src";
 import "./utils-http";
 import { TestHttpStartup } from "@halsp/testing/dist/http";

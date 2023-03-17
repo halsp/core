@@ -1,4 +1,4 @@
-import { Context, Request, Response } from "@halsp/common";
+import { Context, Request, Response } from "@halsp/core";
 import { MicroTcpOptions, MicroTcpStartup } from "@halsp/micro-tcp";
 import { initBaseTestStartup, ITestStartup } from "../test-startup";
 

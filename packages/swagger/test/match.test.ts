@@ -1,10 +1,10 @@
-import { Request } from "@halsp/common";
+import { Request } from "@halsp/core";
 import { TEST_ACTION_DIR } from "@halsp/router/dist/constant";
 import { TestHttpStartup } from "@halsp/testing/dist/http";
 import "../src";
 import { SwaggerOptions } from "../src";
 
-declare module "@halsp/common" {
+declare module "@halsp/core" {
   interface Startup {
     setTestDir(dir: string): this;
   }

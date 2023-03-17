@@ -1,4 +1,4 @@
-import { HookType } from "@halsp/common";
+import { HookType } from "@halsp/core";
 import { TestHttpStartup } from "@halsp/testing/dist/http";
 import { getPipeRecords } from "../src";
 import { expectBody, getTestRequest, TestMiddleware } from "./TestMiddleware";

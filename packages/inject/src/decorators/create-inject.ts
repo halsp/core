@@ -1,4 +1,4 @@
-import { Context } from "@halsp/common";
+import { Context } from "@halsp/core";
 import { CUSTOM_METADATA } from "../constant";
 import { InjectType } from "../inject-type";
 import { InjectCustom } from "../interfaces";

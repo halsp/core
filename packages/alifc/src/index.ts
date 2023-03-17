@@ -1,9 +1,9 @@
-import "@halsp/common";
+import "@halsp/core";
 import "@halsp/http";
 import { AliReq } from "./ali-req";
 import { AliRes } from "./ali-res";
 
-declare module "@halsp/common" {
+declare module "@halsp/core" {
   interface Context {
     get aliContext(): any;
     get aliReq(): AliReq;
