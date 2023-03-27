@@ -27,7 +27,7 @@ export default class MapCreater {
   }
 
   private get dirPath(): string {
-    return path.join(process.cwd(), this.dir);
+    return path.resolve(process.cwd(), this.dir);
   }
 
   private readFilesFromFolder(folderRePath: string, result: MapItem[]) {
