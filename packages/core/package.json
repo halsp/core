@@ -1,6 +1,6 @@
 {
   "name": "@halsp/core",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "面向云的现代渐进式轻量 Node.js 框架",
   "engines": {
     "node": ">=12.14.0"
