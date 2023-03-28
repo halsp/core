@@ -37,10 +37,10 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "glob": "^8.1.0"
+    "glob": "^9.3.2"
   },
   "devDependencies": {
-    "@types/glob": "^8.0.1"
+    "@types/glob": "^8.1.0"
   },
   "files": [
     "/dist/*",

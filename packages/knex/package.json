@@ -39,7 +39,7 @@
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "sqlite3": "^5.1.4"
+    "sqlite3": "^5.1.6"
   },
   "files": [
     "/dist/*",

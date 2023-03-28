@@ -35,7 +35,7 @@
   "dependencies": {
     "@halsp/core": "^1.0.2",
     "@halsp/inject": "^1.0.2",
-    "mongoose": "^6.9.2",
+    "mongoose": "^7.0.3",
     "reflect-metadata": "^0.1.13"
   },
   "files": [

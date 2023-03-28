@@ -39,7 +39,7 @@
     "typeorm": "^0.3.12"
   },
   "devDependencies": {
-    "sqlite3": "^5.1.4"
+    "sqlite3": "^5.1.6"
   },
   "files": [
     "/dist/*",

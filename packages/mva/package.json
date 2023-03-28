@@ -45,7 +45,7 @@
   },
   "devDependencies": {
     "@types/shelljs": "^0.8.11",
-    "ejs": "^3.1.8"
+    "ejs": "^3.1.9"
   },
   "files": [
     "/dist/*",

@@ -38,11 +38,11 @@
     "@halsp/core": "^1.0.2",
     "@halsp/http": "^1.0.2",
     "@halsp/methods": "^1.0.2",
-    "glob": "^8.1.0",
+    "glob": "^9.3.2",
     "mime": "^3.0.0"
   },
   "devDependencies": {
-    "@types/glob": "^8.0.1",
+    "@types/glob": "^8.1.0",
     "@types/mime": "^3.0.1"
   },
   "files": [
