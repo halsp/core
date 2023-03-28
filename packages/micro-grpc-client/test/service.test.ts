@@ -62,6 +62,25 @@ describe("service", () => {
     });
   }, 10000);
 
+  it("should get service in multiple", async () => {
+    const client = new MicroGrpcClient({
+      protoFiles: [
+        "./test/protos/stream.client.proto",
+        "./test/protos/test.proto",
+      ],
+    });
+    await client["connect"]();
+
+    interface TestService {
+      testMethod(data: { reqMessage: string }): Promise<{ resMessage: string }>;
+    }
+    const testService = client.getService<TestService>("test", "TestService2");
+
+    await client.dispose();
+
+    expect(!!testService).toBeTruthy();
+  });
+
   it("should be undefined when get service that not exist", async () => {
     const client = new MicroGrpcClient({
       protoFiles: "./test/protos/test.proto",
@@ -71,7 +90,10 @@ describe("service", () => {
     interface TestService {
       testMethod(data: { reqMessage: string }): Promise<{ resMessage: string }>;
     }
-    const testService = client.getService<TestService>("test", "TestService1");
+    const testService = client.getService<TestService>(
+      "test",
+      "TestServiceNotExist"
+    );
 
     await client.dispose();
 
