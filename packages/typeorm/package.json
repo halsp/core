@@ -36,7 +36,7 @@
     "@halsp/core": "^1.0.3",
     "@halsp/inject": "^1.0.3",
     "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.3.12"
+    "typeorm": "^0.3.13"
   },
   "devDependencies": {
     "sqlite3": "^5.1.6"

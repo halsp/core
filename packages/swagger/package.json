@@ -44,7 +44,7 @@
     "@halsp/validator": "^1.0.3",
     "openapi3-ts-remove-yaml": "^3.0.2",
     "reflect-metadata": "^0.1.13",
-    "swagger-ui-dist": "^4.18.1"
+    "swagger-ui-dist": "^4.18.2"
   },
   "devDependencies": {
     "@types/swagger-ui-dist": "^3.30.1"
