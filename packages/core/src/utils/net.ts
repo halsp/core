@@ -1,5 +1,5 @@
 import * as net from "net";
-import { ILogger } from "honion";
+import { ILogger } from "../logger";
 import { isObject } from "./typeis";
 
 export function getHalspPort(port: number): number;

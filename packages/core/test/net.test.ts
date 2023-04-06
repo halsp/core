@@ -39,7 +39,7 @@ describe("dynamic listen", () => {
     const server = new Server();
     let error: any;
     try {
-      await dynamicListen(server, 80, "hal.wang");
+      await dynamicListen(server, 80, "halsp.org");
     } catch (err) {
       error = err;
     }

@@ -1,4 +1,5 @@
 import { Context, Request, Response, Startup } from "../src";
+import { BaseLogger } from "../src/logger";
 import { TestStartup } from "./test-startup";
 
 describe("invoke", () => {
@@ -68,7 +69,7 @@ describe("simple", () => {
 
 describe("logger", () => {
   it("should set logger", async () => {
-    const logger = {} as any;
+    const logger = new BaseLogger();
     const startup = new TestStartup();
     expect(!!startup.logger).toBeTruthy();
 
