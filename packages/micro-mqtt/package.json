@@ -1,6 +1,6 @@
 {
   "name": "@halsp/micro-mqtt",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Halsp 微服务 MQTT 通信",
   "engines": {
     "node": ">=12.14.0"
@@ -38,9 +38,9 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^1.0.3",
-    "@halsp/micro": "^1.0.3",
-    "@halsp/micro-common": "^1.0.3",
+    "@halsp/core": "^1.0.4",
+    "@halsp/micro": "^1.0.4",
+    "@halsp/micro-common": "^1.0.4",
     "mqtt": "^4.3.7"
   },
   "files": [

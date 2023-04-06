@@ -1,6 +1,6 @@
 {
   "name": "@halsp/micro-redis",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Halsp 微服务 Redis 通信",
   "engines": {
     "node": ">=12.14.0"
@@ -38,9 +38,9 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^1.0.3",
-    "@halsp/micro": "^1.0.3",
-    "@halsp/micro-common": "^1.0.3",
+    "@halsp/core": "^1.0.4",
+    "@halsp/micro": "^1.0.4",
+    "@halsp/micro-common": "^1.0.4",
     "redis": "^4.6.5"
   },
   "files": [
