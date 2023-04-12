@@ -85,12 +85,18 @@ export function initCatchError(ctx: Context) {
     if (err instanceof MicroException) {
       this.res.setError(err.message);
     } else if (err instanceof Error) {
-      this.catchError(new MicroException(err.message));
+      const ex = new MicroException(err);
+      ex.internal = err;
+      this.catchError(ex);
     } else if (isObject(err)) {
-      this.catchError(new MicroException(err));
+      const ex = new MicroException(err);
+      ex.internal = err;
+      this.catchError(ex);
     } else {
       const error = (!isNil(err) && String(err)) || undefined;
-      this.catchError(new MicroException(error));
+      const ex = new MicroException(error);
+      ex.internal = err;
+      this.catchError(ex);
     }
 
     catchError.call(ctx, err);
