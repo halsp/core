@@ -53,8 +53,12 @@ describe("use", () => {
     @Logger()
     private readonly testLogger!: ILogger;
 
+    @Logger("2")
+    private readonly testLogger2!: ILogger;
+
     async invoke(): Promise<void> {
-      this.ctx.set("RESULT", this.testLogger.transports);
+      this.ctx.set("RESULT", this.testLogger?.transports);
+      this.ctx.set("LOGGER2", this.testLogger2);
     }
   }
 
@@ -88,12 +92,23 @@ describe("use", () => {
 
   it("should be dispose after request when injectType is scoped", async () => {
     const { ctx } = await new TestStartup()
-      .useConsoleLogger({
+      .useConsoleLogger("2", {
         injectType: InjectType.Scoped,
       })
       .add(TestMiddleware)
       .run();
 
-    expect((ctx.logger as winston.Logger).destroyed).toBeTruthy();
+    expect(ctx.get<winston.Logger>("LOGGER2").destroyed).toBeTruthy();
+  });
+
+  it("should be singleton after request when injectType is scoped", async () => {
+    const { ctx } = await new TestStartup()
+      .useConsoleLogger({
+        injectType: InjectType.Scoped,
+      } as any)
+      .add(TestMiddleware)
+      .run();
+
+    expect((ctx.logger as winston.Logger).destroyed).toBeFalsy();
   });
 });

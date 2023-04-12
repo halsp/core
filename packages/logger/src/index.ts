@@ -1,5 +1,5 @@
 import { Context, ILogger, Startup } from "@halsp/core";
-import { IService, parseInject } from "@halsp/inject";
+import { InjectType, IService, parseInject } from "@halsp/inject";
 import winston from "winston";
 import Transport from "winston-transport";
 import { FileTransportOptions } from "winston/lib/winston/transports";
@@ -8,15 +8,17 @@ import { FileOptions, Options } from "./options";
 
 declare module "@halsp/core" {
   interface Startup {
-    useLogger(options?: Options): this;
+    useLogger(options?: Omit<Options, "injectType">): this;
     useLogger(identity: string, options?: Options): this;
-    useConsoleLogger(options?: Omit<Options, "transports">): this;
+    useConsoleLogger(
+      options?: Omit<Omit<Options, "transports">, "injectType">
+    ): this;
     useConsoleLogger(
       identity: string,
       options?: Omit<Options, "transports">
     ): this;
     useFileLogger(
-      options: Omit<Options, "transports"> & {
+      options: Omit<Omit<Options, "transports">, "injectType"> & {
         fileTransportOptions: FileTransportOptions;
       }
     ): this;
@@ -56,12 +58,13 @@ Startup.prototype.useLogger = function (...args: any[]): Startup {
   }
 
   const injectKey = OPTIONS_IDENTITY + (identity ?? "");
+  const injectType = !identity ? InjectType.Singleton : options?.injectType;
   return this.useInject().inject(
     injectKey,
     () => {
       return defaultLogger ?? createLogger(options);
     },
-    options?.injectType
+    injectType
   );
 };
 
