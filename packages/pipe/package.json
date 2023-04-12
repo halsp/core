@@ -1,6 +1,6 @@
 {
   "name": "@halsp/pipe",
-  "version": "1.0.4",
+  "version": "1.1.0",
   "description": "Halsp 的管道插件，用于校验、转换、格式化请求参数",
   "engines": {
     "node": ">=12.14.0"
@@ -33,8 +33,8 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^1.0.4",
-    "@halsp/inject": "^1.0.4",
+    "@halsp/core": "^1.1.0",
+    "@halsp/inject": "^1.1.0",
     "class-transformer": "^0.5.1",
     "reflect-metadata": "^0.1.13"
   },
