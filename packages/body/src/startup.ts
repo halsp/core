@@ -3,7 +3,7 @@ import typeis from "type-is";
 import cobody from "co-body";
 import formidable from "formidable";
 import http from "http";
-import { HttpStartup, StatusCodes } from "@halsp/http";
+import { BadRequestException, HttpStartup, StatusCodes } from "@halsp/http";
 import { MultipartBody } from "./multipart";
 
 export abstract class BodyPraserStartup extends HttpStartup {
@@ -127,7 +127,9 @@ export abstract class BodyPraserStartup extends HttpStartup {
         if (onError) {
           await onError(ctx, err as Error);
         } else {
-          throw err;
+          const ex = new BadRequestException((err as Error).message);
+          ex.inner = err;
+          throw ex;
         }
         return;
       }

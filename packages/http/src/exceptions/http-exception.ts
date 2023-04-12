@@ -33,7 +33,9 @@ export class HttpException extends HalspException {
       message: this.message,
     };
     if (this.error && !isString(this.error)) {
-      return Object.assign(obj, this.error);
+      Object.assign(obj, this.error);
+      delete obj["inner"];
+      return obj;
     } else {
       return obj;
     }

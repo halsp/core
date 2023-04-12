@@ -46,17 +46,18 @@ export function initCatchError(ctx: Context) {
         .setStatus(err.status)
         .setBody(err.toPlainObject());
     } else if (err instanceof Error) {
-      const ex = new InternalServerErrorException(err);
-      ex.internal = err;
+      const msg = err.message || undefined;
+      const ex = new InternalServerErrorException(msg);
+      ex.inner = err;
       ctx.catchError(ex);
     } else if (isObject(err)) {
       const ex = new InternalServerErrorException(err);
-      ex.internal = err;
+      ex.inner = err;
       ctx.catchError(ex);
     } else {
       const error = (!isNil(err) && String(err)) || undefined;
       const ex = new InternalServerErrorException(error);
-      ex.internal = err;
+      ex.inner = err;
       ctx.catchError(ex);
     }
 

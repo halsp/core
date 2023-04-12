@@ -20,7 +20,7 @@ describe("startup", () => {
     await startup.close();
 
     expect(result).toBe("test_body");
-  });
+  }, 20000);
 
   it("should not publish when pub is undefined", async () => {
     async function test(isPubUndefined: boolean) {

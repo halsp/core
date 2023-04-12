@@ -26,7 +26,7 @@ export class HalspException extends Error {
     }
   }
 
-  internal?: Error | any;
+  inner?: Error | any;
 
   public breakthrough = false;
   public setBreakthrough(breakthrough = true): this {

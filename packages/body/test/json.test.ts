@@ -51,9 +51,9 @@ test("parse json error default", async () => {
       await next();
       expect(ctx.res.body).toEqual({
         message: "invalid JSON, only supports object and array",
-        status: 500,
+        status: 400,
       });
-      expect(ctx.res.status).toBe(500);
+      expect(ctx.res.status).toBe(400);
       invoke = true;
     })
     .useHttpJsonBody()
