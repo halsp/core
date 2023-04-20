@@ -44,7 +44,7 @@
     "@halsp/methods": "^1.1.0"
   },
   "devDependencies": {
-    "@types/shelljs": "^0.8.11"
+    "@types/shelljs": "^0.8.12"
   },
   "files": [
     "/dist/*",

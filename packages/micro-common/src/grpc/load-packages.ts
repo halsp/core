@@ -1,7 +1,7 @@
 import type grpcLoader from "@grpc/proto-loader";
 import type grpc from "@grpc/grpc-js";
 import path from "path";
-import * as glob from "glob";
+import { glob } from "glob";
 
 export interface Options {
   loaderOptions?: grpcLoader.Options;

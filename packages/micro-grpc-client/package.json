@@ -37,7 +37,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@grpc/grpc-js": "^1.8.13",
+    "@grpc/grpc-js": "^1.8.14",
     "@grpc/proto-loader": "^0.7.6",
     "@halsp/core": "^1.1.0",
     "@halsp/inject": "^1.1.0",

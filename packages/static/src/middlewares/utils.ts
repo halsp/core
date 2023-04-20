@@ -1,4 +1,4 @@
-import glob from "glob";
+import { glob } from "glob";
 import path from "path";
 import { DirectoryOptions } from "../options";
 import * as fs from "fs";

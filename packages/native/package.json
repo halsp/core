@@ -43,7 +43,7 @@
   },
   "devDependencies": {
     "@types/qs": "^6.9.7",
-    "@types/shelljs": "^0.8.11",
+    "@types/shelljs": "^0.8.12",
     "@types/supertest": "^2.0.12",
     "shelljs": "^0.8.5",
     "supertest": "^6.3.3"
