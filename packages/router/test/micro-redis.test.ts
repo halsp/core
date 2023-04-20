@@ -22,7 +22,7 @@ describe("micro-redis", () => {
     await client.dispose();
 
     expect(result).toBe("event-pattern-test");
-  });
+  }, 10000);
 
   it("should match pattern with prefix", async () => {
     const startup = new TestMicroRedisStartup({

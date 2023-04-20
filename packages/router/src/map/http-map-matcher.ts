@@ -43,13 +43,23 @@ export class MapMatcher {
     const options = this.ctx.routerOptions;
 
     let reqUrl = this.ctx.req.path;
-    if (options.prefix && reqUrl.startsWith(options.prefix)) {
+    if (options.prefix) {
+      if (!reqUrl.startsWith(options.prefix)) {
+        return false;
+      }
+
       reqUrl = reqUrl
         .substring(options.prefix.length, reqUrl.length)
         .replace(/^\//, "");
     }
-    const reqUrlStrs = reqUrl.toLowerCase().split("/");
-    const mapUrlStrs = mapItem.url.toLowerCase().split("/");
+    const reqUrlStrs = reqUrl
+      .toLowerCase()
+      .split("/")
+      .filter((item) => !!item);
+    const mapUrlStrs = mapItem.url
+      .toLowerCase()
+      .split("/")
+      .filter((item) => !!item);
     if (reqUrlStrs.length != mapUrlStrs.length) return false;
 
     if (methodIncluded && !mapItem.methods.includes(HttpMethods.any)) {
@@ -78,7 +88,10 @@ export class MapMatcher {
     mapItems.forEach((mapItem) => {
       pathsParts.push({
         mapItem: mapItem,
-        parts: mapItem.url.toLowerCase().split("/"),
+        parts: mapItem.url
+          .toLowerCase()
+          .split("/")
+          .filter((item) => !!item),
       });
     });
 

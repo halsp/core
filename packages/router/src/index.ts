@@ -192,8 +192,10 @@ Startup.prototype.useRouterParser = function (options?: RouterOptions) {
       const params: Dict<string> = {};
       const actionMetadata: MapItem = ctx.actionMetadata;
       if (actionMetadata.url.includes("^")) {
-        const mapPathStrs = actionMetadata.url.split("/");
-        const reqPathStrs = ctx.req.path.split("/");
+        const mapPathStrs = actionMetadata.url
+          .split("/")
+          .filter((item) => !!item);
+        const reqPathStrs = ctx.req.path.split("/").filter((item) => !!item);
         for (
           let i = 0;
           i < Math.min(mapPathStrs.length, reqPathStrs.length);
