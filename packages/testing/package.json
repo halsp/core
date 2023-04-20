@@ -1,6 +1,6 @@
 {
   "name": "@halsp/testing",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Halsp 的测试插件，用于单元测试、本地测试等",
   "engines": {
     "node": ">=12.14.0"
@@ -34,19 +34,19 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^1.1.0"
+    "@halsp/core": "^1.1.1"
   },
   "devDependencies": {
-    "@halsp/http": "^1.1.0",
-    "@halsp/micro": "^1.1.0",
-    "@halsp/micro-client": "^1.1.0",
-    "@halsp/micro-common": "^1.1.0",
-    "@halsp/micro-grpc": "^1.1.0",
-    "@halsp/micro-mqtt": "^1.1.0",
-    "@halsp/micro-nats": "^1.1.0",
-    "@halsp/micro-redis": "^1.1.0",
-    "@halsp/micro-tcp": "^1.1.0",
-    "@halsp/native": "^1.1.0",
+    "@halsp/http": "^1.1.1",
+    "@halsp/micro": "^1.1.1",
+    "@halsp/micro-client": "^1.1.1",
+    "@halsp/micro-common": "^1.1.1",
+    "@halsp/micro-grpc": "^1.1.1",
+    "@halsp/micro-mqtt": "^1.1.1",
+    "@halsp/micro-nats": "^1.1.1",
+    "@halsp/micro-redis": "^1.1.1",
+    "@halsp/micro-tcp": "^1.1.1",
+    "@halsp/native": "^1.1.1",
     "supertest": "^6.3.3"
   },
   "files": [
