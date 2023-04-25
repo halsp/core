@@ -1,14 +1,14 @@
 import "../src";
 import { Middleware } from "@halsp/core";
 import { TestStartup } from "@halsp/testing";
-import { Knex, knex } from "../src";
+import { Knex } from "../src";
 
 describe("identity", () => {
   class TestMiddleware extends Middleware {
     @Knex("app")
-    private readonly appConnection!: knex.Knex;
+    private readonly appConnection!: Knex;
     @Knex()
-    private readonly coreConnection!: knex.Knex;
+    private readonly coreConnection!: Knex;
 
     async invoke(): Promise<void> {
       this.ctx.set("result", {

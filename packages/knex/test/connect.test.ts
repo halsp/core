@@ -2,7 +2,7 @@ import "../src";
 import { TestStartup } from "@halsp/testing";
 import { parseInject } from "@halsp/inject";
 import { OPTIONS_IDENTITY } from "../src/constant";
-import { knex } from "../src";
+import { Knex } from "../src";
 
 describe("connect", () => {
   it("insert and select", async () => {
@@ -14,7 +14,7 @@ describe("connect", () => {
         },
       })
       .use(async (ctx) => {
-        const connection = await parseInject<knex.Knex>(ctx, OPTIONS_IDENTITY);
+        const connection = await parseInject<Knex>(ctx, OPTIONS_IDENTITY);
         if (!connection) throw new Error();
 
         const tableName = "destroy_test";

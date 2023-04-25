@@ -3,6 +3,7 @@ import { Context, Startup } from "@halsp/core";
 import { IService, parseInject } from "@halsp/inject";
 import * as knex from "knex";
 import { OPTIONS_IDENTITY } from "./constant";
+import { Knex } from "./decorators";
 import { Options } from "./options";
 
 declare module "@halsp/core" {
@@ -11,7 +12,7 @@ declare module "@halsp/core" {
   }
 
   interface Context {
-    getKnex(identity?: string): Promise<knex.Knex>;
+    getKnex(identity?: string): Promise<Knex>;
   }
 }
 
@@ -35,13 +36,10 @@ Startup.prototype.useKnex = function (options: Options): Startup {
   );
 };
 
-Context.prototype.getKnex = async function (
-  identity?: string
-): Promise<knex.Knex> {
+Context.prototype.getKnex = async function (identity?: string): Promise<Knex> {
   const injectKey = OPTIONS_IDENTITY + (identity ?? "");
-  return (await parseInject<knex.Knex>(this, injectKey)) as knex.Knex;
+  return (await parseInject<Knex>(this, injectKey)) as Knex;
 };
 
-export { knex };
 export { Knex } from "./decorators";
 export { Options } from "./options";
