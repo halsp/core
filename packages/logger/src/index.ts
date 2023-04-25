@@ -121,6 +121,6 @@ function useLogger<T extends Options = Options>(
   }
 }
 
-export { winston, Transport };
+export { Transport };
 export { Logger } from "./decorators";
 export { Options } from "./options";

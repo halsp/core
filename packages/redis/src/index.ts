@@ -45,6 +45,5 @@ Context.prototype.getRedis = async function (
   return (await parseInject(this, injectKey)) as Redis;
 };
 
-export { redis };
 export { Redis } from "./decorators";
 export { Options } from "./options";

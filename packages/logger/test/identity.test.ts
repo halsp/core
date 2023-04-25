@@ -1,15 +1,16 @@
 import "../src";
-import { Middleware, ILogger } from "@halsp/core";
-import { Logger, winston } from "../src";
+import { Middleware } from "@halsp/core";
+import { Logger } from "../src";
 import { CustomTransport } from "./utils";
 import { TestStartup } from "@halsp/testing";
+import winston from "winston";
 
 describe("identity", () => {
   class TestMiddleware extends Middleware {
     @Logger("app")
-    private readonly appLogger!: ILogger;
+    private readonly appLogger!: Logger;
     @Logger("core")
-    private readonly coreLogger!: ILogger;
+    private readonly coreLogger!: Logger;
 
     async invoke(): Promise<void> {
       this.appLogger.info("info");
@@ -51,7 +52,7 @@ describe("identity", () => {
   it("should define logger with identity by useConsoleLogger", async () => {
     class TestMiddleware extends Middleware {
       @Logger("testid")
-      private readonly testLogger!: ILogger;
+      private readonly testLogger!: Logger;
 
       async invoke(): Promise<void> {
         this.ctx.set("RESULT", this.testLogger.transports);

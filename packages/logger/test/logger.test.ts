@@ -1,9 +1,10 @@
 import "../src";
 import { Middleware, ILogger } from "@halsp/core";
-import { Logger, winston } from "../src";
+import { Logger } from "../src";
 import { CustomTransport } from "./utils";
 import { TestStartup } from "@halsp/testing";
 import { InjectType } from "@halsp/inject";
+import winston from "winston";
 
 class TestMiddleware extends Middleware {
   @Logger()
@@ -98,7 +99,7 @@ describe("use", () => {
       .add(TestMiddleware)
       .run();
 
-    expect(ctx.get<winston.Logger>("LOGGER2").destroyed).toBeTruthy();
+    expect(ctx.get<Logger>("LOGGER2").destroyed).toBeTruthy();
   });
 
   it("should be singleton after request when injectType is scoped", async () => {
@@ -109,6 +110,6 @@ describe("use", () => {
       .add(TestMiddleware)
       .run();
 
-    expect((ctx.logger as winston.Logger).destroyed).toBeFalsy();
+    expect((ctx.logger as Logger).destroyed).toBeFalsy();
   });
 });
