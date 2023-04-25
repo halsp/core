@@ -4,9 +4,8 @@ import { IService, parseInject } from "@halsp/inject";
 import path from "path";
 import * as typeorm from "typeorm";
 import { OPTIONS_IDENTITY } from "./constant";
+import { Typeorm } from "./decorators";
 import { Options } from "./options";
-
-export type TypeormConnection = typeorm.DataSource;
 
 declare module "@halsp/core" {
   interface Startup {
@@ -14,7 +13,7 @@ declare module "@halsp/core" {
   }
 
   interface Context {
-    getTypeorm(identity?: string): Promise<TypeormConnection>;
+    getTypeorm(identity?: string): Promise<Typeorm>;
   }
 }
 
@@ -56,11 +55,10 @@ Startup.prototype.useTypeorm = function (options: Options): Startup {
 
 Context.prototype.getTypeorm = async function (
   identity?: string
-): Promise<TypeormConnection> {
+): Promise<Typeorm> {
   const injectKey = OPTIONS_IDENTITY + (identity ?? "");
-  return (await parseInject(this, injectKey)) as TypeormConnection;
+  return (await parseInject(this, injectKey)) as Typeorm;
 };
 
-export { typeorm };
 export { Typeorm } from "./decorators";
 export { Options } from "./options";

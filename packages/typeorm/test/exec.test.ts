@@ -1,7 +1,7 @@
 import { TestStartup } from "@halsp/testing";
 import { parseInject } from "@halsp/inject";
 import "../src";
-import { TypeormConnection } from "../src";
+import { Typeorm } from "../src";
 import { OPTIONS_IDENTITY } from "../src/constant";
 import { TestEntity } from "./entities/TestEntity";
 
@@ -14,10 +14,7 @@ it("should insert entity to sqlite", async () => {
       entities: [TestEntity],
     })
     .use(async (ctx) => {
-      const connection = await parseInject<TypeormConnection>(
-        ctx,
-        OPTIONS_IDENTITY
-      );
+      const connection = await parseInject<Typeorm>(ctx, OPTIONS_IDENTITY);
       if (!connection) throw new Error();
 
       const testDto = new TestEntity();

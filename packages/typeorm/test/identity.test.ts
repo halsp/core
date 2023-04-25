@@ -1,13 +1,13 @@
 import "../src";
 import { Middleware } from "@halsp/core";
 import { TestStartup } from "@halsp/testing";
-import { Typeorm, TypeormConnection } from "../src";
+import { Typeorm } from "../src";
 
 class TestMiddleware extends Middleware {
   @Typeorm("app")
-  private readonly appConnection!: TypeormConnection;
+  private readonly appConnection!: Typeorm;
   @Typeorm()
-  private readonly coreConnection!: TypeormConnection;
+  private readonly coreConnection!: Typeorm;
 
   async invoke(): Promise<void> {
     this.ctx.set("result", {

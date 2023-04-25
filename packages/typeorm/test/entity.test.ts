@@ -1,7 +1,7 @@
 import { TestStartup } from "@halsp/testing";
 import { parseInject } from "@halsp/inject";
 import "../src";
-import { TypeormConnection } from "../src";
+import { Typeorm } from "../src";
 import { OPTIONS_IDENTITY } from "../src/constant";
 
 it("default entities should endswith *.js", async () => {
@@ -13,10 +13,7 @@ it("default entities should endswith *.js", async () => {
       synchronize: true,
     })
     .use(async (ctx) => {
-      const connection = await parseInject<TypeormConnection>(
-        ctx,
-        OPTIONS_IDENTITY
-      );
+      const connection = await parseInject<Typeorm>(ctx, OPTIONS_IDENTITY);
       if (!connection) throw new Error();
 
       const entity: string = (connection.options.entities as any)[0];
@@ -34,10 +31,7 @@ it("test entities should endswith *.ts", async () => {
       synchronize: true,
     })
     .use(async (ctx) => {
-      const connection = await parseInject<TypeormConnection>(
-        ctx,
-        OPTIONS_IDENTITY
-      );
+      const connection = await parseInject<Typeorm>(ctx, OPTIONS_IDENTITY);
       if (!connection) throw new Error();
 
       const entity: string = (connection.options.entities as any)[0];
