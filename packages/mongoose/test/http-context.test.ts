@@ -1,5 +1,5 @@
 import "../src";
-import { mongoose } from "../src";
+import mongoose from "mongoose";
 import { TestStartup } from "@halsp/testing";
 
 it("should get mongoose by ctx", async () => {

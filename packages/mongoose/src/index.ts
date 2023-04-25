@@ -49,6 +49,5 @@ Context.prototype.getMongoose = async function (
   return (await parseInject(this, injectKey)) as Mongoose;
 };
 
-export { mongoose };
 export { Mongoose } from "./decorators";
 export { Options } from "./options";

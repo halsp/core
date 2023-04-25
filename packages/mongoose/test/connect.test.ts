@@ -1,8 +1,9 @@
 import "../src";
 import { TestStartup } from "@halsp/testing";
 import { parseInject } from "@halsp/inject";
-import { mongoose, Mongoose } from "../src";
+import { Mongoose } from "../src";
 import { OPTIONS_IDENTITY } from "../src/constant";
+import mongoose from "mongoose";
 
 test("connected connection should be destroy", async () => {
   const { ctx } = await new TestStartup()
