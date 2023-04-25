@@ -1,13 +1,13 @@
 import "../src";
 import { Middleware } from "@halsp/core";
-import { mongoose, MongooseConnection, Mongoose } from "../src";
+import { mongoose, Mongoose } from "../src";
 import { TestStartup } from "@halsp/testing";
 
 class TestMiddleware extends Middleware {
   @Mongoose("app")
-  private readonly appConnection!: MongooseConnection;
+  private readonly appConnection!: Mongoose;
   @Mongoose()
-  private readonly coreConnection!: MongooseConnection;
+  private readonly coreConnection!: Mongoose;
 
   async invoke(): Promise<void> {
     this.ctx.set("result", {

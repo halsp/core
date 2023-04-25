@@ -3,9 +3,8 @@ import { Context, Startup } from "@halsp/core";
 import { IService, parseInject } from "@halsp/inject";
 import mongoose from "mongoose";
 import { OPTIONS_IDENTITY } from "./constant";
+import { Mongoose } from "./decorators";
 import { Options } from "./options";
-
-export type MongooseConnection = mongoose.Connection;
 
 declare module "@halsp/core" {
   interface Startup {
@@ -13,7 +12,7 @@ declare module "@halsp/core" {
   }
 
   interface Context {
-    getMongoose(identity?: string): Promise<MongooseConnection>;
+    getMongoose(identity?: string): Promise<Mongoose>;
   }
 }
 
@@ -45,9 +44,9 @@ Startup.prototype.useMongoose = function (options: Options): Startup {
 
 Context.prototype.getMongoose = async function (
   identity?: string
-): Promise<MongooseConnection> {
+): Promise<Mongoose> {
   const injectKey = OPTIONS_IDENTITY + (identity ?? "");
-  return (await parseInject(this, injectKey)) as MongooseConnection;
+  return (await parseInject(this, injectKey)) as Mongoose;
 };
 
 export { mongoose };
