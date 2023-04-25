@@ -1,14 +1,14 @@
 import "../src";
 import { Middleware } from "@halsp/core";
-import { RedisConnection, RedisInject } from "../src";
+import { Redis } from "../src";
 import { TestStartup } from "@halsp/testing";
 import RedisClient from "@redis/client/dist/lib/client";
 
 class TestMiddleware extends Middleware {
-  @RedisInject("app")
-  private readonly appConnection!: RedisConnection;
-  @RedisInject()
-  private readonly coreConnection!: RedisConnection;
+  @Redis("app")
+  private readonly appConnection!: Redis;
+  @Redis()
+  private readonly coreConnection!: Redis;
 
   async invoke(): Promise<void> {
     this.ctx.set("result", {

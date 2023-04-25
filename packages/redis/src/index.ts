@@ -3,9 +3,8 @@ import { Context, Startup } from "@halsp/core";
 import { IService, parseInject } from "@halsp/inject";
 import * as redis from "redis";
 import { OPTIONS_IDENTITY } from "./constant";
+import { Redis } from "./decorators";
 import { Options } from "./options";
-
-export type RedisConnection = redis.RedisClientType;
 
 declare module "@halsp/core" {
   interface Startup {
@@ -13,7 +12,7 @@ declare module "@halsp/core" {
   }
 
   interface Context {
-    getRedis(identity?: string): Promise<RedisConnection>;
+    getRedis(identity?: string): Promise<Redis>;
   }
 }
 
@@ -41,11 +40,11 @@ Startup.prototype.useRedis = function (options: Options = {}): Startup {
 
 Context.prototype.getRedis = async function (
   identity?: string
-): Promise<RedisConnection> {
+): Promise<Redis> {
   const injectKey = OPTIONS_IDENTITY + (identity ?? "");
-  return (await parseInject(this, injectKey)) as RedisConnection;
+  return (await parseInject(this, injectKey)) as Redis;
 };
 
 export { redis };
-export { RedisInject } from "./decorators";
+export { Redis } from "./decorators";
 export { Options } from "./options";
