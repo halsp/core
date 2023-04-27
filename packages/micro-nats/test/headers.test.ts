@@ -20,7 +20,7 @@ describe("headers", () => {
       return subscribe.bind(connection)(pattern, opts);
     };
 
-    startup.pattern("test_pattern", () => undefined);
+    startup.register("test_pattern", () => undefined);
 
     const str = JSON.stringify({
       id: "123",
@@ -64,7 +64,7 @@ describe("headers", () => {
       return subscribe.bind(connection)(pattern, opts);
     };
 
-    startup.pattern("test_pattern", () => undefined);
+    startup.register("test_pattern", () => undefined);
 
     const str = JSON.stringify({
       id: "123",

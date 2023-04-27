@@ -158,21 +158,9 @@ export class MicroGrpcStartup extends MicroStartup {
     }
   }
 
-  pattern(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
+  register(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
     this.logger.debug(`Add pattern: ${pattern}`);
     this.#handlers.push({ pattern, handler });
-    return this;
-  }
-
-  patterns(
-    ...patterns: {
-      pattern: string;
-      handler: (ctx: Context) => Promise<void> | void;
-    }[]
-  ) {
-    patterns.forEach((item) => {
-      this.pattern(item.pattern, item.handler);
-    });
     return this;
   }
 

@@ -31,7 +31,7 @@ export class MicroRedisStartup extends MicroStartup {
     await Promise.all([this.pub.connect(), this.sub.connect()]);
 
     this.#handlers.forEach((item) => {
-      this.#pattern(item.pattern, item.handler);
+      this.#register(item.pattern, item.handler);
     });
 
     this.logger.info(`Server started, listening url: ${opt.url}`);
@@ -41,7 +41,7 @@ export class MicroRedisStartup extends MicroStartup {
     };
   }
 
-  #pattern(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
+  #register(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
     if (!this.sub) return this;
     this.sub.subscribe(
       pattern,
@@ -62,22 +62,10 @@ export class MicroRedisStartup extends MicroStartup {
     return this;
   }
 
-  pattern(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
+  register(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
     this.logger.debug(`Add pattern: ${pattern}`);
     this.#handlers.push({ pattern, handler });
-    return this.#pattern(pattern, handler);
-  }
-
-  patterns(
-    ...patterns: {
-      pattern: string;
-      handler: (ctx: Context) => Promise<void> | void;
-    }[]
-  ) {
-    patterns.forEach((item) => {
-      this.pattern(item.pattern, item.handler);
-    });
-    return this;
+    return this.#register(pattern, handler);
   }
 
   async close() {

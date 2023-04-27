@@ -45,7 +45,7 @@ export class MicroMqttStartup extends MicroStartup {
     });
 
     this.#handlers.forEach((item) => {
-      this.#pattern(item.pattern);
+      this.#register(item.pattern);
     });
 
     const client = this.client as mqtt.MqttClient;
@@ -84,7 +84,7 @@ export class MicroMqttStartup extends MicroStartup {
     return client;
   }
 
-  #pattern(pattern: string) {
+  #register(pattern: string) {
     if (!this.client) return this;
 
     if (this.options.subscribeOptions) {
@@ -96,25 +96,13 @@ export class MicroMqttStartup extends MicroStartup {
     return this;
   }
 
-  pattern(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
+  register(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
     this.logger.debug(`Add pattern: ${pattern}`);
     this.#handlers.push({
       pattern: pattern,
       handler,
     });
-    return this.#pattern(pattern);
-  }
-
-  patterns(
-    ...patterns: {
-      pattern: string;
-      handler: (ctx: Context) => Promise<void> | void;
-    }[]
-  ) {
-    patterns.forEach((item) => {
-      this.pattern(item.pattern, item.handler);
-    });
-    return this;
+    return this.#register(pattern);
   }
 
   async close(force?: boolean) {

@@ -12,7 +12,7 @@ describe("micro tcp startup", () => {
           resMessage: ctx.req.body.reqMessage,
         });
       })
-      .pattern("test/TestService/testMethod", () => undefined);
+      .register("test/TestService/testMethod", () => undefined);
     await startup.listen();
 
     const client = new MicroGrpcClient({

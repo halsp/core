@@ -10,7 +10,7 @@ describe("stream", () => {
       protoFiles: "./test/protos/stream.server.proto",
       port: 5011,
     })
-      .pattern("serverStream.ServerStreamService/testMethod", (ctx) => {
+      .register("serverStream.ServerStreamService/testMethod", (ctx) => {
         expect(ctx.res.body instanceof WriteIterator).toBeTruthy();
         const body = ctx.res.body as WriteIterator;
         body.push({
@@ -85,7 +85,7 @@ describe("stream", () => {
       protoFiles: "./test/protos/stream.client.proto",
       port: 5012,
     })
-      .pattern("clientStream.ClientStreamService/testMethod", () => undefined)
+      .register("clientStream.ClientStreamService/testMethod", () => undefined)
       .use(async (ctx) => {
         req = ctx.req;
         const result = {
@@ -147,7 +147,7 @@ describe("stream", () => {
       protoFiles: "./test/protos/stream.server.proto",
       port: 5011,
     })
-      .pattern("serverStream.ServerStreamService/testMethod", (ctx) => {
+      .register("serverStream.ServerStreamService/testMethod", (ctx) => {
         expect(ctx.res.body instanceof WriteIterator).toBeTruthy();
         const body = ctx.res.body as WriteIterator;
         body.push({
@@ -203,7 +203,7 @@ describe("stream", () => {
       protoFiles: "./test/protos/stream.cs.proto",
       port: 5013,
     })
-      .pattern("csStream.CSStreamService/testMethod", () => undefined)
+      .register("csStream.CSStreamService/testMethod", () => undefined)
       .use(async (ctx) => {
         req = ctx.req;
         const result = {

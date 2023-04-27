@@ -5,7 +5,7 @@ describe("startup", () => {
   it("should subscribe and publish when use mock", async () => {
     const startup = new MicroNatsStartup({
       servers: "127.0.0.1:6001",
-    }).pattern("test_pattern", (ctx) => {
+    }).register("test_pattern", (ctx) => {
       ctx.res.body = ctx.req.body;
     });
     await startup.listen();

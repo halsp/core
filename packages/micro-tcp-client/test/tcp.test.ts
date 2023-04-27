@@ -9,7 +9,7 @@ describe("client", () => {
       .use((ctx) => {
         ctx.res.setBody(ctx.req.body);
       })
-      .pattern("test_pattern", () => undefined);
+      .register("test_pattern", () => undefined);
     const { port } = await startup.dynamicListen();
 
     const client = new MicroTcpClient({
@@ -28,7 +28,7 @@ describe("client", () => {
       .use((ctx) => {
         ctx.res.setBody(ctx.req.body);
       })
-      .pattern("pftest_pattern", () => undefined);
+      .register("pftest_pattern", () => undefined);
     const { port } = await startup.dynamicListen();
 
     const client = new MicroTcpClient({
@@ -50,7 +50,7 @@ describe("client", () => {
       .use((ctx) => {
         ctx.res.setBody(ctx.req.body);
       })
-      .pattern("test_pattern", () => undefined);
+      .register("test_pattern", () => undefined);
     const { port } = await startup.dynamicListen();
 
     const client = new MicroTcpClient({
@@ -72,7 +72,7 @@ describe("client", () => {
       .use(() => {
         invoke = true;
       })
-      .pattern("test_pattern", () => undefined);
+      .register("test_pattern", () => undefined);
     const { port } = await startup.dynamicListen();
 
     const client = new MicroTcpClient({
@@ -143,7 +143,7 @@ describe("client", () => {
       .use((ctx) => {
         ctx.res.setBody(ctx.req.body);
       })
-      .pattern("test_pattern", () => undefined);
+      .register("test_pattern", () => undefined);
     const { port } = await startup.dynamicListen();
     startup["handleMessage"] = () => new Promise((resolve) => resolve());
 
@@ -172,7 +172,7 @@ describe("client", () => {
       .use((ctx) => {
         ctx.res.setBody(ctx.req.body);
       })
-      .pattern("test_pattern", () => undefined);
+      .register("test_pattern", () => undefined);
     const { port } = await startup.dynamicListen();
     startup["handleMessage"] = () => new Promise((resolve) => resolve());
 
@@ -201,7 +201,7 @@ describe("client", () => {
       .use((ctx) => {
         ctx.res.setBody(ctx.req.body);
       })
-      .pattern("test_pattern", () => undefined);
+      .register("test_pattern", () => undefined);
     const { port } = await startup.dynamicListen();
     startup["handleMessage"] = () => new Promise((resolve) => resolve());
 
@@ -231,7 +231,7 @@ describe("client", () => {
       .use((ctx) => {
         ctx.res.setError("err");
       })
-      .pattern("test_pattern", () => undefined);
+      .register("test_pattern", () => undefined);
     const { port } = await startup.dynamicListen();
 
     const client = new MicroTcpClient({

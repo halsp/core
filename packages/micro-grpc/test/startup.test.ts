@@ -12,13 +12,10 @@ describe("startup", () => {
       protoFiles: "./test/protos/test.proto",
       credentials: grpc.ServerCredentials.createInsecure(),
     })
-      .patterns({
-        pattern: "test.TestService/testMethod",
-        handler: (ctx) => {
-          ctx.res.setBody({
-            resMessage: ctx.req.body.reqMessage,
-          });
-        },
+      .register("test.TestService/testMethod", (ctx) => {
+        ctx.res.setBody({
+          resMessage: ctx.req.body.reqMessage,
+        });
       })
       .use((ctx) => {
         req = ctx.req;
@@ -64,13 +61,10 @@ describe("startup", () => {
       protoFiles: "./test/protos/test.proto",
       credentials: grpc.ServerCredentials.createInsecure(),
     })
-      .patterns({
-        pattern: "test.TestService/testMethod",
-        handler: (ctx) => {
-          ctx.res.setBody({
-            resMessage: ctx.req.body.reqMessage,
-          });
-        },
+      .register("test.TestService/testMethod", (ctx) => {
+        ctx.res.setBody({
+          resMessage: ctx.req.body.reqMessage,
+        });
       })
       .use(() => {
         throw new Error("err");
@@ -111,7 +105,7 @@ describe("startup", () => {
       host: "0.0.0.0",
       protoFiles: "./test/protos/test.proto",
       credentials: grpc.ServerCredentials.createInsecure(),
-    }).pattern("test.TestService/not-exist", () => undefined);
+    }).register("test.TestService/not-exist", () => undefined);
     await startup.listen();
     await startup.close();
   }, 10000);

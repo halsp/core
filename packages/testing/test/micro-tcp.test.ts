@@ -9,7 +9,7 @@ describe("micro tcp startup", () => {
       .use((ctx) => {
         ctx.res.setBody(ctx.req.body);
       })
-      .pattern("test_pattern", () => undefined);
+      .register("test_pattern", () => undefined);
     const { port } = await startup.dynamicListen();
 
     const client = new MicroTcpClient({

@@ -111,23 +111,20 @@ Startup.prototype.useRouterParser = function (options?: RouterOptions) {
 
   if (
     process.env.HALSP_ENV == "micro" &&
-    "patterns" in this &&
-    isFunction(this["patterns"])
+    "register" in this &&
+    isFunction(this["register"])
   ) {
-    this["patterns"](
-      ...routerMap.map((item) => ({
-        pattern: (options?.prefix ?? "") + item.url,
-        handler: (ctx: Context) => {
-          Object.defineProperty(ctx, "actionMetadata", {
-            configurable: true,
-            enumerable: false,
-            get: () => {
-              return item;
-            },
-          });
-        },
-      }))
-    );
+    routerMap.forEach((item) => {
+      this["register"]((options?.prefix ?? "") + item.url, (ctx: Context) => {
+        Object.defineProperty(ctx, "actionMetadata", {
+          configurable: true,
+          enumerable: false,
+          get: () => {
+            return item;
+          },
+        });
+      });
+    });
   }
 
   return this.use(async (ctx, next) => {

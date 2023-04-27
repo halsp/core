@@ -17,10 +17,7 @@ describe("error", () => {
       return subscribe.bind(connection)(pattern, opts);
     };
 
-    startup.patterns({
-      pattern: "test_pattern",
-      handler: () => undefined,
-    });
+    startup.register("test_pattern", () => undefined);
 
     let error: any;
     const beforeError = console.error;

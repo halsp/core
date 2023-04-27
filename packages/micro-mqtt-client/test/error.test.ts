@@ -59,7 +59,7 @@ describe("error", () => {
     const startup = new MicroMqttStartup({
       port: 6002,
     })
-      .pattern("test_pattern", () => undefined)
+      .register("test_pattern", () => undefined)
       .use((ctx) => {
         ctx.res.setError("err");
       });

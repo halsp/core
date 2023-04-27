@@ -5,7 +5,7 @@ describe("startup", () => {
   it("should subscribe and publish", async () => {
     const startup = new MicroRedisStartup({
       url: "redis://127.0.0.1:6003",
-    }).pattern("test_pattern", (ctx) => {
+    }).register("test_pattern", (ctx) => {
       ctx.res.body = ctx.req.body;
     });
     await startup.listen();
@@ -47,10 +47,7 @@ describe("startup", () => {
         return publish.bind(pub)(pattern, ...args);
       };
 
-      startup.patterns({
-        pattern: "test_pattern",
-        handler: () => undefined,
-      });
+      startup.register("test_pattern", () => undefined);
 
       const str = JSON.stringify({
         id: "123",

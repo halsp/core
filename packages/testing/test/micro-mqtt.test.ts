@@ -4,7 +4,7 @@ import { TestMicroMqttStartup } from "../src/micro-mqtt";
 describe("micro-mqtt", () => {
   it("should subscribe and publish", async () => {
     const startup = new TestMicroMqttStartup()
-      .pattern("test_pattern", () => undefined)
+      .register("test_pattern", () => undefined)
       .use((ctx) => {
         ctx.res.body = "test";
       });

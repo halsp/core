@@ -11,7 +11,7 @@ describe("startup", () => {
           port: 6002,
         },
       ],
-    }).pattern("test_pattern", (ctx) => {
+    }).register("test_pattern", (ctx) => {
       ctx.res.body = ctx.req.body;
       expect(!!ctx.req.packet).toBeTruthy();
     });
@@ -36,11 +36,8 @@ describe("startup", () => {
       port: 6002,
       subscribeOptions: { qos: 1 },
       publishOptions: {},
-    }).patterns({
-      pattern: "test_pattern_subscribe",
-      handler: (ctx) => {
-        ctx.res.body = ctx.req.body;
-      },
+    }).register("test_pattern_subscribe", (ctx) => {
+      ctx.res.body = ctx.req.body;
     });
     await startup.listen();
 

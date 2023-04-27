@@ -5,7 +5,7 @@ describe("prefix", () => {
   it("should subscribe and publish pattern with prefix", async () => {
     const startup = new MicroMqttStartup({
       port: 6002,
-    }).pattern("pt_test_pattern", (ctx) => {
+    }).register("pt_test_pattern", (ctx) => {
       ctx.res.body = ctx.req.body;
       expect(!!ctx.req.packet).toBeTruthy();
     });

@@ -29,14 +29,14 @@ export class MicroNatsStartup extends MicroStartup {
     this.connection = await nats.connect(opt);
 
     this.#handlers.forEach((item) => {
-      this.#pattern(item.pattern, item.handler);
+      this.#register(item.pattern, item.handler);
     });
 
     this.logger.info(`Server started, listening port: ${opt.port}`);
     return this.connection;
   }
 
-  #pattern(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
+  #register(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
     if (!this.connection) return this;
 
     this.connection.subscribe(pattern, {
@@ -77,22 +77,10 @@ export class MicroNatsStartup extends MicroStartup {
     return this;
   }
 
-  pattern(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
+  register(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
     this.logger.debug(`Add pattern: ${pattern}`);
     this.#handlers.push({ pattern, handler });
-    return this.#pattern(pattern, handler);
-  }
-
-  patterns(
-    ...patterns: {
-      pattern: string;
-      handler: (ctx: Context) => Promise<void> | void;
-    }[]
-  ) {
-    patterns.forEach((item) => {
-      this.pattern(item.pattern, item.handler);
-    });
-    return this;
+    return this.#register(pattern, handler);
   }
 
   async close() {
