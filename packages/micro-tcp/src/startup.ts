@@ -32,7 +32,7 @@ export class MicroTcpStartup extends MicroStartup {
 
   #handlers: {
     pattern: string;
-    handler: (ctx: Context) => Promise<void> | void;
+    handler?: (ctx: Context) => Promise<void> | void;
   }[] = [];
 
   readonly #server: net.Server;
@@ -45,7 +45,7 @@ export class MicroTcpStartup extends MicroStartup {
             const pattern = (packet as ServerPacket).pattern;
             const handler = this.#handlers.filter(
               (item) => item.pattern == pattern
-            )[0]?.handler;
+            )[0];
             if (!handler) {
               if (packet.id) {
                 this.#writeData(socket, {
@@ -72,7 +72,7 @@ export class MicroTcpStartup extends MicroStartup {
                   enumerable: true,
                   get: () => socket,
                 });
-                await handler(ctx);
+                handler.handler && (await handler.handler(ctx));
               }
             );
           } catch (err) {
@@ -132,7 +132,7 @@ export class MicroTcpStartup extends MicroStartup {
     };
   }
 
-  register(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
+  register(pattern: string, handler?: (ctx: Context) => Promise<void> | void) {
     this.logger.debug(`Add pattern: ${pattern}`);
     this.#handlers.push({ pattern, handler });
     return this;

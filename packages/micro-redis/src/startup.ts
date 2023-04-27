@@ -11,7 +11,7 @@ export class MicroRedisStartup extends MicroStartup {
 
   #handlers: {
     pattern: string;
-    handler: (ctx: Context) => Promise<void> | void;
+    handler?: (ctx: Context) => Promise<void> | void;
   }[] = [];
 
   protected pub?: redis.RedisClientType;
@@ -41,7 +41,7 @@ export class MicroRedisStartup extends MicroStartup {
     };
   }
 
-  #register(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
+  #register(pattern: string, handler?: (ctx: Context) => Promise<void> | void) {
     if (!this.sub) return this;
     this.sub.subscribe(
       pattern,
@@ -62,7 +62,7 @@ export class MicroRedisStartup extends MicroStartup {
     return this;
   }
 
-  register(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
+  register(pattern: string, handler?: (ctx: Context) => Promise<void> | void) {
     this.logger.debug(`Add pattern: ${pattern}`);
     this.#handlers.push({ pattern, handler });
     return this.#register(pattern, handler);

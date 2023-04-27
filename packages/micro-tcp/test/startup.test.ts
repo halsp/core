@@ -146,7 +146,7 @@ describe("parse message", () => {
       .use(() => {
         times++;
       })
-      .register("test_pattern", () => undefined);
+      .register("test_pattern");
     const { port } = await startup.dynamicListen();
     const jsonData = JSON.stringify({
       pattern: "test_pattern",
@@ -174,7 +174,7 @@ describe("socket", () => {
       .use((ctx) => {
         ctx.res.setBody(ctx.socket);
       })
-      .register("test_pattern", () => undefined);
+      .register("test_pattern");
     const { port } = await startup.dynamicListen();
 
     const client = new MicroTcpClient({
@@ -195,7 +195,7 @@ describe("socket", () => {
       .use((ctx) => {
         ctx.socket.emit("error", new Error("err"));
       })
-      .register("test_pattern", () => undefined);
+      .register("test_pattern");
     const { port } = await startup.dynamicListen();
 
     const client = new MicroTcpClient({
@@ -265,7 +265,7 @@ describe("socket", () => {
   it("should return Internal Error when handle message error", async () => {
     const startup = new MicroTcpStartup({
       port: 23345,
-    }).register("test_pattern", () => undefined);
+    }).register("test_pattern");
     const { port } = await startup.dynamicListen();
 
     const client = new MicroTcpClient({

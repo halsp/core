@@ -12,7 +12,7 @@ export class MicroMqttStartup extends MicroStartup {
 
   #handlers: {
     pattern: string;
-    handler: (ctx: Context) => Promise<void> | void;
+    handler?: (ctx: Context) => Promise<void> | void;
   }[] = [];
 
   protected client?: mqtt.MqttClient;
@@ -54,7 +54,7 @@ export class MicroMqttStartup extends MicroStartup {
       (topic: string, payload: Buffer, packet: mqtt.IPublishPacket) => {
         const handler = this.#handlers.filter((item) =>
           matchTopic(item.pattern, topic)
-        )[0]?.handler;
+        )[0];
         if (!handler) return;
 
         this.handleMessage(
@@ -74,7 +74,7 @@ export class MicroMqttStartup extends MicroStartup {
               enumerable: true,
               get: () => packet,
             });
-            await handler(ctx);
+            handler.handler && (await handler.handler(ctx));
           }
         );
       }
@@ -96,7 +96,7 @@ export class MicroMqttStartup extends MicroStartup {
     return this;
   }
 
-  register(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
+  register(pattern: string, handler?: (ctx: Context) => Promise<void> | void) {
     this.logger.debug(`Add pattern: ${pattern}`);
     this.#handlers.push({
       pattern: pattern,

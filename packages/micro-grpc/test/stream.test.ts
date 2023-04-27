@@ -85,7 +85,7 @@ describe("stream", () => {
       protoFiles: "./test/protos/stream.client.proto",
       port: 5012,
     })
-      .register("clientStream.ClientStreamService/testMethod", () => undefined)
+      .register("clientStream.ClientStreamService/testMethod")
       .use(async (ctx) => {
         req = ctx.req;
         const result = {
@@ -203,7 +203,7 @@ describe("stream", () => {
       protoFiles: "./test/protos/stream.cs.proto",
       port: 5013,
     })
-      .register("csStream.CSStreamService/testMethod", () => undefined)
+      .register("csStream.CSStreamService/testMethod")
       .use(async (ctx) => {
         req = ctx.req;
         const result = {

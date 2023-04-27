@@ -11,7 +11,7 @@ export class MicroGrpcStartup extends MicroStartup {
 
   #handlers: {
     pattern: string;
-    handler: (ctx: Context) => Promise<void> | void;
+    handler?: (ctx: Context) => Promise<void> | void;
   }[] = [];
 
   protected server?: grpc.Server;
@@ -68,9 +68,9 @@ export class MicroGrpcStartup extends MicroStartup {
       const method = svc.prototype[item] as grpc.MethodDefinition<any, any>;
       const handler = this.#handlers.filter((item) =>
         isPathEqual(item.pattern, method.path)
-      )[0]?.handler;
+      )[0];
       if (handler) {
-        implementation[item] = this.#getServiceMethod(method, handler);
+        implementation[item] = this.#getServiceMethod(method, handler.handler);
       }
     });
     if (Object.keys(implementation).length) {
@@ -83,7 +83,7 @@ export class MicroGrpcStartup extends MicroStartup {
 
   #getServiceMethod(
     method: grpc.MethodDefinition<any, any>,
-    handler: (ctx: Context) => void | Promise<void>
+    handler?: (ctx: Context) => void | Promise<void>
   ): grpc.UntypedHandleCall {
     async function prehook(ctx: Context, call: any) {
       Object.defineProperty(ctx.req, "call", {
@@ -99,7 +99,7 @@ export class MicroGrpcStartup extends MicroStartup {
       if (method.responseStream) {
         ctx.res.setBody(new WriteIterator());
       }
-      await handler(ctx);
+      handler && (await handler(ctx));
     }
     function createServerPacket(call: any) {
       let data: any;
@@ -158,7 +158,7 @@ export class MicroGrpcStartup extends MicroStartup {
     }
   }
 
-  register(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
+  register(pattern: string, handler?: (ctx: Context) => Promise<void> | void) {
     this.logger.debug(`Add pattern: ${pattern}`);
     this.#handlers.push({ pattern, handler });
     return this;

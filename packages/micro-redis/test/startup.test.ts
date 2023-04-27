@@ -47,7 +47,7 @@ describe("startup", () => {
         return publish.bind(pub)(pattern, ...args);
       };
 
-      startup.register("test_pattern", () => undefined);
+      startup.register("test_pattern");
 
       const str = JSON.stringify({
         id: "123",

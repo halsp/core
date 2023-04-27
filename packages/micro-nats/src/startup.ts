@@ -12,7 +12,7 @@ export class MicroNatsStartup extends MicroStartup {
 
   #handlers: {
     pattern: string;
-    handler: (ctx: Context) => Promise<void> | void;
+    handler?: (ctx: Context) => Promise<void> | void;
   }[] = [];
 
   protected connection?: nats.NatsConnection;
@@ -36,7 +36,7 @@ export class MicroNatsStartup extends MicroStartup {
     return this.connection;
   }
 
-  #register(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
+  #register(pattern: string, handler?: (ctx: Context) => Promise<void> | void) {
     if (!this.connection) return this;
 
     this.connection.subscribe(pattern, {
@@ -68,7 +68,7 @@ export class MicroNatsStartup extends MicroStartup {
               enumerable: true,
               get: () => resHeaders,
             });
-            await handler(ctx);
+            handler && (await handler(ctx));
           }
         );
       },
@@ -77,7 +77,7 @@ export class MicroNatsStartup extends MicroStartup {
     return this;
   }
 
-  register(pattern: string, handler: (ctx: Context) => Promise<void> | void) {
+  register(pattern: string, handler?: (ctx: Context) => Promise<void> | void) {
     this.logger.debug(`Add pattern: ${pattern}`);
     this.#handlers.push({ pattern, handler });
     return this.#register(pattern, handler);
