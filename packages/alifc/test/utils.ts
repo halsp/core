@@ -1,3 +1,4 @@
+import "../src";
 import { AliReq, AliRes } from "../src";
 import * as http from "http";
 import { Socket } from "net";

@@ -1,4 +1,3 @@
-import "@halsp/http";
 import "./startup";
 import "./context";
 

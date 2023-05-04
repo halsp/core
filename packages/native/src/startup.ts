@@ -11,7 +11,7 @@ import {
   Context,
   dynamicListen,
 } from "@halsp/core";
-import { NumericalHeadersDict } from "@halsp/http";
+import type { NumericalHeadersDict } from "@halsp/http";
 import "@halsp/http";
 import qs from "qs";
 import { Stream } from "stream";

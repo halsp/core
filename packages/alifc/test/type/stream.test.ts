@@ -1,4 +1,4 @@
-import { AlifcStartup } from "../../src";
+import { Startup } from "@halsp/core";
 import { createReadStream } from "fs";
 import { newAliRes, newAliReq } from "../utils";
 
@@ -7,7 +7,8 @@ test("stream body", async function () {
   const aliReq = newAliReq();
   const aliRes = newAliRes();
 
-  await new AlifcStartup()
+  await new Startup()
+    .useAlifc()
     .use((ctx) => {
       ctx.res.ok(createReadStream("./LICENSE"));
     })

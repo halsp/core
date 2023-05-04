@@ -1,4 +1,4 @@
-import { AlifcStartup } from "../src";
+import { Startup } from "@halsp/core";
 import { newAliReq, newAliRes } from "./utils";
 
 test("without md", async function () {
@@ -6,7 +6,7 @@ test("without md", async function () {
   const aliReq = newAliReq();
   const aliRes = newAliRes();
 
-  await new AlifcStartup().run(aliReq, aliRes, aliContext);
+  await new Startup().useAlifc().run(aliReq, aliRes, aliContext);
 
   expect(aliRes.statusCode).toBe(404);
   expect(aliRes._body).toBe("");

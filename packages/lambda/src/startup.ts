@@ -1,3 +1,4 @@
+import "@halsp/http";
 import { HeadersDict } from "@halsp/http";
 import { HttpMethods } from "@halsp/methods";
 import { ResponseStruct } from "./response-struct";

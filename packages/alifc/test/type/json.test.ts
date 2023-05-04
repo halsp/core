@@ -1,4 +1,5 @@
-import { AlifcStartup } from "../../src";
+import "@halsp/body";
+import { Startup } from "@halsp/core";
 import { newAliRes, newAliReq } from "../utils";
 
 test("json body", async function () {
@@ -6,7 +7,8 @@ test("json body", async function () {
   const aliReq = newAliReq();
   const aliRes = newAliRes();
 
-  await new AlifcStartup()
+  await new Startup()
+    .useAlifc()
     .use((ctx) => {
       ctx.res.ok({
         content: "BODY",
@@ -35,7 +37,8 @@ test("json body set type", async function () {
   };
   const strBody = JSON.stringify(body);
 
-  await new AlifcStartup()
+  await new Startup()
+    .useAlifc()
     .use((ctx) => {
       ctx.res.setHeader("content-type", "application/json");
       ctx.res.setHeader(
@@ -58,7 +61,8 @@ test("prase json", async function () {
 
   aliReq.headers["content-type"] = "application/json";
 
-  await new AlifcStartup()
+  await new Startup()
+    .useAlifc()
     .useHttpJsonBody()
     .use((ctx) => {
       ctx.res.ok(ctx.req.body);

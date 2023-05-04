@@ -1,5 +1,5 @@
-import { Response } from "@halsp/core";
-import { AlifcStartup } from "../src";
+import "../src";
+import { Response, Startup } from "@halsp/core";
 
 const req: any = {
   queries: {},
@@ -13,7 +13,8 @@ const res: any = new Response();
 res.send = () => undefined;
 
 test("context", async () => {
-  await new AlifcStartup()
+  await new Startup()
+    .useAlifc()
     .use((ctx) => {
       const ctxAliReq = ctx.aliReq;
       const ctxAliRes = ctx.aliRes;

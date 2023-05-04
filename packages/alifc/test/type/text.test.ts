@@ -1,4 +1,4 @@
-import { AlifcStartup } from "../../src";
+import { Startup } from "@halsp/core";
 import { newAliRes, newAliReq } from "../utils";
 
 test("text body", async function () {
@@ -6,7 +6,8 @@ test("text body", async function () {
   const aliReq = newAliReq();
   const aliRes = newAliRes();
 
-  await new AlifcStartup()
+  await new Startup()
+    .useAlifc()
     .use((ctx) => {
       ctx.res.ok("BODY");
     })
@@ -22,7 +23,8 @@ test("text body set type", async function () {
   const aliReq = newAliReq();
   const aliRes = newAliRes();
 
-  await new AlifcStartup()
+  await new Startup()
+    .useAlifc()
     .use((ctx) => {
       ctx.res.setHeader("content-type", "text/plain");
       ctx.res.setHeader("content-length", Buffer.byteLength("BODY").toString());
@@ -40,7 +42,8 @@ test("html body", async function () {
   const aliReq = newAliReq();
   const aliRes = newAliRes();
 
-  await new AlifcStartup()
+  await new Startup()
+    .useAlifc()
     .use((ctx) => {
       ctx.res.ok("<div>BODY</div>");
     })

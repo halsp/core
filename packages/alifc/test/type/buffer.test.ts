@@ -1,4 +1,4 @@
-import { AlifcStartup } from "../../src";
+import { Startup } from "@halsp/core";
 import { newAliRes, newAliReq } from "../utils";
 
 test("buffer body", async function () {
@@ -6,7 +6,8 @@ test("buffer body", async function () {
   const aliReq = newAliReq();
   const aliRes = newAliRes();
 
-  await new AlifcStartup()
+  await new Startup()
+    .useAlifc()
     .use((ctx) => {
       ctx.res.ok(Buffer.from("BODY", "utf-8"));
     })
@@ -22,7 +23,8 @@ test("buffer body set type", async function () {
   const aliReq = newAliReq();
   const aliRes = newAliRes();
 
-  await new AlifcStartup()
+  await new Startup()
+    .useAlifc()
     .use((ctx) => {
       ctx.res.setHeader("content-type", "application/octet-stream");
       ctx.res.setHeader(

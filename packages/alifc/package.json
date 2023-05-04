@@ -36,9 +36,11 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/body": "^1.1.1",
     "@halsp/core": "^1.1.1",
     "@halsp/http": "^1.1.1"
+  },
+  "devDependencies": {
+    "@halsp/body": "^1.1.1"
   },
   "files": [
     "/dist/*",
