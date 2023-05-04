@@ -1,17 +1,17 @@
+import { Startup } from "@halsp/core";
 import {
   BadRequestException,
   ForbiddenException,
   getReasonPhrase,
   StatusCodes,
 } from "../../src";
-import { TestStartup } from "../test-startup";
 
 test("throw base error", async () => {
-  const startup = new TestStartup();
+  const startup = new Startup().useHttp();
   startup.use(async () => {
     throw new Error("msg");
   });
-  const res = await startup.run();
+  const res = await startup["invoke"]();
   expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
   expect(res.body).toEqual({
     status: StatusCodes.INTERNAL_SERVER_ERROR,
@@ -20,11 +20,11 @@ test("throw base error", async () => {
 });
 
 test("throw base error with empty message", async () => {
-  const startup = new TestStartup();
+  const startup = new Startup().useHttp();
   startup.use(async () => {
     throw new Error();
   });
-  const res = await startup.run();
+  const res = await startup["invoke"]();
   expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
   expect(res.body).toEqual({
     status: StatusCodes.INTERNAL_SERVER_ERROR,
@@ -33,11 +33,11 @@ test("throw base error with empty message", async () => {
 });
 
 test("throw error", async () => {
-  const startup = new TestStartup();
+  const startup = new Startup().useHttp();
   startup.use(async () => {
     throw new BadRequestException("msg");
   });
-  const res = await startup.run();
+  const res = await startup["invoke"]();
   expect(res.status).toBe(StatusCodes.BAD_REQUEST);
   expect(res.body).toEqual({
     status: StatusCodes.BAD_REQUEST,
@@ -50,7 +50,7 @@ function testPipeline(breakthrough?: boolean) {
     breakthrough != false ? " with breakthrough" : ""
   }`;
   test(title, async () => {
-    const startup = new TestStartup();
+    const startup = new Startup().useHttp();
     startup
       .use(async (ctx, next) => {
         ctx.res.setHeader("h1", "1");
@@ -61,7 +61,7 @@ function testPipeline(breakthrough?: boolean) {
         ctx.res.setHeader("h2", "2");
         throw new ForbiddenException("msg").setBreakthrough(breakthrough);
       });
-    const res = await startup.run();
+    const res = await startup["invoke"]();
     expect(res.status).toBe(StatusCodes.FORBIDDEN);
     expect(res.body).toEqual({
       status: StatusCodes.FORBIDDEN,
@@ -82,11 +82,11 @@ testPipeline(false);
 testPipeline(undefined);
 
 test("throw default error", async () => {
-  const startup = new TestStartup();
+  const startup = new Startup().useHttp();
   startup.use(async () => {
     throw {};
   });
-  const res = await startup.run();
+  const res = await startup["invoke"]();
   expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
   expect(res.body).toEqual({
     status: StatusCodes.INTERNAL_SERVER_ERROR,
@@ -95,11 +95,11 @@ test("throw default error", async () => {
 });
 
 test("throw string error", async () => {
-  const startup = new TestStartup();
+  const startup = new Startup().useHttp();
   startup.use(async () => {
     throw "aaa";
   });
-  const res = await startup.run();
+  const res = await startup["invoke"]();
   expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
   expect(res.body).toEqual({
     status: StatusCodes.INTERNAL_SERVER_ERROR,
@@ -108,11 +108,11 @@ test("throw string error", async () => {
 });
 
 test("throw number error", async () => {
-  const startup = new TestStartup();
+  const startup = new Startup().useHttp();
   startup.use(async () => {
     throw 123;
   });
-  const res = await startup.run();
+  const res = await startup["invoke"]();
   expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
   expect(res.body).toEqual({
     status: StatusCodes.INTERNAL_SERVER_ERROR,
@@ -121,11 +121,11 @@ test("throw number error", async () => {
 });
 
 test("throw object error", async () => {
-  const startup = new TestStartup();
+  const startup = new Startup().useHttp();
   startup.use(async () => {
     throw { a: 1, message: "err" };
   });
-  const res = await startup.run();
+  const res = await startup["invoke"]();
   expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
   expect(res.body).toEqual({
     status: StatusCodes.INTERNAL_SERVER_ERROR,
@@ -135,11 +135,11 @@ test("throw object error", async () => {
 });
 
 test("throw null error", async () => {
-  const startup = new TestStartup();
+  const startup = new Startup().useHttp();
   startup.use(async () => {
     throw null;
   });
-  const res = await startup.run();
+  const res = await startup["invoke"]();
   expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
   expect(res.body).toEqual({
     status: StatusCodes.INTERNAL_SERVER_ERROR,
@@ -148,11 +148,11 @@ test("throw null error", async () => {
 });
 
 test("throw boolean error", async () => {
-  const startup = new TestStartup();
+  const startup = new Startup().useHttp();
   startup.use(async () => {
     throw false;
   });
-  const res = await startup.run();
+  const res = await startup["invoke"]();
   expect(res.status).toBe(StatusCodes.INTERNAL_SERVER_ERROR);
   expect(res.body).toEqual({
     status: StatusCodes.INTERNAL_SERVER_ERROR,

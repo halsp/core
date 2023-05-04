@@ -1,5 +1,5 @@
-import { HookType, Middleware } from "../../src";
-import { TestStartup } from "../test-startup";
+import { HookType, Middleware, Startup } from "../../src";
+import "../test-startup";
 
 function runSimpleTest(handle: boolean, afterNext: boolean) {
   class TestMiddleware extends Middleware {
@@ -20,20 +20,17 @@ function runSimpleTest(handle: boolean, afterNext: boolean) {
 
   test(`error hook ${handle} ${afterNext}`, async () => {
     let errorMiddleware!: Middleware;
-    const { ctx } = await new TestStartup()
-      .use(async (ctx, next) => {
-        ctx.catchError = (err) => {
-          ctx.set("result", err.message);
-          return ctx;
-        };
-        await next();
-      })
+    const { ctx } = await new Startup()
       .hook(HookType.Error, (ctx, middleware, error) => {
         errorMiddleware = middleware;
         ctx.set("result", {
           message: error.message,
         });
         return handle;
+      })
+      .hook(HookType.Error, (ctx, middleware, error) => {
+        ctx.set("result", error.message);
+        return true;
       })
       .add(TestMiddleware)
       .use((ctx) => {
@@ -68,14 +65,7 @@ function runBeforeNextTest(handle: boolean) {
 
   test(`error hook ${handle}`, async () => {
     let errorMiddleware!: Middleware;
-    const { ctx } = await new TestStartup()
-      .use(async (ctx, next) => {
-        ctx.catchError = (err) => {
-          ctx.set("result", err.message);
-          return ctx;
-        };
-        await next();
-      })
+    const { ctx } = await new Startup()
       .hook(HookType.BeforeNext, (ctx, middleware) => {
         if (middleware instanceof TestMiddleware) {
           const err = new Error();
@@ -89,6 +79,10 @@ function runBeforeNextTest(handle: boolean) {
           message: error.message,
         });
         return handle;
+      })
+      .hook(HookType.Error, (ctx, middleware, error) => {
+        ctx.set("result", error.message);
+        return true;
       })
       .add(TestMiddleware)
       .use((ctx) => {

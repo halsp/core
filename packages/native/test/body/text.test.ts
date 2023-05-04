@@ -1,8 +1,11 @@
-import { NativeStartup } from "../../src";
+import "../../src";
+import "@halsp/body";
 import request from "supertest";
+import { Startup } from "@halsp/core";
 
 test("text body", async () => {
-  const server = new NativeStartup()
+  const server = new Startup()
+    .useNative()
     .useHttpTextBody()
     .use(async (ctx) => {
       ctx.res.ok("BODY");
@@ -17,7 +20,8 @@ test("text body", async () => {
 });
 
 test("text body explicit type", async () => {
-  const server = new NativeStartup()
+  const server = new Startup()
+    .useNative()
     .use(async (ctx) => {
       ctx.res.setHeader("content-type", "text/plain");
       ctx.res.setHeader("content-length", Buffer.byteLength("BODY").toString());
@@ -33,7 +37,8 @@ test("text body explicit type", async () => {
 });
 
 test("html body", async () => {
-  const server = new NativeStartup()
+  const server = new Startup()
+    .useNative()
     .use(async (ctx) => {
       ctx.res.ok("<div>BODY</div>");
     })
@@ -48,7 +53,8 @@ test("html body", async () => {
 
 function runTextReturn(headersSent: boolean) {
   test(`return text headersSent: ${headersSent}`, async () => {
-    const server = new NativeStartup()
+    const server = new Startup()
+      .useNative()
       .use(async (ctx) => {
         if (headersSent) {
           ctx.resStream.flushHeaders();

@@ -1,9 +1,10 @@
-import { NativeStartup } from "../src";
+import "../src";
 import request from "supertest";
+import { Startup } from "@halsp/core";
 
 describe("startup", () => {
   it("should listen with empty options", async () => {
-    const startup = new NativeStartup({});
+    const startup = new Startup().useNative({});
     const { server } = await startup
       .use(async (ctx) => {
         ctx.res.ok({
@@ -22,7 +23,11 @@ describe("startup", () => {
   });
 
   it("should listen with https", async () => {
-    const server = new NativeStartup({ https: true }).listen();
+    const server = new Startup()
+      .useNative({
+        https: {},
+      })
+      .listen();
     expect(server).not.toBeUndefined();
     expect(server.listening).toBeTruthy();
     server.close();
@@ -31,7 +36,8 @@ describe("startup", () => {
 
 describe("write end", () => {
   test("should not send body after stream ended", async () => {
-    const server = new NativeStartup()
+    const server = new Startup()
+      .useNative()
       .use(async (ctx, next) => {
         ctx.resStream.end();
         expect(!!ctx.reqStream).toBeTruthy();
@@ -49,7 +55,8 @@ describe("write end", () => {
   });
 
   test("should not set header after writeHead called", async () => {
-    const server = new NativeStartup()
+    const server = new Startup()
+      .useNative()
       .use(async (ctx, next) => {
         ctx.resStream.writeHead(200);
         await next();

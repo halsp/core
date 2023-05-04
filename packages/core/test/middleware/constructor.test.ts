@@ -1,5 +1,5 @@
-import { Middleware } from "../../src";
-import { TestStartup } from "../test-startup";
+import { Middleware, Startup } from "../../src";
+import "../test-startup";
 
 class TestMiddleware extends Middleware {
   async invoke(): Promise<void> {
@@ -8,21 +8,21 @@ class TestMiddleware extends Middleware {
 }
 
 test("add middleware constructor", async () => {
-  const startup = new TestStartup().add(TestMiddleware);
+  const startup = new Startup().add(TestMiddleware);
 
   const { ctx } = await startup.run();
   expect(ctx.get("result")).toBe("test");
 });
 
 test("add function middleware constructor", async () => {
-  const startup = new TestStartup().add(() => TestMiddleware);
+  const startup = new Startup().add(() => TestMiddleware);
 
   const { ctx } = await startup.run();
   expect(ctx.get("result")).toBe("test");
 });
 
 test("add async function middleware constructor", async () => {
-  const startup = new TestStartup().add(async () => {
+  const startup = new Startup().add(async () => {
     await new Promise<void>((resolve) => {
       setTimeout(() => resolve(), 200);
     });

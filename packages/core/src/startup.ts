@@ -1,4 +1,4 @@
-import { Context, Request, Response } from "./context";
+import { Context, Response } from "./context";
 import { BaseLogger, ILogger } from "./logger";
 import {
   Middleware,
@@ -12,7 +12,7 @@ import {
 } from "./middlewares";
 import { ObjectConstructor } from "./utils";
 
-export abstract class Startup {
+export class Startup {
   constructor() {
     if (!process.env.NODE_ENV) {
       process.env.NODE_ENV = "production";
@@ -131,8 +131,8 @@ export abstract class Startup {
     return this;
   }
 
-  protected async invoke(ctx: Request | Context): Promise<Response> {
-    ctx = ctx instanceof Context ? ctx : new Context(ctx);
+  protected async invoke(ctx?: Context): Promise<Response> {
+    ctx ??= new Context();
 
     Object.defineProperty(ctx, "startup", {
       configurable: true,
@@ -142,11 +142,7 @@ export abstract class Startup {
       return ctx.res;
     }
 
-    try {
-      await invokeMiddlewares(ctx, this.#mds);
-    } catch (err) {
-      ctx.catchError(err);
-    }
+    await invokeMiddlewares(ctx, this.#mds, true);
     return ctx.res;
   }
 

@@ -1,9 +1,9 @@
-import { HalspException, isExceptionMessage } from "../src";
-import { TestStartup } from "./test-startup";
+import { HalspException, isExceptionMessage, Startup } from "../src";
+import "./test-startup";
 
 describe("error", () => {
   it("should push error stack when throw error", async () => {
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .use(async () => {
         throw new Error();
       })
@@ -12,7 +12,7 @@ describe("error", () => {
   });
 
   it("should breakthrough when set error.breakthrough = true", async () => {
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .use(async (ctx, next) => {
         await next();
         ctx.set("test", true);
@@ -27,7 +27,7 @@ describe("error", () => {
   });
 
   it("should not breakthrough when set error.breakthrough = false", async () => {
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .use(async (ctx, next) => {
         await next();
         ctx.set("test", true);

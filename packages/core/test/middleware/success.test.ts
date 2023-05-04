@@ -1,12 +1,12 @@
-import { Middleware, Dict } from "../../src";
-import { TestStartup } from "../test-startup";
+import { Middleware, Dict, Startup } from "../../src";
+import "../test-startup";
 
 test("middleware success", async () => {
   const stepResult: Dict<number> = {
     step: 0,
   };
 
-  const { ctx } = await new TestStartup()
+  const { ctx } = await new Startup()
     .add(() => new Mdw1(stepResult))
     .add(() => new Mdw2(stepResult))
     .add(() => new Mdw3(stepResult))

@@ -1,6 +1,5 @@
-import { Context, Middleware } from "@halsp/core";
+import { Context, Middleware, Startup } from "@halsp/core";
 import { getReasonPhrase } from "../../src";
-import { TestStartup } from "../test-startup";
 
 const normalMethod = [
   {
@@ -130,11 +129,12 @@ const normalMethod = [
 async function testBody(body?: unknown) {
   for (let i = 0; i < normalMethod.length; i++) {
     const methodItem = normalMethod[i];
-    const res = await new TestStartup()
+    const res = await new Startup()
+      .useHttp()
       .use(async (ctx) => {
         ctx.res[methodItem.method](body);
       })
-      .run();
+      ["invoke"]();
 
     expect(res.status).toBe(methodItem.code);
     if (methodItem.error && methodItem.method.endsWith("Msg")) {
@@ -158,11 +158,12 @@ test(`test handler func with body`, async () => {
 
 test(`error message`, async () => {
   {
-    const res = await new TestStartup()
+    const res = await new Startup()
+      .useHttp()
       .use(async (ctx) => {
         ctx.res.badRequestMsg("err");
       })
-      .run();
+      ["invoke"]();
     expect(res.status).toBe(400);
     expect(res.body).toEqual({
       message: "err",
@@ -173,20 +174,22 @@ test(`error message`, async () => {
 
 test(`http result created`, async () => {
   {
-    const res = await new TestStartup()
+    const res = await new Startup()
+      .useHttp()
       .use(async (ctx) => {
         ctx.res.created("loca");
       })
-      .run();
+      ["invoke"]();
     expect(res.status).toBe(201);
     expect(res.getHeader("location")).toBe("loca");
   }
   {
-    const res = await new TestStartup()
+    const res = await new Startup()
+      .useHttp()
       .use(async (ctx) => {
         ctx.res.created("loca", "body");
       })
-      .run();
+      ["invoke"]();
     expect(res.status).toBe(201);
     expect(res.body).toBe("body");
     expect(res.getHeader("location")).toBe("loca");
@@ -194,11 +197,12 @@ test(`http result created`, async () => {
 });
 
 test(`http result noContent`, async () => {
-  const res = await new TestStartup()
+  const res = await new Startup()
+    .useHttp()
     .use(async (ctx) => {
       ctx.res.noContent();
     })
-    .run();
+    ["invoke"]();
   expect(res.status).toBe(204);
   expect(res.body).toBe(undefined);
 });
@@ -216,7 +220,7 @@ for (let i = 0; i < msgMethods.length; i++) {
 
   class Md extends Middleware {
     async invoke(): Promise<void> {
-      new TestStartup();
+      new Startup().useHttp();
       (this as any)[methodItem.method](
         this.existMsg
           ? {

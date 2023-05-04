@@ -1,9 +1,5 @@
 import { Request } from "@halsp/core";
-import { TestStartup } from "../test-startup";
-
-beforeAll(() => {
-  new TestStartup();
-});
+import "../../src";
 
 describe("method override", () => {
   test("method override", async () => {
@@ -49,21 +45,6 @@ describe("method override", () => {
       .setHeader("X-HTTP-Method-Override".toLowerCase(), "");
     expect(req.method).toBe("PATCH");
     expect(req.overrideMethod).toBe(undefined);
-  });
-
-  test(`method override request`, async () => {
-    const result = await new TestStartup(
-      new Request().setMethod("PATCH".toUpperCase())
-    )
-      .use(async (ctx) => {
-        ctx.res.ok({
-          method: "GET",
-        });
-      })
-      .run();
-
-    expect(result.status).toBe(200);
-    expect(result.body.method).toBe("GET");
   });
 
   test("empty method", async () => {

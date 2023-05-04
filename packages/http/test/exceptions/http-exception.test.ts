@@ -1,4 +1,4 @@
-import { Context } from "@halsp/core";
+import { Context, Startup } from "@halsp/core";
 import {
   HttpException,
   StatusCodes,
@@ -25,11 +25,9 @@ import {
   UnprocessableEntityException,
   UnsupportedMediaTypeException,
 } from "../../src";
-import { TestStartup } from "../test-startup";
 
 describe("http exception", () => {
-  it("should set headers in exception", () => {
-    new TestStartup();
+  it("should set headers in exception", async () => {
     const ex = new HttpException(StatusCodes.BAD_REQUEST)
       .set("h1", "1")
       .set("h2", "2");
@@ -37,7 +35,13 @@ describe("http exception", () => {
     expect(ex.error).toBeUndefined();
     expect(ex.message).toBe(getReasonPhrase(StatusCodes.BAD_REQUEST));
 
-    const ctx = new Context().initCatchError().catchError(ex);
+    const ctx = new Context();
+    await new Startup()
+      .useHttp()
+      .use(() => {
+        throw ex;
+      })
+      ["invoke"](ctx);
     expect(ctx.res.headers["h1"]).toBe("1");
     expect(ctx.res.headers["h2"]).toBe("2");
     expect(ctx.res.status).toBe(StatusCodes.BAD_REQUEST);
@@ -47,28 +51,38 @@ describe("http exception", () => {
     });
   });
 
-  it("should create exception with string error", () => {
-    new TestStartup();
+  it("should create exception with string error", async () => {
     const ex = new HttpException(StatusCodes.BAD_REQUEST, "err");
     expect(ex.error).toBe("err");
     expect(ex.message).toBe("err");
 
-    const ctx = new Context().initCatchError().catchError(ex);
+    const ctx = new Context();
+    await new Startup()
+      .useHttp()
+      .use(() => {
+        throw ex;
+      })
+      ["invoke"](ctx);
     expect(ctx.res.body).toEqual({
       message: "err",
       status: StatusCodes.BAD_REQUEST,
     });
   });
 
-  it("should create exception with object error", () => {
-    new TestStartup();
+  it("should create exception with object error", async () => {
     const ex = new HttpException(StatusCodes.BAD_REQUEST, {
       a: 1,
     } as any);
     expect(ex.error).toEqual({ a: 1 });
     expect(ex.message).toBe(getReasonPhrase(StatusCodes.BAD_REQUEST));
 
-    const ctx = new Context().initCatchError().catchError(ex);
+    const ctx = new Context();
+    await new Startup()
+      .useHttp()
+      .use(() => {
+        throw ex;
+      })
+      ["invoke"](ctx);
     expect(ctx.res.body).toEqual({
       message: getReasonPhrase(StatusCodes.BAD_REQUEST),
       status: StatusCodes.BAD_REQUEST,
@@ -77,7 +91,6 @@ describe("http exception", () => {
   });
 
   it("should create exception with object error and message", () => {
-    new TestStartup();
     const ex = new HttpException(StatusCodes.BAD_REQUEST, {
       message: "err",
     });
@@ -86,11 +99,12 @@ describe("http exception", () => {
   });
 
   it("should copy headers to ers", async () => {
-    const res = await new TestStartup()
+    const res = await new Startup()
+      .useHttp()
       .use(async () => {
         throw new BadRequestException().setHeader("bad", "true");
       })
-      .run();
+      ["invoke"]();
     expect(res.status).toBe(400);
     expect(res.get("bad")).toBe("true");
   });

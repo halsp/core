@@ -1,4 +1,4 @@
-import { Context, Middleware, Response } from "@halsp/core";
+import { Context, Middleware, Response, Startup } from "@halsp/core";
 import {
   getReasonPhrase,
   getStatusCode,
@@ -6,20 +6,15 @@ import {
   ReasonPhrases,
   StatusCodes,
 } from "../src";
-import { TestStartup } from "./test-startup";
-
-beforeAll(() => {
-  new TestStartup();
-});
 
 test("setHeader", async () => {
-  const req = new Response()
+  const res = new Response()
     .setHeader("h1", "1")
     .setHeader("h2", "2")
     .setHeader("h3", "3")
     .setHeader("h4", undefined as unknown as string);
 
-  expectHeaders(req.headers);
+  expectHeaders(res.headers);
 });
 
 test("setHeaders", async () => {
@@ -90,7 +85,7 @@ it("should get from md.req and set to md.res", async () => {
       expect(this.get("h3")).toBe("3");
     }
   }
-  await new TestStartup().add(TestMiddleware).run();
+  await new Startup().useHttp().add(TestMiddleware)["invoke"]();
 });
 
 it("should append to ctx.res", async () => {

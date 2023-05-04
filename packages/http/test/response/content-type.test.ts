@@ -1,12 +1,14 @@
+import { Startup } from "@halsp/core";
 import { createReadStream, ReadStream } from "fs";
-import { TestStartup } from "../test-startup";
+import "../../src";
 
 test(`buffer`, async () => {
-  const res = await new TestStartup()
+  const res = await new Startup()
+    .useHttp()
     .use(async (ctx) => {
       ctx.res.ok(Buffer.from("halsp"));
     })
-    .run();
+    ["invoke"]();
   expect(res.status).toBe(200);
   expect(res.get("content-type")).toBe("application/octet-stream");
   expect(res.get("content-length")).toBe(Buffer.byteLength("halsp").toString());
@@ -14,11 +16,12 @@ test(`buffer`, async () => {
 });
 
 test(`stream`, async () => {
-  const res = await new TestStartup()
+  const res = await new Startup()
+    .useHttp()
     .use(async (ctx) => {
       ctx.res.ok(createReadStream("./LICENSE"));
     })
-    .run();
+    ["invoke"]();
   expect(res.status).toBe(200);
   expect(res.get("content-type")).toBe("application/octet-stream");
   expect(res.get("content-length")).toBeUndefined();
@@ -26,11 +29,12 @@ test(`stream`, async () => {
 });
 
 test(`html`, async () => {
-  const res = await new TestStartup()
+  const res = await new Startup()
+    .useHttp()
     .use(async (ctx) => {
       ctx.res.ok("<div>halsp</div>");
     })
-    .run();
+    ["invoke"]();
   expect(res.status).toBe(200);
   expect(res.get("content-type")).toBe("text/html; charset=utf-8");
   expect(res.get("content-length")).toBe(
@@ -40,13 +44,14 @@ test(`html`, async () => {
 });
 
 test(`json`, async () => {
-  const res = await new TestStartup()
+  const res = await new Startup()
+    .useHttp()
     .use(async (ctx) => {
       ctx.res.ok({
         halsp: true,
       });
     })
-    .run();
+    ["invoke"]();
   expect(res.status).toBe(200);
   expect(res.get("content-type")).toBe("application/json; charset=utf-8");
   expect(res.get("content-length")).toBe(
@@ -62,11 +67,12 @@ test(`json`, async () => {
 });
 
 test(`array`, async () => {
-  const res = await new TestStartup()
+  const res = await new Startup()
+    .useHttp()
     .use(async (ctx) => {
       ctx.res.ok([1, 2]);
     })
-    .run();
+    ["invoke"]();
   expect(res.status).toBe(200);
   expect(res.get("content-type")).toBe("application/json; charset=utf-8");
   expect(res.get("content-length")).toBe(
@@ -76,14 +82,15 @@ test(`array`, async () => {
 });
 
 test(`string set type`, async () => {
-  const res = await new TestStartup()
+  const res = await new Startup()
+    .useHttp()
     .use(async (ctx) => {
       ctx.res
         .ok("halsp")
         .set("content-type", "text")
         .set("content-length", 100);
     })
-    .run();
+    ["invoke"]();
   expect(res.status).toBe(200);
   expect(res.get("content-type")).toBe("text");
   expect(res.get("content-length")).toBe("100");
@@ -91,7 +98,8 @@ test(`string set type`, async () => {
 });
 
 test(`josn set type`, async () => {
-  const res = await new TestStartup()
+  const res = await new Startup()
+    .useHttp()
     .use(async (ctx) => {
       ctx.res
         .ok({
@@ -100,7 +108,7 @@ test(`josn set type`, async () => {
         .set("content-type", "json")
         .set("content-length", 100);
     })
-    .run();
+    ["invoke"]();
   expect(res.status).toBe(200);
   expect(res.get("content-type")).toBe("json");
   expect(res.get("content-length")).toBe("100");
@@ -110,14 +118,15 @@ test(`josn set type`, async () => {
 });
 
 test(`buffer set type`, async () => {
-  const res = await new TestStartup()
+  const res = await new Startup()
+    .useHttp()
     .use(async (ctx) => {
       ctx.res
         .ok(Buffer.from("halsp"))
         .set("content-type", "bin")
         .set("content-length", 100);
     })
-    .run();
+    ["invoke"]();
   expect(res.status).toBe(200);
   expect(res.get("content-type")).toBe("bin");
   expect(res.get("content-length")).toBe("100");
@@ -125,14 +134,15 @@ test(`buffer set type`, async () => {
 });
 
 test(`stream set type`, async () => {
-  const res = await new TestStartup()
+  const res = await new Startup()
+    .useHttp()
     .use(async (ctx) => {
       ctx.res
         .ok(createReadStream("./LICENSE"))
         .set("content-type", "bin")
         .set("content-length", 100);
     })
-    .run();
+    ["invoke"]();
   expect(res.status).toBe(200);
   expect(res.get("content-type")).toBe("bin");
   expect(res.get("content-length")).toBe("100");

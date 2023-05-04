@@ -1,9 +1,11 @@
-import { NativeStartup } from "../../src";
+import "../../src";
 import request from "supertest";
 import { createReadStream } from "fs";
+import { Startup } from "@halsp/core";
 
 test("stream body", async () => {
-  const server = new NativeStartup()
+  const server = new Startup()
+    .useNative()
     .use(async (ctx) => {
       ctx.res.ok(createReadStream("./LICENSE"));
     })
@@ -18,7 +20,8 @@ test("stream body", async () => {
 });
 
 test("stream body explicit type", async () => {
-  const server = new NativeStartup()
+  const server = new Startup()
+    .useNative()
     .use(async (ctx) => {
       ctx.res.setHeader("content-type", "application/octet-stream");
       ctx.res.ok(createReadStream("./LICENSE"));

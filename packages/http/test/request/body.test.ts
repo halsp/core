@@ -1,10 +1,5 @@
 import { Request } from "@halsp/core";
 import "../../src";
-import { TestStartup } from "../test-startup";
-
-beforeAll(() => {
-  new TestStartup();
-});
 
 test("str body", async () => {
   const req = new Request().setBody("test body");

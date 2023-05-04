@@ -1,9 +1,10 @@
+import { Startup } from "@halsp/core";
 import request from "supertest";
-import { TestBodyParserStartup } from "./utils";
+import "./utils";
 
 test("useHttpTextBody", async () => {
   let invoke = false;
-  const server = new TestBodyParserStartup()
+  const server = new Startup()
     .use(async (ctx, next) => {
       await next();
       expect(ctx.res.body).toBe("a piece of text");
@@ -13,7 +14,7 @@ test("useHttpTextBody", async () => {
     .use(async (ctx) => {
       ctx.res.ok(ctx.req.body);
     })
-    .listen();
+    .listenTest();
   await request(server).post("").type("text").send("a piece of text");
   server.close();
   expect(invoke).toBeTruthy();
@@ -21,7 +22,7 @@ test("useHttpTextBody", async () => {
 
 test("error type", async () => {
   let invoke = false;
-  const server = new TestBodyParserStartup()
+  const server = new Startup()
     .use(async (ctx, next) => {
       await next();
       expect(ctx.res.body).toEqual({
@@ -35,7 +36,7 @@ test("error type", async () => {
         exist: !!ctx.req.body,
       });
     })
-    .listen();
+    .listenTest();
   await request(server).post("").type("json").send({});
   server.close();
   expect(invoke).toBeTruthy();

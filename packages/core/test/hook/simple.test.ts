@@ -1,5 +1,5 @@
-import { Middleware, HookType } from "../../src";
-import { TestStartup } from "../test-startup";
+import { Middleware, HookType, Startup } from "../../src";
+import "../test-startup";
 
 class TestMiddleware extends Middleware {
   static index = 1;
@@ -15,7 +15,7 @@ class TestMiddleware extends Middleware {
 }
 
 test("simple hook", async () => {
-  const startup = new TestStartup()
+  const startup = new Startup()
     .hook((ctx, md) => {
       // 1 before hook
       if (md instanceof TestMiddleware) {

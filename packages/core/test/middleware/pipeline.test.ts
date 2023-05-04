@@ -1,8 +1,8 @@
-import { Middleware } from "../../src";
-import { TestStartup } from "../test-startup";
+import { Middleware, Startup } from "../../src";
+import "../test-startup";
 
 test("middleware pipeline", async () => {
-  const startup = new TestStartup()
+  const startup = new Startup()
     .add(() => new Mdw1())
     .add(() => new Mdw2())
     .add(() => new Mdw3())

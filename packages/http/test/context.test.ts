@@ -1,7 +1,6 @@
 import { Context } from "@halsp/core";
 import { HttpMethods } from "@halsp/methods";
 import "../src";
-import { initContext } from "../src/context";
 
 describe("context", () => {
   it("default instance", async () => {
@@ -16,14 +15,6 @@ describe("context", () => {
   });
 
   it("should set res", async () => {
-    const ctx = new Context();
-    expect(ctx).toBe(ctx.res.ctx);
-  });
-
-  it("should skip init multiple", async () => {
-    initContext();
-    initContext();
-
     const ctx = new Context();
     expect(ctx).toBe(ctx.res.ctx);
   });

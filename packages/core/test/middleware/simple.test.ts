@@ -1,7 +1,8 @@
-import { TestStartup } from "../test-startup";
+import "../test-startup";
+import { Startup } from "../../src";
 
 test("simpple middleware", async () => {
-  const startup = new TestStartup()
+  const startup = new Startup()
     .use(async (ctx, next) => {
       ctx.set("mdw1", "mdw1");
       await next();

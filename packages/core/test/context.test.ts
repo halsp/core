@@ -1,8 +1,8 @@
-import { Context, Request, Response } from "../src";
-import { TestStartup } from "./test-startup";
+import { Context, Request, Response, Startup } from "../src";
+import "./test-startup";
 
 async function getContext() {
-  return await new TestStartup().run();
+  return await new Startup().run();
 }
 
 describe("ctx bag", () => {
@@ -66,11 +66,11 @@ describe("ctx bag", () => {
 
 describe("req", () => {
   it("should init req", async () => {
-    const req = new Request();
-    const ctx = new Context(req);
-    expect(ctx.req).toBe(req);
+    const ctx = new Context();
+    expect(ctx.req instanceof Request).toBeTruthy();
     expect(ctx.req).toBe(ctx.request);
-    expect(req.ctx).toBe(ctx);
+    expect(ctx.req).not.toBeUndefined();
+    expect(ctx.req.ctx).toBe(ctx);
   });
 
   it("should init res", async () => {

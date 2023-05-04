@@ -1,8 +1,10 @@
-import { NativeStartup } from "../../src";
+import "../../src";
 import request from "supertest";
+import { Startup } from "@halsp/core";
 
 test("buffer body explicit type", async () => {
-  const server = new NativeStartup()
+  const server = new Startup()
+    .useNative()
     .use(async (ctx) => {
       ctx.res.setHeader("content-type", "application/octet-stream");
       ctx.res.setHeader("content-length", Buffer.byteLength("BODY").toString());
@@ -18,7 +20,8 @@ test("buffer body explicit type", async () => {
 });
 
 test("buffer body", async () => {
-  const server = new NativeStartup()
+  const server = new Startup()
+    .useNative()
     .use(async (ctx) => {
       ctx.res.ok(Buffer.from("BODY", "utf-8"));
     })

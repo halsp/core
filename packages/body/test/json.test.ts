@@ -1,9 +1,10 @@
+import { Startup } from "@halsp/core";
 import request from "supertest";
-import { TestBodyParserStartup } from "./utils";
+import "./utils";
 
 test("useHttpJsonBody", async () => {
   let invoke = false;
-  const server = new TestBodyParserStartup()
+  const server = new Startup()
     .useHttpJsonBody()
     .use(async (ctx) => {
       expect(ctx.req.body).toEqual({
@@ -11,7 +12,7 @@ test("useHttpJsonBody", async () => {
       });
       invoke = true;
     })
-    .listen();
+    .listenTest();
   await request(server).post("").send({
     content: "BODY",
   });
@@ -22,7 +23,7 @@ test("useHttpJsonBody", async () => {
 
 test("parse json error", async () => {
   let invoke = false;
-  const server = new TestBodyParserStartup()
+  const server = new Startup()
     .use(async (ctx, next) => {
       await next();
       expect(ctx.res.body).toEqual({
@@ -38,7 +39,7 @@ test("parse json error", async () => {
     .use(async (ctx) => {
       ctx.res.ok(ctx.req.body);
     })
-    .listen();
+    .listenTest();
   await request(server).post("").send("+'{}").type("json");
   server.close();
   expect(invoke).toBeTruthy();
@@ -46,7 +47,7 @@ test("parse json error", async () => {
 
 test("parse json error default", async () => {
   let invoke = false;
-  const server = new TestBodyParserStartup()
+  const server = new Startup()
     .use(async (ctx, next) => {
       await next();
       expect(ctx.res.body).toEqual({
@@ -60,7 +61,7 @@ test("parse json error default", async () => {
     .use((ctx) => {
       ctx.res.ok(ctx.req.body);
     })
-    .listen();
+    .listenTest();
   await request(server).post("").send("+'{}").type("json");
   server.close();
   expect(invoke).toBeTruthy();

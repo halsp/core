@@ -1,9 +1,10 @@
+import { Startup } from "@halsp/core";
 import request from "supertest";
-import { TestBodyParserStartup } from "./utils";
+import "./utils";
 
 test("useHttpUrlencodedBody", async () => {
   let invoke = false;
-  const server = new TestBodyParserStartup()
+  const server = new Startup()
     .use(async (ctx, next) => {
       await next();
 
@@ -20,7 +21,7 @@ test("useHttpUrlencodedBody", async () => {
         type: ctx.req.getHeader("content-type"),
       });
     })
-    .listen();
+    .listenTest();
   await request(server).post("").type("urlencoded").send("name=hal");
   server.close();
   expect(invoke).toBeTruthy();

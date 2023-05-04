@@ -1,12 +1,13 @@
 import request from "supertest";
 import { File } from "formidable";
 import { readFileSync } from "fs";
-import { TestBodyParserStartup } from "./utils";
+import "./utils";
 import { MultipartBody } from "../src";
+import { Startup } from "@halsp/core";
 
 test("useHttpMultipartBody", async () => {
   let invoke = false;
-  const server = new TestBodyParserStartup()
+  const server = new Startup()
     .use(async (ctx, next) => {
       await next();
 
@@ -33,7 +34,7 @@ test("useHttpMultipartBody", async () => {
         },
       });
     })
-    .listen();
+    .listenTest();
   await request(server)
     .post("")
     .field("name", "fileName")
@@ -44,7 +45,7 @@ test("useHttpMultipartBody", async () => {
 
 test("on file begin", async () => {
   let invoke = false;
-  const server = new TestBodyParserStartup()
+  const server = new Startup()
     .use(async (ctx, next) => {
       await next();
 
@@ -64,7 +65,7 @@ test("on file begin", async () => {
 
       ctx.res.ok(file.originalFilename);
     })
-    .listen();
+    .listenTest();
   await request(server)
     .post("")
     .field("name", "fileName")
@@ -75,7 +76,7 @@ test("on file begin", async () => {
 
 test("prase file error without callback", async () => {
   let invoke = false;
-  const server = new TestBodyParserStartup()
+  const server = new Startup()
     .use(async (ctx, next) => {
       await next();
 
@@ -87,7 +88,7 @@ test("prase file error without callback", async () => {
     .use(async (ctx) => {
       ctx.res.noContent();
     })
-    .listen();
+    .listenTest();
 
   const body =
     "--foo\r\n" +
@@ -107,7 +108,7 @@ test("prase file error without callback", async () => {
 
 test("prase file error", async () => {
   let invoke = false;
-  const server = new TestBodyParserStartup()
+  const server = new Startup()
     .use(async (ctx, next) => {
       await next();
 
@@ -121,7 +122,7 @@ test("prase file error", async () => {
     .use(async (ctx) => {
       ctx.res.noContent();
     })
-    .listen();
+    .listenTest();
 
   const body =
     "--foo\r\n" +

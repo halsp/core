@@ -1,14 +1,15 @@
+import { Startup } from "@halsp/core";
 import { StatusCodes } from "../../src";
-import { TestStartup } from "../test-startup";
 
 test("response error message", async () => {
-  const result = await new TestStartup()
+  const result = await new Startup()
+    .useHttp()
     .use(async (ctx) => {
       ctx.res
         .setStatus(StatusCodes.BAD_REQUEST)
         .setBody({ message: "error msg" });
     })
-    .run();
+    ["invoke"]();
 
   expect(result.status).toBe(400);
   expect(result.isSuccess).toBeFalsy();

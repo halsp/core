@@ -1,10 +1,10 @@
-import { Context, Request, Response, Startup } from "../src";
+import { Context, Startup } from "../src";
 import { BaseLogger } from "../src/logger";
-import { TestStartup } from "./test-startup";
+import "./test-startup";
 
 describe("invoke", () => {
   it("should invoke multiple", async () => {
-    const startup = new TestStartup()
+    const startup = new Startup()
       .use(async (ctx, next) => {
         if (!ctx.has("result")) {
           ctx.set("result", 0);
@@ -17,41 +17,19 @@ describe("invoke", () => {
       });
     process.env.NODE_ENV = "";
 
-    let res = await startup.run();
+    let res = await startup.run(new Context());
     expect(res.ctx.get("result")).toBe(2);
     res = await startup.run();
     expect(res.ctx.get("result")).toBe(2);
     res = await startup.run();
     expect(res.ctx.get("result")).toBe(2);
-  });
-});
-
-describe("custom", () => {
-  class CustomStartup extends Startup {
-    async run(): Promise<Response> {
-      return await super.invoke(new Request());
-    }
-  }
-
-  it("should run with custom startup", async () => {
-    const { ctx } = await new CustomStartup()
-      .use((ctx) => {
-        ctx.set("result", {
-          msg: "ok",
-        });
-      })
-      .run();
-
-    expect(ctx.get("result")).toEqual({
-      msg: "ok",
-    });
   });
 });
 
 describe("simple", () => {
   it("should invoke simple startup", async () => {
     let context!: Context;
-    await new TestStartup()
+    await new Startup()
       .use(async (ctx) => {
         context = ctx;
       })
@@ -61,7 +39,7 @@ describe("simple", () => {
   });
 
   test("should invoke without md", async () => {
-    const ctx = await new TestStartup().run();
+    const ctx = await new Startup().run();
 
     expect(ctx).not.toBeUndefined();
   });
@@ -70,7 +48,7 @@ describe("simple", () => {
 describe("logger", () => {
   it("should set logger", async () => {
     const logger = new BaseLogger();
-    const startup = new TestStartup();
+    const startup = new Startup();
     expect(!!startup.logger).toBeTruthy();
 
     startup.setLogger(logger);
@@ -78,7 +56,7 @@ describe("logger", () => {
   });
 
   it("should set ctx.logger", async () => {
-    const startup = new TestStartup();
+    const startup = new Startup();
     await startup
       .use(async (ctx) => {
         expect(startup.logger).toBe(ctx.logger);
@@ -90,7 +68,7 @@ describe("logger", () => {
 
   function testConsole(consoleFunc: string) {
     it(`should log ${consoleFunc} by console.${consoleFunc}`, async () => {
-      const startup = new TestStartup();
+      const startup = new Startup();
       const logger = startup.logger;
 
       const beforeFunc = console[consoleFunc];

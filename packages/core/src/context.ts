@@ -48,9 +48,10 @@ export class Response {
   }
 }
 
+const singletonBagMap = new WeakMap<Startup, Dict>();
 export class Context {
-  constructor(req: Request = new Request()) {
-    this.#req = req;
+  constructor() {
+    this.#req = new Request();
     this.#res = new Response();
 
     Object.defineProperty(this.#req, "ctx", {
@@ -89,10 +90,10 @@ export class Context {
   readonly startup!: Startup;
 
   get #singletonBag() {
-    const key = "@halsp/core/singletonBag";
-    const singletonBag: Dict = this.startup[key] ?? {};
-    this.startup[key] = singletonBag;
-    return singletonBag;
+    if (!singletonBagMap.has(this.startup)) {
+      singletonBagMap.set(this.startup, {});
+    }
+    return singletonBagMap.get(this.startup) as Dict;
   }
   readonly #scopedBag: Dict = {};
   readonly #bag: Dict = {};
@@ -165,8 +166,4 @@ export class Context {
   }
 
   readonly errorStack: any[] = [];
-  public catchError(err: Error | any): this {
-    this.errorStack.push(err);
-    return this;
-  }
 }

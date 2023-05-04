@@ -1,67 +1,94 @@
 import { Stream } from "stream";
 import * as mime from "mime-types";
-import { Context, isString, Request, Response, Startup } from "@halsp/core";
-import { initCatchError, initContext } from "./context";
+import {
+  HookType,
+  isNil,
+  isObject,
+  isString,
+  Response,
+  Startup,
+} from "@halsp/core";
+import { HttpException, InternalServerErrorException } from "./exceptions";
 
-export abstract class HttpStartup extends Startup {
-  constructor() {
-    super();
-    process.env.HALSP_ENV = "http";
-    initContext();
+declare module "@halsp/core" {
+  interface Startup {
+    useHttp(): this;
   }
+}
 
-  protected async invoke(ctx: Request | Context): Promise<Response> {
-    ctx = ctx instanceof Request ? new Context(ctx) : ctx;
-    initCatchError(ctx);
+Startup.prototype.useHttp = function () {
+  process.env.HALSP_ENV = "http";
 
-    const res = await super.invoke(ctx);
-    this.#setType(res);
+  return this.use(async (ctx, next) => {
+    await next();
+    setType(ctx.res);
+  }).hook(HookType.Error, (ctx, md, error) => {
+    const catchError = (err: Error | any) => {
+      if (err instanceof HttpException) {
+        ctx.res
+          .setHeaders(err.headers)
+          .setStatus(err.status)
+          .setBody(err.toPlainObject());
+      } else if (err instanceof Error) {
+        const msg = err.message || undefined;
+        const ex = new InternalServerErrorException(msg);
+        ex.inner = err;
+        catchError(ex);
+      } else if (isObject(err)) {
+        const ex = new InternalServerErrorException(err);
+        ex.inner = err;
+        catchError(ex);
+      } else {
+        const error = (!isNil(err) && String(err)) || undefined;
+        const ex = new InternalServerErrorException(error);
+        ex.inner = err;
+        catchError(ex);
+      }
+    };
+    catchError(error);
+    return false;
+  });
+};
+
+function setType(res: Response) {
+  const body = res.body;
+
+  if (!body) {
+    res.removeHeader("content-type");
+    res.removeHeader("content-length");
     return res;
   }
 
-  #setType(res: Response) {
-    const body = res.body;
+  const writeType = !res.hasHeader("content-type");
+  const writeLength = !res.hasHeader("content-length");
 
-    if (!body) {
-      res.removeHeader("content-type");
-      res.removeHeader("content-length");
-      return res;
+  if (Buffer.isBuffer(body)) {
+    if (writeLength) {
+      res.setHeader("content-length", body.byteLength);
     }
-
-    const writeType = !res.hasHeader("content-type");
-    const writeLength = !res.hasHeader("content-length");
-
-    if (Buffer.isBuffer(body)) {
-      if (writeLength) {
-        res.setHeader("content-length", body.byteLength);
-      }
-      if (writeType) {
-        res.setHeader("content-type", mime.contentType("bin") as string);
-      }
-    } else if (body instanceof Stream) {
-      if (writeType) {
-        res.setHeader("content-type", mime.contentType("bin") as string);
-      }
-    } else if (isString(body)) {
-      if (writeLength) {
-        res.setHeader("content-length", Buffer.byteLength(body));
-      }
-      if (writeType) {
-        const type = /^\s*</.test(body) ? "html" : "text";
-        res.setHeader("content-type", mime.contentType(type) as string);
-      }
-    } else {
-      if (writeLength) {
-        res.setHeader(
-          "content-length",
-          Buffer.byteLength(JSON.stringify(body))
-        );
-      }
-      if (writeType) {
-        res.setHeader("content-type", mime.contentType("json") as string);
-      }
+    if (writeType) {
+      res.setHeader("content-type", mime.contentType("bin") as string);
     }
-
-    return res;
+  } else if (body instanceof Stream) {
+    if (writeType) {
+      res.setHeader("content-type", mime.contentType("bin") as string);
+    }
+  } else if (isString(body)) {
+    if (writeLength) {
+      res.setHeader("content-length", Buffer.byteLength(body));
+    }
+    if (writeType) {
+      const type = /^\s*</.test(body) ? "html" : "text";
+      res.setHeader("content-type", mime.contentType(type) as string);
+    }
+  } else {
+    if (writeLength) {
+      res.setHeader("content-length", Buffer.byteLength(JSON.stringify(body)));
+    }
+    if (writeType) {
+      res.setHeader("content-type", mime.contentType("json") as string);
+    }
   }
+
+  return res;
 }

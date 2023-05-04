@@ -1,10 +1,5 @@
-import * as http from "http";
+import "./startup";
+import "./context";
+import { Options } from "./options";
 
-export { NativeStartup } from "./startup";
-
-declare module "@halsp/core" {
-  interface Context {
-    get reqStream(): http.IncomingMessage;
-    get resStream(): http.ServerResponse;
-  }
-}
+export { Options };

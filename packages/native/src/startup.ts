@@ -1,128 +1,90 @@
-import { BodyPraserStartup } from "@halsp/body";
 import * as net from "net";
 import * as http from "http";
 import * as https from "https";
 import {
-  Request,
   Response,
   Dict,
   isString,
-  Context,
   closeServer,
-  dynamicListen,
   logAddress,
+  Startup,
+  Context,
+  dynamicListen,
 } from "@halsp/core";
 import { NumericalHeadersDict } from "@halsp/http";
+import "@halsp/http";
 import qs from "qs";
 import { Stream } from "stream";
+import { Options } from "./options";
 
-type HttpNativeOptions = http.ServerOptions;
-type HttpsNativeOptions = https.ServerOptions & { https: true };
-type ServerType<T extends HttpNativeOptions | HttpsNativeOptions> =
-  T extends HttpNativeOptions ? http.Server : https.Server;
+type ServerType = http.Server | https.Server;
 
-export class NativeStartup<
-  T extends HttpNativeOptions | HttpsNativeOptions =
-    | HttpNativeOptions
-    | HttpsNativeOptions
-> extends BodyPraserStartup {
-  protected readonly server!: ServerType<T>;
+declare module "@halsp/core" {
+  interface Startup {
+    useNative(options?: Options): this;
+    get server(): ServerType;
 
-  constructor(serverOptions?: T) {
-    super((ctx) => ctx.reqStream);
+    listen(
+      port?: number,
+      hostname?: string,
+      backlog?: number,
+      listeningListener?: () => void
+    ): ServerType;
+    listen(
+      port?: number,
+      hostname?: string,
+      listeningListener?: () => void
+    ): ServerType;
+    listen(
+      port?: number,
+      backlog?: number,
+      listeningListener?: () => void
+    ): ServerType;
+    listen(port?: number, listeningListener?: () => void): ServerType;
+    listen(
+      path: string,
+      backlog?: number,
+      listeningListener?: () => void
+    ): ServerType;
+    listen(path: string, listeningListener?: () => void): ServerType;
+    listen(
+      options: net.ListenOptions,
+      listeningListener?: () => void
+    ): ServerType;
+    listen(
+      handle: any,
+      backlog?: number,
+      listeningListener?: () => void
+    ): ServerType;
+    listen(handle: any, listeningListener?: () => void): ServerType;
 
-    if (isHttpsOptions(serverOptions)) {
-      this.server = https.createServer(serverOptions, this.#requestListener);
-    } else if (serverOptions) {
-      this.server = http.createServer(
-        serverOptions,
-        this.#requestListener
-      ) as ServerType<T>;
-    } else {
-      this.server = http.createServer(this.#requestListener) as ServerType<T>;
-    }
+    dynamicListen(
+      port?: number,
+      hostname?: string,
+      backlog?: number,
+      listeningListener?: () => void
+    ): Promise<{ port: number; server: ServerType }>;
+    dynamicListen(
+      port?: number,
+      hostname?: string,
+      listeningListener?: () => void
+    ): Promise<{ port: number; server: ServerType }>;
+    dynamicListen(
+      port?: number,
+      backlog?: number,
+      listeningListener?: () => void
+    ): Promise<{ port: number; server: ServerType }>;
 
-    this.server.on("listening", () => {
-      logAddress(this.server, this.logger, "http://localhost");
-    });
+    close(): Promise<void>;
   }
+}
 
-  listen(
-    port?: number,
-    hostname?: string,
-    backlog?: number,
-    listeningListener?: () => void
-  ): ServerType<T>;
-  listen(
-    port?: number,
-    hostname?: string,
-    listeningListener?: () => void
-  ): ServerType<T>;
-  listen(
-    port?: number,
-    backlog?: number,
-    listeningListener?: () => void
-  ): ServerType<T>;
-  listen(port?: number, listeningListener?: () => void): ServerType<T>;
-  listen(
-    path: string,
-    backlog?: number,
-    listeningListener?: () => void
-  ): ServerType<T>;
-  listen(path: string, listeningListener?: () => void): ServerType<T>;
-  listen(
-    options: net.ListenOptions,
-    listeningListener?: () => void
-  ): ServerType<T>;
-  listen(
-    handle: any,
-    backlog?: number,
-    listeningListener?: () => void
-  ): ServerType<T>;
-  listen(handle: any, listeningListener?: () => void): ServerType<T>;
-  listen(...args: any[]) {
-    return this.server.listen(...args);
-  }
-
-  dynamicListen(
-    port?: number,
-    hostname?: string,
-    backlog?: number,
-    listeningListener?: () => void
-  ): Promise<{ port: number; server: ServerType<T> }>;
-  dynamicListen(
-    port?: number,
-    hostname?: string,
-    listeningListener?: () => void
-  ): Promise<{ port: number; server: ServerType<T> }>;
-  dynamicListen(
-    port?: number,
-    backlog?: number,
-    listeningListener?: () => void
-  ): Promise<{ port: number; server: ServerType<T> }>;
-  async dynamicListen(...args: any[]) {
-    const port = await dynamicListen(this.server, ...args);
-    return {
-      port,
-      server: this.server,
-    };
-  }
-
-  #requestListener = async (
+Startup.prototype.useNative = function (options?: Options) {
+  const requestListener = async (
     reqStream: http.IncomingMessage,
     resStream: http.ServerResponse
   ): Promise<void> => {
-    const pathname = (reqStream.url as string).split("?")[0];
-    const query = qs.parse((reqStream.url as string).split("?")[1]);
-    const ctx = new Context(
-      new Request()
-        .setPath(pathname)
-        .setMethod(reqStream.method as string)
-        .setQuery(query as Dict<string>)
-        .setHeaders(reqStream.headers as NumericalHeadersDict)
-    );
-
-    resStream.statusCode = 404;
+    const ctx = new Context();
 
     Object.defineProperty(ctx, "resStream", {
       get: () => resStream,
@@ -131,48 +93,84 @@ export class NativeStartup<
       get: () => reqStream,
     });
 
-    const res = await this.invoke(ctx);
+    const res = await this["invoke"](ctx);
 
     if (!resStream.writableEnded) {
       resStream.statusCode = res.status;
-      this.#writeHead(res, resStream);
-      this.#writeBody(res, resStream);
+      writeHead(res, resStream);
+      writeBody(res, resStream);
     }
   };
 
-  #writeHead(halspRes: Response, resStream: http.ServerResponse) {
-    if (resStream.headersSent) return;
-    Object.keys(halspRes.headers)
-      .filter((key) => !!halspRes.headers[key])
-      .forEach((key) => {
-        resStream.setHeader(key, halspRes.headers[key] as string | string[]);
-      });
+  let server: ServerType;
+  if (!!options?.https) {
+    server = https.createServer(options, requestListener);
+  } else if (options) {
+    server = http.createServer(options, requestListener);
+  } else {
+    server = http.createServer(requestListener);
   }
+  Object.defineProperty(this, "server", {
+    configurable: true,
+    enumerable: true,
+    get: () => server,
+  });
 
-  #writeBody(halspRes: Response, resStream: http.ServerResponse) {
-    if (!halspRes.body) {
-      resStream.end();
-      return;
-    }
+  this.server.on("listening", () => {
+    logAddress(this.server, this.logger, "http://localhost");
+  });
 
-    if (halspRes.body instanceof Stream) {
-      halspRes.body.pipe(resStream);
-    } else if (Buffer.isBuffer(halspRes.body)) {
-      resStream.end(halspRes.body);
-    } else if (isString(halspRes.body)) {
-      resStream.end(halspRes.body);
-    } else {
-      resStream.end(JSON.stringify(halspRes.body));
-    }
-  }
+  return this.useHttp().use(async (ctx, next) => {
+    const pathname = (ctx.reqStream.url as string).split("?")[0];
+    const query = qs.parse((ctx.reqStream.url as string).split("?")[1]);
+    ctx.req
+      .setPath(pathname)
+      .setMethod(ctx.reqStream.method as string)
+      .setQuery(query as Dict<string>)
+      .setHeaders(ctx.reqStream.headers as NumericalHeadersDict);
+    ctx.resStream.statusCode = 404;
+    await next();
+  });
+};
 
-  async close() {
-    await closeServer(this.server, this.logger);
-  }
+Startup.prototype.listen = function (...args: any[]) {
+  return this.server.listen(...args);
+};
+
+Startup.prototype.dynamicListen = async function (...args: any[]) {
+  const port = await dynamicListen(this.server, ...args);
+  return {
+    port,
+    server: this.server,
+  };
+};
+
+Startup.prototype.close = async function () {
+  await closeServer(this.server, this.logger);
+};
+
+function writeHead(halspRes: Response, resStream: http.ServerResponse) {
+  if (resStream.headersSent) return;
+  Object.keys(halspRes.headers)
+    .filter((key) => !!halspRes.headers[key])
+    .forEach((key) => {
+      resStream.setHeader(key, halspRes.headers[key] as string | string[]);
+    });
 }
 
-function isHttpsOptions(
-  options?: HttpNativeOptions | HttpsNativeOptions
-): options is HttpsNativeOptions {
-  return !!options && "https" in options && !!options.https;
+function writeBody(halspRes: Response, resStream: http.ServerResponse) {
+  if (!halspRes.body) {
+    resStream.end();
+    return;
+  }
+
+  if (halspRes.body instanceof Stream) {
+    halspRes.body.pipe(resStream);
+  } else if (Buffer.isBuffer(halspRes.body)) {
+    resStream.end(halspRes.body);
+  } else if (isString(halspRes.body)) {
+    resStream.end(halspRes.body);
+  } else {
+    resStream.end(JSON.stringify(halspRes.body));
+  }
 }

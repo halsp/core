@@ -1,5 +1,5 @@
-import { Middleware, HookType } from "../../src";
-import { TestStartup } from "../test-startup";
+import { Middleware, HookType, Startup } from "../../src";
+import "../test-startup";
 
 test("simple hook", async () => {
   class TestMiddleware extends Middleware {
@@ -12,7 +12,7 @@ test("simple hook", async () => {
     count = 0;
   }
 
-  const startup = new TestStartup()
+  const startup = new Startup()
     .hook((ctx, md) => {
       if (md instanceof TestMiddleware) {
         md.count++;
@@ -61,7 +61,7 @@ function runReturnFalse(type: HookType.BeforeInvoke | HookType.BeforeNext) {
       count = 0;
     }
 
-    const startup = new TestStartup()
+    const startup = new Startup()
       .hook(type, (ctx, md) => {
         if (md instanceof TestMiddleware) {
           md.count++;

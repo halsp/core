@@ -1,5 +1,5 @@
-import { Middleware } from "../../src";
-import { TestStartup } from "../test-startup";
+import { Middleware, Startup } from "../../src";
+import "../test-startup";
 
 describe("middleware.ctx", () => {
   class TestMiddleware extends Middleware {
@@ -10,7 +10,7 @@ describe("middleware.ctx", () => {
 
   it("should init ctx", async () => {
     const md = new TestMiddleware();
-    const startup = new TestStartup();
+    const startup = new Startup();
     await startup.add(() => md).run();
     expect(md.ctx).not.toBeUndefined();
     expect(md.ctx.startup).toBe(startup);
@@ -18,7 +18,7 @@ describe("middleware.ctx", () => {
 
   it("should init req", async () => {
     const md = new TestMiddleware();
-    const startup = new TestStartup();
+    const startup = new Startup();
     await startup.add(() => md).run();
     expect(md.req).toBe(md.ctx.req);
     expect(md.request).toBe(md.ctx.req);
@@ -26,7 +26,7 @@ describe("middleware.ctx", () => {
 
   it("should init res", async () => {
     const md = new TestMiddleware();
-    const startup = new TestStartup();
+    const startup = new Startup();
     await startup.add(() => md).run();
     expect(md.res).toBe(md.ctx.res);
     expect(md.response).toBe(md.ctx.res);
@@ -34,7 +34,7 @@ describe("middleware.ctx", () => {
 
   it("should set logger", async () => {
     const md = new TestMiddleware();
-    const startup = new TestStartup();
+    const startup = new Startup();
     await startup.add(() => md).run();
 
     expect(md.logger).toBe(startup.logger);

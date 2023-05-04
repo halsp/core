@@ -1,6 +1,6 @@
 import { Context } from "../context";
 import { HalspException } from "../exception";
-import { isClass, ObjectConstructor } from "../utils";
+import { isClass, isObject, ObjectConstructor } from "../utils";
 import { execHooks, HookType } from "./hook.middleware";
 import { LambdaMiddleware } from "./lambda.middleware";
 
@@ -113,8 +113,8 @@ export abstract class Middleware {
       await execHooks(this.ctx, nextMd, HookType.AfterInvoke);
     } catch (err) {
       const error = err as HalspException;
-      if ("breakthrough" in error && error.breakthrough) {
-        throw err;
+      if (isObject(error) && "breakthrough" in error && error.breakthrough) {
+        throw error;
       } else {
         const hookResult = await execHooks(
           this.ctx,
@@ -123,7 +123,7 @@ export abstract class Middleware {
           error
         );
         if (!hookResult) {
-          this.ctx.catchError(err);
+          this.ctx.errorStack.push(error);
         }
       }
     }
@@ -146,7 +146,20 @@ export abstract class Middleware {
   }
 }
 
-export async function invokeMiddlewares(ctx: Context, mds: MiddlewareItem[]) {
+export async function invokeMiddlewares(
+  ctx: Context,
+  mds: MiddlewareItem[],
+  isRoot = false
+) {
   const md = await createMiddleware(ctx, mds[0]);
-  await (md as any).init(ctx, 0, mds).invoke();
+  try {
+    await (md as any).init(ctx, 0, mds).invoke();
+  } catch (err) {
+    const error = err as HalspException;
+    const hookResult = await execHooks(ctx, md, HookType.Error, error);
+
+    if (isRoot && !hookResult) {
+      ctx.errorStack.push(error);
+    }
+  }
 }

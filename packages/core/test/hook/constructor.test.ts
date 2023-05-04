@@ -1,5 +1,5 @@
-import { Middleware, HookType } from "../../src";
-import { TestStartup } from "../test-startup";
+import { Middleware, HookType, Startup } from "../../src";
+import "../test-startup";
 
 class TestMiddleware1 extends Middleware {
   constructor(private readonly num: number) {
@@ -24,7 +24,7 @@ class TestMiddleware2 extends Middleware {
 }
 
 test("constructor hook", async () => {
-  const { ctx } = await new TestStartup()
+  const { ctx } = await new Startup()
     .hook<TestMiddleware1>(HookType.Constructor, (ctx, md) => {
       if (md == TestMiddleware1) {
         return new md(1);
@@ -52,7 +52,7 @@ test("constructor hook", async () => {
 });
 
 test("constructor hook error", async () => {
-  const { ctx } = await new TestStartup().add(TestMiddleware1).run();
+  const { ctx } = await new Startup().add(TestMiddleware1).run();
 
   expect(ctx.get("h1")).toBeUndefined();
 });

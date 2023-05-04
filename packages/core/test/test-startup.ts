@@ -1,11 +1,12 @@
-import { Context, Request, Response, Startup } from "../src";
+import { Context, Response, Startup } from "../src";
 
-export class TestStartup extends Startup {
-  async run() {
-    return await this.invoke();
-  }
-
-  protected async invoke(ctx?: Request | Context): Promise<Response> {
-    return await super.invoke(ctx ?? new Context());
+declare module "../src" {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface Startup {
+    run(ctx?: Context): Promise<Response>;
   }
 }
+
+Startup.prototype.run = async function (ctx?: Context) {
+  return await this["invoke"](ctx);
+};
