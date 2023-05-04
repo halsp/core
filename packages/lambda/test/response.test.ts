@@ -1,7 +1,8 @@
-import { LambdaStartup } from "../src";
+import { Startup } from "@halsp/core";
+import "../src";
 
 test("default response", async () => {
-  const res = await new LambdaStartup().run({}, {});
+  const res = await new Startup().useLambda().run({}, {});
 
   expect(res.isBase64Encoded).toBeFalsy();
   expect(res.headers.t).toBeUndefined();
@@ -11,7 +12,8 @@ test("default response", async () => {
 });
 
 test("base response", async () => {
-  const result = await new LambdaStartup()
+  const result = await new Startup()
+    .useLambda()
     .use(async (ctx, next) => {
       ctx.res.body = "str body";
       ctx.res.setHeader("t", "test");
@@ -26,7 +28,8 @@ test("base response", async () => {
 });
 
 test("error response", async () => {
-  const result = await new LambdaStartup()
+  const result = await new Startup()
+    .useLambda()
     .use(async (ctx, next) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ctx.res.status = undefined as any;
@@ -38,7 +41,8 @@ test("error response", async () => {
 });
 
 test("set json type", async () => {
-  const res = await new LambdaStartup()
+  const res = await new Startup()
+    .useLambda()
     .use(async (ctx, next) => {
       ctx.res.setHeader("content-type", "application/json");
       ctx.res.setHeader("content-length", "10");

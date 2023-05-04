@@ -54,7 +54,7 @@ Startup.prototype.useLogger = function (...args: any[]): Startup {
   let defaultLogger: ILogger | undefined;
   if (!identity) {
     defaultLogger = createLogger(options);
-    this.setLogger(defaultLogger);
+    this.logger = defaultLogger;
   }
 
   const injectKey = OPTIONS_IDENTITY + (identity ?? "");

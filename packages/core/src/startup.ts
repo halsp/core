@@ -147,7 +147,4 @@ export class Startup {
   }
 
   logger: ILogger = new BaseLogger();
-  setLogger(logger: ILogger) {
-    this.logger = logger;
-  }
 }

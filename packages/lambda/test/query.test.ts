@@ -1,7 +1,9 @@
-import { LambdaStartup } from "../src";
+import { Startup } from "@halsp/core";
+import "../src";
 
 test("query", async () => {
-  const res = await new LambdaStartup()
+  const res = await new Startup()
+    .useLambda()
     .use(async (ctx, next) => {
       ctx.res.ok(ctx.req.query);
       await next();

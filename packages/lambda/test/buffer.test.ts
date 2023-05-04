@@ -1,8 +1,10 @@
-import { LambdaStartup } from "../src";
+import "../src";
 import * as fs from "fs";
+import { Startup } from "@halsp/core";
 
 test("buffer", async () => {
-  const res = await new LambdaStartup()
+  const res = await new Startup()
+    .useLambda()
     .use(async (ctx, next) => {
       ctx.res.ok(ctx.req.body);
       await next();
@@ -21,7 +23,8 @@ test("buffer", async () => {
 });
 
 test("return stream", async () => {
-  const res = await new LambdaStartup()
+  const res = await new Startup()
+    .useLambda()
     .use(async (ctx) => {
       const stream = fs.createReadStream("./LICENSE");
       ctx.res.ok(stream);
@@ -33,8 +36,9 @@ test("return stream", async () => {
   expect(res.headers["content-type"]).toBe("application/octet-stream");
 });
 
-test("return stream", async () => {
-  const res = await new LambdaStartup()
+test("return stream with encoding", async () => {
+  const res = await new Startup()
+    .useLambda()
     .use(async (ctx) => {
       const stream = fs.createReadStream("./LICENSE");
       stream.setEncoding("hex");
@@ -50,7 +54,8 @@ test("return stream", async () => {
 test("error stream", async () => {
   let error = false;
   try {
-    await new LambdaStartup()
+    await new Startup()
+      .useLambda()
       .use(async (ctx) => {
         const stream = fs.createReadStream("./not-exist");
         ctx.res.ok(stream);

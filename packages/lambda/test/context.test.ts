@@ -1,7 +1,9 @@
-import { LambdaStartup } from "../src";
+import { Startup } from "@halsp/core";
+import "../src";
 
 test("context", async () => {
-  await new LambdaStartup()
+  await new Startup()
+    .useLambda()
     .use((ctx) => {
       const context1 = ctx.lambdaContext;
       const context2 = ctx.req.lambdaContext;
@@ -20,7 +22,8 @@ test("context", async () => {
 });
 
 test("request context method", async () => {
-  await new LambdaStartup()
+  await new Startup()
+    .useLambda()
     .use((ctx) => {
       expect(ctx.req.method).toBe("POST");
     })

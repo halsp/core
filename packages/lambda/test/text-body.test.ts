@@ -1,7 +1,9 @@
-import { LambdaStartup } from "../src";
+import { Startup } from "@halsp/core";
+import "../src";
 
 test("string body", async () => {
-  const result = await new LambdaStartup()
+  const result = await new Startup()
+    .useLambda()
     .use(async (ctx) => {
       ctx.res.body = ctx.req.body;
     })
@@ -21,7 +23,8 @@ test("string body", async () => {
 });
 
 test("string body without conent-type", async () => {
-  const result = await new LambdaStartup()
+  const result = await new Startup()
+    .useLambda()
     .use(async (ctx) => {
       ctx.res.body = ctx.req.body;
     })
@@ -43,7 +46,8 @@ test("string body without conent-type", async () => {
 });
 
 test("set text type", async () => {
-  const res = await new LambdaStartup()
+  const res = await new Startup()
+    .useLambda()
     .use(async (ctx, next) => {
       ctx.res.setHeader("content-type", "text/plain");
       ctx.res.setHeader("content-length", "10");
@@ -59,7 +63,8 @@ test("set text type", async () => {
 });
 
 test("html", async () => {
-  const res = await new LambdaStartup()
+  const res = await new Startup()
+    .useLambda()
     .use(async (ctx, next) => {
       ctx.res.ok("<div></div>");
       await next();

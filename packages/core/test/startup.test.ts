@@ -51,7 +51,7 @@ describe("logger", () => {
     const startup = new Startup();
     expect(!!startup.logger).toBeTruthy();
 
-    startup.setLogger(logger);
+    startup.logger = logger;
     expect(startup.logger).toBe(logger);
   });
 
