@@ -1,34 +1,38 @@
 import "../src";
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import "@halsp/testing";
+import { Startup } from "@halsp/core";
 
 test("writeHead", async function () {
-  const res = await new TestHttpStartup()
+  const res = await new Startup()
+    .useTest()
     .koa(async (ctx, next) => {
       ctx.res.writeHead(200);
       await next();
     })
-    .run();
+    .runTest();
 
   expect(res.status).toBe(200);
   expect(res.body).toBeUndefined();
 });
 
 test("writeHead2", async function () {
-  const res = await new TestHttpStartup()
+  const res = await new Startup()
+    .useTest()
     .koa(async (ctx, next) => {
       ctx.res.writeHead(200, "", {
         h1: 1,
       });
       await next();
     })
-    .run();
+    .runTest();
 
   expect(res.status).toBe(200);
   expect(res.getHeader("h1")).toBe("1");
 });
 
 test("removeHeader", async function () {
-  const res = await new TestHttpStartup()
+  const res = await new Startup()
+    .useTest()
     .koa(async (ctx, next) => {
       ctx.res.setHeader("h1", 1);
       ctx.res.writeHead(200, "", {
@@ -40,7 +44,7 @@ test("removeHeader", async function () {
     .use(async (ctx) => {
       ctx.res.setHeader("h3", "");
     })
-    .run();
+    .runTest();
 
   expect(res.status).toBe(200);
   expect(res.getHeader("h1")).toBeUndefined();

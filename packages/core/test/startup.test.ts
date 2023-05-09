@@ -1,4 +1,4 @@
-import { Context, Startup } from "../src";
+import { Context, Request, Startup } from "../src";
 import { BaseLogger } from "../src/logger";
 import "./test-startup";
 
@@ -19,7 +19,7 @@ describe("invoke", () => {
 
     let res = await startup.run(new Context());
     expect(res.ctx.get("result")).toBe(2);
-    res = await startup.run();
+    res = await startup.run(new Request());
     expect(res.ctx.get("result")).toBe(2);
     res = await startup.run();
     expect(res.ctx.get("result")).toBe(2);

@@ -16,6 +16,7 @@ import "@halsp/http";
 import qs from "qs";
 import { Stream } from "stream";
 import { Options } from "./options";
+import { USED } from "./constant";
 
 type ServerType = http.Server | https.Server;
 
@@ -80,6 +81,11 @@ declare module "@halsp/core" {
 }
 
 Startup.prototype.useNative = function (options?: Options) {
+  if (this[USED]) {
+    return this;
+  }
+  this[USED] = true;
+
   const requestListener = async (
     reqStream: http.IncomingMessage,
     resStream: http.ServerResponse

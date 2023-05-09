@@ -1,9 +1,9 @@
 import { Context, Startup } from "@halsp/core";
-import { initBaseTestStartup, ITestStartup, TestStartup } from "../src";
+import "../src";
 
 describe("startup", () => {
   it("should add error to stack if skip throw error", async () => {
-    await new TestStartup()
+    await new Startup()
       .setSkipThrow()
       .setContext(new Context())
       .use(() => {
@@ -17,29 +17,15 @@ describe("startup", () => {
   it("error shound be throw", async () => {
     let errMsg: string | undefined;
     try {
-      await new TestStartup()
+      await new Startup()
         .setSkipThrow(false)
         .use(() => {
           throw new Error("err");
         })
-        .run();
+        .test();
     } catch (err) {
       errMsg = (err as Error).message;
     }
     expect(errMsg).toBe("err");
-  });
-
-  it("should init startup by initBaseTestStartup", async () => {
-    class CustomStartup extends Startup {
-      constructor() {
-        super();
-        initBaseTestStartup(this);
-      }
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-empty-interface
-    interface CustomStartup extends ITestStartup {}
-
-    expect(typeof new CustomStartup().setContext).toBe("function");
   });
 });

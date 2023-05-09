@@ -1,5 +1,5 @@
-import { Dict, Context, isObject, ReadonlyDict } from "@halsp/core";
-import { HttpStartup } from "@halsp/http";
+import { Dict, Context, isObject, ReadonlyDict, Startup } from "@halsp/core";
+import "@halsp/http";
 import cookie from "cookie";
 import setCookieParser from "set-cookie-parser";
 import { REQUEST_HEADER_NAME, RESPONSE_HEADER_NAME, USED } from "./constant";
@@ -39,7 +39,7 @@ declare module "@halsp/core" {
   }
 }
 
-HttpStartup.prototype.useCookie = function (options: Options = {}) {
+Startup.prototype.useCookie = function (options: Options = {}) {
   if (this[USED]) {
     return this;
   }

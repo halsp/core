@@ -1,12 +1,12 @@
 import "../src";
 import { HttpMethods } from "@halsp/methods";
-import { Request, Response } from "@halsp/core";
+import { Request, Response, Startup } from "@halsp/core";
 import cors from "@koa/cors";
 import Router from "@koa/router";
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import "@halsp/testing";
 
 test("@koa/cors", async function () {
-  const res = await new TestHttpStartup()
+  const res = await new Startup()
     .setContext(
       new Request()
         .setMethod(HttpMethods.get)
@@ -20,7 +20,7 @@ test("@koa/cors", async function () {
     .use(async (ctx) => {
       ctx.res.ok("halsp");
     })
-    .run();
+    .runTest();
 
   expect(res.status).toBe(200);
   expect(res.body).toBe("halsp");
@@ -42,14 +42,14 @@ test("@koa/router", async function () {
     });
 
   async function request(method: string, path: string): Promise<Response> {
-    return await new TestHttpStartup()
+    return await new Startup()
       .setContext(new Request().setMethod(method).setPath(path))
       .use(async (ctx, next) => {
         await next();
       })
       .koa(router.routes())
       .koa(router.allowedMethods())
-      .run();
+      .runTest();
   }
 
   {

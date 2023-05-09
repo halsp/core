@@ -1,5 +1,6 @@
+import { Startup } from "@halsp/core";
 import { Inject } from "@halsp/inject";
-import { TestStartup } from "../src";
+import "../src";
 
 class TestService1 {
   fn() {
@@ -17,21 +18,21 @@ class TestService2 {
 
 describe("service", () => {
   it("should create service by @halsp/inject", async () => {
-    await new TestStartup()
+    await new Startup()
       .expectInject(TestService2, (service) => {
         expect(service.fn()).toBe(1);
       })
-      .run();
+      .test();
   });
 
   it("should throw error when create service failed", async () => {
     let err = false;
     try {
-      await new TestStartup()
+      await new Startup()
         .expectInject("not-exist", () => {
           //
         })
-        .run();
+        .test();
     } catch {
       err = true;
     }

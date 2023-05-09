@@ -1,4 +1,4 @@
-import { Context, Response } from "./context";
+import { Context, Request, Response } from "./context";
 import { BaseLogger, ILogger } from "./logger";
 import {
   Middleware,
@@ -131,8 +131,8 @@ export class Startup {
     return this;
   }
 
-  protected async invoke(ctx?: Context): Promise<Response> {
-    ctx ??= new Context();
+  protected async invoke(ctx?: Context | Request): Promise<Response> {
+    ctx = ctx instanceof Context ? ctx : new Context(ctx);
 
     Object.defineProperty(ctx, "startup", {
       configurable: true,

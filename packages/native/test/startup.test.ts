@@ -38,6 +38,7 @@ describe("write end", () => {
   test("should not send body after stream ended", async () => {
     const server = new Startup()
       .useNative()
+      .useNative()
       .use(async (ctx, next) => {
         ctx.resStream.end();
         expect(!!ctx.reqStream).toBeTruthy();

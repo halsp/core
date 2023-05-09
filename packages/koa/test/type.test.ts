@@ -1,15 +1,17 @@
 import "../src";
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import "@halsp/http";
+import "@halsp/testing";
+import { Startup } from "@halsp/core";
 
 test("arr header type", async function () {
-  const res = await new TestHttpStartup()
+  const res = await new Startup()
     .koa(async (ctx, next) => {
       ctx.body = "halsp";
       ctx.status = 200;
       ctx.set("Content-Type", ["text/plain", "charset=utf-8"]);
       await next();
     })
-    .run();
+    .runTest();
 
   expect(res.status).toBe(200);
   expect(res.body).toBe("halsp");
@@ -20,14 +22,15 @@ test("arr header type", async function () {
 });
 
 test("without type", async function () {
-  const res = await new TestHttpStartup()
+  const res = await new Startup()
+    .useHttp()
     .koa(async (ctx, next) => {
       ctx.body = "halsp";
       ctx.status = 200;
       ctx.set("Content-Type", "");
       await next();
     })
-    .run();
+    .runTest();
 
   expect(res.status).toBe(200);
   expect(res.body).toBe("halsp");

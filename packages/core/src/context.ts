@@ -50,8 +50,8 @@ export class Response {
 
 const singletonBagMap = new WeakMap<Startup, Dict>();
 export class Context {
-  constructor() {
-    this.#req = new Request();
+  constructor(req?: Request) {
+    this.#req = req ?? new Request();
     this.#res = new Response();
 
     Object.defineProperty(this.#req, "ctx", {
@@ -165,5 +165,8 @@ export class Context {
     }
   }
 
-  readonly errorStack: any[] = [];
+  readonly #errorStack: any[] = [];
+  get errorStack() {
+    return this.#errorStack;
+  }
 }

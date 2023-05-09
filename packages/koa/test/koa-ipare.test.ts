@@ -2,7 +2,8 @@ import Koa from "koa";
 import request from "supertest";
 import { koaHalsp } from "../src";
 import path from "path";
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import "@halsp/testing";
+import { Startup } from "@halsp/core";
 
 describe("koa-halsp", () => {
   it("should connect middlewares", async () => {
@@ -110,7 +111,8 @@ describe("koa-halsp", () => {
   });
 
   it("should add multiple koa middlewares", async () => {
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
+      .useTest()
       .koa(async (ctx, next) => {
         ctx.count = 1;
         await next();
@@ -123,7 +125,7 @@ describe("koa-halsp", () => {
         ctx.set("count", ctx.count + 1);
         await next();
       })
-      .run();
+      .runTest();
 
     expect(res.get("count")).toBe("3");
   });

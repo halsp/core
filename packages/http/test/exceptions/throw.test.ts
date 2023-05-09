@@ -7,7 +7,7 @@ import {
 } from "../../src";
 
 test("throw base error", async () => {
-  const startup = new Startup().useHttp();
+  const startup = new Startup().useHttp().useHttp();
   startup.use(async () => {
     throw new Error("msg");
   });

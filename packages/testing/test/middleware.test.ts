@@ -1,5 +1,5 @@
-import { HookType, Middleware } from "@halsp/core";
-import { TestStartup } from "../src";
+import { HookType, Middleware, Startup } from "@halsp/core";
+import "../src";
 
 class TestMiddleware extends Middleware {
   fn() {
@@ -13,25 +13,25 @@ class TestMiddleware extends Middleware {
 
 describe("middleware", () => {
   it("should expect middleware", async () => {
-    await new TestStartup()
+    await new Startup()
       .expectMiddleware(TestMiddleware, (md) => {
         expect(md.fn()).toBe(1);
       })
       .add(TestMiddleware)
-      .run();
+      .test();
   });
 
   it("should expect before invoke", async () => {
-    await new TestStartup()
+    await new Startup()
       .expectMiddleware(TestMiddleware, (md) => {
         expect(md.ctx.get("result")).toBeUndefined();
       })
       .add(TestMiddleware)
-      .run();
+      .test();
   });
 
   it("should expect after invoke", async () => {
-    await new TestStartup()
+    await new Startup()
       .expectMiddleware(
         TestMiddleware,
         (md) => {
@@ -40,17 +40,17 @@ describe("middleware", () => {
         HookType.AfterInvoke
       )
       .add(TestMiddleware)
-      .run();
+      .test();
   });
 
   it("should throw error if middleware not executed", async () => {
-    const startup = new TestStartup().expectMiddleware(
+    const startup = new Startup().expectMiddleware(
       TestMiddleware,
       () => undefined
     );
     let err: any;
     try {
-      await startup.run();
+      await startup.test();
     } catch (error) {
       err = error;
     }

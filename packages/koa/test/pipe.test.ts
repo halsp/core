@@ -1,9 +1,10 @@
 import "../src";
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import "@halsp/testing";
 import { TransResponse } from "../src/trans-response";
+import { Startup } from "@halsp/core";
 
 test("middleware pipe", async function () {
-  const res = await new TestHttpStartup()
+  const res = await new Startup()
     .use(async (ctx, next) => {
       ctx.res.status = 201;
       await next();
@@ -29,7 +30,7 @@ test("middleware pipe", async function () {
       ctx.res.setHeader("h", ctx.res.getHeader("h") + "h");
       await next();
     })
-    .run();
+    .runTest();
 
   expect(res.body).toBe("halspaaa");
   expect(res.getHeader("h")).toBe("hhhh");
@@ -37,7 +38,7 @@ test("middleware pipe", async function () {
 });
 
 test("koa break", async function () {
-  const res = await new TestHttpStartup()
+  const res = await new Startup()
     .use(async (ctx, next) => {
       await next();
     })
@@ -51,7 +52,7 @@ test("koa break", async function () {
       ctx.res.status = 200;
       await next();
     })
-    .run();
+    .runTest();
 
   expect(res.body).toBe("halsp");
   expect(res.getHeader("h")).toBe("h");

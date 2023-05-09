@@ -1,13 +1,14 @@
-import { HttpStartup } from "@halsp/http";
+import { Startup } from "@halsp/core";
+import "@halsp/http";
 import { CorsMiddleware } from "./cors.middleware";
 import { Options } from "./options";
 
-declare module "@halsp/http" {
-  interface HttpStartup {
+declare module "@halsp/core" {
+  interface Startup {
     useCors(options?: Options): this;
   }
 }
 
-HttpStartup.prototype.useCors = function (options: Options = {}): HttpStartup {
+Startup.prototype.useCors = function (options: Options = {}) {
   return this.add(() => new CorsMiddleware(options));
 };

@@ -1,6 +1,6 @@
-import { Response, Request } from "@halsp/core";
-import { TestHttpStartup, TestNativeStartup } from "../src/http";
-new TestHttpStartup();
+import { Response, Request, Startup } from "@halsp/core";
+import "@halsp/native";
+import "../src";
 
 describe("response.expect", () => {
   it("should expect status 200", async () => {
@@ -38,13 +38,14 @@ describe("response.expect", () => {
 
 describe("http startup", () => {
   it("default status is 404", async () => {
-    await new TestHttpStartup().expect((res) => {
+    await new Startup().useHttp().expect((res) => {
       res.expect(404);
     });
   });
 
   it("should set status 200", async () => {
-    await new TestHttpStartup()
+    await new Startup()
+      .useHttp()
       .use((ctx) => {
         ctx.res.ok();
       })
@@ -54,7 +55,8 @@ describe("http startup", () => {
   });
 
   it("status shound be 500 if skip throw error", async () => {
-    await new TestHttpStartup()
+    await new Startup()
+      .useHttp()
       .setSkipThrow()
       .setContext(new Request())
       .use(() => {
@@ -69,13 +71,13 @@ describe("http startup", () => {
   });
 
   it("should throw error", async () => {
-    const startup = new TestHttpStartup().use(() => {
+    const startup = new Startup().useHttp().use(() => {
       throw new Error("err");
     });
 
     let err = false;
     try {
-      await startup.run();
+      await startup.test();
     } catch {
       err = true;
     }
@@ -85,14 +87,15 @@ describe("http startup", () => {
 
 describe("server startup", () => {
   it("should set body", async () => {
-    await new TestNativeStartup()
+    await new Startup()
+      .useNativeTest()
       .use((ctx) => {
         ctx.res.ok({
           method: ctx.req.method,
           path: ctx.req.path,
         });
       })
-      .create()
+      .nativeTest()
       .get("/url")
       .expect(200, {
         method: "GET",
@@ -101,12 +104,13 @@ describe("server startup", () => {
   });
 
   it("status shound be 500 if skip throw error", async () => {
-    await new TestNativeStartup()
+    await new Startup()
+      .useNativeTest()
       .use(() => {
         throw new Error("err");
       })
       .setSkipThrow()
-      .create()
+      .nativeTest()
       .get("")
       .expect(500, {
         status: 500,
@@ -117,11 +121,12 @@ describe("server startup", () => {
   it("shound throw error", async () => {
     let errMsg: string | undefined;
     try {
-      await new TestNativeStartup()
+      await new Startup()
+        .useNativeTest()
         .use(() => {
           throw new Error("err");
         })
-        .create()
+        .nativeTest()
         .get("");
     } catch (err) {
       errMsg = (err as Error).message;

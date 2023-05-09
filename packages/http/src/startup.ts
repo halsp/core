@@ -9,6 +9,7 @@ import {
   Startup,
 } from "@halsp/core";
 import { HttpException, InternalServerErrorException } from "./exceptions";
+import { USED } from "./constant";
 
 declare module "@halsp/core" {
   interface Startup {
@@ -17,6 +18,11 @@ declare module "@halsp/core" {
 }
 
 Startup.prototype.useHttp = function () {
+  if (this[USED]) {
+    return this;
+  }
+  this[USED] = true;
+
   process.env.HALSP_ENV = "http";
 
   return this.use(async (ctx, next) => {
