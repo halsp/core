@@ -1,5 +1,5 @@
 import "./startup";
 import "./context";
-import { Options } from "./options";
+import { NativeOptions } from "./options";
 
-export { Options };
+export { NativeOptions };

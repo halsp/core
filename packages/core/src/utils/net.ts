@@ -61,12 +61,15 @@ export function logAddress(
   }
 }
 
-export async function closeServer(server: net.Server, logger: ILogger) {
+export async function closeServer(server: net.Server) {
   server.removeAllListeners();
-  await new Promise<void>((resolve) => {
-    server.close(() => {
-      resolve();
-    });
-  });
-  logger.info("Server shutdown success");
+  await new Promise<void>((resolve, reject) =>
+    server.close((err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    })
+  );
 }

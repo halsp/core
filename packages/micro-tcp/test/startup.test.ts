@@ -1,41 +1,43 @@
-import { MicroTcpOptions, MicroTcpStartup } from "../src";
+import { MicroTcpOptions } from "../src";
+import "../src";
 import { sendData, sendMessage } from "./utils";
 import net, { Server } from "net";
 
 import { MicroTcpClient } from "@halsp/micro-tcp-client";
+import { Startup } from "@halsp/core";
 
 describe("startup.listen", () => {
   it("should listen and close", async () => {
-    const startup = new MicroTcpStartup();
-    const { port } = await startup.dynamicListen();
-    expect(port && port > 0).toBeTruthy();
+    const startup = new Startup().useMicroTcp().useMicroTcp();
+    const server = await startup.listen();
+    expect(!!server).toBeTruthy();
 
     startup.close();
   });
 
   it("should listen default port", async () => {
     try {
-      const server = new MicroTcpStartup().listen();
+      const server = await new Startup().useMicroTcp().listen();
       server.on("error", () => undefined);
       server.close();
     } catch {}
   });
 
   it("should listen port 23333", async () => {
-    const opts: MicroTcpOptions = {
-      port: 23333,
-      serverOpts: {},
-    };
-    const server = new MicroTcpStartup(opts).listen();
+    const server = await new Startup()
+      .useMicroTcp({
+        port: 23333,
+      })
+      .listen();
     server.close();
   });
 
   it("should listen port 23333", async () => {
-    const opts: MicroTcpOptions = {
-      port: 23333,
-      serverOpts: {},
-    };
-    const server = new MicroTcpStartup(opts).listen();
+    const server = await new Startup()
+      .useMicroTcp({
+        port: 23333,
+      })
+      .listen();
     server.close();
   });
 
@@ -48,23 +50,9 @@ describe("startup.listen", () => {
     const opts: MicroTcpOptions = {
       handle: baseServer,
     };
-    const server = new MicroTcpStartup(opts).listen();
+    const server = await new Startup().useMicroTcp(opts).listen();
     await new Promise<void>((resolve) => {
       setTimeout(() => resolve(), 500);
-    });
-    server.close();
-  });
-
-  it("should listen with pipe path", async () => {
-    await new Promise<void>((resolve) => {
-      setTimeout(() => resolve(), 500);
-    });
-    const opts: MicroTcpOptions = {
-      path: "//pipe/foo",
-    };
-    const server = new MicroTcpStartup(opts).listen();
-    await new Promise<void>((resolve) => {
-      server.on("error", () => resolve());
     });
     server.close();
   });
@@ -72,11 +60,13 @@ describe("startup.listen", () => {
 
 describe("parse message", () => {
   it("should set default result", async () => {
-    const startup = new MicroTcpStartup({
-      port: 23334,
-    }).register("test_pattern", () => undefined);
-    const { port } = await startup.dynamicListen();
-    const result = await sendMessage(port, true);
+    const startup = new Startup()
+      .useMicroTcp({
+        port: 23334,
+      })
+      .register("test_pattern", () => undefined);
+    await startup.listen();
+    const result = await sendMessage(23334, true);
     await startup.close();
 
     expect(result).toEqual({
@@ -86,11 +76,11 @@ describe("parse message", () => {
   });
 
   it("should return error if there is no '#'", async () => {
-    const startup = new MicroTcpStartup({
+    const startup = new Startup().useMicroTcp({
       port: 23335,
     });
-    const { port } = await startup.dynamicListen();
-    const result = await sendData(port, "abc");
+    await startup.listen();
+    const result = await sendData(23335, "abc");
     await startup.close();
 
     expect(result).toEqual({
@@ -99,11 +89,11 @@ describe("parse message", () => {
   });
 
   it("should return error if length is nan", async () => {
-    const startup = new MicroTcpStartup({
+    const startup = new Startup().useMicroTcp({
       port: 23336,
     });
-    const { port } = await startup.dynamicListen();
-    const result = await sendData(port, "abc#{}");
+    await startup.listen();
+    const result = await sendData(23336, "abc#{}");
     await startup.close();
 
     expect(result).toEqual({
@@ -112,11 +102,11 @@ describe("parse message", () => {
   });
 
   it("should return error if length is error", async () => {
-    const startup = new MicroTcpStartup({
+    const startup = new Startup().useMicroTcp({
       port: 23337,
     });
-    const { port } = await startup.dynamicListen();
-    const result = await sendData(port, "3#{}");
+    await startup.listen();
+    const result = await sendData(23337, "3#{}");
     await startup.close();
 
     expect(result).toEqual({
@@ -125,12 +115,12 @@ describe("parse message", () => {
   });
 
   it("should throw error when socket destroy", async () => {
-    const startup = new MicroTcpStartup({
+    const startup = new Startup().useMicroTcp({
       port: 23338,
     });
-    const { port } = await startup.dynamicListen();
+    await startup.listen();
 
-    const socket = net.createConnection(port);
+    const socket = net.createConnection(23338);
     socket.on("connect", async () => {
       socket.write("abc");
       socket.destroy();
@@ -140,19 +130,20 @@ describe("parse message", () => {
 
   it("should invoke multiple times when send multiple message", async () => {
     let times = 0;
-    const startup = new MicroTcpStartup({
-      port: 23339,
-    })
+    const startup = new Startup()
+      .useMicroTcp({
+        port: 23339,
+      })
       .use(() => {
         times++;
       })
       .register("test_pattern");
-    const { port } = await startup.dynamicListen();
+    await startup.listen();
     const jsonData = JSON.stringify({
       pattern: "test_pattern",
     });
     const sendStr = `${jsonData.length}#${jsonData}`;
-    await sendData(port, `${sendStr}${sendStr}${sendStr}`, false);
+    await sendData(23339, `${sendStr}${sendStr}${sendStr}`, false);
     let i = 0;
     while (i < 30 && times < 3) {
       await new Promise<void>((resolve) => {
@@ -168,17 +159,18 @@ describe("parse message", () => {
 
 describe("socket", () => {
   it("should get socket from ctx", async () => {
-    const startup = new MicroTcpStartup({
-      port: 23340,
-    })
+    const startup = new Startup()
+      .useMicroTcp({
+        port: 23340,
+      })
       .use((ctx) => {
         ctx.res.setBody(ctx.socket);
       })
       .register("test_pattern");
-    const { port } = await startup.dynamicListen();
+    await startup.listen();
 
     const client = new MicroTcpClient({
-      port,
+      port: 23340,
     });
     await client["connect"]();
     const result = await client.send("test_pattern", true);
@@ -189,17 +181,18 @@ describe("socket", () => {
   });
 
   it("should log error when socket emit error", async () => {
-    const startup = new MicroTcpStartup({
-      port: 23341,
-    })
+    const startup = new Startup()
+      .useMicroTcp({
+        port: 23341,
+      })
       .use((ctx) => {
         ctx.socket.emit("error", new Error("err"));
       })
       .register("test_pattern");
-    const { port } = await startup.dynamicListen();
+    await startup.listen();
 
     const client = new MicroTcpClient({
-      port,
+      port: 23341,
     });
     await client["connect"]();
 
@@ -219,13 +212,13 @@ describe("socket", () => {
   });
 
   it("should return error when send pattern is not exist", async () => {
-    const startup = new MicroTcpStartup({
+    const startup = new Startup().useMicroTcp({
       port: 23342,
     });
-    const { port } = await startup.dynamicListen();
+    await startup.listen();
 
     const client = new MicroTcpClient({
-      port,
+      port: 23342,
     });
     await client["connect"]();
 
@@ -243,13 +236,13 @@ describe("socket", () => {
   });
 
   it("should log error when emit pattern is not exist", async () => {
-    const startup = new MicroTcpStartup({
+    const startup = new Startup().useMicroTcp({
       port: 23344,
     });
-    const { port } = await startup.dynamicListen();
+    await startup.listen();
 
     const client = new MicroTcpClient({
-      port,
+      port: 23344,
     });
     await client["connect"]();
     client.emit("test_pattern", true);
@@ -263,19 +256,19 @@ describe("socket", () => {
   });
 
   it("should return Internal Error when handle message error", async () => {
-    const startup = new MicroTcpStartup({
-      port: 23345,
-    }).register("test_pattern");
-    const { port } = await startup.dynamicListen();
+    const startup = new Startup()
+      .useMicroTcp({
+        port: 23345,
+      })
+      .register("test_pattern", () => {
+        throw new Error("err");
+      });
+    await startup.listen();
 
     const client = new MicroTcpClient({
-      port,
+      port: 23345,
     });
     await client["connect"]();
-
-    startup["handleMessage"] = () => {
-      throw new Error("err");
-    };
 
     let error: any;
     try {

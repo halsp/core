@@ -4,14 +4,16 @@ import { Startup } from "@halsp/core";
 
 describe("startup", () => {
   it("should listen with empty options", async () => {
-    const startup = new Startup().useNative({});
-    const { server } = await startup
+    const startup = new Startup().useNative({
+      port: 23331,
+    });
+    const server = await startup
       .use(async (ctx) => {
         ctx.res.ok({
           content: "BODY",
         });
       })
-      .dynamicListen();
+      .listen();
     const res = await request(server).get("");
 
     expect(res.status).toBe(200);
@@ -23,7 +25,7 @@ describe("startup", () => {
   });
 
   it("should listen with https", async () => {
-    const server = new Startup()
+    const server = await new Startup()
       .useNative({
         https: {},
       })
@@ -36,7 +38,7 @@ describe("startup", () => {
 
 describe("write end", () => {
   test("should not send body after stream ended", async () => {
-    const server = new Startup()
+    const server = await new Startup()
       .useNative()
       .useNative()
       .use(async (ctx, next) => {
@@ -56,7 +58,7 @@ describe("write end", () => {
   });
 
   test("should not set header after writeHead called", async () => {
-    const server = new Startup()
+    const server = await new Startup()
       .useNative()
       .use(async (ctx, next) => {
         ctx.resStream.writeHead(200);

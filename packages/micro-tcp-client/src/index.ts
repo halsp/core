@@ -7,8 +7,10 @@ export { MicroTcpClientOptions } from "./options";
 
 declare module "@halsp/core" {
   interface Startup {
-    useMicroTcp(options?: MicroTcpClientOptions & InjectMicroClient): this;
+    useMicroTcpClient(
+      options?: MicroTcpClientOptions & InjectMicroClient
+    ): this;
   }
 }
 
-useMicroClient("useMicroTcp", MicroTcpClient);
+useMicroClient("useMicroTcpClient", MicroTcpClient);

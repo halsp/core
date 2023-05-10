@@ -1,3 +1,4 @@
+import "./startup";
 import * as net from "net";
 
 declare module "@halsp/core" {
@@ -6,5 +7,4 @@ declare module "@halsp/core" {
   }
 }
 
-export { MicroTcpStartup } from "./startup";
 export { MicroTcpOptions } from "./options";

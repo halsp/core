@@ -5,7 +5,7 @@ describe("dynamic listen", () => {
   it("should dynamic with default port", async () => {
     const server = new Server();
     const port = await dynamicListen(server);
-    await closeServer(server, console as any);
+    await closeServer(server);
 
     expect(!!port).toBeTruthy();
   });
@@ -18,8 +18,8 @@ describe("dynamic listen", () => {
     const server2 = new Server();
     const port2 = await dynamicListen(server2, port);
 
-    await closeServer(server1, console as any);
-    await closeServer(server2, console as any);
+    await closeServer(server1);
+    await closeServer(server2);
 
     expect(port1).toBe(port);
     expect(port2).toBe(port + 1);
@@ -30,7 +30,7 @@ describe("dynamic listen", () => {
     const port = await dynamicListen(server);
     server.emit("error", new Error("err"));
 
-    await closeServer(server, console as any);
+    await closeServer(server);
 
     expect(!!port).toBeTruthy();
   });
@@ -44,8 +44,23 @@ describe("dynamic listen", () => {
       error = err;
     }
 
-    await closeServer(server, console as any);
     expect(error.code).toBe("EADDRNOTAVAIL");
+  });
+
+  it("should throw error with close failed", async () => {
+    const server = new Server();
+    server.close = (cb: (err?: Error | undefined) => void) => {
+      cb(new Error("err"));
+      return server;
+    };
+
+    let error: any;
+    try {
+      await closeServer(server);
+    } catch (err) {
+      error = err;
+    }
+    expect(error.message).toBe("err");
   });
 });
 

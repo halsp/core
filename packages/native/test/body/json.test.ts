@@ -3,7 +3,7 @@ import request from "supertest";
 import { Startup } from "@halsp/core";
 
 test("json body explicit type", async () => {
-  const server = new Startup()
+  const server = await new Startup()
     .useNative()
     .use(async (ctx) => {
       ctx.res.setHeader("content-type", "application/json");
@@ -31,7 +31,7 @@ test("json body explicit type", async () => {
 });
 
 test("return json", async () => {
-  const server = new Startup()
+  const server = await new Startup()
     .useNative()
     .use(async (ctx) => {
       ctx.res.ok({

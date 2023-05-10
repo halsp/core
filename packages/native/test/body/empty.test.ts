@@ -3,7 +3,7 @@ import request from "supertest";
 import { Startup } from "@halsp/core";
 
 test("empty body", async () => {
-  const server = new Startup()
+  const server = await new Startup()
     .useNative()
     .use(async (ctx) => {
       ctx.res.ok(undefined);
