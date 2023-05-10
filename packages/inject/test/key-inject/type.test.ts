@@ -1,8 +1,8 @@
-import { isUndefined, Middleware } from "@halsp/core";
+import { isUndefined, Middleware, Startup } from "@halsp/core";
 import "../../src";
 import { Service1 } from "../services";
 import { Inject, InjectType } from "../../src";
-import { TestStartup } from "@halsp/testing";
+import "@halsp/testing";
 
 class TestMiddleware extends Middleware {
   @Inject("KEY1")
@@ -23,12 +23,12 @@ class TestMiddleware extends Middleware {
 
 function runTest(type?: InjectType) {
   test(`key inject type ${type}`, async function () {
-    const startup = new TestStartup()
+    const startup = new Startup()
       .useInject()
       .inject("KEY1", Service1, type)
       .add(TestMiddleware);
 
-    let res = await startup.run();
+    let res = await startup.test();
     let ctx = res.ctx;
 
     expect(ctx.get("result")).toEqual({
@@ -36,7 +36,7 @@ function runTest(type?: InjectType) {
       count2: type == InjectType.Transient ? 3 : 4,
     });
 
-    res = await startup.run();
+    res = await startup.test();
     ctx = res.ctx;
     if (type == InjectType.Transient) {
       expect(ctx.get("result")).toEqual({

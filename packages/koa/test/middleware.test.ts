@@ -20,7 +20,7 @@ test("@koa/cors", async function () {
     .use(async (ctx) => {
       ctx.res.ok("halsp");
     })
-    .runTest();
+    .test();
 
   expect(res.status).toBe(200);
   expect(res.body).toBe("halsp");
@@ -49,7 +49,7 @@ test("@koa/router", async function () {
       })
       .koa(router.routes())
       .koa(router.allowedMethods())
-      .runTest();
+      .test();
   }
 
   {

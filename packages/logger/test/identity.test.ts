@@ -1,8 +1,8 @@
 import "../src";
-import { Middleware } from "@halsp/core";
+import { Middleware, Startup } from "@halsp/core";
 import { Logger } from "../src";
 import { CustomTransport } from "./utils";
-import { TestStartup } from "@halsp/testing";
+import "@halsp/testing";
 import winston from "winston";
 
 describe("identity", () => {
@@ -21,7 +21,7 @@ describe("identity", () => {
   it("should define logger with identity", async () => {
     const appBuffer = [];
     const coreBuffer = [];
-    await new TestStartup()
+    await new Startup()
       .useLogger("app", {
         transports: [new CustomTransport(appBuffer)],
       })
@@ -29,7 +29,7 @@ describe("identity", () => {
         transports: [new CustomTransport(coreBuffer)],
       })
       .add(TestMiddleware)
-      .run();
+      .test();
 
     await new Promise<void>((resolve) => {
       setTimeout(() => {
@@ -59,10 +59,10 @@ describe("identity", () => {
       }
     }
 
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .useConsoleLogger("testid")
       .add(TestMiddleware)
-      .run();
+      .test();
 
     expect(
       ctx.get<winston.transport[]>("RESULT")[0] instanceof

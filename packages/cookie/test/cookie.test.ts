@@ -1,11 +1,12 @@
-import { Request } from "@halsp/core";
+import { Request, Startup } from "@halsp/core";
 import "../src";
 import { REQUEST_HEADER_NAME, RESPONSE_HEADER_NAME } from "../src/constant";
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import "@halsp/testing";
 
 describe("get cookie", () => {
   it("should get cookies from request", async () => {
-    await new TestHttpStartup()
+    await new Startup()
+      .useHttp()
       .setContext(
         new Request().setHeader(REQUEST_HEADER_NAME, "str=abc;num=123")
       )
@@ -18,23 +19,25 @@ describe("get cookie", () => {
         expect(ctx.req.cookies).toBe(ctx.cookies);
       })
       .useCookie()
-      .run();
+      .test();
   });
 
   it("should be empty object if there is no cookie", async () => {
-    await new TestHttpStartup()
+    await new Startup()
+      .useHttp()
       .useCookie()
       .useCookie()
       .use(async (ctx) => {
         expect(ctx.req.cookies).toEqual({});
       })
-      .run();
+      .test();
   });
 });
 
 describe("set cookie", () => {
   it("should set cookies to response", async () => {
-    await new TestHttpStartup()
+    await new Startup()
+      .useHttp()
       .use(async (ctx, next) => {
         await next();
         expect(ctx.res.cookies).toEqual({
@@ -57,11 +60,12 @@ describe("set cookie", () => {
           num: 123 as any,
         };
       })
-      .run();
+      .test();
   });
 
   it("should set cookies to response by ctx", async () => {
-    await new TestHttpStartup()
+    await new Startup()
+      .useHttp()
       .use(async (ctx, next) => {
         await next();
         expect(ctx.res.getHeader(RESPONSE_HEADER_NAME)).toBe("str=abc");
@@ -72,11 +76,12 @@ describe("set cookie", () => {
           str: "abc",
         };
       })
-      .run();
+      .test();
   });
 
   it("should set cookies properties", async () => {
-    await new TestHttpStartup()
+    await new Startup()
+      .useHttp()
       .use(async (ctx, next) => {
         await next();
         expect(ctx.res.cookies).toEqual({
@@ -107,11 +112,12 @@ describe("set cookie", () => {
         };
         ctx.res.cookies.obj.httpOnly = true;
       })
-      .run();
+      .test();
   });
 
   it("should log error if set request cookies", async () => {
-    await new TestHttpStartup()
+    await new Startup()
+      .useHttp()
       .useCookie()
       .use(async (ctx) => {
         const errLog = console.error;
@@ -135,13 +141,14 @@ describe("set cookie", () => {
           a: "abc",
         });
       })
-      .run();
+      .test();
   });
 });
 
 describe("options", () => {
   it("should serialize with useCookie options", async () => {
-    await new TestHttpStartup()
+    await new Startup()
+      .useHttp()
       .use(async (ctx, next) => {
         await next();
         expect(ctx.res.getHeader(RESPONSE_HEADER_NAME)).toBe(
@@ -158,11 +165,12 @@ describe("options", () => {
           str: "abc",
         };
       })
-      .run();
+      .test();
   });
 
   it("should serialize with value options", async () => {
-    await new TestHttpStartup()
+    await new Startup()
+      .useHttp()
       .use(async (ctx, next) => {
         await next();
         expect(ctx.res.getHeader(RESPONSE_HEADER_NAME)).toBe(
@@ -178,11 +186,12 @@ describe("options", () => {
           },
         };
       })
-      .run();
+      .test();
   });
 
   it("should replace serialize", async () => {
-    await new TestHttpStartup()
+    await new Startup()
+      .useHttp()
       .use(async (ctx, next) => {
         await next();
         expect(ctx.res.getHeader(RESPONSE_HEADER_NAME)).toBe(
@@ -202,6 +211,6 @@ describe("options", () => {
           },
         };
       })
-      .run();
+      .test();
   });
 });

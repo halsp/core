@@ -112,7 +112,6 @@ describe("koa-halsp", () => {
 
   it("should add multiple koa middlewares", async () => {
     const res = await new Startup()
-      .useTest()
       .koa(async (ctx, next) => {
         ctx.count = 1;
         await next();
@@ -125,7 +124,7 @@ describe("koa-halsp", () => {
         ctx.set("count", ctx.count + 1);
         await next();
       })
-      .runTest();
+      .test();
 
     expect(res.get("count")).toBe("3");
   });

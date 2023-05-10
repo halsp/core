@@ -1,7 +1,7 @@
 import "../src";
-import { Middleware } from "@halsp/core";
+import { Middleware, Startup } from "@halsp/core";
 import { Mongoose } from "../src";
-import { TestStartup } from "@halsp/testing";
+import "@halsp/testing";
 import mongoose from "mongoose";
 
 class TestMiddleware extends Middleware {
@@ -20,7 +20,7 @@ class TestMiddleware extends Middleware {
 }
 
 test("identity", async () => {
-  const { ctx } = await new TestStartup()
+  const { ctx } = await new Startup()
     .use(async (ctx, next) => {
       (mongoose as any).createConnection = async () => {
         ctx.set("connect", "1");
@@ -40,7 +40,7 @@ test("identity", async () => {
       url: "test",
     })
     .add(TestMiddleware)
-    .run();
+    .test();
 
   expect(ctx.get("result")).toEqual({
     app: true,

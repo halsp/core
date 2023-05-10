@@ -1,46 +1,47 @@
-import { TestStartup } from "@halsp/testing";
+import { Startup } from "@halsp/core";
+import "@halsp/testing";
 import "../src";
 
 test("dir is not exist", async () => {
-  await new TestStartup()
+  await new Startup()
     .useView({
       dir: "test/1views",
     })
     .use(async (ctx) => {
       expect(await ctx.view("")).toBeUndefined();
     })
-    .run();
+    .test();
 });
 
 test("dir is not exist", async () => {
-  await new TestStartup()
+  await new Startup()
     .useView({
       dir: "test",
     })
     .use(async (ctx) => {
       expect(await ctx.view("")).toBeUndefined();
     })
-    .run();
+    .test();
 });
 
 test("engines is not exist", async () => {
-  await new TestStartup()
+  await new Startup()
     .useView({
       dir: "test/views",
     })
     .use(async (ctx) => {
       expect(await ctx.view("error/engine")).toBeUndefined();
     })
-    .run();
+    .test();
 });
 
 test("error path", async () => {
-  await new TestStartup()
+  await new Startup()
     .useView({
       dir: "test/views",
     })
     .use(async (ctx) => {
       expect(await ctx.view("error/path.dir/index")).toBeUndefined();
     })
-    .run();
+    .test();
 });

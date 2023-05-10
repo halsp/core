@@ -1,6 +1,7 @@
-import { Middleware, Request } from "@halsp/core";
+import { Middleware, Request, Startup } from "@halsp/core";
 import { Inject } from "@halsp/inject";
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import "@halsp/http";
+import "@halsp/testing";
 import { Header, PipeTransform } from "../src";
 import { GlobalPipeType } from "../src/global-pipe-type";
 
@@ -27,13 +28,14 @@ test("global pipe property", async () => {
     }
   }
 
-  const startup = new TestHttpStartup()
+  const startup = new Startup()
+    .useHttp()
     .setContext(new Request().setHeader("h1", "5"))
     .useInject()
     .useGlobalPipe(GlobalPipeType.before, TestGlobalPipe)
     .useGlobalPipe(GlobalPipeType.after, TestGlobalPipe)
     .add(TestMiddleware);
-  const res = await startup.run();
+  const res = await startup.test();
 
   expect(res["propertyKey1"]).toBe(String);
   expect(res["propertyKey2"]).toBe(String);
@@ -67,13 +69,14 @@ test("global pipe params", async () => {
     }
   }
 
-  const startup = new TestHttpStartup()
+  const startup = new Startup()
+    .useHttp()
     .setContext(new Request().setHeader("h1", "5"))
     .useInject()
     .useGlobalPipe(GlobalPipeType.before, TestGlobalPipe)
     .useGlobalPipe(GlobalPipeType.after, TestGlobalPipe)
     .add(TestMiddleware);
-  const res = await startup.run();
+  const res = await startup.test();
 
   expect(res["propertyKey1"]).toBe(Number);
   expect(res["propertyKey2"]).toBe(Number);

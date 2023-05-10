@@ -11,7 +11,7 @@ test("arr header type", async function () {
       ctx.set("Content-Type", ["text/plain", "charset=utf-8"]);
       await next();
     })
-    .runTest();
+    .test();
 
   expect(res.status).toBe(200);
   expect(res.body).toBe("halsp");
@@ -30,7 +30,7 @@ test("without type", async function () {
       ctx.set("Content-Type", "");
       await next();
     })
-    .runTest();
+    .test();
 
   expect(res.status).toBe(200);
   expect(res.body).toBe("halsp");

@@ -1,5 +1,5 @@
-import { Middleware } from "@halsp/core";
-import { TestStartup } from "@halsp/testing";
+import { Middleware, Startup } from "@halsp/core";
+import "@halsp/testing";
 import "../../src";
 import { Inject } from "../../src";
 
@@ -36,14 +36,14 @@ class TestMiddleware extends Middleware {
 }
 
 test(`inject key`, async function () {
-  const { ctx } = await new TestStartup()
+  const { ctx } = await new Startup()
     .useInject()
     .inject("KEY1", 1)
     .inject("KEY2", "2")
     .inject("KEY3", true)
     .inject("KEY_OBJECT", TestService2)
     .add(TestMiddleware)
-    .run();
+    .test();
 
   expect(ctx.get("result")).toEqual({
     key1: 1,
@@ -56,7 +56,7 @@ test(`inject key`, async function () {
 });
 
 test(`inject key empty`, async function () {
-  const { ctx } = await new TestStartup().useInject().add(TestMiddleware).run();
+  const { ctx } = await new Startup().useInject().add(TestMiddleware).test();
 
   expect(ctx.get("result")).toEqual({
     key1: undefined,

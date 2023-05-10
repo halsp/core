@@ -1,10 +1,7 @@
-import { Context, Middleware, Request } from "@halsp/core";
-import { TestMicroStartup } from "@halsp/testing/dist/micro";
+import { Context, Middleware, Request, Startup } from "@halsp/core";
+import "@halsp/testing";
+import "@halsp/micro";
 import { Body, ParseBoolPipe } from "../../src";
-
-beforeAll(() => {
-  new TestMicroStartup();
-});
 
 describe("parse bool with micro", () => {
   it(`should parse bool body property when value is 'true'`, async () => {
@@ -21,12 +18,13 @@ describe("parse bool with micro", () => {
       p1: "true",
     });
 
-    const { ctx } = await new TestMicroStartup()
+    const { ctx } = await new Startup()
+      .useMicro()
       .setSkipThrow()
       .setContext(req)
       .useInject()
       .add(new TestMiddleware())
-      .run();
+      .test();
 
     expect(ctx.get("p1")).toBeTruthy();
     expect(ctx.res.body).toBeUndefined();
@@ -48,12 +46,13 @@ describe("parse bool with micro", () => {
       })
     );
 
-    await new TestMicroStartup()
+    await new Startup()
+      .useMicro()
       .setSkipThrow()
       .setContext(ctx)
       .useInject()
       .add(new TestMiddleware())
-      .run();
+      .test();
 
     expect(ctx.get("p1")).toBeUndefined();
     expect(ctx.res.body).toBeUndefined();
@@ -75,12 +74,13 @@ describe("parse bool with micro", () => {
       get: () => undefined,
     });
 
-    await new TestMicroStartup()
+    await new Startup()
+      .useMicro()
       .setSkipThrow()
       .setContext(ctx)
       .useInject()
       .add(new TestMiddleware())
-      .run();
+      .test();
 
     expect(ctx.get("p1")).toBeUndefined();
     expect(ctx.res.body).toBeUndefined();

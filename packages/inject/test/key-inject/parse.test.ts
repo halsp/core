@@ -1,5 +1,5 @@
-import { Middleware } from "@halsp/core";
-import { TestStartup } from "@halsp/testing";
+import { Middleware, Startup } from "@halsp/core";
+import "@halsp/testing";
 import "../../src";
 import { InjectType, parseInject, tryParseInject } from "../../src";
 
@@ -21,13 +21,13 @@ class TestMiddleware extends Middleware {
 }
 
 test(`inject key`, async function () {
-  const { ctx } = await new TestStartup()
+  const { ctx } = await new Startup()
     .useInject()
     .inject("KEY", 1)
     .inject("SERVICE1", TestService1)
     .inject("SERVICE2", TestService1, InjectType.Transient)
     .add(TestMiddleware)
-    .run();
+    .test();
 
   expect(ctx.get("result")).toEqual({
     key: 1,
@@ -38,7 +38,7 @@ test(`inject key`, async function () {
 });
 
 test(`try parse`, async function () {
-  const { ctx } = await new TestStartup()
+  const { ctx } = await new Startup()
     .useInject()
     .inject("SERVICE1", TestService1)
     .use(async (ctx) => {
@@ -51,7 +51,7 @@ test(`try parse`, async function () {
         obj3: !!obj3,
       });
     })
-    .run();
+    .test();
   expect(ctx.get("result")).toEqual({
     obj1: false,
     obj2: true,

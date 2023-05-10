@@ -1,21 +1,21 @@
-import { Context, Request } from "@halsp/core";
-import { ClientPacket } from "@halsp/micro-common";
-import { MicroException, MicroStartup } from "../src";
-import { TestStartup } from "./utils";
+import { Startup } from "@halsp/core";
+import { handleMessage, MicroException } from "../src";
+import "@halsp/testing";
 
 describe("startup", () => {
   it("should set env", () => {
     process.env.HALSP_ENV = "" as any;
-    new TestStartup();
+    new Startup().useMicro();
     expect(process.env.HALSP_ENV).toBe("micro");
   });
 
   it("should set error if throw MicroException", async () => {
-    const res = await new TestStartup()
+    const res = await new Startup()
+      .useMicro()
       .use(() => {
         throw new MicroException("err");
       })
-      .run();
+      .test();
 
     expect(res.error).toBe("err");
     expect(res.body).toBeUndefined();
@@ -23,27 +23,17 @@ describe("startup", () => {
 });
 
 describe("handle message", () => {
-  class TestClass extends MicroStartup {}
-  async function handleMessage<T = object>(
-    text: string,
-    onSend: (arg: {
-      req: Request;
-      result: ClientPacket<T>;
-    }) => void | Promise<void>,
-    prehook?: (ctx: Context) => Promise<void> | void
-  ) {
-    await new TestClass()["handleMessage"](JSON.parse(text), onSend, prehook);
-  }
-
   it("should handle message and send result", async () => {
-    await handleMessage(`{"id":"abc"}`, ({ req, result }) => {
+    const startup = new Startup();
+    await handleMessage.bind(startup)(`{"id":"abc"}`, ({ req, result }) => {
       expect(req.id).toBe("abc");
       expect(result).toEqual({ id: "abc" });
     });
   });
 
   it("should handle message and invoke prehook", async () => {
-    await handleMessage(
+    const startup = new Startup();
+    await handleMessage.bind(startup)(
       `{}`,
       () => {
         expect(true).toBe(false);
@@ -55,9 +45,10 @@ describe("handle message", () => {
   });
 
   it("should log error when message format is illegal", async () => {
+    const startup = new Startup();
     let error: any;
     try {
-      await handleMessage(`abc`, () => {
+      await handleMessage.bind(startup)(`abc`, () => {
         expect(true).toBe(false);
       });
     } catch (err) {
@@ -67,7 +58,8 @@ describe("handle message", () => {
   });
 
   it("should return error message when res.error is not empty", async () => {
-    await handleMessage(
+    const startup = new Startup();
+    await handleMessage.bind(startup)(
       `{"id":"abc"}`,
       ({ req, result }) => {
         expect(req.id).toBe("abc");

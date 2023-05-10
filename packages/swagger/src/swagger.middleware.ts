@@ -4,7 +4,7 @@ import { SwaggerOptions } from "./options";
 import { OpenApiBuilder } from "openapi3-ts-remove-yaml";
 import path from "path";
 import * as fs from "fs";
-import { HttpStartup, StatusCodes } from "@halsp/http";
+import { StatusCodes } from "@halsp/http";
 import { HttpMethods } from "@halsp/methods";
 import { Readable } from "stream";
 
@@ -46,7 +46,7 @@ export class SwaggerMiddlware extends Middleware {
     const extendPath = normalizePath(reqPath.replace(optPath, ""));
     if (extendPath == "index.json") {
       const openApiBuilder = await this.createBuilder();
-      const startup = this.ctx.startup as HttpStartup;
+      const startup = this.ctx.startup;
       const apiDoc = new Parser(
         startup.routerMap,
         openApiBuilder,

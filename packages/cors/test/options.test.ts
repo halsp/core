@@ -1,31 +1,34 @@
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import "@halsp/testing";
 import { HttpMethods } from "@halsp/methods";
-import { Request } from "@halsp/core";
+import { Request, Startup } from "@halsp/core";
 import "../src";
 
 it("should set cors headers when options.origin is empty string", async () => {
-  const res = await new TestHttpStartup()
+  const res = await new Startup()
+    .useHttp()
     .setContext(new Request().set("Origin", "https://halsp.org"))
     .useCors({
       origin: () => "",
     })
-    .run();
+    .test();
   expect(res.get("Access-Control-Allow-Origin")).toBeUndefined();
   expect(res.status).toBe(404);
 });
 
 it("should set Access-Control-Allow-Credentials when credentials is true", async () => {
-  const res = await new TestHttpStartup()
+  const res = await new Startup()
+    .useHttp()
     .setContext(new Request().set("Origin", "https://halsp.org"))
     .useCors({
       credentials: () => true,
     })
-    .run();
+    .test();
   expect(res.get("Access-Control-Allow-Credentials")).toBe("true");
 });
 
 it("should set Access-Control-Allow-Headers when set allowHeaders option", async () => {
-  const res = await new TestHttpStartup()
+  const res = await new Startup()
+    .useHttp()
     .setContext(
       new Request()
         .set("Origin", "https://halsp.org")
@@ -35,13 +38,14 @@ it("should set Access-Control-Allow-Headers when set allowHeaders option", async
     .useCors({
       allowHeaders: ["get"],
     })
-    .run();
+    .test();
   expect(res.get("Access-Control-Allow-Headers")).toEqual(["get"]);
 });
 
 describe("privateNetworkAccess", () => {
   it("should not set Access-Control-Request-Private-Network when privateNetworkAccess is false", async () => {
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
+      .useHttp()
       .setContext(
         new Request()
           .set("Origin", "https://halsp.org")
@@ -51,12 +55,13 @@ describe("privateNetworkAccess", () => {
       .useCors({
         privateNetworkAccess: false,
       })
-      .run();
+      .test();
     expect(res.has("Access-Control-Allow-Private-Network")).toBeFalsy();
   });
 
   it("should not set Access-Control-Request-Private-Network if Access-Control-Request-Private-Network not exist", async () => {
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
+      .useHttp()
       .setContext(
         new Request()
           .set("Origin", "https://halsp.org")
@@ -66,12 +71,13 @@ describe("privateNetworkAccess", () => {
       .useCors({
         privateNetworkAccess: true,
       })
-      .run();
+      .test();
     expect(res.has("Access-Control-Allow-Private-Network")).toBeFalsy();
   });
 
   it("should set Access-Control-Request-Private-Network", async () => {
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
+      .useHttp()
       .setContext(
         new Request()
           .set("Origin", "https://halsp.org")
@@ -82,22 +88,24 @@ describe("privateNetworkAccess", () => {
       .useCors({
         privateNetworkAccess: true,
       })
-      .run();
+      .test();
     expect(res.has("Access-Control-Allow-Private-Network")).toBeTruthy();
   });
 });
 
 describe("allowMethods", () => {
   it("should not set Access-Control-Allow-Methods when the method is not OPTIONS", async () => {
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
+      .useHttp()
       .setContext(new Request().set("Origin", "https://halsp.org"))
       .useCors()
-      .run();
+      .test();
     expect(res.get("Access-Control-Allow-Methods")).toBeUndefined();
   });
 
   it("should set default Access-Control-Allow-Methods", async () => {
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
+      .useHttp()
       .setContext(
         new Request()
           .set("Origin", "https://halsp.org")
@@ -105,7 +113,7 @@ describe("allowMethods", () => {
           .setMethod(HttpMethods.options)
       )
       .useCors()
-      .run();
+      .test();
     expect(res.get("Access-Control-Allow-Methods")).toEqual([
       "GET",
       "HEAD",
@@ -118,7 +126,8 @@ describe("allowMethods", () => {
 
   it("should set Access-Control-Allow-Methods when set allowMethods option", async () => {
     const allowMethods = ["POST"];
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
+      .useHttp()
       .setContext(
         new Request()
           .set("Origin", "https://halsp.org")
@@ -128,7 +137,7 @@ describe("allowMethods", () => {
       .useCors({
         allowMethods,
       })
-      .run();
+      .test();
     expect(res.get("Access-Control-Allow-Methods")).toEqual(allowMethods);
   });
 });

@@ -1,6 +1,6 @@
 import "../src";
-import { Middleware } from "@halsp/core";
-import { TestStartup } from "@halsp/testing";
+import { Middleware, Startup } from "@halsp/core";
+import "@halsp/testing";
 import { Typeorm } from "../src";
 
 class TestMiddleware extends Middleware {
@@ -19,7 +19,7 @@ class TestMiddleware extends Middleware {
 }
 
 test("identity", async () => {
-  const { ctx } = await new TestStartup()
+  const { ctx } = await new Startup()
     .useTypeorm({
       identity: "app",
       type: "sqlite",
@@ -30,7 +30,7 @@ test("identity", async () => {
       database: "test/sqlite.db",
     })
     .add(TestMiddleware)
-    .run();
+    .test();
 
   expect(ctx.get("result")).toEqual({
     app: true,

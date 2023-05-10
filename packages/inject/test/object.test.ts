@@ -1,14 +1,14 @@
-import { Context } from "@halsp/core";
+import { Context, Startup } from "@halsp/core";
 import { InjectType, parseInject } from "../src";
 import "../src";
-import { TestStartup } from "@halsp/testing";
+import "@halsp/testing";
 
 export class Service extends Object {
   public count = 0;
 }
 
 test(`object`, async function () {
-  const { ctx } = await new TestStartup()
+  const { ctx } = await new Startup()
     .useInject()
     .inject(Service, new Service())
     .use(async (ctx) => {
@@ -21,7 +21,7 @@ test(`object`, async function () {
         count2: service2.count,
       });
     })
-    .run();
+    .test();
 
   expect(ctx.get("result")).toEqual({
     count1: 2,
@@ -35,7 +35,7 @@ export class BuilderService {
 }
 function runBuilderTest(type?: InjectType.Scoped | InjectType.Transient) {
   test(`object builder ${type}`, async function () {
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .useInject()
       .inject(BuilderService, (ctx) => new BuilderService(ctx), type)
       .use(async (ctx) => {
@@ -49,7 +49,7 @@ function runBuilderTest(type?: InjectType.Scoped | InjectType.Transient) {
           count2: service2.count,
         });
       })
-      .run();
+      .test();
 
     if (type == InjectType.Transient) {
       expect(ctx.get("result")).toEqual({
@@ -85,7 +85,7 @@ export class PromiseBuilderService {
 
 function runPrimiseBuilderTest(type?: InjectType) {
   test(`object primise builder ${type}`, async function () {
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .useInject()
       .inject(
         PromiseBuilderService,
@@ -103,7 +103,7 @@ function runPrimiseBuilderTest(type?: InjectType) {
           count2: service2.count,
         });
       })
-      .run();
+      .test();
 
     if (type == InjectType.Transient) {
       expect(ctx.get("result")).toEqual({

@@ -1,7 +1,7 @@
-import { Middleware } from "@halsp/core";
+import { Middleware, Startup } from "@halsp/core";
 import { Service2 } from "./services";
 import { Inject } from "../src";
-import { TestStartup } from "@halsp/testing";
+import "@halsp/testing";
 
 @Inject
 class TestMiddleware extends Middleware {
@@ -23,7 +23,7 @@ class TestMiddleware extends Middleware {
 }
 
 test(`middleware constructor`, async () => {
-  const { ctx } = await new TestStartup().useInject().add(TestMiddleware).run();
+  const { ctx } = await new Startup().useInject().add(TestMiddleware).test();
 
   expect(ctx.get("result")).toEqual({
     md: "md.service2.service1",
@@ -33,14 +33,14 @@ test(`middleware constructor`, async () => {
 });
 
 test(`function middleware constructor`, async () => {
-  const { ctx } = await new TestStartup()
+  const { ctx } = await new Startup()
     .useInject()
     .inject("KEY_INJ", 3)
     .add((ctx) => {
       ctx.set("h", "1");
       return TestMiddleware;
     })
-    .run();
+    .test();
 
   expect(ctx.get("result")).toEqual({
     md: "md.service2.service1",
@@ -51,7 +51,7 @@ test(`function middleware constructor`, async () => {
 });
 
 test(`async function middleware constructor`, async () => {
-  const { ctx } = await new TestStartup()
+  const { ctx } = await new Startup()
     .useInject()
     .add(async (ctx) => {
       await new Promise<void>((resolve) => {
@@ -60,7 +60,7 @@ test(`async function middleware constructor`, async () => {
       ctx.set("h", "1");
       return TestMiddleware;
     })
-    .run();
+    .test();
 
   expect(ctx.get("result")).toEqual({
     md: "md.service2.service1",

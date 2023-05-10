@@ -1,15 +1,16 @@
 import "../src";
-import { TestStartup } from "@halsp/testing";
+import "@halsp/testing";
 import { parseInject } from "@halsp/inject";
 import { Redis } from "../src";
 import { OPTIONS_IDENTITY } from "../src/constant";
 import RedisClient from "@redis/client/dist/lib/client";
+import { Startup } from "@halsp/core";
 
 test("connect failed", async () => {
   const beforeConnect = RedisClient.prototype.connect;
   const beforeDisconnect = RedisClient.prototype.disconnect;
 
-  const { ctx } = await new TestStartup()
+  const { ctx } = await new Startup()
     .use(async (ctx, next) => {
       RedisClient.prototype.connect = async () => {
         ctx.set("connect", "1");
@@ -30,7 +31,7 @@ test("connect failed", async () => {
         get: () => true,
       });
     })
-    .run();
+    .test();
 
   RedisClient.prototype.connect = beforeConnect;
   RedisClient.prototype.disconnect = beforeDisconnect;

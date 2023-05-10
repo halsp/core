@@ -1,10 +1,11 @@
-import { TestStartup } from "@halsp/testing";
+import "@halsp/testing";
 import { EnvOptions } from "../src";
 import "../src";
+import { Startup } from "@halsp/core";
 
 export async function getEnv(mode?: string, options?: EnvOptions) {
   process.chdir("test/envs");
-  const startup = new TestStartup();
+  const startup = new Startup();
   if (mode) {
     process.env.NODE_ENV = mode;
   }
@@ -15,7 +16,7 @@ export async function getEnv(mode?: string, options?: EnvOptions) {
       .use((ctx) => {
         ctx.set("env", process.env);
       })
-      .run();
+      .test();
     return ctx.get<typeof process.env>("env");
   } finally {
     process.chdir("../..");

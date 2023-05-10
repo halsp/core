@@ -1,7 +1,7 @@
 import "@halsp/router";
 import "@halsp/static";
-import { normalizePath } from "@halsp/core";
-import { HttpStartup } from "@halsp/http";
+import "@halsp/http";
+import { normalizePath, Startup } from "@halsp/core";
 import { USED } from "./constant";
 import { SwaggerOptions } from "./options";
 import "./validator.decorator";
@@ -13,14 +13,12 @@ declare module "@halsp/core" {
   interface Context {
     get swaggerOptions(): SwaggerOptions;
   }
-}
-declare module "@halsp/http" {
-  interface HttpStartup {
+  interface Startup {
     useSwagger(options?: SwaggerOptions): this;
   }
 }
 
-HttpStartup.prototype.useSwagger = function (options: SwaggerOptions = {}) {
+Startup.prototype.useSwagger = function (options: SwaggerOptions = {}) {
   if (!!this[USED]) {
     return this;
   }

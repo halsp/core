@@ -1,6 +1,7 @@
 import "../src";
-import { TestStartup } from "@halsp/testing";
+import "@halsp/testing";
 import RedisClient from "@redis/client/dist/lib/client";
+import { Startup } from "@halsp/core";
 
 it("should get redis by ctx", async () => {
   const beforeConnect = RedisClient.prototype.connect;
@@ -8,7 +9,7 @@ it("should get redis by ctx", async () => {
   const beforeDisconnect = RedisClient.prototype.disconnect;
   RedisClient.prototype.disconnect = async () => undefined;
 
-  await new TestStartup()
+  await new Startup()
     .useRedis({
       identity: "abc",
     })
@@ -20,7 +21,7 @@ it("should get redis by ctx", async () => {
 
       await next();
     })
-    .run();
+    .test();
 
   RedisClient.prototype.connect = beforeConnect;
   RedisClient.prototype.disconnect = beforeDisconnect;

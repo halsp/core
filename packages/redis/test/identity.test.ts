@@ -1,7 +1,7 @@
 import "../src";
-import { Middleware } from "@halsp/core";
+import { Middleware, Startup } from "@halsp/core";
 import { Redis } from "../src";
-import { TestStartup } from "@halsp/testing";
+import "@halsp/testing";
 import RedisClient from "@redis/client/dist/lib/client";
 
 class TestMiddleware extends Middleware {
@@ -23,7 +23,7 @@ test("identity", async () => {
   const beforeConnect = RedisClient.prototype.connect;
   const beforeDisconnect = RedisClient.prototype.disconnect;
 
-  const { ctx } = await new TestStartup()
+  const { ctx } = await new Startup()
     .use(async (ctx, next) => {
       RedisClient.prototype.connect = async () => {
         ctx.set("connect", "1");
@@ -38,7 +38,7 @@ test("identity", async () => {
     })
     .useRedis()
     .add(TestMiddleware)
-    .run();
+    .test();
 
   RedisClient.prototype.connect = beforeConnect;
   RedisClient.prototype.disconnect = beforeDisconnect;

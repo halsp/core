@@ -1,8 +1,8 @@
-import { Middleware } from "@halsp/core";
+import { Middleware, Startup } from "@halsp/core";
 import "../src";
 import { Service1, Service2 } from "./services";
 import { Inject, InjectType } from "../src";
-import { TestStartup } from "@halsp/testing";
+import "@halsp/testing";
 
 class TestMiddleware extends Middleware {
   @Inject
@@ -23,13 +23,13 @@ class TestMiddleware extends Middleware {
 
 function runTest(type: InjectType) {
   test(`inject type ${type}`, async function () {
-    const startup = new TestStartup()
+    const startup = new Startup()
       .useInject()
       .inject(Service1, type)
       .inject(Service2)
       .add(TestMiddleware);
 
-    let res = await startup.run();
+    let res = await startup.test();
     let ctx = res.ctx;
 
     expect(ctx.get("result")).toEqual({
@@ -37,7 +37,7 @@ function runTest(type: InjectType) {
       singleton2: type == InjectType.Transient ? 3 : 4,
     });
 
-    res = await startup.run();
+    res = await startup.test();
     ctx = res.ctx;
     if (type == InjectType.Transient) {
       expect(ctx.get("result")).toEqual({

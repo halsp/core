@@ -1,10 +1,11 @@
-import { TestStartup } from "@halsp/testing";
+import "@halsp/testing";
 import { createTestContext } from "./utils";
 import "../src";
+import { Startup } from "@halsp/core";
 
 test("prefix", async function () {
   process.env.HALSP_ENV = "http";
-  const { ctx } = await new TestStartup()
+  const { ctx } = await new Startup()
     .setContext(
       await createTestContext(
         {
@@ -20,6 +21,6 @@ test("prefix", async function () {
     })
     .useJwtVerify()
     .use((ctx) => ctx.set("token", ctx.jwtToken))
-    .run();
+    .test();
   expect(!!ctx.get("token")).toBeTruthy();
 });

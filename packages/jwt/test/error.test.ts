@@ -1,13 +1,13 @@
-import { TestStartup } from "@halsp/testing";
+import "@halsp/testing";
 import { createTestContext } from "./utils";
 import "../src";
-import { Context } from "@halsp/core";
+import { Context, Startup } from "@halsp/core";
 
 function testErrorSecret(isError: boolean) {
   function runTest(customError: boolean) {
     test(`error secret ${isError} ${customError}`, async function () {
       process.env.HALSP_ENV = "http";
-      const startup = new TestStartup()
+      const startup = new Startup()
         .setContext(
           await createTestContext({
             secret: isError ? "secret1" : "secret",
@@ -31,7 +31,7 @@ function testErrorSecret(isError: boolean) {
       let ctx: Context | undefined;
       let error = false;
       try {
-        const res = await startup.run();
+        const res = await startup.test();
         ctx = res.ctx;
       } catch (err) {
         console.log(err);

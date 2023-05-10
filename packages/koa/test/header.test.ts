@@ -4,12 +4,11 @@ import { Startup } from "@halsp/core";
 
 test("writeHead", async function () {
   const res = await new Startup()
-    .useTest()
     .koa(async (ctx, next) => {
       ctx.res.writeHead(200);
       await next();
     })
-    .runTest();
+    .test();
 
   expect(res.status).toBe(200);
   expect(res.body).toBeUndefined();
@@ -17,14 +16,13 @@ test("writeHead", async function () {
 
 test("writeHead2", async function () {
   const res = await new Startup()
-    .useTest()
     .koa(async (ctx, next) => {
       ctx.res.writeHead(200, "", {
         h1: 1,
       });
       await next();
     })
-    .runTest();
+    .test();
 
   expect(res.status).toBe(200);
   expect(res.getHeader("h1")).toBe("1");
@@ -32,7 +30,6 @@ test("writeHead2", async function () {
 
 test("removeHeader", async function () {
   const res = await new Startup()
-    .useTest()
     .koa(async (ctx, next) => {
       ctx.res.setHeader("h1", 1);
       ctx.res.writeHead(200, "", {
@@ -44,7 +41,7 @@ test("removeHeader", async function () {
     .use(async (ctx) => {
       ctx.res.setHeader("h3", "");
     })
-    .runTest();
+    .test();
 
   expect(res.status).toBe(200);
   expect(res.getHeader("h1")).toBeUndefined();

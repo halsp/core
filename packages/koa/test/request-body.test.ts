@@ -5,14 +5,13 @@ import { Request, Startup } from "@halsp/core";
 describe("request body", () => {
   it("should parse text body", async function () {
     const res = await new Startup()
-      .useTest()
       .setContext(new Request().setBody("halsp"))
       .koa(async (ctx, next) => {
         ctx.body = ctx.halspCtx.req.body;
         ctx.status = 200;
         await next();
       })
-      .runTest();
+      .test();
 
     expect(res.status).toBe(200);
     expect(res.body).toBe("halsp");
@@ -21,7 +20,6 @@ describe("request body", () => {
 
   it("should parse json body", async function () {
     const res = await new Startup()
-      .useTest()
       .setContext(
         new Request().setBody({
           halsp: "koa",
@@ -32,7 +30,7 @@ describe("request body", () => {
         ctx.status = 200;
         await next();
       })
-      .runTest();
+      .test();
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual({
@@ -45,14 +43,13 @@ describe("request body", () => {
 
   it("should parse buffer body", async function () {
     const res = await new Startup()
-      .useTest()
       .setContext(new Request().setBody(Buffer.from("halsp", "utf-8")))
       .koa(async (ctx, next) => {
         ctx.body = ctx.halspCtx.req.body;
         ctx.status = 200;
         await next();
       })
-      .runTest();
+      .test();
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual(Buffer.from("halsp", "utf-8"));

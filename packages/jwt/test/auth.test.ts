@@ -1,8 +1,9 @@
-import { TestStartup } from "@halsp/testing";
+import "@halsp/testing";
 import { parseInject } from "@halsp/inject";
 import "../src";
 import { JwtService } from "../src";
 import { createTestContext } from "./utils";
+import { Startup } from "@halsp/core";
 
 beforeEach(() => {
   process.env.HALSP_ENV = "" as any;
@@ -11,7 +12,7 @@ beforeEach(() => {
 describe("auth", () => {
   function runAuthTest(auth: boolean) {
     it(`should auth ${auth}`, async function () {
-      const { ctx } = await new TestStartup()
+      const { ctx } = await new Startup()
         .use(async (ctx, next) => {
           ctx.set("result", false);
           await next();
@@ -26,7 +27,7 @@ describe("auth", () => {
         })
         .useJwtExtraAuth(() => auth)
         .use((ctx) => ctx.set("result", true))
-        .run();
+        .test();
       expect(ctx.get("result")).toBe(auth);
     });
   }
@@ -35,7 +36,7 @@ describe("auth", () => {
 
   it("should set 401 when use useJwtVerify in http", async () => {
     process.env.HALSP_ENV = "http";
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .setContext(
         await createTestContext({
           secret: "secret",
@@ -51,13 +52,13 @@ describe("auth", () => {
         secret: "secret1",
       })
       .useJwtVerify()
-      .run();
+      .test();
     expect(ctx.get("msg")).toBe("invalid signature");
   });
 
   it("should set 401 when use useJwtExtraAuth in http", async () => {
     process.env.HALSP_ENV = "http";
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .setContext(
         await createTestContext({
           secret: "secret",
@@ -74,13 +75,13 @@ describe("auth", () => {
         secret: "secret",
       })
       .useJwtExtraAuth(() => false)
-      .run();
+      .test();
     expect(ctx.get("msg")).toBe("JWT validation failed");
   });
 
   it("should throw error when use useJwtVerify without env", async () => {
     process.env.HALSP_ENV = "" as any;
-    const startup = new TestStartup()
+    const startup = new Startup()
       .setContext(
         await createTestContext({
           secret: "secret",
@@ -93,7 +94,7 @@ describe("auth", () => {
 
     let err = false;
     try {
-      await startup.run();
+      await startup.test();
     } catch {
       err = true;
     }
@@ -101,7 +102,7 @@ describe("auth", () => {
   });
 
   it(`should auth failed when use useJwtVerify in micro`, async function () {
-    const startup = new TestStartup();
+    const startup = new Startup();
     const context = await createTestContext({
       secret: "secret",
     });
@@ -112,7 +113,7 @@ describe("auth", () => {
         secret: "secret",
       })
       .useJwtVerify()
-      .run();
+      .test();
 
     expect(ctx.res["error"].message).toBe("jwt must be provided");
   });
@@ -126,20 +127,20 @@ describe("auth", () => {
       token: testCtx.req["headers"]["Authorization"],
     });
 
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .setContext(testCtx)
       .useJwt({
         secret: "secret",
       })
       .useJwtVerify()
       .use((ctx) => ctx.set("result", true))
-      .run();
+      .test();
     expect(ctx.get("result")).toBe(true);
   });
 
   it(`should auth failed with custom status when use micro`, async function () {
     process.env.HALSP_ENV = "micro";
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .setContext(
         await createTestContext({
           secret: "secret",
@@ -153,12 +154,12 @@ describe("auth", () => {
         return false;
       })
       .use((ctx) => ctx.set("extra", false))
-      .run();
+      .test();
     expect(ctx.get("extra")).toBeTruthy();
   });
 
   it(`should auth with null token`, async function () {
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .useJwt({
         secret: "secret",
       })
@@ -171,7 +172,7 @@ describe("auth", () => {
           ctx.set("result", true);
         }
       })
-      .run();
+      .test();
     expect(ctx.get("result")).toBeTruthy();
   });
 });

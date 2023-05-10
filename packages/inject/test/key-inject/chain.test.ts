@@ -1,4 +1,5 @@
-import { TestStartup } from "@halsp/testing";
+import { Startup } from "@halsp/core";
+import "@halsp/testing";
 import { Inject, parseInject } from "../../src";
 
 it("key chain inject", async () => {
@@ -16,7 +17,7 @@ it("key chain inject", async () => {
     readonly service2!: TestService2;
   }
 
-  await new TestStartup()
+  await new Startup()
     .inject("Test", TestService3)
     .use(async (ctx) => {
       const service3 = await parseInject<TestService3>(ctx, "Test");
@@ -28,5 +29,5 @@ it("key chain inject", async () => {
       expect(service3.service1.constructor).toBe(TestService1);
       expect(service3.service2.service1.constructor).toBe(TestService1);
     })
-    .run();
+    .test();
 });

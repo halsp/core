@@ -1,9 +1,9 @@
-import { Middleware } from "@halsp/core";
+import { Middleware, Startup } from "@halsp/core";
 import * as jwt from "jsonwebtoken";
 import { JwtObject, JwtPayload, JwtToken } from "../src";
 import "../src";
 import { createTestContext } from "./utils";
-import { TestStartup } from "@halsp/testing";
+import "@halsp/testing";
 
 class TestMiddleware extends Middleware {
   @JwtObject
@@ -26,7 +26,7 @@ class TestMiddleware extends Middleware {
 test("decorator", async function () {
   let jwt = "";
   process.env.HALSP_ENV = "http";
-  const { ctx } = await new TestStartup()
+  const { ctx } = await new Startup()
     .setContext(
       await createTestContext({
         secret: "secret",
@@ -43,7 +43,7 @@ test("decorator", async function () {
       await next();
     })
     .add(TestMiddleware)
-    .run();
+    .test();
   expect(Object.keys(ctx.get("jwt"))).toEqual([
     "header",
     "payload",
@@ -57,7 +57,7 @@ test("decorator", async function () {
 
 function testGetToken(skip: boolean) {
   test("tokenProvider option", async function () {
-    const startup = new TestStartup()
+    const startup = new Startup()
       .setContext(
         await createTestContext({
           secret: "secret",
@@ -72,7 +72,7 @@ function testGetToken(skip: boolean) {
 
     let error = false;
     try {
-      await startup.run();
+      await startup.test();
     } catch {
       error = true;
     }

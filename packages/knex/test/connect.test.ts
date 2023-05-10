@@ -1,12 +1,13 @@
 import "../src";
-import { TestStartup } from "@halsp/testing";
+import "@halsp/testing";
 import { parseInject } from "@halsp/inject";
 import { OPTIONS_IDENTITY } from "../src/constant";
 import { Knex } from "../src";
+import { Startup } from "@halsp/core";
 
 describe("connect", () => {
   it("insert and select", async () => {
-    await new TestStartup()
+    await new Startup()
       .useKnex({
         client: "sqlite3",
         connection: {
@@ -40,6 +41,6 @@ describe("connect", () => {
           },
         ]);
       })
-      .run();
+      .test();
   });
 });

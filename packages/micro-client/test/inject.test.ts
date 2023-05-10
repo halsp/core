@@ -1,5 +1,5 @@
-import { Middleware } from "@halsp/core";
-import { TestStartup } from "@halsp/testing";
+import { Middleware, Startup } from "@halsp/core";
+import "@halsp/testing";
 import "../src";
 import {
   IMicroClient,
@@ -40,7 +40,7 @@ describe("inject", () => {
     const server2 = net.createServer(() => undefined);
     server2.listen(23378);
 
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .useTestClient()
       .useTestClient({
         identity: "custom_id",
@@ -55,7 +55,7 @@ describe("inject", () => {
         ctx.set("logger2", client2.logger);
         client2.dispose();
       })
-      .run();
+      .test();
 
     server1.removeAllListeners();
     server1.close();
@@ -88,7 +88,7 @@ describe("inject", () => {
     const server2 = net.createServer(() => undefined);
     server2.listen(23380);
 
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .useTestClient({
         injectType: InjectType.Scoped,
       })
@@ -97,7 +97,7 @@ describe("inject", () => {
         injectType: InjectType.Scoped,
       })
       .add(TestMiddleware)
-      .run();
+      .test();
 
     server1.removeAllListeners();
     server1.close();
@@ -112,14 +112,14 @@ describe("inject", () => {
     const server = net.createServer(() => undefined);
     server.listen(23381);
 
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .useTestClient()
       .use(async (ctx) => {
         const client1 = await ctx.getMicroClient<TestClient>();
         ctx.set("logger", client1.logger);
         client1.dispose();
       })
-      .run();
+      .test();
 
     server.removeAllListeners();
     server.close();

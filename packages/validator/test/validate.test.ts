@@ -1,5 +1,5 @@
-import { Middleware, Request } from "@halsp/core";
-import { TestStartup } from "@halsp/testing";
+import { Middleware, Request, Startup } from "@halsp/core";
+import "@halsp/testing";
 import { Body } from "@halsp/pipe";
 import "@halsp/inject";
 import "../src";
@@ -31,13 +31,13 @@ function runTest(validate: boolean) {
       b1: "a",
       b2: validate ? 1 : "1",
     });
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .setSkipThrow()
       .setContext(req)
       .useInject()
       .useValidator()
       .add(TestMiddleware)
-      .run();
+      .test();
 
     const body = ctx.get<TestDto>("body");
     if (validate) {
@@ -79,13 +79,13 @@ test("array message", async () => {
     b1: 1,
     b2: "1",
   });
-  const { ctx } = await new TestStartup()
+  const { ctx } = await new Startup()
     .setSkipThrow()
     .setContext(req)
     .useInject()
     .useValidator()
     .add(TestMiddleware)
-    .run();
+    .test();
 
   expect(ctx.get("body")).toBeUndefined();
   expect(ctx.errorStack[0].message).toBe(
@@ -115,12 +115,12 @@ describe("disabled", () => {
     const req = new Request().setBody({
       b1: 1,
     });
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .setContext(req)
       .useInject()
       .useValidator()
       .add(TestMiddleware)
-      .run();
+      .test();
 
     expect(ctx.get("ok")).toBe(1);
   });
@@ -145,12 +145,12 @@ describe("disabled", () => {
     const req = new Request().setBody({
       b1: "1",
     });
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .setContext(req)
       .useInject()
       .useValidator()
       .add(TestMiddleware)
-      .run();
+      .test();
 
     expect(ctx.get("ok")).toBe(1);
   });

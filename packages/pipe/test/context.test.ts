@@ -1,6 +1,7 @@
-import { Context } from "@halsp/core";
+import { Context, Startup } from "@halsp/core";
 import { parseInject } from "@halsp/inject";
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import "@halsp/http";
+import "@halsp/testing";
 import "../src";
 import { Ctx } from "../src";
 import { expectBody, getTestRequest } from "./TestMiddleware";
@@ -20,14 +21,15 @@ class TestService {
 }
 
 test(`http context`, async () => {
-  const res = await new TestHttpStartup()
+  const res = await new Startup()
+    .useHttp()
     .setContext(getTestRequest())
     .useInject()
     .use(async (ctx) => {
       const obj = await parseInject(ctx, new TestService());
       return ctx.res.ok(obj.invoke());
     })
-    .run();
+    .test();
   expect(res.body).toEqual({
     header: expectBody.header,
     query: expectBody.query1,

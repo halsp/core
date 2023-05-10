@@ -2,8 +2,8 @@ import { parseInject } from "@halsp/inject";
 import { JwtOptions, JwtService } from "../src";
 import "../src";
 import "@halsp/inject";
-import { TestStartup } from "@halsp/testing";
-import { Context } from "@halsp/core";
+import "@halsp/testing";
+import { Context, Startup } from "@halsp/core";
 
 export async function createTestContext(
   options: JwtOptions,
@@ -26,12 +26,12 @@ export async function runJwtServiceTest(
   test: (jwtService: JwtService, ctx: Context) => Promise<void>,
   options: JwtOptions = {}
 ) {
-  await new TestStartup()
+  await new Startup()
     .useInject()
     .useJwt(options)
     .use(async (ctx) => {
       const jwtService = await parseInject(ctx, JwtService);
       await test(jwtService, ctx);
     })
-    .run();
+    .test();
 }

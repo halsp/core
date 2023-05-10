@@ -13,28 +13,28 @@ declare module "@halsp/core" {
 }
 
 Startup.prototype.useLambda = function () {
+  this.run = async function (event: Dict, context: Dict) {
+    const ctx = new Context();
+    defineCtxProperty(ctx, event, context);
+    ctx.req
+      .setBody(getBody(event))
+      .setMethod(
+        event.httpMethod ||
+          event.method ||
+          event.requestContext?.http?.method ||
+          HttpMethods.get
+      )
+      .setHeaders(event.headers ?? {})
+      .setQuery(event.queryStringParameters ?? event.query ?? {})
+      .setPath(
+        event.path || event.rowPath || event.requestPath || event.url || ""
+      );
+
+    await this.useHttp()["invoke"](ctx);
+    return await getStruct(ctx);
+  };
+
   return this.useHttp();
-};
-
-Startup.prototype.run = async function (event: Dict, context: Dict) {
-  const ctx = new Context();
-  defineCtxProperty(ctx, event, context);
-  ctx.req
-    .setBody(getBody(event))
-    .setMethod(
-      event.httpMethod ||
-        event.method ||
-        event.requestContext?.http?.method ||
-        HttpMethods.get
-    )
-    .setHeaders(event.headers ?? {})
-    .setQuery(event.queryStringParameters ?? event.query ?? {})
-    .setPath(
-      event.path || event.rowPath || event.requestPath || event.url || ""
-    );
-
-  await this.useHttp()["invoke"](ctx);
-  return await getStruct(ctx);
 };
 
 function defineCtxProperty(ctx: Context, event: Dict, context: Dict) {

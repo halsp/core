@@ -1,5 +1,6 @@
-import { Middleware, Request } from "@halsp/core";
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import { Middleware, Request, Startup } from "@halsp/core";
+import "@halsp/http";
+import "@halsp/testing";
 import { Body } from "../../src";
 
 class TestMiddleware extends Middleware {
@@ -12,7 +13,8 @@ class TestMiddleware extends Middleware {
 }
 
 test("simple test", async () => {
-  const res = await new TestHttpStartup()
+  const res = await new Startup()
+    .useHttp()
     .setContext(
       new Request().setBody({
         b1: 1,
@@ -20,7 +22,7 @@ test("simple test", async () => {
     )
     .useInject()
     .add(new TestMiddleware())
-    .run();
+    .test();
   expect(res.status).toBe(200);
   expect(res.body).toBe(
     JSON.stringify({

@@ -1,8 +1,8 @@
-import { Middleware } from "@halsp/core";
+import { Middleware, Startup } from "@halsp/core";
 import "../src";
 import { Service1 } from "./services";
 import { Inject, InjectType } from "../src";
-import { TestStartup } from "@halsp/testing";
+import "@halsp/testing";
 
 class TestMiddleware extends Middleware {
   @Inject
@@ -22,11 +22,11 @@ class TestMiddleware extends Middleware {
 
 function runTest(type?: InjectType) {
   test(`only cons ${type}`, async function () {
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .useInject()
       .inject(Service1, type)
       .add(TestMiddleware)
-      .run();
+      .test();
     expect(ctx.get("result")).toEqual({
       service1: type == InjectType.Singleton || type == undefined ? 3 : 1,
       service2: type == InjectType.Singleton || type == undefined ? 3 : 2,

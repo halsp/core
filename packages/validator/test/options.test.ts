@@ -1,9 +1,9 @@
-import { Middleware, Request } from "@halsp/core";
+import { Middleware, Request, Startup } from "@halsp/core";
 import { Body } from "@halsp/pipe";
 import "@halsp/inject";
 import "../src";
 import { UseValidatorOptions, V } from "../src";
-import { TestStartup } from "@halsp/testing";
+import "@halsp/testing";
 
 function testOptions(useOptions: any, decOptions: any, result: boolean) {
   test(`options test ${!!useOptions} ${!!decOptions} ${result}`, async () => {
@@ -29,12 +29,12 @@ function testOptions(useOptions: any, decOptions: any, result: boolean) {
     const req = new Request().setBody({
       b1: null,
     });
-    const startup = new TestStartup()
+    const startup = new Startup()
       .setSkipThrow()
       .setContext(req)
       .useInject()
       .useValidator(useOptions);
-    const { ctx } = await startup.add(TestMiddleware).run();
+    const { ctx } = await startup.add(TestMiddleware).test();
 
     if (result) {
       expect(ctx.get<TestDto>("result").b).toBeNull();

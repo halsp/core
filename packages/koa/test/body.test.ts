@@ -3,10 +3,7 @@ import "@halsp/testing";
 import { Startup } from "@halsp/core";
 
 test("default", async function () {
-  const res = await new Startup()
-    .useTest()
-    .koa(() => undefined)
-    .runTest();
+  const res = await new Startup().koa(() => undefined).test();
 
   expect(res.status).toBe(404);
   expect(res.body).toBeUndefined();
@@ -15,13 +12,12 @@ test("default", async function () {
 
 test("text", async function () {
   const res = await new Startup()
-    .useTest()
     .koa(async (ctx, next) => {
       ctx.body = "halsp";
       ctx.status = 201;
       await next();
     })
-    .runTest();
+    .test();
 
   expect(res.status).toBe(201);
   expect(res.body).toBe("halsp");
@@ -30,13 +26,12 @@ test("text", async function () {
 
 test("boolean", async function () {
   const res = await new Startup()
-    .useTest()
     .koa(async (ctx, next) => {
       ctx.body = true;
       ctx.status = 201;
       await next();
     })
-    .runTest();
+    .test();
 
   expect(res.status).toBe(201);
   expect(res.body).toBe(true);
@@ -45,7 +40,6 @@ test("boolean", async function () {
 
 test("json", async function () {
   const res = await new Startup()
-    .useTest()
     .koa(async (ctx, next) => {
       ctx.body = {
         halsp: "koa",
@@ -53,7 +47,7 @@ test("json", async function () {
       ctx.status = 200;
       await next();
     })
-    .runTest();
+    .test();
 
   expect(res.status).toBe(200);
   expect(res.body).toEqual({
@@ -64,13 +58,12 @@ test("json", async function () {
 
 test("buffer", async function () {
   const res = await new Startup()
-    .useTest()
     .koa(async (ctx, next) => {
       ctx.body = Buffer.from("halsp", "utf-8");
       ctx.status = 200;
       await next();
     })
-    .runTest();
+    .test();
 
   expect(res.status).toBe(200);
   expect(res.body).toEqual(Buffer.from("halsp", "utf-8"));

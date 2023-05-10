@@ -1,4 +1,4 @@
-import { TestStartup } from "@halsp/testing";
+import "@halsp/testing";
 import "../src";
 import { Service2 } from "./services";
 import {
@@ -7,29 +7,30 @@ import {
   parseInject,
   tryParseInject,
 } from "../src";
+import { Startup } from "@halsp/core";
 
 test(`inject decorators object`, async function () {
-  const { ctx } = await new TestStartup()
+  const { ctx } = await new Startup()
     .use(async (ctx) => {
       const obj = await parseInject(ctx, Service2);
       return ctx.set("result", obj.invoke());
     })
-    .run();
+    .test();
   expect(ctx.get("result")).toBe("service2.service1");
 });
 
 test(`inject decorators`, async function () {
-  const { ctx } = await new TestStartup()
+  const { ctx } = await new Startup()
     .use(async (ctx) => {
       const obj = await parseInject(ctx, Service2);
       return ctx.set("result", obj.invoke());
     })
-    .run();
+    .test();
   expect(ctx.get("result")).toBe("service2.service1");
 });
 
 test(`try parse`, async function () {
-  const { ctx } = await new TestStartup()
+  const { ctx } = await new Startup()
     .useInject()
     .use(async (ctx) => {
       const obj1 = tryParseInject(ctx, Service2);
@@ -41,7 +42,7 @@ test(`try parse`, async function () {
         obj3: !!obj3,
       });
     })
-    .run();
+    .test();
   expect(ctx.get("result")).toEqual({
     obj1: false,
     obj2: true,
@@ -50,7 +51,7 @@ test(`try parse`, async function () {
 });
 
 test(`try parse`, async function () {
-  const { ctx } = await new TestStartup()
+  const { ctx } = await new Startup()
     .useInject()
     .inject(Service2, InjectType.Transient)
     .use(async (ctx) => {
@@ -64,7 +65,7 @@ test(`try parse`, async function () {
         length: svs.length,
       });
     })
-    .run();
+    .test();
   expect(ctx.get("result")).toEqual({
     eq: false,
     length: 2,

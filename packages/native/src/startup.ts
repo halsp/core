@@ -122,6 +122,22 @@ Startup.prototype.useNative = function (options?: Options) {
     get: () => server,
   });
 
+  this.listen = function (...args: any[]) {
+    return this.server.listen(...args);
+  };
+
+  this.dynamicListen = async function (...args: any[]) {
+    const port = await dynamicListen(this.server, ...args);
+    return {
+      port,
+      server: this.server,
+    };
+  };
+
+  this.close = async function () {
+    await closeServer(this.server, this.logger);
+  };
+
   this.server.on("listening", () => {
     logAddress(this.server, this.logger, "http://localhost");
   });
@@ -137,22 +153,6 @@ Startup.prototype.useNative = function (options?: Options) {
     ctx.resStream.statusCode = 404;
     await next();
   });
-};
-
-Startup.prototype.listen = function (...args: any[]) {
-  return this.server.listen(...args);
-};
-
-Startup.prototype.dynamicListen = async function (...args: any[]) {
-  const port = await dynamicListen(this.server, ...args);
-  return {
-    port,
-    server: this.server,
-  };
-};
-
-Startup.prototype.close = async function () {
-  await closeServer(this.server, this.logger);
 };
 
 function writeHead(halspRes: Response, resStream: http.ServerResponse) {

@@ -1,5 +1,5 @@
-import { Middleware } from "@halsp/core";
-import { TestStartup } from "@halsp/testing";
+import { Middleware, Startup } from "@halsp/core";
+import "@halsp/testing";
 import "../src";
 
 describe("middleware", () => {
@@ -10,10 +10,10 @@ describe("middleware", () => {
       }
     }
 
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .useView()
       .add(() => new Md())
-      .run();
+      .test();
 
     expect(ctx.get("view")).toBeUndefined();
   });
@@ -25,12 +25,12 @@ describe("middleware", () => {
       }
     }
 
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .useView({
         dir: "test/views",
       })
       .add(() => new Md())
-      .run();
+      .test();
 
     expect(ctx.get("view")).toBeUndefined();
   });

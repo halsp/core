@@ -1,5 +1,5 @@
-import { Middleware } from "@halsp/core";
-import { TestStartup } from "@halsp/testing";
+import { Middleware, Startup } from "@halsp/core";
+import "@halsp/testing";
 import {
   addCustomValidator,
   getCustomValidators,
@@ -54,12 +54,12 @@ describe("custom", () => {
       }
     }
 
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .setSkipThrow()
       .useInject()
       .useValidator()
       .add(TestMiddleware)
-      .run();
+      .test();
 
     expect(ctx.errorStack[0].message).toBe("abc must be a string, error msg");
   });
@@ -85,12 +85,12 @@ describe("custom", () => {
       }
     }
 
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .setSkipThrow()
       .useInject()
       .useValidator()
       .add(TestMiddleware)
-      .run();
+      .test();
 
     expect(ctx.errorStack[0].message).toBe("prop: error");
     expect(ctx.get("body")).toBeUndefined();
@@ -114,12 +114,12 @@ describe("custom", () => {
       }
     }
 
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .setSkipThrow()
       .useInject()
       .useValidator()
       .add(TestMiddleware)
-      .run();
+      .test();
 
     expect(ctx.errorStack[0].message).toBe("abc undefined arg11,22");
   });
@@ -151,12 +151,12 @@ describe("Is", () => {
       }
     }
 
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .setSkipThrow()
       .useInject()
       .useValidator()
       .add(TestMiddleware)
-      .run();
+      .test();
 
     expect(ctx.errorStack[0].message).toBe("error1, abc Is error2");
   });
@@ -184,12 +184,12 @@ describe("proxy", () => {
       }
     }
 
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .setSkipThrow()
       .useInject()
       .useValidator()
       .add(TestMiddleware)
-      .run();
+      .test();
 
     expect(ctx.errorStack.length).toBe(0);
   });
@@ -207,12 +207,12 @@ describe("extend", () => {
       }
     }
 
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .setSkipThrow()
       .useInject()
       .useValidator()
       .add(TestMiddleware)
-      .run();
+      .test();
 
     expect(ctx.errorStack[0].message).toBe("abc should not be empty");
   });

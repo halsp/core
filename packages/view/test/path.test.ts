@@ -1,8 +1,9 @@
-import { TestStartup } from "@halsp/testing";
+import { Startup } from "@halsp/core";
+import "@halsp/testing";
 import "../src";
 
 test("run multiple", async () => {
-  const startup = new TestStartup()
+  const startup = new Startup()
     .useView({
       dir: "test/views",
     })
@@ -15,15 +16,15 @@ test("run multiple", async () => {
       );
     });
 
-  const { ctx: ctx1 } = await startup.run();
+  const { ctx: ctx1 } = await startup.test();
   expect(ctx1.get("view")).toBe("<p>test ejs</p>");
 
-  const { ctx: ctx2 } = await startup.run();
+  const { ctx: ctx2 } = await startup.test();
   expect(ctx2.get("view")).toBe("<p>test ejs</p>");
 });
 
 test("default index", async () => {
-  const { ctx } = await new TestStartup()
+  const { ctx } = await new Startup()
     .useView({
       dir: "test/views",
     })
@@ -35,13 +36,13 @@ test("default index", async () => {
         })
       );
     })
-    .run();
+    .test();
 
   expect(ctx.get("view")).toBe("<p>test ejs</p>");
 });
 
 test("without ext", async () => {
-  const { ctx } = await new TestStartup()
+  const { ctx } = await new Startup()
     .useView({
       dir: "test/views",
     })
@@ -53,13 +54,13 @@ test("without ext", async () => {
         })
       );
     })
-    .run();
+    .test();
 
   expect(ctx.get("view")).toBe("<p>test ejs</p>");
 });
 
 test("default dir", async () => {
-  const { ctx } = await new TestStartup()
+  const { ctx } = await new Startup()
     .useView()
     .use(async (ctx) => {
       ctx.set(
@@ -69,13 +70,13 @@ test("default dir", async () => {
         })
       );
     })
-    .run();
+    .test();
 
   expect(ctx.get("view")).toBeUndefined();
 });
 
 test("null", async () => {
-  const { ctx } = await new TestStartup()
+  const { ctx } = await new Startup()
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     .useView()
     .use(async (ctx) => {
@@ -84,7 +85,7 @@ test("null", async () => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ctx.set("view", await ctx.view(null as any, null as any));
     })
-    .run();
+    .test();
 
   expect(ctx.get("view")).toBeUndefined();
 });

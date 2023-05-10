@@ -1,9 +1,10 @@
 import "../src";
 import mongoose from "mongoose";
-import { TestStartup } from "@halsp/testing";
+import "@halsp/testing";
+import { Startup } from "@halsp/core";
 
 it("should get mongoose by ctx", async () => {
-  await new TestStartup()
+  await new Startup()
     .use(async (ctx, next) => {
       (mongoose as any).createConnection = async () => {
         return {
@@ -26,5 +27,5 @@ it("should get mongoose by ctx", async () => {
 
       await next();
     })
-    .run();
+    .test();
 });

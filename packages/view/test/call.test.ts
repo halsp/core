@@ -1,9 +1,10 @@
 import "../src";
-import { TestStartup } from "@halsp/testing";
+import "@halsp/testing";
+import { Startup } from "@halsp/core";
 
 describe("call", () => {
   it("should set body when 'res.view' called", async () => {
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .useView({
         dir: "test/views",
       })
@@ -12,20 +13,20 @@ describe("call", () => {
           name: "test ejs",
         });
       })
-      .run();
+      .test();
 
     expect(ctx.res.body).toBe("<p>test ejs</p>");
   });
 
   it("should not set body when render empty string", async () => {
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .useView({
         dir: "test/views",
       })
       .use(async (ctx) => {
         await ctx.res.view("empty");
       })
-      .run();
+      .test();
 
     expect(ctx.res.body).toBeUndefined();
   });
@@ -36,7 +37,7 @@ describe("call", () => {
 
     const beforeEnv = process.env.HALSP_ENV;
     process.env.HALSP_ENV = "http";
-    await new TestStartup()
+    await new Startup()
       .useView({
         dir: "test/views",
       })
@@ -51,7 +52,7 @@ describe("call", () => {
           name: "test ejs",
         });
       })
-      .run();
+      .test();
     process.env.HALSP_ENV = beforeEnv;
 
     expect(okCalled).toBeTruthy();

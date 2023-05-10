@@ -1,12 +1,13 @@
 import "../src";
-import { TestStartup } from "@halsp/testing";
+import "@halsp/testing";
 import { parseInject } from "@halsp/inject";
 import { Mongoose } from "../src";
 import { OPTIONS_IDENTITY } from "../src/constant";
 import mongoose from "mongoose";
+import { Startup } from "@halsp/core";
 
 test("connected connection should be destroy", async () => {
-  const { ctx } = await new TestStartup()
+  const { ctx } = await new Startup()
     .use(async (ctx, next) => {
       (mongoose as any).createConnection = async () => {
         ctx.set("connect", "1");
@@ -26,14 +27,14 @@ test("connected connection should be destroy", async () => {
       const connection = await parseInject<Mongoose>(ctx, OPTIONS_IDENTITY);
       if (!connection) throw new Error();
     })
-    .run();
+    .test();
 
   expect(ctx.get("connect")).toBe("1");
   expect(ctx.get("destroy")).toBe("1");
 });
 
 it("disconnected connection should not be destroy", async () => {
-  const { ctx } = await new TestStartup()
+  const { ctx } = await new Startup()
     .use(async (ctx, next) => {
       (mongoose as any).createConnection = async () => {
         ctx.set("connect", "1");
@@ -53,7 +54,7 @@ it("disconnected connection should not be destroy", async () => {
       const connection = await parseInject<Mongoose>(ctx, OPTIONS_IDENTITY);
       if (!connection) throw new Error();
     })
-    .run();
+    .test();
 
   expect(ctx.get("connect")).toBe("1");
   expect(ctx.get("destroy")).toBeUndefined();

@@ -1,9 +1,6 @@
-import { Request, Response } from "@halsp/core";
-import { TestStartup } from "./utils";
-
-beforeAll(() => {
-  new TestStartup();
-});
+import { Request, Response, Startup } from "@halsp/core";
+import "../src";
+import "@halsp/testing";
 
 describe("context", () => {
   it("should set req.id", () => {
@@ -34,12 +31,14 @@ describe("payload", () => {
 
 describe("parse pattern", () => {
   it("should parse pattern from path", async () => {
-    await new TestStartup(new Request().setPath("{a:1}"))
+    await new Startup()
+      .useMicro()
+      .setContext(new Request().setPath("{a:1}"))
       .use((ctx) => {
         expect(ctx.req.pattern).toEqual({
           a: 1,
         });
       })
-      .run();
+      .test();
   });
 });

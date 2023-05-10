@@ -1,3 +1,6 @@
+import "./startup";
+import "./context";
+
 declare module "@halsp/core" {
   interface Request {
     id?: string;
@@ -20,4 +23,4 @@ declare module "@halsp/core" {
 }
 
 export { MicroException } from "./exception";
-export { MicroStartup } from "./startup";
+export { handleMessage } from "./startup";

@@ -1,8 +1,8 @@
 import "../src";
-import { Middleware, ILogger } from "@halsp/core";
+import { Middleware, ILogger, Startup } from "@halsp/core";
 import { Logger } from "../src";
 import { CustomTransport } from "./utils";
-import { TestStartup } from "@halsp/testing";
+import "@halsp/testing";
 import { InjectType } from "@halsp/inject";
 import winston from "winston";
 
@@ -18,12 +18,12 @@ class TestMiddleware extends Middleware {
 describe("logger", () => {
   it("should log info", async () => {
     const buffer = [];
-    await new TestStartup()
+    await new Startup()
       .useLogger({
         transports: [new CustomTransport(buffer)],
       })
       .add(TestMiddleware)
-      .run();
+      .test();
 
     await new Promise<void>((resolve) => {
       setTimeout(() => {
@@ -37,7 +37,7 @@ describe("logger", () => {
   });
 
   it("should get logger by ctx", async () => {
-    await new TestStartup()
+    await new Startup()
       .useLogger()
       .useLogger("abc")
       .use(async (ctx) => {
@@ -45,7 +45,7 @@ describe("logger", () => {
         expect(!!(await ctx.getLogger("abc"))).toBeTruthy();
         expect(!!(await ctx.getLogger("def"))).toBeFalsy();
       })
-      .run();
+      .test();
   });
 });
 
@@ -64,10 +64,10 @@ describe("use", () => {
   }
 
   it("should use console from useConsoleLogger", async () => {
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .useConsoleLogger()
       .add(TestMiddleware)
-      .run();
+      .test();
 
     expect(
       ctx.get<winston.transport[]>("RESULT")[0] instanceof
@@ -76,14 +76,14 @@ describe("use", () => {
   });
 
   it("should use file from useFileLogger", async () => {
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .useFileLogger({
         fileTransportOptions: {
           filename: "node_modules/test.logger.log",
         },
       })
       .add(TestMiddleware)
-      .run();
+      .test();
 
     expect(
       ctx.get<winston.transport[]>("RESULT")[0] instanceof
@@ -92,23 +92,23 @@ describe("use", () => {
   });
 
   it("should be dispose after request when injectType is scoped", async () => {
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .useConsoleLogger("2", {
         injectType: InjectType.Scoped,
       })
       .add(TestMiddleware)
-      .run();
+      .test();
 
     expect(ctx.get<Logger>("LOGGER2").destroyed).toBeTruthy();
   });
 
   it("should be singleton after request when injectType is scoped", async () => {
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .useConsoleLogger({
         injectType: InjectType.Scoped,
       } as any)
       .add(TestMiddleware)
-      .run();
+      .test();
 
     expect((ctx.logger as Logger).destroyed).toBeFalsy();
   });

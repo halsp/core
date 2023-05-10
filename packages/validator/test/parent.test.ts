@@ -1,5 +1,5 @@
-import { Middleware, Request } from "@halsp/core";
-import { TestStartup } from "@halsp/testing";
+import { Middleware, Request, Startup } from "@halsp/core";
+import "@halsp/testing";
 import { Body } from "@halsp/pipe";
 import "@halsp/inject";
 import "../src";
@@ -26,13 +26,13 @@ describe("parent validate", () => {
     const req = new Request().setBody({
       b1: "1",
     });
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .setSkipThrow()
       .setContext(req)
       .useInject()
       .useValidator()
       .add(TestMiddleware)
-      .run();
+      .test();
 
     expect(ctx.get("b1")).toBeUndefined();
     expect(ctx.errorStack[0].message).toBe("b1 must be base64 encoded");
@@ -53,13 +53,13 @@ describe("parent validate", () => {
     const req = new Request().setBody({
       arg: "1",
     });
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .setSkipThrow()
       .setContext(req)
       .useInject()
       .useValidator()
       .add(TestMiddleware)
-      .run();
+      .test();
 
     expect(ctx.errorStack[0].message).toBe(
       "arg must be a number conforming to the specified constraints"

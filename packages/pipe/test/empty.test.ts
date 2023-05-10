@@ -1,5 +1,6 @@
-import { Middleware, Request } from "@halsp/core";
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import { Middleware, Request, Startup } from "@halsp/core";
+import "@halsp/http";
+import "@halsp/testing";
 import { Body, Param } from "../src";
 
 test("null body", async () => {
@@ -20,11 +21,12 @@ test("null body", async () => {
     }
   }
 
-  const res = await new TestHttpStartup()
+  const res = await new Startup()
+    .useHttp()
     .setContext(new Request().setBody(null))
     .useInject()
     .add(TestMiddleware)
-    .run();
+    .test();
   expect(res.body).toEqual({
     body: null,
     field: undefined,

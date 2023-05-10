@@ -1,6 +1,6 @@
 import "../src";
-import { Middleware } from "@halsp/core";
-import { TestStartup } from "@halsp/testing";
+import { Middleware, Startup } from "@halsp/core";
+import "@halsp/testing";
 import { Knex } from "../src";
 
 describe("identity", () => {
@@ -22,7 +22,7 @@ describe("identity", () => {
   }
 
   it("identity", async () => {
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .useKnex({
         identity: "app",
         client: "sqlite3",
@@ -37,7 +37,7 @@ describe("identity", () => {
         },
       })
       .add(TestMiddleware)
-      .run();
+      .test();
 
     expect(ctx.get("result")).toEqual({
       app: true,

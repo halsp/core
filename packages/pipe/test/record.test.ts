@@ -1,11 +1,13 @@
-import { HookType } from "@halsp/core";
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import { HookType, Startup } from "@halsp/core";
+import "@halsp/http";
+import "@halsp/testing";
 import { getPipeRecords } from "../src";
 import { expectBody, getTestRequest, TestMiddleware } from "./TestMiddleware";
 
 test("record test", async () => {
   let done = false;
-  const startup = new TestHttpStartup()
+  const startup = new Startup()
+    .useHttp()
     .setContext(getTestRequest())
     .useInject();
   startup.hook(HookType.BeforeInvoke, (ctx, md) => {
@@ -22,7 +24,7 @@ test("record test", async () => {
   });
   startup.add(TestMiddleware);
 
-  const res = await startup.run();
+  const res = await startup.test();
   expect(done).toBeTruthy();
   expect(res.status).toBe(200);
   expect(res.body).toEqual(expectBody);

@@ -1,4 +1,5 @@
-import { TestStartup } from "@halsp/testing";
+import { Startup } from "@halsp/core";
+import "@halsp/testing";
 import { Inject, parseInject } from "../src";
 
 describe("initialize", () => {
@@ -14,12 +15,12 @@ describe("initialize", () => {
       }
     }
 
-    await new TestStartup()
+    await new Startup()
       .useInject()
       .use(async (ctx) => {
         await parseInject(ctx, TestService);
       })
-      .run();
+      .test();
 
     expect(initializingExecuted).toBeTruthy();
     expect(initializedExecuted).toBeTruthy();
@@ -37,7 +38,7 @@ describe("initialize", () => {
       }
     }
 
-    await new TestStartup()
+    await new Startup()
       .useInject()
       .use(async (ctx, next) => {
         await parseInject(ctx, TestService);
@@ -48,7 +49,7 @@ describe("initialize", () => {
         await parseInject(ctx, TestService);
         await parseInject(ctx, TestService);
       })
-      .run();
+      .test();
 
     expect(initializingExecuted).toBe(1);
     expect(initializedExecuted).toBe(1);
@@ -72,12 +73,12 @@ describe("initialize", () => {
       }
     }
 
-    await new TestStartup()
+    await new Startup()
       .useInject()
       .use(async (ctx) => {
         await parseInject(ctx, TestService2);
       })
-      .run();
+      .test();
 
     expect(execute).toBe(2);
   });

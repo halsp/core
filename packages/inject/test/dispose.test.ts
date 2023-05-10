@@ -1,4 +1,4 @@
-import { TestStartup } from "@halsp/testing";
+import "@halsp/testing";
 import {
   getTransientInstances,
   InjectType,
@@ -6,6 +6,7 @@ import {
   tryParseInject,
 } from "../src";
 import "../src";
+import { Startup } from "@halsp/core";
 
 class TestService {
   #disposed = false;
@@ -19,7 +20,7 @@ class TestService {
 }
 
 it("scoped instance should be dispose", async () => {
-  const { ctx } = await new TestStartup()
+  const { ctx } = await new Startup()
     .use(async (ctx, next) => {
       await next();
       const instance = await parseInject(ctx, TestService);
@@ -32,12 +33,12 @@ it("scoped instance should be dispose", async () => {
       expect(instance?.disposed).toBeFalsy();
       await next();
     })
-    .run();
+    .test();
   expect(ctx).not.toBeUndefined();
 });
 
 it("transient instance should be dispose", async () => {
-  const { ctx } = await new TestStartup()
+  const { ctx } = await new Startup()
     .use(async (ctx, next) => {
       await next();
       const instance = getTransientInstances(ctx, TestService);
@@ -56,12 +57,12 @@ it("transient instance should be dispose", async () => {
 
       await next();
     })
-    .run();
+    .test();
   expect(ctx).not.toBeUndefined();
 });
 
 it("singleton instance should not be dispose", async () => {
-  const { ctx } = await new TestStartup()
+  const { ctx } = await new Startup()
     .use(async (ctx, next) => {
       await next();
       const instance = await parseInject(ctx, TestService);
@@ -74,12 +75,12 @@ it("singleton instance should not be dispose", async () => {
       expect(instance?.disposed).toBeFalsy();
       await next();
     })
-    .run();
+    .test();
   expect(ctx).not.toBeUndefined();
 });
 
 it("instance should be undefined", async () => {
-  const { ctx } = await new TestStartup()
+  const { ctx } = await new Startup()
     .use(async (ctx, next) => {
       await next();
       const instance = tryParseInject(ctx, TestService);
@@ -87,6 +88,6 @@ it("instance should be undefined", async () => {
     })
     .useInject()
     .inject(TestService)
-    .run();
+    .test();
   expect(ctx).not.toBeUndefined();
 });

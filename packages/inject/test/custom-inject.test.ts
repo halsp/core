@@ -1,5 +1,5 @@
-import { Context, Middleware } from "@halsp/core";
-import { TestStartup } from "@halsp/testing";
+import { Context, Middleware, Startup } from "@halsp/core";
+import "@halsp/testing";
 import { createInject, Inject, InjectType } from "../src";
 import "reflect-metadata";
 
@@ -36,7 +36,7 @@ describe("custom inject", () => {
       }
     }
 
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .setContext(
         new Context().set("custom", {
           a: 1,
@@ -44,7 +44,7 @@ describe("custom inject", () => {
       )
       .useInject()
       .add(TestMiddleware)
-      .run();
+      .test();
 
     expect(ctx.get("result")).toEqual({
       c1: {
@@ -94,7 +94,7 @@ describe("custom inject", () => {
       }
     }
 
-    const { ctx } = await new TestStartup()
+    const { ctx } = await new Startup()
       .setContext(
         new Context().set("custom", {
           a: 1,
@@ -102,7 +102,7 @@ describe("custom inject", () => {
       )
       .useInject()
       .add(TestMiddleware)
-      .run();
+      .test();
 
     expect(ctx.get("result")).toEqual({
       c1: {
@@ -146,9 +146,9 @@ describe("inject custom type", () => {
     }
 
     it(`should inject property decorators with custom inject type ${type}`, async function () {
-      const startup = new TestStartup().useInject().add(TestMiddleware);
+      const startup = new Startup().useInject().add(TestMiddleware);
 
-      let res = await startup.run();
+      let res = await startup.test();
       let ctx = res.ctx;
 
       expect(ctx.get("result")).toEqual({
@@ -156,7 +156,7 @@ describe("inject custom type", () => {
         count2: type == InjectType.Transient ? 2 : 1,
       });
 
-      res = await startup.run();
+      res = await startup.test();
       ctx = res.ctx;
       if (type == InjectType.Transient) {
         expect(ctx.get("result")).toEqual({
@@ -215,9 +215,9 @@ describe("inject custom type", () => {
     }
 
     test(`should inject parameter decorators with custom inject type ${type}`, async function () {
-      const startup = new TestStartup().useInject().add(TestMiddleware);
+      const startup = new Startup().useInject().add(TestMiddleware);
 
-      let res = await startup.run();
+      let res = await startup.test();
       let ctx = res.ctx;
 
       expect(ctx.get("result")).toEqual({
@@ -225,7 +225,7 @@ describe("inject custom type", () => {
         count2: type == InjectType.Transient ? 2 : 1,
       });
 
-      res = await startup.run();
+      res = await startup.test();
       ctx = res.ctx;
       if (type == InjectType.Transient) {
         expect(ctx.get("result")).toEqual({

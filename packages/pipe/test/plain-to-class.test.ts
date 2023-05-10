@@ -1,5 +1,6 @@
-import { Middleware, Request } from "@halsp/core";
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import { Middleware, Request, Startup } from "@halsp/core";
+import "@halsp/http";
+import "@halsp/testing";
 import { Body } from "../src";
 
 test("plain to class", async () => {
@@ -20,7 +21,8 @@ test("plain to class", async () => {
     }
   }
 
-  const res = await new TestHttpStartup()
+  const res = await new Startup()
+    .useHttp()
     .setContext(
       new Request().setBody({
         h1: "a",
@@ -29,7 +31,7 @@ test("plain to class", async () => {
     )
     .useInject()
     .add(TestMiddleware)
-    .run();
+    .test();
 
   const body = res.body as TestDto;
   expect(body.h).toBe("a1");

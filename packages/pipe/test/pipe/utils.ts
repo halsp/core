@@ -1,5 +1,6 @@
-import { Middleware, Request } from "@halsp/core";
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import { Middleware, Request, Startup } from "@halsp/core";
+import "@halsp/http";
+import "@halsp/testing";
 import { Body, PipeItem } from "../../src";
 
 function runPipeTest(
@@ -20,7 +21,8 @@ function runPipeTest(
   }
 
   test(`parse: ${success} ${source}, ${target}`, async () => {
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
+      .useHttp()
       .setSkipThrow()
       .setContext(
         new Request().setBody({
@@ -29,7 +31,7 @@ function runPipeTest(
       )
       .useInject()
       .add(new TestMiddleware())
-      .run();
+      .test();
     expect(res.status).toBe(success ? 200 : 400);
     if (success) {
       expect(res.body).toEqual({

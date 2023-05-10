@@ -1,10 +1,5 @@
 import { Context } from "@halsp/core";
 import { MicroException } from "../src";
-import { initCatchError, initContext } from "../src/context";
-
-beforeAll(() => {
-  initContext();
-});
 
 describe("exception", () => {
   it("should trans to plain object", async () => {

@@ -1,6 +1,7 @@
 import { HttpMethods } from "@halsp/methods";
-import { Request } from "@halsp/core";
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import { Request, Startup } from "@halsp/core";
+import "@halsp/http";
+import "@halsp/testing";
 import "../src";
 import { TEST_ACTION_DIR } from "@halsp/router/dist/constant";
 import { OpenApiBuilder } from "openapi3-ts-remove-yaml";
@@ -13,14 +14,14 @@ declare module "@halsp/core" {
   }
 }
 
-TestHttpStartup.prototype.setTestDir = function (dir: string) {
+Startup.prototype.setTestDir = function (dir: string) {
   this[TEST_ACTION_DIR] = dir;
   return this;
 };
 
 describe("options", () => {
   it("should ignore use again", async () => {
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
       .setContext(
         new Request().setMethod(HttpMethods.get).setPath("swagger/index.json")
       )
@@ -40,14 +41,15 @@ describe("options", () => {
       })
       .setTestDir("test/parser")
       .useRouter()
-      .run();
+      .test();
 
     expect(res.status).toBe(200);
     expect(res.body.info.description).toBe("desc-test1");
   });
 
   it("should create custom builder", async () => {
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
+      .useHttp()
       .setContext(
         new Request().setMethod(HttpMethods.get).setPath("swagger/index.json")
       )
@@ -59,14 +61,15 @@ describe("options", () => {
       .useSwagger({})
       .setTestDir("test/parser")
       .useRouter()
-      .run();
+      .test();
 
     expect(res.status).toBe(200);
     expect(res.body.info.description).toBe("new-desc");
   });
 
   it("should set lang when set options.html.lang", async () => {
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
+      .useHttp()
       .setContext(
         new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
       )
@@ -77,7 +80,7 @@ describe("options", () => {
       })
       .setTestDir("test/parser")
       .useRouter()
-      .run();
+      .test();
 
     expect(res.status).toBe(200);
     const html = res.body as string;
@@ -85,7 +88,8 @@ describe("options", () => {
   });
 
   it("should remove default style when options.html.removeDefaultStyle=true", async () => {
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
+      .useHttp()
       .setContext(
         new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
       )
@@ -96,7 +100,7 @@ describe("options", () => {
       })
       .setTestDir("test/parser")
       .useRouter()
-      .run();
+      .test();
 
     expect(res.status).toBe(200);
     const html = res.body as string;
@@ -104,7 +108,8 @@ describe("options", () => {
   });
 
   it("should set title when set options.html.title", async () => {
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
+      .useHttp()
       .setContext(
         new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
       )
@@ -115,7 +120,7 @@ describe("options", () => {
       })
       .setTestDir("test/parser")
       .useRouter()
-      .run();
+      .test();
 
     expect(res.status).toBe(200);
     const html = res.body as string;
@@ -123,7 +128,8 @@ describe("options", () => {
   });
 
   it("should add favicon when set options.html.favicon", async () => {
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
+      .useHttp()
       .setContext(
         new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
       )
@@ -134,7 +140,7 @@ describe("options", () => {
       })
       .setTestDir("test/parser")
       .useRouter()
-      .run();
+      .test();
 
     expect(res.status).toBe(200);
     expect(res.body).toBe(
@@ -161,7 +167,8 @@ describe("options", () => {
   });
 
   it("should add multiple favicon when set options.html.favicon", async () => {
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
+      .useHttp()
       .setContext(
         new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
       )
@@ -175,7 +182,7 @@ describe("options", () => {
       })
       .setTestDir("test/parser")
       .useRouter()
-      .run();
+      .test();
 
     expect(res.status).toBe(200);
     expect(res.body).toBe(
@@ -203,7 +210,8 @@ describe("options", () => {
   });
 
   it("should add style when set options.html.style", async () => {
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
+      .useHttp()
       .setContext(
         new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
       )
@@ -216,7 +224,7 @@ describe("options", () => {
       })
       .setTestDir("test/parser")
       .useRouter()
-      .run();
+      .test();
 
     expect(res.status).toBe(200);
     expect(res.body).toBe(
@@ -247,7 +255,8 @@ describe("options", () => {
   });
 
   it("should add css when set options.html.css", async () => {
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
+      .useHttp()
       .setContext(
         new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
       )
@@ -258,7 +267,7 @@ describe("options", () => {
       })
       .setTestDir("test/parser")
       .useRouter()
-      .run();
+      .test();
 
     expect(res.status).toBe(200);
     expect(res.body).toBe(
@@ -285,7 +294,8 @@ describe("options", () => {
   });
 
   it("should add script when set options.html.script", async () => {
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
+      .useHttp()
       .setContext(
         new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
       )
@@ -296,7 +306,7 @@ describe("options", () => {
       })
       .setTestDir("test/parser")
       .useRouter()
-      .run();
+      .test();
 
     expect(res.status).toBe(200);
     expect(res.body).toBe(
@@ -326,7 +336,8 @@ describe("options", () => {
   });
 
   it("should js file when set options.html.js", async () => {
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
+      .useHttp()
       .setContext(
         new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
       )
@@ -337,7 +348,7 @@ describe("options", () => {
       })
       .setTestDir("test/parser")
       .useRouter()
-      .run();
+      .test();
 
     expect(res.status).toBe(200);
     expect(res.body).toBe(
@@ -365,7 +376,8 @@ describe("options", () => {
   });
 
   it("should be error when index.html body stream emit error", async () => {
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
+      .useHttp()
       .setContext(
         new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
       )
@@ -397,7 +409,7 @@ describe("options", () => {
           })
       )
       .setTestDir("test/parser")
-      .run();
+      .test();
 
     console.log("body", res.body);
     expect(res.status).toBe(500);
@@ -408,7 +420,8 @@ describe("options", () => {
 
 describe("swagger-initializer.js", () => {
   it("should set default swagger config", async () => {
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
+      .useHttp()
       .setContext(
         new Request()
           .setMethod(HttpMethods.get)
@@ -417,7 +430,7 @@ describe("swagger-initializer.js", () => {
       .useSwagger()
       .setTestDir("test/parser")
       .useRouter()
-      .run();
+      .test();
 
     expect(res.status).toBe(200);
 
@@ -440,7 +453,8 @@ describe("swagger-initializer.js", () => {
   });
 
   it("should set custom swagger config", async () => {
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
+      .useHttp()
       .setContext(
         new Request()
           .setMethod(HttpMethods.get)
@@ -456,7 +470,7 @@ describe("swagger-initializer.js", () => {
       })
       .setTestDir("test/parser")
       .useRouter()
-      .run();
+      .test();
 
     expect(res.status).toBe(200);
 
@@ -475,7 +489,8 @@ describe("swagger-initializer.js", () => {
   });
 
   it("should initOAuth when set options.initOAuth = true", async () => {
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
+      .useHttp()
       .setContext(
         new Request()
           .setMethod(HttpMethods.get)
@@ -491,7 +506,7 @@ describe("swagger-initializer.js", () => {
       })
       .setTestDir("test/parser")
       .useRouter()
-      .run();
+      .test();
 
     expect(res.status).toBe(200);
 

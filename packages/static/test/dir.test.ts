@@ -1,19 +1,21 @@
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import "@halsp/http";
+import "@halsp/testing";
 import "../src";
-import { Request } from "@halsp/core";
+import { Request, Startup } from "@halsp/core";
 import { HttpMethods } from "@halsp/methods";
 import path from "path";
 
 describe("dir", () => {
   it("should list dir files when listDir = true", async () => {
     {
-      const result = await new TestHttpStartup()
+      const result = await new Startup()
+        .useHttp()
         .setContext(new Request().setMethod(HttpMethods.get))
         .useStatic({
           dir: "test/static",
           listDir: true,
         })
-        .run();
+        .test();
 
       expect(result.status).toBe(200);
       const html = result.body as string;
@@ -23,12 +25,13 @@ describe("dir", () => {
     }
 
     {
-      const result = await new TestHttpStartup()
+      const result = await new Startup()
+        .useHttp()
         .setContext(new Request().setMethod(HttpMethods.get))
         .useStatic({
           dir: "test/static",
         })
-        .run();
+        .test();
 
       expect(result.status).toBe(404);
       expect(result.body).toBeUndefined();
@@ -36,13 +39,14 @@ describe("dir", () => {
   });
 
   it("should list children dir with folder ..", async () => {
-    const result = await new TestHttpStartup()
+    const result = await new Startup()
+      .useHttp()
       .setContext(new Request().setMethod(HttpMethods.get).setPath("dir"))
       .useStatic({
         dir: "test/static",
         listDir: true,
       })
-      .run();
+      .test();
 
     expect(result.status).toBe(200);
     const html = result.body as string;
@@ -66,7 +70,8 @@ describe("dir", () => {
   });
 
   it("should list dir with prefix", async () => {
-    const result = await new TestHttpStartup()
+    const result = await new Startup()
+      .useHttp()
       .setContext(
         new Request().setMethod(HttpMethods.get).setPath("static/dir")
       )
@@ -75,7 +80,7 @@ describe("dir", () => {
         listDir: true,
         prefix: "static",
       })
-      .run();
+      .test();
 
     expect(result.status).toBe(200);
     const html = result.body as string;

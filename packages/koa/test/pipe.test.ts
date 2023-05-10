@@ -30,7 +30,7 @@ test("middleware pipe", async function () {
       ctx.res.setHeader("h", ctx.res.getHeader("h") + "h");
       await next();
     })
-    .runTest();
+    .test();
 
   expect(res.body).toBe("halspaaa");
   expect(res.getHeader("h")).toBe("hhhh");
@@ -52,7 +52,7 @@ test("koa break", async function () {
       ctx.res.status = 200;
       await next();
     })
-    .runTest();
+    .test();
 
   expect(res.body).toBe("halsp");
   expect(res.getHeader("h")).toBe("h");

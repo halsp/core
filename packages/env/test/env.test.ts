@@ -1,4 +1,5 @@
-import { TestStartup } from "@halsp/testing";
+import { Startup } from "@halsp/core";
+import "@halsp/testing";
 import "../src";
 import { getEnv } from "./utils";
 
@@ -18,7 +19,7 @@ describe("env", () => {
   });
 
   it("should load env with cwd", async () => {
-    const startup = new TestStartup();
+    const startup = new Startup();
     process.env.NODE_ENV = "production";
     const { ctx } = await startup
       .useEnv({
@@ -28,7 +29,7 @@ describe("env", () => {
       .use((ctx) => {
         ctx.set("env", process.env);
       })
-      .run();
+      .test();
     const env = ctx.get<typeof process.env>("env");
 
     expect(env.BNAME).toBe("PRODUCTION");

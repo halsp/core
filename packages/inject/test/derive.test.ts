@@ -1,8 +1,8 @@
-import { Middleware } from "@halsp/core";
+import { Middleware, Startup } from "@halsp/core";
 import "../src";
 import { Service2, Service3 } from "./services";
 import { Inject } from "../src";
-import { TestStartup } from "@halsp/testing";
+import "@halsp/testing";
 
 class TestMiddleware extends Middleware {
   @Inject
@@ -19,11 +19,11 @@ class TestMiddleware extends Middleware {
 }
 
 test(`derive`, async function () {
-  const { ctx } = await new TestStartup()
+  const { ctx } = await new Startup()
     .useInject()
     .inject(Service2, Service3)
     .add(TestMiddleware)
-    .run();
+    .test();
 
   expect(ctx.get("result")).toEqual({
     service2: "service3.service2.service1",

@@ -1,4 +1,5 @@
-import { TestStartup } from "@halsp/testing";
+import { Startup } from "@halsp/core";
+import "@halsp/testing";
 import { Inject, parseInject } from "../src";
 
 export class Service1 extends Object {
@@ -31,14 +32,14 @@ export class Service2 extends Object {
 }
 
 test(`inject params`, async function () {
-  const { ctx } = await new TestStartup()
+  const { ctx } = await new Startup()
     .useInject()
     .inject("KEY1", 1)
     .use(async (ctx) => {
       const service = await parseInject(ctx, Service2);
       ctx.set("result", service.invoke());
     })
-    .run();
+    .test();
 
   expect(ctx.get("result")).toEqual({
     service: "service2.service1",
