@@ -7,8 +7,10 @@ export { MicroRedisClientOptions } from "./options";
 
 declare module "@halsp/core" {
   interface Startup {
-    useMicroRedis(options?: MicroRedisClientOptions & InjectMicroClient): this;
+    useMicroRedisClient(
+      options?: MicroRedisClientOptions & InjectMicroClient
+    ): this;
   }
 }
 
-useMicroClient("useMicroRedis", MicroRedisClient);
+useMicroClient("useMicroRedisClient", MicroRedisClient);

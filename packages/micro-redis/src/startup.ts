@@ -1,37 +1,70 @@
-import { MicroStartup } from "@halsp/micro";
+import "@halsp/micro";
 import { MicroRedisOptions } from "./options";
-import { Context, getHalspPort } from "@halsp/core";
+import { Context, getHalspPort, Startup } from "@halsp/core";
 import * as redis from "redis";
 import { parseJsonBuffer } from "@halsp/micro-common";
+import { USED } from "./constant";
+import { handleMessage } from "@halsp/micro";
 
-export class MicroRedisStartup extends MicroStartup {
-  constructor(protected readonly options: MicroRedisOptions = {}) {
-    super();
+declare module "@halsp/core" {
+  interface Startup {
+    useMicroRedis(options?: MicroRedisOptions): this;
+    get pub(): redis.RedisClientType;
+    get sub(): redis.RedisClientType;
+
+    listen(): Promise<{
+      pub: redis.RedisClientType;
+      sub: redis.RedisClientType;
+    }>;
+    close(): Promise<void>;
+
+    register(
+      pattern: string,
+      handler?: (ctx: Context) => Promise<void> | void
+    ): this;
   }
+}
 
-  #handlers: {
+Startup.prototype.useMicroRedis = function (options?: MicroRedisOptions) {
+  if (this[USED]) {
+    return this;
+  }
+  this[USED] = true;
+
+  initStartup.call(this, options);
+
+  return this.useMicro();
+};
+
+function initStartup(this: Startup, options?: MicroRedisOptions) {
+  const handlers: {
     pattern: string;
     handler?: (ctx: Context) => Promise<void> | void;
   }[] = [];
 
-  protected pub?: redis.RedisClientType;
-  protected sub?: redis.RedisClientType;
-
-  async listen() {
-    await this.close();
-
-    const opt: MicroRedisOptions = { ...this.options };
+  this.listen = async () => {
+    const opt: MicroRedisOptions = { ...options };
     if (!("url" in opt)) {
       const port = getHalspPort(6379);
       opt.url = `redis://localhost:${port}`;
     }
 
-    this.pub = redis.createClient(opt) as redis.RedisClientType;
-    this.sub = redis.createClient(opt) as redis.RedisClientType;
+    const pub = redis.createClient(opt) as redis.RedisClientType;
+    const sub = redis.createClient(opt) as redis.RedisClientType;
+    Object.defineProperty(this, "pub", {
+      configurable: true,
+      enumerable: true,
+      get: () => pub,
+    });
+    Object.defineProperty(this, "sub", {
+      configurable: true,
+      enumerable: true,
+      get: () => sub,
+    });
     await Promise.all([this.pub.connect(), this.sub.connect()]);
 
-    this.#handlers.forEach((item) => {
-      this.#register(item.pattern, item.handler);
+    handlers.forEach((item) => {
+      register.bind(this)(item.pattern, item.handler);
     });
 
     this.logger.info(`Server started, listening url: ${opt.url}`);
@@ -39,41 +72,57 @@ export class MicroRedisStartup extends MicroStartup {
       sub: this.sub,
       pub: this.pub,
     };
-  }
+  };
 
-  #register(pattern: string, handler?: (ctx: Context) => Promise<void> | void) {
-    if (!this.sub) return this;
-    this.sub.subscribe(
-      pattern,
-      async (buffer) => {
-        this.handleMessage(
-          parseJsonBuffer(buffer),
-          async ({ result, req }) => {
-            await this.pub?.publish(
-              pattern + "." + req.id,
-              JSON.stringify(result)
-            );
-          },
-          handler
-        );
-      },
-      true
-    );
-    return this;
-  }
-
-  register(pattern: string, handler?: (ctx: Context) => Promise<void> | void) {
-    this.logger.debug(`Add pattern: ${pattern}`);
-    this.#handlers.push({ pattern, handler });
-    return this.#register(pattern, handler);
-  }
-
-  async close() {
+  this.close = async () => {
     await this.pub?.quit();
-    this.pub = undefined;
+    Object.defineProperty(this, "pub", {
+      configurable: true,
+      enumerable: true,
+      get: () => undefined,
+    });
+
     await this.sub?.quit();
-    this.sub = undefined;
+    Object.defineProperty(this, "sub", {
+      configurable: true,
+      enumerable: true,
+      get: () => undefined,
+    });
 
     this.logger.info("Server shutdown success");
-  }
+  };
+
+  this.register = (
+    pattern: string,
+    handler?: (ctx: Context) => Promise<void> | void
+  ) => {
+    this.logger.debug(`Add pattern: ${pattern}`);
+    handlers.push({ pattern, handler });
+    return register.bind(this)(pattern, handler);
+  };
+}
+
+function register(
+  this: Startup,
+  pattern: string,
+  handler?: (ctx: Context) => Promise<void> | void
+) {
+  if (!this.sub) return this;
+  this.sub.subscribe(
+    pattern,
+    async (buffer) => {
+      handleMessage.bind(this)(
+        parseJsonBuffer(buffer),
+        async ({ result, req }) => {
+          await this.pub?.publish(
+            pattern + "." + req.id,
+            JSON.stringify(result)
+          );
+        },
+        handler
+      );
+    },
+    true
+  );
+  return this;
 }

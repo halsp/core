@@ -1,13 +1,17 @@
-import { MicroRedisStartup } from "../src";
+import "../src";
 import { MicroRedisClient } from "@halsp/micro-redis-client";
+import { Startup } from "@halsp/core";
 
 describe("startup", () => {
   it("should subscribe and publish", async () => {
-    const startup = new MicroRedisStartup({
-      url: "redis://127.0.0.1:6003",
-    }).register("test_pattern", (ctx) => {
-      ctx.res.body = ctx.req.body;
-    });
+    const startup = new Startup()
+      .useMicroRedis({
+        url: "redis://127.0.0.1:6003",
+      })
+      .useMicroRedis()
+      .register("test_pattern", (ctx) => {
+        ctx.res.body = ctx.req.body;
+      });
     await startup.listen();
 
     const client = new MicroRedisClient({
@@ -18,16 +22,19 @@ describe("startup", () => {
 
     await client.dispose();
     await startup.close();
+    await startup.close();
 
+    expect(startup.pub).toBeUndefined();
+    expect(startup.sub).toBeUndefined();
     expect(result).toBe("test_body");
   }, 20000);
 
-  it("should not publish when pub is undefined", async () => {
-    async function test(isPubUndefined: boolean) {
+  function testPub(isPubUndefined: boolean) {
+    it(`should not publish when pub is undefined ${isPubUndefined}`, async () => {
       let publishPattern = "";
       let subscribePattern = "";
       let subscribeCallback: any;
-      const startup = new MicroRedisStartup({
+      const startup = new Startup().useMicroRedis({
         url: "redis://127.0.0.1:6003",
       });
       await startup.listen();
@@ -56,8 +63,12 @@ describe("startup", () => {
       });
 
       if (isPubUndefined) {
-        await (startup as any).pub.disconnect();
-        (startup as any).pub = undefined;
+        await startup.pub.disconnect();
+        Object.defineProperty(startup, "pub", {
+          configurable: true,
+          enumerable: true,
+          get: () => undefined,
+        });
       }
       await subscribeCallback(Buffer.from(str));
 
@@ -67,16 +78,16 @@ describe("startup", () => {
       await startup.close();
       expect(subscribePattern).toBe("test_pattern");
       expect(publishPattern).toBe(isPubUndefined ? "" : "test_pattern.123");
-    }
+    });
+  }
 
-    await test(true);
-    await test(false);
-  });
+  testPub(true);
+  testPub(false);
 });
 
 describe("options", () => {
   it("should not connect with default options", async () => {
-    const startup = new MicroRedisStartup();
+    const startup = new Startup().useMicroRedis();
 
     let error: any;
     try {
