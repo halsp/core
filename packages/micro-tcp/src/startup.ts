@@ -9,7 +9,6 @@ import {
   logAddress,
   Startup,
 } from "@halsp/core";
-import { USED } from "./constant";
 import { handleMessage } from "@halsp/micro";
 
 declare module "@halsp/core" {
@@ -27,11 +26,12 @@ declare module "@halsp/core" {
   }
 }
 
+const usedMap = new WeakMap<Startup, boolean>();
 Startup.prototype.useMicroTcp = function (options?: MicroTcpOptions) {
-  if (this[USED]) {
+  if (usedMap.get(this)) {
     return this;
   }
-  this[USED] = true;
+  usedMap.set(this, true);
 
   initStartup.call(this, options);
 
@@ -59,6 +59,8 @@ function initStartup(this: Startup, options?: MicroTcpOptions) {
   });
 
   this.listen = async function () {
+    await this.close();
+
     if (options?.handle) {
       await new Promise<void>((resolve) => {
         return this.server.listen(options.handle, () => resolve());

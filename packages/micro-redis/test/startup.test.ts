@@ -24,8 +24,6 @@ describe("startup", () => {
     await startup.close();
     await startup.close();
 
-    expect(startup.pub).toBeUndefined();
-    expect(startup.sub).toBeUndefined();
     expect(result).toBe("test_body");
   }, 20000);
 

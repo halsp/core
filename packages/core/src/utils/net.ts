@@ -62,6 +62,10 @@ export function logAddress(
 }
 
 export async function closeServer(server: net.Server) {
+  if (!server.address()) {
+    return;
+  }
+
   server.removeAllListeners();
   await new Promise<void>((resolve, reject) =>
     server.close((err) => {

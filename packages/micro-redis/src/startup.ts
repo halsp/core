@@ -3,7 +3,6 @@ import { MicroRedisOptions } from "./options";
 import { Context, getHalspPort, Startup } from "@halsp/core";
 import * as redis from "redis";
 import { parseJsonBuffer } from "@halsp/micro-common";
-import { USED } from "./constant";
 import { handleMessage } from "@halsp/micro";
 
 declare module "@halsp/core" {
@@ -25,11 +24,12 @@ declare module "@halsp/core" {
   }
 }
 
+const usedMap = new WeakMap<Startup, boolean>();
 Startup.prototype.useMicroRedis = function (options?: MicroRedisOptions) {
-  if (this[USED]) {
+  if (usedMap.get(this)) {
     return this;
   }
-  this[USED] = true;
+  usedMap.set(this, true);
 
   initStartup.call(this, options);
 
@@ -43,6 +43,8 @@ function initStartup(this: Startup, options?: MicroRedisOptions) {
   }[] = [];
 
   this.listen = async () => {
+    await this.close();
+
     const opt: MicroRedisOptions = { ...options };
     if (!("url" in opt)) {
       const port = getHalspPort(6379);
@@ -75,19 +77,12 @@ function initStartup(this: Startup, options?: MicroRedisOptions) {
   };
 
   this.close = async () => {
-    await this.pub?.quit();
-    Object.defineProperty(this, "pub", {
-      configurable: true,
-      enumerable: true,
-      get: () => undefined,
-    });
-
-    await this.sub?.quit();
-    Object.defineProperty(this, "sub", {
-      configurable: true,
-      enumerable: true,
-      get: () => undefined,
-    });
+    if (this.pub?.isOpen) {
+      await this.pub.quit();
+    }
+    if (this.sub?.isOpen) {
+      await this.sub.quit();
+    }
 
     this.logger.info("Server shutdown success");
   };

@@ -1,10 +1,11 @@
-import { MicroNatsStartup } from "../src";
+import { Startup } from "@halsp/core";
+import "../src";
 
 describe("error", () => {
   it("should log error when subscript callback err is defined", async () => {
     let subscribePattern = "";
     let subscribeCallback: any;
-    const startup = new MicroNatsStartup({
+    const startup = new Startup().useMicroNats({
       port: 6001,
     });
     await startup.listen();

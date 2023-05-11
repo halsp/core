@@ -10,6 +10,11 @@ describe("dynamic listen", () => {
     expect(!!port).toBeTruthy();
   });
 
+  it("should close without listen", async () => {
+    const server = new Server();
+    await closeServer(server);
+  });
+
   it("should find next port to listen", async () => {
     const port = 23441;
     const server1 = new Server();
@@ -49,7 +54,10 @@ describe("dynamic listen", () => {
 
   it("should throw error with close failed", async () => {
     const server = new Server();
+    await dynamicListen(server);
+    const close = server.close;
     server.close = (cb: (err?: Error | undefined) => void) => {
+      close.bind(server)();
       cb(new Error("err"));
       return server;
     };

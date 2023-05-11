@@ -1,4 +1,5 @@
 import * as nats from "nats";
+import "./startup";
 
 declare module "@halsp/core" {
   interface Request {
@@ -10,4 +11,3 @@ declare module "@halsp/core" {
 }
 
 export { MicroNatsOptions } from "./options";
-export { MicroNatsStartup } from "./startup";

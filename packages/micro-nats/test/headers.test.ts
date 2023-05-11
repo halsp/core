@@ -1,15 +1,18 @@
-import { MicroNatsStartup } from "../src";
+import { Startup } from "@halsp/core";
+import "../src";
 
 describe("headers", () => {
   it("should create req headers", async () => {
     let subscribePattern = "";
     let subscribeCallback: any;
     let reqHeaders: any;
-    const startup = new MicroNatsStartup({
-      port: 6001,
-    }).use((ctx) => {
-      reqHeaders = ctx.req.headers;
-    });
+    const startup = new Startup()
+      .useMicroNats({
+        port: 6001,
+      })
+      .use((ctx) => {
+        reqHeaders = ctx.req.headers;
+      });
     await startup.listen();
 
     const connection = (startup as any).connection;
@@ -49,11 +52,13 @@ describe("headers", () => {
     let subscribePattern = "";
     let subscribeCallback: any;
     let resHeaders: any;
-    const startup = new MicroNatsStartup({
-      port: 6001,
-    }).use((ctx) => {
-      ctx.res.headers["h"] = "1";
-    });
+    const startup = new Startup()
+      .useMicroNats({
+        port: 6001,
+      })
+      .use((ctx) => {
+        ctx.res.headers["h"] = "1";
+      });
     await startup.listen();
 
     const connection = (startup as any).connection;

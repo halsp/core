@@ -1,13 +1,17 @@
+import { Startup } from "@halsp/core";
 import { MicroNatsClient } from "@halsp/micro-nats-client";
-import { MicroNatsStartup } from "../src";
+import "../src";
 
 describe("startup", () => {
   it("should subscribe and publish when use mock", async () => {
-    const startup = new MicroNatsStartup({
-      servers: "127.0.0.1:6001",
-    }).register("test_pattern", (ctx) => {
-      ctx.res.body = ctx.req.body;
-    });
+    const startup = new Startup()
+      .useMicroNats({
+        servers: "127.0.0.1:6001",
+      })
+      .useMicroNats()
+      .register("test_pattern", (ctx) => {
+        ctx.res.body = ctx.req.body;
+      });
     await startup.listen();
 
     const client = new MicroNatsClient({
@@ -25,7 +29,7 @@ describe("startup", () => {
 
 describe("options", () => {
   it("should not connect with default options", async () => {
-    const startup = new MicroNatsStartup();
+    const startup = new Startup().useMicroNats();
 
     try {
       await startup.listen();

@@ -7,8 +7,10 @@ export { MicroNatsClientOptions } from "./options";
 
 declare module "@halsp/core" {
   interface Startup {
-    useMicroNats(options?: MicroNatsClientOptions & InjectMicroClient): this;
+    useMicroNatsClient(
+      options?: MicroNatsClientOptions & InjectMicroClient
+    ): this;
   }
 }
 
-useMicroClient("useMicroNats", MicroNatsClient);
+useMicroClient("useMicroNatsClient", MicroNatsClient);
