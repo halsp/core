@@ -1,12 +1,13 @@
-import { Request } from "@halsp/core";
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import { Request, Startup } from "@halsp/core";
+import "@halsp/http";
 import "../src";
 import { runin } from "@halsp/testing";
 
 function runTest(executing: boolean) {
   test(`authorization filter ${executing}`, async () => {
     await runin(__dirname, async () => {
-      const res = await new TestHttpStartup()
+      const res = await new Startup()
+        .useHttp()
         .setContext(
           new Request().setMethod("get").setPath("auth").setBody({
             executing,
@@ -19,7 +20,7 @@ function runTest(executing: boolean) {
         })
         .useFilter()
         .useRouter()
-        .run();
+        .test();
 
       expect(res.ctx.get(`h1`)).toBe(1);
       expect(res.ctx.get(`h2`)).toBe(2);

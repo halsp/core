@@ -1,10 +1,11 @@
-import { Context } from "@halsp/core";
+import { Context, Startup } from "@halsp/core";
 import { Request } from "@halsp/core";
 import "../src";
 import { ActionFilter } from "../src";
 import "@halsp/inject";
 import { Action } from "@halsp/router";
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import "@halsp/testing";
+import "@halsp/http";
 
 class TestAction extends Action {
   async invoke(): Promise<void> {
@@ -26,7 +27,8 @@ class TestActionFilter implements ActionFilter {
 
 function runTest(executing: boolean) {
   test(`global filter ${executing}`, async () => {
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
+      .useHttp()
       .setContext(
         new Request().setPath("").setMethod("GET").setBody({
           executing,
@@ -35,7 +37,7 @@ function runTest(executing: boolean) {
       .useGlobalFilter(TestActionFilter)
       .useGlobalFilter(TestActionFilter)
       .add(TestAction)
-      .run();
+      .test();
 
     expect(res.getHeader(`action1`)).toBe("1");
     if (executing) {

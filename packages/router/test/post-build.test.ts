@@ -1,8 +1,9 @@
 import { postbuild } from "../src";
 import * as fs from "fs";
-import { Request } from "@halsp/core";
+import { Request, Startup } from "@halsp/core";
 import { CONFIG_FILE_NAME } from "../src/constant";
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import "@halsp/testing";
+import "@halsp/http";
 
 test("empty config", async () => {
   let count = 0;
@@ -26,10 +27,11 @@ test("build and run", async () => {
     cacheDir: "",
   });
 
-  const res = await new TestHttpStartup()
+  const res = await new Startup()
+    .useHttp()
     .setContext(new Request().setMethod("get"))
     .useRouter()
-    .run();
+    .test();
 
   fs.rmSync(CONFIG_FILE_NAME, {
     force: true,

@@ -1,17 +1,12 @@
-import { Context, Dict, Request } from "@halsp/core";
+import { Context, Dict, Request, Startup } from "@halsp/core";
 import { StatusCodes } from "@halsp/http";
 import { HttpMethods } from "@halsp/methods";
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import "@halsp/testing";
 import { Action } from "../src";
 import "./utils-http";
 
-beforeAll(() => {
-  new TestHttpStartup();
-});
-
 class Login extends Action {
   async invoke(): Promise<void> {
-    new TestHttpStartup(); // for extends
     const { account, password } = <Dict>this.ctx.req.body;
 
     if (account != "abc") {
@@ -57,10 +52,11 @@ function runMultipleTest(
   body?: string
 ) {
   test(`multiple`, async () => {
-    const result = await new TestHttpStartup()
+    const result = await new Startup()
+      .useHttp()
       .setContext(new Request().setPath(path).setMethod(method))
       .useTestRouter()
-      .run();
+      .test();
     if (body) {
       expect(result.body).toBe(body);
     }

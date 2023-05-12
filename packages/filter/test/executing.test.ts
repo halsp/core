@@ -1,9 +1,10 @@
-import { Context } from "@halsp/core";
+import { Context, Startup } from "@halsp/core";
 import { Request } from "@halsp/core";
 import "../src";
 import { ActionFilter, ResourceFilter, UseFilters } from "../src";
 import { Action } from "@halsp/router";
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import "@halsp/testing";
+import "@halsp/http";
 
 class TestResourceFilter implements ResourceFilter {
   onResourceExecuted(ctx: Context): void | Promise<void> {
@@ -43,7 +44,8 @@ function runExecuting(type: string) {
       const body: any = {};
       body[`${type}-executing`] = executing;
 
-      const res = await new TestHttpStartup()
+      const res = await new Startup()
+        .useHttp()
         .setContext(
           new Request()
             .setPath("/filters/executing")
@@ -52,7 +54,7 @@ function runExecuting(type: string) {
         )
         .useFilter()
         .add(TestAction)
-        .run();
+        .test();
       expect(res.getHeader(`${type}1`)).toBe("1");
       if (executing) {
         expect(res.getHeader(`${type}2`)).toBe("2");

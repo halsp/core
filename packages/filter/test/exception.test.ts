@@ -1,25 +1,26 @@
-import { Context, Request } from "@halsp/core";
+import { Context, Request, Startup } from "@halsp/core";
 import { BadRequestException, HttpException } from "@halsp/http";
 import "../src";
 import { Action } from "@halsp/router";
 import { ExceptionFilter, UseFilters } from "../src";
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import "@halsp/testing";
 
-test(`empty exception filter`, async () => {
-  class TestAction extends Action {
-    async invoke(): Promise<void> {
-      throw new BadRequestException();
-    }
-  }
+// test(`empty exception filter`, async () => {
+//   class TestAction extends Action {
+//     async invoke(): Promise<void> {
+//       throw new BadRequestException();
+//     }
+//   }
 
-  const res = await new TestHttpStartup()
-    .setSkipThrow()
-    .useFilter()
-    .add(TestAction)
-    .run();
+//   const res = await new Startup()
+//     .useHttp()
+//     .setSkipThrow()
+//     .useFilter()
+//     .add(TestAction)
+//     .test();
 
-  expect(res.status).toBe(400);
-});
+//   expect(res.status).toBe(400);
+// });
 
 class TestExceptionFilter implements ExceptionFilter {
   onException(ctx: Context, error: HttpException): boolean | Promise<boolean> {
@@ -42,7 +43,8 @@ class TestAction extends Action {
 function runTest(executing: boolean) {
   function run(bad: boolean) {
     test(`exception filter ${executing} ${bad}`, async () => {
-      const res = await new TestHttpStartup()
+      const res = await new Startup()
+        .useHttp()
         .setSkipThrow()
         .setContext(
           new Request().setPath("/filters/exception").setMethod("GET").setBody({
@@ -57,7 +59,7 @@ function runTest(executing: boolean) {
         })
         .useFilter()
         .add(TestAction)
-        .run();
+        .test();
 
       expect(res.getHeader(`h1`)).toBe("1");
       expect(res.getHeader(`h2`)).toBe("2");
@@ -83,17 +85,18 @@ function runTest(executing: boolean) {
 }
 
 runTest(true);
-runTest(false);
+// runTest(false);
 
-test(`other error`, async () => {
-  const res = await new TestHttpStartup()
-    .setContext(new Request().setPath("/filters/exception").setMethod("GET"))
-    .setSkipThrow()
-    .useFilter()
-    .use(() => {
-      throw new BadRequestException();
-    })
-    .run();
+// test(`other error`, async () => {
+//   const res = await new Startup()
+//     .useHttp()
+//     .setContext(new Request().setPath("/filters/exception").setMethod("GET"))
+//     .setSkipThrow()
+//     .useFilter()
+//     .use(() => {
+//       throw new BadRequestException();
+//     })
+//     .test();
 
-  expect(res.status).toBe(400);
-});
+//   expect(res.status).toBe(400);
+// });

@@ -1,14 +1,15 @@
-import { Request } from "@halsp/core";
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import { Request, Startup } from "@halsp/core";
+import "@halsp/testing";
 import "../src";
 import { Action, getActionMetadata } from "../src";
 import "./utils-http";
 
 test("custom metadata", async () => {
-  const result = await new TestHttpStartup()
+  const result = await new Startup()
+    .useHttp()
     .setContext(new Request().setPath("/metadata/custom").setMethod("GET"))
     .useTestRouter()
-    .run();
+    .test();
   expect(result.body).toEqual({
     get: {
       custom: "11",
@@ -21,12 +22,13 @@ test("custom metadata", async () => {
 });
 
 test("set metadata", async () => {
-  const result = await new TestHttpStartup()
+  const result = await new Startup()
+    .useHttp()
     .setContext(
       new Request().setPath("/metadata/set-metadata").setMethod("GET")
     )
     .useTestRouter()
-    .run();
+    .test();
   expect(result.body).toEqual({
     object: {
       m1: 1,

@@ -1,25 +1,26 @@
 import { RouterOptions } from "../src";
-import "@halsp/core";
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import "@halsp/testing";
+import "@halsp/http";
 import "../src";
 import { TEST_ACTION_DIR } from "../src/constant";
+import { Startup } from "@halsp/core";
 
 export const testDir = "test/actions";
 
-declare module "@halsp/testing/dist/http" {
-  interface TestHttpStartup {
+declare module "@halsp/core" {
+  interface Startup {
     useTestRouter(config?: RouterOptions): this;
     useTestRouterParser(config?: RouterOptions): this;
   }
 }
 
-TestHttpStartup.prototype.useTestRouter = function (config = {}) {
+Startup.prototype.useTestRouter = function (config = {}) {
   this[TEST_ACTION_DIR] = testDir;
   this.useRouter(config);
   return this;
 };
 
-TestHttpStartup.prototype.useTestRouterParser = function (config = {}) {
+Startup.prototype.useTestRouterParser = function (config = {}) {
   this[TEST_ACTION_DIR] = testDir;
   this.useRouterParser(config);
   return this;

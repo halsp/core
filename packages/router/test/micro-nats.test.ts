@@ -1,12 +1,15 @@
-import { TestMicroNatsStartup } from "@halsp/testing/dist/micro-nats";
+import "@halsp/testing";
+import "@halsp/micro-nats";
 import "./utils-micro";
 import { MicroNatsClient } from "@halsp/micro-nats-client";
+import { Startup } from "@halsp/core";
 
 describe("micro-nats", () => {
   it("should add pattern handlers when use micro nats", async () => {
-    const startup = new TestMicroNatsStartup({
-      port: 6001,
-    })
+    const startup = new Startup()
+      .useMicroNats({
+        port: 6001,
+      })
       .useTestRouter()
       .useRouter();
     await startup.listen();
@@ -25,9 +28,10 @@ describe("micro-nats", () => {
   });
 
   it("should match pattern with prefix", async () => {
-    const startup = new TestMicroNatsStartup({
-      port: 6001,
-    })
+    const startup = new Startup()
+      .useMicroNats({
+        port: 6001,
+      })
       .useTestRouter({
         prefix: "pf:",
       })

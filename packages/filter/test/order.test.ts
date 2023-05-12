@@ -1,10 +1,11 @@
-import { Context } from "@halsp/core";
+import { Context, Startup } from "@halsp/core";
 import { Request } from "@halsp/core";
 import "../src";
 import { ActionFilter, UseFilters } from "../src";
 import "@halsp/inject";
 import { Action } from "@halsp/router";
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import "@halsp/testing";
+import "@halsp/http";
 
 export class TestActionFilter1 implements ActionFilter {
   onActionExecuted(ctx: Context): void | Promise<void> {
@@ -92,7 +93,8 @@ class TestAction extends Action {
 }
 
 test(`filter order`, async () => {
-  const res = await new TestHttpStartup()
+  const res = await new Startup()
+    .useHttp()
     .setContext(new Request().setPath("filters/order").setMethod("GET"))
     .use(async (ctx, next) => {
       ctx.res.body = 0;
@@ -104,7 +106,7 @@ test(`filter order`, async () => {
     .useFilterOrder(TestActionFilter1, 2)
     .useFilterOrder(TestActionFilter2, 4)
     .add(TestAction)
-    .run();
+    .test();
 
   const orders = [4, 1, 5, 2, 6, 3];
   (() => {

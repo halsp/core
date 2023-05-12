@@ -1,15 +1,18 @@
-import { TestMicroTcpStartup } from "@halsp/testing/dist/micro-tcp";
+import "@halsp/testing";
+import "@halsp/micro-tcp";
 import "./utils-micro";
 import { MicroTcpClient } from "@halsp/micro-tcp-client";
+import { Startup } from "@halsp/core";
 
 describe("micro-nats", () => {
   it("should add pattern handlers when use micro tcp", async () => {
-    const startup = new TestMicroTcpStartup()
+    const startup = new Startup()
+      .useMicroTcp({ port: 23331 })
       .useTestRouter(null as any)
       .useRouter();
-    const { port } = await startup.dynamicListen();
+    await startup.listen();
 
-    const client = new MicroTcpClient({ port });
+    const client = new MicroTcpClient({ port: 23331 });
     await client["connect"]();
 
     const result = await client.send("event:123", true);
@@ -21,14 +24,15 @@ describe("micro-nats", () => {
   });
 
   it("should match pattern with prefix", async () => {
-    const startup = new TestMicroTcpStartup()
+    const startup = new Startup()
+      .useMicroTcp({ port: 23331 })
       .useTestRouter({
         prefix: "pf:",
       })
       .useRouter();
-    const { port } = await startup.dynamicListen();
+    await startup.listen();
 
-    const client = new MicroTcpClient({ port });
+    const client = new MicroTcpClient({ port: 23331 });
     await client["connect"]();
 
     const result = await client.send("pf:event:123", true);

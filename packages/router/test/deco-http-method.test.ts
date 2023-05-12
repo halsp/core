@@ -1,16 +1,17 @@
 import { StatusCodes } from "@halsp/http";
 import { HttpMethods } from "@halsp/methods";
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import "@halsp/testing";
 import "../src";
 import "./utils-http";
-import { Request } from "@halsp/core";
+import { Request, Startup } from "@halsp/core";
 
 function runTest(method: string, success: boolean) {
   test(`${method} ${success}`, async () => {
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
+      .useHttp()
       .setContext(new Request().setPath("/decorator/method").setMethod(method))
       .useTestRouter()
-      .run();
+      .test();
 
     if (success) {
       expect(res.body).toBe("method");
@@ -35,24 +36,26 @@ runTest(HttpMethods.put, false);
 runTest(HttpMethods.any, false);
 
 test(`custom url`, async () => {
-  const res = await new TestHttpStartup()
+  const res = await new Startup()
+    .useHttp()
     .setContext(new Request().setPath("/mu").setMethod(HttpMethods.put))
     .useTestRouter()
-    .run();
+    .test();
 
   expect(res.body).toBe("method");
   expect(res.status).toBe(200);
 });
 
 test(`base path`, async () => {
-  const res = await new TestHttpStartup()
+  const res = await new Startup()
+    .useHttp()
     .setContext(
       new Request()
         .setPath("decorator/method-base-path/mup")
         .setMethod(HttpMethods.get)
     )
     .useTestRouter()
-    .run();
+    .test();
 
   expect(res.body).toBe("method");
   expect(res.status).toBe(200);

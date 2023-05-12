@@ -1,6 +1,7 @@
-import { Context } from "@halsp/core";
+import { Context, Startup } from "@halsp/core";
 import { Action } from "@halsp/router";
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import "@halsp/testing";
+import "@halsp/http";
 import { execFilters, Filter, UseFilters } from "../src";
 
 class CustomFilter implements Filter {
@@ -17,13 +18,14 @@ class TestAction extends Action {
 }
 
 test(`execFilters`, async () => {
-  const res = await new TestHttpStartup()
+  const res = await new Startup()
+    .useHttp()
     .use(async (ctx, next) => {
       ctx.res.body = 0;
       await next();
     })
     .useFilter()
     .add(TestAction)
-    .run();
+    .test();
   expect(res.getHeader("custom")).toBe("1");
 });

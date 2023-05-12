@@ -1,12 +1,15 @@
-import { TestMicroRedisStartup } from "@halsp/testing/dist/micro-redis";
+import "@halsp/testing";
 import "./utils-micro";
+import "@halsp/micro-redis";
 import { MicroRedisClient } from "@halsp/micro-redis-client";
+import { Startup } from "@halsp/core";
 
 describe("micro-redis", () => {
   it("should add pattern handlers when use micro redis", async () => {
-    const startup = new TestMicroRedisStartup({
-      url: "redis://127.0.0.1:6003",
-    })
+    const startup = new Startup()
+      .useMicroRedis({
+        url: "redis://127.0.0.1:6003",
+      })
       .useTestRouter()
       .useRouter();
     await startup.listen();
@@ -25,9 +28,10 @@ describe("micro-redis", () => {
   }, 10000);
 
   it("should match pattern with prefix", async () => {
-    const startup = new TestMicroRedisStartup({
-      url: "redis://127.0.0.1:6003",
-    })
+    const startup = new Startup()
+      .useMicroRedis({
+        url: "redis://127.0.0.1:6003",
+      })
       .useTestRouter({
         prefix: "pf:",
       })

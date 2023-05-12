@@ -1,17 +1,18 @@
 import "../../src";
 import { HttpMethods } from "@halsp/methods";
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import "@halsp/testing";
 import "../utils-http";
-import { Request } from "@halsp/core";
+import { Request, Startup } from "@halsp/core";
 
 const methods = ["test", "aaa", "NO"];
 
 methods.forEach((method) => {
   test(`${method} -> any restful test`, async () => {
-    const result = await new TestHttpStartup()
+    const result = await new Startup()
+      .useHttp()
       .setContext(new Request().setPath("/restful").setMethod(method))
       .useTestRouter()
-      .run();
+      .test();
 
     expect(result.status).toBe(200);
     expect(!!result.body.method).toBe(true);

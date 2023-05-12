@@ -1,8 +1,9 @@
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import "@halsp/testing";
 import MapCreater from "../src/map/map-creater";
 import "./utils-http";
 import MapParser from "../src/map/map-parser";
 import { MapItem } from "../src";
+import { Startup } from "@halsp/core";
 
 describe("map", () => {
   it("should throw error when use MapCreater and router dir not exist", async () => {
@@ -12,16 +13,15 @@ describe("map", () => {
   });
 
   it("should create router map", async () => {
-    const result = await new TestHttpStartup()
+    const result = await new Startup()
+      .useHttp()
       .use(async (ctx, next) => {
         await next();
         expect(ctx.routerMap).not.toBeUndefined();
-        expect(ctx.routerMap).toBe(
-          (ctx.startup as any as TestHttpStartup).routerMap
-        );
+        expect(ctx.routerMap).toBe(ctx.startup.routerMap);
       })
       .useTestRouter()
-      .run();
+      .test();
     expect(result.status).toBe(405);
   });
 
@@ -35,7 +35,8 @@ describe("map", () => {
   });
 
   it("should not find actionMetadata if preset", async () => {
-    const result = await new TestHttpStartup()
+    const result = await new Startup()
+      .useHttp()
       .use(async (ctx, next) => {
         Object.defineProperty(ctx, "actionMetadata", {
           get: () => new MapItem("Router.ts", "default"),
@@ -43,7 +44,7 @@ describe("map", () => {
         await next();
       })
       .useTestRouter()
-      .run();
+      .test();
     expect(result.status).toBe(200);
     expect(result.body).toBe("ok");
   });
