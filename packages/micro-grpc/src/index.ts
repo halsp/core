@@ -1,4 +1,5 @@
 import "@halsp/core";
+import "./startup";
 import type grpc from "@grpc/grpc-js";
 
 declare module "@halsp/core" {
@@ -9,6 +10,5 @@ declare module "@halsp/core" {
 }
 
 export { MicroGrpcOptions } from "./options";
-export { MicroGrpcStartup } from "./startup";
 export { cliConfigHook } from "./cli-config";
 export { WriteIterator, ReadIterator } from "@halsp/micro-common";

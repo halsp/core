@@ -1,31 +1,63 @@
-import { MicroStartup } from "@halsp/micro";
+import "@halsp/micro";
 import { MicroGrpcOptions } from "./options";
 import * as grpc from "@grpc/grpc-js";
-import { Context, getHalspPort, isClass, normalizePath } from "@halsp/core";
+import {
+  Context,
+  getHalspPort,
+  isClass,
+  normalizePath,
+  Startup,
+} from "@halsp/core";
 import { loadPackages, ReadIterator, WriteIterator } from "@halsp/micro-common";
+import { handleMessage } from "@halsp/micro";
 
-export class MicroGrpcStartup extends MicroStartup {
-  constructor(protected readonly options: MicroGrpcOptions = {}) {
-    super();
+declare module "@halsp/core" {
+  interface Startup {
+    useMicroGrpc(options?: MicroGrpcOptions): this;
+    get server(): grpc.Server;
+
+    listen(): Promise<grpc.Server>;
+    close(): Promise<void>;
+
+    register(
+      pattern: string,
+      handler?: (ctx: Context) => Promise<void> | void
+    ): this;
   }
+}
 
-  #handlers: {
+const usedMap = new WeakMap<Startup, boolean>();
+Startup.prototype.useMicroGrpc = function (options: MicroGrpcOptions = {}) {
+  if (usedMap.get(this)) {
+    return this;
+  }
+  usedMap.set(this, true);
+
+  initStartup.call(this, options);
+
+  return this.useMicro();
+};
+
+function initStartup(this: Startup, options: MicroGrpcOptions) {
+  const handlers: {
     pattern: string;
     handler?: (ctx: Context) => Promise<void> | void;
   }[] = [];
 
-  protected server?: grpc.Server;
-
-  async listen() {
+  this.listen = async () => {
     this.close();
 
-    const opt: MicroGrpcOptions = { ...this.options };
-    opt.port = this.options.port ?? getHalspPort(5000);
-    opt.host = this.options.host ?? "0.0.0.0";
+    const opt: MicroGrpcOptions = { ...options };
+    opt.port = options.port ?? getHalspPort(5000);
+    opt.host = options.host ?? "0.0.0.0";
     const url = `${opt.host}:${opt.port}`;
 
     const server = new grpc.Server();
-    this.server = server;
+    Object.defineProperty(this, "server", {
+      configurable: true,
+      enumerable: true,
+      get: () => server,
+    });
 
     const packages = await loadPackages({
       protoFiles: opt.protoFiles,
@@ -37,14 +69,14 @@ export class MicroGrpcStartup extends MicroStartup {
         .filter((item) => isClass(pkg[item]))
         .map((item) => pkg[item] as grpc.ServiceClientConstructor);
       for (const svc of services) {
-        this.#addService(svc);
+        addService.bind(this)(svc, handlers);
       }
     }
 
     const bindPort = await new Promise<number>((resolve, reject) => {
       server.bindAsync(
         url,
-        this.options.credentials ?? grpc.ServerCredentials.createInsecure(),
+        options.credentials ?? grpc.ServerCredentials.createInsecure(),
         (err, port) => {
           if (err) {
             reject(err);
@@ -59,112 +91,9 @@ export class MicroGrpcStartup extends MicroStartup {
     this.logger.info(`Server started, listening port: ${bindPort}`);
 
     return server;
-  }
+  };
 
-  #addService(svc: grpc.ServiceClientConstructor) {
-    const server = this.server as grpc.Server;
-    const implementation: grpc.UntypedServiceImplementation = {};
-    Object.keys(svc.prototype).forEach((item) => {
-      const method = svc.prototype[item] as grpc.MethodDefinition<any, any>;
-      const handler = this.#handlers.filter((item) =>
-        isPathEqual(item.pattern, method.path)
-      )[0];
-      if (handler) {
-        implementation[item] = this.#getServiceMethod(method, handler.handler);
-      }
-    });
-    if (Object.keys(implementation).length) {
-      server.addService(svc.service, implementation);
-      this.logger.debug(
-        `Add service: ${Object.keys(implementation).join(",")}`
-      );
-    }
-  }
-
-  #getServiceMethod(
-    method: grpc.MethodDefinition<any, any>,
-    handler?: (ctx: Context) => void | Promise<void>
-  ): grpc.UntypedHandleCall {
-    async function prehook(ctx: Context, call: any) {
-      Object.defineProperty(ctx.req, "call", {
-        configurable: true,
-        enumerable: true,
-        get: () => call,
-      });
-      Object.defineProperty(ctx.req, "metadata", {
-        configurable: true,
-        enumerable: true,
-        get: () => call.metadata,
-      });
-      if (method.responseStream) {
-        ctx.res.setBody(new WriteIterator());
-      }
-      handler && (await handler(ctx));
-    }
-    function createServerPacket(call: any) {
-      let data: any;
-      if (method.requestStream) {
-        data = new ReadIterator(call as grpc.ServerReadableStream<any, any>);
-      } else {
-        data = (call as grpc.ServerUnaryCall<any, any>).request;
-      }
-
-      return {
-        id: method.path,
-        pattern: method.path,
-        data: data,
-      };
-    }
-
-    if (method.responseStream) {
-      return async (call: grpc.ServerWritableStream<any, any>) => {
-        await this.handleMessage(
-          createServerPacket(call),
-          async ({ result }) => {
-            if (result.error) {
-              call.emit("error", new Error(result.error));
-            } else {
-              if (result.data instanceof WriteIterator) {
-                for await (const item of result.data as WriteIterator) {
-                  call.write(item);
-                }
-              } else {
-                if (result.data) {
-                  call.write(result.data);
-                }
-              }
-            }
-            call.end();
-          },
-          async (ctx) => await prehook(ctx, call)
-        );
-      };
-    } else {
-      return async (
-        call: grpc.ServerUnaryCall<any, any>,
-        callback: grpc.sendUnaryData<any>
-      ) => {
-        await this.handleMessage(
-          createServerPacket(call),
-          ({ result }) => {
-            callback(
-              result.error ? new Error(result.error) : null,
-              result.data
-            );
-          },
-          async (ctx) => await prehook(ctx, call)
-        );
-      };
-    }
-  }
-
-  register(pattern: string, handler?: (ctx: Context) => Promise<void> | void) {
-    this.logger.debug(`Add pattern: ${pattern}`);
-    this.#handlers.push({ pattern, handler });
-    return this;
-  }
-
-  async close() {
+  this.close = async () => {
     if (!this.server) return;
     const server = this.server;
 
@@ -195,10 +124,118 @@ export class MicroGrpcStartup extends MicroStartup {
         }
       });
     });
+  };
 
-    if (this.server == server) {
-      this.server = undefined;
+  this.register = (
+    pattern: string,
+    handler?: (ctx: Context) => Promise<void> | void
+  ) => {
+    this.logger.debug(`Add pattern: ${pattern}`);
+    handlers.push({ pattern, handler });
+    return this;
+  };
+}
+
+function addService(
+  this: Startup,
+  svc: grpc.ServiceClientConstructor,
+  handlers: {
+    pattern: string;
+    handler?: (ctx: Context) => Promise<void> | void;
+  }[]
+) {
+  const server = this.server as grpc.Server;
+  const implementation: grpc.UntypedServiceImplementation = {};
+  Object.keys(svc.prototype).forEach((item) => {
+    const method = svc.prototype[item] as grpc.MethodDefinition<any, any>;
+    const handler = handlers.filter((item) =>
+      isPathEqual(item.pattern, method.path)
+    )[0];
+    if (handler) {
+      implementation[item] = getServiceMethod.bind(this)(
+        method,
+        handler.handler
+      );
     }
+  });
+  if (Object.keys(implementation).length) {
+    server.addService(svc.service, implementation);
+    this.logger.debug(`Add service: ${Object.keys(implementation).join(",")}`);
+  }
+}
+
+function getServiceMethod(
+  this: Startup,
+  method: grpc.MethodDefinition<any, any>,
+  handler?: (ctx: Context) => void | Promise<void>
+): grpc.UntypedHandleCall {
+  async function prehook(ctx: Context, call: any) {
+    Object.defineProperty(ctx.req, "call", {
+      configurable: true,
+      enumerable: true,
+      get: () => call,
+    });
+    Object.defineProperty(ctx.req, "metadata", {
+      configurable: true,
+      enumerable: true,
+      get: () => call.metadata,
+    });
+    if (method.responseStream) {
+      ctx.res.setBody(new WriteIterator());
+    }
+    handler && (await handler(ctx));
+  }
+  function createServerPacket(call: any) {
+    let data: any;
+    if (method.requestStream) {
+      data = new ReadIterator(call as grpc.ServerReadableStream<any, any>);
+    } else {
+      data = (call as grpc.ServerUnaryCall<any, any>).request;
+    }
+
+    return {
+      id: method.path,
+      pattern: method.path,
+      data: data,
+    };
+  }
+
+  if (method.responseStream) {
+    return async (call: grpc.ServerWritableStream<any, any>) => {
+      await handleMessage.bind(this)(
+        createServerPacket(call),
+        async ({ result }) => {
+          if (result.error) {
+            call.emit("error", new Error(result.error));
+          } else {
+            if (result.data instanceof WriteIterator) {
+              for await (const item of result.data as WriteIterator) {
+                call.write(item);
+              }
+            } else {
+              if (result.data) {
+                call.write(result.data);
+              }
+            }
+          }
+          call.end();
+        },
+        async (ctx) => await prehook(ctx, call)
+      );
+    };
+  } else {
+    return async (
+      call: grpc.ServerUnaryCall<any, any>,
+      callback: grpc.sendUnaryData<any>
+    ) => {
+      await handleMessage.bind(this)(
+        createServerPacket(call),
+        ({ result }) => {
+          callback(result.error ? new Error(result.error) : null, result.data);
+        },
+        async (ctx) => await prehook(ctx, call)
+      );
+    };
   }
 }
 

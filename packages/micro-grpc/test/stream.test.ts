@@ -1,15 +1,16 @@
-import { MicroGrpcStartup, ReadIterator, WriteIterator } from "../src";
+import { ReadIterator, WriteIterator } from "../src";
 import * as grpc from "@grpc/grpc-js";
 import * as grpcLoader from "@grpc/proto-loader";
-import { Request } from "@halsp/core";
+import { Request, Startup } from "@halsp/core";
 
 describe("stream", () => {
   it("should handle server stream message", async () => {
     let req!: Request;
-    const startup = new MicroGrpcStartup({
-      protoFiles: "./test/protos/stream.server.proto",
-      port: 5011,
-    })
+    const startup = new Startup()
+      .useMicroGrpc({
+        protoFiles: "./test/protos/stream.server.proto",
+        port: 5011,
+      })
       .register("serverStream.ServerStreamService/testMethod", (ctx) => {
         expect(ctx.res.body instanceof WriteIterator).toBeTruthy();
         const body = ctx.res.body as WriteIterator;
@@ -81,10 +82,11 @@ describe("stream", () => {
 
   it("should handle client stream message", async () => {
     let req!: Request;
-    const startup = new MicroGrpcStartup({
-      protoFiles: "./test/protos/stream.client.proto",
-      port: 5012,
-    })
+    const startup = new Startup()
+      .useMicroGrpc({
+        protoFiles: "./test/protos/stream.client.proto",
+        port: 5012,
+      })
       .register("clientStream.ClientStreamService/testMethod")
       .use(async (ctx) => {
         req = ctx.req;
@@ -143,10 +145,11 @@ describe("stream", () => {
   }, 10000);
 
   it("should return error when throw error in middleware", async () => {
-    const startup = new MicroGrpcStartup({
-      protoFiles: "./test/protos/stream.server.proto",
-      port: 5011,
-    })
+    const startup = new Startup()
+      .useMicroGrpc({
+        protoFiles: "./test/protos/stream.server.proto",
+        port: 5011,
+      })
       .register("serverStream.ServerStreamService/testMethod", (ctx) => {
         expect(ctx.res.body instanceof WriteIterator).toBeTruthy();
         const body = ctx.res.body as WriteIterator;
@@ -199,10 +202,11 @@ describe("stream", () => {
 
   it("should handle client and server stream message", async () => {
     let req!: Request;
-    const startup = new MicroGrpcStartup({
-      protoFiles: "./test/protos/stream.cs.proto",
-      port: 5013,
-    })
+    const startup = new Startup()
+      .useMicroGrpc({
+        protoFiles: "./test/protos/stream.cs.proto",
+        port: 5013,
+      })
       .register("csStream.CSStreamService/testMethod")
       .use(async (ctx) => {
         req = ctx.req;

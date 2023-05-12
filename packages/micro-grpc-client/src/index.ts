@@ -7,8 +7,10 @@ export { WriteIterator, ReadIterator } from "@halsp/micro-common";
 
 declare module "@halsp/core" {
   interface Startup {
-    useMicroGrpc(options?: MicroGrpcClientOptions & InjectMicroClient): this;
+    useMicroGrpcClient(
+      options?: MicroGrpcClientOptions & InjectMicroClient
+    ): this;
   }
 }
 
-useMicroClient("useMicroGrpc", MicroGrpcClient);
+useMicroClient("useMicroGrpcClient", MicroGrpcClient);
