@@ -19,6 +19,7 @@ class TestService2 {
 describe("service", () => {
   it("should create service by @halsp/inject", async () => {
     await new Startup()
+      .keepThrow()
       .expectInject(TestService2, (service) => {
         expect(service.fn()).toBe(1);
       })
@@ -29,6 +30,7 @@ describe("service", () => {
     let err = false;
     try {
       await new Startup()
+        .keepThrow()
         .expectInject("not-exist", () => {
           //
         })

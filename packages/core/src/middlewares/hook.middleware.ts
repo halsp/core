@@ -23,6 +23,7 @@ export enum HookType {
   BeforeNext,
   Constructor,
   Error,
+  Unhandled,
 }
 
 export interface HookItem {
@@ -56,6 +57,12 @@ export async function execHooks(
 ): Promise<boolean>;
 export async function execHooks(
   ctx: Context,
+  middleware: Middleware,
+  type: HookType.Unhandled,
+  error: Error
+): Promise<void>;
+export async function execHooks(
+  ctx: Context,
   middleware: MiddlewareConstructor,
   type: HookType.Constructor
 ): Promise<Middleware>;
@@ -79,10 +86,16 @@ export async function execHooks(
     return await execConstructorHooks(ctx, middleware as MiddlewareConstructor);
   } else if (type == HookType.Error) {
     return await execErrorHooks(ctx, middleware as Middleware, error as Error);
+  } else if (type == HookType.Unhandled) {
+    return await execUnhandledHooks(
+      ctx,
+      middleware as Middleware,
+      error as Error
+    );
   }
 
-  const hooks = ctx.get<HookItem[]>(MIDDLEWARE_HOOK_BAG) ?? [];
-  for (const hookItem of hooks.filter((h) => h.type == type)) {
+  const hooks = getHooks(ctx, type);
+  for (const hookItem of hooks) {
     const hookResult = await hookItem.hook(ctx, middleware);
     if (typeof hookResult == "boolean" && !hookResult) {
       return false;
@@ -95,22 +108,33 @@ async function execErrorHooks(
   middleware: Middleware,
   error: Error
 ): Promise<boolean> {
-  const hooks = ctx.get<HookItem[]>(MIDDLEWARE_HOOK_BAG) ?? [];
+  const hooks = getHooks(ctx, HookType.Error);
   let result = false;
-  for (const hookItem of hooks.filter((h) => h.type == HookType.Error)) {
+  for (const hookItem of hooks) {
     result = (await hookItem.hook(ctx, middleware, error)) as boolean;
     if (result) break;
   }
   return result;
 }
 
+async function execUnhandledHooks(
+  ctx: Context,
+  middleware: Middleware,
+  error: Error
+): Promise<void> {
+  const hooks = getHooks(ctx, HookType.Unhandled);
+  for (const hookItem of hooks) {
+    await hookItem.hook(ctx, middleware, error);
+  }
+}
+
 async function execConstructorHooks(
   ctx: Context,
   middleware: MiddlewareConstructor
 ): Promise<Middleware | undefined> {
-  const hooks = ctx.get<HookItem[]>(MIDDLEWARE_HOOK_BAG) ?? [];
+  const hooks = getHooks(ctx, HookType.Constructor);
   let result: Middleware | undefined;
-  for (const hookItem of hooks.filter((h) => h.type == HookType.Constructor)) {
+  for (const hookItem of hooks) {
     if (!(middleware instanceof Middleware)) {
       result = (await hookItem.hook(ctx, middleware)) as Middleware;
       if (result) break;
@@ -118,4 +142,9 @@ async function execConstructorHooks(
   }
   if (!result) result = new middleware();
   return result;
+}
+
+function getHooks(ctx: Context, type: HookType) {
+  const hooks = ctx.get<HookItem[]>(MIDDLEWARE_HOOK_BAG) ?? [];
+  return hooks.filter((h) => h.type == type);
 }

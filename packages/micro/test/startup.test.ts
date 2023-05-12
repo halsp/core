@@ -5,7 +5,7 @@ import "@halsp/testing";
 describe("startup", () => {
   it("should set env", () => {
     process.env.HALSP_ENV = "" as any;
-    new Startup().useMicro();
+    new Startup().useMicro().useMicro();
     expect(process.env.HALSP_ENV).toBe("micro");
   });
 
@@ -24,17 +24,29 @@ describe("startup", () => {
 
 describe("handle message", () => {
   it("should handle message and send result", async () => {
-    const startup = new Startup();
-    await handleMessage.bind(startup)(`{"id":"abc"}`, ({ req, result }) => {
-      expect(req.id).toBe("abc");
-      expect(result).toEqual({ id: "abc" });
-    });
+    const startup = new Startup().keepThrow();
+    await handleMessage.call(
+      startup,
+      {
+        id: "abc",
+        data: "",
+        pattern: "",
+      },
+      ({ req, result }) => {
+        expect(req.id).toBe("abc");
+        expect(result).toEqual({ id: "abc" });
+      }
+    );
   });
 
   it("should handle message and invoke prehook", async () => {
-    const startup = new Startup();
-    await handleMessage.bind(startup)(
-      `{}`,
+    const startup = new Startup().keepThrow();
+    await handleMessage.call(
+      startup,
+      {
+        data: "",
+        pattern: "",
+      },
       () => {
         expect(true).toBe(false);
       },
@@ -45,11 +57,11 @@ describe("handle message", () => {
   });
 
   it("should log error when message format is illegal", async () => {
-    const startup = new Startup();
+    const startup = new Startup().keepThrow();
     let error: any;
     try {
-      await handleMessage.bind(startup)(`abc`, () => {
-        expect(true).toBe(false);
+      await handleMessage.bind(startup)(null as any, () => {
+        //
       });
     } catch (err) {
       error = err;
@@ -58,9 +70,14 @@ describe("handle message", () => {
   });
 
   it("should return error message when res.error is not empty", async () => {
-    const startup = new Startup();
-    await handleMessage.bind(startup)(
-      `{"id":"abc"}`,
+    const startup = new Startup().keepThrow();
+    await handleMessage.call(
+      startup,
+      {
+        id: "abc",
+        data: "",
+        pattern: "",
+      },
       ({ req, result }) => {
         expect(req.id).toBe("abc");
         expect(result).toEqual({ id: "abc", error: "err" });

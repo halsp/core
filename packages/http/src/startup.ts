@@ -28,7 +28,7 @@ Startup.prototype.useHttp = function () {
   return this.use(async (ctx, next) => {
     await next();
     setType(ctx.res);
-  }).hook(HookType.Error, (ctx, md, error) => {
+  }).hook(HookType.Unhandled, (ctx, md, error) => {
     const catchError = (err: Error | any) => {
       if (err instanceof HttpException) {
         ctx.res
@@ -52,7 +52,6 @@ Startup.prototype.useHttp = function () {
       }
     };
     catchError(error);
-    return false;
   });
 };
 

@@ -25,7 +25,7 @@ Startup.prototype.useMicro = function () {
 
   process.env.HALSP_ENV = "micro";
 
-  return this.hook(HookType.Error, (ctx, md, error) => {
+  return this.hook(HookType.Unhandled, (ctx, md, error) => {
     const catchError = (err: Error | any) => {
       if (err instanceof MicroException) {
         ctx.res.setError(err.message);

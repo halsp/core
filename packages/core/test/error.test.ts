@@ -1,18 +1,26 @@
-import { HalspException, isExceptionMessage, Startup } from "../src";
+import { HalspException, HookType, isExceptionMessage, Startup } from "../src";
 import "./test-startup";
 
 describe("error", () => {
   it("should push error stack when throw error", async () => {
-    const { ctx } = await new Startup()
+    const errs: any[] = [];
+    await new Startup()
+      .hook(HookType.Unhandled, (ctx, md, err) => {
+        errs.push(err);
+      })
       .use(async () => {
         throw new Error();
       })
       .run();
-    expect(ctx.errorStack.length).toBe(1);
+    expect(errs.length).toBe(1);
   });
 
   it("should breakthrough when set error.breakthrough = true", async () => {
+    const errs: any[] = [];
     const { ctx } = await new Startup()
+      .hook(HookType.Unhandled, (ctx, md, err) => {
+        errs.push(err);
+      })
       .use(async (ctx, next) => {
         await next();
         ctx.set("test", true);
@@ -22,12 +30,16 @@ describe("error", () => {
       })
       .run();
 
-    expect(ctx.errorStack.length).toBe(1);
+    expect(errs.length).toBe(1);
     expect(ctx.get("test")).toBeUndefined();
   });
 
   it("should not breakthrough when set error.breakthrough = false", async () => {
+    const errs: any[] = [];
     const { ctx } = await new Startup()
+      .hook(HookType.Unhandled, (ctx, md, err) => {
+        errs.push(err);
+      })
       .use(async (ctx, next) => {
         await next();
         ctx.set("test", true);
@@ -37,7 +49,7 @@ describe("error", () => {
       })
       .run();
 
-    expect(ctx.errorStack.length).toBe(1);
+    expect(errs.length).toBe(1);
     expect(ctx.get("test")).toBeTruthy();
   });
 

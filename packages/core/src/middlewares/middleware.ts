@@ -116,14 +116,10 @@ export abstract class Middleware {
       if (isObject(error) && "breakthrough" in error && error.breakthrough) {
         throw error;
       } else {
-        const hookResult = await execHooks(
-          this.ctx,
-          nextMd ?? this,
-          HookType.Error,
-          error
-        );
+        const md = nextMd ?? this;
+        const hookResult = await execHooks(this.ctx, md, HookType.Error, error);
         if (!hookResult) {
-          this.ctx.errorStack.push(error);
+          await execHooks(this.ctx, md, HookType.Unhandled, error);
         }
       }
     }
@@ -159,7 +155,7 @@ export async function invokeMiddlewares(
     const hookResult = await execHooks(ctx, md, HookType.Error, error);
 
     if (isRoot && !hookResult) {
-      ctx.errorStack.push(error);
+      await execHooks(ctx, md, HookType.Unhandled, error);
     }
   }
 }

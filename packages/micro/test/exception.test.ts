@@ -1,5 +1,6 @@
-import { Context } from "@halsp/core";
+import { Startup } from "@halsp/core";
 import { MicroException } from "../src";
+import "@halsp/testing";
 
 describe("exception", () => {
   it("should trans to plain object", async () => {
@@ -7,47 +8,71 @@ describe("exception", () => {
     expect(ex.message).toBe("err");
   });
 
-  it("should set string error from MicroException.message ", () => {
-    const ctx = new Context();
-    initCatchError(ctx);
-    ctx.catchError(new MicroException("abc"));
-    expect(ctx.res.error).toBe("abc");
+  it("should set string error from MicroException.message ", async () => {
+    await new Startup()
+      .useMicro()
+      .use(() => {
+        throw new MicroException("abc");
+      })
+      .expect((res) => {
+        expect(res.error).toBe("abc");
+      });
   });
 
-  it("should set string error from string ", () => {
-    const ctx = new Context();
-    initCatchError(ctx);
-    ctx.catchError("abc");
-    expect(ctx.res.error).toBe("abc");
+  it("should set string error from string ", async () => {
+    await new Startup()
+      .useMicro()
+      .use(() => {
+        throw "abc";
+      })
+      .expect((res) => {
+        expect(res.error).toBe("abc");
+      });
   });
 
-  it("should set string error from Error", () => {
-    const ctx = new Context();
-    initCatchError(ctx);
-    ctx.catchError(new Error("abc"));
-    expect(ctx.res.error).toBe("abc");
+  it("should set string error from Error", async () => {
+    await new Startup()
+      .useMicro()
+      .use(() => {
+        throw new Error("abc");
+      })
+      .expect((res) => {
+        expect(res.error).toBe("abc");
+      });
   });
 
-  it("should set string error from object with message property", () => {
-    const ctx = new Context();
-    initCatchError(ctx);
-    ctx.catchError({
-      message: "abc",
-    });
-    expect(ctx.res.error).toBe("abc");
+  it("should set string error from object with message property", async () => {
+    await new Startup()
+      .useMicro()
+      .use(() => {
+        throw {
+          message: "abc",
+        };
+      })
+      .expect((res) => {
+        expect(res.error).toBe("abc");
+      });
   });
 
-  it("should set empty error from empty object", () => {
-    const ctx = new Context();
-    initCatchError(ctx);
-    ctx.catchError({});
-    expect(ctx.res.error).toBe("");
+  it("should set empty error from empty object", async () => {
+    await new Startup()
+      .useMicro()
+      .use(() => {
+        throw {};
+      })
+      .expect((res) => {
+        expect(res.error).toBe("");
+      });
   });
 
-  it("should set empty error from null", () => {
-    const ctx = new Context();
-    initCatchError(ctx);
-    ctx.catchError(null);
-    expect(ctx.res.error).toBe("");
+  it("should set empty error from null", async () => {
+    await new Startup()
+      .useMicro()
+      .use(() => {
+        throw null;
+      })
+      .expect((res) => {
+        expect(res.error).toBe("");
+      });
   });
 });

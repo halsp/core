@@ -14,6 +14,7 @@ class TestMiddleware extends Middleware {
 describe("middleware", () => {
   it("should expect middleware", async () => {
     await new Startup()
+      .keepThrow()
       .expectMiddleware(TestMiddleware, (md) => {
         expect(md.fn()).toBe(1);
       })
@@ -23,6 +24,7 @@ describe("middleware", () => {
 
   it("should expect before invoke", async () => {
     await new Startup()
+      .keepThrow()
       .expectMiddleware(TestMiddleware, (md) => {
         expect(md.ctx.get("result")).toBeUndefined();
       })
@@ -32,6 +34,7 @@ describe("middleware", () => {
 
   it("should expect after invoke", async () => {
     await new Startup()
+      .keepThrow()
       .expectMiddleware(
         TestMiddleware,
         (md) => {
@@ -44,10 +47,9 @@ describe("middleware", () => {
   });
 
   it("should throw error if middleware not executed", async () => {
-    const startup = new Startup().expectMiddleware(
-      TestMiddleware,
-      () => undefined
-    );
+    const startup = new Startup()
+      .keepThrow()
+      .expectMiddleware(TestMiddleware, () => undefined);
     let err: any;
     try {
       await startup.test();

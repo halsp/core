@@ -38,9 +38,12 @@ describe("response.expect", () => {
 
 describe("http startup", () => {
   it("default status is 404", async () => {
-    await new Startup().useHttp().expect((res) => {
-      res.expect(404);
-    });
+    await new Startup()
+      .keepThrow()
+      .useHttp()
+      .expect((res) => {
+        res.expect(404);
+      });
   });
 
   it("should set status 200", async () => {
@@ -57,7 +60,6 @@ describe("http startup", () => {
   it("status shound be 500 if skip throw error", async () => {
     await new Startup()
       .useHttp()
-      .setSkipThrow()
       .setContext(new Request())
       .use(() => {
         throw new Error("err");
@@ -71,9 +73,12 @@ describe("http startup", () => {
   });
 
   it("should throw error", async () => {
-    const startup = new Startup().useHttp().use(() => {
-      throw new Error("err");
-    });
+    const startup = new Startup()
+      .keepThrow()
+      .useHttp()
+      .use(() => {
+        throw new Error("err");
+      });
 
     let err = false;
     try {
@@ -88,7 +93,8 @@ describe("http startup", () => {
 describe("server startup", () => {
   it("should set body", async () => {
     await new Startup()
-      .useNativeTest()
+      .keepThrow()
+      .useNative()
       .use((ctx) => {
         ctx.res.ok({
           method: ctx.req.method,
@@ -105,11 +111,10 @@ describe("server startup", () => {
 
   it("status shound be 500 if skip throw error", async () => {
     await new Startup()
-      .useNativeTest()
+      .useNative()
       .use(() => {
         throw new Error("err");
       })
-      .setSkipThrow()
       .nativeTest()
       .get("")
       .expect(500, {
@@ -122,7 +127,8 @@ describe("server startup", () => {
     let errMsg: string | undefined;
     try {
       await new Startup()
-        .useNativeTest()
+        .keepThrow()
+        .useNative()
         .use(() => {
           throw new Error("err");
         })

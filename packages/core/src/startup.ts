@@ -91,6 +91,15 @@ export class Startup {
     mh: (ctx: Context, middleware: Middleware, error: T) => Promise<boolean>
   ): this;
 
+  hook<T extends Error = Error>(
+    type: HookType.Unhandled,
+    mh: (ctx: Context, middleware: Middleware, error: T) => void
+  ): this;
+  hook<T extends Error = Error>(
+    type: HookType.Unhandled,
+    mh: (ctx: Context, middleware: Middleware, error: T) => Promise<void>
+  ): this;
+
   hook<T extends Middleware = Middleware>(
     type: HookType.BeforeInvoke | HookType.BeforeNext,
     mh: (ctx: Context, middleware: T) => boolean | void

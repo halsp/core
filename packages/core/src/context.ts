@@ -164,9 +164,4 @@ export class Context {
       return result as T;
     }
   }
-
-  readonly #errorStack: any[] = [];
-  get errorStack() {
-    return this.#errorStack;
-  }
 }
