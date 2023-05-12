@@ -1,34 +1,61 @@
-import { MicroStartup } from "@halsp/micro";
+import "@halsp/micro";
 import { MicroMqttOptions } from "./options";
 import mqtt from "mqtt";
-import { Context, getHalspPort } from "@halsp/core";
+import { Context, getHalspPort, Startup } from "@halsp/core";
 import { matchTopic } from "./topic";
 import { parseJsonBuffer } from "@halsp/micro-common";
+import { handleMessage } from "@halsp/micro";
 
-export class MicroMqttStartup extends MicroStartup {
-  constructor(protected readonly options: MicroMqttOptions = {}) {
-    super();
+declare module "@halsp/core" {
+  interface Startup {
+    useMicroMqtt(options?: MicroMqttOptions): this;
+    get client(): mqtt.MqttClient;
+
+    listen(): Promise<mqtt.MqttClient>;
+    close(): Promise<void>;
+
+    register(
+      pattern: string,
+      handler?: (ctx: Context) => Promise<void> | void
+    ): this;
   }
+}
 
-  #handlers: {
+const usedMap = new WeakMap<Startup, boolean>();
+Startup.prototype.useMicroMqtt = function (options?: MicroMqttOptions) {
+  if (usedMap.get(this)) {
+    return this;
+  }
+  usedMap.set(this, true);
+
+  initStartup.call(this, options);
+
+  return this.useMicro();
+};
+
+function initStartup(this: Startup, options: MicroMqttOptions = {}) {
+  const handlers: {
     pattern: string;
     handler?: (ctx: Context) => Promise<void> | void;
   }[] = [];
 
-  protected client?: mqtt.MqttClient;
-  private connectResolve?: (err: void) => void;
+  let connectResolve: ((err: void) => void) | undefined = undefined;
+  this.listen = async () => {
+    await this.close();
 
-  async listen() {
-    this.close(true);
-
-    const opt: MicroMqttOptions = { ...this.options };
-    if (!("servers" in this.options) && !("port" in this.options)) {
+    const opt: MicroMqttOptions = { ...options };
+    if (!("servers" in options) && !("port" in options)) {
       opt.port = getHalspPort(1883);
     }
 
     await new Promise<void>((resolve, reject) => {
-      this.connectResolve = resolve;
-      this.client = mqtt.connect(opt) as mqtt.MqttClient;
+      connectResolve = resolve;
+      const client = mqtt.connect(opt) as mqtt.MqttClient;
+      Object.defineProperty(this, "client", {
+        configurable: true,
+        enumerable: true,
+        get: () => client,
+      });
 
       let handled = false;
       const handler = (cb: () => void) => {
@@ -44,26 +71,26 @@ export class MicroMqttStartup extends MicroStartup {
       });
     });
 
-    this.#handlers.forEach((item) => {
-      this.#register(item.pattern);
+    handlers.forEach((item) => {
+      register.bind(this)(item.pattern, opt);
     });
 
     const client = this.client as mqtt.MqttClient;
     client.on(
       "message",
       (topic: string, payload: Buffer, packet: mqtt.IPublishPacket) => {
-        const handler = this.#handlers.filter((item) =>
+        const handler = handlers.filter((item) =>
           matchTopic(item.pattern, topic)
         )[0];
         if (!handler) return;
 
-        this.handleMessage(
+        handleMessage.bind(this)(
           parseJsonBuffer(payload),
           async ({ result, req }) => {
             const reply = req.pattern + "/" + req.id;
             const json = JSON.stringify(result);
-            if (this.options.publishOptions) {
-              client.publish(reply, json, this.options.publishOptions);
+            if (options.publishOptions) {
+              client.publish(reply, json, options.publishOptions);
             } else {
               client.publish(reply, json);
             }
@@ -82,40 +109,22 @@ export class MicroMqttStartup extends MicroStartup {
 
     this.logger.info(`Server started, listening port: ${opt.port}`);
     return client;
-  }
+  };
 
-  #register(pattern: string) {
-    if (!this.client) return this;
-
-    if (this.options.subscribeOptions) {
-      this.client.subscribe(pattern, this.options.subscribeOptions);
-    } else {
-      this.client.subscribe(pattern);
+  this.close = async () => {
+    if (connectResolve) {
+      connectResolve();
+      connectResolve = undefined;
     }
 
-    return this;
-  }
+    if (!this.client) return;
+    const client = this.client;
+    client.removeAllListeners();
 
-  register(pattern: string, handler?: (ctx: Context) => Promise<void> | void) {
-    this.logger.debug(`Add pattern: ${pattern}`);
-    this.#handlers.push({
-      pattern: pattern,
-      handler,
-    });
-    return this.#register(pattern);
-  }
-
-  async close(force?: boolean) {
-    if (this.connectResolve) {
-      this.connectResolve();
-      this.connectResolve = undefined;
-    }
-
-    if (this.client) {
-      const client = this.client;
-      client.removeAllListeners();
-      await new Promise<void>((resolve, reject) => {
-        client.end(force, {}, (err) => {
+    let shutdownTimeout = false;
+    await new Promise<void>((resolve, reject) => {
+      const forceShutdown = () => {
+        client.end(true, {}, (err) => {
           if (err) {
             reject(err);
           } else {
@@ -123,7 +132,52 @@ export class MicroMqttStartup extends MicroStartup {
             resolve();
           }
         });
+      };
+
+      const shutdownTimer = setTimeout(() => {
+        shutdownTimeout = true;
+        this.logger.error(
+          `Server shutdown timeout and will invoke force shutdown`
+        );
+        forceShutdown();
+      }, 2000);
+
+      client.end(false, {}, (err) => {
+        clearTimeout(shutdownTimer);
+        if (shutdownTimeout) return;
+
+        if (err) {
+          this.logger.error(
+            `Server shutdown error and will invoke force shutdown, err = ${err.message}`
+          );
+          forceShutdown();
+          resolve();
+        } else {
+          this.logger.info("Server shutdown success");
+          resolve();
+        }
       });
-    }
+    });
+  };
+
+  this.register = (
+    pattern: string,
+    handler?: (ctx: Context) => Promise<void> | void
+  ) => {
+    this.logger.debug(`Add pattern: ${pattern}`);
+    handlers.push({ pattern, handler });
+    return register.bind(this)(pattern, options);
+  };
+}
+
+function register(this: Startup, pattern: string, options: MicroMqttOptions) {
+  if (!this.client) return this;
+
+  if (options.subscribeOptions) {
+    this.client.subscribe(pattern, options.subscribeOptions);
+  } else {
+    this.client.subscribe(pattern);
   }
+
+  return this;
 }

@@ -1,14 +1,17 @@
-import { MicroMqttStartup } from "@halsp/micro-mqtt";
+import { Startup } from "@halsp/core";
+import "@halsp/micro-mqtt";
 import { MicroMqttClient } from "../src";
 
 describe("prefix", () => {
   it("should subscribe and publish pattern with prefix", async () => {
-    const startup = new MicroMqttStartup({
-      port: 6002,
-    }).register("pt_test_pattern", (ctx) => {
-      ctx.res.body = ctx.req.body;
-      expect(!!ctx.req.packet).toBeTruthy();
-    });
+    const startup = new Startup()
+      .useMicroMqtt({
+        port: 6002,
+      })
+      .register("pt_test_pattern", (ctx) => {
+        ctx.res.body = ctx.req.body;
+        expect(!!ctx.req.packet).toBeTruthy();
+      });
     await startup.listen();
 
     const client = new MicroMqttClient({
@@ -21,7 +24,7 @@ describe("prefix", () => {
     const result = await client.send("test_pattern", "test_body");
 
     await client.dispose(true);
-    await startup.close(true);
+    await startup.close();
 
     expect(result).toBe("test_body");
   });

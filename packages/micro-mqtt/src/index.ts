@@ -1,5 +1,5 @@
 import type mqtt from "mqtt";
-import "@halsp/core";
+import "./startup";
 
 declare module "@halsp/core" {
   interface Request {
@@ -8,5 +8,4 @@ declare module "@halsp/core" {
 }
 
 export { MicroMqttOptions } from "./options";
-export { MicroMqttStartup } from "./startup";
 export { matchTopic } from "./topic";

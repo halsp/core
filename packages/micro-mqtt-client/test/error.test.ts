@@ -1,6 +1,7 @@
-import { MicroMqttStartup } from "@halsp/micro-mqtt";
+import "@halsp/micro-mqtt";
 import { MicroMqttClient } from "../src";
 import * as mqtt from "mqtt";
+import { Startup } from "@halsp/core";
 
 describe("error", () => {
   it("should throw error when client close error", async () => {
@@ -56,9 +57,10 @@ describe("error", () => {
   });
 
   it("should throw error when result.error is defined", async () => {
-    const startup = new MicroMqttStartup({
-      port: 6002,
-    })
+    const startup = new Startup()
+      .useMicroMqtt({
+        port: 6002,
+      })
       .register("test_pattern", () => undefined)
       .use((ctx) => {
         ctx.res.setError("err");
@@ -78,7 +80,7 @@ describe("error", () => {
       error = err;
     }
 
-    await startup.close(true);
+    await startup.close();
     await client.dispose(true);
 
     expect(error.message).toBe("err");

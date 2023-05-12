@@ -1,20 +1,24 @@
-import { MicroMqttStartup } from "../src";
+import "../src";
 import { MicroMqttClient } from "@halsp/micro-mqtt-client";
 import * as mqtt from "mqtt";
+import { Startup } from "@halsp/core";
 
 describe("startup", () => {
   it("should subscribe and publish", async () => {
-    const startup = new MicroMqttStartup({
-      servers: [
-        {
-          host: "127.0.0.1",
-          port: 6002,
-        },
-      ],
-    }).register("test_pattern", (ctx) => {
-      ctx.res.body = ctx.req.body;
-      expect(!!ctx.req.packet).toBeTruthy();
-    });
+    const startup = new Startup()
+      .useMicroMqtt({
+        servers: [
+          {
+            host: "127.0.0.1",
+            port: 6002,
+          },
+        ],
+      })
+      .useMicroMqtt()
+      .register("test_pattern", (ctx) => {
+        ctx.res.body = ctx.req.body;
+        expect(!!ctx.req.packet).toBeTruthy();
+      });
     await startup.listen();
 
     const client = new MicroMqttClient({
@@ -24,21 +28,23 @@ describe("startup", () => {
     await client["connect"]();
     const result = await client.send("test_pattern", "test_body");
 
-    await startup.close(true);
+    await startup.close();
     await client.dispose(true);
 
     expect(result).toBe("test_body");
   });
 
   it("should subscribe and publish with subscribeOptions and publishOptions", async () => {
-    const startup = new MicroMqttStartup({
-      host: "127.0.0.1",
-      port: 6002,
-      subscribeOptions: { qos: 1 },
-      publishOptions: {},
-    }).register("test_pattern_subscribe", (ctx) => {
-      ctx.res.body = ctx.req.body;
-    });
+    const startup = new Startup()
+      .useMicroMqtt({
+        host: "127.0.0.1",
+        port: 6002,
+        subscribeOptions: { qos: 1 },
+        publishOptions: {},
+      })
+      .register("test_pattern_subscribe", (ctx) => {
+        ctx.res.body = ctx.req.body;
+      });
     await startup.listen();
 
     const client = new MicroMqttClient({
@@ -51,14 +57,14 @@ describe("startup", () => {
     await new Promise<void>((resolve) => {
       setTimeout(() => resolve(), 500);
     });
-    await startup.close(true);
+    await startup.close();
     await client.dispose(true);
 
     expect(result).toBe("test_body");
   });
 
   it("should subscribe without publish when pattern is not matched", async () => {
-    const startup = new MicroMqttStartup({
+    const startup = new Startup().useMicroMqtt({
       host: "127.0.0.1",
       port: 6002,
     });
@@ -80,7 +86,7 @@ describe("startup", () => {
       error = err;
     }
 
-    await startup.close(true);
+    await startup.close();
     await client.dispose(true);
 
     expect(error.message).toBe("Send timeout");
@@ -90,14 +96,14 @@ describe("startup", () => {
 describe("HALSP_DEBUG_PORT", () => {
   it("should listen with HALSP_DEBUG_PORT", async () => {
     process.env.HALSP_DEBUG_PORT = "6002";
-    const startup = new MicroMqttStartup();
+    const startup = new Startup().useMicroMqtt();
     const client = await startup.listen();
     process.env.HALSP_DEBUG_PORT = "";
 
     await new Promise<void>((resolve) => {
       setTimeout(() => resolve(), 500);
     });
-    await startup.close(true);
+    await startup.close();
 
     expect(!!client).toBeTruthy();
   });
@@ -105,7 +111,7 @@ describe("HALSP_DEBUG_PORT", () => {
 
 describe("error", () => {
   it("should reject error when client emit error", async () => {
-    const startup = new MicroMqttStartup({
+    const startup = new Startup().useMicroMqtt({
       host: "127.0.0.1",
       port: 6002,
     });
@@ -115,11 +121,11 @@ describe("error", () => {
     await new Promise<void>((resolve) => {
       setTimeout(() => resolve(), 500);
     });
-    await startup.close(true);
+    await startup.close();
   });
 
   it("should throw error when client close error", async () => {
-    const startup = new MicroMqttStartup({
+    const startup = new Startup().useMicroMqtt({
       host: "127.0.0.1",
       port: 6002,
     });
@@ -141,7 +147,7 @@ describe("error", () => {
 
     let error: any;
     try {
-      await startup.close(true);
+      await startup.close();
     } catch (err) {
       error = err;
     }
@@ -153,8 +159,42 @@ describe("error", () => {
     expect(error.message).toBe("err");
   });
 
+  it("should force shutdown when shutdown timeout", async () => {
+    const startup = new Startup().useMicroMqtt({
+      host: "127.0.0.1",
+      port: 6002,
+    });
+    await startup.listen();
+
+    let forceShutdown = false;
+    const client = startup["client"] as mqtt.MqttClient;
+    const end = client.end;
+    client.end = (force: boolean, obj: any, cb: any) => {
+      if (force) {
+        forceShutdown = true;
+        cb();
+        end.bind(client)(force, obj, cb);
+      } else {
+        setTimeout(() => cb(), 2200);
+      }
+      return client;
+    };
+
+    await new Promise<void>((resolve) => {
+      setTimeout(() => resolve(), 500);
+    });
+
+    await startup.close();
+
+    await new Promise<void>((resolve) => {
+      setTimeout(() => resolve(), 500);
+    });
+
+    expect(forceShutdown).toBeTruthy();
+  }, 10000);
+
   it("should throw error when host is invalid", async () => {
-    const client = new MicroMqttStartup({
+    const client = new Startup().useMicroMqtt({
       host: "not-exist.halsp.org",
       connectTimeout: 500,
     });
@@ -170,7 +210,7 @@ describe("error", () => {
       setTimeout(() => resolve(), 600);
     });
 
-    await client.close(true);
+    await client.close();
 
     expect(error.message).toBe("getaddrinfo ENOTFOUND not-exist.halsp.org");
   });
