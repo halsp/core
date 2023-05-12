@@ -3,12 +3,12 @@ import { BadRequestException } from "@halsp/http";
 import * as http from "http";
 import * as ws from "ws";
 import { WebSocket } from "./decorator";
-import { Options } from "./options";
+import { WsOptions } from "./options";
 
 export class Manager {
   constructor(
     private readonly ctx: Context,
-    private readonly options: Options,
+    private readonly options: WsOptions,
     private readonly wss: ws.Server
   ) {
     const server = ctx.startup["server"] as http.Server;

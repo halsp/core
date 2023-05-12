@@ -1,7 +1,6 @@
-import { Context, HookType, Startup } from "@halsp/core";
 import "@halsp/view";
-import "@halsp/router";
-import "@halsp/http";
+
+import { Context, HookType, Startup } from "@halsp/core";
 import { MvaOptions, CodeType } from "./mva-options";
 import { execFilters } from "@halsp/filter";
 import { Action } from "@halsp/router";

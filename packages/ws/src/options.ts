@@ -1,7 +1,7 @@
 import type ws from "ws";
 import type http from "http";
 
-export interface Options {
+export interface WsOptions {
   keepAliveTimeout?: number;
   allowedOrigins?: string[];
 
