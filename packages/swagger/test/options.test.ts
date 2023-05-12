@@ -22,6 +22,7 @@ Startup.prototype.setTestDir = function (dir: string) {
 describe("options", () => {
   it("should ignore use again", async () => {
     const res = await new Startup()
+      .keepThrow()
       .setContext(
         new Request().setMethod(HttpMethods.get).setPath("swagger/index.json")
       )
@@ -49,6 +50,7 @@ describe("options", () => {
 
   it("should create custom builder", async () => {
     const res = await new Startup()
+      .keepThrow()
       .useHttp()
       .setContext(
         new Request().setMethod(HttpMethods.get).setPath("swagger/index.json")
@@ -69,6 +71,7 @@ describe("options", () => {
 
   it("should set lang when set options.html.lang", async () => {
     const res = await new Startup()
+      .keepThrow()
       .useHttp()
       .setContext(
         new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
@@ -89,6 +92,7 @@ describe("options", () => {
 
   it("should remove default style when options.html.removeDefaultStyle=true", async () => {
     const res = await new Startup()
+      .keepThrow()
       .useHttp()
       .setContext(
         new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
@@ -109,6 +113,7 @@ describe("options", () => {
 
   it("should set title when set options.html.title", async () => {
     const res = await new Startup()
+      .keepThrow()
       .useHttp()
       .setContext(
         new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
@@ -129,6 +134,7 @@ describe("options", () => {
 
   it("should add favicon when set options.html.favicon", async () => {
     const res = await new Startup()
+      .keepThrow()
       .useHttp()
       .setContext(
         new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
@@ -168,6 +174,7 @@ describe("options", () => {
 
   it("should add multiple favicon when set options.html.favicon", async () => {
     const res = await new Startup()
+      .keepThrow()
       .useHttp()
       .setContext(
         new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
@@ -211,6 +218,7 @@ describe("options", () => {
 
   it("should add style when set options.html.style", async () => {
     const res = await new Startup()
+      .keepThrow()
       .useHttp()
       .setContext(
         new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
@@ -256,6 +264,7 @@ describe("options", () => {
 
   it("should add css when set options.html.css", async () => {
     const res = await new Startup()
+      .keepThrow()
       .useHttp()
       .setContext(
         new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
@@ -295,6 +304,7 @@ describe("options", () => {
 
   it("should add script when set options.html.script", async () => {
     const res = await new Startup()
+      .keepThrow()
       .useHttp()
       .setContext(
         new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
@@ -337,6 +347,7 @@ describe("options", () => {
 
   it("should js file when set options.html.js", async () => {
     const res = await new Startup()
+      .keepThrow()
       .useHttp()
       .setContext(
         new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
@@ -381,7 +392,6 @@ describe("options", () => {
       .setContext(
         new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
       )
-      .setSkipThrow()
       .use(async (ctx, next) => {
         Object.defineProperty(ctx, "swaggerOptions", {
           configurable: false,
@@ -421,6 +431,7 @@ describe("options", () => {
 describe("swagger-initializer.js", () => {
   it("should set default swagger config", async () => {
     const res = await new Startup()
+      .keepThrow()
       .useHttp()
       .setContext(
         new Request()
@@ -454,6 +465,7 @@ describe("swagger-initializer.js", () => {
 
   it("should set custom swagger config", async () => {
     const res = await new Startup()
+      .keepThrow()
       .useHttp()
       .setContext(
         new Request()
@@ -490,6 +502,7 @@ describe("swagger-initializer.js", () => {
 
   it("should initOAuth when set options.initOAuth = true", async () => {
     const res = await new Startup()
+      .keepThrow()
       .useHttp()
       .setContext(
         new Request()

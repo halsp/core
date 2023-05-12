@@ -5,22 +5,17 @@ import { Action } from "@halsp/router";
 import { ExceptionFilter, UseFilters } from "../src";
 import "@halsp/testing";
 
-// test(`empty exception filter`, async () => {
-//   class TestAction extends Action {
-//     async invoke(): Promise<void> {
-//       throw new BadRequestException();
-//     }
-//   }
+test(`empty exception filter`, async () => {
+  class TestAction extends Action {
+    async invoke(): Promise<void> {
+      throw new BadRequestException();
+    }
+  }
 
-//   const res = await new Startup()
-//     .useHttp()
-//     .setSkipThrow()
-//     .useFilter()
-//     .add(TestAction)
-//     .test();
+  const res = await new Startup().useHttp().useFilter().add(TestAction).test();
 
-//   expect(res.status).toBe(400);
-// });
+  expect(res.status).toBe(400);
+});
 
 class TestExceptionFilter implements ExceptionFilter {
   onException(ctx: Context, error: HttpException): boolean | Promise<boolean> {
@@ -45,7 +40,6 @@ function runTest(executing: boolean) {
     test(`exception filter ${executing} ${bad}`, async () => {
       const res = await new Startup()
         .useHttp()
-        .setSkipThrow()
         .setContext(
           new Request().setPath("/filters/exception").setMethod("GET").setBody({
             bad,
@@ -85,18 +79,17 @@ function runTest(executing: boolean) {
 }
 
 runTest(true);
-// runTest(false);
+runTest(false);
 
-// test(`other error`, async () => {
-//   const res = await new Startup()
-//     .useHttp()
-//     .setContext(new Request().setPath("/filters/exception").setMethod("GET"))
-//     .setSkipThrow()
-//     .useFilter()
-//     .use(() => {
-//       throw new BadRequestException();
-//     })
-//     .test();
+test(`other error`, async () => {
+  const res = await new Startup()
+    .useHttp()
+    .setContext(new Request().setPath("/filters/exception").setMethod("GET"))
+    .useFilter()
+    .use(() => {
+      throw new BadRequestException();
+    })
+    .test();
 
-//   expect(res.status).toBe(400);
-// });
+  expect(res.status).toBe(400);
+});

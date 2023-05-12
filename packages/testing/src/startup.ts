@@ -8,15 +8,16 @@ declare module "@halsp/core" {
     setContext(ctx: Context | Request): this;
     test(): Promise<Response>;
     nativeTest(): supertest.SuperTest<supertest.Test>;
-    expect(fn: (res: Response) => void | Promise<void>): Promise<void>;
+    expect(expect: (res: Response) => void): this;
+    expectError(expect: (err?: any) => void): this;
   }
 }
 
-const errorMap = new WeakMap<Startup, Error[]>();
-function getError(startup: Startup) {
-  const errorStack = errorMap.get(startup);
-  if (errorStack?.length) {
-    return errorStack[0];
+const errorMap = new WeakMap<Context, Error[]>();
+function getError(ctx: Context) {
+  const errs = errorMap.get(ctx);
+  if (errs?.length) {
+    return errs[0];
   }
 }
 Startup.prototype.test = async function (): Promise<Response> {
@@ -24,17 +25,44 @@ Startup.prototype.test = async function (): Promise<Response> {
 
   const res = await this["invoke"](this.ctx ?? new Context());
 
-  const err = getError(this);
+  const err = getError(res.ctx);
   if (err) throw err;
 
   return res;
 };
 
 Startup.prototype.keepThrow = function () {
-  return this.hook(HookType.Unhandled, (ctx, md, err) => {
-    const errs = errorMap.get(this) ?? [];
+  return this.use(async (ctx, next) => {
+    if (nativeTestMap.get(this)) {
+      initSupertest(ctx);
+    }
+
+    errorMap.set(ctx, []);
+    await next();
+  }).hook(HookType.Unhandled, (ctx, md, err) => {
+    const errs = errorMap.get(ctx) as any[];
     errs.push(err);
-    errorMap.set(this, errs);
+  });
+};
+
+Startup.prototype.expectError = function (expect: (err?: any) => void) {
+  return this.use(async (ctx, next) => {
+    await next();
+
+    const err = getError(ctx);
+    expect(err);
+    const errs = errorMap.get(ctx);
+    if (err && errs) {
+      errs.splice(errs.indexOf(err), 1);
+    }
+  });
+};
+
+Startup.prototype.expect = function (expect: (res: Response) => void) {
+  return this.use(async (ctx, next) => {
+    await next();
+
+    expect(ctx.res);
   });
 };
 
@@ -43,30 +71,34 @@ Startup.prototype.setContext = function (ctx: Context | Request): Startup {
   return this;
 };
 
-Startup.prototype.expect = async function (
-  fn: (res: Response) => void | Promise<void>
-): Promise<void> {
-  const res = await this.test();
-  fn(res);
+const nativeTestMap = new WeakMap<Startup, boolean>();
+Startup.prototype.nativeTest = function () {
+  nativeTestMap.set(this, true);
+
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const supertest = require("supertest");
+  return supertest(this["server"]);
 };
 
-Startup.prototype.nativeTest = function () {
+function initSupertest(ctx: Context) {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const supertest = require("supertest");
   const { Test } = supertest;
 
-  // eslint-disable-next-line @typescript-eslint/no-this-alias
-  const startup = this;
-  const callback: any = Test.prototype.callback;
+  if (!Test.prototype._beforeCallback) {
+    Test.prototype._beforeCallback = Test.prototype.callback;
+  }
   Test.prototype.callback = function (err: any, res: any) {
     if (this.constructor == Test && !err) {
-      const stackErr = getError(startup);
+      const stackErr = getError(ctx);
       if (stackErr) {
         err = stackErr;
       }
     }
-    return callback.bind(this)(err, err ? undefined : res);
-  };
 
-  return supertest(this["server"]);
-};
+    return Test.prototype._beforeCallback.bind(this)(
+      err,
+      err ? undefined : res
+    );
+  };
+}

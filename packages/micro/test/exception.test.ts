@@ -16,7 +16,8 @@ describe("exception", () => {
       })
       .expect((res) => {
         expect(res.error).toBe("abc");
-      });
+      })
+      .test();
   });
 
   it("should set string error from string ", async () => {
@@ -27,7 +28,8 @@ describe("exception", () => {
       })
       .expect((res) => {
         expect(res.error).toBe("abc");
-      });
+      })
+      .test();
   });
 
   it("should set string error from Error", async () => {
@@ -38,7 +40,8 @@ describe("exception", () => {
       })
       .expect((res) => {
         expect(res.error).toBe("abc");
-      });
+      })
+      .test();
   });
 
   it("should set string error from object with message property", async () => {
@@ -51,7 +54,8 @@ describe("exception", () => {
       })
       .expect((res) => {
         expect(res.error).toBe("abc");
-      });
+      })
+      .test();
   });
 
   it("should set empty error from empty object", async () => {
@@ -62,7 +66,8 @@ describe("exception", () => {
       })
       .expect((res) => {
         expect(res.error).toBe("");
-      });
+      })
+      .test();
   });
 
   it("should set empty error from null", async () => {
@@ -73,6 +78,7 @@ describe("exception", () => {
       })
       .expect((res) => {
         expect(res.error).toBe("");
-      });
+      })
+      .test();
   });
 });

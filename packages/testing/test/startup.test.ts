@@ -2,8 +2,12 @@ import { Context, HookType, Startup } from "@halsp/core";
 import "../src";
 
 describe("startup", () => {
-  it("should add error to stack if skip throw error", async () => {
+  it("should remove error when expectError success", async () => {
     await new Startup()
+      .keepThrow()
+      .expectError((err) => {
+        expect(err.message).toBe("err");
+      })
       .hook(HookType.Unhandled, (ctx, md, err) => {
         ctx.set("err", err);
       })
@@ -11,9 +15,7 @@ describe("startup", () => {
       .use(() => {
         throw new Error("err");
       })
-      .expect((res) => {
-        expect(res.ctx.get("err")).not.toBeUndefined();
-      });
+      .test();
   });
 
   it("error shound be throw", async () => {

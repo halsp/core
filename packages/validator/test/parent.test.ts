@@ -26,16 +26,19 @@ describe("parent validate", () => {
     const req = new Request().setBody({
       b1: "1",
     });
-    const { ctx } = await new Startup()
-      .setSkipThrow()
+    await new Startup()
+      .keepThrow()
+      .expectError((err) => {
+        expect(err.message).toBe("b1 must be base64 encoded");
+      })
+      .expect(({ ctx }) => {
+        expect(ctx.get("b1")).toBeUndefined();
+      })
       .setContext(req)
       .useInject()
       .useValidator()
       .add(TestMiddleware)
       .test();
-
-    expect(ctx.get("b1")).toBeUndefined();
-    expect(ctx.errorStack[0].message).toBe("b1 must be base64 encoded");
   });
 
   it("should validate parameter pipe", async () => {
@@ -53,16 +56,17 @@ describe("parent validate", () => {
     const req = new Request().setBody({
       arg: "1",
     });
-    const { ctx } = await new Startup()
-      .setSkipThrow()
+    await new Startup()
+      .keepThrow()
+      .expectError((err) => {
+        expect(err.message).toBe(
+          "arg must be a number conforming to the specified constraints"
+        );
+      })
       .setContext(req)
       .useInject()
       .useValidator()
       .add(TestMiddleware)
       .test();
-
-    expect(ctx.errorStack[0].message).toBe(
-      "arg must be a number conforming to the specified constraints"
-    );
   });
 });

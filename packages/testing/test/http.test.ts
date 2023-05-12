@@ -43,7 +43,8 @@ describe("http startup", () => {
       .useHttp()
       .expect((res) => {
         res.expect(404);
-      });
+      })
+      .test();
   });
 
   it("should set status 200", async () => {
@@ -54,7 +55,8 @@ describe("http startup", () => {
       })
       .expect((res) => {
         res.expect(200);
-      });
+      })
+      .test();
   });
 
   it("status shound be 500 if skip throw error", async () => {
@@ -69,7 +71,8 @@ describe("http startup", () => {
           status: 500,
           message: "err",
         });
-      });
+      })
+      .test();
   });
 
   it("should throw error", async () => {

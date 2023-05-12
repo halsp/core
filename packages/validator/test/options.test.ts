@@ -29,8 +29,16 @@ function testOptions(useOptions: any, decOptions: any, result: boolean) {
     const req = new Request().setBody({
       b1: null,
     });
+
     const startup = new Startup()
-      .setSkipThrow()
+      .keepThrow()
+      .expectError((err) => {
+        if (result) {
+          expect(err).toBeUndefined();
+        } else {
+          expect(err.message).toBe("b1 must be an integer number");
+        }
+      })
       .setContext(req)
       .useInject()
       .useValidator(useOptions);
@@ -38,10 +46,8 @@ function testOptions(useOptions: any, decOptions: any, result: boolean) {
 
     if (result) {
       expect(ctx.get<TestDto>("result").b).toBeNull();
-      expect(ctx.errorStack.length).toBe(0);
     } else {
       expect(ctx.get("result")).toBeUndefined();
-      expect(ctx.errorStack[0].message).toBe("b1 must be an integer number");
     }
   });
 }

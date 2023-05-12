@@ -54,14 +54,15 @@ describe("custom", () => {
       }
     }
 
-    const { ctx } = await new Startup()
-      .setSkipThrow()
+    await new Startup()
+      .keepThrow()
+      .expectError((err) => {
+        expect(err.message).toBe("abc must be a string, error msg");
+      })
       .useInject()
       .useValidator()
       .add(TestMiddleware)
       .test();
-
-    expect(ctx.errorStack[0].message).toBe("abc must be a string, error msg");
   });
 
   it("should validate custom validation for dto", async () => {
@@ -85,15 +86,18 @@ describe("custom", () => {
       }
     }
 
-    const { ctx } = await new Startup()
-      .setSkipThrow()
+    await new Startup()
+      .keepThrow()
+      .expectError((err) => {
+        expect(err.message).toBe("prop: error");
+      })
+      .expect((res) => {
+        expect(res.ctx.get("body")).toBeUndefined();
+      })
       .useInject()
       .useValidator()
       .add(TestMiddleware)
       .test();
-
-    expect(ctx.errorStack[0].message).toBe("prop: error");
-    expect(ctx.get("body")).toBeUndefined();
   });
 
   it("should validate custom validation with args", async () => {
@@ -114,14 +118,15 @@ describe("custom", () => {
       }
     }
 
-    const { ctx } = await new Startup()
-      .setSkipThrow()
+    await new Startup()
+      .keepThrow()
+      .expectError((err) => {
+        expect(err.message).toBe("abc undefined arg11,22");
+      })
       .useInject()
       .useValidator()
       .add(TestMiddleware)
       .test();
-
-    expect(ctx.errorStack[0].message).toBe("abc undefined arg11,22");
   });
 });
 
@@ -151,14 +156,15 @@ describe("Is", () => {
       }
     }
 
-    const { ctx } = await new Startup()
-      .setSkipThrow()
+    await new Startup()
+      .keepThrow()
+      .expectError((err) => {
+        expect(err.message).toBe("error1, abc Is error2");
+      })
       .useInject()
       .useValidator()
       .add(TestMiddleware)
       .test();
-
-    expect(ctx.errorStack[0].message).toBe("error1, abc Is error2");
   });
 });
 
@@ -184,14 +190,15 @@ describe("proxy", () => {
       }
     }
 
-    const { ctx } = await new Startup()
-      .setSkipThrow()
+    await new Startup()
+      .keepThrow()
+      .expectError((err) => {
+        expect(err).toBeUndefined();
+      })
       .useInject()
       .useValidator()
       .add(TestMiddleware)
       .test();
-
-    expect(ctx.errorStack.length).toBe(0);
   });
 });
 
@@ -207,13 +214,14 @@ describe("extend", () => {
       }
     }
 
-    const { ctx } = await new Startup()
-      .setSkipThrow()
+    await new Startup()
+      .keepThrow()
+      .expectError((err) => {
+        expect(err.message).toBe("abc should not be empty");
+      })
       .useInject()
       .useValidator()
       .add(TestMiddleware)
       .test();
-
-    expect(ctx.errorStack[0].message).toBe("abc should not be empty");
   });
 });

@@ -20,7 +20,6 @@ describe("parse bool with micro", () => {
 
     const { ctx } = await new Startup()
       .useMicro()
-      .setSkipThrow()
       .setContext(req)
       .useInject()
       .add(new TestMiddleware())
@@ -48,7 +47,6 @@ describe("parse bool with micro", () => {
 
     await new Startup()
       .useMicro()
-      .setSkipThrow()
       .setContext(ctx)
       .useInject()
       .add(new TestMiddleware())
@@ -76,7 +74,6 @@ describe("parse bool with micro", () => {
 
     await new Startup()
       .useMicro()
-      .setSkipThrow()
       .setContext(ctx)
       .useInject()
       .add(new TestMiddleware())

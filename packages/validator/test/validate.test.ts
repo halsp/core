@@ -32,7 +32,14 @@ function runTest(validate: boolean) {
       b2: validate ? 1 : "1",
     });
     const { ctx } = await new Startup()
-      .setSkipThrow()
+      .keepThrow()
+      .expectError((err) => {
+        if (validate) {
+          expect(err).toBeUndefined();
+        } else {
+          expect(err.message).toBe("b2 must be an integer number");
+        }
+      })
       .setContext(req)
       .useInject()
       .useValidator()
@@ -42,10 +49,8 @@ function runTest(validate: boolean) {
     const body = ctx.get<TestDto>("body");
     if (validate) {
       expect(body.b).toBe("a1");
-      expect(ctx.errorStack.length).toBe(0);
     } else {
       expect(body).toBeUndefined();
-      expect(ctx.errorStack[0].message).toBe("b2 must be an integer number");
     }
   });
 }
@@ -79,18 +84,21 @@ test("array message", async () => {
     b1: 1,
     b2: "1",
   });
-  const { ctx } = await new Startup()
-    .setSkipThrow()
+  await new Startup()
+    .keepThrow()
+    .expectError((err) => {
+      expect(err.message).toBe(
+        "b1 must be a string, b2 must be an integer number"
+      );
+    })
+    .expect(({ ctx }) => {
+      expect(ctx.get("body")).toBeUndefined();
+    })
     .setContext(req)
     .useInject()
     .useValidator()
     .add(TestMiddleware)
     .test();
-
-  expect(ctx.get("body")).toBeUndefined();
-  expect(ctx.errorStack[0].message).toBe(
-    "b1 must be a string, b2 must be an integer number"
-  );
 });
 
 it("should be undefined when exec V()()", async () => {
