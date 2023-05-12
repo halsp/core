@@ -1,5 +1,5 @@
-import { Request } from "@halsp/core";
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import { Request, Startup } from "@halsp/core";
+import "@halsp/testing";
 import "../src";
 import { runMva } from "./global";
 import "@halsp/filter";
@@ -7,7 +7,7 @@ import "@halsp/filter";
 function runTest(executing: boolean) {
   test(`filter ${executing}`, async () => {
     await runMva(async () => {
-      const res = await new TestHttpStartup()
+      const res = await new Startup()
         .setContext(
           new Request().setPath("filter").setMethod("GET").setBody({
             executing,
@@ -15,7 +15,7 @@ function runTest(executing: boolean) {
         )
         .useFilter()
         .useMva()
-        .run();
+        .test();
 
       expect(res.status).toBe(200);
       expect(res.getHeader("result1")).toBe("1");

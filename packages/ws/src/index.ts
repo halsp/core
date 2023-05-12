@@ -1,17 +1,15 @@
-import { HttpStartup } from "@halsp/http";
+import "@halsp/http";
+import "@halsp/inject";
 import { Manager } from "./manager";
 import { Options } from "./options";
-import "@halsp/inject";
 import * as ws from "ws";
 import { WebSocket } from "./decorator";
-
-declare module "@halsp/http" {
-  interface HttpStartup {
-    useWebSocket(options?: Options): this;
-  }
-}
+import { Startup } from "@halsp/core";
 
 declare module "@halsp/core" {
+  interface Startup {
+    useWebSocket(options?: Options): this;
+  }
   interface Context {
     acceptWebSocket(): Promise<WebSocket>;
     tryAcceptWebSocket(): Promise<WebSocket | null>;
@@ -19,9 +17,7 @@ declare module "@halsp/core" {
   }
 }
 
-HttpStartup.prototype.useWebSocket = function (
-  options: Options = {}
-): HttpStartup {
+Startup.prototype.useWebSocket = function (options: Options = {}) {
   const wss = new ws.Server({
     ...options,
     noServer: true,

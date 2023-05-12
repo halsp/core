@@ -4,7 +4,6 @@ import type supertest from "supertest";
 declare module "@halsp/core" {
   interface Startup {
     keepThrow(): this;
-    ctx?: Context | Request;
     setContext(ctx: Context | Request): this;
     test(): Promise<Response>;
     nativeTest(): supertest.SuperTest<supertest.Test>;
@@ -20,10 +19,12 @@ function getError(ctx: Context) {
     return errs[0];
   }
 }
+
+const ctxMap = new WeakMap<Startup, Context | Request>();
 Startup.prototype.test = async function (): Promise<Response> {
   process.env.NODE_ENV = "test";
 
-  const res = await this["invoke"](this.ctx ?? new Context());
+  const res = await this["invoke"](ctxMap.get(this) ?? new Context());
 
   const err = getError(res.ctx);
   if (err) throw err;
@@ -67,7 +68,7 @@ Startup.prototype.expect = function (expect: (res: Response) => void) {
 };
 
 Startup.prototype.setContext = function (ctx: Context | Request): Startup {
-  this.ctx = ctx;
+  ctxMap.set(this, ctx);
   return this;
 };
 

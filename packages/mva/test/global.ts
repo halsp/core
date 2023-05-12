@@ -1,10 +1,5 @@
-import * as shell from "shelljs";
+import { runin } from "@halsp/testing";
 
 export async function runMva(test: () => Promise<void>): Promise<void> {
-  shell.cd("test/mva");
-  try {
-    await test();
-  } finally {
-    shell.cd("../..");
-  }
+  await runin("test/mva", test);
 }

@@ -1,14 +1,14 @@
-import { Request } from "@halsp/core";
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import { Request, Startup } from "@halsp/core";
+import "@halsp/testing";
 import "../src";
 import { runMva } from "./global";
 
 test("default", async function () {
   await runMva(async () => {
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
       .setContext(new Request().setMethod("GET"))
       .useMva()
-      .run();
+      .test();
 
     expect(res.getHeader("content-type")).toBe("text/html");
     expect(res.status).toBe(200);
@@ -18,11 +18,11 @@ test("default", async function () {
 
 test("use again", async function () {
   await runMva(async () => {
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
       .setContext(new Request().setMethod("GET"))
       .useMva()
       .useMva()
-      .run();
+      .test();
 
     expect(res.getHeader("content-type")).toBe("text/html");
     expect(res.status).toBe(200);

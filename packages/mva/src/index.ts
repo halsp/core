@@ -1,34 +1,34 @@
-import { Context, HookType } from "@halsp/core";
+import { Context, HookType, Startup } from "@halsp/core";
 import "@halsp/view";
 import "@halsp/router";
+import "@halsp/http";
 import { MvaOptions, CodeType } from "./mva-options";
-import { ERROR_CODES, USED } from "./constant";
 import { execFilters } from "@halsp/filter";
 import { Action } from "@halsp/router";
-import { HttpException, HttpStartup } from "@halsp/http";
+import { HttpException } from "@halsp/http";
 import { HttpMethods } from "@halsp/methods";
 
 export { MvaOptions };
 export { ResultFilter } from "./result.filter";
 
-declare module "@halsp/http" {
-  interface HttpStartup {
+declare module "@halsp/core" {
+  interface Startup {
     useMva(options?: MvaOptions): this;
     useErrorPage(...codes: CodeType[]): this;
     useErrorPage(codes: CodeType[]): this;
   }
 }
 
-HttpStartup.prototype.useErrorPage = function (...codes: any[]) {
-  if (this[ERROR_CODES]) return this;
-  if (this[USED]) return this;
-
+const codesMap = new WeakMap<Startup, CodeType[]>();
+Startup.prototype.useErrorPage = function (...codes: any[]) {
   if (codes.length == 1 && Array.isArray(codes[0])) {
     codes = codes[0];
   }
   codes = codes as CodeType[];
 
-  this[ERROR_CODES] = codes;
+  const existCodes = codesMap.get(this) ?? [];
+  existCodes.push(...codes);
+  codesMap.set(this, existCodes);
 
   return this.hook(HookType.Error, async (ctx, md, ex) => {
     if (!(ex instanceof HttpException)) {
@@ -46,14 +46,16 @@ HttpStartup.prototype.useErrorPage = function (...codes: any[]) {
   }).use(async (ctx, next) => {
     await next();
 
-    const codes: CodeType[] = this[ERROR_CODES];
-    !!codes && (await errorView(ctx, codes));
+    codes.length && (await errorView(ctx, codes));
   });
 };
 
-HttpStartup.prototype.useMva = function (options: MvaOptions = {}) {
-  if (this[USED]) return this;
-  this[USED] = true;
+const usedMap = new WeakMap<Startup, boolean>();
+Startup.prototype.useMva = function (options: MvaOptions = {}) {
+  if (usedMap.get(this)) {
+    return this;
+  }
+  usedMap.set(this, true);
 
   const renderMethods = (() => {
     let result = options.renderMethods ?? [HttpMethods.get];
@@ -63,11 +65,12 @@ HttpStartup.prototype.useMva = function (options: MvaOptions = {}) {
     return result;
   })();
 
-  return this.hook((ctx, md) => {
-    if (md instanceof Action) {
-      ctx.actionMetadata.actionInstance = md;
-    }
-  })
+  return this.useHttp()
+    .hook((ctx, md) => {
+      if (md instanceof Action) {
+        ctx.actionMetadata.actionInstance = md;
+      }
+    })
     .use(async (ctx, next) => {
       await next();
 

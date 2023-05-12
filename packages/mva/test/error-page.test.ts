@@ -2,8 +2,8 @@ import { NotFoundException } from "@halsp/http";
 import "../src";
 import { AutFilter } from "./mva/auth.middleware";
 import { runMva } from "./global";
-import { Request, Response } from "@halsp/core";
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import { Request, Response, Startup } from "@halsp/core";
+import "@halsp/testing";
 
 function expect404(res: Response, isPage: boolean, replaceCode = 404) {
   expect(res.status).toBe(replaceCode);
@@ -28,8 +28,7 @@ function run404(isNumber: boolean) {
       test(`useErrorPage ${isNumber} ${useAgain} ${throwError}`, async function () {
         const codes = [isNumber ? 404 : { code: 404 }];
         await runMva(async () => {
-          const startup = new TestHttpStartup()
-            .setSkipThrow()
+          const startup = new Startup()
             .setContext(new Request().setPath("not-exist").setMethod("GET"))
             .useErrorPage(codes)
             .use(async (ctx, next) => {
@@ -43,7 +42,7 @@ function run404(isNumber: boolean) {
             startup.useErrorPage(codes).useMva();
           }
 
-          const res = await startup.run();
+          const res = await startup.test();
           expect404(res, true);
         });
       });
@@ -59,7 +58,8 @@ run404(false);
 
 test("403", async function () {
   await runMva(async () => {
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
+      .keepThrow()
       .setContext(
         new Request()
           .setPath("user/test1@hal.wang")
@@ -69,7 +69,7 @@ test("403", async function () {
       .useErrorPage([{ code: 403 }])
       .useGlobalFilter(AutFilter)
       .useMva()
-      .run();
+      .test();
 
     expect(res.status).toBe(403);
     expect(res.body).toBe("<p>403</p>");
@@ -78,11 +78,12 @@ test("403", async function () {
 
 test("replace", async function () {
   await runMva(async () => {
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
+      .keepThrow()
       .setContext(new Request().setPath("not-exist").setMethod("GET"))
       .useErrorPage({ code: 404, replace: 204 })
       .useMva()
-      .run();
+      .test();
 
     expect404(res, true, 204);
   });
@@ -90,10 +91,11 @@ test("replace", async function () {
 
 test("404 without error page", async function () {
   await runMva(async () => {
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
+      .keepThrow()
       .setContext(new Request().setPath("not-exist").setMethod("GET"))
       .useMva()
-      .run();
+      .test();
 
     expect404(res, false);
   });
@@ -101,14 +103,14 @@ test("404 without error page", async function () {
 
 test("string error", async function () {
   await runMva(async () => {
-    const res = await new TestHttpStartup()
-      .setSkipThrow()
+    const res = await new Startup()
+      .useHttp()
       .setContext(new Request().setMethod("GET"))
       .useErrorPage([{ code: 404 }])
       .use(() => {
         throw "test";
       })
-      .run();
+      .test();
 
     expect(res.status).toBe(500);
   });
@@ -117,15 +119,15 @@ test("string error", async function () {
 function runEmptyCode(isArray: boolean) {
   test(`without error code ${isArray}`, async function () {
     await runMva(async () => {
-      const startup = new TestHttpStartup().setContext(
-        new Request().setPath("not-exist").setMethod("GET")
-      );
+      const startup = new Startup()
+        .keepThrow()
+        .setContext(new Request().setPath("not-exist").setMethod("GET"));
       if (isArray) {
         startup.useErrorPage([]);
       } else {
         startup.useErrorPage();
       }
-      const res = await startup.useMva().run();
+      const res = await startup.useMva().test();
 
       expect404(res, false);
     });
@@ -137,20 +139,21 @@ runEmptyCode(false);
 
 test(`useMva before useErrorPage`, async function () {
   await runMva(async () => {
-    const res = await new TestHttpStartup()
-      .setContext(new Request().setPath("not-exist").setMethod("GET"))
+    const res = await new Startup()
+      .keepThrow()
       .useMva()
       .useErrorPage(404)
-      .run();
+      .setContext(new Request().setPath("not-exist").setMethod("GET"))
+      .test();
 
-    expect404(res, false);
+    expect404(res, true);
   });
 });
 
 test(`404 default`, async function () {
   await runMva(async () => {
-    const startup = new TestHttpStartup()
-      .setSkipThrow()
+    const startup = new Startup()
+      .useHttp()
       .setContext(new Request().setPath("not-exist").setMethod("GET"))
       .useErrorPage()
       .use(async () => {
@@ -159,7 +162,7 @@ test(`404 default`, async function () {
           path: "not-exist",
         });
       });
-    const res = await startup.run();
+    const res = await startup.test();
 
     expect404(res, false);
   });

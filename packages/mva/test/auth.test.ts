@@ -1,12 +1,12 @@
-import { Request } from "@halsp/core";
-import { TestHttpStartup } from "@halsp/testing/dist/http";
+import { Request, Startup } from "@halsp/core";
+import "@halsp/testing";
 import "../src";
 import { runMva } from "./global";
 import { AutFilter } from "./mva/auth.middleware";
 
 test("auth access", async function () {
   await runMva(async () => {
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
       .setContext(
         new Request()
           .setPath("user/test1@hal.wang")
@@ -15,7 +15,7 @@ test("auth access", async function () {
       )
       .useGlobalFilter(AutFilter)
       .useMva()
-      .run();
+      .test();
 
     expect(res.status).toBe(200);
     expect(res.body).toBe("<p>email: test1@hal.wang</p>");
@@ -25,7 +25,7 @@ test("auth access", async function () {
 
 test("auth failed", async function () {
   await runMva(async () => {
-    const res = await new TestHttpStartup()
+    const res = await new Startup()
       .setContext(
         new Request()
           .setPath("user/test1@hal.wang")
@@ -34,7 +34,7 @@ test("auth failed", async function () {
       )
       .useGlobalFilter(AutFilter)
       .useMva()
-      .run();
+      .test();
 
     expect(res.body).toEqual({
       message: "error email or password",
