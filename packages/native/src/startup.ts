@@ -15,7 +15,6 @@ import "@halsp/http";
 import qs from "qs";
 import { Stream } from "stream";
 import { NativeOptions } from "./options";
-import { USED } from "./constant";
 
 type ServerType = http.Server | https.Server;
 
@@ -29,11 +28,12 @@ declare module "@halsp/core" {
   }
 }
 
+const usedMap = new WeakMap<Startup, boolean>();
 Startup.prototype.useNative = function (options?: NativeOptions) {
-  if (this[USED]) {
+  if (usedMap.get(this)) {
     return this;
   }
-  this[USED] = true;
+  usedMap.set(this, true);
 
   initStartup.call(this, options);
 

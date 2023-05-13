@@ -22,7 +22,7 @@ export class Manager {
 
     const client = this.client;
     if (
-      client.readyState == client.CONNECTING ||
+      client.readyState == client.CLOSING ||
       client.readyState == client.CLOSED
     ) {
       return;

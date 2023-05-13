@@ -9,6 +9,7 @@ import { Startup } from "@halsp/core";
 declare module "@halsp/core" {
   interface Startup {
     useWebSocket(options?: WsOptions): this;
+    closeWebSocket(options?: WsOptions): Promise<void>;
   }
   interface Context {
     acceptWebSocket(): Promise<WebSocket>;
@@ -22,32 +23,46 @@ Startup.prototype.useWebSocket = function (options: WsOptions = {}) {
     ...options,
     noServer: true,
   });
-  return this.useInject().use(async (ctx, next) => {
-    let manager!: Manager;
-
-    Object.defineProperty(ctx, "webSocketClients", {
-      enumerable: true,
-      configurable: true,
-      get: () => wss.clients,
+  this.closeWebSocket = async () => {
+    await new Promise<void>((resolve, reject) => {
+      wss.close((err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
     });
+  };
 
-    ctx.acceptWebSocket = async () => {
-      if (!manager) {
-        manager = new Manager(ctx, options, wss);
-      }
-      return await manager.accept();
-    };
-    ctx.tryAcceptWebSocket = async () => {
-      if (!manager) {
-        manager = new Manager(ctx, options, wss);
-      }
-      return await manager.tryAccept();
-    };
+  return this.useInject()
+    .useHttp()
+    .use(async (ctx, next) => {
+      let manager!: Manager;
 
-    await next();
+      Object.defineProperty(ctx, "webSocketClients", {
+        enumerable: true,
+        configurable: true,
+        get: () => wss.clients,
+      });
 
-    await manager?.untilClosed();
-  });
+      ctx.acceptWebSocket = async () => {
+        if (!manager) {
+          manager = new Manager(ctx, options, wss);
+        }
+        return await manager.accept();
+      };
+      ctx.tryAcceptWebSocket = async () => {
+        if (!manager) {
+          manager = new Manager(ctx, options, wss);
+        }
+        return await manager.tryAccept();
+      };
+
+      await next();
+
+      await manager?.untilClosed();
+    });
 };
 
 export { WsOptions };
