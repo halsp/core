@@ -11,7 +11,6 @@ import {
   closeServer,
 } from "@halsp/core";
 import type { NumericalHeadersDict } from "@halsp/http";
-import "@halsp/http";
 import qs from "qs";
 import { Stream } from "stream";
 import { NativeOptions } from "./options";
@@ -102,10 +101,10 @@ function initStartup(this: Startup, options?: NativeOptions) {
     return this.server;
   };
 
-  this.close = async function () {
+  this.extend("close", async () => {
     await closeServer(this.server);
     this.logger.info("Server shutdown success");
-  };
+  });
 
   this.server.on("listening", () => {
     logAddress(this.server, this.logger, "http://localhost");

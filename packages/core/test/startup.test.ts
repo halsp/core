@@ -86,3 +86,19 @@ describe("logger", () => {
   testConsole("info");
   testConsole("debug");
 });
+
+describe("extend", () => {
+  let times = 0;
+  const startup = new Startup();
+  startup.extend("testExtend", () => {
+    times++;
+  });
+  startup.extend("testExtend", () => {
+    times++;
+  });
+  startup.extend("testExtend", () => {
+    times++;
+  });
+  startup["testExtend"]();
+  expect(times).toBe(3);
+});

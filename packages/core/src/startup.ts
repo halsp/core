@@ -156,4 +156,13 @@ export class Startup {
   }
 
   logger: ILogger = new BaseLogger();
+
+  public extend(name: string, fn: (...args: any[]) => any): this {
+    const beforeFn = this[name];
+    this[name] = (...args: any[]) => {
+      beforeFn && beforeFn.call(this, ...args);
+      return fn.call(this, ...args);
+    };
+    return this;
+  }
 }
