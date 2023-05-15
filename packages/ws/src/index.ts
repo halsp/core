@@ -9,7 +9,7 @@ import { Startup } from "@halsp/core";
 declare module "@halsp/core" {
   interface Startup {
     useWebSocket(options?: WsOptions): this;
-    closeWebSocket(options?: WsOptions): Promise<void>;
+    close(): Promise<void>;
   }
   interface Context {
     acceptWebSocket(): Promise<WebSocket>;
@@ -23,19 +23,21 @@ Startup.prototype.useWebSocket = function (options: WsOptions = {}) {
     ...options,
     noServer: true,
   });
-  this.closeWebSocket = async () => {
-    await new Promise<void>((resolve, reject) => {
-      wss.close((err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve();
-        }
-      });
-    });
-  };
 
-  return this.useInject()
+  return this.extend(
+    "close",
+    () =>
+      new Promise<void>((resolve, reject) => {
+        wss.close((err) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        });
+      })
+  )
+    .useInject()
     .useHttp()
     .use(async (ctx, next) => {
       let manager!: Manager;

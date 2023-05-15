@@ -88,17 +88,80 @@ describe("logger", () => {
 });
 
 describe("extend", () => {
-  let times = 0;
-  const startup = new Startup();
-  startup.extend("testExtend", () => {
-    times++;
+  it("should invoke extend functions on by on", async () => {
+    let times = 0;
+    const startup = new Startup();
+    startup.extend("testExtend" as any, () => {
+      times++;
+    });
+    startup.extend("testExtend" as any, () => {
+      times++;
+    });
+    startup.extend("testExtend" as any, () => {
+      times++;
+    });
+    startup["testExtend"]();
+    expect(times).toBe(3);
   });
-  startup.extend("testExtend", () => {
-    times++;
+
+  it("should return last result", async () => {
+    const startup = new Startup();
+    startup.extend("testExtend" as any, () => {
+      return "test1";
+    });
+    startup.extend("testExtend" as any, () => {
+      return "test2";
+    });
+    startup.extend("testExtend" as any, () => {
+      return undefined;
+    });
+    const result = startup["testExtend"]();
+    expect(result).toBe("test2");
   });
-  startup.extend("testExtend", () => {
-    times++;
+
+  it("should return promise result", async () => {
+    const startup = new Startup();
+    startup.extend("testExtend" as any, async () => {
+      return "test1";
+    });
+    startup.extend("testExtend" as any, async () => {
+      return "test2";
+    });
+    startup.extend("testExtend" as any, async () => {
+      return undefined;
+    });
+    const result = await startup["testExtend"]();
+    expect(result).toBe("test2");
   });
-  startup["testExtend"]();
-  expect(times).toBe(3);
+
+  it("should return promise and normal result", async () => {
+    const startup = new Startup();
+    startup.extend("testExtend" as any, async () => {
+      return "test1";
+    });
+    startup.extend("testExtend" as any, () => {
+      return "test2";
+    });
+    startup.extend("testExtend" as any, () => {
+      return undefined;
+    });
+    const result = await startup["testExtend"]();
+    expect(result).toBe("test2");
+  });
+
+  it("should throw error", async () => {
+    const startup = new Startup();
+    startup.extend("testExtend" as any, async () => {
+      throw new Error("err1");
+    });
+    startup.extend("testExtend" as any, async () => {
+      throw new Error("err2");
+    });
+    try {
+      await startup["testExtend"]();
+      expect(true).toBeFalsy();
+    } catch (err) {
+      expect((err as Error).message).toBe("err1");
+    }
+  });
 });

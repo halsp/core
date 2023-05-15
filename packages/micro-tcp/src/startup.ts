@@ -58,8 +58,8 @@ function initStartup(this: Startup, options?: MicroTcpOptions) {
     get: () => server,
   });
 
-  this.listen = async function () {
-    await this.close();
+  this.extend("listen", async () => {
+    await closeServer(this.server);
 
     if (options?.handle) {
       await new Promise<void>((resolve) => {
@@ -77,21 +77,19 @@ function initStartup(this: Startup, options?: MicroTcpOptions) {
       });
     }
     return this.server;
-  };
-
-  this.close = async function () {
-    await closeServer(this.server);
-    this.logger.info("Server shutdown success");
-  };
-
-  this.register = function (
-    pattern: string,
-    handler?: (ctx: Context) => Promise<void> | void
-  ) {
-    this.logger.debug(`Add pattern: ${pattern}`);
-    handlers.push({ pattern, handler });
-    return this;
-  };
+  })
+    .extend("close", async () => {
+      await closeServer(this.server);
+      this.logger.info("Server shutdown success");
+    })
+    .extend(
+      "register",
+      (pattern: string, handler?: (ctx: Context) => Promise<void> | void) => {
+        this.logger.debug(`Add pattern: ${pattern}`);
+        handlers.push({ pattern, handler });
+        return this;
+      }
+    );
 
   this.server.on("listening", () => {
     logAddress(this.server, this.logger, "localhost");

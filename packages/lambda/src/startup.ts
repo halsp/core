@@ -13,7 +13,7 @@ declare module "@halsp/core" {
 }
 
 Startup.prototype.useLambda = function () {
-  this.run = async function (event: Dict, context: Dict) {
+  return this.extend("run", async (event: Dict, context: Dict) => {
     const ctx = new Context();
     defineCtxProperty(ctx, event, context);
     ctx.req
@@ -32,9 +32,7 @@ Startup.prototype.useLambda = function () {
 
     await this.useHttp()["invoke"](ctx);
     return await getStruct(ctx);
-  };
-
-  return this.useHttp();
+  }).useHttp();
 };
 
 function defineCtxProperty(ctx: Context, event: Dict, context: Dict) {

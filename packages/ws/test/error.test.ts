@@ -156,11 +156,13 @@ describe("error", () => {
 
         const close = webSocket.Server.prototype.close;
         webSocket.Server.prototype.close = function (cb: any) {
-          close.bind(this)();
-          cb(new Error("err"));
+          setTimeout(() => {
+            close.bind(this)();
+            cb(new Error("err"));
+          });
         };
         try {
-          await ctx.startup.closeWebSocket();
+          await ctx.startup.close();
         } finally {
           webSocket.Server.prototype.close = close;
         }

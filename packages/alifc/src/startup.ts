@@ -13,56 +13,57 @@ declare module "@halsp/core" {
 }
 
 Startup.prototype.useAlifc = function () {
-  this.run = async function (aliReq: AliReq, aliRes: AliRes, aliContext: any) {
-    const ctx = new Context();
-    ctx.req
-      .setPath(aliReq.path)
-      .setHeaders(aliReq.headers)
-      .setQuery(aliReq.queries)
-      .setMethod(aliReq.method);
+  return this.extend(
+    "run",
+    async (aliReq: AliReq, aliRes: AliRes, aliContext: any) => {
+      const ctx = new Context();
+      ctx.req
+        .setPath(aliReq.path)
+        .setHeaders(aliReq.headers)
+        .setQuery(aliReq.queries)
+        .setMethod(aliReq.method);
 
-    Object.defineProperty(ctx, "aliContext", {
-      configurable: true,
-      enumerable: true,
-      get: () => aliContext,
-    });
-    Object.defineProperty(ctx, "aliReq", {
-      configurable: true,
-      enumerable: true,
-      get: () => aliReq,
-    });
-    Object.defineProperty(ctx, "reqStream", {
-      configurable: true,
-      enumerable: true,
-      get: () => aliReq,
-    });
-    Object.defineProperty(ctx.req, "aliReq", {
-      configurable: true,
-      enumerable: true,
-      get: () => aliReq,
-    });
-    Object.defineProperty(ctx, "aliRes", {
-      configurable: true,
-      enumerable: true,
-      get: () => aliRes,
-    });
-    Object.defineProperty(ctx.res, "aliRes", {
-      configurable: true,
-      enumerable: true,
-      get: () => aliRes,
-    });
-
-    const halspRes = await this["invoke"](ctx);
-    aliRes.statusCode = halspRes.status;
-    Object.keys(halspRes.headers)
-      .filter((key) => !!halspRes.headers[key])
-      .forEach((key) => {
-        aliRes.setHeader(key, halspRes.headers[key] as string);
+      Object.defineProperty(ctx, "aliContext", {
+        configurable: true,
+        enumerable: true,
+        get: () => aliContext,
       });
-    await writeBody(halspRes, aliRes);
-  };
+      Object.defineProperty(ctx, "aliReq", {
+        configurable: true,
+        enumerable: true,
+        get: () => aliReq,
+      });
+      Object.defineProperty(ctx, "reqStream", {
+        configurable: true,
+        enumerable: true,
+        get: () => aliReq,
+      });
+      Object.defineProperty(ctx.req, "aliReq", {
+        configurable: true,
+        enumerable: true,
+        get: () => aliReq,
+      });
+      Object.defineProperty(ctx, "aliRes", {
+        configurable: true,
+        enumerable: true,
+        get: () => aliRes,
+      });
+      Object.defineProperty(ctx.res, "aliRes", {
+        configurable: true,
+        enumerable: true,
+        get: () => aliRes,
+      });
 
-  return this.useHttp();
+      const halspRes = await this["invoke"](ctx);
+      aliRes.statusCode = halspRes.status;
+      Object.keys(halspRes.headers)
+        .filter((key) => !!halspRes.headers[key])
+        .forEach((key) => {
+          aliRes.setHeader(key, halspRes.headers[key] as string);
+        });
+      await writeBody(halspRes, aliRes);
+    }
+  ).useHttp();
 };
 
 async function writeBody(halspRes: Response, aliRes: AliRes) {

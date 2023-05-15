@@ -20,7 +20,6 @@ describe("startup", () => {
           expect(data).toBe("abc");
           ws.send(data);
           ws.close();
-          await ctx.startup.closeWebSocket();
           await ctx.startup.close();
         };
       })
@@ -55,7 +54,6 @@ describe("startup", () => {
         expect(ws).toBe(await ctx.tryAcceptWebSocket());
 
         ws.close();
-        await ctx.startup.closeWebSocket();
         await ctx.startup.close();
       })
       .listen();
@@ -75,7 +73,6 @@ describe("startup", () => {
       .use(async (ctx) => {
         const ws = await ctx.acceptWebSocket();
         ws.close();
-        await ctx.startup.closeWebSocket();
         await ctx.startup.close();
       })
       .listen();
@@ -98,7 +95,6 @@ describe("startup", () => {
         expect(ctx.webSocketClients.size).toBe(1);
 
         ws.close();
-        await ctx.startup.closeWebSocket();
         await ctx.startup.close();
       })
       .listen();
@@ -123,7 +119,6 @@ describe("decorator", () => {
         expect(this.ws1).toBe(await this.ctx.acceptWebSocket());
 
         this.ws1.close();
-        await this.ctx.startup.closeWebSocket();
         await this.ctx.startup.close();
       }
     }

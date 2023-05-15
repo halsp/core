@@ -44,8 +44,8 @@ function initStartup(this: Startup, options: MicroGrpcOptions) {
     handler?: (ctx: Context) => Promise<void> | void;
   }[] = [];
 
-  this.listen = async () => {
-    this.close();
+  this.extend("listen", async () => {
+    await close.call(this);
 
     const opt: MicroGrpcOptions = { ...options };
     opt.port = options.port ?? getHalspPort(5000);
@@ -91,49 +91,51 @@ function initStartup(this: Startup, options: MicroGrpcOptions) {
     this.logger.info(`Server started, listening port: ${bindPort}`);
 
     return server;
-  };
+  })
+    .extend("close", async () => {
+      await close.call(this);
+      this.logger.info("Server shutdown success");
+    })
+    .extend(
+      "register",
+      (pattern: string, handler?: (ctx: Context) => Promise<void> | void) => {
+        this.logger.debug(`Add pattern: ${pattern}`);
+        handlers.push({ pattern, handler });
+        return this;
+      }
+    );
+}
 
-  this.close = async () => {
-    if (!this.server) return;
-    const server = this.server;
+async function close(this: Startup) {
+  if (!this.server) return;
+  const server = this.server;
 
-    let shutdownTimeout = false;
-    await new Promise<void>((resolve) => {
-      const shutdownTimer = setTimeout(() => {
-        shutdownTimeout = true;
-        server.forceShutdown();
+  let shutdownTimeout = false;
+  await new Promise<void>((resolve) => {
+    const shutdownTimer = setTimeout(() => {
+      shutdownTimeout = true;
+      this.logger.error(
+        `Server shutdown timeout and will invoke force shutdown`
+      );
+      server.forceShutdown();
+      resolve();
+    }, 2000);
+
+    server.tryShutdown((err) => {
+      clearTimeout(shutdownTimer);
+      if (shutdownTimeout) return;
+
+      if (err) {
         this.logger.error(
-          `Server shutdown timeout and will invoke force shutdown`
+          `Server shutdown error and will invoke force shutdown, err = ${err.message}`
         );
+        server.forceShutdown();
         resolve();
-      }, 2000);
-
-      server.tryShutdown((err) => {
-        clearTimeout(shutdownTimer);
-        if (shutdownTimeout) return;
-
-        if (err) {
-          this.logger.error(
-            `Server shutdown error and will invoke force shutdown, err = ${err.message}`
-          );
-          server.forceShutdown();
-          resolve();
-        } else {
-          this.logger.info("Server shutdown success");
-          resolve();
-        }
-      });
+      } else {
+        resolve();
+      }
     });
-  };
-
-  this.register = (
-    pattern: string,
-    handler?: (ctx: Context) => Promise<void> | void
-  ) => {
-    this.logger.debug(`Add pattern: ${pattern}`);
-    handlers.push({ pattern, handler });
-    return this;
-  };
+  });
 }
 
 function addService(

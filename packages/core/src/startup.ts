@@ -1,3 +1,4 @@
+import { isPromise } from "util/types";
 import { Context, Request, Response } from "./context";
 import { BaseLogger, ILogger } from "./logger";
 import {
@@ -157,11 +158,33 @@ export class Startup {
 
   logger: ILogger = new BaseLogger();
 
-  public extend(name: string, fn: (...args: any[]) => any): this {
-    const beforeFn = this[name];
-    this[name] = (...args: any[]) => {
-      beforeFn && beforeFn.call(this, ...args);
-      return fn.call(this, ...args);
+  public extend<T extends keyof this>(name: T, fn: (typeof this)[T]): this {
+    const beforeFn = this[name] as any;
+    this[name as string] = (...args: any[]) => {
+      let beforeResult: any;
+      if (beforeFn) {
+        beforeResult = beforeFn.call(this, ...args);
+      }
+      let currentResult = (fn as any).call(this, ...args);
+
+      if (!isPromise(beforeResult) && !isPromise(currentResult)) {
+        return currentResult ?? beforeResult;
+      }
+
+      return new Promise(async (resolve, reject) => {
+        if (isPromise(beforeResult)) {
+          beforeResult = await beforeResult.catch((err) => {
+            reject(err);
+          });
+        }
+        if (isPromise(currentResult)) {
+          currentResult = await currentResult.catch((err) => {
+            reject(err);
+          });
+        }
+
+        resolve(currentResult ?? beforeResult);
+      });
     };
     return this;
   }

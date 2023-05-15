@@ -10,7 +10,8 @@ import {
   getHalspPort,
   closeServer,
 } from "@halsp/core";
-import type { NumericalHeadersDict } from "@halsp/http";
+import "@halsp/http";
+import { NumericalHeadersDict } from "@halsp/http";
 import qs from "qs";
 import { Stream } from "stream";
 import { NativeOptions } from "./options";
@@ -88,7 +89,9 @@ function initStartup(this: Startup, options?: NativeOptions) {
     get: () => server,
   });
 
-  this.listen = async function () {
+  this.extend("listen", async () => {
+    await closeServer(this.server);
+
     await new Promise<void>((resolve) => {
       this.server.listen(
         {
@@ -99,7 +102,7 @@ function initStartup(this: Startup, options?: NativeOptions) {
       );
     });
     return this.server;
-  };
+  });
 
   this.extend("close", async () => {
     await closeServer(this.server);

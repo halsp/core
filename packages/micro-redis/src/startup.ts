@@ -42,8 +42,8 @@ function initStartup(this: Startup, options?: MicroRedisOptions) {
     handler?: (ctx: Context) => Promise<void> | void;
   }[] = [];
 
-  this.listen = async () => {
-    await this.close();
+  this.extend("listen", async () => {
+    await close.call(this);
 
     const opt: MicroRedisOptions = { ...options };
     if (!("url" in opt)) {
@@ -74,27 +74,29 @@ function initStartup(this: Startup, options?: MicroRedisOptions) {
       sub: this.sub,
       pub: this.pub,
     };
-  };
+  })
+    .extend("close", async () => {
+      await close.call(this);
 
-  this.close = async () => {
-    if (this.pub?.isOpen) {
-      await this.pub.quit();
-    }
-    if (this.sub?.isOpen) {
-      await this.sub.quit();
-    }
+      this.logger.info("Server shutdown success");
+    })
+    .extend(
+      "register",
+      (pattern: string, handler?: (ctx: Context) => Promise<void> | void) => {
+        this.logger.debug(`Add pattern: ${pattern}`);
+        handlers.push({ pattern, handler });
+        return register.bind(this)(pattern, handler);
+      }
+    );
+}
 
-    this.logger.info("Server shutdown success");
-  };
-
-  this.register = (
-    pattern: string,
-    handler?: (ctx: Context) => Promise<void> | void
-  ) => {
-    this.logger.debug(`Add pattern: ${pattern}`);
-    handlers.push({ pattern, handler });
-    return register.bind(this)(pattern, handler);
-  };
+async function close(this: Startup) {
+  if (this.pub?.isOpen) {
+    await this.pub.quit();
+  }
+  if (this.sub?.isOpen) {
+    await this.sub.quit();
+  }
 }
 
 function register(

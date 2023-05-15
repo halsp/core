@@ -40,8 +40,17 @@ function initStartup(this: Startup, options: MicroMqttOptions = {}) {
   }[] = [];
 
   let connectResolve: ((err: void) => void) | undefined = undefined;
-  this.listen = async () => {
-    await this.close();
+  const closeInner = async () => {
+    if (connectResolve) {
+      connectResolve();
+      connectResolve = undefined;
+    }
+
+    await close.call(this);
+  };
+
+  this.extend("listen", async () => {
+    await closeInner();
 
     const opt: MicroMqttOptions = { ...options };
     if (!("servers" in options) && !("port" in options)) {
@@ -109,65 +118,60 @@ function initStartup(this: Startup, options: MicroMqttOptions = {}) {
 
     this.logger.info(`Server started, listening port: ${opt.port}`);
     return client;
-  };
+  })
+    .extend("close", async () => {
+      await closeInner();
+      this.logger.info("Server shutdown success");
+    })
+    .extend(
+      "register",
+      (pattern: string, handler?: (ctx: Context) => Promise<void> | void) => {
+        this.logger.debug(`Add pattern: ${pattern}`);
+        handlers.push({ pattern, handler });
+        return register.bind(this)(pattern, options);
+      }
+    );
+}
 
-  this.close = async () => {
-    if (connectResolve) {
-      connectResolve();
-      connectResolve = undefined;
-    }
+async function close(this: Startup) {
+  if (!this.client) return;
+  const client = this.client;
+  client.removeAllListeners();
 
-    if (!this.client) return;
-    const client = this.client;
-    client.removeAllListeners();
-
-    let shutdownTimeout = false;
-    await new Promise<void>((resolve, reject) => {
-      const forceShutdown = () => {
-        client.end(true, {}, (err) => {
-          if (err) {
-            reject(err);
-          } else {
-            this.logger.info("Server shutdown success");
-            resolve();
-          }
-        });
-      };
-
-      const shutdownTimer = setTimeout(() => {
-        shutdownTimeout = true;
-        this.logger.error(
-          `Server shutdown timeout and will invoke force shutdown`
-        );
-        forceShutdown();
-      }, 2000);
-
-      client.end(false, {}, (err) => {
-        clearTimeout(shutdownTimer);
-        if (shutdownTimeout) return;
-
+  let shutdownTimeout = false;
+  await new Promise<void>((resolve, reject) => {
+    const forceShutdown = () => {
+      client.end(true, {}, (err) => {
         if (err) {
-          this.logger.error(
-            `Server shutdown error and will invoke force shutdown, err = ${err.message}`
-          );
-          forceShutdown();
-          resolve();
+          reject(err);
         } else {
-          this.logger.info("Server shutdown success");
           resolve();
         }
       });
-    });
-  };
+    };
 
-  this.register = (
-    pattern: string,
-    handler?: (ctx: Context) => Promise<void> | void
-  ) => {
-    this.logger.debug(`Add pattern: ${pattern}`);
-    handlers.push({ pattern, handler });
-    return register.bind(this)(pattern, options);
-  };
+    const shutdownTimer = setTimeout(() => {
+      shutdownTimeout = true;
+      this.logger.error(
+        `Server shutdown timeout and will invoke force shutdown`
+      );
+      forceShutdown();
+    }, 2000);
+
+    client.end(false, {}, (err) => {
+      clearTimeout(shutdownTimer);
+      if (shutdownTimeout) return;
+
+      if (err) {
+        this.logger.error(
+          `Server shutdown error and will invoke force shutdown, err = ${err.message}`
+        );
+        forceShutdown();
+      } else {
+        resolve();
+      }
+    });
+  });
 }
 
 function register(this: Startup, pattern: string, options: MicroMqttOptions) {
