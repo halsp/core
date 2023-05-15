@@ -48,6 +48,7 @@ test("parse json error", async () => {
 test("parse json error default", async () => {
   let invoke = false;
   const server = new Startup()
+    .useHttp()
     .use(async (ctx, next) => {
       await next();
       expect(ctx.res.body).toEqual({

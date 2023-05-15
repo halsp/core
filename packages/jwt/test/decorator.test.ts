@@ -56,8 +56,12 @@ test("decorator", async function () {
 });
 
 function testGetToken(skip: boolean) {
-  test("tokenProvider option", async function () {
-    const startup = new Startup()
+  test("tokenProvider option", async () => {
+    await new Startup()
+      .keepThrow()
+      .expectError((err) => {
+        expect(!!err).toBe(!skip);
+      })
       .setContext(
         await createTestContext({
           secret: "secret",
@@ -68,15 +72,8 @@ function testGetToken(skip: boolean) {
         tokenProvider: () => "test",
       })
       .useJwtVerify(() => skip)
-      .add(TestMiddleware);
-
-    let error = false;
-    try {
-      await startup.test();
-    } catch {
-      error = true;
-    }
-    expect(error).toBe(!skip);
+      .add(TestMiddleware)
+      .test();
   });
 }
 

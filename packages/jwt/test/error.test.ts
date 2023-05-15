@@ -1,63 +1,56 @@
 import "@halsp/testing";
 import { createTestContext } from "./utils";
 import "../src";
-import { Context, Startup } from "@halsp/core";
+import { Startup } from "@halsp/core";
 
-function testErrorSecret(isError: boolean) {
-  function runTest(customError: boolean) {
-    test(`error secret ${isError} ${customError}`, async function () {
-      process.env.HALSP_ENV = "http";
-      const startup = new Startup()
-        .setContext(
-          await createTestContext({
-            secret: isError ? "secret1" : "secret",
-          })
-        )
-        .useJwt({
-          secret: "secret",
+describe("error", () => {
+  it("should throw error when secret is error", async () => {
+    process.env.HALSP_ENV = "http";
+    const { ctx } = await new Startup()
+      .keepThrow()
+      .expectError((err) => {
+        expect(!!err).toBeTruthy();
+      })
+      .setContext(
+        await createTestContext({
+          secret: "secret1",
         })
-        .useJwtVerify(
-          undefined,
-          customError
-            ? (ctx, err) => {
-                ctx.set("result", err.message);
-              }
-            : undefined
-        )
-        .use((ctx) => {
-          ctx.set("result", true);
-        });
+      )
+      .useJwt({
+        secret: "secret",
+      })
+      .useJwtVerify()
+      .use((ctx) => {
+        ctx.set("result", true);
+      })
+      .test();
 
-      let ctx: Context | undefined;
-      let error = false;
-      try {
-        const res = await startup.test();
-        ctx = res.ctx;
-      } catch (err) {
-        console.log(err);
-        error = true;
-      }
+    expect(ctx.get("result")).toBeUndefined();
+  });
 
-      if (isError && !customError) {
-        expect(error).toBeTruthy();
-      } else {
-        expect(error).toBeFalsy();
-        if (!ctx) throw new Error();
+  it("should throw error with customError", async () => {
+    process.env.HALSP_ENV = "http";
+    const { ctx } = await new Startup()
+      .keepThrow()
+      .expectError((err) => {
+        expect(!!err).toBeFalsy();
+      })
+      .setContext(
+        await createTestContext({
+          secret: "secret1",
+        })
+      )
+      .useJwt({
+        secret: "secret",
+      })
+      .useJwtVerify(undefined, (ctx, err) => {
+        ctx.set("result", err.message);
+      })
+      .use((ctx) => {
+        ctx.set("result", true);
+      })
+      .test();
 
-        if (!isError) {
-          expect(ctx.get("result")).toBeTruthy();
-        } else {
-          if (customError) {
-            expect(ctx.get("result")).toBe("invalid signature");
-          }
-        }
-      }
-    });
-  }
-
-  runTest(true);
-  runTest(false);
-}
-
-testErrorSecret(true);
-testErrorSecret(false);
+    expect(ctx.get("result")).toBe("invalid signature");
+  });
+});

@@ -81,7 +81,11 @@ describe("auth", () => {
 
   it("should throw error when use useJwtVerify without env", async () => {
     process.env.HALSP_ENV = "" as any;
-    const startup = new Startup()
+    await new Startup()
+      .keepThrow()
+      .expectError((err) => {
+        expect(!!err).toBeTruthy();
+      })
       .setContext(
         await createTestContext({
           secret: "secret",
@@ -90,15 +94,8 @@ describe("auth", () => {
       .useJwt({
         secret: "secret",
       })
-      .useJwtVerify();
-
-    let err = false;
-    try {
-      await startup.test();
-    } catch {
-      err = true;
-    }
-    expect(err).toBeTruthy();
+      .useJwtVerify()
+      .test();
   });
 
   it(`should auth failed when use useJwtVerify in micro`, async function () {
