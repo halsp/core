@@ -38,7 +38,7 @@
     "@halsp/core": "^1.1.1",
     "@halsp/http": "^1.1.1",
     "@halsp/methods": "^1.1.1",
-    "glob": "^10.2.1",
+    "glob": "^10.2.3",
     "mime": "^3.0.0"
   },
   "devDependencies": {

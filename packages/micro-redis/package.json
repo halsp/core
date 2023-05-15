@@ -41,7 +41,7 @@
     "@halsp/core": "^1.1.1",
     "@halsp/micro": "^1.1.1",
     "@halsp/micro-common": "^1.1.1",
-    "redis": "^4.6.5"
+    "redis": "^4.6.6"
   },
   "files": [
     "/dist/*",

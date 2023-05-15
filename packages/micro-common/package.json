@@ -37,7 +37,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "glob": "^10.2.1"
+    "glob": "^10.2.3"
   },
   "devDependencies": {
     "@types/glob": "^8.1.0"

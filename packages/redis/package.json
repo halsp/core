@@ -35,7 +35,7 @@
   "dependencies": {
     "@halsp/core": "^1.1.1",
     "@halsp/inject": "^1.1.1",
-    "redis": "^4.6.5",
+    "redis": "^4.6.6",
     "reflect-metadata": "^0.1.13"
   },
   "files": [
