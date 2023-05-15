@@ -103,10 +103,10 @@ describe("parse message", () => {
 
   it("should return error if length is error", async () => {
     const startup = new Startup().useMicroTcp({
-      port: 23337,
+      port: 23437,
     });
     await startup.listen();
-    const result = await sendData(23337, "3#{}");
+    const result = await sendData(23437, "3#{}");
     await startup.close();
 
     expect(result).toEqual({

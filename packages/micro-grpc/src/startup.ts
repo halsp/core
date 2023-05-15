@@ -14,7 +14,6 @@ import { handleMessage } from "@halsp/micro";
 declare module "@halsp/core" {
   interface Startup {
     useMicroGrpc(options?: MicroGrpcOptions): this;
-    get server(): grpc.Server;
 
     listen(): Promise<grpc.Server>;
     close(): Promise<void>;
@@ -44,20 +43,15 @@ function initStartup(this: Startup, options: MicroGrpcOptions) {
     handler?: (ctx: Context) => Promise<void> | void;
   }[] = [];
 
+  let server: grpc.Server | undefined = undefined;
   this.extend("listen", async () => {
-    await close.call(this);
+    server = new grpc.Server();
+    await close.call(this, server);
 
     const opt: MicroGrpcOptions = { ...options };
     opt.port = options.port ?? getHalspPort(5000);
     opt.host = options.host ?? "0.0.0.0";
     const url = `${opt.host}:${opt.port}`;
-
-    const server = new grpc.Server();
-    Object.defineProperty(this, "server", {
-      configurable: true,
-      enumerable: true,
-      get: () => server,
-    });
 
     const packages = await loadPackages({
       protoFiles: opt.protoFiles,
@@ -69,12 +63,12 @@ function initStartup(this: Startup, options: MicroGrpcOptions) {
         .filter((item) => isClass(pkg[item]))
         .map((item) => pkg[item] as grpc.ServiceClientConstructor);
       for (const svc of services) {
-        addService.bind(this)(svc, handlers);
+        addService.bind(this)(server, svc, handlers);
       }
     }
 
     const bindPort = await new Promise<number>((resolve, reject) => {
-      server.bindAsync(
+      (server as grpc.Server).bindAsync(
         url,
         options.credentials ?? grpc.ServerCredentials.createInsecure(),
         (err, port) => {
@@ -93,7 +87,7 @@ function initStartup(this: Startup, options: MicroGrpcOptions) {
     return server;
   })
     .extend("close", async () => {
-      await close.call(this);
+      await close.call(this, server);
       this.logger.info("Server shutdown success");
     })
     .extend(
@@ -106,9 +100,8 @@ function initStartup(this: Startup, options: MicroGrpcOptions) {
     );
 }
 
-async function close(this: Startup) {
-  if (!this.server) return;
-  const server = this.server;
+async function close(this: Startup, server?: grpc.Server) {
+  if (!server) return;
 
   let shutdownTimeout = false;
   await new Promise<void>((resolve) => {
@@ -140,13 +133,13 @@ async function close(this: Startup) {
 
 function addService(
   this: Startup,
+  server: grpc.Server,
   svc: grpc.ServiceClientConstructor,
   handlers: {
     pattern: string;
     handler?: (ctx: Context) => Promise<void> | void;
   }[]
 ) {
-  const server = this.server as grpc.Server;
   const implementation: grpc.UntypedServiceImplementation = {};
   Object.keys(svc.prototype).forEach((item) => {
     const method = svc.prototype[item] as grpc.MethodDefinition<any, any>;

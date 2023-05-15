@@ -1,6 +1,5 @@
 import "../src";
 import { MicroMqttClient } from "@halsp/micro-mqtt-client";
-import * as mqtt from "mqtt";
 import { Startup } from "@halsp/core";
 
 describe("startup", () => {
@@ -68,8 +67,8 @@ describe("startup", () => {
       host: "127.0.0.1",
       port: 6002,
     });
-    await startup.listen();
-    startup["client"]?.subscribe("test_pattern_not_matched");
+    const server = await startup.listen();
+    server.subscribe("test_pattern_not_matched");
 
     const client = new MicroMqttClient({
       host: "127.0.0.1",
@@ -115,8 +114,8 @@ describe("error", () => {
       host: "127.0.0.1",
       port: 6002,
     });
-    await startup.listen();
-    startup["client"]?.emit("error", new Error("err"));
+    const server = await startup.listen();
+    server.emit("error", new Error("err"));
 
     await new Promise<void>((resolve) => {
       setTimeout(() => resolve(), 500);
@@ -129,9 +128,8 @@ describe("error", () => {
       host: "127.0.0.1",
       port: 6002,
     });
-    await startup.listen();
+    const client = await startup.listen();
 
-    const client = startup["client"] as mqtt.MqttClient;
     const end = client.end;
     client.end = (force: boolean, obj: any, cb: any) => {
       try {
@@ -164,10 +162,9 @@ describe("error", () => {
       host: "127.0.0.1",
       port: 6002,
     });
-    await startup.listen();
+    const client = await startup.listen();
 
     let forceShutdown = false;
-    const client = startup["client"] as mqtt.MqttClient;
     const end = client.end;
     client.end = (force: boolean, obj: any, cb: any) => {
       if (force) {

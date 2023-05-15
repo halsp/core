@@ -11,7 +11,7 @@ export class Manager {
     private readonly options: WsOptions,
     private readonly wss: ws.Server
   ) {
-    const server = ctx.startup["server"] as http.Server;
+    const server = ctx.startup["nativeServer"] as http.Server;
     if (server) {
       server.keepAliveTimeout = options.keepAliveTimeout ?? 1000 * 60 * 2;
     }

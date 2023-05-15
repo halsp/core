@@ -27,29 +27,39 @@ describe("startup", () => {
     expect(result).toBe("test_body");
   }, 20000);
 
-  function testPub(isPubUndefined: boolean) {
-    it(`should not publish when pub is undefined ${isPubUndefined}`, async () => {
+  function testPub(isPubClosed: boolean) {
+    it(`should not publish when pub is closed ${isPubClosed}`, async () => {
       let publishPattern = "";
       let subscribePattern = "";
       let subscribeCallback: any;
       const startup = new Startup().useMicroRedis({
         url: "redis://127.0.0.1:6003",
       });
-      await startup.listen();
+      const { sub, pub } = await startup.listen();
 
-      const sub = (startup as any).sub;
       const subscribe = sub.subscribe;
-      sub.subscribe = (pattern: string, callback: any, ...args: any[]) => {
+      (sub as any).subscribe = (
+        pattern: string,
+        callback: any,
+        ...args: any[]
+      ) => {
         subscribePattern = pattern;
         subscribeCallback = callback;
         return subscribe.bind(sub)(pattern, callback, ...args);
       };
 
-      const pub = (startup as any).pub;
-      const publish = pub.publish;
-      pub.publish = (pattern: string, ...args: any[]) => {
+      const publish = pub.publish as any;
+      (pub as any).publish = async (pattern: string, ...args: any[]) => {
         publishPattern = pattern;
-        return publish.bind(pub)(pattern, ...args);
+
+        let error: any;
+        try {
+          return await publish.call(pub, pattern, ...args);
+        } catch (err) {
+          error = err;
+        }
+        expect(!!error).toBe(isPubClosed);
+        return undefined;
       };
 
       startup.register("test_pattern");
@@ -60,13 +70,8 @@ describe("startup", () => {
         pattern: "pt",
       });
 
-      if (isPubUndefined) {
-        await startup.pub.disconnect();
-        Object.defineProperty(startup, "pub", {
-          configurable: true,
-          enumerable: true,
-          get: () => undefined,
-        });
+      if (isPubClosed) {
+        await pub.disconnect();
       }
       await subscribeCallback(Buffer.from(str));
 
@@ -75,7 +80,7 @@ describe("startup", () => {
       });
       await startup.close();
       expect(subscribePattern).toBe("test_pattern");
-      expect(publishPattern).toBe(isPubUndefined ? "" : "test_pattern.123");
+      expect(publishPattern).toBe("test_pattern.123");
     });
   }
 

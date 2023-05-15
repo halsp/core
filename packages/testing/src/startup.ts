@@ -78,7 +78,7 @@ Startup.prototype.nativeTest = function () {
 
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   const supertest = require("supertest");
-  return supertest(this["server"]);
+  return supertest(this["nativeServer"]);
 };
 
 function initSupertest(ctx: Context) {

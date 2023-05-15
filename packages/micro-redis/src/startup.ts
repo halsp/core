@@ -8,8 +8,6 @@ import { handleMessage } from "@halsp/micro";
 declare module "@halsp/core" {
   interface Startup {
     useMicroRedis(options?: MicroRedisOptions): this;
-    get pub(): redis.RedisClientType;
-    get sub(): redis.RedisClientType;
 
     listen(): Promise<{
       pub: redis.RedisClientType;
@@ -42,8 +40,10 @@ function initStartup(this: Startup, options?: MicroRedisOptions) {
     handler?: (ctx: Context) => Promise<void> | void;
   }[] = [];
 
+  let sub: redis.RedisClientType | undefined = undefined;
+  let pub: redis.RedisClientType | undefined = undefined;
   this.extend("listen", async () => {
-    await close.call(this);
+    await close.call(this, sub, pub);
 
     const opt: MicroRedisOptions = { ...options };
     if (!("url" in opt)) {
@@ -51,32 +51,19 @@ function initStartup(this: Startup, options?: MicroRedisOptions) {
       opt.url = `redis://localhost:${port}`;
     }
 
-    const pub = redis.createClient(opt) as redis.RedisClientType;
-    const sub = redis.createClient(opt) as redis.RedisClientType;
-    Object.defineProperty(this, "pub", {
-      configurable: true,
-      enumerable: true,
-      get: () => pub,
-    });
-    Object.defineProperty(this, "sub", {
-      configurable: true,
-      enumerable: true,
-      get: () => sub,
-    });
-    await Promise.all([this.pub.connect(), this.sub.connect()]);
+    sub = redis.createClient(opt) as redis.RedisClientType;
+    pub = redis.createClient(opt) as redis.RedisClientType;
+    await Promise.all([pub.connect(), sub.connect()]);
 
     handlers.forEach((item) => {
-      register.bind(this)(item.pattern, item.handler);
+      register.bind(this)(item.pattern, item.handler, sub, pub);
     });
 
     this.logger.info(`Server started, listening url: ${opt.url}`);
-    return {
-      sub: this.sub,
-      pub: this.pub,
-    };
+    return { sub, pub };
   })
     .extend("close", async () => {
-      await close.call(this);
+      await close.call(this, sub, pub);
 
       this.logger.info("Server shutdown success");
     })
@@ -85,36 +72,39 @@ function initStartup(this: Startup, options?: MicroRedisOptions) {
       (pattern: string, handler?: (ctx: Context) => Promise<void> | void) => {
         this.logger.debug(`Add pattern: ${pattern}`);
         handlers.push({ pattern, handler });
-        return register.bind(this)(pattern, handler);
+        return register.bind(this)(pattern, handler, sub, pub);
       }
     );
 }
 
-async function close(this: Startup) {
-  if (this.pub?.isOpen) {
-    await this.pub.quit();
+async function close(
+  this: Startup,
+  sub?: redis.RedisClientType,
+  pub?: redis.RedisClientType
+) {
+  if (pub?.isOpen) {
+    await pub.quit();
   }
-  if (this.sub?.isOpen) {
-    await this.sub.quit();
+  if (sub?.isOpen) {
+    await sub.quit();
   }
 }
 
 function register(
   this: Startup,
   pattern: string,
-  handler?: (ctx: Context) => Promise<void> | void
+  handler?: (ctx: Context) => Promise<void> | void,
+  sub?: redis.RedisClientType,
+  pub?: redis.RedisClientType
 ) {
-  if (!this.sub) return this;
-  this.sub.subscribe(
+  if (!sub) return this;
+  sub.subscribe(
     pattern,
     async (buffer) => {
       handleMessage.bind(this)(
         parseJsonBuffer(buffer),
         async ({ result, req }) => {
-          await this.pub?.publish(
-            pattern + "." + req.id,
-            JSON.stringify(result)
-          );
+          await pub!.publish(pattern + "." + req.id, JSON.stringify(result));
         },
         handler
       );

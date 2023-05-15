@@ -170,4 +170,10 @@ describe("shutdown", () => {
 
     expect(!!server).toBeTruthy();
   });
+
+  it("should close right before listen", async () => {
+    process.env.HALSP_DEBUG_PORT = "50002";
+    const startup = new Startup().useMicroGrpc();
+    await startup.close();
+  });
 });

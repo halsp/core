@@ -8,7 +8,6 @@ import { ServerPacket } from "@halsp/micro-common";
 declare module "@halsp/core" {
   interface Startup {
     useMicroNats(options?: MicroNatsOptions): this;
-    get connection(): nats.NatsConnection;
 
     listen(): Promise<nats.NatsConnection>;
     close(): Promise<void>;
@@ -39,30 +38,26 @@ function initStartup(this: Startup, options: MicroNatsOptions = {}) {
     handler?: (ctx: Context) => Promise<void> | void;
   }[] = [];
 
+  let connection: nats.NatsConnection | undefined = undefined;
   this.extend("listen", async () => {
-    await close.call(this);
+    await close.call(this, connection);
 
     const opt: MicroNatsOptions = { ...options };
     if (!("servers" in options) && !("port" in options)) {
       opt.port = getHalspPort(4222);
     }
 
-    const connection = await nats.connect(opt);
-    Object.defineProperty(this, "connection", {
-      configurable: true,
-      enumerable: true,
-      get: () => connection,
-    });
+    connection = await nats.connect(opt);
 
     handlers.forEach((item) => {
-      register.bind(this)(item.pattern, item.handler);
+      register.bind(this)(item.pattern, item.handler, connection);
     });
 
     this.logger.info(`Server started, listening port: ${opt.port}`);
-    return this.connection;
+    return connection;
   })
     .extend("close", async () => {
-      await close.call(this);
+      await close.call(this, connection);
       this.logger.info("Server shutdown success");
     })
     .extend(
@@ -70,25 +65,26 @@ function initStartup(this: Startup, options: MicroNatsOptions = {}) {
       (pattern: string, handler?: (ctx: Context) => Promise<void> | void) => {
         this.logger.debug(`Add pattern: ${pattern}`);
         handlers.push({ pattern, handler });
-        return register.bind(this)(pattern, handler);
+        return register.bind(this)(pattern, handler, connection);
       }
     );
 }
 
-async function close(this: Startup) {
-  if (this.connection && !this.connection.isClosed()) {
-    await this.connection.close();
+async function close(this: Startup, connection?: nats.NatsConnection) {
+  if (connection && !connection.isClosed()) {
+    await connection.close();
   }
 }
 
 function register(
   this: Startup,
   pattern: string,
-  handler?: (ctx: Context) => Promise<void> | void
+  handler?: (ctx: Context) => Promise<void> | void,
+  connection?: nats.NatsConnection
 ) {
-  if (!this.connection) return this;
+  if (!connection) return this;
 
-  this.connection.subscribe(pattern, {
+  connection.subscribe(pattern, {
     callback: (err, msg) => {
       if (err) {
         this.logger.error(err);

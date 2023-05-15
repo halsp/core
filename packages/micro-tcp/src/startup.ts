@@ -14,7 +14,6 @@ import { handleMessage } from "@halsp/micro";
 declare module "@halsp/core" {
   interface Startup {
     useMicroTcp(options?: MicroTcpOptions): this;
-    get server(): net.Server;
 
     listen(): Promise<net.Server>;
     close(): Promise<void>;
@@ -52,22 +51,17 @@ function initStartup(this: Startup, options?: MicroTcpOptions) {
   } else {
     server = net.createServer(listener);
   }
-  Object.defineProperty(this, "server", {
-    configurable: true,
-    enumerable: true,
-    get: () => server,
-  });
 
   this.extend("listen", async () => {
-    await closeServer(this.server);
+    await closeServer(server);
 
     if (options?.handle) {
       await new Promise<void>((resolve) => {
-        return this.server.listen(options.handle, () => resolve());
+        return server.listen(options.handle, () => resolve());
       });
     } else {
       await new Promise<void>((resolve) => {
-        return this.server.listen(
+        return server.listen(
           {
             ...options,
             port: getHalspPort(options?.port ?? 2333),
@@ -76,10 +70,10 @@ function initStartup(this: Startup, options?: MicroTcpOptions) {
         );
       });
     }
-    return this.server;
+    return server;
   })
     .extend("close", async () => {
-      await closeServer(this.server);
+      await closeServer(server);
       this.logger.info("Server shutdown success");
     })
     .extend(
@@ -91,8 +85,8 @@ function initStartup(this: Startup, options?: MicroTcpOptions) {
       }
     );
 
-  this.server.on("listening", () => {
-    logAddress(this.server, this.logger, "localhost");
+  server.on("listening", () => {
+    logAddress(server, this.logger, "localhost");
   });
 }
 

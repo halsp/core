@@ -13,9 +13,8 @@ describe("headers", () => {
       .use((ctx) => {
         reqHeaders = ctx.req.headers;
       });
-    await startup.listen();
+    const connection = await startup.listen();
 
-    const connection = (startup as any).connection;
     const subscribe = connection.subscribe;
     connection.subscribe = (pattern: string, opts: any) => {
       subscribePattern = pattern;
@@ -59,9 +58,8 @@ describe("headers", () => {
       .use((ctx) => {
         ctx.res.headers["h"] = "1";
       });
-    await startup.listen();
+    const connection = await startup.listen();
 
-    const connection = (startup as any).connection;
     const subscribe = connection.subscribe;
     connection.subscribe = (pattern: string, opts: any) => {
       subscribePattern = pattern;

@@ -58,7 +58,7 @@ describe("write end", () => {
   });
 
   test("should not set header after writeHead called", async () => {
-    const server = await new Startup()
+    const startup = new Startup()
       .useNative()
       .use(async (ctx, next) => {
         ctx.resStream.writeHead(200);
@@ -66,8 +66,9 @@ describe("write end", () => {
       })
       .use(async (ctx) => {
         ctx.res.setHeader("h1", "1");
-      })
-      .listen();
+      });
+    await startup.listen();
+    const server = startup["nativeServer"];
     const res = await request(server).get("");
     server.close();
 

@@ -21,7 +21,6 @@ type ServerType = http.Server | https.Server;
 declare module "@halsp/core" {
   interface Startup {
     useNative(options?: NativeOptions): this;
-    get server(): ServerType;
 
     listen(): Promise<ServerType>;
     close(): Promise<void>;
@@ -83,17 +82,17 @@ function initStartup(this: Startup, options?: NativeOptions) {
   } else {
     server = http.createServer(listener);
   }
-  Object.defineProperty(this, "server", {
+  Object.defineProperty(this, "nativeServer", {
     configurable: true,
     enumerable: true,
     get: () => server,
   });
 
   this.extend("listen", async () => {
-    await closeServer(this.server);
+    await closeServer(server);
 
     await new Promise<void>((resolve) => {
-      this.server.listen(
+      server.listen(
         {
           ...options,
           port: getHalspPort(options?.port),
@@ -101,16 +100,16 @@ function initStartup(this: Startup, options?: NativeOptions) {
         () => resolve()
       );
     });
-    return this.server;
+    return server;
   });
 
   this.extend("close", async () => {
-    await closeServer(this.server);
+    await closeServer(server);
     this.logger.info("Server shutdown success");
   });
 
-  this.server.on("listening", () => {
-    logAddress(this.server, this.logger, "http://localhost");
+  server.on("listening", () => {
+    logAddress(server, this.logger, "http://localhost");
   });
 }
 

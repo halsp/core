@@ -8,9 +8,8 @@ describe("error", () => {
     const startup = new Startup().useMicroNats({
       port: 6001,
     });
-    await startup.listen();
+    const connection = await startup.listen();
 
-    const connection = (startup as any).connection;
     const subscribe = connection.subscribe;
     connection.subscribe = (pattern: string, opts: any) => {
       subscribePattern = pattern;
