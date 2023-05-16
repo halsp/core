@@ -1,13 +1,11 @@
 import { Server, AddressInfo } from "net";
-import { dynamicListen, closeServer, logAddress, getHalspPort } from "../src";
+import { closeServer, logAddress, getHalspPort } from "../src";
 
-describe("dynamic listen", () => {
-  it("should dynamic with default port", async () => {
+describe("close", () => {
+  it("should close server", async () => {
     const server = new Server();
-    const port = await dynamicListen(server);
+    server.listen();
     await closeServer(server);
-
-    expect(!!port).toBeTruthy();
   });
 
   it("should close without listen", async () => {
@@ -15,46 +13,9 @@ describe("dynamic listen", () => {
     await closeServer(server);
   });
 
-  it("should find next port to listen", async () => {
-    const port = 23441;
-    const server1 = new Server();
-    const port1 = await dynamicListen(server1, port);
-
-    const server2 = new Server();
-    const port2 = await dynamicListen(server2, port);
-
-    await closeServer(server1);
-    await closeServer(server2);
-
-    expect(port1).toBe(port);
-    expect(port2).toBe(port + 1);
-  });
-
-  it("should ignore error after listen success", async () => {
+  it("should throw error when close failed", async () => {
     const server = new Server();
-    const port = await dynamicListen(server);
-    server.emit("error", new Error("err"));
-
-    await closeServer(server);
-
-    expect(!!port).toBeTruthy();
-  });
-
-  it("should throw error with error host", async () => {
-    const server = new Server();
-    let error: any;
-    try {
-      await dynamicListen(server, 80, "halsp.org");
-    } catch (err) {
-      error = err;
-    }
-
-    expect(error.code).toBe("EADDRNOTAVAIL");
-  });
-
-  it("should throw error with close failed", async () => {
-    const server = new Server();
-    await dynamicListen(server);
+    server.listen();
     const close = server.close;
     server.close = (cb: (err?: Error | undefined) => void) => {
       close.bind(server)();

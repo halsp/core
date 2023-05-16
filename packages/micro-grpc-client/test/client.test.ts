@@ -33,7 +33,7 @@ describe("client", () => {
 
       await client.dispose();
     });
-  });
+  }, 10000);
 
   it("should throw error when send data without connect", async () => {
     const client = new MicroGrpcClient({

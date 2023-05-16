@@ -1,8 +1,10 @@
-import { NativeStartup } from "@halsp/native";
+import "@halsp/native";
+import "@halsp/body";
 import chalk from "chalk";
 import "../src";
 import "@halsp/router";
 import { TEST_ACTION_DIR } from "@halsp/router/dist/constant";
+import { Startup } from "@halsp/core";
 
 async function bootstrap() {
   // const startup = new NativeStartup()
@@ -12,7 +14,10 @@ async function bootstrap() {
   //     dir: "test-http/actions",
   //   });
 
-  const startup = new NativeStartup()
+  const startup = new Startup()
+    .useNative({
+      port: 2333,
+    })
     .useHttpJsonBody()
     .useSwagger({
       path: "",
@@ -20,9 +25,8 @@ async function bootstrap() {
     .useRouter();
   startup[TEST_ACTION_DIR] = "test/parser";
 
-  const result = await startup.dynamicListen(2333);
-  console.log(chalk.blue(`start: http://localhost:${result.port}`));
-  return result;
+  await startup.listen();
+  console.log(chalk.blue(`start: http://localhost:${2333}`));
 }
 
 bootstrap();

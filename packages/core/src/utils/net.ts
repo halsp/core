@@ -12,41 +12,6 @@ export function getHalspPort(port?: number) {
   }
 }
 
-export async function dynamicListen(
-  server: net.Server,
-  port?: number,
-  ...args: any[]
-) {
-  function tryListen(port: number) {
-    return new Promise<number>((resolve, reject) => {
-      let error = false;
-      let listen = false;
-      server.listen(port, ...args);
-      server.once("listening", () => {
-        listen = true;
-        if (error) return;
-
-        resolve(port as number);
-      });
-      server.once("error", (err) => {
-        error = true;
-        if (listen) return;
-
-        server.close();
-        if ((err as any).code == "EADDRINUSE") {
-          tryListen(port + 1).then((svr) => {
-            resolve(svr);
-          });
-        } else {
-          reject(err);
-        }
-      });
-    });
-  }
-
-  return await tryListen(getHalspPort(port) ?? 9504);
-}
-
 export function logAddress(
   server: net.Server,
   logger: ILogger,

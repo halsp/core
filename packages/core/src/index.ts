@@ -20,7 +20,6 @@ export {
   isCliAssetExist,
   getCliAssets,
   tryAddCliAssets,
-  dynamicListen,
   closeServer,
   logAddress,
   getHalspPort,
