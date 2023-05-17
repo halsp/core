@@ -1,4 +1,5 @@
 import {
+  JwtOptions,
   JwtSecretRequestType,
   JwtSignOptions,
   JwtVerifyOptions,
@@ -13,7 +14,7 @@ export class JwtService {
   private readonly ctx!: Context;
 
   get #options() {
-    return this.ctx[OPTIONS];
+    return this.ctx.get<JwtOptions>(OPTIONS)!;
   }
 
   sign(

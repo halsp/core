@@ -14,7 +14,6 @@ import {
   DEFAULT_ACTION_DIR,
   PARSER_USED,
   TEST_ACTION_DIR,
-  USED,
 } from "./constant";
 import * as fs from "fs";
 import { BlankMiddleware } from "./blank.middleware";
@@ -63,11 +62,10 @@ declare module "@halsp/core" {
   }
 }
 
+const usedMap = new WeakMap<Startup, boolean>();
 Startup.prototype.useRouter = function (options?: RouterOptions) {
-  if (this[USED]) {
-    return this;
-  }
-  this[USED] = true;
+  if (usedMap.get(this)) return this;
+  usedMap.set(this, true);
 
   return this.useRouterParser(options).add((ctx) => {
     if (!ctx.actionMetadata) {

@@ -5,6 +5,5 @@ export const SCOPED_BAG = "@halsp/inject/scopedBag";
 export const TRANSIENT_BAG = "@halsp/inject/transientBag";
 export const SINGLETON_BAG = "@halsp/inject/singletonBag";
 export const MAP_BAG = "@halsp/inject/mapBag";
-export const USED = "@halsp/inject/used";
 export const INITIALIZING_EXECUTED = "@halsp/inject/initializingExecuted";
 export const INITIALIZED_EXECUTED = "@halsp/inject/initializdExecuted";

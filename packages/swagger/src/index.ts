@@ -2,7 +2,6 @@ import "@halsp/router";
 import "@halsp/static";
 import "@halsp/http";
 import { normalizePath, Startup } from "@halsp/core";
-import { USED } from "./constant";
 import { SwaggerOptions } from "./options";
 import "./validator.decorator";
 import { SwaggerMiddlware } from "./swagger.middleware";
@@ -18,11 +17,10 @@ declare module "@halsp/core" {
   }
 }
 
+const usedMap = new WeakMap<Startup, boolean>();
 Startup.prototype.useSwagger = function (options: SwaggerOptions = {}) {
-  if (!!this[USED]) {
-    return this;
-  }
-  this[USED] = true;
+  if (usedMap.get(this)) return this;
+  usedMap.set(this, true);
 
   const opt = {
     ...options,

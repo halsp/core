@@ -8,7 +8,6 @@ import {
   Startup,
 } from "@halsp/core";
 import { ClientPacket, ServerPacket } from "@halsp/micro-common";
-import { USED } from "./constant";
 import { MicroException } from "./exception";
 
 declare module "@halsp/core" {
@@ -17,11 +16,10 @@ declare module "@halsp/core" {
   }
 }
 
+const usedMap = new WeakMap<Startup, boolean>();
 Startup.prototype.useMicro = function () {
-  if (this[USED]) {
-    return this;
-  }
-  this[USED] = true;
+  if (usedMap.get(this)) return this;
+  usedMap.set(this, true);
 
   process.env.HALSP_ENV = "micro";
 

@@ -2,7 +2,7 @@ import { Dict, Context, isObject, ReadonlyDict, Startup } from "@halsp/core";
 import "@halsp/http";
 import cookie from "cookie";
 import setCookieParser from "set-cookie-parser";
-import { REQUEST_HEADER_NAME, RESPONSE_HEADER_NAME, USED } from "./constant";
+import { REQUEST_HEADER_NAME, RESPONSE_HEADER_NAME } from "./constant";
 import { Options } from "./options";
 
 export type SetCookieValueWithArgs = {
@@ -39,11 +39,10 @@ declare module "@halsp/core" {
   }
 }
 
+const usedMap = new WeakMap<Startup, boolean>();
 Startup.prototype.useCookie = function (options: Options = {}) {
-  if (this[USED]) {
-    return this;
-  }
-  this[USED] = true;
+  if (usedMap.get(this)) return this;
+  usedMap.set(this, true);
 
   return this.use(async (ctx, next) => {
     let cookies: Dict<string> | undefined = undefined;

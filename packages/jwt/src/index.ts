@@ -1,6 +1,6 @@
 import "@halsp/inject";
 import { Startup, Context } from "@halsp/core";
-import { OPTIONS, USED } from "./constant";
+import { OPTIONS } from "./constant";
 import { JwtOptions } from "./jwt-options";
 import { JwtService } from "./jwt.service";
 import { parseInject } from "@halsp/inject";
@@ -76,16 +76,15 @@ Startup.prototype.useJwtExtraAuth = function (
   });
 };
 
+const usedMap = new WeakMap<Startup, boolean>();
 Startup.prototype.useJwt = function (options: JwtOptions) {
-  if (this[USED]) {
-    return this;
-  }
-  this[USED] = true;
+  if (usedMap.get(this)) return this;
+  usedMap.set(this, true);
 
   return this.useInject()
     .inject(JwtService)
     .use(async (ctx, next) => {
-      ctx[OPTIONS] = options;
+      ctx.set(OPTIONS, options);
 
       Object.defineProperty(ctx, "jwtToken", {
         configurable: false,

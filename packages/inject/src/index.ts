@@ -1,7 +1,7 @@
 import "@halsp/core";
 import { Startup, ObjectConstructor, Context, isFunction } from "@halsp/core";
 import { HookType } from "@halsp/core";
-import { USED, MAP_BAG, SINGLETON_BAG } from "./constant";
+import { MAP_BAG, SINGLETON_BAG } from "./constant";
 import { KeyTargetType, InjectMap } from "./interfaces";
 import {
   getTransientInstances,
@@ -49,11 +49,10 @@ declare module "@halsp/core" {
   }
 }
 
+const usedMap = new WeakMap<Startup, boolean>();
 Startup.prototype.useInject = function (): Startup {
-  if (this[USED]) {
-    return this;
-  }
-  this[USED] = true;
+  if (usedMap.get(this)) return this;
+  usedMap.set(this, true);
 
   const singletons = [];
   return this.use(async (ctx, next) => {
