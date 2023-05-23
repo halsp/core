@@ -18,6 +18,7 @@ it("key chain inject", async () => {
   }
 
   await new Startup()
+    .useInject()
     .inject("Test", TestService3)
     .use(async (ctx) => {
       const service3 = await parseInject<TestService3>(ctx, "Test");

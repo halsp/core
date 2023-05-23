@@ -12,7 +12,6 @@ import {
 import {
   CONFIG_FILE_NAME,
   DEFAULT_ACTION_DIR,
-  PARSER_USED,
   TEST_ACTION_DIR,
 } from "./constant";
 import * as fs from "fs";
@@ -76,11 +75,10 @@ Startup.prototype.useRouter = function (options?: RouterOptions) {
   });
 };
 
+const parserUsedMap = new WeakMap<Startup, boolean>();
 Startup.prototype.useRouterParser = function (options?: RouterOptions) {
-  if (this[PARSER_USED]) {
-    return this;
-  }
-  this[PARSER_USED] = true;
+  if (parserUsedMap.get(this)) return this;
+  parserUsedMap.set(this, true);
 
   const mapOptions = readMap();
   const opts: RouterOptionsMerged = {

@@ -47,7 +47,8 @@
     "swagger-ui-dist": "^4.18.3"
   },
   "devDependencies": {
-    "@types/swagger-ui-dist": "^3.30.1"
+    "@types/swagger-ui-dist": "^3.30.1",
+    "@halsp/testing": "^1.1.1"
   },
   "files": [
     "/dist/*",

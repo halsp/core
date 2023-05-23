@@ -38,7 +38,7 @@
   "dependencies": {
     "@halsp/core": "^1.1.1",
     "@halsp/http": "^1.1.1",
-    "qs": "^6.11.1"
+    "qs": "^6.11.2"
   },
   "devDependencies": {
     "@halsp/body": "^1.1.1",

@@ -40,7 +40,7 @@
     "@halsp/methods": "^1.1.1",
     "koa": "^2.14.2",
     "koa-compose": "^4.1.0",
-    "qs": "^6.11.1"
+    "qs": "^6.11.2"
   },
   "devDependencies": {
     "@koa/cors": "4.0.0",
