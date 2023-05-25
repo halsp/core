@@ -63,7 +63,6 @@ test("prase json", async function () {
 
   await new Startup()
     .useAlifc()
-    .useHttpJsonBody()
     .use((ctx) => {
       ctx.res.ok(ctx.req.body);
     })

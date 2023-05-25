@@ -1,4 +1,5 @@
 import "@halsp/http";
+import "@halsp/body";
 
 import { Context, isString, Response, Startup } from "@halsp/core";
 import { Stream } from "stream";
@@ -63,7 +64,9 @@ Startup.prototype.useAlifc = function () {
         });
       await writeBody(halspRes, aliRes);
     }
-  ).useHttp();
+  )
+    .useHttp()
+    .useHttpJsonBody();
 };
 
 async function writeBody(halspRes: Response, aliRes: AliRes) {
