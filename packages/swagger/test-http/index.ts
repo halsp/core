@@ -18,7 +18,6 @@ async function bootstrap() {
     .useNative({
       port: 2333,
     })
-    .useHttpJsonBody()
     .useSwagger({
       path: "",
     })

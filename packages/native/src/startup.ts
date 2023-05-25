@@ -11,6 +11,7 @@ import {
   closeServer,
 } from "@halsp/core";
 import "@halsp/http";
+import "@halsp/body";
 import { NumericalHeadersDict } from "@halsp/http";
 import qs from "qs";
 import { Stream } from "stream";
@@ -36,17 +37,19 @@ Startup.prototype.useNative = function (options?: NativeOptions) {
 
   initStartup.call(this, options);
 
-  return this.useHttp().use(async (ctx, next) => {
-    const pathname = (ctx.reqStream.url as string).split("?")[0];
-    const query = qs.parse((ctx.reqStream.url as string).split("?")[1]);
-    ctx.req
-      .setPath(pathname)
-      .setMethod(ctx.reqStream.method as string)
-      .setQuery(query as Dict<string>)
-      .setHeaders(ctx.reqStream.headers as NumericalHeadersDict);
-    ctx.resStream.statusCode = 404;
-    await next();
-  });
+  return this.useHttp()
+    .useHttpJsonBody()
+    .use(async (ctx, next) => {
+      const pathname = (ctx.reqStream.url as string).split("?")[0];
+      const query = qs.parse((ctx.reqStream.url as string).split("?")[1]);
+      ctx.req
+        .setPath(pathname)
+        .setMethod(ctx.reqStream.method as string)
+        .setQuery(query as Dict<string>)
+        .setHeaders(ctx.reqStream.headers as NumericalHeadersDict);
+      ctx.resStream.statusCode = 404;
+      await next();
+    });
 };
 
 async function requestListener(
