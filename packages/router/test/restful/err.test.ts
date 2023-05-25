@@ -2,7 +2,8 @@ import "../../src";
 import { HttpMethods } from "@halsp/methods";
 import { Request, Startup } from "@halsp/core";
 import "@halsp/testing";
-import "../utils-http";
+import "@halsp/http";
+import "../utils";
 
 test(`action name error`, async () => {
   const result = await new Startup()

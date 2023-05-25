@@ -1,6 +1,6 @@
 import "@halsp/testing";
 import "@halsp/micro-tcp";
-import "./utils-micro";
+import "./utils";
 import { MicroTcpClient } from "@halsp/micro-tcp-client";
 import { Startup } from "@halsp/core";
 
@@ -25,14 +25,14 @@ describe("micro-nats", () => {
 
   it("should match pattern with prefix", async () => {
     const startup = new Startup()
-      .useMicroTcp({ port: 23331 })
+      .useMicroTcp({ port: 23332 })
       .useTestRouter({
         prefix: "pf:",
       })
       .useRouter();
     await startup.listen();
 
-    const client = new MicroTcpClient({ port: 23331 });
+    const client = new MicroTcpClient({ port: 23332 });
     await client["connect"]();
 
     const result = await client.send("pf:event:123", true);

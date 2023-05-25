@@ -1,7 +1,8 @@
 import "../../src";
 import { HttpMethods } from "@halsp/methods";
 import "@halsp/testing";
-import "../utils-http";
+import "@halsp/http";
+import "../utils";
 import { Request, Startup } from "@halsp/core";
 
 const methods = ["test", "aaa", "NO"];

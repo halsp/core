@@ -45,7 +45,6 @@ export { postbuild } from "./postbuild";
 declare module "@halsp/core" {
   interface Startup {
     useRouter(options?: RouterOptions): this;
-    useRouterParser(options?: RouterOptions): this;
     get routerMap(): MapItem[];
     get routerOptions(): RouterInitedOptions;
   }
@@ -66,82 +65,8 @@ Startup.prototype.useRouter = function (options?: RouterOptions) {
   if (usedMap.get(this)) return this;
   usedMap.set(this, true);
 
-  return this.useRouterParser(options).add((ctx) => {
-    if (!ctx.actionMetadata) {
-      return BlankMiddleware;
-    } else {
-      return ctx.actionMetadata.getAction(ctx.routerOptions.dir);
-    }
-  });
-};
-
-const parserUsedMap = new WeakMap<Startup, boolean>();
-Startup.prototype.useRouterParser = function (options?: RouterOptions) {
-  if (parserUsedMap.get(this)) return this;
-  parserUsedMap.set(this, true);
-
-  const mapOptions = readMap();
-  const opts: RouterOptionsMerged = {
-    map: mapOptions?.map,
-    dir: this[TEST_ACTION_DIR] ?? mapOptions?.dir ?? DEFAULT_ACTION_DIR,
-    prefix: options?.prefix,
-    customMethods: options?.customMethods,
-  };
-
-  const routerMap = new MapParser(opts).getMap();
-  Object.defineProperty(this, "routerMap", {
-    configurable: true,
-    enumerable: false,
-    get: () => {
-      return routerMap;
-    },
-  });
-
-  Object.defineProperty(this, "routerOptions", {
-    configurable: true,
-    enumerable: false,
-    get: () => {
-      return opts;
-    },
-  });
-
-  if (
-    process.env.HALSP_ENV == "micro" &&
-    "register" in this &&
-    isFunction(this["register"])
-  ) {
-    routerMap.forEach((item) => {
-      this["register"]((options?.prefix ?? "") + item.url, (ctx: Context) => {
-        Object.defineProperty(ctx, "actionMetadata", {
-          configurable: true,
-          enumerable: false,
-          get: () => {
-            return item;
-          },
-        });
-      });
-    });
-  }
-
-  return this.use(async (ctx, next) => {
-    Object.defineProperty(ctx, "routerMap", {
-      configurable: true,
-      enumerable: false,
-      get: () => {
-        return routerMap;
-      },
-    });
-
-    Object.defineProperty(ctx, "routerOptions", {
-      configurable: true,
-      enumerable: false,
-      get: () => {
-        return opts;
-      },
-    });
-
-    await next();
-  })
+  return initRouterMap
+    .call(this, options)
     .use(async (ctx, next) => {
       if (process.env.HALSP_ENV != "http") {
         return await next();
@@ -221,8 +146,80 @@ Startup.prototype.useRouterParser = function (options?: RouterOptions) {
       });
 
       await next();
+    })
+    .add((ctx) => {
+      if (!ctx.actionMetadata) {
+        return BlankMiddleware;
+      } else {
+        return ctx.actionMetadata.getAction(ctx.routerOptions.dir);
+      }
     });
 };
+
+function initRouterMap(this: Startup, options?: RouterOptions) {
+  const mapOptions = readMap();
+  const opts: RouterOptionsMerged = {
+    map: mapOptions?.map,
+    dir: this[TEST_ACTION_DIR] ?? mapOptions?.dir ?? DEFAULT_ACTION_DIR,
+    prefix: options?.prefix,
+    customMethods: options?.customMethods,
+  };
+
+  const routerMap = new MapParser(opts).getMap();
+  Object.defineProperty(this, "routerMap", {
+    configurable: true,
+    enumerable: false,
+    get: () => {
+      return routerMap;
+    },
+  });
+
+  Object.defineProperty(this, "routerOptions", {
+    configurable: true,
+    enumerable: false,
+    get: () => {
+      return opts;
+    },
+  });
+
+  if (
+    process.env.HALSP_ENV == "micro" &&
+    "register" in this &&
+    isFunction(this["register"])
+  ) {
+    routerMap.forEach((item) => {
+      this["register"]((options?.prefix ?? "") + item.url, (ctx: Context) => {
+        Object.defineProperty(ctx, "actionMetadata", {
+          configurable: true,
+          enumerable: false,
+          get: () => {
+            return item;
+          },
+        });
+      });
+    });
+  }
+
+  return this.use(async (ctx, next) => {
+    Object.defineProperty(ctx, "routerMap", {
+      configurable: true,
+      enumerable: false,
+      get: () => {
+        return routerMap;
+      },
+    });
+
+    Object.defineProperty(ctx, "routerOptions", {
+      configurable: true,
+      enumerable: false,
+      get: () => {
+        return opts;
+      },
+    });
+
+    await next();
+  });
+}
 
 function readMap(): RouterDistOptions | undefined {
   const filePath = path.join(process.cwd(), CONFIG_FILE_NAME);

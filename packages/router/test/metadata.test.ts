@@ -1,8 +1,9 @@
 import { Request, Startup } from "@halsp/core";
 import "@halsp/testing";
+import "@halsp/http";
 import "../src";
 import { Action, getActionMetadata } from "../src";
-import "./utils-http";
+import "./utils";
 
 test("custom metadata", async () => {
   const result = await new Startup()

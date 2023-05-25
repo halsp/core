@@ -1,7 +1,8 @@
 import "../../src";
 import { HttpMethods } from "@halsp/methods";
 import "@halsp/testing";
-import "../utils-http";
+import "@halsp/http";
+import "../utils";
 import { Context, Request, Startup } from "@halsp/core";
 
 test(`find next`, async () => {

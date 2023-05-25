@@ -1,6 +1,7 @@
 import "@halsp/testing";
+import "@halsp/http";
 import MapCreater from "../src/map/map-creater";
-import "./utils-http";
+import "./utils";
 import MapParser from "../src/map/map-parser";
 import { MapItem } from "../src";
 import { Startup } from "@halsp/core";

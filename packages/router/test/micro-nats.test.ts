@@ -1,6 +1,6 @@
 import "@halsp/testing";
 import "@halsp/micro-nats";
-import "./utils-micro";
+import "./utils";
 import { MicroNatsClient } from "@halsp/micro-nats-client";
 import { Startup } from "@halsp/core";
 

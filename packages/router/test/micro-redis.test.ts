@@ -1,5 +1,5 @@
 import "@halsp/testing";
-import "./utils-micro";
+import "./utils";
 import "@halsp/micro-redis";
 import { MicroRedisClient } from "@halsp/micro-redis-client";
 import { Startup } from "@halsp/core";

@@ -1,8 +1,9 @@
 import { HttpMethods } from "@halsp/methods";
 import { Request, Startup } from "@halsp/core";
 import "@halsp/testing";
+import "@halsp/http";
 import "../../src";
-import "../utils-http";
+import "../utils";
 
 test(`restful params test1`, async () => {
   const res = await new Startup()

@@ -1,7 +1,8 @@
 import { Request, Startup } from "@halsp/core";
 import "@halsp/testing";
+import "@halsp/http";
 import "../src";
-import "./utils-http";
+import "./utils";
 
 test("prefix", async () => {
   const result = await new Startup()

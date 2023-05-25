@@ -1,8 +1,9 @@
 import { StatusCodes } from "@halsp/http";
 import { HttpMethods } from "@halsp/methods";
 import "@halsp/testing";
+import "@halsp/http";
 import "../src";
-import "./utils-http";
+import "./utils";
 import { Request, Startup } from "@halsp/core";
 
 function runTest(method: string, success: boolean) {

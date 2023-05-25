@@ -1,7 +1,7 @@
 import "@halsp/http";
 import { Request, Startup } from "@halsp/core";
 import "../src";
-import "./utils-http";
+import "./utils";
 import { DEFAULT_ACTION_DIR } from "../src/constant";
 import { runin } from "@halsp/testing";
 
@@ -68,7 +68,7 @@ test("null body test", async () => {
   expect(result.status).toBe(404);
 });
 
-describe("useRouterParser", () => {
+describe("options", () => {
   it("should not replace options", async () => {
     await new Startup()
       .useHttp()
@@ -77,10 +77,10 @@ describe("useRouterParser", () => {
         expect(ctx.routerOptions).toBe(ctx.startup.routerOptions);
         expect(ctx.routerOptions.customMethods).toEqual(["CUSTOM1"]);
       })
-      .useTestRouterParser({
+      .useTestRouter({
         customMethods: ["CUSTOM1"],
       })
-      .useRouter({
+      .useTestRouter({
         customMethods: ["CUSTOM2"],
       })
       .test();
@@ -93,7 +93,7 @@ describe("useRouterParser", () => {
           await next();
           expect(ctx.routerOptions.dir).toBe(DEFAULT_ACTION_DIR);
         })
-        .useRouterParser()
+        .useRouter()
         .test();
     });
   });
