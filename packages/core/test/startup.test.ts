@@ -165,3 +165,29 @@ describe("extend", () => {
     }
   });
 });
+
+describe("call", () => {
+  async function testWhen(val: boolean) {
+    const { ctx } = await new Startup()
+      .call(
+        () => val,
+        (_) =>
+          _.use(async (ctx, next) => {
+            ctx.set("test", true);
+            await next();
+          })
+      )
+
+      .run();
+
+    expect(ctx.get("test")).toBe(val ? true : undefined);
+  }
+
+  it("should exec when matched", async () => {
+    await testWhen(true);
+  });
+
+  it("should not exec when not matched", async () => {
+    await testWhen(false);
+  });
+});

@@ -188,4 +188,13 @@ export class Startup {
     };
     return this;
   }
+
+  public call(when: (startup: this) => boolean, fn: (startup: this) => void) {
+    if (!when(this)) {
+      return this;
+    }
+
+    fn(this);
+    return this;
+  }
 }
