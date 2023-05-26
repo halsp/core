@@ -1,5 +1,5 @@
 import "@halsp/micro";
-import { MicroGrpcOptions } from "./options";
+import { MicroGrpcOptions } from "../options";
 import * as grpc from "@grpc/grpc-js";
 import {
   Context,
@@ -8,22 +8,9 @@ import {
   normalizePath,
   Startup,
 } from "@halsp/core";
-import { loadPackages, ReadIterator, WriteIterator } from "@halsp/micro-common";
+import { loadPackages } from "../load-packages";
 import { handleMessage } from "@halsp/micro";
-
-declare module "@halsp/core" {
-  interface Startup {
-    useMicroGrpc(options?: MicroGrpcOptions): this;
-
-    listen(): Promise<grpc.Server>;
-    close(): Promise<void>;
-
-    register(
-      pattern: string,
-      handler?: (ctx: Context) => Promise<void> | void
-    ): this;
-  }
-}
+import { ReadIterator, WriteIterator } from "../stream";
 
 const usedMap = new WeakMap<Startup, boolean>();
 Startup.prototype.useMicroGrpc = function (options: MicroGrpcOptions = {}) {

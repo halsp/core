@@ -45,7 +45,9 @@
     "@halsp/micro-common": "^1.1.1"
   },
   "files": [
+    "/client/*",
     "/dist/*",
+    "/server/*",
     "/src/*",
     "/test/*",
     ".eslintignore",

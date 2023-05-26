@@ -1,6 +1,6 @@
 import * as grpc from "@grpc/grpc-js";
 import * as grpcLoader from "@grpc/proto-loader";
-import { MicroGrpcClient, WriteIterator } from "../src";
+import { MicroGrpcClient, WriteIterator } from "../../src";
 
 describe("error", () => {
   it("should send stream request and throw error", async () => {

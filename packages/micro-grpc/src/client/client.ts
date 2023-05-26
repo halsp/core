@@ -1,10 +1,9 @@
 import * as grpc from "@grpc/grpc-js";
 import { IMicroClient } from "@halsp/micro-client";
-import { loadPackages, ReadIterator, WriteIterator } from "@halsp/micro-common";
+import { loadPackages } from "../load-packages";
 import { isClass } from "@halsp/core";
-import { MicroGrpcClientOptions } from "./options";
-
-export { MicroGrpcClientOptions } from "./options";
+import { MicroGrpcClientOptions } from "../options";
+import { ReadIterator, WriteIterator } from "../stream";
 
 export class MicroGrpcClient extends IMicroClient {
   constructor(protected readonly options: MicroGrpcClientOptions = {}) {

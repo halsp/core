@@ -2,6 +2,51 @@ import { ReadIterator, WriteIterator } from "../src";
 import * as grpc from "@grpc/grpc-js";
 import * as grpcLoader from "@grpc/proto-loader";
 import { Request, Startup } from "@halsp/core";
+import EventEmitter from "events";
+import "../src/server";
+
+describe("iterator", () => {
+  it("should create write iterator", async () => {
+    const writeIterator = new WriteIterator<string>();
+    writeIterator.push("a");
+    setTimeout(() => {
+      writeIterator.push("b");
+      writeIterator.push("c");
+      setTimeout(() => {
+        writeIterator.push("d");
+        writeIterator.end();
+      }, 500);
+    }, 500);
+
+    const result: string[] = [];
+    for await (const item of writeIterator) {
+      result.push(item);
+    }
+
+    expect(result).toEqual(["a", "b", "c", "d"]);
+  });
+
+  it("should create read iterator", async () => {
+    const stream = new EventEmitter();
+    const readIterator = new ReadIterator(stream as any);
+
+    stream.emit("data", "a");
+    setTimeout(() => {
+      stream.emit("data", "b");
+      stream.emit("data", "c");
+      setTimeout(() => {
+        stream.emit("data", "d");
+        stream.emit("end");
+      }, 500);
+    }, 500);
+
+    const result: string[] = [];
+    for await (const item of readIterator) {
+      result.push(item);
+    }
+    expect(result).toEqual(["a", "b", "c", "d"]);
+  });
+});
 
 describe("stream", () => {
   it("should handle server stream message", async () => {
@@ -263,7 +308,7 @@ describe("stream", () => {
 
     expect(result).toEqual([
       {
-        resMessage: ["a", "b", "c"],
+        resMessage: "a,b,c",
       },
     ]);
     expect(!!req.call).toBeTruthy();

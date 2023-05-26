@@ -11,5 +11,5 @@ message TestRequest {
 }
 
 message TestReply {
-  repeated string resMessage = 1;
+  string resMessage = 1;
 }

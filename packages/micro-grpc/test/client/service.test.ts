@@ -1,4 +1,4 @@
-import { MicroGrpcClient } from "../src";
+import { MicroGrpcClient } from "../../src";
 import * as grpc from "@grpc/grpc-js";
 import * as grpcLoader from "@grpc/proto-loader";
 

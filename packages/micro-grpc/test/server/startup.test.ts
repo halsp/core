@@ -1,4 +1,4 @@
-import "../src";
+import "../../src/server";
 import * as grpc from "@grpc/grpc-js";
 import * as grpcLoader from "@grpc/proto-loader";
 import { Request, Startup } from "@halsp/core";

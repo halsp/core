@@ -6,6 +6,10 @@ service TestService {
   rpc testMethod (TestRequest) returns (TestReply) {}
 }
 
+service TestService2 {
+  rpc testMethod (TestRequest) returns (TestReply) {}
+}
+
 message TestRequest {
   string reqMessage = 1;
 }

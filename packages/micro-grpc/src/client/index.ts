@@ -1,9 +1,6 @@
 import { useMicroClient, InjectMicroClient } from "@halsp/micro-client";
-import { MicroGrpcClient, MicroGrpcClientOptions } from "./client";
-
-export { cliConfigHook } from "./cli-config";
-export { MicroGrpcClientOptions, MicroGrpcClient } from "./client";
-export { WriteIterator, ReadIterator } from "@halsp/micro-common";
+import { MicroGrpcClientOptions } from "../options";
+import { MicroGrpcClient } from "./client";
 
 declare module "@halsp/core" {
   interface Startup {
