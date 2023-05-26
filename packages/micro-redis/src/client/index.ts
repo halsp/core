@@ -1,9 +1,6 @@
 import { useMicroClient, InjectMicroClient } from "@halsp/micro-client";
+import { MicroRedisClientOptions } from "../options";
 import { MicroRedisClient } from "./client";
-import { MicroRedisClientOptions } from "./options";
-
-export { MicroRedisClient } from "./client";
-export { MicroRedisClientOptions } from "./options";
 
 declare module "@halsp/core" {
   interface Startup {

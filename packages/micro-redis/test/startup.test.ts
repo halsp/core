@@ -1,5 +1,4 @@
-import "../src";
-import { MicroRedisClient } from "@halsp/micro-redis-client";
+import { MicroRedisClient } from "../src";
 import { Startup } from "@halsp/core";
 
 describe("startup", () => {

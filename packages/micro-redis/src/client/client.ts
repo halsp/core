@@ -1,7 +1,7 @@
 import { ClientPacket, parseJsonBuffer } from "@halsp/micro-common";
 import * as redis from "redis";
 import { IMicroClient } from "@halsp/micro-client";
-import { MicroRedisClientOptions } from "./options";
+import { MicroRedisClientOptions } from "../options";
 
 export class MicroRedisClient extends IMicroClient {
   constructor(protected readonly options: MicroRedisClientOptions = {}) {
