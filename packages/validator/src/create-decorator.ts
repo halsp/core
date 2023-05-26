@@ -66,13 +66,19 @@ export function createDecorator(lib: ValidatorDecoratorReturnType) {
     target = target.prototype ?? target;
 
     const rules: RuleRecord[] = Reflect.getMetadata(METADATA, target) ?? [];
-    rules.push({
-      validates: lib.validates,
-      target,
-      propertyKey,
-      parameterIndex,
-    });
-    Reflect.defineMetadata(METADATA, rules, target);
+    Reflect.defineMetadata(
+      METADATA,
+      [
+        ...rules,
+        {
+          validates: lib.validates,
+          target,
+          propertyKey,
+          parameterIndex,
+        },
+      ],
+      target
+    );
   };
   Object.assign(decorator, lib);
   return libToProxy(decorator as any);

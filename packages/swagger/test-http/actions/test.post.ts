@@ -24,9 +24,7 @@ export class ResultDto {
   rd1?: string;
   @V
   rd2?: number;
-  @V
-    .Deprecated()
-    .Items([[BodyDto]])
+  @V.Deprecated().Items([[BodyDto]])
   rd3?: BodyDto;
 }
 
