@@ -1,6 +1,6 @@
 import { parseTcpBuffer, ServerPacket } from "@halsp/micro-common";
 import "@halsp/micro";
-import { MicroTcpOptions } from "./options";
+import { MicroTcpOptions } from "../options";
 import * as net from "net";
 import {
   closeServer,
@@ -10,20 +10,6 @@ import {
   Startup,
 } from "@halsp/core";
 import { handleMessage } from "@halsp/micro";
-
-declare module "@halsp/core" {
-  interface Startup {
-    useMicroTcp(options?: MicroTcpOptions): this;
-
-    listen(): Promise<net.Server>;
-    close(): Promise<void>;
-
-    register(
-      pattern: string,
-      handler?: (ctx: Context) => Promise<void> | void
-    ): this;
-  }
-}
 
 const usedMap = new WeakMap<Startup, boolean>();
 Startup.prototype.useMicroTcp = function (options?: MicroTcpOptions) {

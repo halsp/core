@@ -1,5 +1,6 @@
 import { MicroTcpClient } from "../src";
-import "@halsp/micro-tcp";
+import "@halsp/micro-tcp/src/client";
+import "@halsp/micro-tcp/src/server";
 import { Startup } from "@halsp/core";
 
 describe("client", () => {

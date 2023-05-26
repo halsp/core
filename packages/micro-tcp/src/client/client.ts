@@ -5,7 +5,7 @@ import {
   parseTcpBuffer,
   ServerPacket,
 } from "@halsp/micro-common";
-import { MicroTcpClientOptions } from "./options";
+import { MicroTcpClientOptions } from "../options";
 
 export class MicroTcpClient extends IMicroClient {
   constructor(private readonly options: MicroTcpClientOptions = {}) {

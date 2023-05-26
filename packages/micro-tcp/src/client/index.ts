@@ -1,9 +1,6 @@
 import { useMicroClient, InjectMicroClient } from "@halsp/micro-client";
+import { MicroTcpClientOptions } from "../options";
 import { MicroTcpClient } from "./client";
-import { MicroTcpClientOptions } from "./options";
-
-export { MicroTcpClient } from "./client";
-export { MicroTcpClientOptions } from "./options";
 
 declare module "@halsp/core" {
   interface Startup {

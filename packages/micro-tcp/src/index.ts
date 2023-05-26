@@ -1,10 +1,2 @@
-import "./startup";
-import * as net from "net";
-
-declare module "@halsp/core" {
-  interface Context {
-    get socket(): net.Socket;
-  }
-}
-
-export { MicroTcpOptions } from "./options";
+export { MicroTcpOptions, MicroTcpClientOptions } from "./options";
+export { MicroTcpClient } from "./client/client";
