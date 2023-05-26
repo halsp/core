@@ -1,5 +1,5 @@
 import "@halsp/micro";
-import { MicroNatsOptions } from "./options";
+import { MicroNatsOptions } from "../options";
 import { Context, getHalspPort, Startup } from "@halsp/core";
 import * as nats from "nats";
 import { handleMessage } from "@halsp/micro";

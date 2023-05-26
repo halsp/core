@@ -1,5 +1,6 @@
 import { MicroRedisClient } from "../src";
 import { Startup } from "@halsp/core";
+import "../src/server";
 
 describe("startup", () => {
   it("should subscribe and publish", async () => {

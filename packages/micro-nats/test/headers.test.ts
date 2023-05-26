@@ -1,5 +1,5 @@
 import { Startup } from "@halsp/core";
-import "../src";
+import "../src/server";
 
 describe("headers", () => {
   it("should create req headers", async () => {

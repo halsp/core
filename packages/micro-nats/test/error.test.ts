@@ -1,5 +1,5 @@
 import { Startup } from "@halsp/core";
-import "../src";
+import "../src/server";
 
 describe("error", () => {
   it("should log error when subscript callback err is defined", async () => {

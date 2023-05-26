@@ -1,4 +1,4 @@
-import { MicroNatsClient } from "../src";
+import { MicroNatsClient } from "../../src";
 
 describe("emit", () => {
   it("should not emit message before connect", async () => {

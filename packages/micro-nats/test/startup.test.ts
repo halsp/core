@@ -1,6 +1,6 @@
 import { Startup } from "@halsp/core";
-import { MicroNatsClient } from "@halsp/micro-nats-client";
-import "../src";
+import { MicroNatsClient } from "../src";
+import "../src/server";
 
 describe("startup", () => {
   it("should subscribe and publish when use mock", async () => {
