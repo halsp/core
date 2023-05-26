@@ -28,11 +28,17 @@ export function createInject<T = any>(
   target = getProptotype(target);
   const args =
     (Reflect.getMetadata(CUSTOM_METADATA, target) as InjectCustom[]) ?? [];
-  args.push({
-    property: propertyKey,
-    parameterIndex: parameterIndex,
-    handler: handler,
-    type: type,
-  });
-  Reflect.defineMetadata(CUSTOM_METADATA, args, target);
+  Reflect.defineMetadata(
+    CUSTOM_METADATA,
+    [
+      ...args,
+      {
+        property: propertyKey,
+        parameterIndex: parameterIndex,
+        handler: handler,
+        type: type,
+      },
+    ],
+    target
+  );
 }

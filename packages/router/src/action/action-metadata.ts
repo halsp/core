@@ -19,7 +19,7 @@ export function getActionMetadata<T = any>(
 
   const metadata = Reflect.getMetadata(ACTION_METADATA, target.prototype);
   if (metadataKey) {
-    return metadata ? metadata[metadataKey] : undefined;
+    return metadata?.[metadataKey];
   } else {
     return metadata;
   }
@@ -35,8 +35,14 @@ export function setActionMetadata<T>(
   }
 
   const metadata = Reflect.getMetadata(ACTION_METADATA, target.prototype) ?? {};
-  metadata[metadataKey] = metadataValue;
-  Reflect.defineMetadata(ACTION_METADATA, metadata, target.prototype);
+  Reflect.defineMetadata(
+    ACTION_METADATA,
+    {
+      ...metadata,
+      [metadataKey]: metadataValue,
+    },
+    target.prototype
+  );
 }
 
 export function ActionMetadata<T = any>(

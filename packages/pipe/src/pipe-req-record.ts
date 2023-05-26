@@ -14,7 +14,7 @@ function getProptotype(target: any) {
   return isClass(target) ? target.prototype : target;
 }
 
-export function getPipeRecords(target: any): PipeReqRecord[] {
+export function getPipeRecords(target: any): ReadonlyArray<PipeReqRecord> {
   target = getProptotype(target);
   return Reflect.getMetadata(PIPE_RECORDS_METADATA, target) ?? [];
 }
@@ -33,12 +33,14 @@ export function addPipeRecord(
   property?: string
 ) {
   const records = getPipeRecords(target);
-  records.push({
-    type: type,
-    pipes: pipes,
-    propertyKey: propertyKey,
-    parameterIndex: parameterIndex,
-    property: property,
-  });
-  setPipeRecords(target, records);
+  setPipeRecords(target, [
+    ...records,
+    {
+      type: type,
+      pipes: pipes,
+      propertyKey: propertyKey,
+      parameterIndex: parameterIndex,
+      property: property,
+    },
+  ]);
 }

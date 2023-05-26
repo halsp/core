@@ -46,8 +46,7 @@ function injectProperty(target: any, propertyKey: string | symbol) {
   const args =
     (Reflect.getMetadata(PROPERTY_METADATA, target) as (string | symbol)[]) ??
     [];
-  args.push(propertyKey);
-  Reflect.defineMetadata(PROPERTY_METADATA, args, target);
+  Reflect.defineMetadata(PROPERTY_METADATA, [...args, propertyKey], target);
 }
 
 function injectKey(key: string) {
@@ -59,12 +58,18 @@ function injectKey(key: string) {
     target = getProptotype(target);
     const args =
       (Reflect.getMetadata(KEY_METADATA, target) as InjectKey[]) ?? [];
-    args.push({
-      key: key,
-      property: propertyKey,
-      parameterIndex: parameterIndex,
-    });
-    Reflect.defineMetadata(KEY_METADATA, args, target);
+    Reflect.defineMetadata(
+      KEY_METADATA,
+      [
+        ...args,
+        {
+          key: key,
+          property: propertyKey,
+          parameterIndex: parameterIndex,
+        },
+      ],
+      target
+    );
   };
 }
 

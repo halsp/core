@@ -5,11 +5,17 @@ import { ACTION_METHOD_METADATA } from "../constant";
 function setHttpMethodMetadata(target: any, method: string, url?: string) {
   const methods: MethodItem[] =
     Reflect.getMetadata(ACTION_METHOD_METADATA, target.prototype) ?? [];
-  methods.push({
-    method: method,
-    url: url ?? "",
-  });
-  Reflect.defineMetadata(ACTION_METHOD_METADATA, methods, target.prototype);
+  Reflect.defineMetadata(
+    ACTION_METHOD_METADATA,
+    [
+      ...methods,
+      {
+        method: method,
+        url: url ?? "",
+      },
+    ],
+    target.prototype
+  );
 }
 
 function createHttpMethodDecorator(
