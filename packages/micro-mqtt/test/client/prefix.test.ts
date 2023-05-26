@@ -1,6 +1,6 @@
 import { Startup } from "@halsp/core";
-import "@halsp/micro-mqtt";
-import { MicroMqttClient } from "../src";
+import "../../src/server";
+import { MicroMqttClient } from "../../src";
 
 describe("prefix", () => {
   it("should subscribe and publish pattern with prefix", async () => {

@@ -1,4 +1,4 @@
-import { matchTopic } from "../src";
+import { matchTopic } from "../src/server/topic";
 
 describe("match topic", () => {
   it("should not match topic", async () => {

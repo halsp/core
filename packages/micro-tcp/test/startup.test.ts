@@ -1,9 +1,8 @@
-import { MicroTcpOptions } from "../src";
+import { MicroTcpOptions, MicroTcpClient } from "../src";
 import "../src/server";
 import { sendData, sendMessage } from "./utils";
 import net, { Server } from "net";
 
-import { MicroTcpClient } from "@halsp/micro-tcp-client";
 import { Startup } from "@halsp/core";
 
 describe("startup.listen", () => {

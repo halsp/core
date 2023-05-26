@@ -1,4 +1,4 @@
-import { MicroMqttClient } from "../src";
+import { MicroMqttClient } from "../../src";
 
 describe("emit", () => {
   it("should not emit message before connect", async () => {

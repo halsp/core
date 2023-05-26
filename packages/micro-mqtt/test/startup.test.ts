@@ -1,5 +1,5 @@
-import "../src";
-import { MicroMqttClient } from "@halsp/micro-mqtt-client";
+import "../src/server";
+import { MicroMqttClient } from "../src";
 import { Startup } from "@halsp/core";
 
 describe("startup", () => {
