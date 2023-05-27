@@ -1,4 +1,4 @@
-import { parseTcpBuffer } from "../src";
+import { parseTcpBuffer } from "../src/tcp-parser";
 
 describe("parse buffer", () => {
   it("should parse buffer empty content", async () => {

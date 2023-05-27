@@ -1,4 +1,4 @@
-import { parseTcpBuffer, ServerPacket } from "@halsp/micro-common";
+import { ServerPacket } from "@halsp/micro-common";
 import "@halsp/micro";
 import { MicroTcpOptions } from "../options";
 import * as net from "net";
@@ -10,6 +10,7 @@ import {
   Startup,
 } from "@halsp/core";
 import { handleMessage } from "@halsp/micro";
+import { parseTcpBuffer } from "../tcp-parser";
 
 const usedMap = new WeakMap<Startup, boolean>();
 Startup.prototype.useMicroTcp = function (options?: MicroTcpOptions) {
