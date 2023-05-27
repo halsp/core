@@ -41,8 +41,7 @@
     "@grpc/grpc-js": "^1.8.14",
     "@grpc/proto-loader": "^0.7.7",
     "@halsp/core": "^1.1.1",
-    "@halsp/micro": "^1.1.1",
-    "@halsp/micro-common": "^1.1.1"
+    "@halsp/micro": "^1.1.1"
   },
   "files": [
     "/client/*",

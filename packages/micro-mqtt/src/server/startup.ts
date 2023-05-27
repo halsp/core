@@ -3,8 +3,8 @@ import { MicroMqttOptions } from "../options";
 import mqtt from "mqtt";
 import { Context, getHalspPort, Startup } from "@halsp/core";
 import { matchTopic } from "./topic";
-import { parseJsonBuffer } from "@halsp/micro-common";
-import { handleMessage } from "@halsp/micro";
+import { parseJsonBuffer } from "@halsp/micro";
+import { handleMessage } from "@halsp/micro/dist/server";
 
 declare module "@halsp/core" {
   interface Startup {

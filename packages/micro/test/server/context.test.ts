@@ -1,5 +1,5 @@
 import { Request, Response, Startup } from "@halsp/core";
-import "../src";
+import "../../src/server";
 import "@halsp/testing";
 
 describe("context", () => {

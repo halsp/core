@@ -1,12 +1,12 @@
 import { Middleware, Startup } from "@halsp/core";
 import "@halsp/testing";
-import "../src";
+import "../../src/client";
 import {
   IMicroClient,
   InjectMicroClient,
   MicroClient,
   useMicroClient,
-} from "../src";
+} from "../../src/client";
 import * as net from "net";
 import { InjectType } from "@halsp/inject";
 

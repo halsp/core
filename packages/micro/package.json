@@ -37,8 +37,10 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^1.1.1",
-    "@halsp/micro-common": "^1.1.1"
+    "@halsp/core": "^1.1.1"
+  },
+  "devDependencies": {
+    "@halsp/inject": "^1.1.1"
   },
   "files": [
     "/dist/*",

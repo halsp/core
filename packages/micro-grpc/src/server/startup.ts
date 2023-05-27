@@ -1,4 +1,3 @@
-import "@halsp/micro";
 import { MicroGrpcOptions } from "../options";
 import * as grpc from "@grpc/grpc-js";
 import {
@@ -9,7 +8,7 @@ import {
   Startup,
 } from "@halsp/core";
 import { loadPackages } from "../load-packages";
-import { handleMessage } from "@halsp/micro";
+import { handleMessage } from "@halsp/micro/dist/server";
 import { ReadIterator, WriteIterator } from "../stream";
 
 const usedMap = new WeakMap<Startup, boolean>();

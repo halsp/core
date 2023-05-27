@@ -1,6 +1,7 @@
 import { Startup } from "@halsp/core";
-import { handleMessage, MicroException } from "../src";
+import { MicroException } from "../../src";
 import "@halsp/testing";
+import { handleMessage } from "../../src/server";
 
 describe("startup", () => {
   it("should set env", () => {

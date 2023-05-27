@@ -2,8 +2,8 @@ import "@halsp/micro";
 import { MicroNatsOptions } from "../options";
 import { Context, getHalspPort, Startup } from "@halsp/core";
 import * as nats from "nats";
-import { handleMessage } from "@halsp/micro";
-import { ServerPacket } from "@halsp/micro-common";
+import { handleMessage } from "@halsp/micro/dist/server";
+import { ServerPacket } from "@halsp/micro";
 
 declare module "@halsp/core" {
   interface Startup {

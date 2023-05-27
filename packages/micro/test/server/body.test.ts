@@ -1,4 +1,4 @@
-import { parseMicroBody } from "../src/startup";
+import { parseMicroBody } from "../../src/server/startup";
 
 describe("parse json body", () => {
   it("should parse json str body", async () => {

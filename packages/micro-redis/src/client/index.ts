@@ -1,4 +1,4 @@
-import { useMicroClient, InjectMicroClient } from "@halsp/micro-client";
+import { useMicroClient, InjectMicroClient } from "@halsp/micro/dist/client";
 import { MicroRedisClientOptions } from "../options";
 import { MicroRedisClient } from "./client";
 

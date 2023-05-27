@@ -39,8 +39,7 @@
   "license": "MIT",
   "dependencies": {
     "@halsp/core": "^1.1.1",
-    "@halsp/micro": "^1.1.1",
-    "@halsp/micro-common": "^1.1.1"
+    "@halsp/micro": "^1.1.1"
   },
   "files": [
     "/dist/*",

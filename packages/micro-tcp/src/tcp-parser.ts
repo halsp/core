@@ -1,4 +1,4 @@
-import { ClientPacket, ServerPacket } from "@halsp/micro-common";
+import { ClientPacket, ServerPacket } from "@halsp/micro";
 
 export function parseTcpBuffer(
   buffer: Buffer,

@@ -39,8 +39,6 @@
   "devDependencies": {
     "@halsp/http": "^1.1.1",
     "@halsp/micro": "^1.1.1",
-    "@halsp/micro-client": "^1.1.1",
-    "@halsp/micro-common": "^1.1.1",
     "@halsp/micro-grpc": "^1.1.1",
     "@halsp/micro-mqtt": "^1.1.1",
     "@halsp/micro-nats": "^1.1.1",
