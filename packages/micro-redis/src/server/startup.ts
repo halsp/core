@@ -1,4 +1,3 @@
-import "@halsp/micro";
 import { MicroRedisOptions } from "../options";
 import { Context, getHalspPort, Startup } from "@halsp/core";
 import * as redis from "redis";

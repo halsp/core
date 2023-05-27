@@ -1,6 +1,6 @@
 import { Context, Middleware, Request, Startup } from "@halsp/core";
 import "@halsp/testing";
-import "@halsp/micro";
+import "@halsp/micro/src/server";
 import { Body, ParseBoolPipe } from "../../src";
 
 describe("parse bool with micro", () => {

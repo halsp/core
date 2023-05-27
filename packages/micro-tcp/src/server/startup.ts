@@ -1,5 +1,4 @@
 import { ServerPacket } from "@halsp/micro";
-import "@halsp/micro";
 import { MicroTcpOptions } from "../options";
 import * as net from "net";
 import {

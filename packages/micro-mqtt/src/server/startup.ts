@@ -1,4 +1,3 @@
-import "@halsp/micro";
 import { MicroMqttOptions } from "../options";
 import mqtt from "mqtt";
 import { Context, getHalspPort, Startup } from "@halsp/core";
