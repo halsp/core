@@ -43,7 +43,9 @@
     "redis": "^4.6.6"
   },
   "files": [
+    "/client/*",
     "/dist/*",
+    "/server/*",
     "/src/*",
     "/test/*",
     ".eslintignore",

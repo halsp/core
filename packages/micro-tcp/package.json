@@ -42,7 +42,9 @@
     "@halsp/micro": "^2.0.0-alpha.2"
   },
   "files": [
+    "/client/*",
     "/dist/*",
+    "/server/*",
     "/src/*",
     "/test/*",
     ".eslintignore",

@@ -43,7 +43,9 @@
     "mqtt": "^4.3.7"
   },
   "files": [
+    "/client/*",
     "/dist/*",
+    "/server/*",
     "/src/*",
     "/test/*",
     ".eslintignore",
