@@ -15,5 +15,4 @@ Context.prototype.getMicroClient = async function (
   return await parseInject(this, injectKey);
 };
 
-export { MicroClient } from "./decorators";
 export { useMicroClient, InjectMicroClient } from "./use-client";
