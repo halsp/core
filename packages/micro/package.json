@@ -37,10 +37,12 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^2.0.0-alpha.0"
+    "@halsp/core": "^2.0.0-alpha.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
-    "@halsp/inject": "^2.0.0-alpha.0"
+    "@halsp/inject": "^2.0.0-alpha.0",
+    "@types/uuid": "^9.0.1"
   },
   "files": [
     "/dist/*",
