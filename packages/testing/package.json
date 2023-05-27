@@ -1,6 +1,6 @@
 {
   "name": "@halsp/testing",
-  "version": "2.0.0-alpha.0",
+  "version": "2.0.0-alpha.2",
   "description": "Halsp 的测试插件，用于单元测试、本地测试等",
   "engines": {
     "node": ">=12.14.0"
@@ -34,17 +34,17 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^2.0.0-alpha.0"
+    "@halsp/core": "^2.0.0-alpha.2"
   },
   "devDependencies": {
-    "@halsp/http": "^2.0.0-alpha.0",
-    "@halsp/micro": "^2.0.0-alpha.0",
-    "@halsp/micro-grpc": "^2.0.0-alpha.0",
-    "@halsp/micro-mqtt": "^2.0.0-alpha.0",
-    "@halsp/micro-nats": "^2.0.0-alpha.0",
-    "@halsp/micro-redis": "^2.0.0-alpha.0",
-    "@halsp/micro-tcp": "^2.0.0-alpha.0",
-    "@halsp/native": "^2.0.0-alpha.0",
+    "@halsp/http": "^2.0.0-alpha.2",
+    "@halsp/micro": "^2.0.0-alpha.2",
+    "@halsp/micro-grpc": "^2.0.0-alpha.2",
+    "@halsp/micro-mqtt": "^2.0.0-alpha.2",
+    "@halsp/micro-nats": "^2.0.0-alpha.2",
+    "@halsp/micro-redis": "^2.0.0-alpha.2",
+    "@halsp/micro-tcp": "^2.0.0-alpha.2",
+    "@halsp/native": "^2.0.0-alpha.2",
     "supertest": "^6.3.3"
   },
   "files": [
