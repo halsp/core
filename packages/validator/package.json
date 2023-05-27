@@ -1,6 +1,6 @@
 {
   "name": "@halsp/validator",
-  "version": "2.0.0-alpha.3",
+  "version": "2.0.0-alpha.4",
   "description": "Halsp 的参数校验插件",
   "engines": {
     "node": ">=12.14.0"
@@ -35,9 +35,9 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^2.0.0-alpha.3",
-    "@halsp/inject": "^2.0.0-alpha.3",
-    "@halsp/pipe": "^2.0.0-alpha.3",
+    "@halsp/core": "^2.0.0-alpha.4",
+    "@halsp/inject": "^2.0.0-alpha.4",
+    "@halsp/pipe": "^2.0.0-alpha.4",
     "class-validator": "^0.14.0",
     "reflect-metadata": "^0.1.13"
   },
