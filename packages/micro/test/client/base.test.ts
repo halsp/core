@@ -1,4 +1,4 @@
-import { IMicroClient } from "../../src/client";
+import { IMicroClient } from "../../src";
 
 describe("client", () => {
   it("should create packet", async () => {

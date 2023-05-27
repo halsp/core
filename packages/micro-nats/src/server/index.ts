@@ -2,6 +2,7 @@ import { Context } from "@halsp/core";
 import * as nats from "nats";
 import { MicroNatsOptions } from "../options";
 import "./startup";
+import "@halsp/micro/dist/server";
 
 declare module "@halsp/core" {
   interface Request {

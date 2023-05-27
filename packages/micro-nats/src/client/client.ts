@@ -1,6 +1,5 @@
-import { ClientPacket, ServerPacket } from "@halsp/micro";
+import { ClientPacket, ServerPacket, IMicroClient } from "@halsp/micro";
 import * as nats from "nats";
-import { IMicroClient } from "@halsp/micro/dist/client";
 import { MicroNatsClientOptions } from "../options";
 
 type SendOptions = Omit<nats.SubscriptionOptions, "callback"> & {

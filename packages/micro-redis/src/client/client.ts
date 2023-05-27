@@ -1,6 +1,5 @@
-import { ClientPacket, parseJsonBuffer } from "@halsp/micro";
+import { ClientPacket, parseJsonBuffer, IMicroClient } from "@halsp/micro";
 import * as redis from "redis";
-import { IMicroClient } from "@halsp/micro/dist/client";
 import { MicroRedisClientOptions } from "../options";
 
 export class MicroRedisClient extends IMicroClient {

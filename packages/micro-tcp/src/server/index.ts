@@ -1,6 +1,7 @@
 import "./startup";
 import * as net from "net";
 import { MicroTcpOptions } from "../options";
+import "@halsp/micro/dist/server";
 
 declare module "@halsp/core" {
   interface Startup {

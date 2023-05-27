@@ -1,3 +1,4 @@
+import "@halsp/micro/dist/client";
 import { useMicroClient, InjectMicroClient } from "@halsp/micro/dist/client";
 import { MicroTcpClientOptions } from "../options";
 import { MicroTcpClient } from "./client";

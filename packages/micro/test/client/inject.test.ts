@@ -1,14 +1,13 @@
 import { Middleware, Startup } from "@halsp/core";
 import "@halsp/testing";
-import "../../src/client";
 import {
-  IMicroClient,
   InjectMicroClient,
   MicroClient,
   useMicroClient,
 } from "../../src/client";
 import * as net from "net";
 import { InjectType } from "@halsp/inject";
+import { IMicroClient } from "../../src";
 
 class TestClient extends IMicroClient {
   async connect() {

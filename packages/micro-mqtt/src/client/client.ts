@@ -1,6 +1,5 @@
-import { parseJsonBuffer } from "@halsp/micro";
+import { parseJsonBuffer, IMicroClient } from "@halsp/micro";
 import mqtt from "mqtt";
-import { IMicroClient } from "@halsp/micro/dist/client";
 import { MicroMqttClientOptions } from "../options";
 
 export class MicroMqttClient extends IMicroClient {

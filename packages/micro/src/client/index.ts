@@ -16,5 +16,4 @@ Context.prototype.getMicroClient = async function (
 };
 
 export { MicroClient } from "./decorators";
-export { IMicroClient } from "./client";
 export { useMicroClient, InjectMicroClient } from "./use-client";

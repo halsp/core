@@ -1,6 +1,5 @@
 import * as net from "net";
-import { IMicroClient } from "@halsp/micro/dist/client";
-import { ClientPacket, ServerPacket } from "@halsp/micro";
+import { ClientPacket, ServerPacket, IMicroClient } from "@halsp/micro";
 import { MicroTcpClientOptions } from "../options";
 import { parseTcpBuffer } from "../tcp-parser";
 

@@ -1,5 +1,5 @@
 import * as grpc from "@grpc/grpc-js";
-import { IMicroClient } from "@halsp/micro/dist/client";
+import { IMicroClient } from "@halsp/micro";
 import { loadPackages } from "../load-packages";
 import { isClass } from "@halsp/core";
 import { MicroGrpcClientOptions } from "../options";

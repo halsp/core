@@ -2,6 +2,7 @@ import { Context } from "@halsp/core";
 import type mqtt from "mqtt";
 import { MicroMqttOptions } from "../options";
 import "./startup";
+import "@halsp/micro/dist/server";
 
 declare module "@halsp/core" {
   interface Startup {
