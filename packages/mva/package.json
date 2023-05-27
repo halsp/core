@@ -1,6 +1,6 @@
 {
   "name": "@halsp/mva",
-  "version": "2.0.0-alpha.2",
+  "version": "2.0.0-alpha.3",
   "description": "Halsp MVA 框架",
   "engines": {
     "node": ">=12.14.0"
@@ -36,12 +36,12 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^2.0.0-alpha.2",
-    "@halsp/filter": "^2.0.0-alpha.2",
-    "@halsp/http": "^2.0.0-alpha.2",
-    "@halsp/methods": "^2.0.0-alpha.2",
-    "@halsp/router": "^2.0.0-alpha.2",
-    "@halsp/view": "^2.0.0-alpha.2"
+    "@halsp/core": "^2.0.0-alpha.3",
+    "@halsp/filter": "^2.0.0-alpha.3",
+    "@halsp/http": "^2.0.0-alpha.3",
+    "@halsp/methods": "^2.0.0-alpha.3",
+    "@halsp/router": "^2.0.0-alpha.3",
+    "@halsp/view": "^2.0.0-alpha.3"
   },
   "devDependencies": {
     "@types/shelljs": "^0.8.12",
