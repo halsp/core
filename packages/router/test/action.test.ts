@@ -1,8 +1,6 @@
 import { Context, Dict, Request, Startup } from "@halsp/core";
-import { StatusCodes } from "@halsp/http";
-import { HttpMethods } from "@halsp/methods";
+import { StatusCodes, HttpMethods } from "@halsp/http";
 import "@halsp/testing";
-import "@halsp/http";
 import { Action } from "../src";
 import "./utils";
 

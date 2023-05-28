@@ -2,7 +2,7 @@ import { Request, Startup } from "@halsp/core";
 import "@halsp/testing";
 import { runMva } from "./global";
 import "../src";
-import { HttpMethods } from "@halsp/methods";
+import { HttpMethods } from "@halsp/http";
 
 test("not allowed method", async function () {
   await runMva(async () => {

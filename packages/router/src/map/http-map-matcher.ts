@@ -1,6 +1,7 @@
 import MapItem from "./map-item";
 import { Context } from "@halsp/core";
-import { HttpMethods } from "@halsp/methods";
+
+const anyMethod = "ANY";
 
 export class MapMatcher {
   constructor(private readonly ctx: Context) {
@@ -23,7 +24,7 @@ export class MapMatcher {
       .filter((m) => !!m.methods.length)
       .filter((m) => this.isPathMatched(m, true));
     this.ctx.routerMap
-      .filter((m) => !m.methods.length || m.methods.includes(HttpMethods.any))
+      .filter((m) => !m.methods.length || m.methods.includes(anyMethod))
       .filter((m) => this.isPathMatched(m, false))
       .forEach((m) => matchedPaths.push(m));
     const mapItem = this.getMostLikeMapItem(matchedPaths);
@@ -62,7 +63,9 @@ export class MapMatcher {
       .filter((item) => !!item);
     if (reqUrlStrs.length != mapUrlStrs.length) return false;
 
-    if (methodIncluded && !mapItem.methods.includes(HttpMethods.any)) {
+    if (methodIncluded && !mapItem.methods.includes(anyMethod)) {
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const { HttpMethods } = require("@halsp/http");
       const matchedMethod = HttpMethods.matched(
         this.ctx.req["method"],
         options.customMethods
@@ -110,11 +113,11 @@ export class MapMatcher {
     }
 
     if (
-      pathsParts.some((pp) => pp.mapItem.methods.includes(HttpMethods.any)) &&
-      pathsParts.some((pp) => !pp.mapItem.methods.includes(HttpMethods.any))
+      pathsParts.some((pp) => pp.mapItem.methods.includes(anyMethod)) &&
+      pathsParts.some((pp) => !pp.mapItem.methods.includes(anyMethod))
     ) {
       pathsParts
-        .filter((pp) => pp.mapItem.methods.includes(HttpMethods.any))
+        .filter((pp) => pp.mapItem.methods.includes(anyMethod))
         .forEach((pp) => {
           pathsParts.splice(pathsParts.indexOf(pp), 1);
         });

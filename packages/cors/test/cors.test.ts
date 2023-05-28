@@ -1,4 +1,4 @@
-import { HttpMethods } from "@halsp/methods";
+import { HttpMethods } from "@halsp/http";
 import { Request, Startup } from "@halsp/core";
 import "@halsp/testing";
 import "../src";

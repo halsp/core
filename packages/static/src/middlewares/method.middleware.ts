@@ -1,7 +1,7 @@
 import { DirectoryOptions, FileOptions } from "../options";
 import { BaseMiddleware } from "./base.middleware";
 import { IS_METHOD_VALID_BAG } from "../constant";
-import { HttpMethods } from "@halsp/methods";
+import { HttpMethods } from "@halsp/http";
 
 export class MethodMiddleware extends BaseMiddleware {
   constructor(readonly options: FileOptions | DirectoryOptions) {

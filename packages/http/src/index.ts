@@ -48,3 +48,5 @@ export {
   HeaderHandler,
   ResultHandler,
 } from "./context";
+
+export { HttpMethods } from "./methods";

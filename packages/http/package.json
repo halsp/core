@@ -35,11 +35,11 @@
   "license": "MIT",
   "dependencies": {
     "@halsp/core": "^2.0.0-alpha.4",
-    "@halsp/methods": "^2.0.0-alpha.4",
     "http-status-codes": "^2.2.0",
     "mime-types": "^2.1.35"
   },
   "devDependencies": {
+    "@halsp/testing": "^2.0.0-alpha.4",
     "@types/mime-types": "^2.1.1"
   },
   "files": [

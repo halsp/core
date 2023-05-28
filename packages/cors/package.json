@@ -34,8 +34,10 @@
   "license": "MIT",
   "dependencies": {
     "@halsp/core": "^2.0.0-alpha.4",
-    "@halsp/http": "^2.0.0-alpha.4",
-    "@halsp/methods": "^2.0.0-alpha.4"
+    "@halsp/http": "^2.0.0-alpha.4"
+  },
+  "devDependencies": {
+    "@halsp/testing": "^2.0.0-alpha.4"
   },
   "files": [
     "/dist/*",

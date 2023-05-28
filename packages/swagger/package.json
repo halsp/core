@@ -37,7 +37,6 @@
     "@halsp/core": "^2.0.0-alpha.4",
     "@halsp/http": "^2.0.0-alpha.4",
     "@halsp/inject": "^2.0.0-alpha.4",
-    "@halsp/methods": "^2.0.0-alpha.4",
     "@halsp/pipe": "^2.0.0-alpha.4",
     "@halsp/router": "^2.0.0-alpha.4",
     "@halsp/static": "^2.0.0-alpha.4",

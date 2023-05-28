@@ -37,11 +37,11 @@
   "dependencies": {
     "@halsp/core": "^2.0.0-alpha.4",
     "@halsp/http": "^2.0.0-alpha.4",
-    "@halsp/methods": "^2.0.0-alpha.4",
     "glob": "^10.2.6",
     "mime": "^3.0.0"
   },
   "devDependencies": {
+    "@halsp/testing": "^2.0.0-alpha.4",
     "@types/glob": "^8.1.0",
     "@types/mime": "^3.0.1"
   },

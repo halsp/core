@@ -4,8 +4,7 @@ import { Context, HookType, Startup } from "@halsp/core";
 import { MvaOptions, CodeType } from "./mva-options";
 import { execFilters } from "@halsp/filter";
 import { Action } from "@halsp/router";
-import { HttpException } from "@halsp/http";
-import { HttpMethods } from "@halsp/methods";
+import { HttpException, HttpMethods } from "@halsp/http";
 
 export { MvaOptions };
 export { ResultFilter } from "./result.filter";

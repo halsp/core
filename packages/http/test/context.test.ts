@@ -1,6 +1,5 @@
 import { Context } from "@halsp/core";
-import { HttpMethods } from "@halsp/methods";
-import "../src";
+import { HttpMethods } from "../src";
 
 describe("context", () => {
   it("default instance", async () => {

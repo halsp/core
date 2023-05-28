@@ -1,6 +1,5 @@
-import { HttpMethods } from "@halsp/methods";
+import { HttpMethods } from "@halsp/http";
 import { Request, Startup } from "@halsp/core";
-import "@halsp/http";
 import "@halsp/testing";
 import "../src";
 import { TEST_ACTION_DIR } from "@halsp/router/dist/constant";

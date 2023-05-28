@@ -1,6 +1,4 @@
-import "@halsp/http";
-import { HeadersDict } from "@halsp/http";
-import { HttpMethods } from "@halsp/methods";
+import { HeadersDict, HttpMethods } from "@halsp/http";
 import { ResponseStruct } from "./response-struct";
 import { Readable } from "stream";
 import { Context, Dict, isObject, Startup } from "@halsp/core";

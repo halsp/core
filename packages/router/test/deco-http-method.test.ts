@@ -1,7 +1,5 @@
-import { StatusCodes } from "@halsp/http";
-import { HttpMethods } from "@halsp/methods";
+import { StatusCodes, HttpMethods } from "@halsp/http";
 import "@halsp/testing";
-import "@halsp/http";
 import "../src";
 import "./utils";
 import { Request, Startup } from "@halsp/core";

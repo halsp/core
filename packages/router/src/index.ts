@@ -16,6 +16,7 @@ import {
 } from "./constant";
 import * as fs from "fs";
 import { BlankMiddleware } from "./blank.middleware";
+import { MapMatcher } from "./map/http-map-matcher";
 
 export { Action, MapItem, RouterOptions, RouterInitedOptions };
 export {
@@ -75,8 +76,6 @@ Startup.prototype.useRouter = function (options?: RouterOptions) {
         return await next();
       }
 
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const { MapMatcher } = require("./map/http-map-matcher");
       const mapMatcher = new MapMatcher(ctx);
       if (mapMatcher.notFound) {
         ctx.res["notFoundMsg"]({

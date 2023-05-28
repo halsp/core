@@ -1,5 +1,5 @@
 import { Middleware } from "@halsp/core";
-import { HttpMethods } from "@halsp/methods";
+import { HttpMethods } from "@halsp/http";
 import { Options } from "./options";
 
 export class CorsMiddleware extends Middleware {

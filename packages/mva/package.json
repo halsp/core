@@ -39,11 +39,11 @@
     "@halsp/core": "^2.0.0-alpha.4",
     "@halsp/filter": "^2.0.0-alpha.4",
     "@halsp/http": "^2.0.0-alpha.4",
-    "@halsp/methods": "^2.0.0-alpha.4",
     "@halsp/router": "^2.0.0-alpha.4",
     "@halsp/view": "^2.0.0-alpha.4"
   },
   "devDependencies": {
+    "@halsp/testing": "^2.0.0-alpha.4",
     "@types/shelljs": "^0.8.12",
     "ejs": "^3.1.9"
   },

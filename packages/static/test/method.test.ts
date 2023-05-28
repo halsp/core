@@ -1,6 +1,5 @@
 import { Request, Startup } from "@halsp/core";
-import { HttpMethods } from "@halsp/methods";
-import "@halsp/http";
+import { HttpMethods } from "@halsp/http";
 import "@halsp/testing";
 import "../src";
 import { readStream } from "./utils";

@@ -1,8 +1,7 @@
-import "@halsp/http";
 import "@halsp/testing";
 import "../src";
 import { Request, Startup } from "@halsp/core";
-import { HttpMethods } from "@halsp/methods";
+import { HttpMethods } from "@halsp/http";
 import path from "path";
 
 describe("dir", () => {

@@ -1,8 +1,7 @@
 import "../../src";
-import { HttpMethods } from "@halsp/methods";
+import { HttpMethods } from "@halsp/http";
 import { Request, Startup } from "@halsp/core";
 import "@halsp/testing";
-import "@halsp/http";
 import "../utils";
 
 test(`action name error`, async () => {

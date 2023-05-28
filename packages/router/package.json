@@ -36,10 +36,11 @@
   "license": "MIT",
   "dependencies": {
     "@halsp/core": "^2.0.0-alpha.4",
-    "@halsp/methods": "^2.0.0-alpha.4",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
+    "@halsp/http": "^2.0.0-alpha.4",
+    "@halsp/micro": "^2.0.0-alpha.4",
     "@halsp/testing": "^2.0.0-alpha.4"
   },
   "files": [

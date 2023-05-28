@@ -1,5 +1,4 @@
 import { Startup } from "@halsp/core";
-import "@halsp/http";
 import { CorsMiddleware } from "./cors.middleware";
 import { Options } from "./options";
 

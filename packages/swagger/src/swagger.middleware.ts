@@ -4,8 +4,7 @@ import { SwaggerOptions } from "./options";
 import { OpenApiBuilder } from "openapi3-ts-remove-yaml";
 import path from "path";
 import * as fs from "fs";
-import { StatusCodes } from "@halsp/http";
-import { HttpMethods } from "@halsp/methods";
+import { StatusCodes, HttpMethods } from "@halsp/http";
 import { Readable } from "stream";
 
 export class SwaggerMiddlware extends Middleware {

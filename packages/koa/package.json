@@ -37,12 +37,12 @@
   "dependencies": {
     "@halsp/core": "^2.0.0-alpha.4",
     "@halsp/http": "^2.0.0-alpha.4",
-    "@halsp/methods": "^2.0.0-alpha.4",
     "koa": "^2.14.2",
     "koa-compose": "^4.1.0",
     "qs": "^6.11.2"
   },
   "devDependencies": {
+    "@halsp/testing": "^2.0.0-alpha.4",
     "@koa/cors": "4.0.0",
     "@koa/router": "^12.0.0",
     "@types/koa": "^2.13.6",

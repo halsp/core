@@ -1,5 +1,5 @@
 import "../src";
-import { HttpMethods } from "@halsp/methods";
+import { HttpMethods } from "@halsp/http";
 import { Request, Response, Startup } from "@halsp/core";
 import cors from "@koa/cors";
 import Router from "@koa/router";
