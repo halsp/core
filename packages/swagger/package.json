@@ -1,6 +1,6 @@
 {
   "name": "@halsp/swagger",
-  "version": "2.0.0-alpha.4",
+  "version": "2.0.0",
   "description": "使用 swagger 自动生成你的 Halsp 文档",
   "engines": {
     "node": ">=12.14.0"
@@ -34,13 +34,13 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^2.0.0-alpha.4",
-    "@halsp/http": "^2.0.0-alpha.4",
-    "@halsp/inject": "^2.0.0-alpha.4",
-    "@halsp/pipe": "^2.0.0-alpha.4",
-    "@halsp/router": "^2.0.0-alpha.4",
-    "@halsp/static": "^2.0.0-alpha.4",
-    "@halsp/validator": "^2.0.0-alpha.4",
+    "@halsp/core": "^2.0.0",
+    "@halsp/http": "^2.0.0",
+    "@halsp/inject": "^2.0.0",
+    "@halsp/pipe": "^2.0.0",
+    "@halsp/router": "^2.0.0",
+    "@halsp/static": "^2.0.0",
+    "@halsp/validator": "^2.0.0",
     "openapi3-ts-remove-yaml": "^3.0.2",
     "reflect-metadata": "^0.1.13",
     "swagger-ui-dist": "^4.19.0"

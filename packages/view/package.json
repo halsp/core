@@ -1,6 +1,6 @@
 {
   "name": "@halsp/view",
-  "version": "2.0.0-alpha.4",
+  "version": "2.0.0",
   "description": "Halsp 视图渲染中间件",
   "engines": {
     "node": ">=12.14.0"
@@ -37,7 +37,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^2.0.0-alpha.4",
+    "@halsp/core": "^2.0.0",
     "consolidate": "^0.16.0"
   },
   "devDependencies": {

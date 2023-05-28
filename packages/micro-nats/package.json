@@ -1,6 +1,6 @@
 {
   "name": "@halsp/micro-nats",
-  "version": "2.0.0-alpha.4",
+  "version": "2.0.0",
   "description": "Halsp 微服务 NATS 通信",
   "engines": {
     "node": ">=12.14.0"
@@ -38,8 +38,8 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^2.0.0-alpha.4",
-    "@halsp/micro": "^2.0.0-alpha.4",
+    "@halsp/core": "^2.0.0",
+    "@halsp/micro": "^2.0.0",
     "nats": "^2.14.0"
   },
   "files": [
