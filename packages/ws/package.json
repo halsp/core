@@ -39,9 +39,6 @@
     "@types/ws": "^8.5.4",
     "ws": "^8.13.0"
   },
-  "devDependencies": {
-    "@halsp/testing": "^2.0.0-alpha.4"
-  },
   "files": [
     "/dist/*",
     "/src/*",
