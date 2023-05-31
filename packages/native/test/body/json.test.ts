@@ -4,7 +4,9 @@ import { Startup } from "@halsp/core";
 
 test("json body explicit type", async () => {
   const server = await new Startup()
-    .useNative()
+    .useNative({
+      port: 0,
+    })
     .use(async (ctx) => {
       ctx.res.setHeader("content-type", "application/json");
       ctx.res.setHeader(
@@ -32,7 +34,9 @@ test("json body explicit type", async () => {
 
 test("return json", async () => {
   const server = await new Startup()
-    .useNative()
+    .useNative({
+      port: 0,
+    })
     .use(async (ctx) => {
       ctx.res.ok({
         content: "BODY",

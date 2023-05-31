@@ -98,7 +98,7 @@ function initStartup(this: Startup, options?: NativeOptions) {
       server.listen(
         {
           ...options,
-          port: getHalspPort(options?.port),
+          port: getHalspPort(options?.port ?? 9504),
         },
         () => resolve()
       );

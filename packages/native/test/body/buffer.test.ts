@@ -4,7 +4,9 @@ import { Startup } from "@halsp/core";
 
 test("buffer body explicit type", async () => {
   const server = await new Startup()
-    .useNative()
+    .useNative({
+      port: 0,
+    })
     .use(async (ctx) => {
       ctx.res.setHeader("content-type", "application/octet-stream");
       ctx.res.setHeader("content-length", Buffer.byteLength("BODY").toString());
@@ -21,7 +23,9 @@ test("buffer body explicit type", async () => {
 
 test("buffer body", async () => {
   const server = await new Startup()
-    .useNative()
+    .useNative({
+      port: 0,
+    })
     .use(async (ctx) => {
       ctx.res.ok(Buffer.from("BODY", "utf-8"));
     })

@@ -5,7 +5,9 @@ import { Startup } from "@halsp/core";
 
 test("stream body", async () => {
   const server = await new Startup()
-    .useNative()
+    .useNative({
+      port: 0,
+    })
     .use(async (ctx) => {
       ctx.res.ok(createReadStream("./LICENSE"));
     })
@@ -21,7 +23,9 @@ test("stream body", async () => {
 
 test("stream body explicit type", async () => {
   const server = await new Startup()
-    .useNative()
+    .useNative({
+      port: 0,
+    })
     .use(async (ctx) => {
       ctx.res.setHeader("content-type", "application/octet-stream");
       ctx.res.ok(createReadStream("./LICENSE"));

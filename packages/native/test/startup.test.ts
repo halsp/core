@@ -59,7 +59,9 @@ describe("write end", () => {
 
   test("should not set header after writeHead called", async () => {
     const startup = new Startup()
-      .useNative()
+      .useNative({
+        port: 0,
+      })
       .use(async (ctx, next) => {
         ctx.resStream.writeHead(200);
         await next();

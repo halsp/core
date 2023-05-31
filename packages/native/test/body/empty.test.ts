@@ -4,7 +4,9 @@ import { Startup } from "@halsp/core";
 
 test("empty body", async () => {
   const server = await new Startup()
-    .useNative()
+    .useNative({
+      port: 0,
+    })
     .use(async (ctx) => {
       ctx.res.ok(undefined);
     })
