@@ -27,6 +27,7 @@ describe("startup", () => {
   it("should listen with https", async () => {
     const server = await new Startup()
       .useNative({
+        port: 0,
         https: {},
       })
       .listen();
@@ -39,7 +40,9 @@ describe("startup", () => {
 describe("write end", () => {
   test("should not send body after stream ended", async () => {
     const server = await new Startup()
-      .useNative()
+      .useNative({
+        port: 0,
+      })
       .useNative()
       .use(async (ctx, next) => {
         ctx.resStream.end();
@@ -59,9 +62,7 @@ describe("write end", () => {
 
   test("should not set header after writeHead called", async () => {
     const startup = new Startup()
-      .useNative({
-        port: 0,
-      })
+      .useNative()
       .use(async (ctx, next) => {
         ctx.resStream.writeHead(200);
         await next();
