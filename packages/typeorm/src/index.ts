@@ -1,6 +1,6 @@
-import "@halsp/core";
+import "@halsp/inject";
 import { Context, Startup } from "@halsp/core";
-import { IService, parseInject } from "@halsp/inject";
+import { IService } from "@halsp/inject";
 import path from "path";
 import * as typeorm from "typeorm";
 import { OPTIONS_IDENTITY } from "./constant";
@@ -57,7 +57,7 @@ Context.prototype.getTypeorm = async function (
   identity?: string
 ): Promise<Typeorm> {
   const injectKey = OPTIONS_IDENTITY + (identity ?? "");
-  return (await parseInject(this, injectKey)) as Typeorm;
+  return (await this.getService<Typeorm>(injectKey))!;
 };
 
 export { Typeorm } from "./decorators";

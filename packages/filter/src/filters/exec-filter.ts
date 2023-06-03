@@ -1,5 +1,4 @@
 import { isClass, ObjectConstructor } from "@halsp/core";
-import { parseInject } from "@halsp/inject";
 import { Action } from "@halsp/router";
 import {
   FILTERS_METADATA,
@@ -40,7 +39,7 @@ export async function execFilters(
   }
 
   for (const filter of filters) {
-    const obj = await parseInject(action.ctx, filter);
+    const obj = await action.ctx.getService(filter);
     const execResult = await obj[funcName](action.ctx, ...params);
     if (isExecuting && typeof execResult == "boolean" && !execResult) {
       return false;

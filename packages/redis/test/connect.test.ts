@@ -1,6 +1,5 @@
 import "../src";
 import "@halsp/testing";
-import { parseInject } from "@halsp/inject";
 import { Redis } from "../src";
 import { OPTIONS_IDENTITY } from "../src/constant";
 import RedisClient from "@redis/client/dist/lib/client";
@@ -24,7 +23,7 @@ test("connect failed", async () => {
       url: "redis://test",
     })
     .use(async (ctx) => {
-      const connection = await parseInject<Redis>(ctx, OPTIONS_IDENTITY);
+      const connection = await ctx.getService<Redis>(OPTIONS_IDENTITY);
       if (!connection) throw new Error();
 
       Object.defineProperty(connection, "isOpen", {

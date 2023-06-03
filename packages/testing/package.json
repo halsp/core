@@ -38,6 +38,7 @@
   },
   "devDependencies": {
     "@halsp/http": "^2.0.1",
+    "@halsp/inject": "^2.0.1",
     "@halsp/micro": "^2.0.1",
     "@halsp/micro-grpc": "^2.0.1",
     "@halsp/micro-mqtt": "^2.0.1",

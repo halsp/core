@@ -1,6 +1,6 @@
 import { Startup } from "@halsp/core";
 import "@halsp/testing";
-import { Inject, parseInject } from "../src";
+import { Inject } from "../src";
 
 describe("initialize", () => {
   it("should execute initializing and initialized", async () => {
@@ -18,7 +18,7 @@ describe("initialize", () => {
     await new Startup()
       .useInject()
       .use(async (ctx) => {
-        await parseInject(ctx, TestService);
+        await ctx.getService(TestService);
       })
       .test();
 
@@ -41,13 +41,13 @@ describe("initialize", () => {
     await new Startup()
       .useInject()
       .use(async (ctx, next) => {
-        await parseInject(ctx, TestService);
-        await parseInject(ctx, TestService);
+        await ctx.getService(TestService);
+        await ctx.getService(TestService);
         await next();
       })
       .use(async (ctx) => {
-        await parseInject(ctx, TestService);
-        await parseInject(ctx, TestService);
+        await ctx.getService(TestService);
+        await ctx.getService(TestService);
       })
       .test();
 
@@ -76,7 +76,7 @@ describe("initialize", () => {
     await new Startup()
       .useInject()
       .use(async (ctx) => {
-        await parseInject(ctx, TestService2);
+        await ctx.getService(TestService2);
       })
       .test();
 

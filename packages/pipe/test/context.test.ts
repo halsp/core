@@ -1,5 +1,4 @@
 import { Context, Startup } from "@halsp/core";
-import { parseInject } from "@halsp/inject";
 import "@halsp/http";
 import "@halsp/testing";
 import "../src";
@@ -26,7 +25,7 @@ test(`http context`, async () => {
     .setContext(getTestRequest())
     .useInject()
     .use(async (ctx) => {
-      const obj = await parseInject(ctx, new TestService());
+      const obj = await ctx.getService(new TestService());
       return ctx.res.ok(obj.invoke());
     })
     .test();

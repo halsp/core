@@ -1,6 +1,6 @@
 import { Middleware, Startup } from "@halsp/core";
 import "@halsp/testing";
-import { Inject, InjectType, parseInject } from "../src";
+import { Inject, InjectType } from "../src";
 
 export class Service1 extends Object {
   public invoke(): string {
@@ -61,9 +61,9 @@ test(`class singleton`, async function () {
     .useInject()
     .inject(Service2, InjectType.Singleton)
     .use(async (ctx) => {
-      const service1 = await parseInject(ctx, Service2);
+      const service1 = await ctx.getService(Service2);
       service1.count += 1;
-      const service2 = await parseInject(ctx, Service2);
+      const service2 = await ctx.getService(Service2);
       service2.count += 2;
       ctx.set("result", service2.count);
     })

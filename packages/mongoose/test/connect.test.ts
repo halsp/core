@@ -1,6 +1,5 @@
 import "../src";
 import "@halsp/testing";
-import { parseInject } from "@halsp/inject";
 import { Mongoose } from "../src";
 import { OPTIONS_IDENTITY } from "../src/constant";
 import mongoose from "mongoose";
@@ -24,7 +23,7 @@ test("connected connection should be destroy", async () => {
       url: "mongodb://test",
     })
     .use(async (ctx) => {
-      const connection = await parseInject<Mongoose>(ctx, OPTIONS_IDENTITY);
+      const connection = await ctx.getService<Mongoose>(OPTIONS_IDENTITY);
       if (!connection) throw new Error();
     })
     .test();
@@ -51,7 +50,7 @@ it("disconnected connection should not be destroy", async () => {
       url: "mongodb://test",
     })
     .use(async (ctx) => {
-      const connection = await parseInject<Mongoose>(ctx, OPTIONS_IDENTITY);
+      const connection = await ctx.getService<Mongoose>(OPTIONS_IDENTITY);
       if (!connection) throw new Error();
     })
     .test();

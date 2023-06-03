@@ -1,6 +1,5 @@
 import { Context, Startup } from "@halsp/core";
-import { InjectType, parseInject } from "../src";
-import "../src";
+import { InjectType } from "../src";
 import "@halsp/testing";
 
 export class Service extends Object {
@@ -12,9 +11,9 @@ test(`object`, async function () {
     .useInject()
     .inject(Service, new Service())
     .use(async (ctx) => {
-      const service1 = await parseInject(ctx, Service);
+      const service1 = await ctx.getService(Service);
       service1.count++;
-      const service2 = await parseInject(ctx, Service);
+      const service2 = await ctx.getService(Service);
       service2.count++;
       ctx.set("result", {
         count1: service1.count,
@@ -39,9 +38,9 @@ function runBuilderTest(type?: InjectType.Scoped | InjectType.Transient) {
       .useInject()
       .inject(BuilderService, (ctx) => new BuilderService(ctx), type)
       .use(async (ctx) => {
-        const service1 = await parseInject(ctx, BuilderService);
+        const service1 = await ctx.getService(BuilderService);
         service1.count++;
-        const service2 = await parseInject(ctx, BuilderService);
+        const service2 = await ctx.getService(BuilderService);
         service2.count++;
         ctx.set("result", {
           ctx: service1.ctx == service2.ctx,
@@ -93,9 +92,9 @@ function runPrimiseBuilderTest(type?: InjectType) {
         type
       )
       .use(async (ctx) => {
-        const service1 = await parseInject(ctx, PromiseBuilderService);
+        const service1 = await ctx.getService(PromiseBuilderService);
         service1.count++;
-        const service2 = await parseInject(ctx, PromiseBuilderService);
+        const service2 = await ctx.getService(PromiseBuilderService);
         service2.count++;
         ctx.set("result", {
           ctx: service1.ctx == service2.ctx,

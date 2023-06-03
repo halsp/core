@@ -1,6 +1,6 @@
 import { Startup } from "@halsp/core";
 import "@halsp/testing";
-import { Inject, parseInject } from "../../src";
+import { Inject } from "../../src";
 
 it("key chain inject", async () => {
   class TestService1 {}
@@ -21,7 +21,7 @@ it("key chain inject", async () => {
     .useInject()
     .inject("Test", TestService3)
     .use(async (ctx) => {
-      const service3 = await parseInject<TestService3>(ctx, "Test");
+      const service3 = await ctx.getService<TestService3>("Test");
       if (!service3) {
         throw new Error();
       }

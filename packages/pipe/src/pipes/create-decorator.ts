@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { createInject, parseInject } from "@halsp/inject";
+import { createInject } from "@halsp/inject";
 import {
   Dict,
   Context,
@@ -36,7 +36,7 @@ async function execPipes<T extends object = any>(
 
   for (let pipe of [...beforeGlobalPipes, ...pipes, ...afterGlobalPipes]) {
     if (isClass(pipe)) {
-      pipe = await parseInject(ctx, pipe);
+      pipe = await ctx.getService(pipe);
     } else if (typeof pipe == "function") {
       pipe = new LambdaPipe(pipe);
     }

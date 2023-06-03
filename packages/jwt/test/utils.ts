@@ -1,4 +1,3 @@
-import { parseInject } from "@halsp/inject";
 import { JwtOptions, JwtService } from "../src";
 import "../src";
 import "@halsp/inject";
@@ -30,7 +29,7 @@ export async function runJwtServiceTest(
     .useInject()
     .useJwt(options)
     .use(async (ctx) => {
-      const jwtService = await parseInject(ctx, JwtService);
+      const jwtService = await ctx.getService(JwtService);
       await test(jwtService, ctx);
     })
     .test();

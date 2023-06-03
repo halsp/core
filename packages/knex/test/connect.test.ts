@@ -1,6 +1,5 @@
 import "../src";
 import "@halsp/testing";
-import { parseInject } from "@halsp/inject";
 import { OPTIONS_IDENTITY } from "../src/constant";
 import { Knex } from "../src";
 import { Startup } from "@halsp/core";
@@ -15,7 +14,7 @@ describe("connect", () => {
         },
       })
       .use(async (ctx) => {
-        const connection = await parseInject<Knex>(ctx, OPTIONS_IDENTITY);
+        const connection = await ctx.getService<Knex>(OPTIONS_IDENTITY);
         if (!connection) throw new Error();
 
         const tableName = "destroy_test";

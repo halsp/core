@@ -1,6 +1,7 @@
 import "@halsp/core";
+import "@halsp/inject";
 import { Context, Startup } from "@halsp/core";
-import { IService, parseInject } from "@halsp/inject";
+import { IService } from "@halsp/inject";
 import * as redis from "redis";
 import { OPTIONS_IDENTITY } from "./constant";
 import { Redis } from "./decorators";
@@ -42,7 +43,7 @@ Context.prototype.getRedis = async function (
   identity?: string
 ): Promise<Redis> {
   const injectKey = OPTIONS_IDENTITY + (identity ?? "");
-  return (await parseInject(this, injectKey)) as Redis;
+  return (await this.getService<Redis>(injectKey))!;
 };
 
 export { Redis } from "./decorators";

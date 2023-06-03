@@ -9,6 +9,7 @@ import {
 } from "@halsp/core";
 import { FILTERS_ORDER_BAG, GLOBAL_FILTERS_BAG, USE_FILTER } from "./constant";
 import { Action } from "@halsp/router";
+import "@halsp/inject";
 
 export {
   Filter,

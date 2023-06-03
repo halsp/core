@@ -1,5 +1,6 @@
+import "@halsp/inject";
 import { Context, ILogger, Startup } from "@halsp/core";
-import { InjectType, IService, parseInject } from "@halsp/inject";
+import { InjectType, IService } from "@halsp/inject";
 import winston from "winston";
 import Transport from "winston-transport";
 import { FileTransportOptions } from "winston/lib/winston/transports";
@@ -70,7 +71,7 @@ Startup.prototype.useLogger = function (...args: any[]): Startup {
 
 Context.prototype.getLogger = async function (identity?: string) {
   const injectKey = OPTIONS_IDENTITY + (identity ?? "");
-  return (await parseInject(this, injectKey)) as ILogger;
+  return (await this.getService(injectKey)) as ILogger;
 };
 
 Startup.prototype.useConsoleLogger = function (...args: any[]): Startup {

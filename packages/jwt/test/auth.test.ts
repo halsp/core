@@ -1,5 +1,4 @@
 import "@halsp/testing";
-import { parseInject } from "@halsp/inject";
 import "../src";
 import { JwtService } from "../src";
 import { createTestContext } from "./utils";
@@ -161,7 +160,7 @@ describe("auth", () => {
         secret: "secret",
       })
       .use(async (ctx) => {
-        const jwtService = await parseInject(ctx, JwtService);
+        const jwtService = await ctx.getService(JwtService);
         try {
           await jwtService.verify(null as any);
           ctx.set("result", false);

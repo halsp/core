@@ -1,21 +1,21 @@
 import { Middleware, Startup } from "@halsp/core";
 import "@halsp/testing";
 import "../../src";
-import { InjectType, parseInject, tryParseInject } from "../../src";
+import { InjectType } from "../../src";
 
 class TestService1 {}
 
 class TestMiddleware extends Middleware {
   async invoke(): Promise<void> {
     this.ctx.set("result", {
-      key: await parseInject(this.ctx, "KEY"),
+      key: await this.ctx.getService("KEY"),
       sv1:
-        (await parseInject<TestService1>(this.ctx, "SERVICE1")) ==
-        (await parseInject<TestService1>(this.ctx, "SERVICE1")),
+        (await this.ctx.getService<TestService1>("SERVICE1")) ==
+        (await this.ctx.getService<TestService1>("SERVICE1")),
       sv2:
-        (await parseInject<TestService1>(this.ctx, "SERVICE2")) ==
-        (await parseInject<TestService1>(this.ctx, "SERVICE2")),
-      notExist: await parseInject(this.ctx, "notExist"),
+        (await this.ctx.getService<TestService1>("SERVICE2")) ==
+        (await this.ctx.getService<TestService1>("SERVICE2")),
+      notExist: await this.ctx.getService("notExist"),
     });
   }
 }
@@ -42,9 +42,9 @@ test(`try parse`, async function () {
     .useInject()
     .inject("SERVICE1", TestService1)
     .use(async (ctx) => {
-      const obj1 = tryParseInject(ctx, "SERVICE1");
-      const obj2 = await parseInject(ctx, "SERVICE1");
-      const obj3 = tryParseInject(ctx, "SERVICE1");
+      const obj1 = ctx.getCachedService("SERVICE1");
+      const obj2 = await ctx.getService("SERVICE1");
+      const obj3 = ctx.getCachedService("SERVICE1");
       return ctx.set("result", {
         obj1: !!obj1,
         obj2: !!obj2,

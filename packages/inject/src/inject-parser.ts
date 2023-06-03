@@ -22,14 +22,14 @@ import { InjectType } from "./inject-type";
 import "reflect-metadata";
 import { InjectMap, InjectCustom, InjectKey, IService } from "./interfaces";
 
-type InjectTarget<T extends object = any> = T | ObjectConstructor<T>;
+export type InjectTarget<T extends object = any> = T | ObjectConstructor<T>;
 
 type InjectDecoratorRecordItem<T = any> = {
   injectKey: ObjectConstructor | string | ((...args: any[]) => T | Promise<T>);
   value: T;
 };
 
-class InjectDecoratorParser<T extends object = any> {
+export class InjectDecoratorParser<T extends object = any> {
   constructor(private readonly ctx: Context) {}
 
   private injectConstructor!: ObjectConstructor<T>;
@@ -64,7 +64,9 @@ class InjectDecoratorParser<T extends object = any> {
     return this.obj;
   }
 
-  public tryParseInject(target: string | ObjectConstructor<T>): T | undefined {
+  public getCachedService(
+    target: string | ObjectConstructor<T>
+  ): T | undefined {
     const existMap = isString(target)
       ? this.getExistKeyMap(target)
       : this.getExistTargetMap(target);
@@ -162,7 +164,7 @@ class InjectDecoratorParser<T extends object = any> {
       const argTypes = this.getConstructorArgsTypes(this.injectConstructor);
       const constr = argTypes[prop.parameterIndex];
       if (constr && isClass(constr)) {
-        result = await parseInject(this.ctx, constr);
+        result = await this.ctx.getService(constr);
       }
     }
 
@@ -197,7 +199,7 @@ class InjectDecoratorParser<T extends object = any> {
       value &&
       ((isObject(value) && !Array.isArray(value)) || isClass(value))
     ) {
-      return await parseInject(this.ctx, value);
+      return await this.ctx.getService(value);
     } else {
       return value;
     }
@@ -210,7 +212,7 @@ class InjectDecoratorParser<T extends object = any> {
       property
     );
     if (isClass(constr)) {
-      return await parseInject(this.ctx, constr);
+      return await this.ctx.getService(constr);
     } else {
       return undefined;
     }
@@ -335,7 +337,7 @@ class InjectDecoratorParser<T extends object = any> {
 
     // ordinary inject
     if (isClass(arg)) {
-      return await parseInject(this.ctx, arg);
+      return await this.ctx.getService(arg);
     } else {
       return undefined;
     }
@@ -366,37 +368,4 @@ class InjectDecoratorParser<T extends object = any> {
 
 export function isInjectClass<T extends object>(target: ObjectConstructor<T>) {
   return !!Reflect.getMetadata("design:paramtypes", target);
-}
-
-export async function parseInject<T extends object = any>(
-  ctx: Context,
-  key: string
-): Promise<T | undefined>;
-export async function parseInject<T extends object = any>(
-  ctx: Context,
-  target: InjectTarget<T>
-): Promise<T>;
-export async function parseInject<T extends object = any>(
-  ctx: Context,
-  target: InjectTarget<T> | string
-): Promise<T | undefined> {
-  if (isString(target)) {
-    return await new InjectDecoratorParser<T>(ctx).parseKey(target);
-  } else {
-    return await new InjectDecoratorParser<T>(ctx).parseTarget(target);
-  }
-}
-
-export function tryParseInject<T extends object = any>(
-  ctx: Context,
-  target: ObjectConstructor<T> | string
-): T | undefined {
-  return new InjectDecoratorParser<T>(ctx).tryParseInject(target);
-}
-
-export function getTransientInstances<T extends object = any>(
-  ctx: Context,
-  target: ObjectConstructor<T> | string
-): T[] {
-  return new InjectDecoratorParser<T>(ctx).getTransientInstances(target);
 }

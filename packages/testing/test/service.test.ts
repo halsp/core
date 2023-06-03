@@ -1,3 +1,4 @@
+import "@halsp/inject";
 import { Startup } from "@halsp/core";
 import { Inject } from "@halsp/inject";
 import "../src";

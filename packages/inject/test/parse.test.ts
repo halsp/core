@@ -1,18 +1,16 @@
 import "@halsp/testing";
 import "../src";
 import { Service2 } from "./services";
-import {
-  getTransientInstances,
-  InjectType,
-  parseInject,
-  tryParseInject,
-} from "../src";
+import { InjectType } from "../src";
 import { Startup } from "@halsp/core";
+import { InjectDecoratorParser } from "../src/inject-parser";
 
 test(`inject decorators object`, async function () {
   const { ctx } = await new Startup()
+    .keepThrow()
+    .useInject()
     .use(async (ctx) => {
-      const obj = await parseInject(ctx, Service2);
+      const obj = await ctx.getService(Service2);
       return ctx.set("result", obj.invoke());
     })
     .test();
@@ -21,8 +19,10 @@ test(`inject decorators object`, async function () {
 
 test(`inject decorators`, async function () {
   const { ctx } = await new Startup()
+    .keepThrow()
+    .useInject()
     .use(async (ctx) => {
-      const obj = await parseInject(ctx, Service2);
+      const obj = await ctx.getService(Service2);
       return ctx.set("result", obj.invoke());
     })
     .test();
@@ -33,9 +33,9 @@ test(`try parse`, async function () {
   const { ctx } = await new Startup()
     .useInject()
     .use(async (ctx) => {
-      const obj1 = tryParseInject(ctx, Service2);
-      const obj2 = await parseInject(ctx, Service2);
-      const obj3 = tryParseInject(ctx, Service2);
+      const obj1 = ctx.getCachedService(Service2);
+      const obj2 = await ctx.getService(Service2);
+      const obj3 = ctx.getCachedService(Service2);
       return ctx.set("result", {
         obj1: !!obj1,
         obj2: !!obj2,
@@ -55,9 +55,11 @@ test(`try parse`, async function () {
     .useInject()
     .inject(Service2, InjectType.Transient)
     .use(async (ctx) => {
-      const service1 = await parseInject(ctx, Service2);
-      const service2 = await parseInject(ctx, Service2);
-      const svs = getTransientInstances(ctx, Service2);
+      const service1 = await ctx.getService(Service2);
+      const service2 = await ctx.getService(Service2);
+      const svs = new InjectDecoratorParser(ctx).getTransientInstances(
+        Service2
+      );
       return ctx.set("result", {
         eq: service1 == service2,
         sv1: svs[0] == service1,

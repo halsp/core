@@ -18,22 +18,15 @@ Startup.prototype.expectInject = function <T extends object>(
   service: ObjectConstructor<T> | string,
   fn: (service: T, ctx: Context) => void | Promise<void>
 ) {
-  return this.use(async (ctx, next) => {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  require("@halsp/inject") as typeof import("@halsp/inject");
+
+  return this.useInject().use(async (ctx, next) => {
     await next();
 
-    const parseInject = getDepFunc<
-      <T>(ctx: Context, service: any) => Promise<T>
-    >("@halsp/inject", "parseInject");
-
-    const sv = await parseInject<T>(ctx, service as any);
+    const sv = await ctx["getService"]<T>(service as any);
     if (!sv) throw new Error("Create service failed");
 
     await fn(sv, ctx);
   });
 };
-
-function getDepFunc<T = any>(depName: string, funcName: string): T {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const d = require(depName);
-  return d[funcName] as T;
-}

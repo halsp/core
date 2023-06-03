@@ -3,7 +3,6 @@ import { Startup, Context } from "@halsp/core";
 import { OPTIONS } from "./constant";
 import { JwtOptions } from "./jwt-options";
 import { JwtService } from "./jwt.service";
-import { parseInject } from "@halsp/inject";
 import * as jwt from "jsonwebtoken";
 
 export { JwtObject, JwtPayload, JwtToken } from "./decorators";
@@ -41,7 +40,7 @@ Startup.prototype.useJwtVerify = function (
       return;
     }
 
-    const jwtService = await parseInject(ctx, JwtService);
+    const jwtService = await ctx.getService(JwtService);
     try {
       await jwtService.verify();
       await next();

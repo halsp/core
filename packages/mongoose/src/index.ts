@@ -1,6 +1,7 @@
 import "@halsp/core";
+import "@halsp/inject";
 import { Context, Startup } from "@halsp/core";
-import { IService, parseInject } from "@halsp/inject";
+import { IService } from "@halsp/inject";
 import mongoose from "mongoose";
 import { OPTIONS_IDENTITY } from "./constant";
 import { Mongoose } from "./decorators";
@@ -46,7 +47,7 @@ Context.prototype.getMongoose = async function (
   identity?: string
 ): Promise<Mongoose> {
   const injectKey = OPTIONS_IDENTITY + (identity ?? "");
-  return (await parseInject(this, injectKey)) as Mongoose;
+  return (await this.getService<Mongoose>(injectKey))!;
 };
 
 export { Mongoose } from "./decorators";
