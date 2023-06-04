@@ -11,6 +11,7 @@ import {
   MiddlewareConstructor,
   LambdaMiddleware,
 } from "./middlewares";
+import { Register } from "./register";
 import { ObjectConstructor } from "./utils";
 
 export class Startup {
@@ -198,10 +199,7 @@ export class Startup {
     return this;
   }
 
-  #registers: {
-    pattern: string;
-    handler?: (ctx: Context) => Promise<void> | void;
-  }[] = [];
+  #registers: Register[] = [];
 
   get registers() {
     return this.#registers;

@@ -9,15 +9,19 @@ import {
   Startup,
 } from "@halsp/core";
 import { HttpException, InternalServerErrorException } from "./exceptions";
+import { MapMatcher, ParsedRegister, parsePattern } from "./map-matcher";
+import { HttpOptions } from "./options";
 
 declare module "@halsp/core" {
   interface Startup {
-    useHttp(): this;
+    useHttp(options?: HttpOptions): this;
+
+    get parsedRegisters(): ParsedRegister[];
   }
 }
 
 const usedMap = new WeakMap<Startup, boolean>();
-Startup.prototype.useHttp = function () {
+Startup.prototype.useHttp = function (options: HttpOptions = {}) {
   if (usedMap.get(this)) {
     return this;
   }
@@ -25,7 +29,14 @@ Startup.prototype.useHttp = function () {
 
   process.env.HALSP_ENV = "http";
 
+  Object.defineProperty(this, "parsedRegisters", {
+    enumerable: true,
+    configurable: true,
+    get: () => this.registers.map((r) => parsePattern(r)),
+  });
+
   return this.use(async (ctx, next) => {
+    await new MapMatcher(ctx, options).match();
     await next();
     setType(ctx.res);
   }).hook(HookType.Unhandled, (ctx, md, error) => {

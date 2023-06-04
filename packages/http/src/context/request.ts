@@ -14,6 +14,8 @@ declare module "@halsp/core" {
     get query(): ReadonlyDict<string>;
     setQuery(key: string, value: string): this;
     setQuery(query: Dict<string>): this;
+
+    get params(): ReadonlyDict<string>;
   }
 }
 

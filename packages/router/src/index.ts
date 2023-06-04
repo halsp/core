@@ -1,4 +1,4 @@
-import { Context, Dict, isFunction, ReadonlyDict, Startup } from "@halsp/core";
+import { Context, Startup } from "@halsp/core";
 import { Action } from "./action";
 import MapParser from "./map/map-parser";
 import path = require("path");
@@ -16,7 +16,6 @@ import {
 } from "./constant";
 import * as fs from "fs";
 import { BlankMiddleware } from "./blank.middleware";
-import { MapMatcher } from "./map/http-map-matcher";
 
 export { Action, MapItem, RouterOptions, RouterInitedOptions };
 export {
@@ -55,10 +54,6 @@ declare module "@halsp/core" {
     get routerMap(): MapItem[];
     get routerOptions(): RouterInitedOptions;
   }
-
-  interface Request {
-    get params(): ReadonlyDict<string>;
-  }
 }
 
 const usedMap = new WeakMap<Startup, boolean>();
@@ -66,93 +61,13 @@ Startup.prototype.useRouter = function (options?: RouterOptions) {
   if (usedMap.get(this)) return this;
   usedMap.set(this, true);
 
-  return initRouterMap
-    .call(this, options)
-    .use(async (ctx, next) => {
-      if (process.env.HALSP_ENV != "http") {
-        return await next();
-      }
-      if (!!ctx.actionMetadata) {
-        return await next();
-      }
-
-      const mapMatcher = new MapMatcher(ctx);
-      if (mapMatcher.notFound) {
-        ctx.res["notFoundMsg"]({
-          message: `Can't find the path：${ctx.req.path}`,
-          path: ctx.req.path,
-        });
-      } else if (mapMatcher.methodNotAllowed) {
-        const method: string = ctx.req["method"];
-        ctx.res["methodNotAllowedMsg"]({
-          message: `method not allowed：${method}`,
-          method: method,
-          path: ctx.req.path,
-        });
-      } else {
-        const mapItem = mapMatcher.mapItem;
-        Object.defineProperty(ctx, "actionMetadata", {
-          configurable: true,
-          enumerable: false,
-          get: () => {
-            return mapItem;
-          },
-        });
-      }
-      await next();
-    })
-    .use(async (ctx, next) => {
-      if (!ctx.actionMetadata) {
-        return await next();
-      }
-
-      const params: Dict<string> = {};
-      const actionMetadata: MapItem = ctx.actionMetadata;
-      if (actionMetadata.url.includes("^")) {
-        const mapPathStrs = actionMetadata.url
-          .split("/")
-          .filter((item) => !!item);
-        const reqPathStrs = ctx.req.path.split("/").filter((item) => !!item);
-        for (
-          let i = 0;
-          i < Math.min(mapPathStrs.length, reqPathStrs.length);
-          i++
-        ) {
-          const mapPathStr = mapPathStrs[i];
-          if (!mapPathStr.startsWith("^")) continue;
-          const reqPathStr = reqPathStrs[i];
-
-          const key = mapPathStr.substring(1, mapPathStr.length);
-          const value = decodeURIComponent(reqPathStr);
-
-          params[key] = value;
-        }
-      }
-
-      Object.defineProperty(ctx.req, "params", {
-        configurable: true,
-        enumerable: false,
-        get: () => {
-          return params;
-        },
-      });
-      Object.defineProperty(ctx.req, "param", {
-        configurable: true,
-        enumerable: false,
-        get: () => {
-          return params;
-        },
-      });
-
-      await next();
-    })
-    .add((ctx) => {
-      if (!ctx.actionMetadata) {
-        return BlankMiddleware;
-      } else {
-        return ctx.actionMetadata.getAction(ctx.routerOptions.dir);
-      }
-    });
+  return initRouterMap.call(this, options).add((ctx) => {
+    if (!ctx.actionMetadata) {
+      return BlankMiddleware;
+    } else {
+      return ctx.actionMetadata.getAction(ctx.routerOptions.dir);
+    }
+  });
 };
 
 function initRouterMap(this: Startup, options?: RouterOptions) {
@@ -181,23 +96,21 @@ function initRouterMap(this: Startup, options?: RouterOptions) {
     },
   });
 
-  if (
-    process.env.HALSP_ENV == "micro" &&
-    "register" in this &&
-    isFunction(this["register"])
-  ) {
-    routerMap.forEach((item) => {
-      this["register"]((options?.prefix ?? "") + item.url, (ctx: Context) => {
-        Object.defineProperty(ctx, "actionMetadata", {
-          configurable: true,
-          enumerable: false,
-          get: () => {
-            return item;
-          },
-        });
+  routerMap.forEach((item) => {
+    const url = (options?.prefix ?? "") + item.url;
+    const methods = item.methods.join(",");
+    const pattern = methods ? methods + "//" + url : url;
+
+    this.register(pattern, (ctx: Context) => {
+      Object.defineProperty(ctx, "actionMetadata", {
+        configurable: true,
+        enumerable: false,
+        get: () => {
+          return item;
+        },
       });
     });
-  }
+  });
 
   return this.use(async (ctx, next) => {
     Object.defineProperty(ctx, "routerMap", {

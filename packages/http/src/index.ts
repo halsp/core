@@ -50,3 +50,4 @@ export {
 } from "./context";
 
 export { HttpMethods } from "./methods";
+export { HttpOptions } from "./options";

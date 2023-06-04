@@ -116,9 +116,7 @@ export function initResultHandler<T extends ResultHandler>(
 ) {
   function setResult(this: any, status: StatusCodes, body?: unknown): T {
     const res = getRes.bind(this)();
-    if (body != undefined) {
-      res.body = body;
-    }
+    res.body = body;
     res.status = status;
     return this;
   }

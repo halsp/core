@@ -9,7 +9,7 @@ test("prefix", async () => {
     .useHttp()
     .setContext(new Request().setPath("/api2/simple/router").setMethod("POST"))
     .useTestRouter({
-      prefix: "api2",
+      prefix: "api2/",
     })
     .test();
   expect(result.status).toBe(200);
@@ -20,7 +20,7 @@ test("error prefix", async () => {
     .useHttp()
     .setContext(new Request().setPath("/api2/simple/router").setMethod("POST"))
     .useTestRouter({
-      prefix: "error",
+      prefix: "error/",
     })
     .test();
   expect(result.status).toBe(404);
