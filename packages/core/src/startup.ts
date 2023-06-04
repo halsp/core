@@ -197,4 +197,24 @@ export class Startup {
     fn(this);
     return this;
   }
+
+  #registers: {
+    pattern: string;
+    handler?: (ctx: Context) => Promise<void> | void;
+  }[] = [];
+
+  get registers() {
+    return this.#registers;
+  }
+
+  public register(
+    pattern: string,
+    handler?: (ctx: Context) => Promise<void> | void
+  ) {
+    this.#registers.push({
+      pattern,
+      handler,
+    });
+    return this;
+  }
 }

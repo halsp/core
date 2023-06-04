@@ -191,3 +191,25 @@ describe("call", () => {
     await testWhen(false);
   });
 });
+
+describe("register", () => {
+  it("should register handler", async () => {
+    const { ctx } = await new Startup()
+      .register("test1", (ctx) => {
+        ctx.set("test1", true);
+      })
+      .register("test2", (ctx) => {
+        ctx.set("test2", true);
+      })
+      .use(async (ctx, next) => {
+        for (const item of ctx.startup.registers) {
+          await item.handler?.call(item, ctx);
+        }
+        await next();
+      })
+      .run();
+
+    expect(ctx.get("test1")).toBeTruthy();
+    expect(ctx.get("test2")).toBeTruthy();
+  });
+});
