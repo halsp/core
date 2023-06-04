@@ -4,20 +4,6 @@ import * as nats from "nats";
 import { handleMessage } from "@halsp/micro/dist/server";
 import { ServerPacket } from "@halsp/micro";
 
-declare module "@halsp/core" {
-  interface Startup {
-    useMicroNats(options?: MicroNatsOptions): this;
-
-    listen(): Promise<nats.NatsConnection>;
-    close(): Promise<void>;
-
-    register(
-      pattern: string,
-      handler?: (ctx: Context) => Promise<void> | void
-    ): this;
-  }
-}
-
 const usedMap = new WeakMap<Startup, boolean>();
 Startup.prototype.useMicroNats = function (options?: MicroNatsOptions) {
   if (usedMap.get(this)) {
@@ -32,11 +18,6 @@ Startup.prototype.useMicroNats = function (options?: MicroNatsOptions) {
 
 const jsonCodec = nats.JSONCodec();
 function initStartup(this: Startup, options: MicroNatsOptions = {}) {
-  const handlers: {
-    pattern: string;
-    handler?: (ctx: Context) => Promise<void> | void;
-  }[] = [];
-
   let connection: nats.NatsConnection | undefined = undefined;
   this.extend("listen", async () => {
     await close.call(this, connection);
@@ -48,7 +29,7 @@ function initStartup(this: Startup, options: MicroNatsOptions = {}) {
 
     connection = await nats.connect(opt);
 
-    handlers.forEach((item) => {
+    this.registers.forEach((item) => {
       register.bind(this)(item.pattern, item.handler, connection);
     });
 
@@ -63,7 +44,6 @@ function initStartup(this: Startup, options: MicroNatsOptions = {}) {
       "register",
       (pattern: string, handler?: (ctx: Context) => Promise<void> | void) => {
         this.logger.debug(`Add pattern: ${pattern}`);
-        handlers.push({ pattern, handler });
         return register.bind(this)(pattern, handler, connection);
       }
     );

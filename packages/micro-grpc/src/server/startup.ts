@@ -24,11 +24,6 @@ Startup.prototype.useMicroGrpc = function (options: MicroGrpcOptions = {}) {
 };
 
 function initStartup(this: Startup, options: MicroGrpcOptions) {
-  const handlers: {
-    pattern: string;
-    handler?: (ctx: Context) => Promise<void> | void;
-  }[] = [];
-
   let server: grpc.Server | undefined = undefined;
   this.extend("listen", async () => {
     server = new grpc.Server();
@@ -49,7 +44,7 @@ function initStartup(this: Startup, options: MicroGrpcOptions) {
         .filter((item) => isClass(pkg[item]))
         .map((item) => pkg[item] as grpc.ServiceClientConstructor);
       for (const svc of services) {
-        addService.bind(this)(server, svc, handlers);
+        addService.bind(this)(server, svc, this.registers);
       }
     }
 
@@ -76,14 +71,10 @@ function initStartup(this: Startup, options: MicroGrpcOptions) {
       await close.call(this, server);
       this.logger.info("Server shutdown success");
     })
-    .extend(
-      "register",
-      (pattern: string, handler?: (ctx: Context) => Promise<void> | void) => {
-        this.logger.debug(`Add pattern: ${pattern}`);
-        handlers.push({ pattern, handler });
-        return this;
-      }
-    );
+    .extend("register", (pattern: string) => {
+      this.logger.debug(`Add pattern: ${pattern}`);
+      return this;
+    });
 }
 
 async function close(this: Startup, server?: grpc.Server) {

@@ -1,7 +1,6 @@
 import "./startup";
 import * as redis from "redis";
 import { MicroRedisOptions } from "../options";
-import { Context } from "@halsp/core";
 import "@halsp/micro/dist/server";
 
 declare module "@halsp/core" {
@@ -13,10 +12,5 @@ declare module "@halsp/core" {
       sub: redis.RedisClientType;
     }>;
     close(): Promise<void>;
-
-    register(
-      pattern: string,
-      handler?: (ctx: Context) => Promise<void> | void
-    ): this;
   }
 }

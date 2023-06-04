@@ -1,13 +1,7 @@
 import { ServerPacket } from "@halsp/micro";
 import { MicroTcpOptions } from "../options";
 import * as net from "net";
-import {
-  closeServer,
-  Context,
-  getHalspPort,
-  logAddress,
-  Startup,
-} from "@halsp/core";
+import { closeServer, getHalspPort, logAddress, Startup } from "@halsp/core";
 import { handleMessage } from "@halsp/micro/dist/server";
 import { parseTcpBuffer } from "../tcp-parser";
 
@@ -24,13 +18,7 @@ Startup.prototype.useMicroTcp = function (options?: MicroTcpOptions) {
 };
 
 function initStartup(this: Startup, options?: MicroTcpOptions) {
-  const handlers: {
-    pattern: string;
-    handler?: (ctx: Context) => Promise<void> | void;
-  }[] = [];
-
-  const listener = (socket: net.Socket) =>
-    requestListener.bind(this)(socket, handlers);
+  const listener = (socket: net.Socket) => requestListener.bind(this)(socket);
   let server: net.Server;
   if (!!options) {
     server = net.createServer(options, listener);
@@ -62,34 +50,25 @@ function initStartup(this: Startup, options?: MicroTcpOptions) {
       await closeServer(server);
       this.logger.info("Server shutdown success");
     })
-    .extend(
-      "register",
-      (pattern: string, handler?: (ctx: Context) => Promise<void> | void) => {
-        this.logger.debug(`Add pattern: ${pattern}`);
-        handlers.push({ pattern, handler });
-        return this;
-      }
-    );
+    .extend("register", (pattern: string) => {
+      this.logger.debug(`Add pattern: ${pattern}`);
+      return this;
+    });
 
   server.on("listening", () => {
     logAddress(server, this.logger, "localhost");
   });
 }
 
-function requestListener(
-  this: Startup,
-  socket: net.Socket,
-  handlers: {
-    pattern: string;
-    handler?: (ctx: Context) => Promise<void> | void;
-  }[]
-) {
+function requestListener(this: Startup, socket: net.Socket) {
   socket.on("data", async (buffer) => {
     try {
       parseTcpBuffer(buffer, async (packet) => {
         try {
           const pattern = (packet as ServerPacket).pattern;
-          const handler = handlers.filter((item) => item.pattern == pattern)[0];
+          const handler = this.registers.filter(
+            (item) => item.pattern == pattern
+          )[0];
           if (!handler) {
             if (packet.id) {
               writeData(socket, {

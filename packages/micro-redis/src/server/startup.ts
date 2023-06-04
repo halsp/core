@@ -17,11 +17,6 @@ Startup.prototype.useMicroRedis = function (options?: MicroRedisOptions) {
 };
 
 function initStartup(this: Startup, options?: MicroRedisOptions) {
-  const handlers: {
-    pattern: string;
-    handler?: (ctx: Context) => Promise<void> | void;
-  }[] = [];
-
   let sub: redis.RedisClientType | undefined = undefined;
   let pub: redis.RedisClientType | undefined = undefined;
   this.extend("listen", async () => {
@@ -37,7 +32,7 @@ function initStartup(this: Startup, options?: MicroRedisOptions) {
     pub = redis.createClient(opt) as redis.RedisClientType;
     await Promise.all([pub.connect(), sub.connect()]);
 
-    handlers.forEach((item) => {
+    this.registers.forEach((item) => {
       register.bind(this)(item.pattern, item.handler, sub, pub);
     });
 
@@ -53,7 +48,6 @@ function initStartup(this: Startup, options?: MicroRedisOptions) {
       "register",
       (pattern: string, handler?: (ctx: Context) => Promise<void> | void) => {
         this.logger.debug(`Add pattern: ${pattern}`);
-        handlers.push({ pattern, handler });
         return register.bind(this)(pattern, handler, sub, pub);
       }
     );

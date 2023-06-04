@@ -1,4 +1,3 @@
-import { Context } from "@halsp/core";
 import type mqtt from "mqtt";
 import { MicroMqttOptions } from "../options";
 import "./startup";
@@ -10,11 +9,6 @@ declare module "@halsp/core" {
 
     listen(): Promise<mqtt.MqttClient>;
     close(): Promise<void>;
-
-    register(
-      pattern: string,
-      handler?: (ctx: Context) => Promise<void> | void
-    ): this;
   }
 
   interface Request {

@@ -1,23 +1,9 @@
 import { MicroMqttOptions } from "../options";
 import mqtt from "mqtt";
-import { Context, getHalspPort, Startup } from "@halsp/core";
+import { getHalspPort, Startup } from "@halsp/core";
 import { matchTopic } from "./topic";
 import { parseJsonBuffer } from "@halsp/micro";
 import { handleMessage } from "@halsp/micro/dist/server";
-
-declare module "@halsp/core" {
-  interface Startup {
-    useMicroMqtt(options?: MicroMqttOptions): this;
-
-    listen(): Promise<mqtt.MqttClient>;
-    close(): Promise<void>;
-
-    register(
-      pattern: string,
-      handler?: (ctx: Context) => Promise<void> | void
-    ): this;
-  }
-}
 
 const usedMap = new WeakMap<Startup, boolean>();
 Startup.prototype.useMicroMqtt = function (options?: MicroMqttOptions) {
@@ -32,11 +18,6 @@ Startup.prototype.useMicroMqtt = function (options?: MicroMqttOptions) {
 };
 
 function initStartup(this: Startup, options: MicroMqttOptions = {}) {
-  const handlers: {
-    pattern: string;
-    handler?: (ctx: Context) => Promise<void> | void;
-  }[] = [];
-
   let client: mqtt.MqttClient | undefined = undefined;
 
   let connectResolve: ((err: void) => void) | undefined = undefined;
@@ -75,14 +56,14 @@ function initStartup(this: Startup, options: MicroMqttOptions = {}) {
       });
     });
 
-    handlers.forEach((item) => {
+    this.registers.forEach((item) => {
       register.bind(this)(item.pattern, opt, client);
     });
 
     client.on(
       "message",
       (topic: string, payload: Buffer, packet: mqtt.IPublishPacket) => {
-        const handler = handlers.filter((item) =>
+        const handler = this.registers.filter((item) =>
           matchTopic(item.pattern, topic)
         )[0];
         if (!handler) return;
@@ -117,14 +98,10 @@ function initStartup(this: Startup, options: MicroMqttOptions = {}) {
       await closeInner();
       this.logger.info("Server shutdown success");
     })
-    .extend(
-      "register",
-      (pattern: string, handler?: (ctx: Context) => Promise<void> | void) => {
-        this.logger.debug(`Add pattern: ${pattern}`);
-        handlers.push({ pattern, handler });
-        return register.bind(this)(pattern, options, client);
-      }
-    );
+    .extend("register", (pattern: string) => {
+      this.logger.debug(`Add pattern: ${pattern}`);
+      return register.bind(this)(pattern, options, client);
+    });
 }
 
 async function close(this: Startup, client?: mqtt.MqttClient) {

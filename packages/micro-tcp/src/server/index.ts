@@ -9,11 +9,6 @@ declare module "@halsp/core" {
 
     listen(): Promise<net.Server>;
     close(): Promise<void>;
-
-    register(
-      pattern: string,
-      handler?: (ctx: Context) => Promise<void> | void
-    ): this;
   }
 
   interface Context {
