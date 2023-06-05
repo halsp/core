@@ -47,6 +47,10 @@ export function getTestRequest() {
     .setBody([0, 1])
     .setHeader("h1", 1)
     .setQuery("q", "q");
-  req["params"] = {};
+  Object.defineProperty(req, "params", {
+    enumerable: true,
+    configurable: true,
+    value: {},
+  });
   return req;
 }

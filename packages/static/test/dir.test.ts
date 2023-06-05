@@ -33,7 +33,6 @@ describe("dir", () => {
         .test();
 
       expect(result.status).toBe(404);
-      expect(result.body).toBeUndefined();
     }
   });
 

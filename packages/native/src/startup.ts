@@ -43,7 +43,7 @@ Startup.prototype.useNative = function (options?: NativeOptions) {
       const pathname = (ctx.reqStream.url as string).split("?")[0];
       const query = qs.parse((ctx.reqStream.url as string).split("?")[1]);
       ctx.req
-        .setPath(decodeURIComponent(pathname))
+        .setPath(pathname)
         .setMethod(ctx.reqStream.method as string)
         .setQuery(query as Dict<string>)
         .setHeaders(ctx.reqStream.headers as NumericalHeadersDict);

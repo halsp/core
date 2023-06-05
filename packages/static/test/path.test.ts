@@ -172,3 +172,20 @@ describe("useExt", () => {
     expect(await readStream(result.body)).toBe("TEST");
   });
 });
+
+describe("decode URI", () => {
+  it("should match utf-8 path", async () => {
+    const result = await new Startup()
+      .useHttp()
+      .setContext(
+        new Request().setMethod("get").setPath(encodeURIComponent("中文.html"))
+      )
+      .useStatic({
+        dir: "test/static",
+        encoding: "utf-8",
+      })
+      .test();
+    expect(result.status).toBe(200);
+    expect(await readStream(result.body)).toBe("Chinese");
+  });
+});

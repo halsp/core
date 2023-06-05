@@ -27,6 +27,10 @@ abstract class BaseMatchMiddleware extends Middleware {
   protected get isEnable() {
     return !this.options.strictMethod || this.isMethodValid;
   }
+
+  protected get reqPath() {
+    return decodeURIComponent(this.ctx.req.path);
+  }
 }
 
 class FileMatchMiddleware extends BaseMatchMiddleware {
@@ -62,7 +66,7 @@ class FileMatchMiddleware extends BaseMatchMiddleware {
   }
 
   private get isPathEqual() {
-    return this.reqPaths.some((rp) => this.ctx.req.path == normalizePath(rp));
+    return this.reqPaths.some((rp) => this.reqPath == normalizePath(rp));
   }
 
   private get reqPaths() {
@@ -177,11 +181,11 @@ class DirectoryMatchMiddleware extends BaseMatchMiddleware {
   private getDirFilePath(): string | undefined {
     const prefix = normalizePath(this.options.prefix);
 
-    if (prefix && !this.ctx.req.path.startsWith(prefix)) {
+    if (prefix && !this.reqPath.startsWith(prefix)) {
       return;
     }
 
-    let reqPath = this.ctx.req.path;
+    let reqPath = this.reqPath;
     if (prefix) {
       reqPath = reqPath.substring(prefix.length, reqPath.length);
     }
