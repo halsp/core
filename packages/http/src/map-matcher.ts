@@ -1,4 +1,4 @@
-import { Context, Dict, Register } from "@halsp/core";
+import { Context, Dict, normalizePath, Register } from "@halsp/core";
 import { HttpMethods } from "./methods";
 import { HttpOptions } from "./options";
 
@@ -143,7 +143,7 @@ export function parsePattern(register: Register): ParsedRegister {
   if (strs.length <= 1) {
     return {
       methods: [],
-      url: strs[0],
+      url: normalizePath(strs[0]),
       handler: register.handler,
     };
   } else {
@@ -152,7 +152,7 @@ export function parsePattern(register: Register): ParsedRegister {
         .split(",")
         .filter((m) => !!m)
         .map((m) => m.toUpperCase()),
-      url: strs[1],
+      url: normalizePath(strs[1]),
       handler: register.handler,
     };
   }
