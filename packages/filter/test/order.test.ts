@@ -88,7 +88,7 @@ class TestActionFilter6 implements ActionFilter {
 @UseFilters(TestActionFilter1, new TestActionFilter2(), TestActionFilter3)
 class TestAction extends Action {
   async invoke(): Promise<void> {
-    this.ok();
+    this.res.setStatus(200);
   }
 }
 
@@ -96,6 +96,7 @@ test(`filter order`, async () => {
   const res = await new Startup()
     .useHttp()
     .setContext(new Request().setPath("filters/order").setMethod("GET"))
+    .register("GET//filters/order")
     .use(async (ctx, next) => {
       ctx.res.body = 0;
       await next();

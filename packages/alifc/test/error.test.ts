@@ -6,7 +6,7 @@ test("without md", async function () {
   const aliReq = newAliReq();
   const aliRes = newAliRes();
 
-  await new Startup().useAlifc().run(aliReq, aliRes, aliContext);
+  await new Startup().useAlifc().register("").run(aliReq, aliRes, aliContext);
 
   expect(aliRes.statusCode).toBe(404);
   expect(aliRes._body).toBe("");

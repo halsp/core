@@ -2,7 +2,7 @@ import { Startup } from "@halsp/core";
 import "../src";
 
 test("default response", async () => {
-  const res = await new Startup().useLambda().run({}, {});
+  const res = await new Startup().useLambda().register("").run({}, {});
 
   expect(res.isBase64Encoded).toBeFalsy();
   expect(res.headers.t).toBeUndefined();
