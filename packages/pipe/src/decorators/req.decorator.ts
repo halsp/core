@@ -11,7 +11,7 @@ export function Query(
 export function Query(target: any, propertyKey: string | symbol): void;
 export function Query(
   target: any,
-  propertyKey: string | symbol,
+  propertyKey: string | symbol | undefined,
   parameterIndex: number
 ): void;
 export function Query(...args: any[]): any {
@@ -28,7 +28,7 @@ export function Body(
 export function Body(target: any, propertyKey: string | symbol): void;
 export function Body(
   target: any,
-  propertyKey: string | symbol,
+  propertyKey: string | symbol | undefined,
   parameterIndex: number
 ): void;
 export function Body(...args: any[]): any {
@@ -45,7 +45,7 @@ export function Param(
 export function Param(target: any, propertyKey: string | symbol): void;
 export function Param(
   target: any,
-  propertyKey: string | symbol,
+  propertyKey: string | symbol | undefined,
   parameterIndex: number
 ): void;
 export function Param(...args: any[]): any {
@@ -62,7 +62,7 @@ export function Header(
 export function Header(target: any, propertyKey: string | symbol): void;
 export function Header(
   target: any,
-  propertyKey: string | symbol,
+  propertyKey: string | symbol | undefined,
   parameterIndex: number
 ): void;
 export function Header(...args: any[]): any {

@@ -7,7 +7,7 @@ describe("custom inject", () => {
   it(`should inject custom property decorators`, async () => {
     function Custom(property: string): PropertyDecorator;
     function Custom(target: any, propertyKey: string | symbol): void;
-    function Custom(arg1: any, arg2?: any) {
+    function Custom(arg1: any, arg2?: any): any {
       if (typeof arg1 == "string") {
         return Inject((ctx) => ctx.get<object>("custom")[arg1]);
       } else {
@@ -58,7 +58,7 @@ describe("custom inject", () => {
     function Custom(property: string): ParameterDecorator;
     function Custom(
       target: any,
-      propertyKey: string | symbol,
+      propertyKey: string | symbol | undefined,
       parameterIndex: number
     ): void;
     function Custom(...args: any[]): void | ParameterDecorator {

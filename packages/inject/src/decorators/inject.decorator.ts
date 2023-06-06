@@ -19,7 +19,7 @@ export function Inject(target: any): void;
 export function Inject(target: any, propertyKey: string | symbol): void;
 export function Inject(
   target: any,
-  propertyKey: string | symbol,
+  propertyKey: string | symbol | undefined,
   parameterIndex: number
 ): void;
 

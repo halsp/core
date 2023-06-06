@@ -3,7 +3,7 @@ import * as ws from "ws";
 
 export function WebSocket(
   target: any,
-  propertyKey: string | symbol,
+  propertyKey: string | symbol | undefined,
   parameterIndex?: number
 ): void;
 export function WebSocket(): PropertyDecorator & ParameterDecorator;
