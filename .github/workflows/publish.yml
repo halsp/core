@@ -47,3 +47,17 @@ jobs:
       - run: npx lerna publish from-package -y -m "chore(release):\ publish %s"
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+
+  sync-cnpm:
+    if: github.repository == 'halsp/core'
+    needs: publish-npm
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+          registry-url: https://registry.npmjs.org/
+      - run: sh scripts/install-yarn.sh
+      - run: npm run bootstrap
+      - run: npx ts-node scripts/sync-cnpm.ts
