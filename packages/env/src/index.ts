@@ -1,7 +1,6 @@
 import { Startup } from "@halsp/core";
 import { EnvOptions } from "./options";
 import dotenv from "dotenv";
-import { BASE_USED } from "./constant";
 import path from "path";
 
 declare module "@halsp/core" {
@@ -10,11 +9,15 @@ declare module "@halsp/core" {
   }
 }
 
+const usedMap = new WeakMap<Startup, dotenv.DotenvConfigOutput>();
 Startup.prototype.useEnv = function (options: EnvOptions = {}): Startup {
-  if (!this[BASE_USED]) {
-    this[BASE_USED] = dotenv.config({
-      path: ".env",
-    });
+  if (!usedMap.get(this)) {
+    usedMap.set(
+      this,
+      dotenv.config({
+        path: ".env",
+      })
+    );
   }
 
   const fileNames = getFileNames();
