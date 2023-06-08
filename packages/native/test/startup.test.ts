@@ -1,6 +1,7 @@
 import "../src";
 import request from "supertest";
 import { Startup } from "@halsp/core";
+import { Server } from "http";
 
 describe("startup", () => {
   it("should listen with empty options", async () => {
@@ -35,10 +36,26 @@ describe("startup", () => {
     expect(server.listening).toBeTruthy();
     server.close();
   });
+
+  it("should throw error when the port is already in use", async () => {
+    const startup = new Startup().useNative();
+    const server = startup["nativeServer"] as Server;
+
+    let options: any;
+    server.listen = (opts, cb) => {
+      options = opts;
+      cb();
+      return server;
+    };
+
+    await startup.listen();
+
+    expect(options.port).toBe(9504);
+  }, 10000);
 });
 
 describe("write end", () => {
-  test("should not send body after stream ended", async () => {
+  it("should not send body after stream ended", async () => {
     const server = await new Startup()
       .useNative({
         port: 0,
@@ -60,9 +77,11 @@ describe("write end", () => {
     expect(res.body).not.toBe("BODY");
   });
 
-  test("should not set header after writeHead called", async () => {
+  it("should not set header after writeHead called", async () => {
     const startup = new Startup()
-      .useNative()
+      .useNative({
+        port: 0,
+      })
       .use(async (ctx, next) => {
         ctx.resStream.writeHead(200);
         await next();

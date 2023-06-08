@@ -30,26 +30,12 @@ declare module "@halsp/core" {
 
 const usedMap = new WeakMap<Startup, boolean>();
 Startup.prototype.useNative = function (options?: NativeOptions) {
-  if (usedMap.get(this)) {
-    return this;
-  }
+  if (usedMap.get(this)) return this;
   usedMap.set(this, true);
 
   initStartup.call(this, options);
 
-  return this.useHttp()
-    .useHttpJsonBody()
-    .use(async (ctx, next) => {
-      const pathname = (ctx.reqStream.url as string).split("?")[0];
-      const query = qs.parse((ctx.reqStream.url as string).split("?")[1]);
-      ctx.req
-        .setPath(pathname)
-        .setMethod(ctx.reqStream.method as string)
-        .setQuery(query as Dict<string>)
-        .setHeaders(ctx.reqStream.headers as NumericalHeadersDict);
-      ctx.resStream.statusCode = 404;
-      await next();
-    });
+  return this.useHttp().useHttpJsonBody();
 };
 
 async function requestListener(
@@ -65,6 +51,15 @@ async function requestListener(
   Object.defineProperty(ctx, "reqStream", {
     get: () => reqStream,
   });
+
+  const pathname = (reqStream.url as string).split("?")[0];
+  const query = qs.parse((reqStream.url as string).split("?")[1]);
+  ctx.req
+    .setPath(pathname)
+    .setMethod(reqStream.method as string)
+    .setQuery(query as Dict<string>)
+    .setHeaders(reqStream.headers as NumericalHeadersDict);
+  resStream.statusCode = 404;
 
   const res = await this["invoke"](ctx);
 

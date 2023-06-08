@@ -22,11 +22,11 @@ export class MapMatcher {
     const register = this.getRegister();
     if (!register) return;
 
+    parseParams(this.ctx, register);
+
     if (register.handler) {
       await register.handler(this.ctx);
     }
-
-    parseParams(this.ctx, register);
   }
 
   private getRegister(): ParsedRegister | undefined {
