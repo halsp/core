@@ -43,6 +43,7 @@
     "@halsp/micro": "^2.1.1"
   },
   "files": [
+    "/cli-config/*",
     "/dist/*",
     "/src/*",
     "/test/*",
