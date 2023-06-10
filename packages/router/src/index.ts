@@ -76,7 +76,6 @@ function initRouterMap(this: Startup, options?: RouterOptions) {
     map: mapOptions?.map,
     dir: this[TEST_ACTION_DIR] ?? mapOptions?.dir ?? DEFAULT_ACTION_DIR,
     prefix: options?.prefix,
-    customMethods: options?.customMethods,
   };
 
   const routerMap = new MapParser(opts).getMap();

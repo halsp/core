@@ -2,7 +2,6 @@ import MapItem from "./map/map-item";
 
 export interface RouterOptions {
   prefix?: string;
-  customMethods?: string[];
 }
 
 export interface RouterInitedOptions extends RouterOptions {

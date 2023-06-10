@@ -71,17 +71,18 @@ test("null body test", async () => {
 describe("options", () => {
   it("should not replace options", async () => {
     await new Startup()
+      .keepThrow()
       .useHttp()
       .use(async (ctx, next) => {
         await next();
         expect(ctx.routerOptions).toBe(ctx.startup.routerOptions);
-        expect(ctx.routerOptions.customMethods).toEqual(["CUSTOM1"]);
+        expect(ctx.routerOptions.prefix).toEqual("p1");
       })
       .useTestRouter({
-        customMethods: ["CUSTOM1"],
+        prefix: "p1",
       })
       .useTestRouter({
-        customMethods: ["CUSTOM2"],
+        prefix: "p2",
       })
       .test();
   });
