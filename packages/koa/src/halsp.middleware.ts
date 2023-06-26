@@ -5,9 +5,9 @@ import { Context as KoaContext, Next } from "koa";
 import { KOA_CTX, KOA_NEXT } from "./constant";
 import { koaResToHalspRes, halspResToKoaRes } from "./res-transform";
 
-export function koaHalsp(useMiddlewares: (startup: Startup) => void) {
+export function koaHalsp(config: (startup: Startup) => void) {
   const startup = new Startup().useHttp();
-  useMiddlewares(startup);
+  config(startup);
   startup.use(async (halspCtx) => {
     const koaCtx: KoaContext = halspCtx.get(KOA_CTX);
     const koaNext: Next = halspCtx.get(KOA_NEXT);

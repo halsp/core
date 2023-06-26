@@ -1,4 +1,4 @@
-import { Middleware } from "@halsp/core";
+import { Middleware, Startup } from "@halsp/core";
 import Koa from "koa";
 import compose from "koa-compose";
 import { KOA_MIDDLEWARES_BAG } from "./constant";
@@ -7,6 +7,19 @@ import {
   halspResToKoaRes,
   koaResToHalspRes,
 } from "./res-transform";
+
+declare module "@halsp/core" {
+  interface Startup {
+    koa(middleware: Parameters<typeof Koa.prototype.use>[0]): this;
+  }
+}
+
+Startup.prototype.koa = function (
+  middleware: Parameters<typeof Koa.prototype.use>[0]
+) {
+  this.add(() => new KoaMiddleware(middleware), KoaMiddleware);
+  return this;
+};
 
 export class KoaMiddleware extends Middleware {
   constructor(
