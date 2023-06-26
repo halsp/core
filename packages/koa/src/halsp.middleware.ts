@@ -9,8 +9,8 @@ export function koaHalsp(useMiddlewares: (startup: Startup) => void) {
   const startup = new Startup().useHttp();
   useMiddlewares(startup);
   startup.use(async (halspCtx) => {
-    const koaCtx: KoaContext = halspCtx[KOA_CTX];
-    const koaNext: Next = halspCtx[KOA_NEXT];
+    const koaCtx: KoaContext = halspCtx.get(KOA_CTX);
+    const koaNext: Next = halspCtx.get(KOA_NEXT);
     await halspResToKoaRes(halspCtx.res, koaCtx);
     await koaNext();
     await koaResToHalspRes(koaCtx, halspCtx.res);
@@ -32,8 +32,8 @@ export function koaHalsp(useMiddlewares: (startup: Startup) => void) {
         get: () => koaCtx.req,
       });
     }
-    ctx[KOA_CTX] = koaCtx;
-    ctx[KOA_NEXT] = koaNext;
+    ctx.set(KOA_CTX, koaCtx);
+    ctx.set(KOA_NEXT, koaNext);
 
     await koaResToHalspRes(koaCtx, ctx.res);
     const res = await startup["invoke"](ctx);

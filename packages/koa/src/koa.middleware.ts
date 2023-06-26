@@ -8,18 +8,9 @@ import {
   koaResToHalspRes,
 } from "./res-transform";
 
-export interface KoaOptions {
-  env?: string | undefined;
-  keys?: string[] | undefined;
-  proxy?: boolean | undefined;
-  subdomainOffset?: number | undefined;
-  proxyIpHeader?: string | undefined;
-  maxIpsCount?: number | undefined;
-}
 export class KoaMiddleware extends Middleware {
   constructor(
-    private readonly middleware: Parameters<typeof Koa.prototype.use>[0],
-    private readonly options?: KoaOptions
+    private readonly middleware: Parameters<typeof Koa.prototype.use>[0]
   ) {
     super();
   }
@@ -38,9 +29,8 @@ export class KoaMiddleware extends Middleware {
     }
     this.ctx.set(KOA_MIDDLEWARES_BAG, []);
 
-    const app = new Koa(this.options);
-    middlewares.splice(0, 0, async (koaCtx, next) => {
-      koaCtx.status = koaCtx.halspInStatus;
+    const app = new Koa().use(async (ctx, next) => {
+      ctx.status = ctx.halspInStatus;
       await next();
     });
     middlewares.forEach((md) => app.use(md));
