@@ -20,18 +20,19 @@ declare module "@halsp/core" {
 Startup.prototype.useTypeorm = function (options: Options): Startup {
   const injectKey = OPTIONS_IDENTITY + (options.identity ?? "");
   if (!options.entities) {
-    options = Object.assign(options, {
-      entities: [
-        path.join(
-          process.cwd(),
-          process.env.TS_JEST ? "entities/**/*.ts" : "entities/**/*.js"
-        ),
-        path.join(
-          process.cwd(),
-          process.env.TS_JEST ? "entity/**/*.ts" : "entity/**/*.js"
-        ),
-      ],
-    });
+    options = Object.assign(
+      {
+        entities: [
+          path.resolve(
+            process.env.TS_JEST ? "entities/**/*.ts" : "entities/**/*.js"
+          ),
+          path.resolve(
+            process.env.TS_JEST ? "entity/**/*.ts" : "entity/**/*.js"
+          ),
+        ],
+      },
+      options
+    );
   }
 
   return this.useInject().inject(
