@@ -7,10 +7,14 @@ import RedisClient from "@redis/client/dist/lib/client";
 class TestMiddleware extends Middleware {
   @Redis("app")
   private readonly appConnection!: Redis;
-  @Redis()
+  @Redis
   private readonly coreConnection!: Redis;
+  @Redis()
+  private readonly coreConnection2!: Redis;
 
   async invoke(): Promise<void> {
+    expect(this.coreConnection).toBe(this.coreConnection2);
+
     this.ctx.set("result", {
       app: !!this.appConnection,
       core: !!this.coreConnection,

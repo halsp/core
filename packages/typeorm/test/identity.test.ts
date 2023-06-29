@@ -6,10 +6,14 @@ import { Typeorm } from "../src";
 class TestMiddleware extends Middleware {
   @Typeorm("app")
   private readonly appConnection!: Typeorm;
-  @Typeorm()
+  @Typeorm
   private readonly coreConnection!: Typeorm;
+  @Typeorm()
+  private readonly coreConnection2!: Typeorm;
 
   async invoke(): Promise<void> {
+    expect(this.coreConnection).toBe(this.coreConnection2);
+
     this.ctx.set("result", {
       app: !!this.appConnection,
       core: !!this.coreConnection,

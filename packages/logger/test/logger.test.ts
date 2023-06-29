@@ -7,7 +7,7 @@ import { InjectType } from "@halsp/inject";
 import winston from "winston";
 
 class TestMiddleware extends Middleware {
-  @Logger()
+  @Logger
   private readonly testLogger!: ILogger;
 
   async invoke(): Promise<void> {

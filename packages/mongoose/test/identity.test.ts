@@ -7,10 +7,14 @@ import mongoose from "mongoose";
 class TestMiddleware extends Middleware {
   @Mongoose("app")
   private readonly appConnection!: Mongoose;
-  @Mongoose()
+  @Mongoose
   private readonly coreConnection!: Mongoose;
+  @Mongoose()
+  private readonly coreConnection2!: Mongoose;
 
   async invoke(): Promise<void> {
+    expect(this.coreConnection).toBe(this.coreConnection2);
+
     this.ctx.set("result", {
       app: !!this.appConnection,
       core: !!this.coreConnection,

@@ -7,10 +7,14 @@ describe("identity", () => {
   class TestMiddleware extends Middleware {
     @Knex("app")
     private readonly appConnection!: Knex;
-    @Knex()
+    @Knex
     private readonly coreConnection!: Knex;
+    @Knex()
+    private readonly coreConnection2!: Knex;
 
     async invoke(): Promise<void> {
+      expect(this.coreConnection).toBe(this.coreConnection2);
+
       this.ctx.set("result", {
         app: !!this.appConnection,
         core: !!this.coreConnection,
