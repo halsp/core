@@ -3,7 +3,7 @@ import { File } from "formidable";
 import { readFileSync } from "fs";
 import "./utils";
 import { MultipartBody } from "../src";
-import { Startup } from "@halsp/core";
+import { HookType, Startup } from "@halsp/core";
 
 test("useHttpMultipartBody", async () => {
   let invoke = false;
@@ -77,6 +77,9 @@ test("on file begin", async () => {
 test("prase file error without callback", async () => {
   let invoke = false;
   const server = new Startup()
+    .hook(HookType.Unhandled, (ctx, md, err) => {
+      console.error("err", err);
+    })
     .use(async (ctx, next) => {
       await next();
 

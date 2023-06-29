@@ -2,7 +2,7 @@ import { Context, Startup } from "@halsp/core";
 import typeis from "type-is";
 import cobody from "co-body";
 import formidable from "formidable";
-import { BadRequestException, StatusCodes } from "@halsp/http";
+import { BadRequestException } from "@halsp/http";
 import { MultipartBody } from "./multipart";
 
 declare module "@halsp/core" {
@@ -110,7 +110,7 @@ function parseMultipart(
       getReqStream(ctx),
       async (err, fields: formidable.Fields, files: formidable.Files) => {
         if (err) {
-          ctx.res.status = StatusCodes.BAD_REQUEST;
+          ctx.res.badRequest();
           if (onError) await onError(ctx, err);
           resolve(undefined);
         } else {
@@ -130,7 +130,7 @@ function useBodyPraser(
   types: string[],
   onError?: (ctx: Context, err: Error) => Promise<void>
 ) {
-  this.use(async (ctx, next) => {
+  this.useHttp().use(async (ctx, next) => {
     if (!typeis(getReqStream(ctx), types)) {
       return await next();
     }
@@ -139,7 +139,7 @@ function useBodyPraser(
     try {
       body = await bodyBuilder(ctx);
     } catch (err) {
-      ctx.res.status = StatusCodes.BAD_REQUEST;
+      ctx.res.badRequest();
       if (onError) {
         await onError(ctx, err as Error);
       } else {

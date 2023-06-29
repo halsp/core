@@ -39,7 +39,7 @@
     "@halsp/core": "^2.1.1",
     "@halsp/http": "^2.1.1",
     "co-body": "^6.1.0",
-    "formidable": "^2.1.1",
+    "formidable": "^2.1.2",
     "type-is": "^1.6.18"
   },
   "devDependencies": {

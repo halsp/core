@@ -38,7 +38,7 @@
   "license": "MIT",
   "dependencies": {
     "@halsp/core": "^2.1.1",
-    "consolidate": "^0.16.0"
+    "consolidate": "^1.0.1"
   },
   "devDependencies": {
     "@types/consolidate": "^0.14.1",

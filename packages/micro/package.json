@@ -42,7 +42,7 @@
   },
   "devDependencies": {
     "@halsp/inject": "^2.1.1",
-    "@types/uuid": "^9.0.1"
+    "@types/uuid": "^9.0.2"
   },
   "files": [
     "/dist/*",

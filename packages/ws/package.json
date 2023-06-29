@@ -36,7 +36,7 @@
     "@halsp/core": "^2.1.1",
     "@halsp/http": "^2.1.1",
     "@halsp/inject": "^2.1.1",
-    "@types/ws": "^8.5.4",
+    "@types/ws": "^8.5.5",
     "ws": "^8.13.0"
   },
   "files": [
