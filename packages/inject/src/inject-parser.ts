@@ -351,14 +351,14 @@ export class InjectDecoratorParser<T extends object = any> {
   }
 
   private getExistKeyMap(key: string) {
-    const injectMaps = this.ctx.get<InjectMap[]>(MAP_BAG) ?? [];
+    const injectMaps = this.ctx.get<InjectMap[]>(MAP_BAG);
     return injectMaps.filter(
       (map) => isString(map.anestor) && map.anestor == key
     )[0];
   }
 
   private getExistTargetMap(target: ObjectConstructor<T>) {
-    const injectMaps = this.ctx.get<InjectMap[]>(MAP_BAG) ?? [];
+    const injectMaps = this.ctx.get<InjectMap[]>(MAP_BAG);
     return injectMaps.filter(
       (map) =>
         isFunction<ObjectConstructor<T>>(map.anestor) && map.anestor == target
