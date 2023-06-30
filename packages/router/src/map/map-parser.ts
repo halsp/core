@@ -14,8 +14,9 @@ export default class MapParser {
   }
 
   public getMap(): MapItem[] {
+    let map: MapItem[];
     if (this.options.map?.length) {
-      const result: MapItem[] = this.options.map.map((m) => {
+      map = this.options.map.map((m) => {
         const mapItem = new MapItem(m.path, m.actionName, m.url, [
           ...m.methods,
         ]);
@@ -26,9 +27,22 @@ export default class MapParser {
         });
         return mapItem;
       });
-      return result;
     } else {
-      return new MapCreater(this.options.dir).create();
+      map = new MapCreater(this.options.dir).create();
     }
+
+    if (this.options.decorators) {
+      map.forEach((item) => {
+        let decorators = this.options.decorators;
+        if (typeof decorators == "function") {
+          decorators = decorators(item);
+        }
+        if (decorators?.length) {
+          item.extendDecoradors.push(...decorators);
+        }
+      });
+    }
+
+    return map;
   }
 }

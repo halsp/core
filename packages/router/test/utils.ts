@@ -16,6 +16,7 @@ Startup.prototype.useTestRouter = function (config = {}) {
   process.env["HALSP_ROUTER_DIR"] = config?.dir ?? testDir();
   this.useRouter({
     prefix: config?.prefix,
+    decorators: config?.decorators,
   });
   return this;
 };

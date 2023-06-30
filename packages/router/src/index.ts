@@ -76,6 +76,7 @@ function initRouterMap(this: Startup, options?: RouterOptions) {
     map: mapOptions?.map,
     dir: process.env[HALSP_ROUTER_DIR] ?? mapOptions?.dir ?? DEFAULT_ACTION_DIR,
     prefix: options?.prefix,
+    decorators: options?.decorators,
   };
 
   const routerMap = new MapParser(opts).getMap();

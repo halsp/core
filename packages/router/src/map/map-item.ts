@@ -1,6 +1,7 @@
 import { normalizePath, ObjectConstructor } from "@halsp/core";
 import path from "path";
 import { Action } from "../action";
+import "reflect-metadata";
 
 export default class MapItem {
   constructor(
@@ -70,12 +71,18 @@ export default class MapItem {
 
   [key: string]: any;
 
+  readonly extendDecoradors: ClassDecorator[] = [];
+  #decoratorsSetted = false;
   public getAction(dir: string): ObjectConstructor<Action> {
     const filePath = path.join(process.cwd(), dir, this.path);
 
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const module = require(filePath);
     const action = module[this.actionName];
+    if (this.extendDecoradors.length && !this.#decoratorsSetted) {
+      this.#decoratorsSetted = true;
+      Reflect.decorate(this.extendDecoradors, action);
+    }
     return action;
   }
 

@@ -2,6 +2,7 @@ import MapItem from "./map/map-item";
 
 export interface RouterOptions {
   prefix?: string;
+  decorators?: ClassDecorator[] | ((mapItem: MapItem) => ClassDecorator[]);
 }
 
 export interface RouterInitedOptions extends RouterOptions {
