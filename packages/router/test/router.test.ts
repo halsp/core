@@ -2,7 +2,7 @@ import "@halsp/http";
 import { Request, Startup } from "@halsp/core";
 import "../src";
 import "./utils";
-import { DEFAULT_ACTION_DIR } from "../src/constant";
+import { DEFAULT_ACTION_DIR, HALSP_ROUTER_DIR } from "../src/constant";
 import { runin } from "@halsp/testing";
 
 test("startup test", async () => {
@@ -89,6 +89,8 @@ describe("options", () => {
 
   it("should set default dir", async () => {
     await runin("test", async () => {
+      delete process.env[HALSP_ROUTER_DIR];
+
       await new Startup()
         .use(async (ctx, next) => {
           await next();

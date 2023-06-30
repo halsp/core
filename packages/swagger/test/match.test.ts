@@ -1,5 +1,5 @@
 import { Request, Startup } from "@halsp/core";
-import { TEST_ACTION_DIR } from "@halsp/router/dist/constant";
+import { HALSP_ROUTER_DIR } from "@halsp/router/dist/constant";
 import "@halsp/http";
 import "@halsp/testing";
 import "../src";
@@ -12,7 +12,7 @@ declare module "@halsp/core" {
 }
 
 Startup.prototype.setTestDir = function (dir: string) {
-  this[TEST_ACTION_DIR] = dir;
+  process.env[HALSP_ROUTER_DIR] = dir;
   return this;
 };
 

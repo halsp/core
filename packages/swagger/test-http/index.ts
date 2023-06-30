@@ -3,7 +3,7 @@ import "@halsp/body";
 import chalk from "chalk";
 import "../src";
 import "@halsp/router";
-import { TEST_ACTION_DIR } from "@halsp/router/dist/constant";
+import { HALSP_ROUTER_DIR } from "@halsp/router/dist/constant";
 import { Startup } from "@halsp/core";
 
 async function bootstrap() {
@@ -22,7 +22,7 @@ async function bootstrap() {
       path: "",
     })
     .useRouter();
-  startup[TEST_ACTION_DIR] = "test/parser";
+  process.env[HALSP_ROUTER_DIR] = "test/parser";
 
   await startup.listen();
   console.log(chalk.blue(`start: http://localhost:${2333}`));

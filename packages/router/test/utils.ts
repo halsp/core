@@ -1,7 +1,6 @@
 import { RouterOptions } from "../src";
 import "@halsp/testing";
 import "../src";
-import { TEST_ACTION_DIR } from "../src/constant";
 import { Startup } from "@halsp/core";
 
 export const testDir = () =>
@@ -9,12 +8,14 @@ export const testDir = () =>
 
 declare module "@halsp/core" {
   interface Startup {
-    useTestRouter(config?: RouterOptions): this;
+    useTestRouter(config?: RouterOptions & { dir?: string }): this;
   }
 }
 
 Startup.prototype.useTestRouter = function (config = {}) {
-  this[TEST_ACTION_DIR] = testDir();
-  this.useRouter(config);
+  process.env["HALSP_ROUTER_DIR"] = config?.dir ?? testDir();
+  this.useRouter({
+    prefix: config?.prefix,
+  });
   return this;
 };

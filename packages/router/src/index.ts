@@ -12,7 +12,7 @@ import {
 import {
   CONFIG_FILE_NAME,
   DEFAULT_ACTION_DIR,
-  TEST_ACTION_DIR,
+  HALSP_ROUTER_DIR,
 } from "./constant";
 import * as fs from "fs";
 import { BlankMiddleware } from "./blank.middleware";
@@ -74,7 +74,7 @@ function initRouterMap(this: Startup, options?: RouterOptions) {
   const mapOptions = readMap();
   const opts: RouterOptionsMerged = {
     map: mapOptions?.map,
-    dir: this[TEST_ACTION_DIR] ?? mapOptions?.dir ?? DEFAULT_ACTION_DIR,
+    dir: process.env[HALSP_ROUTER_DIR] ?? mapOptions?.dir ?? DEFAULT_ACTION_DIR,
     prefix: options?.prefix,
   };
 
