@@ -18,6 +18,7 @@ import * as fs from "fs";
 import { BlankMiddleware } from "./blank.middleware";
 
 export { Action, MapItem, RouterOptions, RouterInitedOptions };
+export { RouterModule, defineModule } from "./map/module";
 export {
   ActionMetadata,
   SetActionMetadata,

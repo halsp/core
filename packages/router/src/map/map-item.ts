@@ -4,24 +4,19 @@ import { Action } from "../action";
 import "reflect-metadata";
 
 export default class MapItem {
-  constructor(
-    path: string,
-    actionName: string,
-    url?: string,
-    methods?: string[]
-  ) {
-    this.#path = path.replace(/\\/g, "/");
-    this.#actionName = actionName;
-    if (url) {
-      if (url.startsWith("//")) {
-        this.#url = this.#getUrlFromPath() + "/" + normalizePath(url);
-      } else {
-        this.#url = normalizePath(url);
-      }
-    } else {
-      this.#url = this.#getUrlFromPath();
-    }
-    this.#methods = methods ?? this.#getMethodsFromPath();
+  constructor(args: {
+    path: string;
+    actionName: string;
+    url?: string;
+    methods?: string[];
+    prefix?: string;
+    moduleFilePath?: string;
+  }) {
+    this.moduleFilePath = args.moduleFilePath;
+    this.#path = args.path.replace(/\\/g, "/");
+    this.#actionName = args.actionName;
+    this.#url = this.#formatPrefix(args.prefix) + this.#formatUrl(args.url);
+    this.#methods = args.methods ?? this.#getMethodsFromPath();
   }
 
   readonly #actionName: string;
@@ -51,6 +46,8 @@ export default class MapItem {
     return [...this.#methods] as ReadonlyArray<string>;
   }
 
+  public moduleFilePath?: string;
+
   #getMethodsFromPath() {
     return this.fileNameWithoutExt
       .split(".")
@@ -59,19 +56,48 @@ export default class MapItem {
       .map((item) => item.toUpperCase());
   }
 
+  #formatUrl(url?: string) {
+    if (url) {
+      if (url.startsWith("//")) {
+        return this.#getUrlFromPath() + "/" + normalizePath(url);
+      } else {
+        return normalizePath(url);
+      }
+    } else {
+      return this.#getUrlFromPath();
+    }
+  }
+
   #getUrlFromPath() {
+    let filePath = this.path;
+    if (this.moduleFilePath) {
+      filePath = filePath.replace(/^.+?\//, "");
+    }
     const fileName = this.fileName.replace(/\..*$/, "").replace(/^_$/, "");
-    const pPath = this.path.substr(0, this.path.length - this.fileName.length);
-    let url = pPath + fileName;
+    const dirPath = filePath.substring(
+      0,
+      filePath.length - this.fileName.length
+    );
+    let url = dirPath + fileName;
     if (this.#actionName && this.#actionName != "default") {
-      url += "/" + this.#actionName;
+      url = path.join(url, this.actionName);
     }
     return normalizePath(url);
   }
 
+  #formatPrefix(prefix?: string) {
+    if (!prefix) return "";
+
+    return normalizePath(prefix) + "/";
+  }
+
   [key: string]: any;
 
-  readonly extendDecoradors: ClassDecorator[] = [];
+  readonly #extendDecoradors: ClassDecorator[] = [];
+  public addExtendDecorators(val: ClassDecorator[]) {
+    this.#extendDecoradors.push(...val);
+  }
+
   #decoratorsSetted = false;
   public getAction(dir: string): ObjectConstructor<Action> {
     const filePath = path.join(process.cwd(), dir, this.path);
@@ -79,9 +105,9 @@ export default class MapItem {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const module = require(filePath);
     const action = module[this.actionName];
-    if (this.extendDecoradors.length && !this.#decoratorsSetted) {
+    if (this.#extendDecoradors.length && !this.#decoratorsSetted) {
       this.#decoratorsSetted = true;
-      Reflect.decorate(this.extendDecoradors, action);
+      Reflect.decorate(this.#extendDecoradors, action);
     }
     return action;
   }

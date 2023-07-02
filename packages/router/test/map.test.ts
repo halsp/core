@@ -40,7 +40,11 @@ describe("map", () => {
       .useHttp()
       .use(async (ctx, next) => {
         Object.defineProperty(ctx, "actionMetadata", {
-          get: () => new MapItem("Router.ts", "default"),
+          get: () =>
+            new MapItem({
+              path: "Router.ts",
+              actionName: "default",
+            }),
         });
         await next();
       })
