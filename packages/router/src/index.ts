@@ -135,14 +135,11 @@ function initRouterMap(this: Startup, options?: RouterOptions) {
 }
 
 function readMap(): RouterDistOptions | undefined {
-  const filePath = path.join(process.cwd(), CONFIG_FILE_NAME);
+  const filePath = path.resolve(CONFIG_FILE_NAME);
   if (!fs.existsSync(filePath)) {
     return undefined;
   }
 
-  const txt = fs.readFileSync(
-    path.join(process.cwd(), CONFIG_FILE_NAME),
-    "utf-8"
-  );
+  const txt = fs.readFileSync(filePath, "utf-8");
   return JSON.parse(txt);
 }

@@ -39,11 +39,12 @@ export default class MapParser {
 
       if (item.moduleFilePath) {
         // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const moduleDecorators = require(path.resolve(
+        const moduleRequire = require(path.resolve(
           this.options.dir,
           item.moduleFilePath
-        )) as RouterModule;
-        addDecorators(item, moduleDecorators.decorators);
+        ));
+        const module: RouterModule = moduleRequire.default ?? moduleRequire;
+        addDecorators(item, module.decorators);
       }
     });
 
