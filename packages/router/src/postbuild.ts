@@ -5,11 +5,12 @@ import {
   CONFIG_FILE_NAME,
   DEFAULT_ACTION_DIR,
   DEFAULT_MODULES_DIR,
+  HALSP_ROUTER_DIR,
 } from "./constant";
 import { RouterDistOptions } from "./router-options";
 
-export const postbuild = async ({ config, cacheDir }) => {
-  const routerDirPath = config.routerActionsDir ?? getDefaultDir(cacheDir);
+export const postbuild = async ({ cacheDir }) => {
+  const routerDirPath = getDefaultDir(cacheDir);
   const routerDir = path.join(cacheDir, routerDirPath);
   if (!fs.existsSync(routerDir) || !fs.statSync(routerDir).isDirectory()) {
     throw new Error("The router dir is not exist");
@@ -28,7 +29,9 @@ export const postbuild = async ({ config, cacheDir }) => {
 };
 
 function getDefaultDir(parent: string) {
-  if (fs.existsSync(path.join(parent, DEFAULT_MODULES_DIR))) {
+  if (process.env[HALSP_ROUTER_DIR]) {
+    return process.env[HALSP_ROUTER_DIR];
+  } else if (fs.existsSync(path.join(parent, DEFAULT_MODULES_DIR))) {
     return DEFAULT_MODULES_DIR;
   } else {
     return DEFAULT_ACTION_DIR;

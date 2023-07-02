@@ -10,9 +10,9 @@ export default class MapItem {
     url?: string;
     methods?: string[];
     prefix?: string;
-    moduleFilePath?: string;
+    isModule?: boolean;
   }) {
-    this.moduleFilePath = args.moduleFilePath;
+    this.#isModule = args.isModule;
     this.#path = args.path.replace(/\\/g, "/");
     this.#actionName = args.actionName;
     this.#url = this.#formatPrefix(args.prefix) + this.#formatUrl(args.url);
@@ -46,7 +46,7 @@ export default class MapItem {
     return [...this.#methods] as ReadonlyArray<string>;
   }
 
-  public moduleFilePath?: string;
+  readonly #isModule?: boolean;
 
   #getMethodsFromPath() {
     return this.fileNameWithoutExt
@@ -70,7 +70,7 @@ export default class MapItem {
 
   #getUrlFromPath() {
     let filePath = this.path;
-    if (this.moduleFilePath) {
+    if (this.#isModule) {
       filePath = filePath.replace(/^.+?\//, "");
     }
     const fileName = this.fileName.replace(/\..*$/, "").replace(/^_$/, "");

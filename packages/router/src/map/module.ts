@@ -1,6 +1,7 @@
 import path from "path";
 import * as fs from "fs";
 import MapItem from "./map-item";
+import { DEFAULT_MODULES_DIR } from "../constant";
 
 export interface RouterModule {
   prefix?: string;
@@ -15,7 +16,7 @@ export function defineModule(arg: RouterModule | (() => RouterModule)) {
   }
 }
 
-export function findModulePath(dir: string, file: string): string | null {
+function findModulePath(dir: string, file: string): string | null {
   let moduleDir = file.replace(/\\/g, "/");
   if (!moduleDir.includes("/")) {
     return null;
@@ -34,4 +35,25 @@ export function findModulePath(dir: string, file: string): string | null {
   }
 
   return null;
+}
+
+function getModuleFilePath(dir: string, file: string) {
+  const moduleFilePath = findModulePath(dir, file);
+  return moduleFilePath ?? undefined;
+}
+
+export function getModuleConfig(
+  dir: string,
+  file: string
+): RouterModule | undefined {
+  const moduleFilePath = getModuleFilePath(dir, file);
+  if (moduleFilePath) {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const moduleRequire = require(path.resolve(dir, moduleFilePath));
+    return moduleRequire.default ?? moduleRequire;
+  }
+}
+
+export function isModule(dir: string) {
+  return dir.endsWith(DEFAULT_MODULES_DIR);
 }

@@ -1,7 +1,7 @@
 import { postbuild } from "../src";
 import * as fs from "fs";
 import { Request, Startup } from "@halsp/core";
-import { CONFIG_FILE_NAME } from "../src/constant";
+import { CONFIG_FILE_NAME, HALSP_ROUTER_DIR } from "../src/constant";
 import "@halsp/testing";
 import "@halsp/http";
 import { runin } from "@halsp/testing";
@@ -10,9 +10,9 @@ describe("post build", () => {
   it("should be error when the router dir is not exist", async () => {
     const cacheDir = "temp-test-not-exist";
     let count = 0;
+    delete process.env[HALSP_ROUTER_DIR];
     try {
       await postbuild({
-        config: {},
         cacheDir,
       });
     } catch (err) {
@@ -30,10 +30,8 @@ describe("post build", () => {
         });
       }
 
+      process.env[HALSP_ROUTER_DIR] = "actions";
       await postbuild({
-        config: {
-          routerActionsDir: "actions",
-        },
         cacheDir: "",
       });
 
@@ -59,8 +57,8 @@ describe("post build", () => {
         });
       }
 
+      delete process.env[HALSP_ROUTER_DIR];
       await postbuild({
-        config: {},
         cacheDir: "",
       });
 

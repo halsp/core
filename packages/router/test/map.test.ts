@@ -4,7 +4,8 @@ import MapCreater from "../src/map/map-creater";
 import "./utils";
 import MapParser from "../src/map/map-parser";
 import { MapItem } from "../src";
-import { Startup } from "@halsp/core";
+import { Request, Startup } from "@halsp/core";
+import { runin } from "@halsp/testing";
 
 describe("map", () => {
   it("should throw error when use MapCreater and router dir not exist", async () => {
@@ -52,5 +53,24 @@ describe("map", () => {
       .test();
     expect(result.status).toBe(200);
     expect(result.body).toBe("ok");
+  });
+});
+
+describe("default actions", () => {
+  it("should find actions dir", async () => {
+    await runin("test/def-actions", async () => {
+      delete process.env["HALSP_ROUTER_DIR"];
+
+      const result = await new Startup()
+        .useHttp()
+        .setContext(new Request().setPath("").setMethod("GET"))
+        .useRouter()
+        .test();
+
+      expect(result.body).toEqual({
+        defaultActions: true,
+      });
+      expect(result.status).toBe(200);
+    });
   });
 });

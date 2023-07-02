@@ -10,7 +10,7 @@ import {
 } from "../constant";
 import MapItem from "./map-item";
 import "reflect-metadata";
-import { findModulePath, RouterModule } from "./module";
+import { getModuleConfig, isModule } from "./module";
 
 export default class MapCreater {
   constructor(private readonly dir: string) {
@@ -106,6 +106,11 @@ export default class MapCreater {
   ) {
     const mapItems: MapItem[] = [];
 
+    const isItemModule = isModule(this.dir);
+    const prefix = isItemModule
+      ? getModuleConfig(this.dir, file)?.prefix
+      : undefined;
+
     // http
     const decMethods: MethodItem[] =
       Reflect.getMetadata(ACTION_METHOD_METADATA, action.prototype) ?? [];
@@ -116,8 +121,8 @@ export default class MapCreater {
           actionName,
           url: method.url,
           methods: [method.method],
-          prefix: this.#getModulePrefix(file),
-          moduleFilePath: this.#getModuleFilePath(file),
+          prefix,
+          isModule: isItemModule,
         })
       );
     });
@@ -132,8 +137,8 @@ export default class MapCreater {
           actionName,
           url: pattern,
           methods: [],
-          prefix: this.#getModulePrefix(file),
-          moduleFilePath: this.#getModuleFilePath(file),
+          prefix,
+          isModule: isItemModule,
         })
       );
     });
@@ -144,8 +149,8 @@ export default class MapCreater {
         new MapItem({
           path: file,
           actionName,
-          prefix: this.#getModulePrefix(file),
-          moduleFilePath: this.#getModuleFilePath(file),
+          prefix,
+          isModule: isItemModule,
         })
       );
     }
@@ -161,20 +166,5 @@ export default class MapCreater {
     });
 
     return mapItems;
-  }
-
-  #getModuleFilePath(file: string) {
-    const moduleFilePath = findModulePath(this.dir, file);
-    return moduleFilePath ?? undefined;
-  }
-
-  #getModulePrefix(file: string) {
-    const moduleFilePath = this.#getModuleFilePath(file);
-    if (moduleFilePath) {
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const moduleRequire = require(path.resolve(this.dir, moduleFilePath));
-      const module: RouterModule = moduleRequire.default ?? moduleRequire;
-      return module.prefix;
-    }
   }
 }

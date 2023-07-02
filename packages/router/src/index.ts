@@ -12,6 +12,7 @@ import {
 import {
   CONFIG_FILE_NAME,
   DEFAULT_ACTION_DIR,
+  DEFAULT_MODULES_DIR,
   HALSP_ROUTER_DIR,
 } from "./constant";
 import * as fs from "fs";
@@ -75,7 +76,7 @@ function initRouterMap(this: Startup, options?: RouterOptions) {
   const mapOptions = readMap();
   const opts: RouterOptionsMerged = {
     map: mapOptions?.map,
-    dir: process.env[HALSP_ROUTER_DIR] ?? mapOptions?.dir ?? DEFAULT_ACTION_DIR,
+    dir: getDir(mapOptions?.dir),
     prefix: options?.prefix,
     decorators: options?.decorators,
   };
@@ -142,4 +143,16 @@ function readMap(): RouterDistOptions | undefined {
 
   const txt = fs.readFileSync(filePath, "utf-8");
   return JSON.parse(txt);
+}
+
+function getDir(dir?: string) {
+  if (process.env[HALSP_ROUTER_DIR]) {
+    return process.env[HALSP_ROUTER_DIR];
+  } else if (dir) {
+    return dir;
+  } else if (fs.existsSync(DEFAULT_MODULES_DIR)) {
+    return DEFAULT_MODULES_DIR;
+  } else {
+    return DEFAULT_ACTION_DIR;
+  }
 }

@@ -2,8 +2,7 @@ import { existsSync, lstatSync } from "fs";
 import MapCreater from "./map-creater";
 import MapItem from "./map-item";
 import { RouterOptionsMerged } from "../router-options";
-import { RouterModule } from "./module";
-import path from "path";
+import { getModuleConfig, isModule } from "./module";
 
 export default class MapParser {
   constructor(private readonly options: RouterOptionsMerged) {
@@ -37,14 +36,9 @@ export default class MapParser {
     map.forEach((item) => {
       addDecorators(item, this.options.decorators);
 
-      if (item.moduleFilePath) {
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const moduleRequire = require(path.resolve(
-          this.options.dir,
-          item.moduleFilePath
-        ));
-        const module: RouterModule = moduleRequire.default ?? moduleRequire;
-        addDecorators(item, module.decorators);
+      if (isModule(this.options.dir)) {
+        const module = getModuleConfig(this.options.dir, item.path);
+        addDecorators(item, module?.decorators);
       }
     });
 
