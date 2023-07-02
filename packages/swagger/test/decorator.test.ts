@@ -7,7 +7,14 @@ test("decorators", async () => {
   process.chdir("test/parser");
   try {
     new Parser(
-      [new MapItem("decorator.ts", "TestDecorator", "test", ["post"])],
+      [
+        new MapItem({
+          path: "decorator.ts",
+          actionName: "TestDecorator",
+          url: "test",
+          methods: ["post"],
+        }),
+      ],
       builder,
       {
         dir: ".",
