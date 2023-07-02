@@ -204,11 +204,11 @@ describe("error", () => {
     }
 
     await new Promise<void>((resolve) => {
-      setTimeout(() => resolve(), 600);
+      setTimeout(() => resolve(), 1000);
     });
 
     await client.close();
 
     expect(error.message).toBe("getaddrinfo ENOTFOUND not-exist.halsp.org");
-  });
+  }, 10000);
 });

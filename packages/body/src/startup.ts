@@ -1,7 +1,7 @@
 import { Context, Startup } from "@halsp/core";
 import typeis from "type-is";
 import cobody from "co-body";
-import formidable from "formidable";
+import * as formidable from "formidable";
 import { BadRequestException } from "@halsp/http";
 import { MultipartBody } from "./multipart";
 

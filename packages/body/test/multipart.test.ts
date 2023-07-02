@@ -8,11 +8,12 @@ import { HookType, Startup } from "@halsp/core";
 test("useHttpMultipartBody", async () => {
   let invoke = false;
   const server = new Startup()
+    .keepThrow()
     .use(async (ctx, next) => {
       await next();
 
       expect(ctx.res.body.fields).toEqual({
-        name: "fileName",
+        name: ["fileName"],
       });
       expect(ctx.res.body.file.name).toBe("LICENSE");
       expect(
@@ -24,13 +25,13 @@ test("useHttpMultipartBody", async () => {
     .use(async (ctx) => {
       const multipartBody = ctx.req.body as MultipartBody;
       if (!multipartBody) return;
-      const file = multipartBody.files.file as File;
+      const file = multipartBody.files.file as File[];
 
       ctx.res.ok({
         fields: multipartBody.fields,
         file: {
-          name: file.originalFilename,
-          content: readFileSync(file.filepath, "utf-8"),
+          name: file[0].originalFilename,
+          content: readFileSync(file[0].filepath, "utf-8"),
         },
       });
     })
@@ -46,6 +47,7 @@ test("useHttpMultipartBody", async () => {
 test("on file begin", async () => {
   let invoke = false;
   const server = new Startup()
+    .keepThrow()
     .use(async (ctx, next) => {
       await next();
 
@@ -61,9 +63,9 @@ test("on file begin", async () => {
     .use(async (ctx) => {
       const multipartBody = ctx.req.body as MultipartBody;
       if (!multipartBody) return;
-      const file = multipartBody.files.file as File;
+      const file = multipartBody.files.file as File[];
 
-      ctx.res.ok(file.originalFilename);
+      ctx.res.ok(file[0].originalFilename);
     })
     .listenTest();
   await request(server)
