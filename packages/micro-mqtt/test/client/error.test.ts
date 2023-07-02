@@ -52,9 +52,13 @@ describe("error", () => {
       error = err;
     }
 
+    await new Promise<void>((resolve) => {
+      setTimeout(() => resolve(), 1000);
+    });
+
     await client.dispose(true);
     expect(error.message).toBe("getaddrinfo ENOTFOUND not-exist.halsp.org");
-  });
+  }, 10000);
 
   it("should throw error when result.error is defined", async () => {
     const startup = new Startup()

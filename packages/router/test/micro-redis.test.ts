@@ -50,5 +50,5 @@ describe("micro-redis", () => {
     await client.dispose();
 
     expect(result).toBe("event-pattern-test");
-  });
+  }, 10000);
 });
