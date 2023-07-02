@@ -8,10 +8,7 @@ import { runin } from "@halsp/testing";
 
 describe("post build", () => {
   it("should be error when the router dir is not exist", async () => {
-    const cacheDir = "node_modules/.halsp-router-not-exist";
-    if (!fs.existsSync(cacheDir)) {
-      fs.mkdirSync(cacheDir);
-    }
+    const cacheDir = "temp-test-not-exist";
     let count = 0;
     try {
       await postbuild({
