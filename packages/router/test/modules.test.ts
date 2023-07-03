@@ -2,7 +2,7 @@ import { HookType, Request, Startup } from "@halsp/core";
 import "@halsp/http";
 import "./utils";
 import { Action } from "../src";
-import { HALSP_ROUTER_MODULE } from "../src/constant";
+import { HALSP_ROUTER_IS_MODULE } from "../src/constant";
 import { isModule } from "../src/map/module";
 
 describe("def modules", () => {
@@ -95,16 +95,16 @@ describe("decorators", () => {
 });
 
 describe("isModule", () => {
-  it("should be true when env.HALSP_ROUTER_MODULE is true", async () => {
-    process.env[HALSP_ROUTER_MODULE] = "true";
+  it("should be true when env.HALSP_ROUTER_IS_MODULE is true", async () => {
+    process.env[HALSP_ROUTER_IS_MODULE] = "true";
 
     expect(isModule("")).toBeTruthy();
     expect(isModule("actions")).toBeTruthy();
     expect(isModule("modules")).toBeTruthy();
   });
 
-  it("should be false when env.HALSP_ROUTER_MODULE is false", async () => {
-    process.env[HALSP_ROUTER_MODULE] = "false";
+  it("should be false when env.HALSP_ROUTER_IS_MODULE is false", async () => {
+    process.env[HALSP_ROUTER_IS_MODULE] = "false";
 
     expect(isModule("")).toBeFalsy();
     expect(isModule("actions")).toBeFalsy();
@@ -112,13 +112,13 @@ describe("isModule", () => {
   });
 
   it("should be true when dir = modules", async () => {
-    delete process.env[HALSP_ROUTER_MODULE];
+    delete process.env[HALSP_ROUTER_IS_MODULE];
 
     expect(isModule("modules")).toBeTruthy();
   });
 
   it("should be false when dir = actions or others", async () => {
-    delete process.env[HALSP_ROUTER_MODULE];
+    delete process.env[HALSP_ROUTER_IS_MODULE];
 
     expect(isModule("actions")).toBeFalsy();
     expect(isModule("others")).toBeFalsy();

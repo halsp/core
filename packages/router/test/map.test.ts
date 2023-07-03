@@ -6,6 +6,7 @@ import MapParser from "../src/map/map-parser";
 import { MapItem } from "../src";
 import { Request, Startup } from "@halsp/core";
 import { runin } from "@halsp/testing";
+import { HALSP_ROUTER_DIR } from "../src/constant";
 
 describe("map", () => {
   it("should throw error when use MapCreater and router dir not exist", async () => {
@@ -59,7 +60,7 @@ describe("map", () => {
 describe("default actions", () => {
   it("should find actions dir", async () => {
     await runin("test/def-actions", async () => {
-      delete process.env["HALSP_ROUTER_DIR"];
+      delete process.env[HALSP_ROUTER_DIR];
 
       const result = await new Startup()
         .useHttp()
