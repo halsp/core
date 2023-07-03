@@ -2,6 +2,8 @@ import { HookType, Request, Startup } from "@halsp/core";
 import "@halsp/http";
 import "./utils";
 import { Action } from "../src";
+import { HALSP_ROUTER_MODULE } from "../src/constant";
+import { isModule } from "../src/map/module";
 
 describe("def modules", () => {
   it("should load modules", async () => {
@@ -11,6 +13,7 @@ describe("def modules", () => {
       .setContext(new Request().setPath("").setMethod("GET"))
       .useTestRouter({
         dir: "test/modules",
+        isModule: true,
       })
       .useRouter()
       .test();
@@ -27,6 +30,7 @@ describe("prefix", () => {
       .setContext(new Request().setPath("pre").setMethod("GET"))
       .useTestRouter({
         dir: "test/modules",
+        isModule: true,
       })
       .useRouter()
       .test();
@@ -41,6 +45,7 @@ describe("prefix", () => {
       .setContext(new Request().setPath("pre/deep").setMethod("GET"))
       .useTestRouter({
         dir: "test/modules",
+        isModule: true,
       })
       .useRouter()
       .test();
@@ -55,6 +60,7 @@ describe("prefix", () => {
       .setContext(new Request().setPath("pre/deep-deco").setMethod("POST"))
       .useTestRouter({
         dir: "test/modules",
+        isModule: true,
       })
       .useRouter()
       .test();
@@ -74,16 +80,47 @@ describe("decorators", () => {
           return undefined;
         }
 
-        console.log("aaaaaaaaa", md);
         ctx.set("test", md["moduleTest"]);
       })
       .useTestRouter({
         dir: "test/modules",
+        isModule: true,
       })
       .useRouter()
       .test();
 
     expect(ctx.get("module")).toBe(true);
     expect(ctx.get("test")).toBe(true);
+  });
+});
+
+describe("isModule", () => {
+  it("should be true when env.HALSP_ROUTER_MODULE is true", async () => {
+    process.env[HALSP_ROUTER_MODULE] = "true";
+
+    expect(isModule("")).toBeTruthy();
+    expect(isModule("actions")).toBeTruthy();
+    expect(isModule("modules")).toBeTruthy();
+  });
+
+  it("should be false when env.HALSP_ROUTER_MODULE is false", async () => {
+    process.env[HALSP_ROUTER_MODULE] = "false";
+
+    expect(isModule("")).toBeFalsy();
+    expect(isModule("actions")).toBeFalsy();
+    expect(isModule("modules")).toBeFalsy();
+  });
+
+  it("should be true when dir = modules", async () => {
+    delete process.env[HALSP_ROUTER_MODULE];
+
+    expect(isModule("modules")).toBeTruthy();
+  });
+
+  it("should be false when dir = actions or others", async () => {
+    delete process.env[HALSP_ROUTER_MODULE];
+
+    expect(isModule("actions")).toBeFalsy();
+    expect(isModule("others")).toBeFalsy();
   });
 });

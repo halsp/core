@@ -1,7 +1,7 @@
 import path from "path";
 import * as fs from "fs";
 import MapItem from "./map-item";
-import { DEFAULT_MODULES_DIR } from "../constant";
+import { DEFAULT_MODULES_DIR, HALSP_ROUTER_MODULE } from "../constant";
 
 export interface RouterModule {
   prefix?: string;
@@ -55,5 +55,9 @@ export function getModuleConfig(
 }
 
 export function isModule(dir: string) {
-  return dir.endsWith(DEFAULT_MODULES_DIR);
+  if (!!process.env[HALSP_ROUTER_MODULE]) {
+    return process.env[HALSP_ROUTER_MODULE].toLowerCase() == "true";
+  }
+
+  return dir == DEFAULT_MODULES_DIR;
 }
