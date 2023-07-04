@@ -107,9 +107,13 @@ export default class MapCreater {
     const mapItems: MapItem[] = [];
 
     const isItemModule = isModule(this.dir);
-    const prefix = isItemModule
-      ? getModuleConfig(this.dir, file)?.prefix
-      : undefined;
+    let prefix: string | undefined;
+    let deepDir: string | undefined;
+    if (isItemModule) {
+      const moduleConfig = getModuleConfig(this.dir, file);
+      prefix = moduleConfig?.prefix;
+      deepDir = moduleConfig?.deepDir ?? "";
+    }
 
     // http
     const decMethods: MethodItem[] =
@@ -122,7 +126,7 @@ export default class MapCreater {
           url: method.url,
           methods: [method.method],
           prefix,
-          isModule: isItemModule,
+          moduleActionDir: deepDir,
         })
       );
     });
@@ -138,7 +142,7 @@ export default class MapCreater {
           url: pattern,
           methods: [],
           prefix,
-          isModule: isItemModule,
+          moduleActionDir: deepDir,
         })
       );
     });
@@ -150,7 +154,7 @@ export default class MapCreater {
           path: file,
           actionName,
           prefix,
-          isModule: isItemModule,
+          moduleActionDir: deepDir,
         })
       );
     }
@@ -165,6 +169,6 @@ export default class MapCreater {
       });
     });
 
-    return mapItems;
+    return mapItems.filter((item) => !item.ignore);
   }
 }

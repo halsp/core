@@ -10,9 +10,9 @@ export default class MapItem {
     url?: string;
     methods?: string[];
     prefix?: string;
-    isModule?: boolean;
+    moduleActionDir?: string;
   }) {
-    this.#isModule = args.isModule;
+    this.#moduleActionDir = args.moduleActionDir;
     this.#path = args.path.replace(/\\/g, "/");
     this.#actionName = args.actionName;
     this.#url = this.#formatPrefix(args.prefix) + this.#formatUrl(args.url);
@@ -46,7 +46,7 @@ export default class MapItem {
     return [...this.#methods] as ReadonlyArray<string>;
   }
 
-  readonly #isModule?: boolean;
+  readonly #moduleActionDir?: string;
 
   #getMethodsFromPath() {
     return this.fileNameWithoutExt
@@ -68,11 +68,22 @@ export default class MapItem {
     }
   }
 
+  ignore?: true;
+
   #getUrlFromPath() {
     let filePath = this.path;
-    if (this.#isModule) {
-      filePath = filePath.replace(/^.+?\//, "");
+    if (this.#moduleActionDir != undefined) {
+      const moduleActionDir = path
+        .join(filePath.replace(/\/.*$/, ""), this.#moduleActionDir)
+        .replace(/\\/, "/");
+      if (!filePath.startsWith(moduleActionDir)) {
+        this.ignore = true;
+        return "";
+      }
+
+      filePath = filePath.substring(moduleActionDir.length, filePath.length);
     }
+
     const fileName = this.fileName.replace(/\..*$/, "").replace(/^_$/, "");
     const dirPath = filePath.substring(
       0,

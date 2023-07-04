@@ -6,6 +6,7 @@ import { DEFAULT_MODULES_DIR, HALSP_ROUTER_IS_MODULE } from "../constant";
 export interface RouterModule {
   prefix?: string;
   decorators?: ClassDecorator[] | ((mapItem: MapItem) => ClassDecorator[]);
+  deepDir?: string;
 }
 
 export function defineModule(arg: RouterModule | (() => RouterModule)) {

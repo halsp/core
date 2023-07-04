@@ -11,6 +11,9 @@ describe("def modules", () => {
       .keepThrow()
       .useHttp()
       .setContext(new Request().setPath("").setMethod("GET"))
+      .use(async (ctx, next) => {
+        await next();
+      })
       .useTestRouter({
         dir: "test/modules",
         isModule: true,
@@ -122,5 +125,22 @@ describe("isModule", () => {
 
     expect(isModule("actions")).toBeFalsy();
     expect(isModule("others")).toBeFalsy();
+  });
+});
+
+describe("ignore", () => {
+  it("should be ignore if the action outside deepDir", async () => {
+    const { ctx } = await new Startup()
+      .keepThrow()
+      .useHttp()
+      .setContext(new Request().setPath("ignore").setMethod("GET"))
+      .useTestRouter({
+        dir: "test/modules",
+        isModule: true,
+      })
+      .useRouter()
+      .test();
+
+    expect(ctx.get("module")).toBeUndefined();
   });
 });
