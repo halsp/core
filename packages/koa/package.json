@@ -1,6 +1,6 @@
 {
   "name": "@halsp/koa",
-  "version": "2.1.3",
+  "version": "2.2.0",
   "description": "让 Koa 成为 Halsp 的中间件，或 Halsp 成为 Koa 的中间件，并打通二者中间件管道",
   "engines": {
     "node": ">=12.14.0"
@@ -35,8 +35,8 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^2.1.3",
-    "@halsp/http": "^2.1.3",
+    "@halsp/core": "^2.2.0",
+    "@halsp/http": "^2.2.0",
     "koa": "^2.14.2",
     "koa-compose": "^4.1.0",
     "qs": "^6.11.2"
