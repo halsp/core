@@ -1,13 +1,9 @@
 import { isFunction, ObjectConstructor } from "@halsp/core";
 import { existsSync, lstatSync, readdirSync } from "fs";
 import path from "path";
-import { Action } from "../action";
+import { Action, getActionMetadata } from "../action";
 import { MethodItem } from "../action/method-item";
-import {
-  ACTION_METADATA,
-  ACTION_METHOD_METADATA,
-  ACTION_PATTERN_METADATA,
-} from "../constant";
+import { ACTION_METHOD_METADATA, ACTION_PATTERN_METADATA } from "../constant";
 import MapItem from "./map-item";
 import "reflect-metadata";
 import { getModuleConfig, isModule } from "./module";
@@ -159,15 +155,14 @@ export default class MapCreater {
       );
     }
 
-    const metadata =
-      Reflect.getMetadata(ACTION_METADATA, action.prototype) ?? {};
-    mapItems.forEach((mapItem) => {
-      Object.keys(metadata).forEach((key) => {
-        if (!(key in mapItem)) {
-          mapItem[key] = metadata[key];
-        }
-      });
-    });
+    const metadata = getActionMetadata(action);
+    if (metadata) {
+      mapItems.forEach((mapItem) =>
+        Object.keys(metadata)
+          .filter((k) => !(k in mapItem))
+          .forEach((k) => (mapItem[k] = metadata[k]))
+      );
+    }
 
     return mapItems.filter((item) => !item.ignore);
   }

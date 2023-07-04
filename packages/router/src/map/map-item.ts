@@ -111,7 +111,7 @@ export default class MapItem {
 
   #decoratorsSetted = false;
   public getAction(dir: string): ObjectConstructor<Action> {
-    const filePath = path.join(process.cwd(), dir, this.path);
+    const filePath = path.resolve(dir, this.path);
 
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const module = require(filePath);

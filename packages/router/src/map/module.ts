@@ -60,5 +60,5 @@ export function isModule(dir: string) {
     return process.env[HALSP_ROUTER_IS_MODULE].toLowerCase() == "true";
   }
 
-  return dir == DEFAULT_MODULES_DIR;
+  return dir.endsWith(DEFAULT_MODULES_DIR);
 }
