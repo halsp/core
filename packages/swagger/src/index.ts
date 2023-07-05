@@ -48,3 +48,5 @@ Startup.prototype.useSwagger = function (options: SwaggerOptions = {}) {
 };
 
 export { SwaggerOptions, ArrayItemType };
+
+export { V } from "@halsp/validator";

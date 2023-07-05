@@ -1,6 +1,6 @@
 import { Body, Header, Query } from "@halsp/pipe";
 import { Action, HttpDelete, HttpPost, HttpPut } from "@halsp/router";
-import { V } from "@halsp/validator";
+import { V } from "../../src";
 
 class TestClassDto {}
 
