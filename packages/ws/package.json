@@ -1,6 +1,6 @@
 {
   "name": "@halsp/ws",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "description": "Halsp WebSocket 插件",
   "engines": {
     "node": ">=12.14.0"
@@ -33,9 +33,9 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^2.2.0",
-    "@halsp/http": "^2.2.0",
-    "@halsp/inject": "^2.2.0",
+    "@halsp/core": "^2.2.1",
+    "@halsp/http": "^2.2.1",
+    "@halsp/inject": "^2.2.1",
     "@types/ws": "^8.5.5",
     "ws": "^8.13.0"
   },
