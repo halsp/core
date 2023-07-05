@@ -89,7 +89,9 @@ export class Parser {
   }
 
   private parseUrlItems(url: string, mapItems: MapItem[]) {
-    url = url.replace(/(^|\/)\^(.*?)($|\/)/, "$1{$2}$3");
+    url = url
+      .replace(/(^|\/)\^(.*?)($|\/)/g, "$1{$2}$3")
+      .replace(/(^|\/)\^(.*?)($|\/)/g, "$1{$2}$3");
     url = "/" + url;
     const pathItem: PathItemObject = {};
     this.builder.addPath(url, pathItem);
