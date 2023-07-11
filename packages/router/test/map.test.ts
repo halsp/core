@@ -9,10 +9,16 @@ import { runin } from "@halsp/testing";
 import { HALSP_ROUTER_DIR } from "../src/constant";
 
 describe("map", () => {
-  it("should throw error when use MapCreater and router dir not exist", async () => {
-    expect(() => new MapCreater("not-exist")).toThrowError(
-      "The router dir is not exist"
-    );
+  it("should be empty when use MapCreater and router dir not exist", async () => {
+    const map = new MapCreater("not-exist").create();
+    expect(map).toEqual([]);
+  });
+
+  it("should be empty when use MapParser and router dir not exist", async () => {
+    const map = new MapParser({
+      dir: "test/not-exist",
+    }).getMap();
+    expect(map).toEqual([]);
   });
 
   it("should create router map", async () => {
@@ -26,15 +32,6 @@ describe("map", () => {
       .useTestRouter()
       .test();
     expect(result.status).toBe(405);
-  });
-
-  it("should throw error when use MapParser and router dir not exist", async () => {
-    expect(
-      () =>
-        new MapParser({
-          dir: "test/not-exist",
-        })
-    ).toThrowError("The router dir is not exist");
   });
 
   it("should not find actionMetadata if preset", async () => {

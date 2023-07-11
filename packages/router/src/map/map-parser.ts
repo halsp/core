@@ -1,18 +1,10 @@
-import { existsSync, lstatSync } from "fs";
 import MapCreater from "./map-creater";
 import MapItem from "./map-item";
 import { RouterOptionsMerged } from "../router-options";
 import { getModuleConfig, isModule } from "./module";
 
 export default class MapParser {
-  constructor(private readonly options: RouterOptionsMerged) {
-    if (
-      !existsSync(this.options.dir) ||
-      !lstatSync(this.options.dir).isDirectory()
-    ) {
-      throw new Error("The router dir is not exist");
-    }
-  }
+  constructor(private readonly options: RouterOptionsMerged) {}
 
   public getMap(): MapItem[] {
     let map: MapItem[];

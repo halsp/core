@@ -9,17 +9,17 @@ import "reflect-metadata";
 import { getModuleConfig, isModule } from "./module";
 
 export default class MapCreater {
-  constructor(private readonly dir: string) {
+  constructor(private readonly dir: string) {}
+
+  public create(): MapItem[] {
     if (
       !this.dir ||
       !existsSync(this.dirPath) ||
       !lstatSync(this.dirPath).isDirectory()
     ) {
-      throw new Error("The router dir is not exist");
+      return [];
     }
-  }
 
-  public create(): MapItem[] {
     return this.readFilesFromFolder("", []);
   }
 

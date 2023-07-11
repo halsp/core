@@ -12,9 +12,6 @@ import { RouterDistOptions } from "./router-options";
 export const postbuild = async ({ cacheDir }) => {
   const routerDirPath = getDefaultDir(cacheDir);
   const routerDir = path.join(cacheDir, routerDirPath);
-  if (!fs.existsSync(routerDir) || !fs.statSync(routerDir).isDirectory()) {
-    throw new Error("The router dir is not exist");
-  }
 
   const map = new MapCreater(routerDir).create();
   const routerConfig: RouterDistOptions = {

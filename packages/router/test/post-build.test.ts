@@ -5,21 +5,31 @@ import { CONFIG_FILE_NAME, HALSP_ROUTER_DIR } from "../src/constant";
 import "@halsp/testing";
 import "@halsp/http";
 import { runin } from "@halsp/testing";
+import path from "path";
+import { DEFAULT_ACTION_DIR } from "../src/constant";
 
 describe("post build", () => {
-  it("should be error when the router dir is not exist", async () => {
-    const cacheDir = "temp-test-not-exist";
-    let count = 0;
-    delete process.env[HALSP_ROUTER_DIR];
-    try {
+  it("should be empty when the router dir is not exist", async () => {
+    await runin("test/post-build", async () => {
+      const cacheDir = "temp-test-not-exist";
+      if (!fs.existsSync(cacheDir)) {
+        fs.mkdirSync(cacheDir);
+      }
+
+      delete process.env[HALSP_ROUTER_DIR];
       await postbuild({
         cacheDir,
       });
-    } catch (err) {
-      count++;
-      expect((err as Error).message).toBe("The router dir is not exist");
-    }
-    expect(count).toBe(1);
+
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const config = JSON.parse(
+        fs.readFileSync(path.resolve(cacheDir, CONFIG_FILE_NAME), "utf-8")
+      );
+      expect(config).toEqual({
+        dir: DEFAULT_ACTION_DIR,
+        map: [],
+      });
+    });
   });
 
   it("should build router config file", async () => {
