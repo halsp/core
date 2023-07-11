@@ -14,6 +14,7 @@ import {
   ROUTER_INITED_OPTIONS_BAG,
 } from "./constant";
 import * as fs from "fs";
+import { BlankMiddleware } from "./blank.middleware";
 
 export function initRouterMap(this: Startup, options?: RouterOptions) {
   const mapOptions = readMap();
@@ -61,6 +62,12 @@ export function initRouterMap(this: Startup, options?: RouterOptions) {
     ctx.set(ROUTER_INITED_OPTIONS_BAG, opts);
 
     await next();
+  }).add((ctx) => {
+    if (!ctx.actionMetadata) {
+      return BlankMiddleware;
+    } else {
+      return ctx.actionMetadata.getAction();
+    }
   });
 }
 

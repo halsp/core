@@ -2,7 +2,6 @@ import { Startup } from "@halsp/core";
 import { Action } from "./action";
 import MapItem from "./map/map-item";
 import { RouterInitedOptions, RouterOptions } from "./router-options";
-import { BlankMiddleware } from "./blank.middleware";
 import { initRouterMap } from "./startup";
 
 declare module "@halsp/core" {
@@ -22,13 +21,7 @@ Startup.prototype.useRouter = function (options?: RouterOptions) {
   if (usedMap.get(this)) return this;
   usedMap.set(this, true);
 
-  return initRouterMap.call(this, options).add((ctx) => {
-    if (!ctx.actionMetadata) {
-      return BlankMiddleware;
-    } else {
-      return ctx.actionMetadata.getAction();
-    }
-  });
+  return initRouterMap.call(this, options);
 };
 
 export { Action, MapItem, RouterOptions, RouterInitedOptions };
