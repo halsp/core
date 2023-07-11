@@ -2,7 +2,11 @@ import "@halsp/http";
 import { Request, Startup } from "@halsp/core";
 import "../src";
 import "./utils";
-import { DEFAULT_ACTION_DIR, HALSP_ROUTER_DIR } from "../src/constant";
+import {
+  DEFAULT_ACTION_DIR,
+  HALSP_ROUTER_DIR,
+  ROUTER_INITED_OPTIONS_BAG,
+} from "../src/constant";
 import { runin } from "@halsp/testing";
 
 test("startup test", async () => {
@@ -75,8 +79,7 @@ describe("options", () => {
       .useHttp()
       .use(async (ctx, next) => {
         await next();
-        expect(ctx.routerOptions).toBe(ctx.startup.routerOptions);
-        expect(ctx.routerOptions.prefix).toEqual("p1");
+        expect(ctx.get<any>(ROUTER_INITED_OPTIONS_BAG).prefix).toEqual("p1");
       })
       .useTestRouter({
         prefix: "p1",
@@ -94,7 +97,9 @@ describe("options", () => {
       await new Startup()
         .use(async (ctx, next) => {
           await next();
-          expect(ctx.routerOptions.dir).toBe(DEFAULT_ACTION_DIR);
+          expect(ctx.get<any>(ROUTER_INITED_OPTIONS_BAG).dir).toBe(
+            DEFAULT_ACTION_DIR
+          );
         })
         .useRouter()
         .test();

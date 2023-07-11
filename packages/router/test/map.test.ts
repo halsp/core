@@ -23,6 +23,7 @@ describe("map", () => {
 
   it("should create router map", async () => {
     const result = await new Startup()
+      .keepThrow()
       .useHttp()
       .use(async (ctx, next) => {
         await next();
@@ -34,8 +35,9 @@ describe("map", () => {
     expect(result.status).toBe(405);
   });
 
-  it("should not find actionMetadata if preset", async () => {
+  it("should not search actionMetadata if preset", async () => {
     const result = await new Startup()
+      .keepThrow()
       .useHttp()
       .use(async (ctx, next) => {
         Object.defineProperty(ctx, "actionMetadata", {
@@ -43,6 +45,7 @@ describe("map", () => {
             new MapItem({
               path: "Router.ts",
               actionName: "default",
+              realActionsDir: "test/actions",
             }),
         });
         await next();
@@ -52,6 +55,28 @@ describe("map", () => {
     expect(result.status).toBe(200);
     expect(result.body).toBe("ok");
   });
+
+  it("should not search actionMetadata if preset without realActionsDir", async () => {
+    await runin("test/actions", async () => {
+      const result = await new Startup()
+        .keepThrow()
+        .useHttp()
+        .use(async (ctx, next) => {
+          Object.defineProperty(ctx, "actionMetadata", {
+            get: () =>
+              new MapItem({
+                path: "Router.ts",
+                actionName: "default",
+              }),
+          });
+          await next();
+        })
+        .useRouter()
+        .test();
+      expect(result.status).toBe(200);
+      expect(result.body).toBe("ok");
+    });
+  });
 });
 
 describe("default actions", () => {
@@ -60,6 +85,7 @@ describe("default actions", () => {
       delete process.env[HALSP_ROUTER_DIR];
 
       const result = await new Startup()
+        .keepThrow()
         .useHttp()
         .setContext(new Request().setPath("").setMethod("GET"))
         .useRouter()

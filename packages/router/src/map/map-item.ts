@@ -11,7 +11,9 @@ export default class MapItem {
     methods?: string[];
     prefix?: string;
     moduleActionDir?: string;
+    realActionsDir?: string;
   }) {
+    this.#realActionsDir = args.realActionsDir ?? "";
     this.#moduleActionDir = args.moduleActionDir;
     this.#path = args.path.replace(/\\/g, "/");
     this.#actionName = args.actionName;
@@ -109,9 +111,10 @@ export default class MapItem {
     this.#extendDecoradors.push(...val);
   }
 
+  #realActionsDir: string;
   #decoratorsSetted = false;
-  public getAction(dir: string): ObjectConstructor<Action> {
-    const filePath = path.resolve(dir, this.path);
+  public getAction(): ObjectConstructor<Action> {
+    const filePath = path.resolve(this.#realActionsDir, this.path);
 
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const module = require(filePath);

@@ -6,3 +6,4 @@ export const HALSP_ROUTER_IS_MODULE = "@halsp/router/isModule";
 export const ACTION_METADATA = "@halsp/router/actionMetadata";
 export const ACTION_METHOD_METADATA = "@halsp/router/actionMethodMetadata";
 export const ACTION_PATTERN_METADATA = "@halsp/router/actionPatternMetadata";
+export const ROUTER_INITED_OPTIONS_BAG = "@halsp.router/routerInitedOptionsBag";

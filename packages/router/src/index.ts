@@ -9,13 +9,11 @@ declare module "@halsp/core" {
   interface Startup {
     useRouter(options?: RouterOptions): this;
     get routerMap(): MapItem[];
-    get routerOptions(): RouterInitedOptions;
   }
 
   interface Context {
     get actionMetadata(): MapItem;
     get routerMap(): MapItem[];
-    get routerOptions(): RouterInitedOptions;
   }
 }
 
@@ -28,7 +26,7 @@ Startup.prototype.useRouter = function (options?: RouterOptions) {
     if (!ctx.actionMetadata) {
       return BlankMiddleware;
     } else {
-      return ctx.actionMetadata.getAction(ctx.routerOptions.dir);
+      return ctx.actionMetadata.getAction();
     }
   });
 };

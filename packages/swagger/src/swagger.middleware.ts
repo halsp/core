@@ -46,11 +46,7 @@ export class SwaggerMiddlware extends Middleware {
     if (extendPath == "index.json") {
       const openApiBuilder = await this.createBuilder();
       const startup = this.ctx.startup;
-      const apiDoc = new Parser(
-        startup.routerMap,
-        openApiBuilder,
-        startup.routerOptions
-      ).parse();
+      const apiDoc = new Parser(startup.routerMap, openApiBuilder).parse();
       this.ctx.res.set("content-type", "text/json").ok(apiDoc);
       return;
     } else if (extendPath == "swagger-initializer.js") {

@@ -123,6 +123,7 @@ export default class MapCreater {
           methods: [method.method],
           prefix,
           moduleActionDir: deepDir,
+          realActionsDir: this.dir,
         })
       );
     });
@@ -139,6 +140,7 @@ export default class MapCreater {
           methods: [],
           prefix,
           moduleActionDir: deepDir,
+          realActionsDir: this.dir,
         })
       );
     });
@@ -151,6 +153,7 @@ export default class MapCreater {
           actionName,
           prefix,
           moduleActionDir: deepDir,
+          realActionsDir: this.dir,
         })
       );
     }

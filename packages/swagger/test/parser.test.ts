@@ -6,9 +6,7 @@ function runParserTest(routerMap?: readonly MapItem[]) {
   const builder = new OpenApiBuilder();
   process.chdir("test/parser");
   try {
-    new Parser(routerMap ?? [], builder, {
-      dir: ".",
-    }).parse();
+    new Parser(routerMap ?? [], builder).parse();
   } finally {
     process.chdir("../..");
   }

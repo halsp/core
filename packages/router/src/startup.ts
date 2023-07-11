@@ -11,6 +11,7 @@ import {
   DEFAULT_ACTION_DIR,
   DEFAULT_MODULES_DIR,
   HALSP_ROUTER_DIR,
+  ROUTER_INITED_OPTIONS_BAG,
 } from "./constant";
 import * as fs from "fs";
 
@@ -29,14 +30,6 @@ export function initRouterMap(this: Startup, options?: RouterOptions) {
     enumerable: false,
     get: () => {
       return routerMap;
-    },
-  });
-
-  Object.defineProperty(this, "routerOptions", {
-    configurable: true,
-    enumerable: false,
-    get: () => {
-      return opts;
     },
   });
 
@@ -65,13 +58,7 @@ export function initRouterMap(this: Startup, options?: RouterOptions) {
       },
     });
 
-    Object.defineProperty(ctx, "routerOptions", {
-      configurable: true,
-      enumerable: false,
-      get: () => {
-        return opts;
-      },
-    });
+    ctx.set(ROUTER_INITED_OPTIONS_BAG, opts);
 
     await next();
   });

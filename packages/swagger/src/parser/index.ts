@@ -1,6 +1,6 @@
 import { isClass, isUndefined, ObjectConstructor } from "@halsp/core";
 import { getPipeRecords, PipeReqRecord } from "@halsp/pipe";
-import { Action, MapItem, RouterOptions } from "@halsp/router";
+import { Action, MapItem } from "@halsp/router";
 import { getRules, RuleRecord } from "@halsp/validator";
 import {
   OpenApiBuilder,
@@ -35,8 +35,7 @@ import {
 export class Parser {
   constructor(
     private readonly routerMap: readonly MapItem[],
-    private readonly builder: OpenApiBuilder,
-    private readonly routerOptions: RouterOptions & { dir: string }
+    private readonly builder: OpenApiBuilder
   ) {}
 
   public parse() {
@@ -48,7 +47,7 @@ export class Parser {
   private parseTags() {
     const tags = this.builder.getSpec().tags as TagObject[];
     for (const mapItem of this.routerMap) {
-      const action = mapItem.getAction(this.routerOptions.dir);
+      const action = mapItem.getAction();
       const rules = this.getActionRules(action);
       const isIgnore = existIgnore(rules);
       if (isIgnore) continue;
@@ -97,7 +96,7 @@ export class Parser {
     this.builder.addPath(url, pathItem);
 
     for (const mapItem of mapItems) {
-      const action = mapItem.getAction(this.routerOptions.dir);
+      const action = mapItem.getAction();
       for (const method of mapItem.methods) {
         this.parseUrlMethodItem(pathItem, method.toLowerCase(), action);
       }

@@ -15,6 +15,7 @@ export default class MapParser {
           actionName: m.actionName,
           url: m.url,
           methods: [...m.methods],
+          realActionsDir: this.options.dir,
         });
         Object.keys(m)
           .filter((k) => mapItem[k] == undefined)
