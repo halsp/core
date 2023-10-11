@@ -31,7 +31,7 @@ describe("startup", () => {
     ] as grpc.ServiceClientConstructor;
     const client = new service(
       "0.0.0.0:5001",
-      grpc.credentials.createInsecure()
+      grpc.credentials.createInsecure(),
     );
 
     const result = await new Promise((resolve) => {
@@ -39,7 +39,7 @@ describe("startup", () => {
         { reqMessage: "test_startup" },
         (err: grpc.ServerErrorResponse | undefined, response: any) => {
           resolve(err ?? response);
-        }
+        },
       );
     });
 
@@ -81,7 +81,7 @@ describe("startup", () => {
     ] as grpc.ServiceClientConstructor;
     const client = new service(
       "0.0.0.0:5002",
-      grpc.credentials.createInsecure()
+      grpc.credentials.createInsecure(),
     );
 
     const result = await new Promise((resolve) => {
@@ -89,7 +89,7 @@ describe("startup", () => {
         { reqMessage: "test_startup" },
         (err: grpc.ServerErrorResponse | undefined, response: any) => {
           resolve(err ?? response);
-        }
+        },
       );
     });
 

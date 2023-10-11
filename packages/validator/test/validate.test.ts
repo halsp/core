@@ -88,7 +88,7 @@ test("array message", async () => {
     .keepThrow()
     .expectError((err) => {
       expect(err.message).toBe(
-        "b1 must be a string, b2 must be an integer number"
+        "b1 must be a string, b2 must be an integer number",
       );
     })
     .expect(({ ctx }) => {

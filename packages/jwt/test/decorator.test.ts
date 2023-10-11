@@ -30,7 +30,7 @@ test("decorator", async function () {
     .setContext(
       await createTestContext({
         secret: "secret",
-      })
+      }),
     )
     .useJwt({
       secret: "secret",
@@ -65,7 +65,7 @@ function testGetToken(skip: boolean) {
       .setContext(
         await createTestContext({
           secret: "secret",
-        })
+        }),
       )
       .useJwt({
         secret: "secret",

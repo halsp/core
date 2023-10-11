@@ -23,7 +23,7 @@ describe("post build", () => {
 
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const config = JSON.parse(
-        fs.readFileSync(path.resolve(cacheDir, CONFIG_FILE_NAME), "utf-8")
+        fs.readFileSync(path.resolve(cacheDir, CONFIG_FILE_NAME), "utf-8"),
       );
       expect(config).toEqual({
         dir: DEFAULT_ACTION_DIR,
@@ -79,7 +79,9 @@ describe("post build", () => {
         .test();
 
       expect(
-        fs.readFileSync(CONFIG_FILE_NAME, "utf-8").includes(`"modules-first":1`)
+        fs
+          .readFileSync(CONFIG_FILE_NAME, "utf-8")
+          .includes(`"modules-first":1`),
       ).toBeTruthy();
       expect(res.status).toBe(200);
       expect(res.body).toEqual({

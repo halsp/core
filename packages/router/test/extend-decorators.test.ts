@@ -13,7 +13,7 @@ describe("extend decorators", () => {
   async function testDecorators(
     decorators: ClassDecorator[] | ((mapItem: MapItem) => ClassDecorator[]),
     property: string,
-    effect: boolean
+    effect: boolean,
   ) {
     const result = await new Startup()
       .keepThrow()

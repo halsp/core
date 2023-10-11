@@ -11,7 +11,7 @@ class TestResourceFilter implements ResourceFilter {
     ctx.res.setHeader("resource2", 2);
   }
   onResourceExecuting(
-    ctx: Context
+    ctx: Context,
   ): boolean | void | Promise<void> | Promise<boolean> {
     ctx.res.setHeader("resource1", 1);
     return ctx.req.body["resource-executing"];
@@ -23,7 +23,7 @@ class TestActionFilter implements ActionFilter {
     ctx.res.setHeader("action2", 2);
   }
   onActionExecuting(
-    ctx: Context
+    ctx: Context,
   ): boolean | void | Promise<void> | Promise<boolean> {
     ctx.res.setHeader("action1", 1);
     return ctx.req.body["action-executing"];
@@ -50,7 +50,7 @@ function runExecuting(type: string) {
           new Request()
             .setPath("/filters/executing")
             .setMethod("GET")
-            .setBody(body)
+            .setBody(body),
         )
         .useFilter()
         .add(TestAction)

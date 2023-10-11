@@ -6,7 +6,7 @@ export type ExceptionMessage = object & {
 };
 
 export function isExceptionMessage(
-  error: any
+  error: any,
 ): error is string | ExceptionMessage {
   if (!error) return false;
 

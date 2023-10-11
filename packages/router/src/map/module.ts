@@ -45,7 +45,7 @@ function getModuleFilePath(dir: string, file: string) {
 
 export function getModuleConfig(
   dir: string,
-  file: string
+  file: string,
 ): RouterModule | undefined {
   const moduleFilePath = getModuleFilePath(dir, file);
   if (moduleFilePath) {

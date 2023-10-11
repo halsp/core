@@ -4,7 +4,7 @@ import type swaggerUi from "swagger-ui-dist";
 
 type SwaggerBuilder = (
   builder: OpenApiBuilder,
-  ctx: Context
+  ctx: Context,
 ) => void | Promise<void> | OpenApiBuilder | Promise<OpenApiBuilder>;
 
 export interface SwaggerHtmlOptions {

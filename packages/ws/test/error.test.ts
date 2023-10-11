@@ -66,7 +66,7 @@ describe("error", () => {
         new Request()
           .setMethod("GET")
           .set("Connection", "upgrade")
-          .set("Upgrade", "websocket")
+          .set("Upgrade", "websocket"),
       )
       .useWebSocket()
       .use(async (ctx) => {
@@ -80,7 +80,7 @@ describe("error", () => {
       .keepThrow()
       .expectError((err) => {
         expect(err.message).toBe(
-          "Missing or invalid Sec-WebSocket-Version header"
+          "Missing or invalid Sec-WebSocket-Version header",
         );
       })
       .setContext(
@@ -89,7 +89,7 @@ describe("error", () => {
           .set("Connection", "upgrade")
           .set("Upgrade", "websocket")
           .set("Sec-WebSocket-Key", "dGhlIHNhbXBsZSBub25jZQ==")
-          .set("Sec-WebSocket-Version", "test")
+          .set("Sec-WebSocket-Version", "test"),
       )
       .useWebSocket()
       .use(async (ctx) => {
@@ -110,7 +110,7 @@ describe("error", () => {
           .set("Connection", "upgrade")
           .set("Upgrade", "websocket")
           .set("Sec-WebSocket-Key", "dGhlIHNhbXBsZSBub25jZQ==")
-          .set("Sec-WebSocket-Version", "13")
+          .set("Sec-WebSocket-Version", "13"),
       )
       .useWebSocket({
         allowedOrigins: ["not-exist"],
@@ -134,7 +134,7 @@ describe("error", () => {
           .set("Upgrade", "websocket")
           .set("Sec-WebSocket-Key", "dGhlIHNhbXBsZSBub25jZQ==")
           .set("Sec-WebSocket-Version", "13")
-          .set("Origin", "test-origin")
+          .set("Origin", "test-origin"),
       )
       .useWebSocket({
         allowedOrigins: ["not-exist"],

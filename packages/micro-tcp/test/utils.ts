@@ -4,7 +4,7 @@ import net from "net";
 export async function sendData(
   port: number,
   data: string | Uint8Array,
-  waitReturn = true
+  waitReturn = true,
 ) {
   let result: ClientPacket | undefined;
   await new Promise<void>((resolve) => {
@@ -32,17 +32,17 @@ export async function sendData(
 export async function sendMessage(
   port: number,
   data: any,
-  waitReturn: false
+  waitReturn: false,
 ): Promise<void>;
 export async function sendMessage(
   port: number,
   data: any,
-  waitReturn?: true
+  waitReturn?: true,
 ): Promise<ClientPacket>;
 export async function sendMessage(
   port: number,
   data: any,
-  waitReturn = true
+  waitReturn = true,
 ): Promise<ClientPacket | void> {
   const json = JSON.stringify({
     pattern: "test_pattern",

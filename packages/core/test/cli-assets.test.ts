@@ -2,12 +2,12 @@ import { getCliAssets, isCliAssetExist, tryAddCliAssets } from "../src";
 
 test("string array", async () => {
   expect(
-    isCliAssetExist(["views/*"], (asset) => asset.startsWith("views/"))
+    isCliAssetExist(["views/*"], (asset) => asset.startsWith("views/")),
   ).toBeTruthy();
 });
 test("string array not exist", async () => {
   expect(
-    isCliAssetExist(["static"], (asset) => asset.startsWith("views/"))
+    isCliAssetExist(["static"], (asset) => asset.startsWith("views/")),
   ).toBeFalsy();
 });
 
@@ -19,8 +19,8 @@ test("object", async () => {
           include: "views/*",
         },
       ],
-      (asset) => asset.startsWith("views/")
-    )
+      (asset) => asset.startsWith("views/"),
+    ),
   ).toBeTruthy();
 });
 test("object not exist", async () => {
@@ -31,8 +31,8 @@ test("object not exist", async () => {
           include: "static",
         },
       ],
-      (asset) => asset.startsWith("views/")
-    )
+      (asset) => asset.startsWith("views/"),
+    ),
   ).toBeFalsy();
 });
 
@@ -44,8 +44,8 @@ test("include array", async () => {
           include: ["views/*"],
         },
       ],
-      (asset) => asset.startsWith("views/")
-    )
+      (asset) => asset.startsWith("views/"),
+    ),
   ).toBeTruthy();
 });
 test("include not exist", async () => {
@@ -56,8 +56,8 @@ test("include not exist", async () => {
           include: ["static"],
         },
       ],
-      (asset) => asset.startsWith("views/")
-    )
+      (asset) => asset.startsWith("views/"),
+    ),
   ).toBeFalsy();
 });
 
@@ -65,7 +65,7 @@ test("try add cli assets", async () => {
   const config = tryAddCliAssets(
     {},
     (asset) => asset.startsWith("views/"),
-    "views/*"
+    "views/*",
   );
   expect(config).toEqual({
     build: {

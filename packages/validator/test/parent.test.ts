@@ -60,7 +60,7 @@ describe("parent validate", () => {
       .keepThrow()
       .expectError((err) => {
         expect(err.message).toBe(
-          "arg must be a number conforming to the specified constraints"
+          "arg must be a number conforming to the specified constraints",
         );
       })
       .setContext(req)

@@ -36,7 +36,7 @@ class DirectoryResultMiddleware extends BaseResultMiddleware {
     if (this.matchResult.stats.isFile()) {
       return await this.setFileResult(
         this.matchResult.filePath,
-        this.matchResult.stats
+        this.matchResult.stats,
       );
     } else {
       if (this.options.listDir) {
@@ -45,7 +45,7 @@ class DirectoryResultMiddleware extends BaseResultMiddleware {
           dirHtml: await createDirHtml(
             this.matchResult.filePath,
             tempPath,
-            this.options
+            this.options,
           ),
         });
       } else {
@@ -67,7 +67,7 @@ class FileResultMiddleware extends BaseResultMiddleware {
 
     return await this.setFileResult(
       this.matchResult.filePath,
-      this.matchResult.stats
+      this.matchResult.stats,
     );
   }
 }

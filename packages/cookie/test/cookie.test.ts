@@ -8,7 +8,7 @@ describe("get cookie", () => {
     await new Startup()
       .useHttp()
       .setContext(
-        new Request().setHeader(REQUEST_HEADER_NAME, "str=abc;num=123")
+        new Request().setHeader(REQUEST_HEADER_NAME, "str=abc;num=123"),
       )
       .use(async (ctx, next) => {
         await next();
@@ -131,7 +131,7 @@ describe("set cookie", () => {
           console.error = errLog;
         }
         expect(msg).toBe(
-          `Can't set request cookies. You may want to do this: ctx.res.cookies.a = abc`
+          `Can't set request cookies. You may want to do this: ctx.res.cookies.a = abc`,
         );
         expect(ctx.cookies).toEqual({
           a: "abc",
@@ -152,7 +152,7 @@ describe("options", () => {
       .use(async (ctx, next) => {
         await next();
         expect(ctx.res.getHeader(RESPONSE_HEADER_NAME)).toBe(
-          "str=abc; Path=def"
+          "str=abc; Path=def",
         );
       })
       .useCookie({
@@ -174,7 +174,7 @@ describe("options", () => {
       .use(async (ctx, next) => {
         await next();
         expect(ctx.res.getHeader(RESPONSE_HEADER_NAME)).toBe(
-          "str=abc; Path=def"
+          "str=abc; Path=def",
         );
       })
       .useCookie()
@@ -195,7 +195,7 @@ describe("options", () => {
       .use(async (ctx, next) => {
         await next();
         expect(ctx.res.getHeader(RESPONSE_HEADER_NAME)).toBe(
-          "str=abc; Path=def"
+          "str=abc; Path=def",
         );
       })
       .useCookie({

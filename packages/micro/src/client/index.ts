@@ -9,7 +9,7 @@ declare module "@halsp/core" {
 }
 
 Context.prototype.getMicroClient = async function (
-  identity?: string
+  identity?: string,
 ): Promise<any> {
   const injectKey = MICRO_IDENTITY_KEY + (identity ?? "");
   return await this.getService(injectKey);

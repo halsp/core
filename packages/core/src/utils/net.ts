@@ -15,7 +15,7 @@ export function getHalspPort(port?: number) {
 export function logAddress(
   server: net.Server,
   logger: ILogger,
-  defaultHost: string
+  defaultHost: string,
 ) {
   const address = server.address();
   if (isObject<net.AddressInfo>(address)) {
@@ -39,6 +39,6 @@ export async function closeServer(server: net.Server) {
       } else {
         resolve();
       }
-    })
+    }),
   );
 }

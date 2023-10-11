@@ -26,7 +26,7 @@ export type MiddlewareItem =
 
 export async function createMiddleware(
   ctx: Context,
-  middleware: MiddlewareItem
+  middleware: MiddlewareItem,
 ): Promise<Middleware> {
   if (middleware instanceof Middleware) {
     return middleware;
@@ -68,14 +68,14 @@ export abstract class Middleware {
   }
 
   public isPrevInstanceOf<T extends object = any>(
-    target: ObjectConstructor<T>
+    target: ObjectConstructor<T>,
   ): target is ObjectConstructor<T> {
     const prevMd = this.#mds[this.#index - 1];
     return this.#isInstanceOf(prevMd, target);
   }
 
   public isNextInstanceOf<T extends object = any>(
-    target: ObjectConstructor<T>
+    target: ObjectConstructor<T>,
   ): target is ObjectConstructor<T> {
     const nextMd = this.#mds[this.#index + 1];
     return this.#isInstanceOf(nextMd, target);
@@ -83,7 +83,7 @@ export abstract class Middleware {
 
   #isInstanceOf<T extends object = any>(
     md: MiddlewareItem | undefined,
-    target: ObjectConstructor<T>
+    target: ObjectConstructor<T>,
   ) {
     if (!md) return false;
     if (md == target) return true;
@@ -133,7 +133,7 @@ export abstract class Middleware {
   private init(
     ctx: Context,
     index: number,
-    mds: readonly MiddlewareItem[]
+    mds: readonly MiddlewareItem[],
   ): this {
     this.#mds = mds;
     this.#ctx = ctx;
@@ -145,7 +145,7 @@ export abstract class Middleware {
 export async function invokeMiddlewares(
   ctx: Context,
   mds: MiddlewareItem[],
-  isRoot = false
+  isRoot = false,
 ) {
   const md = await createMiddleware(ctx, mds[0]);
   try {

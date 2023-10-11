@@ -61,11 +61,13 @@ function createPackageReadme(name: string) {
   return baseReadme.replace(introRegExp, intro);
 }
 
-getPackages().forEach((item: string) => {
-  fs.writeFileSync(
-    `packages/${item}/README.md`,
-    prettier.format(createPackageReadme(item), {
-      parser: "markdown",
-    })
-  );
-});
+(async () => {
+  for (const pkg of getPackages() as string[]) {
+    await fs.promises.writeFile(
+      `packages/${pkg}/README.md`,
+      await prettier.format(createPackageReadme(pkg), {
+        parser: "markdown",
+      }),
+    );
+  }
+})();

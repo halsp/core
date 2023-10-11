@@ -19,23 +19,23 @@ export class JwtService {
 
   sign(
     payload: string | Buffer | object,
-    options?: JwtSignOptions
+    options?: JwtSignOptions,
   ): Promise<string> {
     const signOptions = this.#mergeJwtOptions(
       { ...options },
-      "signOptions"
+      "signOptions",
     ) as jwt.SignOptions;
     const secret = this.#getSecretKey(
       payload,
       options,
       "privateKey",
-      JwtSecretRequestType.SIGN
+      JwtSecretRequestType.SIGN,
     );
 
     return new Promise((resolve, reject) =>
       jwt.sign(payload, secret, signOptions, (err, encoded) =>
-        err ? reject(err) : resolve(encoded as string)
-      )
+        err ? reject(err) : resolve(encoded as string),
+      ),
     );
   }
 
@@ -44,20 +44,20 @@ export class JwtService {
   verify(options?: JwtVerifyOptions) {
     const verifyOptions = this.#mergeJwtOptions(
       { ...options },
-      "verifyOptions"
+      "verifyOptions",
     );
     const token = this.#fixToken;
     const secret = this.#getSecretKey(
       token,
       options,
       "publicKey",
-      JwtSecretRequestType.VERIFY
+      JwtSecretRequestType.VERIFY,
     );
 
     return new Promise((resolve, reject) =>
       jwt.verify(token, secret, verifyOptions, (err, decoded) =>
-        err ? reject(err) : resolve(decoded)
-      )
+        err ? reject(err) : resolve(decoded),
+      ),
     );
   }
 
@@ -70,7 +70,7 @@ export class JwtService {
 
   #mergeJwtOptions(
     options: JwtVerifyOptions | JwtSignOptions,
-    key: "verifyOptions" | "signOptions"
+    key: "verifyOptions" | "signOptions",
   ): jwt.VerifyOptions | jwt.SignOptions {
     delete options.secret;
     if (key === "signOptions") {
@@ -88,13 +88,13 @@ export class JwtService {
     token: string | object | Buffer,
     options: JwtVerifyOptions | JwtSignOptions | undefined,
     key: "publicKey" | "privateKey",
-    secretRequestType: JwtSecretRequestType
+    secretRequestType: JwtSecretRequestType,
   ): string | Buffer | jwt.Secret {
     if (this.#options.secretOrKeyProvider) {
       return this.#options.secretOrKeyProvider(
         secretRequestType,
         token,
-        options
+        options,
       );
     }
 

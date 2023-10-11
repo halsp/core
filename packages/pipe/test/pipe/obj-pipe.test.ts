@@ -18,7 +18,7 @@ test("simple test", async () => {
     .setContext(
       new Request().setBody({
         b1: 1,
-      })
+      }),
     )
     .useInject()
     .add(new TestMiddleware())
@@ -27,6 +27,6 @@ test("simple test", async () => {
   expect(res.body).toBe(
     JSON.stringify({
       b1: 1,
-    })
+    }),
   );
 });

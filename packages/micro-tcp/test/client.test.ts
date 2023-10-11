@@ -158,7 +158,7 @@ describe("client", () => {
         () =>
           new Promise<void>((resolve) => {
             setTimeout(() => resolve(), 1200);
-          })
+          }),
       );
     await startup.listen();
 
@@ -193,7 +193,7 @@ describe("client", () => {
         () =>
           new Promise<void>((resolve) => {
             setTimeout(() => resolve(), 1200);
-          })
+          }),
       );
     await startup.listen();
 
@@ -228,7 +228,7 @@ describe("client", () => {
         () =>
           new Promise<void>((resolve) => {
             setTimeout(() => resolve(), 1200);
-          })
+          }),
       );
     await startup.listen();
 

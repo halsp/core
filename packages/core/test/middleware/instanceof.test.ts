@@ -163,7 +163,7 @@ describe("middleware instanceof", () => {
       .add(() =>
         new ComposeMiddleware()
           .add(Middleware1)
-          .add(() => new Middleware1(), Middleware1)
+          .add(() => new Middleware1(), Middleware1),
       )
       .run();
     expect(ctx.get("result")).toBeFalsy();

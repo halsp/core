@@ -17,7 +17,7 @@ class TestMiddleware extends Middleware {
     @Inject("KEY3") private readonly key3: number, // number to bool
     @Inject("KEY4") private readonly key4: any,
     @Inject("KEY_OBJECT") private readonly service1: any,
-    @Inject("KEY_OBJECT") private readonly service2: TestService2
+    @Inject("KEY_OBJECT") private readonly service2: TestService2,
   ) {
     super();
   }

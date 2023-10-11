@@ -80,7 +80,7 @@ describe("stream", () => {
     await startup.listen();
 
     const definition = await grpcLoader.load(
-      "./test/protos/stream.server.proto"
+      "./test/protos/stream.server.proto",
     );
     const grpcObject = grpc.loadPackageDefinition(definition);
     const service = grpcObject.serverStream[
@@ -88,7 +88,7 @@ describe("stream", () => {
     ] as grpc.ServiceClientConstructor;
     const client = new service(
       "0.0.0.0:5011",
-      grpc.credentials.createInsecure()
+      grpc.credentials.createInsecure(),
     );
 
     const result = await new Promise((resolve) => {
@@ -147,7 +147,7 @@ describe("stream", () => {
     await startup.listen();
 
     const definition = await grpcLoader.load(
-      "./test/protos/stream.client.proto"
+      "./test/protos/stream.client.proto",
     );
     const grpcObject = grpc.loadPackageDefinition(definition);
     const service = grpcObject.clientStream[
@@ -155,14 +155,14 @@ describe("stream", () => {
     ] as grpc.ServiceClientConstructor;
     const client = new service(
       "0.0.0.0:5012",
-      grpc.credentials.createInsecure()
+      grpc.credentials.createInsecure(),
     );
 
     const result = await new Promise((resolve) => {
       const call: grpc.ClientWritableStream<any> = client.testMethod(
         (err: grpc.ServerErrorResponse | undefined, response: any) => {
           resolve(err ?? response);
-        }
+        },
       );
       call.write({
         reqMessage: ["a"],
@@ -209,7 +209,7 @@ describe("stream", () => {
     await startup.listen();
 
     const definition = await grpcLoader.load(
-      "./test/protos/stream.server.proto"
+      "./test/protos/stream.server.proto",
     );
     const grpcObject = grpc.loadPackageDefinition(definition);
     const service = grpcObject.serverStream[
@@ -217,7 +217,7 @@ describe("stream", () => {
     ] as grpc.ServiceClientConstructor;
     const client = new service(
       "0.0.0.0:5011",
-      grpc.credentials.createInsecure()
+      grpc.credentials.createInsecure(),
     );
 
     const result = await new Promise((resolve) => {
@@ -275,7 +275,7 @@ describe("stream", () => {
     ] as grpc.ServiceClientConstructor;
     const client = new service(
       "0.0.0.0:5013",
-      grpc.credentials.createInsecure()
+      grpc.credentials.createInsecure(),
     );
 
     const result = await new Promise((resolve) => {

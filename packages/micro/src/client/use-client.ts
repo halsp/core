@@ -10,10 +10,10 @@ export type InjectMicroClient = {
 
 export function useMicroClient(
   fnName: string,
-  clientConstructor: ObjectConstructor<IMicroClient>
+  clientConstructor: ObjectConstructor<IMicroClient>,
 ) {
   Startup.prototype[fnName] = function (
-    options: InjectMicroClient = {}
+    options: InjectMicroClient = {},
   ): Startup {
     const injectKey = MICRO_IDENTITY_KEY + (options.identity ?? "");
     return this.useInject().inject(
@@ -35,7 +35,7 @@ export function useMicroClient(
         await client["connect"]();
         return client;
       },
-      options.injectType ?? InjectType.Singleton
+      options.injectType ?? InjectType.Singleton,
     );
   };
 }

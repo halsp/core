@@ -24,31 +24,31 @@ declare module "@halsp/core" {
     inject<T extends KeyTargetType>(
       key: string,
       target: (ctx: Context) => T | Promise<T>,
-      type?: InjectType
+      type?: InjectType,
     ): this;
     inject<TTarget extends object>(
       key: string,
       target: ObjectConstructor<TTarget>,
-      type?: InjectType
+      type?: InjectType,
     ): this;
 
     inject<TAnestor extends object, TTarget extends TAnestor>(
       anestor: ObjectConstructor<TAnestor>,
-      target: TTarget
+      target: TTarget,
     ): this;
     inject<TAnestor extends object>(
       target: ObjectConstructor<TAnestor>,
-      type?: InjectType
+      type?: InjectType,
     ): this;
     inject<TAnestor extends object, TTarget extends TAnestor>(
       anestor: ObjectConstructor<TAnestor>,
       target: (ctx: Context) => TTarget | Promise<TTarget>,
-      type?: InjectType
+      type?: InjectType,
     ): this;
     inject<TAnestor extends object, TTarget extends TAnestor>(
       anestor: ObjectConstructor<TAnestor>,
       target: ObjectConstructor<TTarget>,
-      type?: InjectType
+      type?: InjectType,
     ): this;
   }
 
@@ -56,7 +56,7 @@ declare module "@halsp/core" {
     getService<T extends object = any>(key: string): Promise<T | undefined>;
     getService<T extends object = any>(target: InjectTarget<T>): Promise<T>;
     getCachedService<T extends object = any>(
-      target: ObjectConstructor<T> | string
+      target: ObjectConstructor<T> | string,
     ): T | undefined;
   }
 }
@@ -128,7 +128,7 @@ Startup.prototype.inject = function (...args: any[]): Startup {
 async function dispose<T extends object = any>(
   ctx: Context,
   injectType: InjectType,
-  target: ObjectConstructor<T> | string
+  target: ObjectConstructor<T> | string,
 ) {
   async function disposeObject<T extends IService = any>(instance?: T) {
     if (!instance) return;
@@ -151,7 +151,7 @@ async function dispose<T extends object = any>(
 
 function initContext(ctx: Context) {
   ctx.getService = async function <T extends object = any>(
-    target: InjectTarget<T> | string
+    target: InjectTarget<T> | string,
   ) {
     if (isString(target)) {
       return await new InjectDecoratorParser<T>(ctx).parseKey(target);
@@ -160,7 +160,7 @@ function initContext(ctx: Context) {
     }
   };
   ctx.getCachedService = function <T extends object = any>(
-    target: ObjectConstructor<T> | string
+    target: ObjectConstructor<T> | string,
   ) {
     return new InjectDecoratorParser<T>(ctx).getCachedService(target);
   };

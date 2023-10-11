@@ -9,31 +9,31 @@ declare module "@halsp/core" {
   interface Startup {
     useHttpJsonBody(
       options?: cobody.Options,
-      onError?: (ctx: Context, err: unknown) => Promise<void>
+      onError?: (ctx: Context, err: unknown) => Promise<void>,
     ): this;
     useHttpTextBody(
       options?: cobody.Options,
-      onError?: (ctx: Context, err: unknown) => Promise<void>
+      onError?: (ctx: Context, err: unknown) => Promise<void>,
     ): this;
     useHttpUrlencodedBody(
       options?: cobody.Options,
-      onError?: (ctx: Context, err: Error) => Promise<void>
+      onError?: (ctx: Context, err: Error) => Promise<void>,
     ): this;
     useHttpMultipartBody(
       options?: formidable.Options,
       onFileBegin?: (
         ctx: Context,
         formName: string,
-        file: formidable.File
+        file: formidable.File,
       ) => void,
-      onError?: (ctx: Context, err: Error) => Promise<void>
+      onError?: (ctx: Context, err: Error) => Promise<void>,
     ): this;
   }
 }
 
 Startup.prototype.useHttpJsonBody = function (
   options?: cobody.Options,
-  onError?: (ctx: Context, err: unknown) => Promise<void>
+  onError?: (ctx: Context, err: unknown) => Promise<void>,
 ) {
   useBodyPraser.bind(this)(
     async (ctx) => await cobody.json(getReqStream(ctx), options),
@@ -45,31 +45,31 @@ Startup.prototype.useHttpJsonBody = function (
       "text/json",
       "application/*+json",
     ],
-    onError
+    onError,
   );
   return this;
 };
 
 Startup.prototype.useHttpTextBody = function (
   options?: cobody.Options,
-  onError?: (ctx: Context, err: unknown) => Promise<void>
+  onError?: (ctx: Context, err: unknown) => Promise<void>,
 ) {
   useBodyPraser.bind(this)(
     async (ctx) => await cobody.text(getReqStream(ctx), options),
     ["text/*"],
-    onError
+    onError,
   );
   return this;
 };
 
 Startup.prototype.useHttpUrlencodedBody = function (
   options?: cobody.Options,
-  onError?: (ctx: Context, err: Error) => Promise<void>
+  onError?: (ctx: Context, err: Error) => Promise<void>,
 ) {
   useBodyPraser.bind(this)(
     async (ctx) => await cobody.form(getReqStream(ctx), options),
     ["urlencoded"],
-    onError
+    onError,
   );
   return this;
 };
@@ -77,13 +77,13 @@ Startup.prototype.useHttpUrlencodedBody = function (
 Startup.prototype.useHttpMultipartBody = function (
   options?: formidable.Options,
   onFileBegin?: (ctx: Context, formName: string, file: formidable.File) => void,
-  onError?: (ctx: Context, err: Error) => Promise<void>
+  onError?: (ctx: Context, err: Error) => Promise<void>,
 ) {
   useBodyPraser.bind(this)(
     async (ctx) =>
       await parseMultipart.bind(this)(ctx, options, onFileBegin, onError),
     ["multipart"],
-    onError
+    onError,
   );
   return this;
 };
@@ -97,7 +97,7 @@ function parseMultipart(
   ctx: Context,
   options?: formidable.Options,
   onFileBegin?: (ctx: Context, formName: string, file: formidable.File) => void,
-  onError?: (ctx: Context, err: Error) => Promise<void>
+  onError?: (ctx: Context, err: Error) => Promise<void>,
 ): Promise<MultipartBody> {
   return new Promise<MultipartBody>((resolve) => {
     const form = new formidable.IncomingForm(options);
@@ -119,7 +119,7 @@ function parseMultipart(
             files: files,
           });
         }
-      }
+      },
     );
   });
 }
@@ -128,7 +128,7 @@ function useBodyPraser(
   this: Startup,
   bodyBuilder: (ctx: Context) => Promise<unknown>,
   types: string[],
-  onError?: (ctx: Context, err: Error) => Promise<void>
+  onError?: (ctx: Context, err: Error) => Promise<void>,
 ) {
   this.useHttp().use(async (ctx, next) => {
     if (!typeis(getReqStream(ctx), types)) {

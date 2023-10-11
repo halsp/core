@@ -1,4 +1,4 @@
-interface Options extends Object {
+interface Options {
   encoding?: BufferEncoding;
   method?: string | string[];
   strictMethod?: boolean;

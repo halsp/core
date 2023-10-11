@@ -26,8 +26,8 @@ Startup.prototype.useMicroGrpc = function (options: MicroGrpcOptions = {}) {
 function initStartup(this: Startup, options: MicroGrpcOptions) {
   let server: grpc.Server | undefined = undefined;
   this.extend("listen", async () => {
-    server = new grpc.Server();
     await close.call(this, server);
+    server = new grpc.Server();
 
     const opt: MicroGrpcOptions = { ...options };
     opt.port = options.port ?? getHalspPort(5000);
@@ -58,7 +58,7 @@ function initStartup(this: Startup, options: MicroGrpcOptions) {
           } else {
             resolve(port);
           }
-        }
+        },
       );
     });
 
@@ -85,7 +85,7 @@ async function close(this: Startup, server?: grpc.Server) {
     const shutdownTimer = setTimeout(() => {
       shutdownTimeout = true;
       this.logger.error(
-        `Server shutdown timeout and will invoke force shutdown`
+        `Server shutdown timeout and will invoke force shutdown`,
       );
       server.forceShutdown();
       resolve();
@@ -97,7 +97,7 @@ async function close(this: Startup, server?: grpc.Server) {
 
       if (err) {
         this.logger.error(
-          `Server shutdown error and will invoke force shutdown, err = ${err.message}`
+          `Server shutdown error and will invoke force shutdown, err = ${err.message}`,
         );
         server.forceShutdown();
         resolve();
@@ -115,18 +115,18 @@ function addService(
   handlers: {
     pattern: string;
     handler?: (ctx: Context) => Promise<void> | void;
-  }[]
+  }[],
 ) {
   const implementation: grpc.UntypedServiceImplementation = {};
   Object.keys(svc.prototype).forEach((item) => {
     const method = svc.prototype[item] as grpc.MethodDefinition<any, any>;
     const handler = handlers.filter((item) =>
-      isPathEqual(item.pattern, method.path)
+      isPathEqual(item.pattern, method.path),
     )[0];
     if (handler) {
       implementation[item] = getServiceMethod.bind(this)(
         method,
-        handler.handler
+        handler.handler,
       );
     }
   });
@@ -139,7 +139,7 @@ function addService(
 function getServiceMethod(
   this: Startup,
   method: grpc.MethodDefinition<any, any>,
-  handler?: (ctx: Context) => void | Promise<void>
+  handler?: (ctx: Context) => void | Promise<void>,
 ): grpc.UntypedHandleCall {
   async function prehook(ctx: Context, call: any) {
     Object.defineProperty(ctx.req, "call", {
@@ -192,20 +192,20 @@ function getServiceMethod(
           }
           call.end();
         },
-        async (ctx) => await prehook(ctx, call)
+        async (ctx) => await prehook(ctx, call),
       );
     };
   } else {
     return async (
       call: grpc.ServerUnaryCall<any, any>,
-      callback: grpc.sendUnaryData<any>
+      callback: grpc.sendUnaryData<any>,
     ) => {
       await handleMessage.bind(this)(
         createServerPacket(call),
         ({ result }) => {
           callback(result.error ? new Error(result.error) : null, result.data);
         },
-        async (ctx) => await prehook(ctx, call)
+        async (ctx) => await prehook(ctx, call),
       );
     };
   }

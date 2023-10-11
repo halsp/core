@@ -5,7 +5,7 @@ import { Startup } from "@halsp/core";
 
 it("should get redis by ctx", async () => {
   const beforeConnect = RedisClient.prototype.connect;
-  RedisClient.prototype.connect = async () => undefined;
+  RedisClient.prototype.connect = async () => undefined as any;
   const beforeDisconnect = RedisClient.prototype.disconnect;
   RedisClient.prototype.disconnect = async () => undefined;
 

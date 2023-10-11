@@ -39,12 +39,12 @@ describe("send", () => {
     expect(
       client["getDataFromReturnPacket"]({
         data: "data",
-      })
+      }),
     ).toBe("data");
     expect(
       client["getDataFromReturnPacket"]({
         response: "res",
-      })
+      }),
     ).toBe("res");
   });
 });

@@ -118,7 +118,7 @@ async function render(ctx: Context, url: string) {
 
 function getCode(
   codes: CodeType[],
-  status: number
+  status: number,
 ): { path: string; replace: number } {
   return codes
     .filter((code) => {

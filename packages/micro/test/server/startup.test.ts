@@ -36,7 +36,7 @@ describe("handle message", () => {
       ({ req, result }) => {
         expect(req.id).toBe("abc");
         expect(result).toEqual({ id: "abc" });
-      }
+      },
     );
   });
 
@@ -53,7 +53,7 @@ describe("handle message", () => {
       },
       (ctx) => {
         expect(ctx.req.id).toBeUndefined();
-      }
+      },
     );
   });
 
@@ -85,7 +85,7 @@ describe("handle message", () => {
       },
       (ctx) => {
         ctx.res.setError("err");
-      }
+      },
     );
   });
 });

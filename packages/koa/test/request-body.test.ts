@@ -23,7 +23,7 @@ describe("request body", () => {
       .setContext(
         new Request().setBody({
           halsp: "koa",
-        })
+        }),
       )
       .koa(async (ctx, next) => {
         ctx.body = ctx.halspCtx.req.body;
@@ -37,7 +37,7 @@ describe("request body", () => {
       halsp: "koa",
     });
     expect(res.getHeader("content-type")).toBe(
-      "application/json; charset=utf-8"
+      "application/json; charset=utf-8",
     );
   });
 

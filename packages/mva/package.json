@@ -43,7 +43,7 @@
     "@halsp/view": "^2.2.1"
   },
   "devDependencies": {
-    "@types/shelljs": "^0.8.12",
+    "@types/shelljs": "^0.8.13",
     "ejs": "^3.1.9"
   },
   "files": [

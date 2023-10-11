@@ -6,7 +6,7 @@ describe("stream", () => {
   it("should send stream request", async () => {
     interface ClientStreamService {
       testMethod(
-        data: WriteIterator<{ reqMessage: string }>
+        data: WriteIterator<{ reqMessage: string }>,
       ): Promise<{ resMessage: string }>;
     }
 
@@ -20,11 +20,11 @@ describe("stream", () => {
             reject(err);
           }
           resolve(port);
-        }
+        },
       );
     });
     const definition = await grpcLoader.load(
-      "./test/protos/stream.client.proto"
+      "./test/protos/stream.client.proto",
     );
     const grpcObject = grpc.loadPackageDefinition(definition);
     const svc = grpcObject.clientStream[
@@ -33,7 +33,7 @@ describe("stream", () => {
     server.addService(svc.service, {
       testMethod: async (
         call: grpc.ServerReadableStream<any, any>,
-        callback: grpc.sendUnaryData<any>
+        callback: grpc.sendUnaryData<any>,
       ) => {
         const result: any[] = [];
         const readIterator = new ReadIterator(call);
@@ -55,7 +55,7 @@ describe("stream", () => {
 
     const testService = client.getService<ClientStreamService>(
       "clientStream",
-      "ClientStreamService"
+      "ClientStreamService",
     ) as ClientStreamService;
     const writeIterator = new WriteIterator();
     (async () => {
@@ -98,11 +98,11 @@ describe("stream", () => {
             reject(err);
           }
           resolve(port);
-        }
+        },
       );
     });
     const definition = await grpcLoader.load(
-      "./test/protos/stream.server.proto"
+      "./test/protos/stream.server.proto",
     );
     const grpcObject = grpc.loadPackageDefinition(definition);
     const svc = grpcObject.serverStream[
@@ -134,7 +134,7 @@ describe("stream", () => {
 
     const testService = client.getService<ServerStreamService>(
       "serverStream",
-      "ServerStreamService"
+      "ServerStreamService",
     ) as ServerStreamService;
     const result = await testService.testMethod({
       reqMessage: "abc",
@@ -168,7 +168,7 @@ describe("stream", () => {
       testMethod(
         data: WriteIterator<{
           reqMessage: string;
-        }>
+        }>,
       ): Promise<ReadIterator<{ resMessage: string }>>;
     }
 
@@ -182,7 +182,7 @@ describe("stream", () => {
             reject(err);
           }
           resolve(port);
-        }
+        },
       );
     });
     const definition = await grpcLoader.load("./test/protos/stream.cs.proto");
@@ -212,7 +212,7 @@ describe("stream", () => {
 
     const testService = client.getService<CSStreamService>(
       "csStream",
-      "CSStreamService"
+      "CSStreamService",
     ) as CSStreamService;
 
     const writeIterator = new WriteIterator();

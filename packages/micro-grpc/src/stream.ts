@@ -28,7 +28,7 @@ export class ReadIterator<T = any> extends StreamIterator<T> {
       | grpc.ServerReadableStream<any, any>
       | grpc.ServerDuplexStream<any, any>
       | grpc.ClientReadableStream<any>
-      | grpc.ClientDuplexStream<any, any>
+      | grpc.ClientDuplexStream<any, any>,
   ) {
     super();
 

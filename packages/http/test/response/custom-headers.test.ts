@@ -1,17 +1,18 @@
 import { HeadersDict, HeaderHandler, initHeaderHandler } from "../../src";
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 class CustomHeader {
   constructor() {
     initHeaderHandler(
       this,
       () => this.headers,
-      () => this.headers
+      () => this.headers,
     );
   }
 
   readonly headers: HeadersDict = {};
 }
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+// eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-unsafe-declaration-merging
 interface CustomHeader extends HeaderHandler {}
 
 test("custom halsp headers", async () => {

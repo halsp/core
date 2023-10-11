@@ -8,7 +8,7 @@ test("restful root get", async () => {
   const result = await new Startup()
     .useHttp()
     .setContext(
-      new Request().setPath("/").setMethod(HttpMethods.get.toUpperCase())
+      new Request().setPath("/").setMethod(HttpMethods.get.toUpperCase()),
     )
     .useTestRouter()
     .test();

@@ -71,7 +71,7 @@ describe("inject", () => {
       invoke() {
         this.ctx.set(
           "equal",
-          this.injectDefaultClient == this.injectIdentityClient
+          this.injectDefaultClient == this.injectIdentityClient,
         );
         this.ctx.set("instance", !!this.injectDefaultClient);
       }

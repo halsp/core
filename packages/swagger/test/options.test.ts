@@ -23,7 +23,7 @@ describe("options", () => {
     const res = await new Startup()
       .keepThrow()
       .setContext(
-        new Request().setMethod(HttpMethods.get).setPath("swagger/index.json")
+        new Request().setMethod(HttpMethods.get).setPath("swagger/index.json"),
       )
       .use(async (ctx, next) => {
         await next();
@@ -52,7 +52,7 @@ describe("options", () => {
       .keepThrow()
       .useHttp()
       .setContext(
-        new Request().setMethod(HttpMethods.get).setPath("swagger/index.json")
+        new Request().setMethod(HttpMethods.get).setPath("swagger/index.json"),
       )
       .useSwagger({
         builder: () => {
@@ -73,7 +73,7 @@ describe("options", () => {
       .keepThrow()
       .useHttp()
       .setContext(
-        new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
+        new Request().setMethod(HttpMethods.get).setPath("swagger/index.html"),
       )
       .useSwagger({
         html: {
@@ -94,7 +94,7 @@ describe("options", () => {
       .keepThrow()
       .useHttp()
       .setContext(
-        new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
+        new Request().setMethod(HttpMethods.get).setPath("swagger/index.html"),
       )
       .useSwagger({
         html: {
@@ -115,7 +115,7 @@ describe("options", () => {
       .keepThrow()
       .useHttp()
       .setContext(
-        new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
+        new Request().setMethod(HttpMethods.get).setPath("swagger/index.html"),
       )
       .useSwagger({
         html: {
@@ -136,7 +136,7 @@ describe("options", () => {
       .keepThrow()
       .useHttp()
       .setContext(
-        new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
+        new Request().setMethod(HttpMethods.get).setPath("swagger/index.html"),
       )
       .useSwagger({
         html: {
@@ -167,7 +167,7 @@ describe("options", () => {
     <script src="./swagger-initializer.js" charset="UTF-8"> </script>
   </body>
 </html>
-`
+`,
     );
   });
 
@@ -176,7 +176,7 @@ describe("options", () => {
       .keepThrow()
       .useHttp()
       .setContext(
-        new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
+        new Request().setMethod(HttpMethods.get).setPath("swagger/index.html"),
       )
       .useSwagger({
         html: {
@@ -211,7 +211,7 @@ describe("options", () => {
     <script src="./swagger-initializer.js" charset="UTF-8"> </script>
   </body>
 </html>
-`
+`,
     );
   });
 
@@ -220,7 +220,7 @@ describe("options", () => {
       .keepThrow()
       .useHttp()
       .setContext(
-        new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
+        new Request().setMethod(HttpMethods.get).setPath("swagger/index.html"),
       )
       .useSwagger({
         html: {
@@ -257,7 +257,7 @@ describe("options", () => {
     <script src="./swagger-initializer.js" charset="UTF-8"> </script>
   </body>
 </html>
-`
+`,
     );
   });
 
@@ -266,7 +266,7 @@ describe("options", () => {
       .keepThrow()
       .useHttp()
       .setContext(
-        new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
+        new Request().setMethod(HttpMethods.get).setPath("swagger/index.html"),
       )
       .useSwagger({
         html: {
@@ -297,7 +297,7 @@ describe("options", () => {
     <script src="./swagger-initializer.js" charset="UTF-8"> </script>
   </body>
 </html>
-`
+`,
     );
   });
 
@@ -306,7 +306,7 @@ describe("options", () => {
       .keepThrow()
       .useHttp()
       .setContext(
-        new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
+        new Request().setMethod(HttpMethods.get).setPath("swagger/index.html"),
       )
       .useSwagger({
         html: {
@@ -340,7 +340,7 @@ describe("options", () => {
     </script>
   </body>
 </html>
-`
+`,
     );
   });
 
@@ -349,7 +349,7 @@ describe("options", () => {
       .keepThrow()
       .useHttp()
       .setContext(
-        new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
+        new Request().setMethod(HttpMethods.get).setPath("swagger/index.html"),
       )
       .useSwagger({
         html: {
@@ -381,7 +381,7 @@ describe("options", () => {
     <script src="domain.com/js/index.js" charset="UTF-8"> </script>
   </body>
 </html>
-`
+`,
     );
   });
 
@@ -389,7 +389,7 @@ describe("options", () => {
     const res = await new Startup()
       .useHttp()
       .setContext(
-        new Request().setMethod(HttpMethods.get).setPath("swagger/index.html")
+        new Request().setMethod(HttpMethods.get).setPath("swagger/index.html"),
       )
       .use(async (ctx, next) => {
         Object.defineProperty(ctx, "swaggerOptions", {
@@ -415,7 +415,7 @@ describe("options", () => {
         () =>
           new SwaggerMiddlware({
             path: "swagger",
-          })
+          }),
       )
       .setTestDir("test/parser")
       .test();
@@ -435,7 +435,7 @@ describe("swagger-initializer.js", () => {
       .setContext(
         new Request()
           .setMethod(HttpMethods.get)
-          .setPath("swagger/swagger-initializer.js")
+          .setPath("swagger/swagger-initializer.js"),
       )
       .useSwagger()
       .setTestDir("test/parser")
@@ -469,7 +469,7 @@ describe("swagger-initializer.js", () => {
       .setContext(
         new Request()
           .setMethod(HttpMethods.get)
-          .setPath("swagger/swagger-initializer.js")
+          .setPath("swagger/swagger-initializer.js"),
       )
       .useSwagger({
         uiBundleOptions: {
@@ -506,7 +506,7 @@ describe("swagger-initializer.js", () => {
       .setContext(
         new Request()
           .setMethod(HttpMethods.get)
-          .setPath("swagger/swagger-initializer.js")
+          .setPath("swagger/swagger-initializer.js"),
       )
       .useSwagger({
         uiBundleOptions: {

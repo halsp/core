@@ -16,7 +16,7 @@ export class ValidatePipe<T extends object = any, R extends T = any>
           ctx: Context;
           val: any;
           propertyType: any;
-        }) => ValidatorOptions | Promise<ValidatorOptions>)
+        }) => ValidatorOptions | Promise<ValidatorOptions>),
   ) {}
 
   async transform(args: TransformArgs<T | R>) {
@@ -26,7 +26,7 @@ export class ValidatePipe<T extends object = any, R extends T = any>
       ctx,
       value,
       ENABLE_METADATA,
-      true
+      true,
     );
     if (!enable) {
       return value;
@@ -42,7 +42,7 @@ export class ValidatePipe<T extends object = any, R extends T = any>
 
   private async validateModel(
     args: TransformArgs<T | R>,
-    options?: ValidatorOptions
+    options?: ValidatorOptions,
   ) {
     const { value, propertyType } = args;
 
@@ -53,14 +53,14 @@ export class ValidatePipe<T extends object = any, R extends T = any>
         [rule],
         isUndefined(value) ? undefined : value[rule.propertyKey as string],
         rule.propertyKey as string,
-        options
+        options,
       );
       errs.push(...propertyErrs);
 
       const customPropertyErrs = await this.validateCustomValidator(
         [rule],
         isUndefined(value) ? undefined : value[rule.propertyKey as string],
-        rule.propertyKey as string
+        rule.propertyKey as string,
       );
       errs.push(...customPropertyErrs);
     }
@@ -70,14 +70,14 @@ export class ValidatePipe<T extends object = any, R extends T = any>
       .map((item) =>
         typeof item == "string"
           ? item
-          : (item.constraints as Record<string, string>)
+          : (item.constraints as Record<string, string>),
       );
     this.throwMsg(msgs);
   }
 
   private async validateParent(
     args: TransformArgs<T | R>,
-    options?: ValidatorOptions
+    options?: ValidatorOptions,
   ) {
     const { parent, property, propertyKey, parameterIndex } = args;
     if (isUndefined(property)) {
@@ -89,7 +89,7 @@ export class ValidatePipe<T extends object = any, R extends T = any>
       rules,
       args.value,
       property as string,
-      options
+      options,
     );
     const msgs: (Record<string, string> | string)[] = errs
       .filter((item) => !!item.constraints)
@@ -98,7 +98,7 @@ export class ValidatePipe<T extends object = any, R extends T = any>
     const customMsgs = await this.validateCustomValidator(
       rules,
       args.value,
-      property as string
+      property as string,
     );
     msgs.push(...customMsgs);
 
@@ -126,7 +126,7 @@ export class ValidatePipe<T extends object = any, R extends T = any>
     rules: RuleRecord[],
     value: any,
     property: string,
-    options?: ValidatorOptions
+    options?: ValidatorOptions,
   ) {
     const result: ValidationError[] = [];
     for (const rule of rules) {
@@ -145,18 +145,18 @@ export class ValidatePipe<T extends object = any, R extends T = any>
   private async validateCustomValidator(
     rules: RuleRecord[],
     value: any,
-    property: string
+    property: string,
   ) {
     const result: string[] = [];
     for (const rule of rules) {
       for (const validateItem of rule.validates.filter(
-        (item) => !!item.validate
+        (item) => !!item.validate,
       )) {
         if (validateItem.validate) {
           const validateResult = await validateItem.validate(
             value,
             property,
-            validateItem.args as any[]
+            validateItem.args as any[],
           );
 
           if (!validateResult) {
@@ -165,8 +165,8 @@ export class ValidatePipe<T extends object = any, R extends T = any>
                 validateItem.errorMessage(
                   value,
                   property,
-                  validateItem.args as any[]
-                )
+                  validateItem.args as any[],
+                ),
               );
             } else {
               result.push(validateItem.errorMessage as string);
@@ -181,7 +181,7 @@ export class ValidatePipe<T extends object = any, R extends T = any>
   private async getOptions(
     value: T,
     ctx: Context,
-    propertyType: any
+    propertyType: any,
   ): Promise<ValidatorOptions | undefined> {
     let opts = this.options;
     if (typeof opts == "function") {
@@ -196,7 +196,7 @@ export class ValidatePipe<T extends object = any, R extends T = any>
       ctx,
       value,
       OPTIONS_METADATA,
-      undefined
+      undefined,
     );
 
     if (!opts && !decOptions) {
@@ -215,7 +215,7 @@ export class ValidatePipe<T extends object = any, R extends T = any>
     ctx: Context,
     value: any,
     key: string,
-    def: T
+    def: T,
   ): Promise<T | undefined> {
     if (isUndefined(value) || !isObject(value)) return def;
 

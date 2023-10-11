@@ -11,13 +11,13 @@ import * as fs from "fs";
 export function useView(startup: Startup, options: ViewOptions) {
   Context.prototype.view = async function (
     tmpPath,
-    locals: Record<string, unknown> = {}
+    locals: Record<string, unknown> = {},
   ) {
     return await render(this, options, tmpPath, locals);
   };
   Response.prototype.view = async function (
     tmpPath,
-    locals: Record<string, unknown> = {}
+    locals: Record<string, unknown> = {},
   ) {
     const html = await render(this.ctx, options, tmpPath, locals);
     if (!html) return this;
@@ -41,7 +41,7 @@ async function render(
   ctx: Context,
   options: ViewOptions,
   tmpPath: string,
-  locals: Record<string, unknown>
+  locals: Record<string, unknown>,
 ): Promise<string | undefined> {
   tmpPath = path.join(options.dir ?? "views", tmpPath ?? "");
   options.options = Object.assign({}, options.options, ctx.state, locals);
@@ -64,7 +64,7 @@ async function render(
 
 function getFile(
   tmpPath: string,
-  engines: Engine[]
+  engines: Engine[],
 ): { filePath: string; ext: string } | undefined {
   tmpPath = tmpPath.replace(/\\/g, "/");
   const ext = getExt(tmpPath);
@@ -81,7 +81,7 @@ function getFile(
 
 function findFile(
   tmpPath: string,
-  engines: Engine[]
+  engines: Engine[],
 ): { filePath: string; ext: string } | undefined {
   tmpPath = tmpPath.replace(/\\/g, "/");
   if (!tmpPath.includes("/")) {
@@ -131,7 +131,7 @@ function getExt(filePath: string): string | undefined {
 
 function getEngine(
   ext: string,
-  engines: Engine[]
+  engines: Engine[],
 ): RendererInterface | undefined {
   let engine = engines.filter((e) => e.ext == ext).map((e) => e.render)[0];
   if (engine != undefined && typeof engine == "string") {

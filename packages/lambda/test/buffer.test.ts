@@ -14,7 +14,7 @@ test("buffer", async () => {
         body: Buffer.from("test", "utf-8").toString("base64"),
         isBase64Encoded: true,
       },
-      {}
+      {},
     );
 
   expect(res.isBase64Encoded).toBeTruthy();

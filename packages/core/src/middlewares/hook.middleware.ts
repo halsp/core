@@ -7,7 +7,7 @@ export type MdHook<T extends Middleware | MiddlewareConstructor | Error = any> =
   (
     ctx: Context,
     md: T,
-    error?: Error
+    error?: Error,
   ) =>
     | void
     | Promise<void | boolean>
@@ -53,34 +53,34 @@ export async function execHooks(
   ctx: Context,
   middleware: Middleware,
   type: HookType.Error,
-  error: Error
+  error: Error,
 ): Promise<boolean>;
 export async function execHooks(
   ctx: Context,
   middleware: Middleware,
   type: HookType.Unhandled,
-  error: Error
+  error: Error,
 ): Promise<void>;
 export async function execHooks(
   ctx: Context,
   middleware: MiddlewareConstructor,
-  type: HookType.Constructor
+  type: HookType.Constructor,
 ): Promise<Middleware>;
 export async function execHooks(
   ctx: Context,
   middleware: Middleware,
-  type: HookType.BeforeInvoke | HookType.BeforeNext
+  type: HookType.BeforeInvoke | HookType.BeforeNext,
 ): Promise<boolean | void>;
 export async function execHooks(
   ctx: Context,
   middleware: Middleware,
-  type: HookType.AfterInvoke
+  type: HookType.AfterInvoke,
 ): Promise<void>;
 export async function execHooks(
   ctx: Context,
   middleware: Middleware | MiddlewareConstructor,
   type: HookType,
-  error?: Error
+  error?: Error,
 ): Promise<Middleware | void | boolean> {
   if (type == HookType.Constructor) {
     return await execConstructorHooks(ctx, middleware as MiddlewareConstructor);
@@ -90,7 +90,7 @@ export async function execHooks(
     return await execUnhandledHooks(
       ctx,
       middleware as Middleware,
-      error as Error
+      error as Error,
     );
   }
 
@@ -106,7 +106,7 @@ export async function execHooks(
 async function execErrorHooks(
   ctx: Context,
   middleware: Middleware,
-  error: Error
+  error: Error,
 ): Promise<boolean> {
   const hooks = getHooks(ctx, HookType.Error);
   let result = false;
@@ -120,7 +120,7 @@ async function execErrorHooks(
 async function execUnhandledHooks(
   ctx: Context,
   middleware: Middleware,
-  error: Error
+  error: Error,
 ): Promise<void> {
   const hooks = getHooks(ctx, HookType.Unhandled);
   for (const hookItem of hooks) {
@@ -130,7 +130,7 @@ async function execUnhandledHooks(
 
 async function execConstructorHooks(
   ctx: Context,
-  middleware: MiddlewareConstructor
+  middleware: MiddlewareConstructor,
 ): Promise<Middleware | undefined> {
   const hooks = getHooks(ctx, HookType.Constructor);
   let result: Middleware | undefined;

@@ -36,8 +36,8 @@
     "@halsp/core": "^2.2.1",
     "@halsp/http": "^2.2.1",
     "@halsp/inject": "^2.2.1",
-    "@types/ws": "^8.5.5",
-    "ws": "^8.13.0"
+    "@types/ws": "^8.5.7",
+    "ws": "^8.14.2"
   },
   "files": [
     "/dist/*",

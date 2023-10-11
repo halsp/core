@@ -51,7 +51,7 @@ export class TestDecoratorHeaderDto {
 class TestDecoratorBodyDto {
   constructor(
     @V.Description("invalid")
-    readonly invalid: string
+    readonly invalid: string,
   ) {}
 
   @V.Items({
@@ -120,7 +120,7 @@ export class ParameterDecoratorTest extends Action {
 
     @V.Description("body constructor 3").Ignore()
     @Body("bc3")
-    readonly bc3: string
+    readonly bc3: string,
   ) {
     super();
   }

@@ -26,7 +26,7 @@ export class Service2 extends Object {
 export class Service3 extends Object {
   constructor(
     @Inject private readonly service1: Service1,
-    private readonly service2: Service2
+    private readonly service2: Service2,
   ) {
     super();
   }

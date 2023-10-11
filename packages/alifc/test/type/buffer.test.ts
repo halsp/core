@@ -29,7 +29,7 @@ test("buffer body set type", async function () {
       ctx.res.setHeader("content-type", "application/octet-stream");
       ctx.res.setHeader(
         "content-length",
-        Buffer.from("BODY", "utf-8").length.toString()
+        Buffer.from("BODY", "utf-8").length.toString(),
       );
       ctx.res.ok(Buffer.from("BODY", "utf-8"));
     })

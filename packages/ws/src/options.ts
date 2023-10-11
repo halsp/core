@@ -12,7 +12,7 @@ export interface WsOptions {
     | undefined;
   handleProtocols?: (
     protocols: Set<string>,
-    request: http.IncomingMessage
+    request: http.IncomingMessage,
   ) => string | false;
   clientTracking?: boolean | undefined;
   perMessageDeflate?: boolean | ws.PerMessageDeflateOptions | undefined;

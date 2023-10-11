@@ -11,7 +11,7 @@ export interface ParsedRegister {
 export class MapMatcher {
   constructor(
     private readonly ctx: Context,
-    private readonly options: HttpOptions
+    private readonly options: HttpOptions,
   ) {
     this.#parsedRegisters = ctx.startup.parsedRegisters;
   }
@@ -41,7 +41,7 @@ export class MapMatcher {
     if (mapItem) return mapItem;
 
     const otherMethodPathCount = this.#parsedRegisters.filter((r) =>
-      this.isPathMatched(r, false)
+      this.isPathMatched(r, false),
     ).length;
     if (otherMethodPathCount) {
       const method = this.ctx.req.method;
@@ -60,7 +60,7 @@ export class MapMatcher {
 
   private isPathMatched(
     register: ParsedRegister,
-    methodIncluded: boolean
+    methodIncluded: boolean,
   ): boolean {
     const reqUrl = this.ctx.req.path;
     const reqUrlStrs = reqUrl
@@ -76,7 +76,7 @@ export class MapMatcher {
     if (methodIncluded && !register.methods.includes(HttpMethods.any)) {
       const matchedMethod = HttpMethods.matched(
         this.ctx.req.method,
-        this.options.customMethods
+        this.options.customMethods,
       );
       if (!matchedMethod || !register.methods.includes(matchedMethod)) {
         return false;
@@ -92,7 +92,7 @@ export class MapMatcher {
   }
 
   private getMostLikeRegister(
-    registers: ParsedRegister[]
+    registers: ParsedRegister[],
   ): ParsedRegister | undefined {
     if (!registers || !registers.length) return;
     if (registers.length == 1) return registers[0];

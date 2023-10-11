@@ -17,7 +17,7 @@ export class HttpMethods {
 
   static matched(
     method: string,
-    customMethods: string[] = []
+    customMethods: string[] = [],
   ): string | undefined {
     if (!method) return undefined;
     switch (method.toUpperCase()) {

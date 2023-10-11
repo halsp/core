@@ -42,9 +42,9 @@
     "qs": "^6.11.2"
   },
   "devDependencies": {
-    "@types/qs": "^6.9.7",
-    "@types/shelljs": "^0.8.12",
-    "@types/supertest": "^2.0.12",
+    "@types/qs": "^6.9.8",
+    "@types/shelljs": "^0.8.13",
+    "@types/supertest": "^2.0.14",
     "shelljs": "^0.8.5",
     "supertest": "^6.3.3"
   },

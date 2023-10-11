@@ -43,7 +43,7 @@ test(`key`, async () => {
   await runJwtServiceTest(async (jwtService, ctx) => {
     const token = await jwtService.sign(
       {},
-      { privateKey: privateKey, algorithm: "RS256" }
+      { privateKey: privateKey, algorithm: "RS256" },
     );
     ctx[OPTIONS].tokenProvider = () => token;
     const jwt = await jwtService.verify({
@@ -64,7 +64,7 @@ test(`options key`, async () => {
     {
       privateKey: privateKey,
       publicKey: publicKey,
-    }
+    },
   );
 });
 
@@ -79,6 +79,6 @@ test(`secretOrKeyProvider`, async () => {
     {
       secretOrKeyProvider: (type: JwtSecretRequestType) =>
         type == JwtSecretRequestType.SIGN ? privateKey : publicKey,
-    }
+    },
   );
 });

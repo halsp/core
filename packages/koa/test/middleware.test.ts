@@ -10,12 +10,12 @@ test("@koa/cors", async function () {
     .setContext(
       new Request()
         .setMethod(HttpMethods.get)
-        .set("origin", "https://halsp.org")
+        .set("origin", "https://halsp.org"),
     )
     .koa(
       cors({
         allowMethods: "GET,POST",
-      })
+      }),
     )
     .use(async (ctx) => {
       ctx.res.ok("halsp");
@@ -25,7 +25,7 @@ test("@koa/cors", async function () {
   expect(res.status).toBe(200);
   expect(res.body).toBe("halsp");
   expect(res.getHeader("Access-Control-Allow-Origin")).toBe(
-    "https://halsp.org"
+    "https://halsp.org",
   );
 });
 

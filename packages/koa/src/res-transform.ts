@@ -7,7 +7,7 @@ import qs from "qs";
 
 export async function koaResToHalspRes(
   koaCtx: Koa.ParameterizedContext,
-  halspRes: Response
+  halspRes: Response,
 ) {
   Object.keys(halspRes.headers).forEach((key) => {
     halspRes.removeHeader(key);
@@ -25,7 +25,7 @@ export async function koaResToHalspRes(
 
 export async function halspResToKoaRes(
   halspRes: Response,
-  koaCtx: Koa.ParameterizedContext
+  koaCtx: Koa.ParameterizedContext,
 ) {
   koaCtx.body = halspRes.body ?? null;
   Object.keys(koaCtx.response.headers).forEach((key) => {
@@ -42,7 +42,7 @@ export async function halspResToKoaRes(
 
 export async function createContext(
   koaApp: Koa,
-  halspCtx: Context
+  halspCtx: Context,
 ): Promise<Koa.ParameterizedContext> {
   const reqStream = await getReqStream(halspCtx);
   const resStream = new TransResponse(reqStream);

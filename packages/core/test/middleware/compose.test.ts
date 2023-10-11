@@ -41,19 +41,19 @@ describe("compose middleware", () => {
                     ctx.set("h51", getIndex());
                     await next();
                     ctx.set("h52", getIndex());
-                  })
+                  }),
               )
               .use(async (ctx, next) => {
                 ctx.set("h61", getIndex());
                 await next();
                 ctx.set("h62", getIndex());
-              })
+              }),
           )
           .use(async (ctx, next) => {
             ctx.set("h71", getIndex());
             await next();
             ctx.set("h72", getIndex());
-          })
+          }),
       )
       .use(async (ctx, next) => {
         ctx.set("h81", getIndex());
@@ -85,7 +85,7 @@ describe("compose middleware", () => {
       .add(() =>
         new ComposeMiddleware(() => true).use(async (ctx) => {
           ctx.set("h", 1);
-        })
+        }),
       )
       .run();
     expect(ctx.get("h")).toBe(1);
@@ -96,7 +96,7 @@ describe("compose middleware", () => {
       .add(() =>
         new ComposeMiddleware(() => false).use(async (ctx) => {
           ctx.set("h", 1);
-        })
+        }),
       )
       .run();
     expect(ctx.get("h")).toBeUndefined();
@@ -112,7 +112,7 @@ describe("compose middleware", () => {
         new ComposeMiddleware().use(async (ctx, next) => {
           throw new Error("err");
           await next();
-        })
+        }),
       )
       .run();
   });

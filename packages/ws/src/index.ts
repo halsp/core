@@ -35,7 +35,7 @@ Startup.prototype.useWebSocket = function (options: WsOptions = {}) {
             resolve();
           }
         });
-      })
+      }),
   )
     .useInject()
     .useHttp()

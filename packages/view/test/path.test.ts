@@ -12,7 +12,7 @@ test("run multiple", async () => {
         "view",
         await ctx.view("ejs/index.ejs", {
           name: "test ejs",
-        })
+        }),
       );
     });
 
@@ -33,7 +33,7 @@ test("default index", async () => {
         "view",
         await ctx.view("ejs", {
           name: "test ejs",
-        })
+        }),
       );
     })
     .test();
@@ -51,7 +51,7 @@ test("without ext", async () => {
         "view",
         await ctx.view("ejs/index", {
           name: "test ejs",
-        })
+        }),
       );
     })
     .test();
@@ -67,7 +67,7 @@ test("default dir", async () => {
         "view",
         await ctx.view("ejs/index", {
           name: "test ejs",
-        })
+        }),
       );
     })
     .test();

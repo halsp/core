@@ -37,12 +37,12 @@
   "dependencies": {
     "@halsp/core": "^2.2.1",
     "@halsp/http": "^2.2.1",
-    "glob": "^10.3.1",
+    "glob": "^10.3.10",
     "mime": "^3.0.0"
   },
   "devDependencies": {
     "@types/glob": "^8.1.0",
-    "@types/mime": "^3.0.1"
+    "@types/mime": "^3.0.2"
   },
   "files": [
     "/dist/*",

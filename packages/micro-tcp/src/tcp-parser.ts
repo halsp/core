@@ -2,7 +2,7 @@ import { ClientPacket, ServerPacket } from "@halsp/micro";
 
 export function parseTcpBuffer(
   buffer: Buffer,
-  callback: (packet: ServerPacket | ClientPacket) => void
+  callback: (packet: ServerPacket | ClientPacket) => void,
 ) {
   let stringBuffer = buffer.toString("utf-8");
 
@@ -29,7 +29,7 @@ export function parseTcpBuffer(
       continue;
     } else {
       throw new Error(
-        `Required length "${contentLength}", bug actual length is "${stringBuffer.length}"`
+        `Required length "${contentLength}", bug actual length is "${stringBuffer.length}"`,
       );
     }
   }

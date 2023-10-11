@@ -15,7 +15,7 @@ declare module "@halsp/core" {
 }
 
 Startup.prototype.koa = function (
-  middleware: Parameters<typeof Koa.prototype.use>[0]
+  middleware: Parameters<typeof Koa.prototype.use>[0],
 ) {
   this.add(() => new KoaMiddleware(middleware), KoaMiddleware);
   return this;
@@ -23,7 +23,7 @@ Startup.prototype.koa = function (
 
 export class KoaMiddleware extends Middleware {
   constructor(
-    private readonly middleware: Parameters<typeof Koa.prototype.use>[0]
+    private readonly middleware: Parameters<typeof Koa.prototype.use>[0],
   ) {
     super();
   }
@@ -32,7 +32,7 @@ export class KoaMiddleware extends Middleware {
   async invoke() {
     const middlewares =
       this.ctx.get<Parameters<typeof Koa.prototype.use>[0][]>(
-        KOA_MIDDLEWARES_BAG
+        KOA_MIDDLEWARES_BAG,
       ) ?? [];
     middlewares.push(this.middleware);
 

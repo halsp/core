@@ -65,5 +65,5 @@ testOptions(
   {
     skipNullProperties: false,
   },
-  false
+  false,
 );

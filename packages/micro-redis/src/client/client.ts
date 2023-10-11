@@ -39,7 +39,7 @@ export class MicroRedisClient extends IMicroClient {
   async send<T = any>(
     pattern: string,
     data: any,
-    timeout?: number
+    timeout?: number,
   ): Promise<T> {
     if (!this.sub?.isReady || !this.pub?.isReady) {
       throw new Error("The connection is not connected");
@@ -76,7 +76,7 @@ export class MicroRedisClient extends IMicroClient {
             resolve(packet.data ?? packet["response"]);
           }
         },
-        true
+        true,
       );
       this.#sendPacket(packet);
     });

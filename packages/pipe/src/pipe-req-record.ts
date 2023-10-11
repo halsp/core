@@ -30,7 +30,7 @@ export function addPipeRecord(
   target: any,
   propertyKey: string | symbol,
   parameterIndex?: number,
-  property?: string
+  property?: string,
 ) {
   const records = getPipeRecords(target);
   setPipeRecords(target, [

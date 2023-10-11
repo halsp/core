@@ -23,7 +23,7 @@ export class Status404Middleware extends BaseMiddleware {
 
   private async getFile404Info(): Promise<MatchResult & { error?: string }> {
     async function getFileInfo(
-      filePath: string
+      filePath: string,
     ): Promise<MatchResult | undefined> {
       if (fs.existsSync(filePath)) {
         const stats = await fs.promises.stat(filePath);
@@ -46,7 +46,7 @@ export class Status404Middleware extends BaseMiddleware {
     } else {
       const filePath = path.resolve(
         this.options["dir"] ?? process.cwd(),
-        this.use404
+        this.use404,
       );
       const fileInfo = await getFileInfo(filePath);
       if (fileInfo) {

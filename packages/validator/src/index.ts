@@ -29,7 +29,7 @@ declare module "@halsp/core" {
         ctx: Context;
         val: any;
         propertyType: any;
-      }) => ValidatorOptions | Promise<ValidatorOptions>
+      }) => ValidatorOptions | Promise<ValidatorOptions>,
     ): this;
   }
 }
@@ -41,7 +41,7 @@ Startup.prototype.useValidator = function (
         ctx: Context;
         val: any;
         propertyType: any;
-      }) => ValidatorOptions | Promise<ValidatorOptions>)
+      }) => ValidatorOptions | Promise<ValidatorOptions>),
 ) {
   return this.useGlobalPipe(GlobalPipeType.after, new ValidatePipe(options));
 };

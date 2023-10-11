@@ -8,7 +8,7 @@ test(`sign`, async () => {
         {},
         {
           secret: "secret",
-        }
+        },
       );
       ctx[OPTIONS].tokenProvider = () => token;
 
@@ -23,7 +23,7 @@ test(`sign`, async () => {
     },
     {
       secret: "secret",
-    }
+    },
   );
 });
 
@@ -34,7 +34,7 @@ test(`secretOrKeyProvider`, async () => {
         {},
         {
           secret: "secret",
-        }
+        },
       );
       ctx[OPTIONS].tokenProvider = () => token;
 
@@ -49,7 +49,7 @@ test(`secretOrKeyProvider`, async () => {
     },
     {
       secretOrKeyProvider: () => "secret",
-    }
+    },
   );
 });
 
@@ -66,6 +66,6 @@ test(`sign error`, async () => {
     },
     {
       secret: "secret",
-    }
+    },
   );
 });

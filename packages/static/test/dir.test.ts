@@ -19,7 +19,7 @@ describe("dir", () => {
       expect(result.status).toBe(200);
       const html = result.body as string;
       expect(
-        html.includes(`<title>Files within ${path.sep}</title>`)
+        html.includes(`<title>Files within ${path.sep}</title>`),
       ).toBeTruthy();
     }
 
@@ -50,20 +50,20 @@ describe("dir", () => {
     const html = result.body as string;
     console.log("html", html);
     expect(
-      html.includes(`<title>Files within dir${path.sep}</title>`)
+      html.includes(`<title>Files within dir${path.sep}</title>`),
     ).toBeTruthy();
     expect(
       html.includes(
-        `<a href="/../../static">📂${path.sep}</a><a href="/../../static/dir">dir${path.sep}</a>`
-      )
+        `<a href="/../../static">📂${path.sep}</a><a href="/../../static/dir">dir${path.sep}</a>`,
+      ),
     ).toBeTruthy();
     expect(
-      html.includes(`<a href="/." title=".." class="folder ">..</a>`)
+      html.includes(`<a href="/." title=".." class="folder ">..</a>`),
     ).toBeTruthy();
     expect(
       html.includes(
-        `<a href="/dir/index.html" title="index.html" class="file ">index.html</a>`
-      )
+        `<a href="/dir/index.html" title="index.html" class="file ">index.html</a>`,
+      ),
     ).toBeTruthy();
   });
 
@@ -71,7 +71,7 @@ describe("dir", () => {
     const result = await new Startup()
       .useHttp()
       .setContext(
-        new Request().setMethod(HttpMethods.get).setPath("static/dir")
+        new Request().setMethod(HttpMethods.get).setPath("static/dir"),
       )
       .useStatic({
         dir: "test/static",
@@ -83,20 +83,20 @@ describe("dir", () => {
     expect(result.status).toBe(200);
     const html = result.body as string;
     expect(
-      html.includes(`<title>Files within dir${path.sep}</title>`)
+      html.includes(`<title>Files within dir${path.sep}</title>`),
     ).toBeTruthy();
     expect(
       html.includes(
-        `<a href="/../static">📂${path.sep}</a><a href="/../static/dir">dir${path.sep}</a>`
-      )
+        `<a href="/../static">📂${path.sep}</a><a href="/../static/dir">dir${path.sep}</a>`,
+      ),
     ).toBeTruthy();
     expect(
-      html.includes(`<a href="/static" title=".." class="folder ">..</a>`)
+      html.includes(`<a href="/static" title=".." class="folder ">..</a>`),
     ).toBeTruthy();
     expect(
       html.includes(
-        `<a href="/static/dir/index.html" title="index.html" class="file ">index.html</a>`
-      )
+        `<a href="/static/dir/index.html" title="index.html" class="file ">index.html</a>`,
+      ),
     ).toBeTruthy();
   });
 });

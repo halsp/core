@@ -137,7 +137,7 @@ class DirectoryMatchMiddleware extends BaseMatchMiddleware {
       }
       const indexFilePath = path.resolve(
         filePath,
-        typeof options.useIndex == "string" ? options.useIndex : "index.html"
+        typeof options.useIndex == "string" ? options.useIndex : "index.html",
       );
       paths.push(indexFilePath);
     }
@@ -161,7 +161,7 @@ class DirectoryMatchMiddleware extends BaseMatchMiddleware {
   }
 
   private async tryGetDirFileInfo(
-    filePath: string
+    filePath: string,
   ): Promise<MatchResult | undefined> {
     if (!fs.existsSync(filePath)) {
       return;

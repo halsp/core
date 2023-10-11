@@ -35,7 +35,7 @@ import {
 export class Parser {
   constructor(
     private readonly routerMap: readonly MapItem[],
-    private readonly builder: OpenApiBuilder
+    private readonly builder: OpenApiBuilder,
   ) {}
 
   public parse() {
@@ -67,7 +67,7 @@ export class Parser {
   private getActionRules(action: ObjectConstructor<Action>) {
     return getRules(action).filter(
       (rule) =>
-        isUndefined(rule.parameterIndex) && isUndefined(rule.propertyKey)
+        isUndefined(rule.parameterIndex) && isUndefined(rule.propertyKey),
     );
   }
 
@@ -106,7 +106,7 @@ export class Parser {
   private parseUrlMethodItem(
     pathItem: PathItemObject,
     method: string,
-    action: ObjectConstructor<Action>
+    action: ObjectConstructor<Action>,
   ) {
     const actionClassRules = this.getActionRules(action);
     if (existIgnore(actionClassRules)) {
@@ -137,7 +137,7 @@ export class Parser {
     optObj: OperationObject,
     action: ObjectConstructor<Action>,
     record: PipeReqRecord,
-    rules: RuleRecord[]
+    rules: RuleRecord[],
   ) {
     const bodyRules = rules.filter((rule) => {
       if (!isUndefined(record.propertyKey)) {
@@ -157,12 +157,12 @@ export class Parser {
     setRequestBodyValue(this.builder, requestBody, bodyRules);
 
     const actionRules = rules.filter(
-      (r) => isUndefined(r.propertyKey) && isUndefined(r.parameterIndex)
+      (r) => isUndefined(r.propertyKey) && isUndefined(r.parameterIndex),
     );
     const contentTypes: string[] = [];
     const contentTypeValidates = getNamedValidates(
       actionRules,
-      lib.ContentTypes.name
+      lib.ContentTypes.name,
     );
     if (contentTypeValidates.length) {
       contentTypeValidates.forEach((validate) => {
@@ -179,7 +179,7 @@ export class Parser {
         contentType,
         action,
         record,
-        bodyRules
+        bodyRules,
       );
     }
   }
@@ -189,7 +189,7 @@ export class Parser {
     contentType: string,
     action: ObjectConstructor<Action>,
     record: PipeReqRecord,
-    rules: RuleRecord[]
+    rules: RuleRecord[],
   ) {
     const contentTypeObj = requestBody.content[contentType] ?? {};
     requestBody.content[contentType] = contentTypeObj;
@@ -210,11 +210,11 @@ export class Parser {
         properties,
         action,
         record.property,
-        rules
+        rules,
       );
 
       contentTypeSchema.required = Object.keys(properties).filter(
-        (property) => (properties[property] as SchemaObject).nullable == false
+        (property) => (properties[property] as SchemaObject).nullable == false,
       );
       if (!contentTypeSchema.required.length) {
         delete contentTypeSchema.required;
@@ -230,7 +230,7 @@ export class Parser {
         setSchemaValue(
           this.builder,
           contentTypeObj.schema as SchemaObject,
-          rules
+          rules,
         );
 
         getNamedValidates(rules, lib.Items.name).forEach((v) => {
@@ -238,7 +238,7 @@ export class Parser {
             this.builder,
             contentTypeObj.schema as SchemaObject,
             lib,
-            v.args[0] as ArrayItemType
+            v.args[0] as ArrayItemType,
           );
         });
       } else if (isClass(modelType)) {
@@ -249,14 +249,14 @@ export class Parser {
         setSchemaValue(
           this.builder,
           contentTypeObj.schema as SchemaObject,
-          rules
+          rules,
         );
 
         setComponentModelSchema(this.builder, modelType, rules);
         setModelSchema(
           this.builder,
           modelType,
-          contentTypeObj.schema as SchemaObject
+          contentTypeObj.schema as SchemaObject,
         );
       } else {
         contentTypeObj.schema = contentTypeObj.schema ?? {
@@ -265,7 +265,7 @@ export class Parser {
         setSchemaValue(
           this.builder,
           contentTypeObj.schema as SchemaObject,
-          rules
+          rules,
         );
       }
     }
@@ -275,7 +275,7 @@ export class Parser {
     optObj: OperationObject,
     action: ObjectConstructor<Action>,
     record: PipeReqRecord,
-    rules: RuleRecord[]
+    rules: RuleRecord[],
   ) {
     const propertyRules = rules.filter((rule) => {
       if (!isUndefined(record.propertyKey)) {
@@ -295,7 +295,7 @@ export class Parser {
         record.property,
         record,
         propertyRules,
-        modelType
+        modelType,
       );
       parameters.push(parameter);
     } else {
@@ -309,12 +309,12 @@ export class Parser {
   private parseModelParam(
     optObj: OperationObject,
     record: PipeReqRecord,
-    modelType: ObjectConstructor
+    modelType: ObjectConstructor,
   ) {
     const parameters = optObj.parameters as ParameterObject[];
 
     const rules = getRules(modelType).filter(
-      (rule) => !isUndefined(rule.propertyKey)
+      (rule) => !isUndefined(rule.propertyKey),
     );
     const propertiesRules = rules.reduce((prev, cur) => {
       (prev[cur.propertyKey as string] =
@@ -329,13 +329,13 @@ export class Parser {
       const propertyType = Reflect.getMetadata(
         "design:type",
         modelType.prototype,
-        property
+        property,
       );
       const parameter = this.createParameter(
         property,
         record,
         propertiesRules[property],
-        propertyType
+        propertyType,
       );
       parameters.push(parameter);
     }
@@ -345,7 +345,7 @@ export class Parser {
     property: string,
     record: PipeReqRecord,
     rules: RuleRecord[],
-    paramType?: ObjectConstructor
+    paramType?: ObjectConstructor,
   ) {
     const type = typeToApiType(paramType);
     const parameter: ParameterObject = {
@@ -379,7 +379,7 @@ export class Parser {
 
   private getPipeRecordModelType(
     cls: ObjectConstructor,
-    record: PipeReqRecord
+    record: PipeReqRecord,
   ): ObjectConstructor | undefined {
     let result: ObjectConstructor;
     if (!isUndefined(record.parameterIndex)) {
@@ -389,7 +389,7 @@ export class Parser {
       result = Reflect.getMetadata(
         "design:type",
         cls.prototype,
-        record.propertyKey
+        record.propertyKey,
       );
     }
     return result;

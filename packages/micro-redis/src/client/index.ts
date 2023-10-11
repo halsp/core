@@ -6,7 +6,7 @@ import { MicroRedisClient } from "./client";
 declare module "@halsp/core" {
   interface Startup {
     useMicroRedisClient(
-      options?: MicroRedisClientOptions & InjectMicroClient
+      options?: MicroRedisClientOptions & InjectMicroClient,
     ): this;
   }
 }

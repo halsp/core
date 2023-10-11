@@ -12,7 +12,7 @@ export class ParseFloatPipe implements PipeTransform<string | number, number> {
     }
 
     throw createBadRequestError(
-      "Validation failed (numeric string is expected)"
+      "Validation failed (numeric string is expected)",
     );
   }
 }

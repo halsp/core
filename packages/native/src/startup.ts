@@ -41,7 +41,7 @@ Startup.prototype.useNative = function (options?: NativeOptions) {
 async function requestListener(
   this: Startup,
   reqStream: http.IncomingMessage,
-  resStream: http.ServerResponse
+  resStream: http.ServerResponse,
 ): Promise<void> {
   const ctx = new Context();
 
@@ -95,7 +95,7 @@ function initStartup(this: Startup, options?: NativeOptions) {
           ...options,
           port: getHalspPort(options?.port ?? 9504),
         },
-        () => resolve()
+        () => resolve(),
       );
     });
     return server;

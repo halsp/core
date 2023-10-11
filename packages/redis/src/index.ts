@@ -35,12 +35,12 @@ Startup.prototype.useRedis = function (options: Options = {}): Startup {
 
       return client;
     },
-    options.injectType
+    options.injectType,
   );
 };
 
 Context.prototype.getRedis = async function (
-  identity?: string
+  identity?: string,
 ): Promise<Redis> {
   const injectKey = OPTIONS_IDENTITY + (identity ?? "");
   return (await this.getService<Redis>(injectKey))!;

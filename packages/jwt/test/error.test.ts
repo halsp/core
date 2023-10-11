@@ -14,7 +14,7 @@ describe("error", () => {
       .setContext(
         await createTestContext({
           secret: "secret1",
-        })
+        }),
       )
       .useJwt({
         secret: "secret",
@@ -38,7 +38,7 @@ describe("error", () => {
       .setContext(
         await createTestContext({
           secret: "secret1",
-        })
+        }),
       )
       .useJwt({
         secret: "secret",

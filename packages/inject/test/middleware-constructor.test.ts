@@ -8,7 +8,7 @@ class TestMiddleware extends Middleware {
   constructor(
     private readonly service: Service2,
     @Inject("KEY_INJ") private readonly num: number,
-    private readonly str: string
+    private readonly str: string,
   ) {
     super();
   }

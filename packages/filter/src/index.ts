@@ -27,18 +27,18 @@ declare module "@halsp/core" {
     useFilter(): this;
     useGlobalFilter<T extends Filter = Filter>(
       filter: FilterItem<T>,
-      order?: number
+      order?: number,
     ): this;
     useFilterOrder<T extends Filter = Filter>(
       filter: ObjectConstructor<T>,
-      order: number
+      order: number,
     ): this;
   }
 }
 
 Startup.prototype.useFilterOrder = function <T extends Filter = Filter>(
   filter: ObjectConstructor<T>,
-  order: number
+  order: number,
 ) {
   return this.useFilter().use(async (ctx, next) => {
     const existOrders = ctx.get<OrderRecord<T>[]>(FILTERS_ORDER_BAG) ?? [];
@@ -54,7 +54,7 @@ Startup.prototype.useFilterOrder = function <T extends Filter = Filter>(
 
 Startup.prototype.useGlobalFilter = function <T extends Filter = Filter>(
   filter: FilterItem<T>,
-  order?: number
+  order?: number,
 ) {
   this.useFilter();
 

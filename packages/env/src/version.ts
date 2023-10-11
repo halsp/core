@@ -2,7 +2,7 @@ import path from "path";
 import * as fs from "fs";
 
 export async function getVersion(
-  cwd = process.cwd()
+  cwd = process.cwd(),
 ): Promise<string | undefined> {
   let pkgPath = "package.json";
   while (true) {

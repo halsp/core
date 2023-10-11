@@ -45,7 +45,7 @@ function initStartup(this: Startup, options: MicroNatsOptions = {}) {
       (pattern: string, handler?: (ctx: Context) => Promise<void> | void) => {
         this.logger.debug(`Add pattern: ${pattern}`);
         return register.bind(this)(pattern, handler, connection);
-      }
+      },
     );
 }
 
@@ -59,7 +59,7 @@ function register(
   this: Startup,
   pattern: string,
   handler?: (ctx: Context) => Promise<void> | void,
-  connection?: nats.NatsConnection
+  connection?: nats.NatsConnection,
 ) {
   if (!connection) return this;
 
@@ -93,7 +93,7 @@ function register(
             get: () => resHeaders,
           });
           handler && (await handler(ctx));
-        }
+        },
       );
     },
   });

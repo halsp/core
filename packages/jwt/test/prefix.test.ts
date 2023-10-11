@@ -12,8 +12,8 @@ test("prefix", async function () {
           secret: "secret",
         },
         undefined,
-        "custom "
-      )
+        "custom ",
+      ),
     )
     .useJwt({
       secret: "secret",

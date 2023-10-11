@@ -1,6 +1,7 @@
 import { Response } from "@halsp/core";
 import { initResultHandler, ResultHandler } from "../../src";
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 class CustomResultHandler {
   constructor() {
     initResultHandler(this, () => this.res);
@@ -8,7 +9,7 @@ class CustomResultHandler {
 
   readonly res = new Response();
 }
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+// eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-unsafe-declaration-merging
 interface CustomResultHandler extends ResultHandler {}
 
 test("custom result handler", async () => {

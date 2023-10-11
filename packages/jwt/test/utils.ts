@@ -7,7 +7,7 @@ import { Context, Startup } from "@halsp/core";
 export async function createTestContext(
   options: JwtOptions,
   payload: any = {},
-  prefix = "Bearer "
+  prefix = "Bearer ",
 ): Promise<Context> {
   let token = "";
   await runJwtServiceTest(async (jwtService) => {
@@ -23,7 +23,7 @@ export async function createTestContext(
 
 export async function runJwtServiceTest(
   test: (jwtService: JwtService, ctx: Context) => Promise<void>,
-  options: JwtOptions = {}
+  options: JwtOptions = {},
 ) {
   await new Startup()
     .useInject()

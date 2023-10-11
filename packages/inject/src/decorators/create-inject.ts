@@ -9,21 +9,21 @@ export function createInject<T = any>(
   target: any,
   propertyKey: string | symbol,
   parameterIndex: number | undefined,
-  type: InjectType.Singleton
+  type: InjectType.Singleton,
 ): void;
 export function createInject<T = any>(
   handler: (ctx: Context, parent: any) => T | Promise<T>,
   target: any,
   propertyKey: string | symbol,
   parameterIndex?: number,
-  type?: InjectType
+  type?: InjectType,
 ): void;
 export function createInject<T = any>(
   handler: (parent: any, ctx?: any) => T | Promise<T>,
   target: any,
   propertyKey: string | symbol,
   parameterIndex?: number,
-  type?: InjectType
+  type?: InjectType,
 ): void {
   target = getProptotype(target);
   const args =
@@ -39,6 +39,6 @@ export function createInject<T = any>(
         type: type,
       },
     ],
-    target
+    target,
   );
 }

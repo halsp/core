@@ -27,7 +27,7 @@ test("action test", async () => {
     new Request().setBody({
       account: "abc",
       password: "123456",
-    })
+    }),
   );
   ctx.res.status = StatusCodes.OK;
   (loginAction as any).init(ctx, 0);
@@ -48,7 +48,7 @@ function runMultipleTest(
   path: string,
   method: string,
   status: number,
-  body?: string
+  body?: string,
 ) {
   test(`multiple`, async () => {
     const result = await new Startup()

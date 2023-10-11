@@ -40,7 +40,7 @@ describe("middleware", () => {
         (md) => {
           expect(md.fn()).toBe(1);
         },
-        HookType.AfterInvoke
+        HookType.AfterInvoke,
       )
       .add(TestMiddleware)
       .test();

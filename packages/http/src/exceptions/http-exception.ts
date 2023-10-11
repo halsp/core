@@ -3,10 +3,11 @@ import { HeaderHandler, initHeaderHandler } from "../context/header-handler";
 import { ExceptionMessage, HalspException, isString } from "@halsp/core";
 import { HeadersDict } from "../types";
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-declaration-merging
 export class HttpException extends HalspException {
   constructor(
     public readonly status: StatusCodes,
-    error?: string | ExceptionMessage
+    error?: string | ExceptionMessage,
   ) {
     super(error);
 
@@ -18,7 +19,7 @@ export class HttpException extends HalspException {
     initHeaderHandler(
       this,
       () => this.headers,
-      () => this.headers
+      () => this.headers,
     );
   }
 
@@ -42,5 +43,5 @@ export class HttpException extends HalspException {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
+// eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-unsafe-declaration-merging
 export interface HttpException extends HeaderHandler {}

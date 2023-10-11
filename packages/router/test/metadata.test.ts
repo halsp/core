@@ -26,7 +26,7 @@ test("set metadata", async () => {
   const result = await new Startup()
     .useHttp()
     .setContext(
-      new Request().setPath("/metadata/set-metadata").setMethod("GET")
+      new Request().setPath("/metadata/set-metadata").setMethod("GET"),
     )
     .useTestRouter()
     .test();

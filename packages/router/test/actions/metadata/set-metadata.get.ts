@@ -13,7 +13,7 @@ export default class extends Action {
     setActionMetadata(this.constructor as ObjectConstructor<Action>, "m3", 3);
     this.ok({
       constructor: getActionMetadata(
-        this.constructor as ObjectConstructor<Action>
+        this.constructor as ObjectConstructor<Action>,
       ),
       object: getActionMetadata(this),
       m1: getActionMetadata(this, "m1"),

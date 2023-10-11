@@ -21,5 +21,5 @@ initHeaderHandler(
   },
   function () {
     return this.res.headers;
-  }
+  },
 );

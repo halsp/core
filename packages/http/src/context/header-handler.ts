@@ -22,11 +22,11 @@ export interface HeaderHandler {
 export function initHeaderHandler<T extends HeaderHandler>(
   target: T,
   getHeaders: (this: any) => HeadersDict,
-  setHeaders: (this: any) => HeadersDict
+  setHeaders: (this: any) => HeadersDict,
 ) {
   function getHeaderFromDict<T extends HeaderValue = HeaderValue>(
     key: string,
-    dict: HeadersDict
+    dict: HeadersDict,
   ): T | undefined {
     const existKey = hasHeaderFromDict(key, dict);
     if (existKey) {
@@ -49,7 +49,7 @@ export function initHeaderHandler<T extends HeaderHandler>(
     const headers = setHeaders.bind(this)();
     if (Array.isArray(value)) {
       headers[key] = value.map((item) =>
-        typeof item == "string" ? item : String(item)
+        typeof item == "string" ? item : String(item),
       );
     } else if (typeof value != "string") {
       headers[key] = String(value);
@@ -74,7 +74,7 @@ export function initHeaderHandler<T extends HeaderHandler>(
   target.appendHeader = function (key: string, value: NumericalHeaderValue): T {
     const prev = getHeaderFromDict(
       key,
-      setHeaders.bind(this)()
+      setHeaders.bind(this)(),
     ) as NumericalHeaderValue;
     if (prev) {
       value = (Array.isArray(prev) ? prev : [prev]).concat(value);
@@ -105,12 +105,12 @@ export function initHeaderHandler<T extends HeaderHandler>(
   };
 
   target.getHeader = function <U extends HeaderValue = HeaderValue>(
-    key: string
+    key: string,
   ): U | undefined {
     return getHeaderFromDict(key, getHeaders.bind(this)());
   };
   target.get = function <U extends HeaderValue = HeaderValue>(
-    key: string
+    key: string,
   ): U | undefined {
     return this.getHeader<U>(key);
   };

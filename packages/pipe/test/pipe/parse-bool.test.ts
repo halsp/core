@@ -4,7 +4,7 @@ import { runFieldPipeTest, runSuccessPipeTest } from "./utils";
 function runSuccessTest(
   source: any,
   target: any,
-  options?: ParseBoolPipeOptions
+  options?: ParseBoolPipeOptions,
 ) {
   runSuccessPipeTest([new ParseBoolPipe(options)], source, target);
 }

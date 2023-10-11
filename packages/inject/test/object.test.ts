@@ -89,7 +89,7 @@ function runPrimiseBuilderTest(type?: InjectType) {
       .inject(
         PromiseBuilderService,
         async (ctx) => await PromiseBuilderService.createService(ctx),
-        type
+        type,
       )
       .use(async (ctx) => {
         const service1 = await ctx.getService(PromiseBuilderService);

@@ -14,7 +14,7 @@ export class TrimPipe implements PipeTransform<string, string> {
         start: true,
         end: true,
       },
-      options ?? {}
+      options ?? {},
     );
   }
   readonly #options: TrimPipeOptions;

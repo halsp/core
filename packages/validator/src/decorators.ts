@@ -9,7 +9,7 @@ export function UseValidatorOptions(
   options: (args: {
     ctx: Context;
     val: any;
-  }) => ValidatorOptions | Promise<ValidatorOptions>
+  }) => ValidatorOptions | Promise<ValidatorOptions>,
 ): ClassDecorator;
 export function UseValidatorOptions(options: ValidatorOptions): ClassDecorator;
 export function UseValidatorOptions(options: any): ClassDecorator {
@@ -19,7 +19,7 @@ export function UseValidatorOptions(options: any): ClassDecorator {
 }
 
 export function ValidatorEnable(
-  fn: (args: { ctx: Context; val: any }) => boolean | Promise<boolean>
+  fn: (args: { ctx: Context; val: any }) => boolean | Promise<boolean>,
 ): ClassDecorator {
   return function (target: any) {
     Reflect.defineMetadata(ENABLE_METADATA, fn, target.prototype);
@@ -28,7 +28,7 @@ export function ValidatorEnable(
 
 export function getRules(
   target: any,
-  propertyOrIndex?: string | symbol | number
+  propertyOrIndex?: string | symbol | number,
 ) {
   target = target?.prototype ?? target;
   if (!target) return [];

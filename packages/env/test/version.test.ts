@@ -13,7 +13,7 @@ describe("version", () => {
     process.chdir("test");
     try {
       const version = JSON.parse(
-        fs.readFileSync("../package.json", "utf-8")
+        fs.readFileSync("../package.json", "utf-8"),
       ).version;
       expect(await getVersion()).toBe(version);
     } finally {
@@ -34,7 +34,7 @@ describe("version", () => {
   it("should find current version", async () => {
     const version = await getVersion();
     const pkg = JSON.parse(
-      fs.readFileSync(path.join(__dirname, "../package.json"), "utf-8")
+      fs.readFileSync(path.join(__dirname, "../package.json"), "utf-8"),
     );
     expect(version).toBe(pkg.version);
   });

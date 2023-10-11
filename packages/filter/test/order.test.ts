@@ -13,7 +13,7 @@ export class TestActionFilter1 implements ActionFilter {
     ctx.res.setHeader(`order12`, ctx.res.body);
   }
   onActionExecuting(
-    ctx: Context
+    ctx: Context,
   ): boolean | void | Promise<void> | Promise<boolean> {
     ctx.res.body++;
     ctx.res.setHeader(`order11`, ctx.res.body);
@@ -26,7 +26,7 @@ export class TestActionFilter2 implements ActionFilter {
     ctx.res.setHeader(`order22`, ctx.res.body);
   }
   onActionExecuting(
-    ctx: Context
+    ctx: Context,
   ): boolean | void | Promise<void> | Promise<boolean> {
     ctx.res.body++;
     ctx.res.setHeader(`order21`, ctx.res.body);
@@ -39,7 +39,7 @@ export class TestActionFilter3 implements ActionFilter {
     ctx.res.setHeader(`order32`, ctx.res.body);
   }
   onActionExecuting(
-    ctx: Context
+    ctx: Context,
   ): boolean | void | Promise<void> | Promise<boolean> {
     ctx.res.body++;
     ctx.res.setHeader(`order31`, ctx.res.body);
@@ -52,7 +52,7 @@ class TestActionFilter4 implements ActionFilter {
     ctx.res.setHeader(`order42`, ctx.res.body);
   }
   onActionExecuting(
-    ctx: Context
+    ctx: Context,
   ): boolean | void | Promise<void> | Promise<boolean> {
     ctx.res.body++;
     ctx.res.setHeader(`order41`, ctx.res.body);
@@ -65,7 +65,7 @@ class TestActionFilter5 implements ActionFilter {
     ctx.res.setHeader(`order52`, ctx.res.body);
   }
   onActionExecuting(
-    ctx: Context
+    ctx: Context,
   ): boolean | void | Promise<void> | Promise<boolean> {
     ctx.res.body++;
     ctx.res.setHeader(`order51`, ctx.res.body);
@@ -78,7 +78,7 @@ class TestActionFilter6 implements ActionFilter {
     ctx.res.setHeader(`order62`, ctx.res.body);
   }
   onActionExecuting(
-    ctx: Context
+    ctx: Context,
   ): boolean | void | Promise<void> | Promise<boolean> {
     ctx.res.body++;
     ctx.res.setHeader(`order61`, ctx.res.body);

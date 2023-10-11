@@ -17,7 +17,7 @@ describe("custom inject", () => {
             return ctx.get<object>("custom");
           },
           arg1,
-          arg2
+          arg2,
         );
       }
     }
@@ -40,7 +40,7 @@ describe("custom inject", () => {
       .setContext(
         new Context().set("custom", {
           a: 1,
-        })
+        }),
       )
       .useInject()
       .add(TestMiddleware)
@@ -59,7 +59,7 @@ describe("custom inject", () => {
     function Custom(
       target: any,
       propertyKey: string | symbol | undefined,
-      parameterIndex: number
+      parameterIndex: number,
     ): void;
     function Custom(...args: any[]): void | ParameterDecorator {
       if (typeof args[0] == "string") {
@@ -72,7 +72,7 @@ describe("custom inject", () => {
           },
           args[0],
           args[1],
-          args[2]
+          args[2],
         );
       }
     }
@@ -81,7 +81,7 @@ describe("custom inject", () => {
     class TestMiddleware extends Middleware {
       constructor(
         @Custom private readonly c1: any,
-        @Custom("a") readonly c2: any
+        @Custom("a") readonly c2: any,
       ) {
         super();
       }
@@ -98,7 +98,7 @@ describe("custom inject", () => {
       .setContext(
         new Context().set("custom", {
           a: 1,
-        })
+        }),
       )
       .useInject()
       .add(TestMiddleware)
@@ -201,7 +201,7 @@ describe("inject custom type", () => {
     class TestMiddleware extends Middleware {
       constructor(
         @CustomInject private readonly count1: any,
-        @CustomInject private readonly count2: any
+        @CustomInject private readonly count2: any,
       ) {
         super();
       }

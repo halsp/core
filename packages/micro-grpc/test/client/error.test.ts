@@ -6,7 +6,7 @@ describe("error", () => {
   it("should send stream request and throw error", async () => {
     interface ClientStreamService {
       testMethod(
-        data: WriteIterator<{ reqMessage: string }>
+        data: WriteIterator<{ reqMessage: string }>,
       ): Promise<{ resMessage: string }>;
     }
 
@@ -20,11 +20,11 @@ describe("error", () => {
             reject(err);
           }
           resolve(port);
-        }
+        },
       );
     });
     const definition = await grpcLoader.load(
-      "./test/protos/stream.client.proto"
+      "./test/protos/stream.client.proto",
     );
     const grpcObject = grpc.loadPackageDefinition(definition);
     const svc = grpcObject.clientStream[
@@ -33,7 +33,7 @@ describe("error", () => {
     server.addService(svc.service, {
       testMethod: async (
         call: grpc.ServerReadableStream<any, any>,
-        callback: grpc.sendUnaryData<any>
+        callback: grpc.sendUnaryData<any>,
       ) => {
         callback(new Error("err"));
       },
@@ -49,7 +49,7 @@ describe("error", () => {
 
     const testService = client.getService<ClientStreamService>(
       "clientStream",
-      "ClientStreamService"
+      "ClientStreamService",
     ) as ClientStreamService;
     const writeIterator = new WriteIterator();
     (async () => {
@@ -91,7 +91,7 @@ describe("error", () => {
       err = e as Error;
     }
     expect(err?.message).toBe(
-      "Send data should be WriteIterator when request is stream"
+      "Send data should be WriteIterator when request is stream",
     );
   });
 
@@ -105,13 +105,13 @@ describe("error", () => {
     try {
       await client.send(
         "serverStream/ServerStreamService/testMethod",
-        new WriteIterator()
+        new WriteIterator(),
       );
     } catch (e) {
       err = e as Error;
     }
     expect(err?.message).toBe(
-      "Send data should not be WriteIterator when request is not stream"
+      "Send data should not be WriteIterator when request is not stream",
     );
   });
 
@@ -145,7 +145,7 @@ describe("emit error", () => {
             reject(err);
           }
           resolve(port);
-        }
+        },
       );
     });
     const definition = await grpcLoader.load("./test/protos/test.proto");
@@ -154,7 +154,7 @@ describe("emit error", () => {
     server.addService(svc.service, {
       testMethod: async (
         call: grpc.ServerReadableStream<any, any>,
-        callback: grpc.sendUnaryData<any>
+        callback: grpc.sendUnaryData<any>,
       ) => {
         called = true;
         callback(new Error("err"));
@@ -193,11 +193,11 @@ describe("emit error", () => {
             reject(err);
           }
           resolve(port);
-        }
+        },
       );
     });
     const definition = await grpcLoader.load(
-      "./test/protos/stream.client.proto"
+      "./test/protos/stream.client.proto",
     );
     const grpcObject = grpc.loadPackageDefinition(definition);
     const svc = grpcObject.clientStream[
@@ -206,7 +206,7 @@ describe("emit error", () => {
     server.addService(svc.service, {
       testMethod: async (
         call: grpc.ServerReadableStream<any, any>,
-        callback: grpc.sendUnaryData<any>
+        callback: grpc.sendUnaryData<any>,
       ) => {
         called = true;
         callback(new Error("err"));

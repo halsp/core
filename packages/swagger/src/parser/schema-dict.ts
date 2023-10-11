@@ -80,7 +80,7 @@ function dynamicSetValue(
 export function setActionValue(
   builder: OpenApiBuilder,
   operation: OperationObject,
-  rules: RuleRecord[]
+  rules: RuleRecord[],
 ) {
   dynamicSetValue(
     builder,
@@ -106,7 +106,7 @@ export function setActionValue(
     {
       func: lib.Servers,
       type: "array",
-    }
+    },
   );
 
   parseResponse(builder, operation, rules);
@@ -115,22 +115,22 @@ export function setActionValue(
 function parseResponse(
   builder: OpenApiBuilder,
   operation: OperationObject,
-  rules: RuleRecord[]
+  rules: RuleRecord[],
 ) {
   const descriptionValidates = getNamedValidates(
     rules,
-    lib.ResponseDescription.name
+    lib.ResponseDescription.name,
   );
   const descriptionDefValidates = descriptionValidates.filter(
-    (item) => typeof item.args[0] != "number"
+    (item) => typeof item.args[0] != "number",
   );
   const headersValidates = getNamedValidates(rules, lib.ResponseHeaders.name);
   const headersDefValidates = headersValidates.filter(
-    (item) => typeof item.args[0] != "number"
+    (item) => typeof item.args[0] != "number",
   );
   const contentValidates = getNamedValidates(rules, lib.Response.name);
   const contentDefValidates = contentValidates.filter(
-    (item) => typeof item.args[0] != "number"
+    (item) => typeof item.args[0] != "number",
   );
 
   const responses = operation.responses;
@@ -144,7 +144,7 @@ function parseResponse(
       rules,
       descriptionDefValidates,
       headersDefValidates,
-      contentDefValidates
+      contentDefValidates,
     );
   }
 
@@ -155,25 +155,25 @@ function parseResponse(
       if (typeof code == "number" && !status.includes(code)) {
         status.push(code);
       }
-    }
+    },
   );
 
   status.forEach((code) => {
     const descriptionCodeValidates = descriptionValidates.filter(
-      (v) => v.args[0] == code
+      (v) => v.args[0] == code,
     );
     const headersCodeValidates = headersValidates.filter(
-      (v) => v.args[0] == code
+      (v) => v.args[0] == code,
     );
     const contentCodeValidates = contentValidates.filter(
-      (v) => v.args[0] == code
+      (v) => v.args[0] == code,
     );
     responses[code.toString()] = createResponseObject(
       builder,
       rules,
       descriptionCodeValidates,
       headersCodeValidates,
-      contentCodeValidates
+      contentCodeValidates,
     );
   });
 
@@ -189,7 +189,7 @@ function createResponseObject(
   rules: RuleRecord[],
   descriptionValidates: ValidateItem[],
   headersValidates: ValidateItem[],
-  contentValidates: ValidateItem[]
+  contentValidates: ValidateItem[],
 ) {
   const responseObject: ResponseObject = {
     description: "",
@@ -211,11 +211,11 @@ function createResponseObject(
 function createContentObject(
   builder: OpenApiBuilder,
   rules: RuleRecord[],
-  validate: ValidateItem
+  validate: ValidateItem,
 ) {
   const contentTypeValidates = getNamedValidates(
     rules,
-    lib.ResponseContentTypes.name
+    lib.ResponseContentTypes.name,
   );
   const contentTypes: string[] = [];
   if (contentTypeValidates.length) {
@@ -244,7 +244,7 @@ function createContentObject(
           builder,
           contentTypeObj.schema as SchemaObject,
           lib,
-          sv
+          sv,
         );
       });
     } else {
@@ -265,7 +265,7 @@ function createContentObject(
 export function setSchemaValue(
   builder: OpenApiBuilder,
   target: SchemaObject,
-  rules: RuleRecord[]
+  rules: RuleRecord[],
 ) {
   dynamicSetValue(
     builder,
@@ -392,14 +392,14 @@ export function setSchemaValue(
       func: lib.Enum,
       type: "array",
     },
-    lib.Format
+    lib.Format,
   );
 }
 
 export function setParamValue(
   builder: OpenApiBuilder,
   target: object,
-  rules: RuleRecord[]
+  rules: RuleRecord[],
 ) {
   dynamicSetValue(
     builder,
@@ -433,14 +433,14 @@ export function setParamValue(
       type: "true",
     },
     lib.Examples,
-    lib.Example
+    lib.Example,
   );
 }
 
 export function setRequestBodyValue(
   builder: OpenApiBuilder,
   target: object,
-  rules: RuleRecord[]
+  rules: RuleRecord[],
 ) {
   dynamicSetValue(builder, target, rules, lib.Description, {
     func: lib.Required,

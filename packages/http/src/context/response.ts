@@ -64,5 +64,5 @@ initHeaderHandler(
   },
   function () {
     return this.headers;
-  }
+  },
 );

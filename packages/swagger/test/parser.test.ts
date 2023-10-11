@@ -171,7 +171,7 @@ describe("content type", () => {
     const doc = runParserTest(mapItems);
 
     expect(
-      Object.keys(doc["paths"]["/test"]["post"]["requestBody"]["content"])
+      Object.keys(doc["paths"]["/test"]["post"]["requestBody"]["content"]),
     ).toEqual(["application/json"]);
   });
 
@@ -187,7 +187,7 @@ describe("content type", () => {
     const doc = runParserTest(mapItems);
 
     expect(
-      Object.keys(doc["paths"]["/test"]["post"]["requestBody"]["content"])
+      Object.keys(doc["paths"]["/test"]["post"]["requestBody"]["content"]),
     ).toEqual(["application/json"]);
   });
 
@@ -203,7 +203,7 @@ describe("content type", () => {
     const doc = runParserTest(mapItems);
 
     expect(
-      Object.keys(doc["paths"]["/test"]["post"]["requestBody"]["content"])
+      Object.keys(doc["paths"]["/test"]["post"]["requestBody"]["content"]),
     ).toEqual(["mt"]);
   });
 
@@ -219,7 +219,7 @@ describe("content type", () => {
     const doc = runParserTest(mapItems);
 
     expect(
-      Object.keys(doc["paths"]["/test"]["post"]["requestBody"]["content"])
+      Object.keys(doc["paths"]["/test"]["post"]["requestBody"]["content"]),
     ).toEqual(["mt1", "mt2", "mt3"]);
   });
 });
@@ -281,7 +281,7 @@ describe("ignore", () => {
     expect(
       doc["paths"]["/ignore"]["post"]["requestBody"]["content"][
         "application/json"
-      ]["schema"]["properties"]
+      ]["schema"]["properties"],
     ).toEqual({
       b1: {
         nullable: false,

@@ -7,7 +7,7 @@ function runPipeTest(
   pipes: PipeItem[],
   source: any,
   success: boolean,
-  target?: any
+  target?: any,
 ) {
   class TestMiddleware extends Middleware {
     @Body("b1", ...pipes)
@@ -26,7 +26,7 @@ function runPipeTest(
       .setContext(
         new Request().setBody({
           b1: source,
-        })
+        }),
       )
       .useInject()
       .add(new TestMiddleware())
@@ -43,7 +43,7 @@ function runPipeTest(
 export function runSuccessPipeTest(
   pipes: PipeItem[],
   source: any,
-  target: any
+  target: any,
 ) {
   runPipeTest(pipes, source, true, target);
 }

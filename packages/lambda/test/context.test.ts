@@ -35,6 +35,6 @@ test("request context method", async () => {
           },
         },
       },
-      {}
+      {},
     );
 });

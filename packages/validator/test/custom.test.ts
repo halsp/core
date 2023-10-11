@@ -18,7 +18,7 @@ declare module "../src" {
     CustomDecorator2: () => ValidatorDecoratorReturnType;
     CustomDecorator3: (
       arg1: string,
-      arg2: number
+      arg2: number,
     ) => ValidatorDecoratorReturnType;
     NotExist: () => ValidatorDecoratorReturnType;
   }
@@ -33,7 +33,7 @@ describe("custom", () => {
     });
     const validators = getCustomValidators();
     expect(
-      validators.filter((item) => item.name == "testname").length > 0
+      validators.filter((item) => item.name == "testname").length > 0,
     ).toBeTruthy();
   });
 
@@ -145,7 +145,7 @@ describe("Is", () => {
         .Is(() => false, `error1`)
         .Is(
           () => false,
-          (v, p) => `${p} Is error2`
+          (v, p) => `${p} Is error2`,
         )
         .Is(() => true, `not-error3`)
       @Body("abc")

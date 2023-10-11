@@ -55,7 +55,7 @@ export async function handleMessage<T = object>(
     result: ClientPacket<T>;
     res: Response;
   }) => void | Promise<void>,
-  prehook?: (ctx: Context) => Promise<void> | void
+  prehook?: (ctx: Context) => Promise<void> | void,
 ) {
   const req = new Request()
     .setPath(packet.pattern)

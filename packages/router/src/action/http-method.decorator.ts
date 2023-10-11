@@ -14,18 +14,18 @@ function setHttpMethodMetadata(target: any, method: string, url?: string) {
         url: url ?? "",
       },
     ],
-    target.prototype
+    target.prototype,
   );
 }
 
 function createHttpMethodDecorator(
   method: string,
-  url?: string
+  url?: string,
 ): ClassDecorator;
 function createHttpMethodDecorator(method: string, target: any): void;
 function createHttpMethodDecorator(
   method: string,
-  data?: any
+  data?: any,
 ): ClassDecorator | undefined {
   if (typeof data == "function") {
     setHttpMethodMetadata(data, method);

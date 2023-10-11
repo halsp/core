@@ -39,12 +39,12 @@ Startup.prototype.useMongoose = function (options: Options): Startup {
       };
       return connection;
     },
-    options.injectType
+    options.injectType,
   );
 };
 
 Context.prototype.getMongoose = async function (
-  identity?: string
+  identity?: string,
 ): Promise<Mongoose> {
   const injectKey = OPTIONS_IDENTITY + (identity ?? "");
   return (await this.getService<Mongoose>(injectKey))!;

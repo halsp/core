@@ -63,7 +63,7 @@ Startup.prototype.useAlifc = function () {
           aliRes.setHeader(key, halspRes.headers[key] as string);
         });
       await writeBody(halspRes, aliRes);
-    }
+    },
   )
     .useHttp()
     .useHttpJsonBody();

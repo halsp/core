@@ -8,6 +8,6 @@ const targetFileName = process.argv[3] ?? sourceFileName;
 getPackages().forEach((item: string) => {
   fs.copyFileSync(
     path.join("packages", sourceFileName),
-    path.join("packages", item, targetFileName)
+    path.join("packages", item, targetFileName),
   );
 });

@@ -3,13 +3,13 @@ import { OPTIONS_IDENTITY } from "./constant";
 import * as typeorm from "typeorm";
 
 export function Typeorm(
-  identity?: string
+  identity?: string,
 ): PropertyDecorator & ParameterDecorator;
 export function Typeorm(target: any, propertyKey: string | symbol): void;
 export function Typeorm(
   target: any,
   propertyKey: string | symbol | undefined,
-  parameterIndex: number
+  parameterIndex: number,
 ): void;
 export function Typeorm(...args: any[]) {
   if (args.length == 0 || (args.length == 1 && typeof args[0] == "string")) {
@@ -19,7 +19,7 @@ export function Typeorm(...args: any[]) {
       (ctx) => ctx.getService(OPTIONS_IDENTITY),
       args[0],
       args[1],
-      args[2]
+      args[2],
     );
   }
 }

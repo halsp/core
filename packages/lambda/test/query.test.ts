@@ -15,7 +15,7 @@ test("query", async () => {
           b: "2",
         },
       },
-      {}
+      {},
     );
 
   expect(res.statusCode).toBe(200);
@@ -23,6 +23,6 @@ test("query", async () => {
     JSON.stringify({
       a: "1",
       b: "2",
-    })
+    }),
   );
 });

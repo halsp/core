@@ -39,15 +39,15 @@
     "@halsp/core": "^2.2.1",
     "@halsp/http": "^2.2.1",
     "co-body": "^6.1.0",
-    "formidable": "^3.5.0",
+    "formidable": "^3.5.1",
     "type-is": "^1.6.18"
   },
   "devDependencies": {
-    "@types/co-body": "^6.1.0",
-    "@types/formidable": "^3.4.0",
-    "@types/shelljs": "^0.8.12",
-    "@types/supertest": "^2.0.12",
-    "@types/type-is": "^1.6.3",
+    "@types/co-body": "^6.1.1",
+    "@types/formidable": "^3.4.3",
+    "@types/shelljs": "^0.8.13",
+    "@types/supertest": "^2.0.14",
+    "@types/type-is": "^1.6.4",
     "shelljs": "^0.8.5",
     "supertest": "^6.3.3"
   },

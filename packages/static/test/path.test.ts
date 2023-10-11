@@ -178,7 +178,7 @@ describe("decode URI", () => {
     const result = await new Startup()
       .useHttp()
       .setContext(
-        new Request().setMethod("get").setPath(encodeURIComponent("中文.html"))
+        new Request().setMethod("get").setPath(encodeURIComponent("中文.html")),
       )
       .useStatic({
         dir: "test/static",

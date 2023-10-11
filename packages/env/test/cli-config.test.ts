@@ -35,7 +35,7 @@ test("cli config hook with custom assets", async () => {
         ],
       },
     },
-    { command: "start" }
+    { command: "start" },
   );
   expect(config).toEqual({
     build: {
@@ -60,7 +60,7 @@ test("cli config hook with custom array assets", async () => {
         ],
       },
     },
-    { command: "start" }
+    { command: "start" },
   );
   expect(config).toEqual({
     build: {

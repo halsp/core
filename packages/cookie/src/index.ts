@@ -57,7 +57,7 @@ Startup.prototype.useCookie = function (options: Options = {}) {
             set: (target, p: string, value) => {
               target[p] = value;
               console.error(
-                `Can't set request cookies. You may want to do this: ctx.res.cookies.${p} = ${value}`
+                `Can't set request cookies. You may want to do this: ctx.res.cookies.${p} = ${value}`,
               );
               return true;
             },
@@ -71,7 +71,7 @@ Startup.prototype.useCookie = function (options: Options = {}) {
   }).use(async (ctx, next) => {
     function createOptionsProxy(
       parent: Dict<SetCookieValue>,
-      args: SetCookieValueWithArgs
+      args: SetCookieValueWithArgs,
     ) {
       return new Proxy(args, {
         set: (target, p, value) => {
@@ -103,7 +103,7 @@ Startup.prototype.useCookie = function (options: Options = {}) {
           ctx.res.getHeader(RESPONSE_HEADER_NAME) ?? "",
           {
             map: true,
-          }
+          },
         );
         for (const key in cookies) {
           delete cookies[key]["name"];
@@ -135,7 +135,7 @@ Startup.prototype.useCookie = function (options: Options = {}) {
 function serializeCookie(
   ctx: Context,
   cookies: Dict<SetCookieValue>,
-  options?: cookie.CookieSerializeOptions
+  options?: cookie.CookieSerializeOptions,
 ) {
   ctx.res.removeHeader(RESPONSE_HEADER_NAME);
   for (const key in cookies) {
@@ -145,7 +145,7 @@ function serializeCookie(
       cookieStr = cookie.serialize(
         key,
         String(value.value),
-        Object.assign({}, options ?? {}, value)
+        Object.assign({}, options ?? {}, value),
       );
     } else {
       cookieStr = cookie.serialize(key, String(value), options);

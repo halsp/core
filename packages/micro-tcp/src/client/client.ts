@@ -25,7 +25,7 @@ export class MicroTcpClient extends IMicroClient {
 
     socket.on("data", (buffer: Buffer) => {
       parseTcpBuffer(buffer, (packet) =>
-        this.#handleResponse(packet as ClientPacket)
+        this.#handleResponse(packet as ClientPacket),
       );
     });
 
@@ -42,7 +42,7 @@ export class MicroTcpClient extends IMicroClient {
 
     this.#socket.connect(
       this.options.port ?? 2333,
-      this.options.host ?? "localhost"
+      this.options.host ?? "localhost",
     );
 
     await promise;
@@ -76,7 +76,7 @@ export class MicroTcpClient extends IMicroClient {
     data: any,
     options: {
       timeout?: number;
-    } = {}
+    } = {},
   ): Promise<T> {
     if (!this.#socket || this.#socket.destroyed) {
       throw new Error("The connection is not connected");

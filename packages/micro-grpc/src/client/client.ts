@@ -34,7 +34,7 @@ export class MicroGrpcClient extends IMicroClient {
 
   getService<T extends object = any>(
     packageName: string,
-    serviceName: string
+    serviceName: string,
   ): T | undefined {
     const service = this.#createService(packageName, serviceName);
     if (!service) return;
@@ -49,7 +49,7 @@ export class MicroGrpcClient extends IMicroClient {
             return undefined;
           }
         },
-      }
+      },
     );
     Object.values(service.constructor.prototype).forEach((m) => {
       const method = m as grpc.MethodDefinition<any, any>;
@@ -65,15 +65,15 @@ export class MicroGrpcClient extends IMicroClient {
 
   send<T = any>(
     pattern: string,
-    data: WriteIterator
+    data: WriteIterator,
   ): Promise<ReadIterator<T> | T>;
   send<T = any>(
     pattern: string,
-    data?: Record<string, any>
+    data?: Record<string, any>,
   ): Promise<ReadIterator<T> | T>;
   async send(
     pattern: string,
-    data: WriteIterator | Record<string, any> = {}
+    data: WriteIterator | Record<string, any> = {},
   ): Promise<any> {
     if (!this.#packages) {
       throw new Error("Should invoke .connect() first");
@@ -105,7 +105,7 @@ export class MicroGrpcClient extends IMicroClient {
               } else {
                 resolve(response);
               }
-            }
+            },
           );
           (async () => {
             for await (const item of requestIterator) {
@@ -130,7 +130,7 @@ export class MicroGrpcClient extends IMicroClient {
               } else {
                 resolve(response);
               }
-            }
+            },
           );
         });
       }
@@ -157,7 +157,7 @@ export class MicroGrpcClient extends IMicroClient {
           if (err) {
             this.logger.error(err);
           }
-        }
+        },
       );
       (async () => {
         for await (const item of requestIterator) {
@@ -172,7 +172,7 @@ export class MicroGrpcClient extends IMicroClient {
           if (err) {
             this.logger.error(err);
           }
-        }
+        },
       );
     }
   }
@@ -181,7 +181,7 @@ export class MicroGrpcClient extends IMicroClient {
     const existService = this.#services.filter(
       (s) =>
         s.packageName.toLowerCase() == packageName.toLowerCase() &&
-        s.serviceName.toLowerCase() == serviceName.toLowerCase()
+        s.serviceName.toLowerCase() == serviceName.toLowerCase(),
     )[0];
     if (existService) {
       return existService.client;
@@ -194,7 +194,7 @@ export class MicroGrpcClient extends IMicroClient {
 
       const pkg = packages[pkgName];
       const svcs = Object.values(pkg).filter((item) =>
-        isClass(item)
+        isClass(item),
       ) as grpc.ServiceClientConstructor[];
       for (const svc of svcs) {
         if (svc.serviceName.toLowerCase() == serviceName.toLowerCase()) {
@@ -220,7 +220,7 @@ export class MicroGrpcClient extends IMicroClient {
       const service = new serviceConstructor(
         url,
         opt.credentials ?? grpc.ChannelCredentials.createInsecure(),
-        opt
+        opt,
       );
       this.#services.push({
         packageName: packageName,
@@ -261,18 +261,18 @@ export class MicroGrpcClient extends IMicroClient {
 
   #checkSendData(
     method: grpc.MethodDefinition<any, any>,
-    data: WriteIterator | Record<string, any>
+    data: WriteIterator | Record<string, any>,
   ) {
     if (method.requestStream) {
       if (!(data instanceof WriteIterator)) {
         throw new Error(
-          "Send data should be WriteIterator when request is stream"
+          "Send data should be WriteIterator when request is stream",
         );
       }
     } else {
       if (data instanceof WriteIterator) {
         throw new Error(
-          "Send data should not be WriteIterator when request is not stream"
+          "Send data should not be WriteIterator when request is not stream",
         );
       }
     }

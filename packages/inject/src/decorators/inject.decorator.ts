@@ -7,11 +7,11 @@ import "reflect-metadata";
 
 export function Inject<T = any>(
   handler: (parent: any) => T | Promise<T>,
-  type: InjectType.Singleton
+  type: InjectType.Singleton,
 ): PropertyDecorator & ParameterDecorator;
 export function Inject<T = any>(
   handler: (ctx: Context, parent: any) => T | Promise<T>,
-  type?: InjectType.Scoped | InjectType.Transient
+  type?: InjectType.Scoped | InjectType.Transient,
 ): PropertyDecorator & ParameterDecorator;
 
 export function Inject(key: string): PropertyDecorator & ParameterDecorator;
@@ -20,7 +20,7 @@ export function Inject(target: any, propertyKey: string | symbol): void;
 export function Inject(
   target: any,
   propertyKey: string | symbol | undefined,
-  parameterIndex: number
+  parameterIndex: number,
 ): void;
 
 export function Inject(
@@ -53,7 +53,7 @@ function injectKey(key: string) {
   return function (
     target: any,
     propertyKey: string | symbol,
-    parameterIndex?: number
+    parameterIndex?: number,
   ) {
     target = getProptotype(target);
     const args =
@@ -68,19 +68,19 @@ function injectKey(key: string) {
           parameterIndex: parameterIndex,
         },
       ],
-      target
+      target,
     );
   };
 }
 
 function injectCustom<T>(
   handler: (...args: []) => T | Promise<T>,
-  type?: InjectType
+  type?: InjectType,
 ) {
   return function (
     target: any,
     propertyKey: string | symbol,
-    parameterIndex?: number
+    parameterIndex?: number,
   ) {
     createInject(handler, target, propertyKey, parameterIndex, type);
   };

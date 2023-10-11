@@ -37,7 +37,7 @@ it("transient instance should be dispose", async () => {
     .use(async (ctx, next) => {
       await next();
       const instance = new InjectDecoratorParser(ctx).getTransientInstances(
-        TestService
+        TestService,
       );
       expect(instance.some((item) => !item.disposed)).toBeFalsy();
     })

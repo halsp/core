@@ -58,7 +58,7 @@ test("set json type", async () => {
   expect(res.body).toBe(
     JSON.stringify({
       body: "BODY",
-    })
+    }),
   );
   expect(res.statusCode).toBe(200);
 });

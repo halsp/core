@@ -93,7 +93,7 @@ describe("isExceptionMessage", () => {
     expect(
       isExceptionMessage({
         message: "",
-      })
+      }),
     ).toBeFalsy();
   });
 
@@ -101,7 +101,7 @@ describe("isExceptionMessage", () => {
     expect(
       isExceptionMessage({
         message: "abc",
-      })
+      }),
     ).toBeTruthy();
   });
 

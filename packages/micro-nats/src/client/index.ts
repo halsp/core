@@ -6,7 +6,7 @@ import { MicroNatsClient } from "./client";
 declare module "@halsp/core" {
   interface Startup {
     useMicroNatsClient(
-      options?: MicroNatsClientOptions & InjectMicroClient
+      options?: MicroNatsClientOptions & InjectMicroClient,
     ): this;
   }
 }

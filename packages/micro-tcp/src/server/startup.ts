@@ -40,7 +40,7 @@ function initStartup(this: Startup, options?: MicroTcpOptions) {
             ...options,
             port: getHalspPort(options?.port ?? 2333),
           },
-          () => resolve()
+          () => resolve(),
         );
       });
     }
@@ -67,7 +67,7 @@ function requestListener(this: Startup, socket: net.Socket) {
         try {
           const pattern = (packet as ServerPacket).pattern;
           const handler = this.registers.filter(
-            (item) => item.pattern == pattern
+            (item) => item.pattern == pattern,
           )[0];
           if (!handler) {
             if (packet.id) {
@@ -96,7 +96,7 @@ function requestListener(this: Startup, socket: net.Socket) {
                 get: () => socket,
               });
               handler.handler && (await handler.handler(ctx));
-            }
+            },
           );
         } catch (err) {
           this.logger.error(err);

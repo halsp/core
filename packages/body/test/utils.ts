@@ -29,7 +29,7 @@ Startup.prototype.listenTest = function () {
 async function requestListener(
   this: Startup,
   reqStream: http.IncomingMessage,
-  resStream: http.ServerResponse
+  resStream: http.ServerResponse,
 ): Promise<void> {
   const pathname = (reqStream.url as string).split("?")[0];
   const query = qs.parse((reqStream.url as string).split("?")[1] ?? "");

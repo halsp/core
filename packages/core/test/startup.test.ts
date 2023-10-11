@@ -175,7 +175,7 @@ describe("call", () => {
           _.use(async (ctx, next) => {
             ctx.set("test", true);
             await next();
-          })
+          }),
       )
 
       .run();

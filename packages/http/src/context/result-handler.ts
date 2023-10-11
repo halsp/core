@@ -22,7 +22,7 @@ export interface ResultHandler {
       | StatusCodes.MOVED_TEMPORARILY
       | StatusCodes.SEE_OTHER
       | StatusCodes.TEMPORARY_REDIRECT
-      | StatusCodes.PERMANENT_REDIRECT
+      | StatusCodes.PERMANENT_REDIRECT,
   ) => this;
 
   // 400
@@ -112,7 +112,7 @@ export interface ResultHandler {
 
 export function initResultHandler<T extends ResultHandler>(
   target: T,
-  getRes: (this: any) => Response
+  getRes: (this: any) => Response,
 ) {
   function setResult(this: any, status: StatusCodes, body?: unknown): T {
     const res = getRes.bind(this)();
@@ -124,7 +124,7 @@ export function initResultHandler<T extends ResultHandler>(
   function setError(
     this: any,
     status: StatusCodes,
-    error?: HttpErrorMessage | string
+    error?: HttpErrorMessage | string,
   ): T {
     const res = getRes.bind(this)();
     res.status = status;
@@ -171,7 +171,7 @@ export function initResultHandler<T extends ResultHandler>(
       | StatusCodes.MOVED_TEMPORARILY
       | StatusCodes.SEE_OTHER
       | StatusCodes.TEMPORARY_REDIRECT
-      | StatusCodes.PERMANENT_REDIRECT = StatusCodes.MOVED_TEMPORARILY
+      | StatusCodes.PERMANENT_REDIRECT = StatusCodes.MOVED_TEMPORARILY,
   ): T {
     const res = getRes.bind(this)();
     res.setStatus(code).set("location", location);
@@ -245,7 +245,7 @@ export function initResultHandler<T extends ResultHandler>(
     return setResult.bind(this)(StatusCodes.PRECONDITION_FAILED, body);
   };
   target.preconditionFailedMsg = function (
-    error?: HttpErrorMessage | string
+    error?: HttpErrorMessage | string,
   ): T {
     return setError.bind(this)(StatusCodes.PRECONDITION_FAILED, error);
   };
@@ -261,7 +261,7 @@ export function initResultHandler<T extends ResultHandler>(
     return setResult.bind(this)(StatusCodes.UNSUPPORTED_MEDIA_TYPE, body);
   };
   target.unsupportedMediaTypeMsg = function (
-    error?: HttpErrorMessage | string
+    error?: HttpErrorMessage | string,
   ): T {
     return setError.bind(this)(StatusCodes.UNSUPPORTED_MEDIA_TYPE, error);
   };
@@ -284,7 +284,7 @@ export function initResultHandler<T extends ResultHandler>(
     return setResult.bind(this)(StatusCodes.UNPROCESSABLE_ENTITY, body);
   };
   target.unprocessableEntityMsg = function (
-    error?: HttpErrorMessage | string
+    error?: HttpErrorMessage | string,
   ): T {
     return setError.bind(this)(StatusCodes.UNPROCESSABLE_ENTITY, error);
   };
@@ -293,7 +293,7 @@ export function initResultHandler<T extends ResultHandler>(
     return setResult.bind(this)(StatusCodes.INTERNAL_SERVER_ERROR, body);
   };
   target.internalServerErrorMsg = function (
-    error?: HttpErrorMessage | string
+    error?: HttpErrorMessage | string,
   ): T {
     return setError.bind(this)(StatusCodes.INTERNAL_SERVER_ERROR, error);
   };
@@ -316,7 +316,7 @@ export function initResultHandler<T extends ResultHandler>(
     return setResult.bind(this)(StatusCodes.SERVICE_UNAVAILABLE, body);
   };
   target.serviceUnavailableMsg = function (
-    error?: HttpErrorMessage | string
+    error?: HttpErrorMessage | string,
   ): T {
     return setError.bind(this)(StatusCodes.SERVICE_UNAVAILABLE, error);
   };
@@ -332,7 +332,7 @@ export function initResultHandler<T extends ResultHandler>(
     return setResult.bind(this)(StatusCodes.HTTP_VERSION_NOT_SUPPORTED, body);
   };
   target.httpVersionNotSupportedMsg = function (
-    error?: HttpErrorMessage | string
+    error?: HttpErrorMessage | string,
   ): T {
     return setError.bind(this)(StatusCodes.HTTP_VERSION_NOT_SUPPORTED, error);
   };

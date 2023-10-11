@@ -17,7 +17,7 @@ describe("engine", () => {
         expect(
           await ctx.view("ejs/index.ejs", {
             name: "test ejs",
-          })
+          }),
         ).toBe("<p>test ejs</p>");
       })
       .test();
@@ -33,7 +33,7 @@ describe("engine", () => {
         expect(
           await ctx.view("ejs/index.ejs", {
             name: "test ejs",
-          })
+          }),
         ).toBe("<p>test ejs</p>");
       })
       .test();
@@ -52,7 +52,7 @@ describe("engine", () => {
         expect(
           await ctx.view("ejs/index.ejs", {
             name: "test ejs",
-          })
+          }),
         ).toBe("<p>test ejs</p>");
       })
       .test();
@@ -70,7 +70,7 @@ describe("pub", () => {
           "view",
           await ctx.view("pug/test", {
             name: "test pug",
-          })
+          }),
         );
       })
       .test();
@@ -89,7 +89,7 @@ describe("ejs", () => {
         expect(
           await ctx.view("ejs/index.ejs", {
             name: "test ejs",
-          })
+          }),
         ).toBe("<p>test ejs</p>");
       })
       .test();
@@ -104,7 +104,7 @@ describe("ejs", () => {
         expect(
           await ctx.view("", {
             name: "test ejs",
-          })
+          }),
         ).toBe("<p>test ejs</p>");
       })
       .test();

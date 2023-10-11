@@ -168,7 +168,7 @@ describe("match path", () => {
       const res = await new Startup()
         .useHttp()
         .setContext(
-          new Request().setPath("swagger/index.json").setMethod("get")
+          new Request().setPath("swagger/index.json").setMethod("get"),
         )
         .useSwagger()
         .setTestDir("core/packages/swagger/test/parser")
@@ -188,7 +188,7 @@ describe("match path", () => {
       const res = await new Startup()
         .useHttp()
         .setContext(
-          new Request().setPath("swagger/index.json").setMethod("get")
+          new Request().setPath("swagger/index.json").setMethod("get"),
         )
         .useSwagger()
         .setTestDir("../parser")
@@ -207,7 +207,7 @@ describe("redirect", () => {
     name: string,
     path: string,
     options: SwaggerOptions | undefined,
-    location: string
+    location: string,
   ) {
     it(name.replace("$location", location), async () => {
       const res = await new Startup()
@@ -229,7 +229,7 @@ describe("redirect", () => {
     {
       path: "",
     },
-    "./index.html"
+    "./index.html",
   );
 
   test(
@@ -238,21 +238,21 @@ describe("redirect", () => {
     {
       path: "",
     },
-    "./index.html"
+    "./index.html",
   );
 
   test(
     "should redirect to $location when path is root",
     "swagger",
     undefined,
-    "./swagger/index.html"
+    "./swagger/index.html",
   );
 
   test(
     "should redirect to $location when path is swagger/",
     "swagger/",
     undefined,
-    "./index.html"
+    "./index.html",
   );
 
   test(
@@ -261,7 +261,7 @@ describe("redirect", () => {
     {
       path: "swagger/abc",
     },
-    "./index.html"
+    "./index.html",
   );
 
   test(
@@ -270,7 +270,7 @@ describe("redirect", () => {
     {
       path: "swagger/abc",
     },
-    "./abc/index.html"
+    "./abc/index.html",
   );
 
   test(
@@ -279,7 +279,7 @@ describe("redirect", () => {
     {
       basePath: "v3",
     },
-    "./swagger/index.html"
+    "./swagger/index.html",
   );
 
   test(
@@ -289,7 +289,7 @@ describe("redirect", () => {
       basePath: "v3",
       path: "",
     },
-    "./v3/index.html"
+    "./v3/index.html",
   );
 
   test(
@@ -299,6 +299,6 @@ describe("redirect", () => {
       basePath: "v3",
       path: "",
     },
-    "./v3/index.html"
+    "./v3/index.html",
   );
 });

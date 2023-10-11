@@ -51,7 +51,7 @@ test(`base path`, async () => {
     .setContext(
       new Request()
         .setPath("decorator/method-base-path/mup")
-        .setMethod(HttpMethods.get)
+        .setMethod(HttpMethods.get),
     )
     .useTestRouter()
     .test();

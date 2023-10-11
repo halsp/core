@@ -47,7 +47,7 @@ declare module "@halsp/validator" {
         | "binary"
         | "date"
         | "date-time"
-        | "password"
+        | "password",
     ) => RT) &
       ((value: string) => RT);
     Items: (type: ArrayItemType) => RT;

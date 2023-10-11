@@ -226,7 +226,7 @@ for (let i = 0; i < msgMethods.length; i++) {
           ? {
               message: errorMsgTest,
             }
-          : undefined
+          : undefined,
       );
     }
     constructor(private existMsg: boolean) {
@@ -252,7 +252,7 @@ for (let i = 0; i < msgMethods.length; i++) {
       const result = md.ctx.res;
       expect(result.status).toBe(methodItem.code);
       expect((result.body as any).message).toBe(
-        getReasonPhrase(methodItem.code)
+        getReasonPhrase(methodItem.code),
       );
     });
   }
@@ -271,7 +271,10 @@ for (let i = 0; i < redirectCodes.length; i++) {
 }
 
 class RedirectMd extends Middleware {
-  constructor(readonly code: number | undefined, readonly location: string) {
+  constructor(
+    readonly code: number | undefined,
+    readonly location: string,
+  ) {
     super();
 
     (this as any).init(new Context(), 0);

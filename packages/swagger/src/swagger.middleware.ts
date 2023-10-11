@@ -125,14 +125,14 @@ export class SwaggerMiddlware extends Middleware {
     let content = this.res.body;
     content = content.replace(
       `<title>Swagger UI</title>`,
-      `<title>${this.options.html?.title ?? doc.info.title}</title>`
+      `<title>${this.options.html?.title ?? doc.info.title}</title>`,
     );
     content = content.replace(/<link\srel="icon"[\s\S]+\/>/g, "");
 
     if (this.options.html?.removeDefaultStyle) {
       content = content.replace(
         /<link\srel="stylesheet" type="text\/css"[\s\S]+\/>/g,
-        ""
+        "",
       );
     }
 
@@ -145,13 +145,13 @@ export class SwaggerMiddlware extends Middleware {
       "head",
       content,
       (val) => `<link rel="icon" type="image/png" href="${val}" />`,
-      this.options.html?.favicon
+      this.options.html?.favicon,
     );
     content = addDocumentItems(
       "head",
       content,
       (val) => `<link rel="stylesheet" type="text/css" href="${val}" />`,
-      this.options.html?.css
+      this.options.html?.css,
     );
     content = addDocumentItems(
       "head",
@@ -159,14 +159,14 @@ export class SwaggerMiddlware extends Middleware {
       (val) => `<style>
     ${val}
     </style>`,
-      this.options.html?.style
+      this.options.html?.style,
     );
 
     content = addDocumentItems(
       "body",
       content,
       (val) => `<script src="${val}" charset="UTF-8"> </script>`,
-      this.options.html?.js
+      this.options.html?.js,
     );
 
     content = addDocumentItems(
@@ -175,7 +175,7 @@ export class SwaggerMiddlware extends Middleware {
       (val) => `<script>
     ${val}
     </script>`,
-      this.options.html?.script
+      this.options.html?.script,
     );
 
     this.res.body = content;
@@ -195,7 +195,7 @@ function addDocumentItems(
   tag: string,
   html: string,
   builder: (val: any) => string,
-  options?: string | string[]
+  options?: string | string[],
 ) {
   if (!options) return html;
   if (!Array.isArray(options)) {
@@ -206,7 +206,7 @@ function addDocumentItems(
     html = html.replace(
       new RegExp(`\\s*<\\/${tag}>`),
       `\n    ${builder(v)}
-  <\/${tag}>`
+  <\/${tag}>`,
     );
   });
   return html;

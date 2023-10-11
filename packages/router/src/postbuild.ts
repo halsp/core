@@ -21,7 +21,7 @@ export const postbuild = async ({ cacheDir }) => {
 
   await fs.promises.writeFile(
     path.resolve(process.cwd(), cacheDir, CONFIG_FILE_NAME),
-    JSON.stringify(routerConfig)
+    JSON.stringify(routerConfig),
   );
 };
 

@@ -14,8 +14,8 @@ test("json body explicit type", async () => {
         Buffer.byteLength(
           JSON.stringify({
             content: "BODY",
-          })
-        ).toString()
+          }),
+        ).toString(),
       );
       ctx.res.ok({
         content: "BODY",

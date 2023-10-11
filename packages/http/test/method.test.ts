@@ -39,33 +39,33 @@ describe("http methods", () => {
 
   it("should match custom methods with custom list", async () => {
     expect(HttpMethods.matched("CUSTOM1", ["CUSTOM1", "CUSTOM2"])).toBe(
-      "CUSTOM1"
+      "CUSTOM1",
     );
     expect(HttpMethods.matched("Custom1", ["CUSTOM1", "CUSTOM2"])).toBe(
-      "CUSTOM1"
+      "CUSTOM1",
     );
     expect(HttpMethods.matched("custom1", ["CUSTOM1", "CUSTOM2"])).toBe(
-      "CUSTOM1"
+      "CUSTOM1",
     );
 
     expect(HttpMethods.matched("CUSTOM2", ["CUSTOM1", "CUSTOM2"])).toBe(
-      "CUSTOM2"
+      "CUSTOM2",
     );
     expect(HttpMethods.matched("Custom2", ["CUSTOM1", "CUSTOM2"])).toBe(
-      "CUSTOM2"
+      "CUSTOM2",
     );
     expect(HttpMethods.matched("custom2", ["CUSTOM1", "CUSTOM2"])).toBe(
-      "CUSTOM2"
+      "CUSTOM2",
     );
 
     expect(
-      HttpMethods.matched("CUSTOM", ["CUSTOM1", "CUSTOM2"])
+      HttpMethods.matched("CUSTOM", ["CUSTOM1", "CUSTOM2"]),
     ).toBeUndefined();
     expect(
-      HttpMethods.matched("Custom", ["CUSTOM1", "CUSTOM2"])
+      HttpMethods.matched("Custom", ["CUSTOM1", "CUSTOM2"]),
     ).toBeUndefined();
     expect(
-      HttpMethods.matched("custom", ["CUSTOM1", "CUSTOM2"])
+      HttpMethods.matched("custom", ["CUSTOM1", "CUSTOM2"]),
     ).toBeUndefined();
   });
 

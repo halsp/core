@@ -80,7 +80,7 @@ test("isPlainObject", async () => {
   expect(
     isPlainObject(function () {
       return 0;
-    })
+    }),
   ).toBeFalsy();
   expect(isPlainObject(new TestClass())).toBeFalsy();
 });
@@ -197,7 +197,7 @@ test("isClass", async () => {
   expect(
     isClass(function () {
       return 0;
-    })
+    }),
   ).toBeFalsy();
   expect(isClass(new TestClass())).toBeFalsy();
 });

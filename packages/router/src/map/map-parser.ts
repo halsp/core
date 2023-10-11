@@ -41,7 +41,7 @@ export default class MapParser {
 
 const addDecorators = (
   item: MapItem,
-  decorators?: ClassDecorator[] | ((mapItem: MapItem) => ClassDecorator[])
+  decorators?: ClassDecorator[] | ((mapItem: MapItem) => ClassDecorator[]),
 ) => {
   if (!decorators) {
     return;

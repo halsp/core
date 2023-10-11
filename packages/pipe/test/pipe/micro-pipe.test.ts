@@ -42,7 +42,7 @@ describe("parse bool with micro", () => {
     const ctx = new Context(
       new Request().setBody({
         p1: "abc",
-      })
+      }),
     );
 
     await new Startup()

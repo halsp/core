@@ -13,7 +13,7 @@ export class DefaultValuePipe<T = any, R = any>
 {
   constructor(
     private readonly defaultValue: R,
-    options?: DefaultValuePipeOptions
+    options?: DefaultValuePipeOptions,
   ) {
     this.#options = options ?? {};
   }

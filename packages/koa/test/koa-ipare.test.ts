@@ -31,7 +31,7 @@ describe("koa-halsp", () => {
             await next();
             ctx.res.set("h4", getIndexValue());
           });
-        })
+        }),
       )
       .use((ctx) => {
         ctx.set("h3", getIndexValue());
@@ -76,10 +76,10 @@ describe("koa-halsp", () => {
               expect(
                 (res.body as Buffer)
                   .toString("utf-8")
-                  .startsWith("--------------------")
+                  .startsWith("--------------------"),
               ).toBeTruthy();
               expect(res.getHeader("content-type")).toBe(
-                "application/octet-stream"
+                "application/octet-stream",
               );
               expect(res.headers["h1"]).toBe("1");
               expect(res.headers["h2"]).toBe("2");
@@ -87,7 +87,7 @@ describe("koa-halsp", () => {
 
               working = true;
             });
-        })
+        }),
       )
       .use(async (ctx) => {
         ctx.res.end("");

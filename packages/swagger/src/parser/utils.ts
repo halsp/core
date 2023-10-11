@@ -20,7 +20,7 @@ export const lib = V;
 export const jsonTypes = ["application/json"];
 
 export function typeToApiType(
-  type?: any
+  type?: any,
 ): "string" | "number" | "boolean" | "object" | "integer" | "null" | "array" {
   if (!type) {
     return "null";
@@ -57,7 +57,7 @@ export function pipeTypeToDocType(pipeType: PipeReqType): ParameterLocation {
 export function setModelSchema(
   builder: OpenApiBuilder,
   modelType: ObjectConstructor,
-  schema: SchemaObject
+  schema: SchemaObject,
 ) {
   const propertiesObject = schema.properties as Exclude<
     typeof schema.properties,
@@ -69,8 +69,8 @@ export function setModelSchema(
     builder,
     schema,
     rules.filter(
-      (r) => isUndefined(r.propertyKey) && isUndefined(r.parameterIndex)
-    )
+      (r) => isUndefined(r.propertyKey) && isUndefined(r.parameterIndex),
+    ),
   );
 
   const requiredProperties: string[] = [];
@@ -94,7 +94,7 @@ export function setModelSchema(
       propertiesObject,
       modelType,
       propertyKey,
-      propertyRules
+      propertyRules,
     );
 
     if ((propertiesObject[propertyKey] as SchemaObject).nullable == false) {
@@ -111,12 +111,12 @@ export function parseModelProperty(
   propertiesObject: Record<string, SchemaObject | ReferenceObject>,
   modelType: ObjectConstructor,
   propertyKey: string,
-  rules: RuleRecord[]
+  rules: RuleRecord[],
 ) {
   const propertyCls = Reflect.getMetadata(
     "design:type",
     modelType.prototype,
-    propertyKey
+    propertyKey,
   );
 
   const type = typeToApiType(propertyCls);
@@ -130,7 +130,7 @@ export function parseModelProperty(
         builder,
         propertiesObject[propertyKey] as SchemaObject,
         lib,
-        v.args[0] as ArrayItemType
+        v.args[0] as ArrayItemType,
       );
     });
   } else if (isClass(propertyCls)) {
@@ -145,7 +145,7 @@ export function parseModelProperty(
     setSchemaValue(
       builder,
       propertiesObject[propertyKey] as SchemaObject,
-      rules
+      rules,
     );
   }
 }
@@ -153,7 +153,7 @@ export function parseModelProperty(
 export function setComponentModelSchema(
   builder: OpenApiBuilder,
   modelType: ObjectConstructor,
-  extendRules?: RuleRecord[]
+  extendRules?: RuleRecord[],
 ) {
   let schema = tryGetComponentSchema(builder, modelType.name);
   if (!schema) {
@@ -168,7 +168,7 @@ export function setComponentModelSchema(
 
 function getComponentSchema(
   builder: OpenApiBuilder,
-  name: string
+  name: string,
 ): SchemaObject {
   let schema = tryGetComponentSchema(builder, name);
   if (!schema) {
@@ -183,7 +183,7 @@ function getComponentSchema(
 
 function tryGetComponentSchema(
   builder: OpenApiBuilder,
-  name: string
+  name: string,
 ): SchemaObject | undefined {
   const components = builder.getSpec().components as ComponentsObject;
   const schemas = components.schemas as Record<string, SchemaObject>;
@@ -206,7 +206,7 @@ export function parseArraySchema(
   builder: OpenApiBuilder,
   target: SchemaObject,
   lib: ValidatorDecoratorReturnType,
-  schemaValue: ArrayItemType
+  schemaValue: ArrayItemType,
 ) {
   const type = typeToApiType(schemaValue);
   if (Array.isArray(schemaValue)) {

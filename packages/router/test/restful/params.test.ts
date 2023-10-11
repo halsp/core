@@ -22,7 +22,7 @@ test(`restful params test2`, async () => {
   const res = await new Startup()
     .useHttp()
     .setContext(
-      new Request().setPath("/restful/11/animals").setMethod(HttpMethods.get)
+      new Request().setPath("/restful/11/animals").setMethod(HttpMethods.get),
     )
     .useTestRouter()
     .test();

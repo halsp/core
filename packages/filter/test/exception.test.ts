@@ -44,7 +44,7 @@ function runTest(executing: boolean) {
           new Request().setPath("/filters/exception").setMethod("GET").setBody({
             bad,
             executing,
-          })
+          }),
         )
         .use(async (ctx, next) => {
           ctx.res.set("h1", 1);

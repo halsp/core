@@ -1,5 +1,5 @@
 import { MicroMqttOptions } from "../options";
-import mqtt from "mqtt";
+import * as mqtt from "mqtt";
 import { getHalspPort, Startup } from "@halsp/core";
 import { matchTopic } from "./topic";
 import { parseJsonBuffer } from "@halsp/micro";
@@ -64,7 +64,7 @@ function initStartup(this: Startup, options: MicroMqttOptions = {}) {
       "message",
       (topic: string, payload: Buffer, packet: mqtt.IPublishPacket) => {
         const handler = this.registers.filter((item) =>
-          matchTopic(item.pattern, topic)
+          matchTopic(item.pattern, topic),
         )[0];
         if (!handler) return;
 
@@ -86,9 +86,9 @@ function initStartup(this: Startup, options: MicroMqttOptions = {}) {
               get: () => packet,
             });
             handler.handler && (await handler.handler(ctx));
-          }
+          },
         );
-      }
+      },
     );
 
     this.logger.info(`Server started, listening port: ${opt.port}`);
@@ -123,7 +123,7 @@ async function close(this: Startup, client?: mqtt.MqttClient) {
     const shutdownTimer = setTimeout(() => {
       shutdownTimeout = true;
       this.logger.error(
-        `Server shutdown timeout and will invoke force shutdown`
+        `Server shutdown timeout and will invoke force shutdown`,
       );
       forceShutdown();
     }, 2000);
@@ -134,7 +134,7 @@ async function close(this: Startup, client?: mqtt.MqttClient) {
 
       if (err) {
         this.logger.error(
-          `Server shutdown error and will invoke force shutdown, err = ${err.message}`
+          `Server shutdown error and will invoke force shutdown, err = ${err.message}`,
         );
         forceShutdown();
       } else {
@@ -148,7 +148,7 @@ function register(
   this: Startup,
   pattern: string,
   options: MicroMqttOptions,
-  client?: mqtt.MqttClient
+  client?: mqtt.MqttClient,
 ) {
   if (!client) return this;
 

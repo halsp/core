@@ -9,7 +9,7 @@ export class Manager {
   constructor(
     private readonly ctx: Context,
     private readonly options: WsOptions,
-    private readonly wss: ws.Server
+    private readonly wss: ws.Server,
   ) {
     const server = ctx.startup["nativeServer"] as http.Server;
     if (server) {
@@ -70,7 +70,7 @@ export class Manager {
         Buffer.from("", "utf-8"),
         (client) => {
           resolve(client);
-        }
+        },
       );
     });
     return client;

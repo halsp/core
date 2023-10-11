@@ -24,7 +24,7 @@ async function execPipes<T extends object = any>(
   parameterIndex: number | undefined,
   value: any,
   propertyType: any,
-  pipes: PipeItem[]
+  pipes: PipeItem[],
 ) {
   const globalPipes = ctx.get<GlobalPipeItem[]>(GLOBAL_PIPE_BAG) ?? [];
   const beforeGlobalPipes = globalPipes
@@ -61,7 +61,7 @@ async function execPipes<T extends object = any>(
 function getPropertyType(
   target: any,
   propertyKey: string | symbol,
-  parameterIndex?: number
+  parameterIndex?: number,
 ): any {
   if (!isUndefined(parameterIndex)) {
     const types = Reflect.getMetadata("design:paramtypes", target) ?? [];
@@ -88,7 +88,7 @@ export function createDecorator(type: PipeReqType, args: any[]) {
     return function (
       target: any,
       propertyKey: string | symbol,
-      parameterIndex?: number
+      parameterIndex?: number,
     ) {
       addPipeRecord(type, pipes, target, propertyKey, parameterIndex, args[0]);
       const propertyType = getPropertyType(target, propertyKey, parameterIndex);
@@ -109,12 +109,12 @@ export function createDecorator(type: PipeReqType, args: any[]) {
             parameterIndex,
             val,
             propertyType,
-            pipes
+            pipes,
           );
         },
         target,
         propertyKey,
-        parameterIndex
+        parameterIndex,
       );
     };
   } else if (typeof args[1] == "string" || typeof args[2] == "number") {
@@ -132,18 +132,18 @@ export function createDecorator(type: PipeReqType, args: any[]) {
           args[2],
           getObjectFromDict(propertyType, handler(ctx)),
           propertyType,
-          []
+          [],
         ),
       args[0],
       args[1],
-      args[2]
+      args[2],
     );
   } else {
     const pipes = args;
     return function (
       target: any,
       propertyKey: string | symbol,
-      parameterIndex?: number
+      parameterIndex?: number,
     ) {
       addPipeRecord(type, pipes, target, propertyKey, parameterIndex, args[0]);
       const propertyType = getPropertyType(target, propertyKey, parameterIndex);
@@ -158,11 +158,11 @@ export function createDecorator(type: PipeReqType, args: any[]) {
             parameterIndex,
             getObjectFromDict(propertyType, handler(ctx)),
             propertyType,
-            pipes
+            pipes,
           ),
         target,
         propertyKey,
-        parameterIndex
+        parameterIndex,
       );
     };
   }

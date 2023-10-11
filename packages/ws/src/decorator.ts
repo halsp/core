@@ -4,7 +4,7 @@ import * as ws from "ws";
 export function WebSocket(
   target: any,
   propertyKey: string | symbol | undefined,
-  parameterIndex?: number
+  parameterIndex?: number,
 ): void;
 export function WebSocket(): PropertyDecorator & ParameterDecorator;
 export function WebSocket(...args: any[]): any {
@@ -13,7 +13,7 @@ export function WebSocket(...args: any[]): any {
       (ctx) => ctx.acceptWebSocket(),
       args[0],
       args[1],
-      args[2]
+      args[2],
     );
   } else {
     return Inject((ctx) => ctx.acceptWebSocket());

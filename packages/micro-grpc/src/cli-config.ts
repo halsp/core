@@ -8,6 +8,6 @@ export const cliConfigHook = (config: any) => {
       include: "protos/**/*.proto",
       root: "src",
     },
-    "protos/**/*.proto"
+    "protos/**/*.proto",
   );
 };

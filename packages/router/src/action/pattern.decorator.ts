@@ -8,7 +8,7 @@ export function MicroPattern(pattern: string): ClassDecorator {
     Reflect.defineMetadata(
       ACTION_PATTERN_METADATA,
       [...patterns, pattern],
-      target.prototype
+      target.prototype,
     );
   };
 }

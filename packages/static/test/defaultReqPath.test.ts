@@ -19,7 +19,7 @@ test("default req path found", async () => {
     const result = await new Startup()
       .useHttp()
       .setContext(
-        new Request().setMethod("get").setPath("test/static/index.html")
+        new Request().setMethod("get").setPath("test/static/index.html"),
       )
       .useStatic({
         file: "test/static/index.html",
@@ -31,7 +31,7 @@ test("default req path found", async () => {
     const result = await new Startup()
       .useHttp()
       .setContext(
-        new Request().setMethod("get").setPath("test/static/index.html/")
+        new Request().setMethod("get").setPath("test/static/index.html/"),
       )
       .useStatic({
         file: "test/static/index.html",

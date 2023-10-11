@@ -2,7 +2,7 @@ import { isString } from "./typeis";
 
 export function isCliAssetExist(
   assets: any[],
-  compare: (asset: string) => boolean
+  compare: (asset: string) => boolean,
 ): boolean {
   return assets.some((item) => {
     if (isString(item)) {

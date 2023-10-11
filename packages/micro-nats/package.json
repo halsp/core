@@ -40,7 +40,7 @@
   "dependencies": {
     "@halsp/core": "^2.2.1",
     "@halsp/micro": "^2.2.1",
-    "nats": "^2.15.1"
+    "nats": "^2.17.0"
   },
   "files": [
     "/client/*",

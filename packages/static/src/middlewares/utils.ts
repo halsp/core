@@ -31,7 +31,7 @@ export function isIgnore(filePath: string, options: DirectoryOptions) {
 export async function createDirHtml(
   dir: string,
   tempPath: string,
-  options: DirectoryOptions
+  options: DirectoryOptions,
 ) {
   const prefix = options.prefix ?? "";
   const getDirPaths = (dir: string) =>
@@ -53,7 +53,7 @@ export async function createDirHtml(
   const getRelativeDir = (dir: string, containsParent: boolean) =>
     path.relative(
       containsParent ? path.basename(path.dirname(options.dir)) : options.dir,
-      dir
+      dir,
     );
 
   async function getDirFiles(dir: string) {

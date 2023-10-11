@@ -15,7 +15,7 @@ test("decorators", async () => {
           methods: ["post"],
         }),
       ],
-      builder
+      builder,
     ).parse();
   } finally {
     process.chdir("../..");

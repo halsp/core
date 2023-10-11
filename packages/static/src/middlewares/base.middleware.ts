@@ -16,7 +16,7 @@ export abstract class BaseMiddleware extends Middleware {
       status?: number;
       dirHtml?: string;
       error?: string;
-    } = {}
+    } = {},
   ) {
     const mimeType = mime.getType(filePath) || "*/*";
     this.ctx.res
@@ -39,7 +39,7 @@ export abstract class BaseMiddleware extends Middleware {
         const html = await this.createErrorHtml(
           args.status,
           args.error,
-          filePath
+          filePath,
         );
         this.ctx.res.setBody(html);
       } else {
@@ -53,7 +53,7 @@ export abstract class BaseMiddleware extends Middleware {
   private async createErrorHtml(
     status: number,
     message: string,
-    tempPath: string
+    tempPath: string,
   ) {
     const html = await fs.promises.readFile(tempPath, "utf-8");
     return html
@@ -62,7 +62,7 @@ export abstract class BaseMiddleware extends Middleware {
   }
 
   protected async getErrorStats(
-    error: string
+    error: string,
   ): Promise<MatchResult & { error?: string }> {
     const filePath = path.join(__dirname, "../../html/error.html");
     const stats = await fs.promises.stat(filePath);

@@ -9,7 +9,7 @@ import {
 
 export class ComposeMiddleware extends Middleware {
   constructor(
-    private readonly enable?: (ctx: Context) => boolean | Promise<boolean>
+    private readonly enable?: (ctx: Context) => boolean | Promise<boolean>,
   ) {
     super();
   }
@@ -36,7 +36,7 @@ export class ComposeMiddleware extends Middleware {
   use(
     lambda:
       | ((ctx: Context, next: () => Promise<void>) => void)
-      | ((ctx: Context, next: () => Promise<void>) => Promise<void>)
+      | ((ctx: Context, next: () => Promise<void>) => Promise<void>),
   ): this {
     this.#mds.push(() => new LambdaMiddleware(lambda));
     return this;
@@ -44,19 +44,19 @@ export class ComposeMiddleware extends Middleware {
 
   add(
     builder: (ctx: Context) => Middleware,
-    type?: MiddlewareConstructor
+    type?: MiddlewareConstructor,
   ): this;
   add(
     builder: (ctx: Context) => Promise<Middleware>,
-    type?: MiddlewareConstructor
+    type?: MiddlewareConstructor,
   ): this;
   add(
     builder: (ctx: Context) => MiddlewareConstructor,
-    type?: MiddlewareConstructor
+    type?: MiddlewareConstructor,
   ): this;
   add(
     builder: (ctx: Context) => Promise<MiddlewareConstructor>,
-    type?: MiddlewareConstructor
+    type?: MiddlewareConstructor,
   ): this;
   add(md: Middleware): this;
   add(md: MiddlewareConstructor): this;
@@ -68,7 +68,7 @@ export class ComposeMiddleware extends Middleware {
       | ((ctx: Context) => Promise<MiddlewareConstructor>)
       | Middleware
       | MiddlewareConstructor,
-    type?: MiddlewareConstructor
+    type?: MiddlewareConstructor,
   ): this {
     if (type) {
       this.#mds.push([md as any, type]);

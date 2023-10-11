@@ -81,7 +81,7 @@ Object.defineProperty(Request.prototype, "query", {
 });
 Request.prototype.setQuery = function (
   key: string | Dict<string>,
-  value?: string
+  value?: string,
 ): Request {
   const query = this.query as Dict<string>;
   if (typeof key == "string") {
@@ -103,5 +103,5 @@ initHeaderHandler(
   },
   function () {
     return this.headers;
-  }
+  },
 );

@@ -55,7 +55,7 @@ export class InjectDecoratorParser<T extends object = any> {
     this.obj = await this.getObjectFromExistMap(
       existMap.target,
       existMap.type,
-      key
+      key,
     );
     if (!isUndefined(this.obj)) {
       this.injectConstructor = this.obj.constructor;
@@ -65,7 +65,7 @@ export class InjectDecoratorParser<T extends object = any> {
   }
 
   public getCachedService(
-    target: string | ObjectConstructor<T>
+    target: string | ObjectConstructor<T>,
   ): T | undefined {
     const existMap = isString(target)
       ? this.getExistKeyMap(target)
@@ -73,7 +73,7 @@ export class InjectDecoratorParser<T extends object = any> {
 
     const { record } = this.getExistInjectRecord(
       existMap?.type ?? InjectType.Scoped,
-      target
+      target,
     );
     return record?.value;
   }
@@ -107,7 +107,7 @@ export class InjectDecoratorParser<T extends object = any> {
     const customProps: InjectCustom[] =
       Reflect.getMetadata(CUSTOM_METADATA, prototype) ?? [];
     for (const prop of customProps.filter(
-      (item) => item.parameterIndex == undefined
+      (item) => item.parameterIndex == undefined,
     )) {
       if (this.obj[prop.property] == undefined) {
         this.obj[prop.property] = await this.getCustomPropValue(prop);
@@ -117,7 +117,7 @@ export class InjectDecoratorParser<T extends object = any> {
     const keyProps: InjectKey[] =
       Reflect.getMetadata(KEY_METADATA, prototype) ?? [];
     for (const prop of keyProps.filter(
-      (item) => item.parameterIndex == undefined
+      (item) => item.parameterIndex == undefined,
     )) {
       if (this.obj[prop.property] == undefined) {
         this.obj[prop.property] = await this.getKeyPropValue(prop);
@@ -156,7 +156,7 @@ export class InjectDecoratorParser<T extends object = any> {
       result = await this.getObjectFromExistMap(
         existMap.target,
         existMap.type,
-        prop.key
+        prop.key,
       );
     } else if (!!prop.property) {
       result = await this.getPropertyValue(prop.property);
@@ -174,7 +174,7 @@ export class InjectDecoratorParser<T extends object = any> {
   private async getCustomPropValue(prop: InjectCustom) {
     const { record, records } = this.getExistInjectRecord(
       prop.type ?? InjectType.Scoped,
-      prop.handler
+      prop.handler,
     );
 
     let result: any;
@@ -209,7 +209,7 @@ export class InjectDecoratorParser<T extends object = any> {
     const constr: ObjectConstructor<T> = Reflect.getMetadata(
       "design:type",
       this.obj,
-      property
+      property,
     );
     if (isClass(constr)) {
       return await this.ctx.getService(constr);
@@ -226,7 +226,7 @@ export class InjectDecoratorParser<T extends object = any> {
     return await this.getObjectFromExistMap(
       existMap?.target ?? target,
       existMap?.type ?? InjectType.Scoped,
-      target
+      target,
     );
   }
 
@@ -236,7 +236,7 @@ export class InjectDecoratorParser<T extends object = any> {
     injectKey:
       | ObjectConstructor
       | string
-      | ((ctx: Context) => any | Promise<any>)
+      | ((ctx: Context) => any | Promise<any>),
   ) {
     const { record, records } = this.getExistInjectRecord(type, injectKey);
 
@@ -257,7 +257,7 @@ export class InjectDecoratorParser<T extends object = any> {
     injectKey:
       | ObjectConstructor
       | string
-      | ((...angs: any[]) => any | Promise<any>)
+      | ((...angs: any[]) => any | Promise<any>),
   ): {
     records: InjectDecoratorRecordItem[];
     record?: InjectDecoratorRecordItem;
@@ -291,7 +291,7 @@ export class InjectDecoratorParser<T extends object = any> {
   }
 
   private async createObject<T extends object>(
-    target: ObjectConstructor<T> | T | ((ctx: Context) => T | Promise<T>)
+    target: ObjectConstructor<T> | T | ((ctx: Context) => T | Promise<T>),
   ): Promise<T> {
     if (isClass<T>(target)) {
       const argTypes = this.getConstructorArgsTypes(target);
@@ -312,14 +312,15 @@ export class InjectDecoratorParser<T extends object = any> {
   private async createConstructorArg<T extends object>(
     target: ObjectConstructor<T>,
     arg: ObjectConstructor,
-    index: number
+    index: number,
   ) {
     target = target.prototype;
     // custom inject
     const customProps: InjectCustom[] =
       Reflect.getMetadata(CUSTOM_METADATA, target) ?? [];
     const existCustomInject = customProps.filter(
-      (prop) => prop.parameterIndex != undefined && prop.parameterIndex == index
+      (prop) =>
+        prop.parameterIndex != undefined && prop.parameterIndex == index,
     )[0];
     if (!!existCustomInject) {
       return this.getCustomPropValue(existCustomInject);
@@ -329,7 +330,8 @@ export class InjectDecoratorParser<T extends object = any> {
     const keyProps: InjectKey[] =
       Reflect.getMetadata(KEY_METADATA, target) ?? [];
     const existParamInject = keyProps.filter(
-      (prop) => prop.parameterIndex != undefined && prop.parameterIndex == index
+      (prop) =>
+        prop.parameterIndex != undefined && prop.parameterIndex == index,
     )[0];
     if (!!existParamInject) {
       return this.getKeyPropValue(existParamInject);
@@ -345,7 +347,7 @@ export class InjectDecoratorParser<T extends object = any> {
   //#endregion
 
   private getConstructorArgsTypes<T extends object>(
-    target: ObjectConstructor<T>
+    target: ObjectConstructor<T>,
   ): ObjectConstructor[] {
     return Reflect.getMetadata("design:paramtypes", target) ?? [];
   }
@@ -353,7 +355,7 @@ export class InjectDecoratorParser<T extends object = any> {
   private getExistKeyMap(key: string) {
     const injectMaps = this.ctx.get<InjectMap[]>(MAP_BAG);
     return injectMaps.filter(
-      (map) => isString(map.anestor) && map.anestor == key
+      (map) => isString(map.anestor) && map.anestor == key,
     )[0];
   }
 
@@ -361,7 +363,7 @@ export class InjectDecoratorParser<T extends object = any> {
     const injectMaps = this.ctx.get<InjectMap[]>(MAP_BAG);
     return injectMaps.filter(
       (map) =>
-        isFunction<ObjectConstructor<T>>(map.anestor) && map.anestor == target
+        isFunction<ObjectConstructor<T>>(map.anestor) && map.anestor == target,
     )[0];
   }
 }

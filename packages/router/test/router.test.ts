@@ -55,7 +55,7 @@ test("deep startup test", async () => {
   const result = await new Startup()
     .useHttp()
     .setContext(
-      new Request().setPath("/simple/deepActions/RoUtEr").setMethod("POST")
+      new Request().setPath("/simple/deepActions/RoUtEr").setMethod("POST"),
     )
     .useTestRouter()
     .test();
@@ -98,7 +98,7 @@ describe("options", () => {
         .use(async (ctx, next) => {
           await next();
           expect(ctx.get<any>(ROUTER_INITED_OPTIONS_BAG).dir).toBe(
-            DEFAULT_ACTION_DIR
+            DEFAULT_ACTION_DIR,
           );
         })
         .useRouter()

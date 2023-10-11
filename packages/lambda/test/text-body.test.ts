@@ -16,7 +16,7 @@ test("string body", async () => {
           test: "halsp",
         }),
       },
-      {}
+      {},
     );
 
   expect(result.body).toBe(JSON.stringify({ test: "halsp" }));
@@ -35,13 +35,13 @@ test("string body without conent-type", async () => {
           test: "halsp",
         }),
       },
-      {}
+      {},
     );
 
   expect(result.body).toBe(
     JSON.stringify({
       test: "halsp",
-    })
+    }),
   );
 });
 

@@ -29,7 +29,7 @@ export default class MapCreater {
 
   private readFilesFromFolder(folderRePath: string, result: MapItem[]) {
     const storageItems = readdirSync(path.join(this.dirPath, folderRePath)).map(
-      (item) => path.join(folderRePath, item)
+      (item) => path.join(folderRePath, item),
     );
 
     const files = this.getFilesModules(storageItems);
@@ -38,7 +38,7 @@ export default class MapCreater {
         const mapItems = this.createMapItems(
           file.path,
           module.actionName,
-          module.action
+          module.action,
         );
         result.push(...mapItems);
       });
@@ -98,7 +98,7 @@ export default class MapCreater {
   private createMapItems(
     file: string,
     actionName: string,
-    action: ObjectConstructor<Action>
+    action: ObjectConstructor<Action>,
   ) {
     const mapItems: MapItem[] = [];
 
@@ -124,7 +124,7 @@ export default class MapCreater {
           prefix,
           moduleActionDir: deepDir,
           realActionsDir: this.dir,
-        })
+        }),
       );
     });
 
@@ -141,7 +141,7 @@ export default class MapCreater {
           prefix,
           moduleActionDir: deepDir,
           realActionsDir: this.dir,
-        })
+        }),
       );
     });
 
@@ -154,7 +154,7 @@ export default class MapCreater {
           prefix,
           moduleActionDir: deepDir,
           realActionsDir: this.dir,
-        })
+        }),
       );
     }
 
@@ -163,7 +163,7 @@ export default class MapCreater {
       mapItems.forEach((mapItem) =>
         Object.keys(metadata)
           .filter((k) => !(k in mapItem))
-          .forEach((k) => (mapItem[k] = metadata[k]))
+          .forEach((k) => (mapItem[k] = metadata[k])),
       );
     }
 

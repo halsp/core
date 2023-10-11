@@ -6,7 +6,7 @@ import { MicroGrpcClient } from "./client";
 declare module "@halsp/core" {
   interface Startup {
     useMicroGrpcClient(
-      options?: MicroGrpcClientOptions & InjectMicroClient
+      options?: MicroGrpcClientOptions & InjectMicroClient,
     ): this;
   }
 }

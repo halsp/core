@@ -40,7 +40,7 @@ export class MicroNatsClient extends IMicroClient {
     data: any,
     options: SendOptions & {
       returnHeaders: true;
-    }
+    },
   ): Promise<{
     data: T;
     headers: nats.MsgHdrs;
@@ -50,14 +50,14 @@ export class MicroNatsClient extends IMicroClient {
     data: any,
     options?: SendOptions & {
       returnHeaders?: boolean;
-    }
+    },
   ): Promise<T>;
   async send<T = any>(
     pattern: string,
     data: any,
     options: SendOptions & {
       returnHeaders?: boolean;
-    } = {}
+    } = {},
   ): Promise<
     | T
     | {
@@ -132,7 +132,7 @@ export class MicroNatsClient extends IMicroClient {
     data: any,
     options: {
       headers?: nats.MsgHdrs;
-    } = {}
+    } = {},
   ): void {
     if (!this.connection || this.connection.isClosed()) {
       throw new Error("The connection is not connected");

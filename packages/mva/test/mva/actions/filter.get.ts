@@ -8,7 +8,7 @@ class TestFilter implements ResultFilter {
     ctx.res.setHeader("result2", 2);
   }
   onResultExecuting(
-    ctx: Context
+    ctx: Context,
   ): boolean | void | Promise<void> | Promise<boolean> {
     ctx.res.setHeader("result1", 1);
     return ctx.req.body["executing"];

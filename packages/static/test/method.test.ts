@@ -49,7 +49,7 @@ describe("method", () => {
       const result = await new Startup()
         .useHttp()
         .setContext(
-          new Request().setMethod(HttpMethods.post).setPath("index.html")
+          new Request().setMethod(HttpMethods.post).setPath("index.html"),
         )
         .useStatic({
           dir: "test/static/dir",
@@ -94,7 +94,7 @@ describe("method", () => {
     const result = await new Startup()
       .useHttp()
       .setContext(
-        new Request().setMethod(HttpMethods.post).setPath("index.html")
+        new Request().setMethod(HttpMethods.post).setPath("index.html"),
       )
       .useStatic({
         dir: "test/static",
@@ -111,7 +111,7 @@ describe("method", () => {
       const result = await new Startup()
         .useHttp()
         .setContext(
-          new Request().setMethod(HttpMethods.post).setPath("index.html")
+          new Request().setMethod(HttpMethods.post).setPath("index.html"),
         )
         .useStatic({
           dir: "test/static/dir",

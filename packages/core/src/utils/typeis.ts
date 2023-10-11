@@ -59,7 +59,7 @@ export const isNilOrBlank = (val?: string | null): boolean =>
   isNil(val) || val.trim().length == 0;
 
 export function isClass<T extends object = any>(
-  val: any
+  val: any,
 ): val is ObjectConstructor<T> {
   if (!val) return false;
 

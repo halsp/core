@@ -56,31 +56,31 @@ export class CorsMiddleware extends Middleware {
     this.#set(
       "Cross-Origin-Opener-Policy",
       "same-origin",
-      () => !!this.options.secureContext
+      () => !!this.options.secureContext,
     );
     this.#set(
       "Cross-Origin-Embedder-Policy",
       "require-corp",
-      () => !!this.options.secureContext
+      () => !!this.options.secureContext,
     );
 
     if (this.ctx.req.method === HttpMethods.options) {
       this.#set(
         "Access-Control-Max-Age",
         this.options.maxAge,
-        () => !!this.options.maxAge
+        () => !!this.options.maxAge,
       );
       this.#set(
         "Access-Control-Allow-Private-Network",
         this.options.privateNetworkAccess,
         () =>
           !!this.options.privateNetworkAccess &&
-          !!this.ctx.req.has("Access-Control-Request-Private-Network")
+          !!this.ctx.req.has("Access-Control-Request-Private-Network"),
       );
       this.#set(
         "Access-Control-Allow-Methods",
         allowMethods,
-        () => !!allowMethods
+        () => !!allowMethods,
       );
 
       let allowHeaders = this.options.allowHeaders;
@@ -94,7 +94,7 @@ export class CorsMiddleware extends Middleware {
       this.#set(
         "Access-Control-Expose-Headers",
         this.options.exposeHeaders,
-        () => !!this.options.exposeHeaders
+        () => !!this.options.exposeHeaders,
       );
     }
   }

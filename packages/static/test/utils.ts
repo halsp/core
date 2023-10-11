@@ -2,7 +2,7 @@ import * as fs from "fs";
 
 export async function readStream(
   stream: fs.ReadStream,
-  output?: BufferEncoding
+  output?: BufferEncoding,
 ) {
   const chunks: Buffer[] = [];
   await new Promise<void>((resolve, reject) => {

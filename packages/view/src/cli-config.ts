@@ -8,6 +8,6 @@ export const cliConfigHook = (config: any) => {
       include: "views/**/*",
       root: "src",
     },
-    "views/**/*"
+    "views/**/*",
   );
 };

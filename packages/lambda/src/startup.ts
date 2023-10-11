@@ -20,12 +20,12 @@ Startup.prototype.useLambda = function () {
         event.httpMethod ||
           event.method ||
           event.requestContext?.http?.method ||
-          HttpMethods.get
+          HttpMethods.get,
       )
       .setHeaders(event.headers ?? {})
       .setQuery(event.queryStringParameters ?? event.query ?? {})
       .setPath(
-        event.path || event.rowPath || event.requestPath || event.url || ""
+        event.path || event.rowPath || event.requestPath || event.url || "",
       );
 
     await this["invoke"](ctx);

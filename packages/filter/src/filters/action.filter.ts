@@ -4,6 +4,6 @@ import { Filter } from "./filter";
 export interface ActionFilter extends Filter {
   onActionExecuted(ctx: Context): void | Promise<void>;
   onActionExecuting(
-    ctx: Context
+    ctx: Context,
   ): boolean | Promise<boolean> | void | Promise<void>;
 }

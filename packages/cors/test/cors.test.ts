@@ -18,7 +18,7 @@ it("should set 'Access-Control-Allow-Origin'", async () => {
     .test();
 
   expect(res.getHeader("Access-Control-Allow-Origin")).toBe(
-    "https://halsp.org"
+    "https://halsp.org",
   );
 });
 
@@ -28,7 +28,7 @@ it("should not set 'Access-Control-Allow-Origin' when method is OPTIONS and no '
     .setContext(
       new Request()
         .setHeader("Origin", "https://halsp.org")
-        .setMethod(HttpMethods.options)
+        .setMethod(HttpMethods.options),
     )
     .useCors()
     .test();
@@ -43,7 +43,7 @@ it("should set status to 204 when method is OPTIONS", async () => {
       new Request()
         .setHeader("Origin", "https://halsp.org")
         .setHeader("Access-Control-Request-Method", "POST")
-        .setMethod(HttpMethods.options)
+        .setMethod(HttpMethods.options),
     )
     .useCors()
     .test();

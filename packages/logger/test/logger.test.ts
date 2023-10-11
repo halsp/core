@@ -71,7 +71,7 @@ describe("use", () => {
 
     expect(
       ctx.get<winston.transport[]>("RESULT")[0] instanceof
-        winston.transports.Console
+        winston.transports.Console,
     ).toBeTruthy();
   });
 
@@ -87,7 +87,7 @@ describe("use", () => {
 
     expect(
       ctx.get<winston.transport[]>("RESULT")[0] instanceof
-        winston.transports.File
+        winston.transports.File,
     ).toBeTruthy();
   });
 

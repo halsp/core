@@ -16,7 +16,7 @@ export class Service2 extends Object {
   constructor(
     @Inject("KEY1") readonly key1: number,
     private readonly service1: Service1,
-    @Inject("KEY2") readonly key2: string
+    @Inject("KEY2") readonly key2: string,
   ) {
     super();
   }

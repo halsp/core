@@ -10,7 +10,7 @@ export const testDir = () =>
 declare module "@halsp/core" {
   interface Startup {
     useTestRouter(
-      config?: RouterOptions & { dir?: string; isModule?: boolean }
+      config?: RouterOptions & { dir?: string; isModule?: boolean },
     ): this;
   }
 }

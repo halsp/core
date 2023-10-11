@@ -12,7 +12,7 @@ declare module "@halsp/core" {
     state: Record<string, unknown>;
     view(
       tmpPath: string,
-      locals?: Record<string, unknown>
+      locals?: Record<string, unknown>,
     ): Promise<string | undefined>;
   }
 

@@ -37,7 +37,7 @@
     "@halsp/inject": "^2.2.1",
     "class-transformer": "^0.5.1",
     "reflect-metadata": "^0.1.13",
-    "winston": "^3.9.0"
+    "winston": "^3.11.0"
   },
   "files": [
     "/dist/*",

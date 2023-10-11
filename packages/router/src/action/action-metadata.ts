@@ -3,15 +3,15 @@ import { Dict, ObjectConstructor } from "@halsp/core";
 import { ACTION_METADATA } from "../constant";
 
 export function getActionMetadata(
-  target: ObjectConstructor<Action> | Action
+  target: ObjectConstructor<Action> | Action,
 ): Dict;
 export function getActionMetadata<T = any>(
   target: ObjectConstructor<Action> | Action,
-  metadataKey: string
+  metadataKey: string,
 ): T;
 export function getActionMetadata<T = any>(
   target: ObjectConstructor<Action> | Action,
-  metadataKey?: string
+  metadataKey?: string,
 ): T | Dict {
   if (target instanceof Action) {
     target = target.constructor as ObjectConstructor<Action>;
@@ -28,7 +28,7 @@ export function getActionMetadata<T = any>(
 export function setActionMetadata<T>(
   target: ObjectConstructor<Action> | Action,
   metadataKey: string,
-  metadataValue: T
+  metadataValue: T,
 ) {
   if (target instanceof Action) {
     target = target.constructor as ObjectConstructor<Action>;
@@ -41,13 +41,13 @@ export function setActionMetadata<T>(
       ...metadata,
       [metadataKey]: metadataValue,
     },
-    target.prototype
+    target.prototype,
   );
 }
 
 export function ActionMetadata<T = any>(
   metadataKey: string,
-  metadataValue: T
+  metadataValue: T,
 ): ClassDecorator {
   return (target: any) => {
     setActionMetadata(target, metadataKey, metadataValue);

@@ -4,6 +4,6 @@ import { Filter } from "./filter";
 export interface ResourceFilter extends Filter {
   onResourceExecuted(ctx: Context): void | Promise<void>;
   onResourceExecuting(
-    ctx: Context
+    ctx: Context,
   ): boolean | Promise<boolean> | void | Promise<void>;
 }

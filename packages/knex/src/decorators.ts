@@ -7,7 +7,7 @@ export function Knex(target: any, propertyKey: string | symbol): void;
 export function Knex(
   target: any,
   propertyKey: string | symbol | undefined,
-  parameterIndex: number
+  parameterIndex: number,
 ): void;
 export function Knex(...args: any[]) {
   if (args.length == 0 || (args.length == 1 && typeof args[0] == "string")) {
@@ -17,7 +17,7 @@ export function Knex(...args: any[]) {
       (ctx) => ctx.getService(OPTIONS_IDENTITY),
       args[0],
       args[1],
-      args[2]
+      args[2],
     );
   }
 }

@@ -13,6 +13,7 @@ test("connect failed", async () => {
     .use(async (ctx, next) => {
       RedisClient.prototype.connect = async () => {
         ctx.set("connect", "1");
+        return undefined as any;
       };
       RedisClient.prototype.disconnect = async () => {
         ctx.set("disconnect", "1");

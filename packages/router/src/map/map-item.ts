@@ -89,7 +89,7 @@ export default class MapItem {
     const fileName = this.fileName.replace(/\..*$/, "").replace(/^_$/, "");
     const dirPath = filePath.substring(
       0,
-      filePath.length - this.fileName.length
+      filePath.length - this.fileName.length,
     );
     let url = dirPath + fileName;
     if (this.#actionName && this.#actionName != "default") {

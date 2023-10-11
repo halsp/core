@@ -21,7 +21,7 @@ declare module "@halsp/core" {
 Startup.prototype.useStatic = function (
   options: FileOptions | DirectoryOptions = {
     dir: "static",
-  }
+  },
 ): Startup {
   this.add(() => new MethodMiddleware(options));
   this.add(() => new MatchMiddleware(options));

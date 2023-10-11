@@ -5,12 +5,12 @@ function runTest(
   source: any,
   defaultValue: any,
   target: any,
-  options?: DefaultValuePipeOptions
+  options?: DefaultValuePipeOptions,
 ) {
   runSuccessPipeTest(
     [new DefaultValuePipe(defaultValue, options)],
     source,
-    target
+    target,
   );
 }
 

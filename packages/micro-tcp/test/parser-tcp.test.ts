@@ -25,19 +25,19 @@ describe("parse buffer", () => {
 
   it("should throw error when message format is illegal", async () => {
     expect(() => parseTcpBuffer(Buffer.from("abc"), () => undefined)).toThrow(
-      "Error message format"
+      "Error message format",
     );
   });
 
   it("should throw error when length is not a number", async () => {
     expect(() => parseTcpBuffer(Buffer.from("a#{}"), () => undefined)).toThrow(
-      `Error length "a"`
+      `Error length "a"`,
     );
   });
 
   it("should throw error when length is illegal", async () => {
     expect(() => parseTcpBuffer(Buffer.from("3#{}"), () => undefined)).toThrow(
-      `Required length "3", bug actual length is "2"`
+      `Required length "3", bug actual length is "2"`,
     );
   });
 });

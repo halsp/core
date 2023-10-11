@@ -33,7 +33,7 @@ Startup.prototype.useKnex = function (options: Options): Startup {
       };
       return connection;
     },
-    options.injectType
+    options.injectType,
   );
 };
 

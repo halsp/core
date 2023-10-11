@@ -20,10 +20,10 @@ test("json body", async function () {
   expect(aliRes._body).toBe(
     JSON.stringify({
       content: "BODY",
-    })
+    }),
   );
   expect(aliRes.headers["content-type"]).toBe(
-    "application/json; charset=utf-8"
+    "application/json; charset=utf-8",
   );
 });
 
@@ -43,7 +43,7 @@ test("json body set type", async function () {
       ctx.res.setHeader("content-type", "application/json");
       ctx.res.setHeader(
         "content-length",
-        Buffer.byteLength(strBody).toString()
+        Buffer.byteLength(strBody).toString(),
       );
       ctx.res.ok(body);
     })

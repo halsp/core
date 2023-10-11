@@ -27,7 +27,7 @@ test("plain to class", async () => {
       new Request().setBody({
         h1: "a",
         h2: 1,
-      })
+      }),
     )
     .useInject()
     .add(TestMiddleware)

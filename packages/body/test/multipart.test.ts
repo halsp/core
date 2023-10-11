@@ -17,7 +17,7 @@ test("useHttpMultipartBody", async () => {
       });
       expect(ctx.res.body.file.name).toBe("LICENSE");
       expect(
-        (ctx.res.body.file.content as string).startsWith("MIT License")
+        (ctx.res.body.file.content as string).startsWith("MIT License"),
       ).toBeTruthy();
       invoke = true;
     })

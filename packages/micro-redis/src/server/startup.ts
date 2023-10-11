@@ -49,14 +49,14 @@ function initStartup(this: Startup, options?: MicroRedisOptions) {
       (pattern: string, handler?: (ctx: Context) => Promise<void> | void) => {
         this.logger.debug(`Add pattern: ${pattern}`);
         return register.bind(this)(pattern, handler, sub, pub);
-      }
+      },
     );
 }
 
 async function close(
   this: Startup,
   sub?: redis.RedisClientType,
-  pub?: redis.RedisClientType
+  pub?: redis.RedisClientType,
 ) {
   if (pub?.isOpen) {
     await pub.quit();
@@ -71,7 +71,7 @@ function register(
   pattern: string,
   handler?: (ctx: Context) => Promise<void> | void,
   sub?: redis.RedisClientType,
-  pub?: redis.RedisClientType
+  pub?: redis.RedisClientType,
 ) {
   if (!sub) return this;
   sub.subscribe(
@@ -82,10 +82,10 @@ function register(
         async ({ result, req }) => {
           await pub!.publish(pattern + "." + req.id, JSON.stringify(result));
         },
-        handler
+        handler,
       );
     },
-    true
+    true,
   );
   return this;
 }

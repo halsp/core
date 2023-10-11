@@ -18,7 +18,7 @@ describe("service", () => {
             reject(err);
           }
           resolve(port);
-        }
+        },
       );
     });
     const definition = await grpcLoader.load("./test/protos/test.proto");
@@ -27,7 +27,7 @@ describe("service", () => {
     server.addService(svc.service, {
       testMethod: (
         call: grpc.ServerUnaryCall<any, any>,
-        callback: grpc.sendUnaryData<any>
+        callback: grpc.sendUnaryData<any>,
       ) => {
         callback(null, {
           resMessage: call.request.reqMessage,
@@ -46,7 +46,7 @@ describe("service", () => {
 
     const testService = client.getService<TestService>(
       "test",
-      "TestService"
+      "TestService",
     ) as TestService;
     const result = await testService.testMethod({
       reqMessage: "abc",
@@ -92,7 +92,7 @@ describe("service", () => {
     }
     const testService = client.getService<TestService>(
       "test",
-      "TestServiceNotExist"
+      "TestServiceNotExist",
     );
 
     await client.dispose();
@@ -113,7 +113,7 @@ describe("service", () => {
     }
     const testService = client.getService<TestService>(
       "test",
-      "TestService"
+      "TestService",
     ) as TestService;
 
     await client.dispose();

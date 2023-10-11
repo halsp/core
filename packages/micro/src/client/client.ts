@@ -13,17 +13,17 @@ export abstract class IMicroClient {
   protected createServerPacket<T = any>(
     pattern: string,
     data: any,
-    containsId: true
+    containsId: true,
   ): ServerPacket<T> & { id: string };
   protected createServerPacket<T = any>(
     pattern: string,
     data: any,
-    containsId: false
+    containsId: false,
   ): ServerPacket<T>;
   protected createServerPacket(
     pattern: string,
     data: any,
-    containsId: boolean
+    containsId: boolean,
   ) {
     const result: any = {
       pattern,

@@ -66,7 +66,7 @@ describe("identity", () => {
 
     expect(
       ctx.get<winston.transport[]>("RESULT")[0] instanceof
-        winston.transports.Console
+        winston.transports.Console,
     ).toBeTruthy();
   });
 });

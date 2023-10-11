@@ -19,7 +19,7 @@ describe("auth", () => {
         .setContext(
           await createTestContext({
             secret: "secret",
-          })
+          }),
         )
         .useJwt({
           secret: "secret",
@@ -39,7 +39,7 @@ describe("auth", () => {
       .setContext(
         await createTestContext({
           secret: "secret",
-        })
+        }),
       )
       .use(async (ctx, next) => {
         ctx["unauthorizedMsg"] = (msg) => {
@@ -61,7 +61,7 @@ describe("auth", () => {
       .setContext(
         await createTestContext({
           secret: "secret",
-        })
+        }),
       )
       .use(async (ctx, next) => {
         ctx["unauthorizedMsg"] = (msg: string) => {
@@ -88,7 +88,7 @@ describe("auth", () => {
       .setContext(
         await createTestContext({
           secret: "secret",
-        })
+        }),
       )
       .useJwt({
         secret: "secret",
@@ -140,7 +140,7 @@ describe("auth", () => {
       .setContext(
         await createTestContext({
           secret: "secret",
-        })
+        }),
       )
       .useJwt({
         secret: "secret",

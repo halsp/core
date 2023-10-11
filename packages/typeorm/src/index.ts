@@ -24,14 +24,14 @@ Startup.prototype.useTypeorm = function (options: Options): Startup {
       {
         entities: [
           path.resolve(
-            process.env.TS_JEST ? "entities/**/*.ts" : "entities/**/*.js"
+            process.env.TS_JEST ? "entities/**/*.ts" : "entities/**/*.js",
           ),
           path.resolve(
-            process.env.TS_JEST ? "entity/**/*.ts" : "entity/**/*.js"
+            process.env.TS_JEST ? "entity/**/*.ts" : "entity/**/*.js",
           ),
         ],
       },
-      options
+      options,
     );
   }
 
@@ -50,12 +50,12 @@ Startup.prototype.useTypeorm = function (options: Options): Startup {
 
       return dataSource;
     },
-    options.injectType
+    options.injectType,
   );
 };
 
 Context.prototype.getTypeorm = async function (
-  identity?: string
+  identity?: string,
 ): Promise<Typeorm> {
   const injectKey = OPTIONS_IDENTITY + (identity ?? "");
   return (await this.getService<Typeorm>(injectKey))!;

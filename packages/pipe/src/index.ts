@@ -25,14 +25,14 @@ declare module "@halsp/core" {
   interface Startup {
     useGlobalPipe<T = any, R = any>(
       type: GlobalPipeType,
-      pipe: PipeItem<T, R>
+      pipe: PipeItem<T, R>,
     ): this;
   }
 }
 
 Startup.prototype.useGlobalPipe = function <T = any, R = any>(
   type: GlobalPipeType,
-  pipe: PipeItem<T, R>
+  pipe: PipeItem<T, R>,
 ) {
   return this.use(async (ctx, next) => {
     const pipes = ctx.get<GlobalPipeItem<T, R>[]>(GLOBAL_PIPE_BAG) ?? [];

@@ -24,7 +24,7 @@ declare module "@halsp/core" {
     useJwt(options: JwtOptions): this;
     useJwtVerify(
       skip?: (ctx: Context) => boolean | Promise<boolean>,
-      onError?: (ctx: Context, err: jwt.VerifyErrors) => void | Promise<void>
+      onError?: (ctx: Context, err: jwt.VerifyErrors) => void | Promise<void>,
     ): this;
     useJwtExtraAuth(access: (ctx: Context) => boolean | Promise<boolean>): this;
   }
@@ -32,7 +32,7 @@ declare module "@halsp/core" {
 
 Startup.prototype.useJwtVerify = function (
   skip?: (ctx: Context) => boolean | Promise<boolean>,
-  onError?: (ctx: Context, err: jwt.VerifyErrors) => void | Promise<void>
+  onError?: (ctx: Context, err: jwt.VerifyErrors) => void | Promise<void>,
 ) {
   return this.use(async (ctx, next) => {
     if (skip && (await skip(ctx))) {
@@ -60,7 +60,7 @@ Startup.prototype.useJwtVerify = function (
 };
 
 Startup.prototype.useJwtExtraAuth = function (
-  access: (ctx: Context) => boolean | Promise<boolean>
+  access: (ctx: Context) => boolean | Promise<boolean>,
 ) {
   return this.use(async (ctx, next) => {
     if (await access(ctx)) {

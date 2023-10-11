@@ -16,7 +16,7 @@ Startup.prototype.useEnv = function (options: EnvOptions = {}): Startup {
       this,
       dotenv.config({
         path: ".env",
-      })
+      }),
     );
   }
 

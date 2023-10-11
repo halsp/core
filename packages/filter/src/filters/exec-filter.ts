@@ -53,7 +53,7 @@ export async function execFilters(
 function getFilters<T extends Filter = Filter>(
   action: Action,
   isExecuting: boolean,
-  select: (filter: FilterItem<T>) => boolean
+  select: (filter: FilterItem<T>) => boolean,
 ): FilterItem<T>[] {
   const useFilters: FilterItem<T>[] =
     Reflect.getMetadata(FILTERS_METADATA, action.constructor) ?? [];

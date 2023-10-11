@@ -18,7 +18,7 @@ class TestActionFilter implements ActionFilter {
     ctx.res.set(`action2`, 2);
   }
   onActionExecuting(
-    ctx: Context
+    ctx: Context,
   ): boolean | void | Promise<void> | Promise<boolean> {
     ctx.res.set(`action1`, 1);
     return ctx.req.body["executing"];
@@ -32,7 +32,7 @@ function runTest(executing: boolean) {
       .setContext(
         new Request().setPath("").setMethod("GET").setBody({
           executing,
-        })
+        }),
       )
       .useGlobalFilter(TestActionFilter)
       .useGlobalFilter(TestActionFilter)

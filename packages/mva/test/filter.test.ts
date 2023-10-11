@@ -11,7 +11,7 @@ function runTest(executing: boolean) {
         .setContext(
           new Request().setPath("filter").setMethod("GET").setBody({
             executing,
-          })
+          }),
         )
         .useFilter()
         .useMva()

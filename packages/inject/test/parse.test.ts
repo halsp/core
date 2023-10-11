@@ -58,7 +58,7 @@ test(`try parse`, async function () {
       const service1 = await ctx.getService(Service2);
       const service2 = await ctx.getService(Service2);
       const svs = new InjectDecoratorParser(ctx).getTransientInstances(
-        Service2
+        Service2,
       );
       return ctx.set("result", {
         eq: service1 == service2,

@@ -14,7 +14,7 @@ export interface JwtOptions {
   secretOrKeyProvider?: (
     requestType: JwtSecretRequestType,
     tokenOrPayload: string | object | Buffer,
-    options?: jwt.VerifyOptions | jwt.SignOptions
+    options?: jwt.VerifyOptions | jwt.SignOptions,
   ) => jwt.Secret;
   verifyOptions?: jwt.VerifyOptions;
   tokenProvider?: (ctx: Context) => string;

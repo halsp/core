@@ -12,22 +12,22 @@ declare module "@halsp/core" {
     useLogger(options?: Omit<Options, "injectType">): this;
     useLogger(identity: string, options?: Options): this;
     useConsoleLogger(
-      options?: Omit<Omit<Options, "transports">, "injectType">
+      options?: Omit<Omit<Options, "transports">, "injectType">,
     ): this;
     useConsoleLogger(
       identity: string,
-      options?: Omit<Options, "transports">
+      options?: Omit<Options, "transports">,
     ): this;
     useFileLogger(
       options: Omit<Omit<Options, "transports">, "injectType"> & {
         fileTransportOptions: FileTransportOptions;
-      }
+      },
     ): this;
     useFileLogger(
       identity: string,
       options: Omit<Options, "transports"> & {
         fileTransportOptions: FileTransportOptions;
-      }
+      },
     ): this;
   }
 
@@ -65,7 +65,7 @@ Startup.prototype.useLogger = function (...args: any[]): Startup {
     () => {
       return defaultLogger ?? createLogger(options);
     },
-    injectType
+    injectType,
   );
 };
 
@@ -83,20 +83,20 @@ Startup.prototype.useConsoleLogger = function (...args: any[]): Startup {
 Startup.prototype.useFileLogger = function (...args: any[]): Startup {
   const { identity, options } = getOptions<FileOptions>(args, {});
   options.transports = new winston.transports.File(
-    options.fileTransportOptions
+    options.fileTransportOptions,
   );
   return useLogger(this, identity, options);
 };
 
 function getOptions<T extends Options = Options>(
-  args: any[]
+  args: any[],
 ): {
   identity: string;
   options: T | undefined;
 };
 function getOptions<T extends Options = Options>(
   args: any[],
-  def: T
+  def: T,
 ): {
   identity: string;
   options: T;
@@ -113,7 +113,7 @@ function getOptions<T extends Options = Options>(args: any[], def?: T) {
 function useLogger<T extends Options = Options>(
   startup: Startup,
   identity: string,
-  options: T
+  options: T,
 ) {
   if (identity) {
     return startup.useLogger(identity, options);

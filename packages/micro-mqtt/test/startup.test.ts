@@ -131,13 +131,15 @@ describe("error", () => {
     const client = await startup.listen();
 
     const end = client.end;
-    client.end = (force: boolean, obj: any, cb: any) => {
-      try {
-        cb(new Error("err"));
-      } finally {
-        return end.bind(client)(force, obj, cb);
-      }
-    };
+    Object.defineProperty(client, "end", {
+      value: (force: boolean, obj: any, cb: any) => {
+        try {
+          cb(new Error("err"));
+        } finally {
+          return end.bind(client)(force, obj, cb);
+        }
+      },
+    });
 
     await new Promise<void>((resolve) => {
       setTimeout(() => resolve(), 500);
@@ -166,16 +168,18 @@ describe("error", () => {
 
     let forceShutdown = false;
     const end = client.end;
-    client.end = (force: boolean, obj: any, cb: any) => {
-      if (force) {
-        forceShutdown = true;
-        cb();
-        end.bind(client)(force, obj, cb);
-      } else {
-        setTimeout(() => cb(), 2200);
-      }
-      return client;
-    };
+    Object.defineProperty(client, "end", {
+      value: (force: boolean, obj: any, cb: any) => {
+        if (force) {
+          forceShutdown = true;
+          cb();
+          end.bind(client)(force, obj, cb);
+        } else {
+          setTimeout(() => cb(), 2200);
+        }
+        return client;
+      },
+    });
 
     await new Promise<void>((resolve) => {
       setTimeout(() => resolve(), 500);

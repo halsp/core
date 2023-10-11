@@ -11,7 +11,7 @@ function runTest(executing: boolean) {
         .setContext(
           new Request().setMethod("get").setPath("auth").setBody({
             executing,
-          })
+          }),
         )
         .use(async (ctx, next) => {
           ctx.set("h1", 1);

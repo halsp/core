@@ -13,13 +13,16 @@ describe("error", () => {
 
     const client = mqttClient["client"] as mqtt.MqttClient;
     const end = client.end;
-    client.end = (force: boolean, obj: any, cb: any) => {
-      try {
-        cb(new Error("err"));
-      } finally {
-        return end.bind(client)(force, obj, cb);
-      }
-    };
+
+    Object.defineProperty(client, "end", {
+      value: (force: boolean, obj: any, cb: any) => {
+        try {
+          cb(new Error("err"));
+        } finally {
+          return end.bind(client)(force, obj, cb);
+        }
+      },
+    });
 
     await new Promise<void>((resolve) => {
       setTimeout(() => resolve(), 500);

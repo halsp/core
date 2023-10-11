@@ -9,7 +9,7 @@ export interface Options {
 }
 
 export async function loadPackages(
-  options: Options = {}
+  options: Options = {},
 ): Promise<grpc.GrpcObject> {
   let protoFiles = options.protoFiles;
   if (!protoFiles || (Array.isArray(protoFiles) && !protoFiles.length)) {
@@ -25,7 +25,7 @@ export async function loadPackages(
   const grpcLoaderPkg = require("@grpc/proto-loader");
   const definition = await grpcLoaderPkg.load(
     protoFiles,
-    options.loaderOptions
+    options.loaderOptions,
   );
 
   // eslint-disable-next-line @typescript-eslint/no-var-requires

@@ -9,7 +9,7 @@ export function UseFilters(...filters: FilterItem[]): ClassDecorator {
     Reflect.defineMetadata(
       FILTERS_METADATA,
       [...existFilters, ...filters],
-      target
+      target,
     );
   };
 }

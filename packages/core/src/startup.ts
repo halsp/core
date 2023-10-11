@@ -27,7 +27,7 @@ export class Startup {
   use(
     lambda:
       | ((ctx: Context, next: () => Promise<void>) => void)
-      | ((ctx: Context, next: () => Promise<void>) => Promise<void>)
+      | ((ctx: Context, next: () => Promise<void>) => Promise<void>),
   ): this {
     this.#mds.push(() => new LambdaMiddleware(lambda));
     return this;
@@ -35,19 +35,19 @@ export class Startup {
 
   add(
     builder: (ctx: Context) => Middleware,
-    type?: MiddlewareConstructor
+    type?: MiddlewareConstructor,
   ): this;
   add(
     builder: (ctx: Context) => Promise<Middleware>,
-    type?: MiddlewareConstructor
+    type?: MiddlewareConstructor,
   ): this;
   add(
     builder: (ctx: Context) => MiddlewareConstructor,
-    type?: MiddlewareConstructor
+    type?: MiddlewareConstructor,
   ): this;
   add(
     builder: (ctx: Context) => Promise<MiddlewareConstructor>,
-    type?: MiddlewareConstructor
+    type?: MiddlewareConstructor,
   ): this;
   add(md: Middleware): this;
   add(md: MiddlewareConstructor): this;
@@ -59,7 +59,7 @@ export class Startup {
       | ((ctx: Context) => Promise<MiddlewareConstructor>)
       | Middleware
       | MiddlewareConstructor,
-    type?: MiddlewareConstructor
+    type?: MiddlewareConstructor,
   ): this {
     if (type) {
       this.#mds.push([md as any, type]);
@@ -73,58 +73,58 @@ export class Startup {
     type: HookType.Constructor,
     mh: (
       ctx: Context,
-      middlewareConstructor: ObjectConstructor<T>
-    ) => T | undefined
+      middlewareConstructor: ObjectConstructor<T>,
+    ) => T | undefined,
   ): this;
   hook<T extends Middleware = Middleware>(
     type: HookType.Constructor,
     mh: (
       ctx: Context,
-      middlewareConstructor: ObjectConstructor<T>
-    ) => Promise<T | undefined>
+      middlewareConstructor: ObjectConstructor<T>,
+    ) => Promise<T | undefined>,
   ): this;
 
   hook<T extends Error = Error>(
     type: HookType.Error,
-    mh: (ctx: Context, middleware: Middleware, error: T) => boolean
+    mh: (ctx: Context, middleware: Middleware, error: T) => boolean,
   ): this;
   hook<T extends Error = Error>(
     type: HookType.Error,
-    mh: (ctx: Context, middleware: Middleware, error: T) => Promise<boolean>
+    mh: (ctx: Context, middleware: Middleware, error: T) => Promise<boolean>,
   ): this;
 
   hook<T extends Error = Error>(
     type: HookType.Unhandled,
-    mh: (ctx: Context, middleware: Middleware, error: T) => void
+    mh: (ctx: Context, middleware: Middleware, error: T) => void,
   ): this;
   hook<T extends Error = Error>(
     type: HookType.Unhandled,
-    mh: (ctx: Context, middleware: Middleware, error: T) => Promise<void>
+    mh: (ctx: Context, middleware: Middleware, error: T) => Promise<void>,
   ): this;
 
   hook<T extends Middleware = Middleware>(
     type: HookType.BeforeInvoke | HookType.BeforeNext,
-    mh: (ctx: Context, middleware: T) => boolean | void
+    mh: (ctx: Context, middleware: T) => boolean | void,
   ): this;
   hook<T extends Middleware = Middleware>(
     type: HookType.BeforeInvoke | HookType.BeforeNext,
-    mh: (ctx: Context, middleware: T) => Promise<boolean | void>
+    mh: (ctx: Context, middleware: T) => Promise<boolean | void>,
   ): this;
 
   hook<T extends Middleware = Middleware>(
     type: HookType.AfterInvoke,
-    mh: (ctx: Context, middleware: T) => void
+    mh: (ctx: Context, middleware: T) => void,
   ): this;
   hook<T extends Middleware = Middleware>(
     type: HookType.AfterInvoke,
-    mh: (ctx: Context, middleware: T) => Promise<void>
+    mh: (ctx: Context, middleware: T) => Promise<void>,
   ): this;
 
   hook<T extends Middleware = Middleware>(
-    mh: (ctx: Context, middleware: T) => void
+    mh: (ctx: Context, middleware: T) => void,
   ): this;
   hook<T extends Middleware = Middleware>(
-    mh: (ctx: Context, middleware: T) => Promise<void>
+    mh: (ctx: Context, middleware: T) => Promise<void>,
   ): this;
 
   hook(arg1: MdHook | HookType, arg2?: MdHook | HookType): this {
@@ -207,7 +207,7 @@ export class Startup {
 
   public register(
     pattern: string,
-    handler?: (ctx: Context) => Promise<void> | void
+    handler?: (ctx: Context) => Promise<void> | void,
   ) {
     this.#registers.push({
       pattern,

@@ -1,5 +1,5 @@
 import { parseJsonBuffer, IMicroClient } from "@halsp/micro";
-import mqtt from "mqtt";
+import * as mqtt from "mqtt";
 import { MicroMqttClientOptions } from "../options";
 
 export class MicroMqttClient extends IMicroClient {
@@ -84,7 +84,7 @@ export class MicroMqttClient extends IMicroClient {
     data: any,
     options?: Partial<mqtt.IClientSubscribeOptions> & {
       timeout?: number;
-    }
+    },
   ): Promise<T> {
     if (!this.client?.connected) {
       throw new Error("The connection is not connected");

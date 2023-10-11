@@ -38,7 +38,7 @@ test(`html`, async () => {
   expect(res.status).toBe(200);
   expect(res.get("content-type")).toBe("text/html; charset=utf-8");
   expect(res.get("content-length")).toBe(
-    Buffer.byteLength("<div>halsp</div>").toString()
+    Buffer.byteLength("<div>halsp</div>").toString(),
   );
   expect(res.body).toBe("<div>halsp</div>");
 });
@@ -58,8 +58,8 @@ test(`json`, async () => {
     Buffer.byteLength(
       JSON.stringify({
         halsp: true,
-      })
-    ).toString()
+      }),
+    ).toString(),
   );
   expect(res.body).toEqual({
     halsp: true,
@@ -76,7 +76,7 @@ test(`array`, async () => {
   expect(res.status).toBe(200);
   expect(res.get("content-type")).toBe("application/json; charset=utf-8");
   expect(res.get("content-length")).toBe(
-    Buffer.byteLength(JSON.stringify([1, 2])).toString()
+    Buffer.byteLength(JSON.stringify([1, 2])).toString(),
   );
   expect(res.body).toEqual([1, 2]);
 });

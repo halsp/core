@@ -99,7 +99,7 @@ function initSupertest(ctx: Context) {
 
     return Test.prototype._beforeCallback.bind(this)(
       err,
-      err ? undefined : res
+      err ? undefined : res,
     );
   };
 }

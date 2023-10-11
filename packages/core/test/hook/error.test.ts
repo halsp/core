@@ -44,7 +44,7 @@ function runSimpleTest(handle: boolean, afterNext: boolean) {
         ? {
             message: "err",
           }
-        : "err"
+        : "err",
     );
     expect(ctx.get("h")).toBe(afterNext ? 1 : undefined);
     expect(errorMiddleware.constructor).toBe(TestMiddleware);
@@ -96,7 +96,7 @@ function runBeforeNextTest(handle: boolean) {
         ? {
             message: "err",
           }
-        : "err"
+        : "err",
     );
     expect(ctx.get("h")).toBe(undefined);
     expect(errorMiddleware.constructor).toBe(TestMiddleware);

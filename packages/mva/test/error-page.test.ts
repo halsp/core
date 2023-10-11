@@ -12,7 +12,7 @@ function expect404(res: Response, isPage: boolean, replaceCode = 404) {
     expect(res.body).toBe("<p>404</p>");
   } else {
     expect(res.getHeader("content-type")).toBe(
-      "application/json; charset=utf-8"
+      "application/json; charset=utf-8",
     );
     expect(res.body).toEqual({
       message: "Can't find the path：not-exist",
@@ -64,7 +64,7 @@ test("403", async function () {
         new Request()
           .setPath("user/test1@hal.wang")
           .setMethod("GET")
-          .setHeader("password", "test2password")
+          .setHeader("password", "test2password"),
       )
       .useErrorPage([{ code: 403 }])
       .useGlobalFilter(AutFilter)

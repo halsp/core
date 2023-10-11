@@ -33,7 +33,7 @@ it("should set Access-Control-Allow-Headers when set allowHeaders option", async
       new Request()
         .set("Origin", "https://halsp.org")
         .set("Access-Control-Request-Method", "POST")
-        .setMethod(HttpMethods.options)
+        .setMethod(HttpMethods.options),
     )
     .useCors({
       allowHeaders: ["get"],
@@ -50,7 +50,7 @@ describe("privateNetworkAccess", () => {
         new Request()
           .set("Origin", "https://halsp.org")
           .set("Access-Control-Request-Method", "POST")
-          .setMethod(HttpMethods.options)
+          .setMethod(HttpMethods.options),
       )
       .useCors({
         privateNetworkAccess: false,
@@ -66,7 +66,7 @@ describe("privateNetworkAccess", () => {
         new Request()
           .set("Origin", "https://halsp.org")
           .set("Access-Control-Request-Method", "POST")
-          .setMethod(HttpMethods.options)
+          .setMethod(HttpMethods.options),
       )
       .useCors({
         privateNetworkAccess: true,
@@ -83,7 +83,7 @@ describe("privateNetworkAccess", () => {
           .set("Origin", "https://halsp.org")
           .set("Access-Control-Request-Method", "POST")
           .set("Access-Control-Request-Private-Network", "true")
-          .setMethod(HttpMethods.options)
+          .setMethod(HttpMethods.options),
       )
       .useCors({
         privateNetworkAccess: true,
@@ -110,7 +110,7 @@ describe("allowMethods", () => {
         new Request()
           .set("Origin", "https://halsp.org")
           .set("Access-Control-Request-Method", "POST")
-          .setMethod(HttpMethods.options)
+          .setMethod(HttpMethods.options),
       )
       .useCors()
       .test();
@@ -132,7 +132,7 @@ describe("allowMethods", () => {
         new Request()
           .set("Origin", "https://halsp.org")
           .set("Access-Control-Request-Method", "POST")
-          .setMethod(HttpMethods.options)
+          .setMethod(HttpMethods.options),
       )
       .useCors({
         allowMethods,

@@ -21,7 +21,7 @@ export type RuleRecord = {
 export function createClassValidatorDecorator(
   lib: ValidatorDecoratorReturnType,
   validator: () => PropertyDecorator,
-  methodName: string
+  methodName: string,
 ): ValidatorDecoratorReturnType {
   lib.validates.push({
     createTempObj: (property: string, value: any) => {
@@ -42,7 +42,7 @@ export function createClassValidatorDecorator(
 export function createCustomValidatorDecorator(
   lib: ValidatorDecoratorReturnType,
   validator: CustomValidatorItem,
-  args: any[]
+  args: any[],
 ): ValidatorDecoratorReturnType {
   lib.validates.push({
     ...validator,
@@ -56,7 +56,7 @@ export function createDecorator(lib: ValidatorDecoratorReturnType) {
   const decorator = function (
     target: any,
     propertyKey?: symbol | string,
-    parameterIndex?: number
+    parameterIndex?: number,
   ) {
     if (!target) {
       // for @V()
@@ -77,7 +77,7 @@ export function createDecorator(lib: ValidatorDecoratorReturnType) {
           parameterIndex,
         },
       ],
-      target
+      target,
     );
   };
   Object.assign(decorator, lib);

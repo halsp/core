@@ -56,7 +56,7 @@ export class Status405Middleware extends BaseMiddleware {
     } else {
       const filePath = path.resolve(
         this.options["dir"] ?? process.cwd(),
-        this.use405
+        this.use405,
       );
       if (fs.existsSync(filePath)) {
         return {

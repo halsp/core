@@ -127,7 +127,7 @@ export interface ValidatorLib {
   validates: ValidateItem[];
   Is: (
     validate: (value: any, property: string) => Promise<boolean> | boolean,
-    errorMessage: string | ((value: any, property: string) => string)
+    errorMessage: string | ((value: any, property: string) => string),
   ) => ValidatorDecoratorReturnType;
 }
 
@@ -152,12 +152,12 @@ export type ValidatorDecoratorReturnType = PropertyDecorator &
 export type CustomValidatorFunc = (
   value: any,
   property: string,
-  args: any[]
+  args: any[],
 ) => Promise<boolean> | boolean;
 export type CustomValidatorMessageFunc = (
   value: any,
   property: string,
-  args: any[]
+  args: any[],
 ) => string;
 
 export type CustomValidatorItem = {
@@ -187,7 +187,7 @@ export function createLib(): ValidatorDecoratorReturnType {
       return createClassValidatorDecorator(
         lib,
         () => cvMethod(...args),
-        methodName
+        methodName,
       );
     };
     Object.defineProperty(method, "name", {
@@ -204,7 +204,7 @@ export function createLib(): ValidatorDecoratorReturnType {
       return createClassValidatorDecorator(
         lib,
         () => cvMethod(...args),
-        extendName
+        extendName,
       );
     };
     Object.defineProperty(method, "name", {
@@ -227,7 +227,7 @@ export function createLib(): ValidatorDecoratorReturnType {
 
   lib.Is = function Is(
     validate: CustomValidatorFunc,
-    errorMessage: string | CustomValidatorMessageFunc
+    errorMessage: string | CustomValidatorMessageFunc,
   ) {
     return createCustomValidatorDecorator(
       lib,
@@ -236,7 +236,7 @@ export function createLib(): ValidatorDecoratorReturnType {
         errorMessage,
         name: "Is",
       },
-      []
+      [],
     );
   };
 
@@ -257,7 +257,7 @@ export function libToProxy(lib: ValidatorDecoratorReturnType) {
               name: p as string,
               errorMessage: "",
             },
-            args
+            args,
           );
         Object.defineProperty(func, "name", {
           get: () => p,

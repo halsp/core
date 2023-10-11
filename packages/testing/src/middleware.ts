@@ -8,7 +8,7 @@ import {
 
 export type TestMiddlewareFn<T extends Middleware> = (
   md: T,
-  ctx: Context
+  ctx: Context,
 ) => void | Promise<void>;
 
 export type ExpectMiddlewareType =
@@ -21,7 +21,7 @@ declare module "@halsp/core" {
     expectMiddleware<T extends Middleware>(
       mdCls: ObjectConstructor<T>,
       fn: TestMiddlewareFn<T>,
-      type?: ExpectMiddlewareType
+      type?: ExpectMiddlewareType,
     ): this;
   }
 }
@@ -29,7 +29,7 @@ declare module "@halsp/core" {
 Startup.prototype.expectMiddleware = function <T extends Middleware>(
   middleware: ObjectConstructor<T>,
   expect: TestMiddlewareFn<T>,
-  type: ExpectMiddlewareType = HookType.BeforeInvoke
+  type: ExpectMiddlewareType = HookType.BeforeInvoke,
 ) {
   const key = "";
   return this.use(async (ctx, next) => {
