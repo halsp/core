@@ -21,9 +21,11 @@
 
 ## 线上示例
 
-请访问 <http://mini.halsp.org> 🌈
+请访问 <https://quickstart.halsp.org> 🌈
 
-> 该示例是由 `@halsp/cli` 生成，运行于 [StackBlitz](https://stackblitz.com)，可以在线编辑、运行、调试
+> 该网站可快速体验 Halsp，代码由 `@halsp/cli` 生成，运行于 [StackBlitz](https://stackblitz.com)
+
+> 可以自由选择插件和运行环境，支持在线编辑、运行、调试
 
 ## 介绍
 
