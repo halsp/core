@@ -9,6 +9,7 @@ import { FileOptions, DirectoryOptions } from "./options";
 
 export { FileOptions, DirectoryOptions };
 export { cliConfigHook } from "./cli-config";
+export { HALSP_CLI_PLUGIN_ATTACH } from "./cli-plugin";
 
 declare module "@halsp/core" {
   interface Startup {
