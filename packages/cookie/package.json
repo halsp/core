@@ -45,9 +45,9 @@
     "@types/set-cookie-parser": "^2.4.4"
   },
   "files": [
-    "/dist/*",
-    "/src/*",
-    "/test/*",
+    "/dist/**/*",
+    "/src/**/*",
+    "/test/**/*",
     ".eslintignore",
     ".eslintrc.js",
     ".gitignore",

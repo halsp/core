@@ -43,11 +43,11 @@
     "redis": "^4.6.10"
   },
   "files": [
-    "/client/*",
-    "/dist/*",
-    "/server/*",
-    "/src/*",
-    "/test/*",
+    "/client/**/*",
+    "/dist/**/*",
+    "/server/**/*",
+    "/src/**/*",
+    "/test/**/*",
     ".eslintignore",
     ".eslintrc.js",
     ".gitignore",

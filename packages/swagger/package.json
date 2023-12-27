@@ -49,9 +49,9 @@
     "@types/swagger-ui-dist": "^3.30.2"
   },
   "files": [
-    "/dist/*",
-    "/src/*",
-    "/test/*",
+    "/dist/**/*",
+    "/src/**/*",
+    "/test/**/*",
     ".eslintrc.js",
     ".gitignore",
     "LICENSE",

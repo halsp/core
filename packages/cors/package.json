@@ -37,9 +37,9 @@
     "@halsp/http": "^2.2.2"
   },
   "files": [
-    "/dist/*",
-    "/src/*",
-    "/test/*",
+    "/dist/**/*",
+    "/src/**/*",
+    "/test/**/*",
     ".eslintignore",
     ".eslintrc.js",
     ".gitignore",

@@ -34,9 +34,9 @@
   "author": "hal-wang",
   "license": "MIT",
   "files": [
-    "/dist/*",
-    "/src/*",
-    "/test/*",
+    "/dist/**/*",
+    "/src/**/*",
+    "/test/**/*",
     ".eslintignore",
     ".eslintrc.js",
     ".gitignore",

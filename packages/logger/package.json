@@ -40,9 +40,9 @@
     "winston": "^3.11.0"
   },
   "files": [
-    "/dist/*",
-    "/src/*",
-    "/test/*",
+    "/dist/**/*",
+    "/src/**/*",
+    "/test/**/*",
     ".eslintignore",
     ".eslintrc.js",
     ".gitignore",

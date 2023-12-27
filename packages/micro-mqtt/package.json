@@ -43,11 +43,11 @@
     "mqtt": "^5.1.2"
   },
   "files": [
-    "/client/*",
-    "/dist/*",
-    "/server/*",
-    "/src/*",
-    "/test/*",
+    "/client/**/*",
+    "/dist/**/*",
+    "/server/**/*",
+    "/src/**/*",
+    "/test/**/*",
     ".eslintignore",
     ".eslintrc.js",
     ".gitignore",

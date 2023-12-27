@@ -43,11 +43,11 @@
     "nats": "^2.17.0"
   },
   "files": [
-    "/client/*",
-    "/dist/*",
-    "/server/*",
-    "/src/*",
-    "/test/*",
+    "/client/**/*",
+    "/dist/**/*",
+    "/server/**/*",
+    "/src/**/*",
+    "/test/**/*",
     ".eslintignore",
     ".eslintrc.js",
     ".gitignore",

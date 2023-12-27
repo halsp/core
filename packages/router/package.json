@@ -43,10 +43,10 @@
     "@halsp/micro": "^2.2.2"
   },
   "files": [
-    "/cli-config/*",
-    "/dist/*",
-    "/src/*",
-    "/test/*",
+    "/cli-config/**/*",
+    "/dist/**/*",
+    "/src/**/*",
+    "/test/**/*",
     ".eslintignore",
     ".eslintrc.js",
     ".gitignore",
