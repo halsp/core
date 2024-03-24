@@ -40,7 +40,7 @@
   "dependencies": {
     "@halsp/core": "^2.2.2",
     "@halsp/micro": "^2.2.2",
-    "redis": "^4.6.10"
+    "redis": "^4.6.13"
   },
   "files": [
     "/client/**/*",

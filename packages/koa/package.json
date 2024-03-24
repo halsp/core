@@ -37,20 +37,20 @@
   "dependencies": {
     "@halsp/core": "^2.2.2",
     "@halsp/http": "^2.2.2",
-    "koa": "^2.14.2",
+    "koa": "^2.15.2",
     "koa-compose": "^4.1.0",
-    "qs": "^6.11.2"
+    "qs": "^6.12.0"
   },
   "devDependencies": {
-    "@koa/cors": "4.0.0",
-    "@koa/router": "^12.0.0",
-    "@types/koa": "^2.13.9",
-    "@types/koa-cors": "0.0.3",
-    "@types/koa__cors": "^4.0.1",
-    "@types/koa__router": "^12.0.1",
-    "@types/qs": "^6.9.8",
-    "@types/supertest": "^2.0.14",
-    "supertest": "^6.3.3"
+    "@koa/cors": "5.0.0",
+    "@koa/router": "^12.0.1",
+    "@types/koa": "^2.15.0",
+    "@types/koa-cors": "0.0.6",
+    "@types/koa__cors": "^5.0.0",
+    "@types/koa__router": "^12.0.4",
+    "@types/qs": "^6.9.14",
+    "@types/supertest": "^6.0.2",
+    "supertest": "^6.3.4"
   },
   "files": [
     "/dist/**/*",

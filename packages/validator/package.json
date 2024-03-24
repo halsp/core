@@ -38,8 +38,8 @@
     "@halsp/core": "^2.2.2",
     "@halsp/inject": "^2.2.2",
     "@halsp/pipe": "^2.2.2",
-    "class-validator": "^0.14.0",
-    "reflect-metadata": "^0.1.13"
+    "class-validator": "^0.14.1",
+    "reflect-metadata": "^0.2.1"
   },
   "peerDependencies": {
     "class-validator": "*"

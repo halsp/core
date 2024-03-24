@@ -46,7 +46,7 @@
     "@halsp/micro-redis": "^2.2.2",
     "@halsp/micro-tcp": "^2.2.2",
     "@halsp/native": "^2.2.2",
-    "supertest": "^6.3.3"
+    "supertest": "^6.3.4"
   },
   "files": [
     "/dist/**/*",

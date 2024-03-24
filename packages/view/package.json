@@ -41,7 +41,7 @@
     "consolidate": "^1.0.3"
   },
   "devDependencies": {
-    "@types/consolidate": "^0.14.2",
+    "@types/consolidate": "^0.14.4",
     "ejs": "^3.1.9",
     "pug": "^3.0.2"
   },

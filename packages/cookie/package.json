@@ -37,12 +37,12 @@
   "dependencies": {
     "@halsp/core": "^2.2.2",
     "@halsp/http": "^2.2.2",
-    "cookie": "^0.5.0",
+    "cookie": "^0.6.0",
     "set-cookie-parser": "^2.6.0"
   },
   "devDependencies": {
-    "@types/cookie": "^0.5.2",
-    "@types/set-cookie-parser": "^2.4.4"
+    "@types/cookie": "^0.6.0",
+    "@types/set-cookie-parser": "^2.4.7"
   },
   "files": [
     "/dist/**/*",

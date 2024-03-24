@@ -35,11 +35,11 @@
   "dependencies": {
     "@halsp/core": "^2.2.2",
     "@halsp/inject": "^2.2.2",
-    "knex": "^3.0.1",
-    "reflect-metadata": "^0.1.13"
+    "knex": "^3.1.0",
+    "reflect-metadata": "^0.2.1"
   },
   "devDependencies": {
-    "sqlite3": "^5.1.6"
+    "sqlite3": "^5.1.7"
   },
   "files": [
     "/dist/**/*",

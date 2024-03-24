@@ -35,11 +35,11 @@
   "dependencies": {
     "@halsp/core": "^2.2.2",
     "@halsp/inject": "^2.2.2",
-    "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.3.17"
+    "reflect-metadata": "^0.2.1",
+    "typeorm": "^0.3.20"
   },
   "devDependencies": {
-    "sqlite3": "^5.1.6"
+    "sqlite3": "^5.1.7"
   },
   "files": [
     "/dist/**/*",

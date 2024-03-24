@@ -37,9 +37,9 @@
   "dependencies": {
     "@halsp/core": "^2.2.2",
     "@halsp/inject": "^2.2.2",
-    "@types/jsonwebtoken": "^9.0.3",
+    "@types/jsonwebtoken": "^9.0.6",
     "jsonwebtoken": "^9.0.2",
-    "reflect-metadata": "^0.1.13"
+    "reflect-metadata": "^0.2.1"
   },
   "files": [
     "/dist/**/*",
