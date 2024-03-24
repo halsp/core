@@ -1,8 +1,7 @@
 import { Startup } from "@halsp/core";
 import type { Command } from "commander";
-import type {} from "@halsp/native";
+import { getAvailablePort } from "@halsp/native";
 import path from "path";
-import net from "net";
 
 export const HALSP_CLI_PLUGIN_ATTACH = {
   register,
@@ -22,14 +21,14 @@ async function register(command: Command) {
     )
     .option("--prefix <prefix>", "File prefix")
     .option("--encoding <encoding>", "Buffer encoding (e.g. utf8)")
-    .action(async (app: string, command: Record<string, boolean | string>) => {
+    .action(async (app: string, args: Record<string, boolean | string>) => {
       if (!app) {
-        await serve(command);
+        await serve(command, args);
       } else {
         const cwd = process.cwd();
         process.chdir(path.resolve(app));
         try {
-          await serve(command);
+          await serve(command, args);
         } finally {
           process.chdir(cwd);
         }
@@ -37,57 +36,35 @@ async function register(command: Command) {
     });
 }
 
-async function serve(command: Record<string, boolean | string>) {
+async function serve(command: Command, args: Record<string, boolean | string>) {
   const port =
-    Number(command.port) ||
-    (await getAvailablePort(command.hostname as string));
+    Number(args.port) || (await getAvailablePort(args.hostname as string));
   const server = await new Startup()
     .useNative({
       port: port,
-      host: command.hostname as string,
+      host: args.hostname as string,
     })
     .useStatic({
       dir: process.cwd(),
-      listDir: !command.hideDir,
+      listDir: !args.hideDir,
       use404: true,
       useIndex: true,
       method: "ANY",
       useExt: true,
-      exclude: command.exclude as string,
-      prefix: command.prefix as string,
-      encoding: command.encoding as BufferEncoding,
+      exclude: args.exclude as string,
+      prefix: args.prefix as string,
+      encoding: args.encoding as BufferEncoding,
     })
     .listen();
+  Object.defineProperty(command, "@halsp/static/serve/server", {
+    enumerable: false,
+    value: server,
+    configurable: true,
+    writable: false,
+  });
 
   await new Promise((resolve, reject) => {
     server.on("close", resolve);
     server.on("error", reject);
   });
-}
-
-async function getAvailablePort(host: string) {
-  const checkPort = (port: number) => {
-    return new Promise<void>((resolve, reject) => {
-      const server = net.createServer();
-      server.unref();
-      server.on("error", reject);
-
-      server.listen(port, host, () => {
-        server.close(() => {
-          resolve();
-        });
-      });
-    });
-  };
-  for (let i = 9504; i < 9600; i++) {
-    try {
-      await checkPort(i);
-      return i;
-    } catch (err) {
-      const error = err as any;
-      if (!["EADDRNOTAVAIL", "EINVAL"].includes(error.code)) {
-        throw error;
-      }
-    }
-  }
 }
