@@ -48,4 +48,4 @@ export {
   getActionMetadata,
   MicroPattern,
 } from "./action";
-export { postbuild } from "./postbuild";
+export { HALSP_CLI_PLUGIN_POSTBUILD } from "./postbuild";

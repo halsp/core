@@ -1,4 +1,4 @@
-import { postbuild } from "../src";
+import { HALSP_CLI_PLUGIN_POSTBUILD } from "../src";
 import * as fs from "fs";
 import { Request, Startup } from "@halsp/core";
 import { CONFIG_FILE_NAME, HALSP_ROUTER_DIR } from "../src/constant";
@@ -17,7 +17,7 @@ describe("post build", () => {
       }
 
       delete process.env[HALSP_ROUTER_DIR];
-      await postbuild({
+      await HALSP_CLI_PLUGIN_POSTBUILD({
         cacheDir,
       });
 
@@ -41,7 +41,7 @@ describe("post build", () => {
       }
 
       process.env[HALSP_ROUTER_DIR] = "actions";
-      await postbuild({
+      await HALSP_CLI_PLUGIN_POSTBUILD({
         cacheDir: "",
       });
 
@@ -68,7 +68,7 @@ describe("post build", () => {
       }
 
       delete process.env[HALSP_ROUTER_DIR];
-      await postbuild({
+      await HALSP_CLI_PLUGIN_POSTBUILD({
         cacheDir: "",
       });
 

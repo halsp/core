@@ -1,7 +1,7 @@
-import { cliConfigHook } from "../src";
+import { HALSP_CLI_PLUGIN_CONFIG_HOOK } from "../src";
 
 test("cli config hook", async () => {
-  const config = cliConfigHook({});
+  const config = HALSP_CLI_PLUGIN_CONFIG_HOOK({});
   expect(config).toEqual({
     build: {
       assets: [
@@ -16,7 +16,7 @@ test("cli config hook", async () => {
 });
 
 test("cli config hook with custom assets", async () => {
-  const config = cliConfigHook({
+  const config = HALSP_CLI_PLUGIN_CONFIG_HOOK({
     build: {
       assets: ["views/*"],
     },

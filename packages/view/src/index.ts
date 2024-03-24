@@ -31,4 +31,4 @@ export {
   RendererInterface,
   ViewOptions,
 } from "./view-options";
-export { cliConfigHook } from "./cli-config";
+export { HALSP_CLI_PLUGIN_CONFIG_HOOK } from "./cli-config";

@@ -1,4 +1,4 @@
-export const cliConfigHook = (config: any, { command }) => {
+export const HALSP_CLI_PLUGIN_CONFIG_HOOK = (config: any, { command }) => {
   if (!config.build) {
     config.build = {};
   }

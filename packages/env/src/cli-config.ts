@@ -1,6 +1,6 @@
 import { getCliAssets, isCliAssetExist } from "@halsp/core";
 
-export const cliConfigHook = (config: any, { command }) => {
+export const HALSP_CLI_PLUGIN_CONFIG_HOOK = (config: any, { command }) => {
   const assets = getCliAssets(config);
   if (!isCliAssetExist(assets, (ass) => ass == ".env")) {
     assets.push(".env");

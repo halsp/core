@@ -9,7 +9,7 @@ import {
 } from "./constant";
 import { RouterDistOptions } from "./router-options";
 
-export const postbuild = async ({ cacheDir }) => {
+export const HALSP_CLI_PLUGIN_POSTBUILD = async ({ cacheDir }) => {
   const routerDirPath = getDefaultDir(cacheDir);
   const routerDir = path.join(cacheDir, routerDirPath);
 

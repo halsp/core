@@ -1,7 +1,7 @@
-import { cliConfigHook } from "../src";
+import { HALSP_CLI_PLUGIN_CONFIG_HOOK } from "../src";
 
 test("cli config hook with start command", async () => {
-  const config = cliConfigHook({}, { command: "start" });
+  const config = HALSP_CLI_PLUGIN_CONFIG_HOOK({}, { command: "start" });
   expect(config).toEqual({
     build: {
       assets: [".env", ".env.*"],
@@ -10,7 +10,7 @@ test("cli config hook with start command", async () => {
 });
 
 test("cli config hook with build command", async () => {
-  const config = cliConfigHook({}, { command: "build" });
+  const config = HALSP_CLI_PLUGIN_CONFIG_HOOK({}, { command: "build" });
   expect(config).toEqual({
     build: {
       assets: [
@@ -25,7 +25,7 @@ test("cli config hook with build command", async () => {
 });
 
 test("cli config hook with custom assets", async () => {
-  const config = cliConfigHook(
+  const config = HALSP_CLI_PLUGIN_CONFIG_HOOK(
     {
       build: {
         assets: [
@@ -50,7 +50,7 @@ test("cli config hook with custom assets", async () => {
 });
 
 test("cli config hook with custom array assets", async () => {
-  const config = cliConfigHook(
+  const config = HALSP_CLI_PLUGIN_CONFIG_HOOK(
     {
       build: {
         assets: [

@@ -1,7 +1,7 @@
-import { cliConfigHook } from "../src";
+import { HALSP_CLI_PLUGIN_CONFIG_HOOK } from "../src";
 
 test("cli config hook with start command", async () => {
-  expect(cliConfigHook({}, { command: "start" })).toEqual({
+  expect(HALSP_CLI_PLUGIN_CONFIG_HOOK({}, { command: "start" })).toEqual({
     build: {
       copyPackage: false,
       removeDevDeps: false,
@@ -10,7 +10,9 @@ test("cli config hook with start command", async () => {
 });
 
 test("cli config hook with build command", async () => {
-  expect(cliConfigHook({ build: {} }, { command: "build" })).toEqual({
+  expect(
+    HALSP_CLI_PLUGIN_CONFIG_HOOK({ build: {} }, { command: "build" }),
+  ).toEqual({
     build: {
       copyPackage: true,
       removeDevDeps: true,
