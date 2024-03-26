@@ -15,6 +15,9 @@ test("@koa/cors", async function () {
     .koa(
       cors({
         allowMethods: "GET,POST",
+        origin(ctx) {
+          return ctx.get("Origin") || "*";
+        },
       }),
     )
     .use(async (ctx) => {

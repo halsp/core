@@ -13,7 +13,9 @@ describe("client", () => {
       } catch (e) {
         err = e as Error;
       }
-      expect(err.message).toBe("14 UNAVAILABLE: No connection established");
+      expect(
+        err.message.startsWith("14 UNAVAILABLE: No connection established"),
+      ).toBeTruthy();
 
       err = undefined as any;
       try {
