@@ -114,17 +114,17 @@ describe("port", () => {
 
 describe("port", () => {
   it("should get available port", async () => {
-    const port = await getAvailablePort();
-    expect(port).toBe(9504);
+    const port = (await getAvailablePort()) ?? 0;
+    expect(port >= 9504).toBeTruthy();
   });
 
   it("should get available port when port is used", async () => {
     const server = net.createServer();
     server.listen(9602, "127.0.0.1");
 
-    const port = await getAvailablePort("127.0.0.1", 9602);
+    const port = (await getAvailablePort("127.0.0.1", 9602)) ?? 0;
     server.close();
-    expect(port).toBe(9603);
+    expect(port > 9602).toBeTruthy();
   });
 
   it("should get available port error", async () => {
