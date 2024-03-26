@@ -23,6 +23,7 @@ export {
   closeServer,
   logAddress,
   getHalspPort,
+  getAvailablePort,
 } from "./utils";
 
 export { Context, Request, Response } from "./context";

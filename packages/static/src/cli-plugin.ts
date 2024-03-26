@@ -1,6 +1,6 @@
-import { Startup } from "@halsp/core";
+import { Startup, getAvailablePort } from "@halsp/core";
 import type { Command } from "commander";
-import { getAvailablePort } from "@halsp/native";
+import type {} from "@halsp/native";
 import path from "path";
 
 export const HALSP_CLI_PLUGIN_ATTACH = {
