@@ -91,7 +91,7 @@ describe("startup", () => {
 describe("options", () => {
   it("should not connect with default options", async () => {
     const startup = new Startup().useMicroRedis();
-    expect(startup.listen()).resolves.toThrow();
+    expect(startup.listen()).rejects.toThrow();
     await new Promise((resolve) => setTimeout(resolve, 2000));
   }, 10000);
 });

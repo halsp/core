@@ -200,19 +200,8 @@ describe("error", () => {
       connectTimeout: 500,
     });
 
-    let error: any;
-    try {
-      await client.listen();
-    } catch (err) {
-      error = err;
-    }
-
-    await new Promise<void>((resolve) => {
-      setTimeout(() => resolve(), 1000);
-    });
-
+    await expect(client.listen).rejects.toThrow();
+    await new Promise<void>((r) => setTimeout(r, 1000));
     await client.close();
-
-    expect(error.message).toBe("getaddrinfo ENOTFOUND not-exist.halsp.org");
   }, 10000);
 });

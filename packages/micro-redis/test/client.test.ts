@@ -245,7 +245,7 @@ describe("redis client", () => {
 describe("options", () => {
   it("should not connect with default options", async () => {
     const client = new MicroRedisClient();
-    expect(client["connect"]()).resolves.toThrow();
+    expect(client["connect"]()).rejects.toThrow();
     await new Promise((resolve) => setTimeout(resolve, 2000));
   }, 10000);
 });

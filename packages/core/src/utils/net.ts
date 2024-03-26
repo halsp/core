@@ -49,22 +49,19 @@ export async function getAvailablePort(
   max?: number,
 ) {
   const checkPort = (port: number) => {
-    return new Promise<void>((resolve, reject) => {
+    return new Promise<boolean>((resolve) => {
       const server = net.createServer();
       server.unref();
-      server.on("error", reject);
+      server.on("error", () => resolve(false));
 
       server.listen(port, host, () => {
-        server.close(() => {
-          resolve();
-        });
+        server.close(() => resolve(true));
       });
     });
   };
   for (let i = port; i <= (max ?? port + 100); i++) {
-    try {
-      await checkPort(i);
+    if (await checkPort(i)) {
       return i;
-    } catch {}
+    }
   }
 }
