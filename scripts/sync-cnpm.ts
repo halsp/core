@@ -3,7 +3,7 @@ import { getPackages } from "./get-packages";
 const dynamicImport = new Function(
   "specifier",
   `return import(specifier);
-  `
+  `,
 ) as <T = any>(specifier: string) => Promise<T>;
 
 async function dynamicImportDefault<T = any>(specifier: string) {
@@ -14,7 +14,7 @@ async function dynamicImportDefault<T = any>(specifier: string) {
 type Fetch = typeof import("node-fetch").default;
 
 async function sync(fetch: Fetch, name: string) {
-  const url = `https://registry-direct.npmmirror.com/@halsp/${name}/sync?sync_upstream=true`;
+  const url = `https://registry-direct.npmmirror.com/-/package/@halsp/${name}/syncs`;
   const res = await fetch(url, {
     method: "PUT",
   });
