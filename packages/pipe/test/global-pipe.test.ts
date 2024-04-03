@@ -2,8 +2,7 @@ import { Middleware, Request, Startup } from "@halsp/core";
 import { Inject } from "@halsp/inject";
 import "@halsp/http";
 import "@halsp/testing";
-import { Header, PipeTransform } from "../src";
-import { GlobalPipeType } from "../src/global-pipe-type";
+import { Header, PipeTransform, GlobalPipeType } from "../src";
 
 test("global pipe property", async () => {
   class TestGlobalPipe implements PipeTransform<string | number, number> {

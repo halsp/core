@@ -21,14 +21,12 @@ export async function loadPackages(
       .map((f: string) => path.join(proptosDir, f));
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const grpcLoaderPkg = require("@grpc/proto-loader");
+  const grpcLoaderPkg = _require("@grpc/proto-loader");
   const definition = await grpcLoaderPkg.load(
     protoFiles,
     options.loaderOptions,
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const grpcPkg = require("@grpc/grpc-js");
+  const grpcPkg = _require("@grpc/grpc-js");
   return grpcPkg.loadPackageDefinition(definition);
 }

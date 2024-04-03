@@ -1,5 +1,5 @@
 import { createInject, Inject } from "@halsp/inject";
-import * as ws from "ws";
+import ws from "ws";
 
 export function WebSocket(
   target: any,

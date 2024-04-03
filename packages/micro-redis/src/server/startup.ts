@@ -2,7 +2,7 @@ import { MicroRedisOptions } from "../options";
 import { Context, getHalspPort, Startup } from "@halsp/core";
 import * as redis from "redis";
 import { parseJsonBuffer } from "@halsp/micro";
-import { handleMessage } from "@halsp/micro/dist/server";
+import { handleMessage } from "@halsp/micro/server";
 
 const usedMap = new WeakMap<Startup, boolean>();
 Startup.prototype.useMicroRedis = function (options?: MicroRedisOptions) {

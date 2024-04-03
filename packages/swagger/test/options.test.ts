@@ -2,7 +2,7 @@ import { HttpMethods } from "@halsp/http";
 import { Request, Startup } from "@halsp/core";
 import "@halsp/testing";
 import "../src";
-import { HALSP_ROUTER_DIR } from "@halsp/router/dist/constant";
+import { HALSP_ROUTER_DIR } from "@halsp/router/constant";
 import { OpenApiBuilder } from "openapi3-ts-remove-yaml";
 import { SwaggerMiddlware } from "../src/swagger.middleware";
 import * as fs from "fs";

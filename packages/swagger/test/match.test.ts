@@ -1,5 +1,5 @@
 import { Request, Startup } from "@halsp/core";
-import { HALSP_ROUTER_DIR } from "@halsp/router/dist/constant";
+import { HALSP_ROUTER_DIR } from "@halsp/router/constant";
 import "@halsp/http";
 import "@halsp/testing";
 import "../src";

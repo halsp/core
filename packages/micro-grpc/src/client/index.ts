@@ -1,5 +1,5 @@
-import "@halsp/micro/dist/client";
-import { useMicroClient, InjectMicroClient } from "@halsp/micro/dist/client";
+import "@halsp/micro/client";
+import { useMicroClient, InjectMicroClient } from "@halsp/micro/client";
 import { MicroGrpcClientOptions } from "../options";
 import { MicroGrpcClient } from "./client";
 

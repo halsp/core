@@ -1,9 +1,5 @@
-import { addPipeRecord } from "@halsp/pipe/dist/pipe-req-record";
+import { Header } from "@halsp/pipe";
 import "reflect-metadata";
-
-function TestPipeDec(target: any, propertyKey: symbol | string) {
-  addPipeRecord("header", [], target, propertyKey, 0);
-}
 
 export function func() {
   return 0;
@@ -12,6 +8,6 @@ export function func() {
 export const num = 0;
 
 export class TestClass {
-  @TestPipeDec
+  @Header()
   testProp: any;
 }

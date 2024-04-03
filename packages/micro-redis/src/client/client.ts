@@ -19,8 +19,7 @@ export class MicroRedisClient extends IMicroClient {
       opt.url = `redis://localhost:6379`;
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const redisPkg = require("redis");
+    const redisPkg = _require("redis");
     const pub = redisPkg.createClient(opt) as redis.RedisClientType;
     const sub = redisPkg.createClient(opt) as redis.RedisClientType;
 

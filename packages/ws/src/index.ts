@@ -2,7 +2,7 @@ import "@halsp/http";
 import "@halsp/inject";
 import { Manager } from "./manager";
 import { WsOptions } from "./options";
-import * as ws from "ws";
+import ws from "ws";
 import { WebSocket } from "./decorator";
 import { Startup } from "@halsp/core";
 

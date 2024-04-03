@@ -18,8 +18,7 @@ Startup.prototype.expectInject = function <T extends object>(
   service: ObjectConstructor<T> | string,
   fn: (service: T, ctx: Context) => void | Promise<void>,
 ) {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  require("@halsp/inject") as typeof import("@halsp/inject");
+  _require("@halsp/inject") as typeof import("@halsp/inject");
 
   return this.useInject().use(async (ctx, next) => {
     await next();

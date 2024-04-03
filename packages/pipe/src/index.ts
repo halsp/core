@@ -20,6 +20,7 @@ export {
 } from "./pipes";
 
 export { PipeReqRecord, getPipeRecords } from "./pipe-req-record";
+export { GlobalPipeType };
 
 declare module "@halsp/core" {
   interface Startup {

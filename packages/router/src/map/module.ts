@@ -49,8 +49,7 @@ export function getModuleConfig(
 ): RouterModule | undefined {
   const moduleFilePath = getModuleFilePath(dir, file);
   if (moduleFilePath) {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const moduleRequire = require(path.resolve(dir, moduleFilePath));
+    const moduleRequire = _require(path.resolve(dir, moduleFilePath));
     return moduleRequire.default ?? moduleRequire;
   }
 }

@@ -8,7 +8,7 @@ import {
   Startup,
 } from "@halsp/core";
 import { loadPackages } from "../load-packages";
-import { handleMessage } from "@halsp/micro/dist/server";
+import { handleMessage } from "@halsp/micro/server";
 import { ReadIterator, WriteIterator } from "../stream";
 
 const usedMap = new WeakMap<Startup, boolean>();

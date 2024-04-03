@@ -1,4 +1,5 @@
 dist
+dist-*
 node_modules
 coverage
 /LICENSE
@@ -7,5 +8,6 @@ coverage
 /jest.setup.js
 /.eslintignore
 /.eslintrc.js
+/.eslintrc.cjs
 /.gitignore
-/tsconfig.json
+/tsconfig.*

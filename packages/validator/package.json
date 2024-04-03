@@ -3,7 +3,7 @@
   "version": "2.3.0",
   "description": "Halsp 的参数校验插件",
   "engines": {
-    "node": ">=12.14.0"
+    "node": ">=16"
   },
   "homepage": "https://halsp.org",
   "repository": {
@@ -24,10 +24,22 @@
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
-  "main": "dist/index.js",
+  "type": "module",
+  "main": "./dist-cjs/index.cjs",
+  "module": "./dist-mjs/index.mjs",
+  "types": "./dist-mjs/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist-cjs/index.cjs",
+      "import": "./dist-mjs/index.mjs",
+      "types": "./dist-mjs/index.d.ts"
+    }
+  },
   "scripts": {
+    "build:cjs": "halsp build --tsconfigPath tsconfig.cjs.json --moduleType cjs --cleanDist",
+    "build:mjs": "halsp build --tsconfigPath tsconfig.mjs.json --moduleType mjs --cleanDist",
     "prebuild": "npm run lint",
-    "build": "sh ../../scripts/clean-dist.sh && tsc",
+    "build": "npm run build:mjs && npm run build:cjs",
     "lint": "eslint src test --ext .ts",
     "pretest": "npm run build",
     "test": "jest"

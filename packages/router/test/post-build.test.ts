@@ -21,7 +21,6 @@ describe("post build", () => {
         cacheDir,
       });
 
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
       const config = JSON.parse(
         fs.readFileSync(path.resolve(cacheDir, CONFIG_FILE_NAME), "utf-8"),
       );

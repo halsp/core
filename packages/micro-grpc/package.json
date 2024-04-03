@@ -3,7 +3,7 @@
   "version": "2.3.0",
   "description": "Halsp 微服务 gRPC 通信",
   "engines": {
-    "node": ">=12.14.0"
+    "node": ">=16"
   },
   "homepage": "https://halsp.org",
   "repository": {
@@ -27,10 +27,42 @@
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
-  "main": "dist/index.js",
+  "type": "module",
+  "main": "./dist-cjs/index.cjs",
+  "module": "./dist-mjs/index.mjs",
+  "types": "./dist-mjs/index.d.ts",
+  "exports": {
+    ".": {
+      "require": "./dist-cjs/index.cjs",
+      "import": "./dist-mjs/index.mjs",
+      "types": "./dist-mjs/index.d.ts"
+    },
+    "./client": {
+      "require": "./dist-cjs/client/index.cjs",
+      "import": "./dist-mjs/client/index.mjs",
+      "types": "./dist-mjs/client/index.d.ts"
+    },
+    "./server": {
+      "require": "./dist-cjs/server/index.cjs",
+      "import": "./dist-mjs/server/index.mjs",
+      "types": "./dist-mjs/server/index.d.ts"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./dist-mjs/index.d.ts",
+        "./dist-mjs/client/index.d.ts",
+        "./dist-mjs/server/index.d.ts",
+        "./dist-mjs/*"
+      ]
+    }
+  },
   "scripts": {
+    "build:cjs": "halsp build --tsconfigPath tsconfig.cjs.json --moduleType cjs --cleanDist",
+    "build:mjs": "halsp build --tsconfigPath tsconfig.mjs.json --moduleType mjs --cleanDist",
     "prebuild": "npm run lint",
-    "build": "sh ../../scripts/clean-dist.sh && tsc",
+    "build": "npm run build:mjs && npm run build:cjs",
     "lint": "eslint src test --ext .ts",
     "pretest": "npm run build",
     "test": "jest"

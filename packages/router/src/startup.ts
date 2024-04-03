@@ -1,6 +1,6 @@
 import { Context, Startup } from "@halsp/core";
 import MapParser from "./map/map-parser";
-import path = require("path");
+import path from "path";
 import {
   RouterDistOptions,
   RouterOptions,

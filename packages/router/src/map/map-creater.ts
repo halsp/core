@@ -66,12 +66,11 @@ export default class MapCreater {
         if (storageItem.endsWith(".d.ts")) {
           return null;
         }
-        if (!storageItem.endsWith(".js") && !storageItem.endsWith(".ts")) {
+        if (!storageItem.match(/\.(m|c)?(j|t)s$/)) {
           return null;
         }
 
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const module = require(filePath);
+        const module = _require(filePath);
         const modules = Object.keys(module)
           .map((actionName) => {
             const action: ObjectConstructor<Action> = module[actionName];

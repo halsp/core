@@ -1,6 +1,6 @@
 import { Context, Startup } from "@halsp/core";
 import "@halsp/pipe";
-import { GlobalPipeType } from "@halsp/pipe/dist/global-pipe-type";
+import { GlobalPipeType } from "@halsp/pipe";
 import { ValidatorOptions } from "class-validator";
 import { ValidatePipe } from "./validate.pipe";
 

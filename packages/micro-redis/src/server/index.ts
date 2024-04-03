@@ -1,7 +1,7 @@
 import "./startup";
 import * as redis from "redis";
 import { MicroRedisOptions } from "../options";
-import "@halsp/micro/dist/server";
+import "@halsp/micro/server";
 
 declare module "@halsp/core" {
   interface Startup {

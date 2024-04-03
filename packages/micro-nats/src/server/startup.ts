@@ -1,7 +1,7 @@
 import { MicroNatsOptions } from "../options";
 import { Context, getHalspPort, Startup } from "@halsp/core";
 import * as nats from "nats";
-import { handleMessage } from "@halsp/micro/dist/server";
+import { handleMessage } from "@halsp/micro/server";
 import { ServerPacket } from "@halsp/micro";
 
 const usedMap = new WeakMap<Startup, boolean>();
@@ -102,7 +102,6 @@ function register(
 }
 
 function createHeaders() {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const natsPkg = require("nats");
+  const natsPkg = _require("nats");
   return natsPkg.headers() as nats.MsgHdrs;
 }

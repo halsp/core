@@ -1,7 +1,7 @@
 import { Context } from "@halsp/core";
 import { BadRequestException } from "@halsp/http";
-import * as http from "http";
-import * as ws from "ws";
+import http from "http";
+import ws from "ws";
 import { WebSocket } from "./decorator";
 import { WsOptions } from "./options";
 

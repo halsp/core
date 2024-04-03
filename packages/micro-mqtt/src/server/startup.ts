@@ -3,7 +3,7 @@ import * as mqtt from "mqtt";
 import { getHalspPort, Startup } from "@halsp/core";
 import { matchTopic } from "./topic";
 import { parseJsonBuffer } from "@halsp/micro";
-import { handleMessage } from "@halsp/micro/dist/server";
+import { handleMessage } from "@halsp/micro/server";
 
 const usedMap = new WeakMap<Startup, boolean>();
 Startup.prototype.useMicroMqtt = function (options?: MicroMqttOptions) {

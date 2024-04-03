@@ -2,7 +2,7 @@ import { ServerPacket } from "@halsp/micro";
 import { MicroTcpOptions } from "../options";
 import * as net from "net";
 import { closeServer, getHalspPort, logAddress, Startup } from "@halsp/core";
-import { handleMessage } from "@halsp/micro/dist/server";
+import { handleMessage } from "@halsp/micro/server";
 import { parseTcpBuffer } from "../tcp-parser";
 
 const usedMap = new WeakMap<Startup, boolean>();

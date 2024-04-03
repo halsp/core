@@ -76,14 +76,12 @@ const nativeTestMap = new WeakMap<Startup, boolean>();
 Startup.prototype.nativeTest = function () {
   nativeTestMap.set(this, true);
 
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const supertest = require("supertest");
+  const supertest = _require("supertest");
   return supertest(this["nativeServer"]);
 };
 
 function initSupertest(ctx: Context) {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const supertest = require("supertest");
+  const supertest = _require("supertest");
   const { Test } = supertest;
 
   if (!Test.prototype._beforeCallback) {
