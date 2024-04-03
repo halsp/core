@@ -47,6 +47,16 @@
       "types": "./dist-mjs/server/index.d.ts"
     }
   },
+  "typesVersions": {
+    "*": {
+      "client": [
+        "./dist-mjs/client/index.d.ts"
+      ],
+      "server": [
+        "./dist-mjs/server/index.d.ts"
+      ]
+    }
+  },
   "scripts": {
     "build:cjs": "halsp build --tsconfigPath tsconfig.cjs.json --moduleType cjs --cleanDist",
     "build:mjs": "halsp build --tsconfigPath tsconfig.mjs.json --moduleType mjs --cleanDist",
