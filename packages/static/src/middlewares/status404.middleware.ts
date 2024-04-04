@@ -1,7 +1,7 @@
-import * as path from "path";
+import path from "path";
 import { DirectoryOptions, FileOptions } from "../options";
 import { BaseMiddleware } from "./base.middleware";
-import * as fs from "fs";
+import fs from "fs";
 import { MatchResult } from "./match.middleware";
 
 export class Status404Middleware extends BaseMiddleware {

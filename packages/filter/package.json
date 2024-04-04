@@ -48,7 +48,7 @@
     "@halsp/core": "^2.3.0",
     "@halsp/inject": "^2.3.0",
     "@halsp/router": "^2.3.0",
-    "reflect-metadata": "^0.2.1"
+    "reflect-metadata": "^0.2.2"
   },
   "files": [
     "/dist/**/*",

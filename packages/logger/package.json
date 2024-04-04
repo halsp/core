@@ -48,8 +48,8 @@
     "@halsp/core": "^2.3.0",
     "@halsp/inject": "^2.3.0",
     "class-transformer": "^0.5.1",
-    "reflect-metadata": "^0.2.1",
-    "winston": "^3.12.0"
+    "reflect-metadata": "^0.2.2",
+    "winston": "^3.13.0"
   },
   "files": [
     "/dist/**/*",

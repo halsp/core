@@ -1,4 +1,4 @@
-import * as path from "path";
+import path from "path";
 import { DirectoryOptions, FileOptions } from "../options";
 import {
   ComposeMiddleware,
@@ -6,7 +6,7 @@ import {
   Middleware,
   normalizePath,
 } from "@halsp/core";
-import * as fs from "fs";
+import fs from "fs";
 import { MATCH_RESULT_BAG, IS_METHOD_VALID_BAG } from "../constant";
 import { isIgnore } from "./utils";
 

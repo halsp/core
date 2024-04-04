@@ -2,7 +2,7 @@ import { DirectoryOptions, FileOptions } from "../options";
 import { BaseMiddleware } from "./base.middleware";
 import path from "path";
 import { IS_METHOD_VALID_BAG, MATCH_RESULT_BAG } from "../constant";
-import * as fs from "fs";
+import fs from "fs";
 import { MatchResult } from "./match.middleware";
 
 export class Status405Middleware extends BaseMiddleware {

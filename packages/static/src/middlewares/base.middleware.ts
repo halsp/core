@@ -1,8 +1,8 @@
 import { Middleware } from "@halsp/core";
 import { FILE_ERROR_STATUS_BAG, FILE_BAG, DIR_RESULT_BAG } from "../constant";
 import { FileOptions, DirectoryOptions } from "../options";
-import * as fs from "fs";
-import * as mime from "mime";
+import fs from "fs";
+import mime from "mime";
 import path from "path";
 import { MatchResult } from "./match.middleware";
 

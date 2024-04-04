@@ -47,7 +47,7 @@
   "dependencies": {
     "@halsp/core": "^2.3.0",
     "@halsp/inject": "^2.3.0",
-    "reflect-metadata": "^0.2.1",
+    "reflect-metadata": "^0.2.2",
     "typeorm": "^0.3.20"
   },
   "devDependencies": {

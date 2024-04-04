@@ -49,7 +49,7 @@
   "dependencies": {
     "@halsp/core": "^2.3.0",
     "@halsp/http": "^2.3.0",
-    "glob": "^10.3.10",
+    "glob": "^10.3.12",
     "mime": "^3.0.0"
   },
   "devDependencies": {
