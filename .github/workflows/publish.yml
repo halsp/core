@@ -23,7 +23,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-      - run: sh scripts/install-with-yarn.sh
+      - run: sh scripts/ci-install.sh
       - name: Run test
         env:
           NODE_OPTIONS: "--max-old-space-size=8192"
@@ -40,7 +40,7 @@ jobs:
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/
-      - run: sh scripts/install-with-yarn.sh
+      - run: sh scripts/ci-install.sh
       - run: npm run build
       - run: npx lerna publish from-package -y -m "chore(release):\ publish %s"
         env:
@@ -56,5 +56,5 @@ jobs:
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/
-      - run: sh scripts/install-with-yarn.sh
+      - run: sh scripts/ci-install.sh
       - run: npx ts-node scripts/sync-cnpm.ts
