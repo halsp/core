@@ -50,7 +50,8 @@
     "dotenv": "^16.4.5"
   },
   "files": [
-    "/dist/**/*",
+    "/dist-cjs/**/*",
+    "/dist-mjs/**/*",
     "/src/**/*",
     "/test/**/*",
     ".eslintignore",

@@ -46,7 +46,8 @@
   "author": "hal-wang",
   "license": "MIT",
   "files": [
-    "/dist/**/*",
+    "/dist-cjs/**/*",
+    "/dist-mjs/**/*",
     "/src/**/*",
     "/test/**/*",
     ".eslintignore",

@@ -61,7 +61,8 @@
     "supertest": "^6.3.4"
   },
   "files": [
-    "/dist/**/*",
+    "/dist-cjs/**/*",
+    "/dist-mjs/**/*",
     "/src/**/*",
     "/test/**/*",
     ".eslintignore",

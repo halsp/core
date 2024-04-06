@@ -75,9 +75,8 @@
     "mqtt": "^5.5.0"
   },
   "files": [
-    "/client/**/*",
-    "/dist/**/*",
-    "/server/**/*",
+    "/dist-cjs/**/*",
+    "/dist-mjs/**/*",
     "/src/**/*",
     "/test/**/*",
     ".eslintignore",

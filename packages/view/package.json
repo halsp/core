@@ -58,7 +58,8 @@
     "pug": "^3.0.2"
   },
   "files": [
-    "/dist/**/*",
+    "/dist-cjs/**/*",
+    "/dist-mjs/**/*",
     "/src/**/*",
     "/test/**/*",
     ".eslintignore",

@@ -49,7 +49,8 @@
     "@halsp/http": "^2.3.1"
   },
   "files": [
-    "/dist/**/*",
+    "/dist-cjs/**/*",
+    "/dist-mjs/**/*",
     "/src/**/*",
     "/test/**/*",
     ".eslintignore",

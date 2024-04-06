@@ -76,9 +76,8 @@
     "@halsp/micro": "^2.3.1"
   },
   "files": [
-    "/client/**/*",
-    "/dist/**/*",
-    "/server/**/*",
+    "/dist-cjs/**/*",
+    "/dist-mjs/**/*",
     "/src/**/*",
     "/test/**/*",
     ".eslintignore",

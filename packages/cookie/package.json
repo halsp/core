@@ -57,7 +57,8 @@
     "@types/set-cookie-parser": "^2.4.7"
   },
   "files": [
-    "/dist/**/*",
+    "/dist-cjs/**/*",
+    "/dist-mjs/**/*",
     "/src/**/*",
     "/test/**/*",
     ".eslintignore",

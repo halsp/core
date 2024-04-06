@@ -59,7 +59,8 @@
     "commander": "^12.0.0"
   },
   "files": [
-    "/dist/**/*",
+    "/dist-cjs/**/*",
+    "/dist-mjs/**/*",
     "/html/**/*",
     "/src/**/*",
     "/test/**/*",

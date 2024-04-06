@@ -61,7 +61,8 @@
   },
   "files": [
     "/cli-config/**/*",
-    "/dist/**/*",
+    "/dist-cjs/**/*",
+    "/dist-mjs/**/*",
     "/src/**/*",
     "/test/**/*",
     ".eslintignore",

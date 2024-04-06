@@ -61,7 +61,8 @@
     "@types/swagger-ui-dist": "^3.30.4"
   },
   "files": [
-    "/dist/**/*",
+    "/dist-cjs/**/*",
+    "/dist-mjs/**/*",
     "/src/**/*",
     "/test/**/*",
     ".eslintrc.js",

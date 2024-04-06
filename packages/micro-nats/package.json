@@ -75,9 +75,8 @@
     "nats": "^2.21.0"
   },
   "files": [
-    "/client/**/*",
-    "/dist/**/*",
-    "/server/**/*",
+    "/dist-cjs/**/*",
+    "/dist-mjs/**/*",
     "/src/**/*",
     "/test/**/*",
     ".eslintignore",
