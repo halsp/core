@@ -1,6 +1,6 @@
 {
   "name": "@halsp/cookie",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "Halsp Cookie 插件，用于解析、设置 Cookie",
   "engines": {
     "node": ">=16"
@@ -47,8 +47,8 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^2.3.0",
-    "@halsp/http": "^2.3.0",
+    "@halsp/core": "^2.3.1",
+    "@halsp/http": "^2.3.1",
     "cookie": "^0.6.0",
     "set-cookie-parser": "^2.6.0"
   },

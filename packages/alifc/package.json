@@ -1,6 +1,6 @@
 {
   "name": "@halsp/alifc",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "将 Halsp 托管到阿里云函数计算",
   "engines": {
     "node": ">=16"
@@ -48,11 +48,11 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^2.3.0",
-    "@halsp/http": "^2.3.0"
+    "@halsp/core": "^2.3.1",
+    "@halsp/http": "^2.3.1"
   },
   "devDependencies": {
-    "@halsp/body": "^2.3.0"
+    "@halsp/body": "^2.3.1"
   },
   "files": [
     "/dist/**/*",
