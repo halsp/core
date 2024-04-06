@@ -119,12 +119,13 @@ describe("port", () => {
   });
 
   it("should get available port when port is used", async () => {
+    const existPort = await getAvailablePort("127.0.0.1", 9602);
     const server = net.createServer();
-    server.listen(9602, "127.0.0.1");
+    server.listen(existPort, "127.0.0.1");
 
-    const port = (await getAvailablePort("127.0.0.1", 9602)) ?? 0;
+    const port = (await getAvailablePort("127.0.0.1", existPort)) ?? 0;
     server.close();
-    expect(port > 9602).toBeTruthy();
+    expect(port > existPort!).toBeTruthy();
   });
 
   it("should get available port error", async () => {
