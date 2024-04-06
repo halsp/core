@@ -24,11 +24,13 @@
     "publish:from-package": "lerna publish from-package -m \"chore(release): publish %s\"",
     "publish:from-package:alpha": "lerna publish from-package --dist-tag=alpha -m \"chore(release): publish %s\"",
     "lint": "lerna run lint",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "postinstall": "sh scripts/init-cli-deps.sh"
   },
   "devDependencies": {
     "@commitlint/cli": "^19.2.1",
     "@commitlint/config-conventional": "^19.1.0",
+    "@halsp/cli": "*",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.12.4",
     "@typescript-eslint/eslint-plugin": "^7.5.0",
