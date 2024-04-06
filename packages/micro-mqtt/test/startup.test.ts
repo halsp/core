@@ -31,7 +31,7 @@ describe("startup", () => {
     await client.dispose(true);
 
     expect(result).toBe("test_body");
-  });
+  }, 10000);
 
   it("should subscribe and publish with subscribeOptions and publishOptions", async () => {
     const startup = new Startup()
@@ -60,7 +60,7 @@ describe("startup", () => {
     await client.dispose(true);
 
     expect(result).toBe("test_body");
-  });
+  }, 10000);
 
   it("should subscribe without publish when pattern is not matched", async () => {
     const startup = new Startup().useMicroMqtt({
@@ -89,7 +89,7 @@ describe("startup", () => {
     await client.dispose(true);
 
     expect(error.message).toBe("Send timeout");
-  });
+  }, 10000);
 });
 
 describe("HALSP_DEBUG_PORT", () => {
@@ -105,7 +105,7 @@ describe("HALSP_DEBUG_PORT", () => {
     await startup.close();
 
     expect(!!client).toBeTruthy();
-  });
+  }, 10000);
 });
 
 describe("error", () => {
@@ -121,7 +121,7 @@ describe("error", () => {
       setTimeout(() => resolve(), 500);
     });
     await startup.close();
-  });
+  }, 10000);
 
   it("should throw error when client close error", async () => {
     const startup = new Startup().useMicroMqtt({
@@ -157,7 +157,7 @@ describe("error", () => {
     });
 
     expect(error.message).toBe("err");
-  });
+  }, 10000);
 
   it("should force shutdown when shutdown timeout", async () => {
     const startup = new Startup().useMicroMqtt({

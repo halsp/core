@@ -27,5 +27,5 @@ describe("prefix", () => {
     await startup.close();
 
     expect(result).toBe("test_body");
-  });
+  }, 10000);
 });

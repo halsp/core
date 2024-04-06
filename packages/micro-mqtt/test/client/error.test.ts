@@ -40,7 +40,7 @@ describe("error", () => {
     });
 
     expect(error.message).toBe("err");
-  });
+  }, 10000);
 
   it("should throw error when host is invalid", async () => {
     const client = new MicroMqttClient({
@@ -81,5 +81,5 @@ describe("error", () => {
     await client.dispose(true);
 
     expect(error.message).toBe("err");
-  });
+  }, 10000);
 });

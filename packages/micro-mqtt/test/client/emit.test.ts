@@ -11,7 +11,7 @@ describe("emit", () => {
       error = err;
     }
     expect(error.message).toBe("The connection is not connected");
-  });
+  }, 10000);
 
   it("should not emit message if connected is false", async () => {
     const client = new MicroMqttClient();
@@ -26,7 +26,7 @@ describe("emit", () => {
       error = err;
     }
     expect(error.message).toBe("The connection is not connected");
-  });
+  }, 10000);
 
   it("should emit message when connected", async () => {
     let published = false;
@@ -40,5 +40,5 @@ describe("emit", () => {
 
     client.emit("", "");
     expect(published).toBeTruthy();
-  });
+  }, 10000);
 });

@@ -51,7 +51,6 @@ export async function getAvailablePort(
   const checkPort = (port: number) => {
     return new Promise<boolean>((resolve) => {
       const server = net.createServer();
-      server.unref();
       server.on("error", () => resolve(false));
 
       server.listen(port, host, () => {

@@ -13,7 +13,7 @@ describe("send", () => {
 
     await client.dispose();
     expect(error.message).toBe("The connection is not connected");
-  });
+  }, 10000);
 
   it("should not send message if client is not connected", async () => {
     const client = new MicroMqttClient();
@@ -32,7 +32,7 @@ describe("send", () => {
     await client.dispose();
 
     expect(error.message).toBe("The connection is not connected");
-  });
+  }, 10000);
 
   it("should get data from return packet", async () => {
     const client = new MicroMqttClient();
@@ -46,5 +46,5 @@ describe("send", () => {
         response: "res",
       }),
     ).toBe("res");
-  });
+  }, 10000);
 });

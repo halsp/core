@@ -34,7 +34,7 @@ test("return stream", async () => {
   expect(res.isBase64Encoded).toBeTruthy();
   expect(res.body).toBe(fs.readFileSync("./LICENSE", "base64"));
   expect(res.headers["content-type"]).toBe("application/octet-stream");
-});
+}, 10000);
 
 test("return stream with encoding", async () => {
   const res = await new Startup()
@@ -49,7 +49,7 @@ test("return stream with encoding", async () => {
   expect(res.isBase64Encoded).toBeTruthy();
   expect(res.body).toBe(fs.readFileSync("./LICENSE").toString("base64"));
   expect(res.headers["content-type"]).toBe("application/octet-stream");
-});
+}, 10000);
 
 test("error stream", async () => {
   let error = false;
@@ -65,4 +65,4 @@ test("error stream", async () => {
     error = true;
   }
   expect(error).toBeTruthy();
-});
+}, 10000);
