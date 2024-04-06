@@ -128,10 +128,11 @@ describe("port", () => {
   });
 
   it("should get available port error", async () => {
+    const existPort = await getAvailablePort("127.0.0.1", 9604);
     const server = net.createServer();
-    server.listen(9604, "127.0.0.1");
+    server.listen(existPort, "127.0.0.1");
 
-    const port = await getAvailablePort("127.0.0.1", 9604, 9604);
+    const port = await getAvailablePort("127.0.0.1", existPort, existPort);
     server.close();
     expect(port).toBeUndefined();
   });
