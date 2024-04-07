@@ -42,12 +42,14 @@ const transormer: ts.TransformerFactory<ts.SourceFile> = (context) => {
   };
 
   const visit = (node: ts.Node) => {
-    if (
-      (tsc.isDecorator(node) && node.getText() == "@V") ||
-      node.getText().startsWith("@V.")
-    ) {
-      return tsc.visitEachChild(node, visitDecorator, context);
-    }
+    try {
+      if (
+        (tsc.isDecorator(node) && node.getText() == "@V") ||
+        node.getText().startsWith("@V.")
+      ) {
+        return tsc.visitEachChild(node, visitDecorator, context);
+      }
+    } catch {}
 
     return tsc.visitEachChild(node, visit, context);
   };

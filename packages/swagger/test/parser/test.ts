@@ -6,31 +6,31 @@ import { V } from "@halsp/validator";
 export class TestEmptyDto {}
 
 export class TestBodyDto {
-  @V.Description("sum")
+  @V().Description("sum")
   b1?: string;
-  @V.Required()
+  @V().Required()
   b2?: number;
-  @V.Required()
+  @V().Required()
   bigint?: bigint;
-  @V.Required()
+  @V().Required()
   bool?: boolean;
-  @V.Required()
+  @V().Required()
   arr?: string[];
-  @V.Required()
+  @V().Required()
   any?: any;
-  @V.Required()
+  @V().Required()
   date?: Date;
 }
 
 export class TestHeaderDto {
-  @V.Required().Description("sum")
+  @V().Required().Description("sum")
   h1?: string;
 
-  @V.Deprecated()
+  @V().Deprecated()
   h2?: number;
 }
 
-@V.Tags("test")
+@V().Tags("test")
 @Inject
 export class TestPost extends Action {
   constructor(@Header readonly header: TestHeaderDto) {
@@ -48,7 +48,7 @@ export class TestPost extends Action {
   @Body
   private readonly b1!: TestBodyDto;
   @Body("bbb")
-  @V.Required()
+  @V().Required()
   private readonly bbb!: string;
 
   async invoke(): Promise<void> {
@@ -56,8 +56,8 @@ export class TestPost extends Action {
   }
 }
 
-@V.Tags("test")
-@V.Summary("summary")
+@V().Tags("test")
+@V().Summary("summary")
 export class TestGet extends Action {
   @Header
   private readonly h!: TestHeaderDto;

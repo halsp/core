@@ -16,7 +16,7 @@ import {
 } from "openapi3-ts-remove-yaml";
 import { ArrayItemType, setSchemaValue } from "./schema-dict";
 
-export const lib = V;
+export const lib = V();
 export const jsonTypes = ["application/json"];
 
 export function typeToApiType(

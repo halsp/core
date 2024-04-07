@@ -3,7 +3,7 @@ import "@halsp/body";
 import chalk from "chalk";
 import "../src";
 import "@halsp/router";
-import { HALSP_ROUTER_DIR } from "@halsp/router/dist/constant";
+import { HALSP_ROUTER_DIR } from "@halsp/router/constant";
 import { Startup } from "@halsp/core";
 
 async function bootstrap() {

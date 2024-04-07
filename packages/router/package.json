@@ -40,6 +40,13 @@
       "types": "./dist-mjs/constant.d.ts"
     }
   },
+  "typesVersions": {
+    "*": {
+      "constant": [
+        "./dist-mjs/constant.d.ts"
+      ]
+    }
+  },
   "scripts": {
     "build:cjs": "halsp build --tsconfigPath tsconfig.cjs.json --moduleType cjs --cleanDist",
     "build:mjs": "halsp build --tsconfigPath tsconfig.mjs.json --moduleType mjs --cleanDist",

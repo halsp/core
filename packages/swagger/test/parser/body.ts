@@ -3,14 +3,14 @@ import { Action } from "@halsp/router";
 import { V } from "@halsp/validator";
 
 class TestDto {
-  @V.Description("test")
+  @V().Description("test")
   test?: string;
 }
 
-@V.Tags("test").Summary("summary")
+@V().Tags("test").Summary("summary")
 export class StringBody extends Action {
   @Body
-  @V.Description("abc")
+  @V().Description("abc")
   private readonly b!: string;
 
   async invoke(): Promise<void> {
@@ -18,10 +18,10 @@ export class StringBody extends Action {
   }
 }
 
-@V.Tags("test").Summary("summary")
+@V().Tags("test").Summary("summary")
 export class PartialBody extends Action {
   @Body("b")
-  @V.Description("abc")
+  @V().Description("abc")
   private readonly b!: string;
   @Body
   private readonly body!: TestDto;
@@ -31,13 +31,13 @@ export class PartialBody extends Action {
   }
 }
 
-@V.Tags("test").Summary("summary")
+@V().Tags("test").Summary("summary")
 export class StringBodyTwice extends Action {
   @Body
-  @V.Description("abc")
+  @V().Description("abc")
   private readonly b1!: string;
   @Body
-  @V.Description("def")
+  @V().Description("def")
   private readonly b2!: number;
 
   async invoke(): Promise<void> {
@@ -47,10 +47,10 @@ export class StringBodyTwice extends Action {
 
 class TestSchemaDto {}
 
-@V.Tags("test").Summary("summary")
+@V().Tags("test").Summary("summary")
 export class DtoSchema extends Action {
   @Body
-  @V.Description("desc")
+  @V().Description("desc")
   private readonly b1!: TestSchemaDto;
 
   async invoke(): Promise<void> {
@@ -58,13 +58,13 @@ export class DtoSchema extends Action {
   }
 }
 
-@V.Description("desc2")
+@V().Description("desc2")
 class TestSchemaOverrideDto {}
 
-@V.Tags("test").Summary("summary")
+@V().Tags("test").Summary("summary")
 export class DtoSchemaOverride extends Action {
   @Body
-  @V.Description("desc2")
+  @V().Description("desc2")
   private readonly b1!: TestSchemaOverrideDto;
 
   async invoke(): Promise<void> {
