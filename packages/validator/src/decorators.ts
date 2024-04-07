@@ -1,9 +1,9 @@
 import "reflect-metadata";
 import { Context, isUndefined } from "@halsp/core";
 import { ENABLE_METADATA, METADATA, OPTIONS_METADATA } from "./constant";
-import { createLib, ValidatorDecoratorReturnType } from "./validator-lib";
-import { createDecorator, RuleRecord } from "./create-decorator";
+import { RuleRecord, createDecorator } from "./create-decorator";
 import { isNumber, ValidatorOptions } from "class-validator";
+import { ValidatorDecoratorReturnType, createLib } from "./validator-lib";
 
 export function UseValidatorOptions(
   options: (args: {
@@ -45,10 +45,6 @@ export function getRules(
   return rules;
 }
 
-export const V = {} as ValidatorDecoratorReturnType &
+export const V = (() =>
+  createDecorator(createLib())) as ValidatorDecoratorReturnType &
   (() => ValidatorDecoratorReturnType);
-Object.defineProperty(exports, "V", {
-  get: () => {
-    return createDecorator(createLib());
-  },
-});

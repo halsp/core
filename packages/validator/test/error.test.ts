@@ -5,8 +5,7 @@ describe("validate failed", () => {
     process.env.HALSP_ENV = "http";
     const err = createBadRequestError("test");
 
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { BadRequestException } = require("@halsp/http");
+    const { BadRequestException } = _require("@halsp/http");
     expect(err instanceof BadRequestException).toBeTruthy();
     expect(err.message).toBe("test");
   });
@@ -15,8 +14,7 @@ describe("validate failed", () => {
     process.env.HALSP_ENV = "micro";
     const err = createBadRequestError("test");
 
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { MicroException } = require("@halsp/micro");
+    const { MicroException } = _require("@halsp/micro");
     expect(err instanceof MicroException).toBeTruthy();
     expect(err.message).toBe("test");
   });

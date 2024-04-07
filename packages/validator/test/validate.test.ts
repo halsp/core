@@ -112,7 +112,7 @@ describe("disabled", () => {
   it("should not validate when body type is plain object", async () => {
     class TestMiddleware extends Middleware {
       @Body
-      @V
+      @V()
       b!: Record<string, any>;
 
       async invoke(): Promise<void> {
@@ -142,7 +142,7 @@ describe("disabled", () => {
 
     class TestMiddleware extends Middleware {
       @Body
-      @V
+      @(V as any)()()
       b!: TestClass;
 
       async invoke(): Promise<void> {

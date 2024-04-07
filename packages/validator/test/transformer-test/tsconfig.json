@@ -1,19 +1,27 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "Bundler",
     "declaration": true,
-    "target": "es2015",
+    "resolveJsonModule": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
     "strict": true,
-    "outDir": "dist",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "noImplicitAny": false,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "preserveWatchOutput": true,
+    "sourceMap": true,
     "types": [
       "@types/node",
       "@halsp/cli",
       "@types/jest"
     ]
-  }
+  },
+  "include": [
+    "src/**/*"
+  ],
 }

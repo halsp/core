@@ -11,11 +11,11 @@ describe("parent validate", () => {
     class TestMiddleware extends Middleware {
       // usless
       @Body
-      @V.IsNumber()
+      @V().IsNumber()
       b: any;
 
       @Body("b1")
-      @V.IsString().IsBase64()
+      @V().IsString().IsBase64()
       b1!: string;
 
       async invoke(): Promise<void> {
@@ -44,7 +44,7 @@ describe("parent validate", () => {
   it("should validate parameter pipe", async () => {
     @Inject
     class TestMiddleware extends Middleware {
-      constructor(@V.IsNumber() @Body("arg") private arg: number) {
+      constructor(@V().IsNumber() @Body("arg") private arg: number) {
         super();
       }
 

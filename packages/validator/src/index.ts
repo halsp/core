@@ -20,6 +20,8 @@ export {
   getCustomValidators,
 } from "./validator-lib";
 
+export { HALSP_CLI_PLUGIN_TRANSFORMER } from "./cli-transformer";
+
 declare module "@halsp/core" {
   interface Startup {
     useValidator(): this;
