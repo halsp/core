@@ -38,7 +38,8 @@
       "require": "./dist-cjs/constant.cjs",
       "import": "./dist-mjs/constant.mjs",
       "types": "./dist-mjs/constant.d.ts"
-    }
+    },
+    "./package.json":"./package.json"
   },
   "typesVersions": {
     "*": {

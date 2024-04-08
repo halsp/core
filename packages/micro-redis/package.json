@@ -46,7 +46,8 @@
       "require": "./dist-cjs/server/index.cjs",
       "import": "./dist-mjs/server/index.mjs",
       "types": "./dist-mjs/server/index.d.ts"
-    }
+    },
+    "./package.json":"./package.json"
   },
   "typesVersions": {
     "*": {
