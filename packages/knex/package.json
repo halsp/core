@@ -1,6 +1,6 @@
 {
   "name": "@halsp/knex",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "description": "Halsp Knex 插件",
   "engines": {
     "node": ">=16"
@@ -45,8 +45,8 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^2.3.2",
-    "@halsp/inject": "^2.3.2",
+    "@halsp/core": "^2.3.3",
+    "@halsp/inject": "^2.3.3",
     "knex": "^3.1.0",
     "reflect-metadata": "^0.2.2"
   },
