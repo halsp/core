@@ -1,6 +1,6 @@
 {
   "name": "@halsp/jwt",
-  "version": "2.3.3",
+  "version": "2.3.4",
   "description": "基于 jsonwebtoken 和 @halsp/inject 的 JWT 中间件",
   "engines": {
     "node": ">=16"
@@ -34,7 +34,7 @@
       "import": "./dist-mjs/index.mjs",
       "types": "./dist-mjs/index.d.ts"
     },
-    "./package.json":"./package.json"
+    "./package.json": "./package.json"
   },
   "scripts": {
     "build:cjs": "halsp build --tsconfigPath tsconfig.cjs.json --moduleType cjs --cleanDist",
@@ -48,8 +48,8 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^2.3.3",
-    "@halsp/inject": "^2.3.3",
+    "@halsp/core": "^2.3.4",
+    "@halsp/inject": "^2.3.4",
     "@types/jsonwebtoken": "^9.0.6",
     "jsonwebtoken": "^9.0.2",
     "reflect-metadata": "^0.2.2"

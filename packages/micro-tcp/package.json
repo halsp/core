@@ -1,6 +1,6 @@
 {
   "name": "@halsp/micro-tcp",
-  "version": "2.3.3",
+  "version": "2.3.4",
   "description": "Halsp 微服务 TCP 通信",
   "engines": {
     "node": ">=16"
@@ -47,7 +47,7 @@
       "import": "./dist-mjs/server/index.mjs",
       "types": "./dist-mjs/server/index.d.ts"
     },
-    "./package.json":"./package.json"
+    "./package.json": "./package.json"
   },
   "typesVersions": {
     "*": {
@@ -71,8 +71,8 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^2.3.3",
-    "@halsp/micro": "^2.3.3"
+    "@halsp/core": "^2.3.4",
+    "@halsp/micro": "^2.3.4"
   },
   "files": [
     "/dist-cjs/**/*",

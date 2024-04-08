@@ -1,6 +1,6 @@
 {
   "name": "@halsp/router",
-  "version": "2.3.3",
+  "version": "2.3.4",
   "engines": {
     "node": ">=16"
   },
@@ -39,7 +39,7 @@
       "import": "./dist-mjs/constant.mjs",
       "types": "./dist-mjs/constant.d.ts"
     },
-    "./package.json":"./package.json"
+    "./package.json": "./package.json"
   },
   "typesVersions": {
     "*": {
@@ -60,12 +60,12 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^2.3.3",
+    "@halsp/core": "^2.3.4",
     "reflect-metadata": "^0.2.2"
   },
   "devDependencies": {
-    "@halsp/http": "^2.3.3",
-    "@halsp/micro": "^2.3.3"
+    "@halsp/http": "^2.3.4",
+    "@halsp/micro": "^2.3.4"
   },
   "files": [
     "/cli-config/**/*",

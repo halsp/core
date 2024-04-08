@@ -1,6 +1,6 @@
 {
   "name": "@halsp/mva",
-  "version": "2.3.3",
+  "version": "2.3.4",
   "description": "Halsp MVA 框架",
   "engines": {
     "node": ">=16"
@@ -35,7 +35,7 @@
       "import": "./dist-mjs/index.mjs",
       "types": "./dist-mjs/index.d.ts"
     },
-    "./package.json":"./package.json"
+    "./package.json": "./package.json"
   },
   "scripts": {
     "build:cjs": "halsp build --tsconfigPath tsconfig.cjs.json --moduleType cjs --cleanDist",
@@ -49,11 +49,11 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^2.3.3",
-    "@halsp/filter": "^2.3.3",
-    "@halsp/http": "^2.3.3",
-    "@halsp/router": "^2.3.3",
-    "@halsp/view": "^2.3.3"
+    "@halsp/core": "^2.3.4",
+    "@halsp/filter": "^2.3.4",
+    "@halsp/http": "^2.3.4",
+    "@halsp/router": "^2.3.4",
+    "@halsp/view": "^2.3.4"
   },
   "devDependencies": {
     "@types/shelljs": "^0.8.15",

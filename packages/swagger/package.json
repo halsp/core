@@ -1,6 +1,6 @@
 {
   "name": "@halsp/swagger",
-  "version": "2.3.3",
+  "version": "2.3.4",
   "description": "使用 swagger 自动生成你的 Halsp 文档",
   "engines": {
     "node": ">=16"
@@ -33,7 +33,7 @@
       "import": "./dist-mjs/index.mjs",
       "types": "./dist-mjs/index.d.ts"
     },
-    "./package.json":"./package.json"
+    "./package.json": "./package.json"
   },
   "scripts": {
     "build:cjs": "halsp build --tsconfigPath tsconfig.cjs.json --moduleType cjs --cleanDist",
@@ -47,13 +47,13 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^2.3.3",
-    "@halsp/http": "^2.3.3",
-    "@halsp/inject": "^2.3.3",
-    "@halsp/pipe": "^2.3.3",
-    "@halsp/router": "^2.3.3",
-    "@halsp/static": "^2.3.3",
-    "@halsp/validator": "^2.3.3",
+    "@halsp/core": "^2.3.4",
+    "@halsp/http": "^2.3.4",
+    "@halsp/inject": "^2.3.4",
+    "@halsp/pipe": "^2.3.4",
+    "@halsp/router": "^2.3.4",
+    "@halsp/static": "^2.3.4",
+    "@halsp/validator": "^2.3.4",
     "openapi3-ts-remove-yaml": "^3.0.2",
     "reflect-metadata": "^0.2.2",
     "swagger-ui-dist": "^5.13.0"
