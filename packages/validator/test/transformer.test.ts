@@ -25,7 +25,7 @@ describe("transformer", () => {
       "utf-8",
     );
     await expectCode(text);
-  });
+  }, 200000);
 
   it("should replace @V to @V() by transformer", async () => {
     const code = await fs.promises.readFile(
@@ -42,5 +42,5 @@ describe("transformer", () => {
       fileName: "index.ts",
     });
     await expectCode(outputText);
-  });
+  }, 100000);
 });

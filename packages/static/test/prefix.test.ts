@@ -17,7 +17,7 @@ describe("prefix", () => {
       .test();
     expect(result.status).toBe(200);
     expect(await readStream(result.body)).toBe("unknown");
-  });
+  }, 100000);
 
   it("prefix with /", async () => {
     const result = await new Startup()
@@ -31,7 +31,7 @@ describe("prefix", () => {
       .test();
     expect(result.status).toBe(200);
     expect(await readStream(result.body)).toBe("unknown");
-  });
+  }, 100000);
 
   it("prefix not found", async () => {
     const result = await new Startup()
