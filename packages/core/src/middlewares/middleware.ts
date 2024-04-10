@@ -1,8 +1,14 @@
 import { Context } from "../context";
 import { HalspException } from "../exception";
 import { isClass, isObject, ObjectConstructor } from "../utils";
-import { execHooks, HookType } from "./hook.middleware";
+import { HookType } from "../hook";
 import { LambdaMiddleware } from "./lambda.middleware";
+import {
+  execConstructorHooks,
+  execErrorHooks,
+  execHooks,
+  execUnhandledHooks,
+} from "../hook/hook.exec";
 
 function isMiddlewareConstructor(md: any): md is MiddlewareConstructor {
   return !!md.prototype;
@@ -31,7 +37,7 @@ export async function createMiddleware(
   if (middleware instanceof Middleware) {
     return middleware;
   } else if (isMiddlewareConstructor(middleware)) {
-    return await execHooks(ctx, middleware, HookType.Constructor);
+    return await execConstructorHooks(ctx, middleware);
   } else if (Array.isArray(middleware)) {
     return createMiddleware(ctx, await middleware[0](ctx));
   } else {
@@ -100,26 +106,26 @@ export abstract class Middleware {
   protected async next(): Promise<void> {
     let nextMd: Middleware | undefined = undefined;
     try {
-      if (false == (await execHooks(this.ctx, this, HookType.BeforeNext))) {
+      if (false == (await execHooks(this.ctx, HookType.BeforeNext, this))) {
         return;
       }
       if (this.#mds.length <= this.#index + 1) return;
       nextMd = await this.#createNextMiddleware();
       nextMd.init(this.ctx, this.#index + 1, this.#mds);
-      if (false == (await execHooks(this.ctx, nextMd, HookType.BeforeInvoke))) {
+      if (false == (await execHooks(this.ctx, HookType.BeforeInvoke, nextMd))) {
         return;
       }
       await nextMd.invoke();
-      await execHooks(this.ctx, nextMd, HookType.AfterInvoke);
+      await execHooks(this.ctx, HookType.AfterInvoke, nextMd);
     } catch (err) {
       const error = err as HalspException;
       if (isObject(error) && "breakthrough" in error && error.breakthrough) {
         throw error;
       } else {
         const md = nextMd ?? this;
-        const hookResult = await execHooks(this.ctx, md, HookType.Error, error);
+        const hookResult = await execErrorHooks(this.ctx, md, error);
         if (!hookResult) {
-          await execHooks(this.ctx, md, HookType.Unhandled, error);
+          await execUnhandledHooks(this.ctx, md, error);
         }
       }
     }
@@ -152,10 +158,10 @@ export async function invokeMiddlewares(
     await (md as any).init(ctx, 0, mds).invoke();
   } catch (err) {
     const error = err as HalspException;
-    const hookResult = await execHooks(ctx, md, HookType.Error, error);
+    const hookResult = await execErrorHooks(ctx, md, error);
 
     if (isRoot && !hookResult) {
-      await execHooks(ctx, md, HookType.Unhandled, error);
+      await execUnhandledHooks(ctx, md, error);
     }
   }
 }

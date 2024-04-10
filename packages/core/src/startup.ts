@@ -1,11 +1,8 @@
 import { isPromise } from "util/types";
-import { Context, Request, Response } from "./context";
+import { Context, Response } from "./context";
 import { BaseLogger, ILogger } from "./logger";
 import {
   Middleware,
-  MdHook,
-  HookMiddleware,
-  HookType,
   MiddlewareItem,
   invokeMiddlewares,
   MiddlewareConstructor,
@@ -13,6 +10,9 @@ import {
 } from "./middlewares";
 import { Register } from "./register";
 import { ObjectConstructor } from "./utils";
+import { HookManager } from "./hook/hook.manager";
+import { HookType, MdHook } from "./hook";
+import { execBeginingHooks, execContextHooks } from "./hook/hook.exec";
 
 export class Startup {
   constructor() {
@@ -71,85 +71,130 @@ export class Startup {
 
   hook<T extends Middleware = Middleware>(
     type: HookType.Constructor,
-    mh: (
-      ctx: Context,
-      middlewareConstructor: ObjectConstructor<T>,
-    ) => T | undefined,
+    mh: (ctx: Context, middlewareConstructor: ObjectConstructor<T>) => T | void,
+    isGlobal?: true,
   ): this;
   hook<T extends Middleware = Middleware>(
     type: HookType.Constructor,
     mh: (
       ctx: Context,
       middlewareConstructor: ObjectConstructor<T>,
-    ) => Promise<T | undefined>,
+    ) => Promise<T | void>,
+    isGlobal?: true,
   ): this;
 
   hook<T extends Error = Error>(
     type: HookType.Error,
     mh: (ctx: Context, middleware: Middleware, error: T) => boolean,
+    isGlobal?: true,
   ): this;
   hook<T extends Error = Error>(
     type: HookType.Error,
     mh: (ctx: Context, middleware: Middleware, error: T) => Promise<boolean>,
+    isGlobal?: true,
   ): this;
 
   hook<T extends Error = Error>(
     type: HookType.Unhandled,
     mh: (ctx: Context, middleware: Middleware, error: T) => void,
+    isGlobal?: true,
   ): this;
   hook<T extends Error = Error>(
     type: HookType.Unhandled,
     mh: (ctx: Context, middleware: Middleware, error: T) => Promise<void>,
+    isGlobal?: true,
   ): this;
 
   hook<T extends Middleware = Middleware>(
     type: HookType.BeforeInvoke | HookType.BeforeNext,
     mh: (ctx: Context, middleware: T) => boolean | void,
+    isGlobal?: true,
   ): this;
   hook<T extends Middleware = Middleware>(
     type: HookType.BeforeInvoke | HookType.BeforeNext,
     mh: (ctx: Context, middleware: T) => Promise<boolean | void>,
+    isGlobal?: true,
   ): this;
 
   hook<T extends Middleware = Middleware>(
     type: HookType.AfterInvoke,
     mh: (ctx: Context, middleware: T) => void,
+    isGlobal?: true,
   ): this;
   hook<T extends Middleware = Middleware>(
     type: HookType.AfterInvoke,
     mh: (ctx: Context, middleware: T) => Promise<void>,
+    isGlobal?: true,
+  ): this;
+
+  hook(type: HookType.Begining, mh: (ctx: Context) => boolean | void): this;
+  hook(
+    type: HookType.Begining,
+    mh: (ctx: Context) => Promise<boolean | void>,
+  ): this;
+
+  hook(type: HookType.Context, mh: (args: any[]) => Context | void): this;
+  hook(
+    type: HookType.Context,
+    mh: (...args: any[]) => Promise<Context | void>,
   ): this;
 
   hook<T extends Middleware = Middleware>(
     mh: (ctx: Context, middleware: T) => void,
+    isGlobal?: true,
   ): this;
   hook<T extends Middleware = Middleware>(
     mh: (ctx: Context, middleware: T) => Promise<void>,
+    isGlobal?: true,
   ): this;
 
-  hook(arg1: MdHook | HookType, arg2?: MdHook | HookType): this {
+  hook(
+    arg1: MdHook | HookType,
+    arg2?: MdHook | HookType | true,
+    arg3?: true,
+  ): this {
     let mh: MdHook;
     let type: HookType;
+    let isGlobal: true | undefined;
 
     if (typeof arg1 == "function") {
       mh = arg1;
       type = HookType.BeforeInvoke;
+      isGlobal = arg2 as true | undefined;
     } else {
       type = arg1;
       mh = arg2 as MdHook;
+      isGlobal = arg3 as true | undefined;
     }
-    this.#mds.push(() => new HookMiddleware(mh, type));
+
+    if (type == HookType.Context || type == HookType.Begining) {
+      isGlobal = true;
+    }
+
+    if (isGlobal) {
+      HookManager.addGlobalHook(this, { hook: mh, type: type });
+    } else {
+      this.use(async (ctx, next) => {
+        HookManager.addHook(ctx, { hook: mh, type: type });
+        await next();
+      });
+    }
+
     return this;
   }
 
-  protected async invoke(ctx?: Context | Request): Promise<Response> {
-    ctx = ctx instanceof Context ? ctx : new Context(ctx);
+  protected async invoke(...args: any[]): Promise<Response> {
+    const ctx = await execContextHooks(this, args);
 
     Object.defineProperty(ctx, "startup", {
       configurable: true,
       get: () => this,
     });
     if (!this.#mds.length) {
+      return ctx.res;
+    }
+
+    if (false == (await execBeginingHooks(ctx))) {
       return ctx.res;
     }
 

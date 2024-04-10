@@ -30,7 +30,8 @@ export {
 export { Context, Request, Response } from "./context";
 export { Startup } from "./startup";
 export { Register } from "./register";
-export { Middleware, ComposeMiddleware, HookType } from "./middlewares";
+export { Middleware, ComposeMiddleware } from "./middlewares";
+export { HookType } from "./hook";
 export {
   HalspException,
   ExceptionMessage,

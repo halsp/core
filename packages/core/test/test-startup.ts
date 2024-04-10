@@ -1,12 +1,12 @@
-import { Context, Response, Request, Startup } from "../src";
+import { Response, Startup } from "../src";
 
 declare module "../src" {
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
   interface Startup {
-    run(ctx?: Context | Request): Promise<Response>;
+    run(...args: any[]): Promise<Response>;
   }
 }
 
-Startup.prototype.run = async function (ctx?: Context | Request) {
-  return await this["invoke"](ctx);
+Startup.prototype.run = async function (...args: any[]) {
+  return await this["invoke"](...args);
 };
