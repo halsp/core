@@ -24,6 +24,7 @@ export {
   logAddress,
   getHalspPort,
   getAvailablePort,
+  safeImport,
 } from "./utils";
 
 export { Context, Request, Response } from "./context";
