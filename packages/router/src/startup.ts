@@ -1,4 +1,4 @@
-import { Context, Startup } from "@halsp/core";
+import { Context, HookType, Startup } from "@halsp/core";
 import MapParser from "./map/map-parser";
 import path from "path";
 import {
@@ -17,16 +17,38 @@ import * as fs from "fs";
 import { BlankMiddleware } from "./blank.middleware";
 
 export function initRouterMap(this: Startup, options?: RouterOptions) {
-  const mapOptions = readMap();
-  const opts: RouterOptionsMerged = {
-    map: mapOptions?.map,
-    dir: getDir(mapOptions?.dir),
-    prefix: options?.prefix,
-    decorators: options?.decorators,
-  };
+  return this.hook(HookType.Begining, async (ctx) => {
+    if (this.routerMap) return;
 
-  const routerMap = new MapParser(opts).getMap();
-  Object.defineProperty(this, "routerMap", {
+    const mapOptions = readMap();
+    const opts: RouterOptionsMerged = {
+      map: mapOptions?.map ?? [],
+      dir: getDir(mapOptions?.dir),
+      prefix: options?.prefix,
+      decorators: options?.decorators,
+    };
+    ctx.set(ROUTER_INITED_OPTIONS_BAG, opts);
+
+    await registerMap(ctx, opts);
+  }).add(async (ctx) => {
+    if (!ctx.actionMetadata) {
+      return BlankMiddleware;
+    } else {
+      return await ctx.actionMetadata.getAction();
+    }
+  });
+}
+
+async function registerMap(ctx: Context, opts: RouterOptionsMerged) {
+  const routerMap = await new MapParser(opts).getMap();
+  Object.defineProperty(ctx.startup, "routerMap", {
+    configurable: true,
+    enumerable: false,
+    get: () => {
+      return routerMap;
+    },
+  });
+  Object.defineProperty(ctx, "routerMap", {
     configurable: true,
     enumerable: false,
     get: () => {
@@ -35,11 +57,11 @@ export function initRouterMap(this: Startup, options?: RouterOptions) {
   });
 
   routerMap.forEach((item) => {
-    const url = (options?.prefix ?? "") + item.url;
+    const url = (opts?.prefix ?? "") + item.url;
     const methods = item.methods.join(",");
     const pattern = methods ? methods + "//" + url : url;
 
-    this.register(pattern, (ctx: Context) => {
+    ctx.startup.register(pattern, (ctx: Context) => {
       Object.defineProperty(ctx, "actionMetadata", {
         configurable: true,
         enumerable: false,
@@ -48,26 +70,6 @@ export function initRouterMap(this: Startup, options?: RouterOptions) {
         },
       });
     });
-  });
-
-  return this.use(async (ctx, next) => {
-    Object.defineProperty(ctx, "routerMap", {
-      configurable: true,
-      enumerable: false,
-      get: () => {
-        return routerMap;
-      },
-    });
-
-    ctx.set(ROUTER_INITED_OPTIONS_BAG, opts);
-
-    await next();
-  }).add((ctx) => {
-    if (!ctx.actionMetadata) {
-      return BlankMiddleware;
-    } else {
-      return ctx.actionMetadata.getAction();
-    }
   });
 }
 

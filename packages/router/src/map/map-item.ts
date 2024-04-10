@@ -1,4 +1,4 @@
-import { normalizePath, ObjectConstructor } from "@halsp/core";
+import { normalizePath, ObjectConstructor, safeImport } from "@halsp/core";
 import path from "path";
 import { Action } from "../action";
 import "reflect-metadata";
@@ -113,10 +113,10 @@ export default class MapItem {
 
   #realActionsDir: string;
   #decoratorsSetted = false;
-  public getAction(): ObjectConstructor<Action> {
+  public async getAction(): Promise<ObjectConstructor<Action>> {
     const filePath = path.resolve(this.#realActionsDir, this.path);
 
-    const module = _require(filePath);
+    const module = await safeImport(filePath);
     const action = module[this.actionName];
     if (this.#extendDecoradors.length && !this.#decoratorsSetted) {
       this.#decoratorsSetted = true;

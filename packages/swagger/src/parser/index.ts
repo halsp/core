@@ -38,16 +38,16 @@ export class Parser {
     private readonly builder: OpenApiBuilder,
   ) {}
 
-  public parse() {
-    this.parseTags();
-    this.parsePaths();
+  public async parse() {
+    await this.parseTags();
+    await this.parsePaths();
     return this.builder.getSpec();
   }
 
-  private parseTags() {
+  private async parseTags() {
     const tags = this.builder.getSpec().tags as TagObject[];
     for (const mapItem of this.routerMap) {
-      const action = mapItem.getAction();
+      const action = await mapItem.getAction();
       const rules = this.getActionRules(action);
       const isIgnore = existIgnore(rules);
       if (isIgnore) continue;
@@ -71,10 +71,10 @@ export class Parser {
     );
   }
 
-  private parsePaths() {
+  private async parsePaths() {
     const urls = this.getUrls();
     for (const url in urls) {
-      this.parseUrlItems(url, urls[url]);
+      await this.parseUrlItems(url, urls[url]);
     }
   }
 
@@ -87,7 +87,7 @@ export class Parser {
     }, {});
   }
 
-  private parseUrlItems(url: string, mapItems: MapItem[]) {
+  private async parseUrlItems(url: string, mapItems: MapItem[]) {
     url = url
       .replace(/(^|\/)\^(.*?)($|\/)/g, "$1{$2}$3")
       .replace(/(^|\/)\^(.*?)($|\/)/g, "$1{$2}$3");
@@ -96,7 +96,7 @@ export class Parser {
     this.builder.addPath(url, pathItem);
 
     for (const mapItem of mapItems) {
-      const action = mapItem.getAction();
+      const action = await mapItem.getAction();
       for (const method of mapItem.methods) {
         this.parseUrlMethodItem(pathItem, method.toLowerCase(), action);
       }

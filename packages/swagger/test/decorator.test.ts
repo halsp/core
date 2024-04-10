@@ -1,12 +1,12 @@
 import { MapItem } from "@halsp/router";
 import { OpenApiBuilder } from "openapi3-ts-remove-yaml";
 import { Parser } from "../src/parser";
+import { runin } from "@halsp/testing";
 
 test("decorators", async () => {
   const builder = new OpenApiBuilder();
-  process.chdir("test/parser");
-  try {
-    new Parser(
+  await runin("test/parser", async () => {
+    await new Parser(
       [
         new MapItem({
           path: "decorator.ts",
@@ -17,9 +17,7 @@ test("decorators", async () => {
       ],
       builder,
     ).parse();
-  } finally {
-    process.chdir("../..");
-  }
+  });
   const doc = builder.getSpec();
   expect("post" in doc["paths"]["/test"]).toBeTruthy();
 });

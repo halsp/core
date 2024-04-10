@@ -2,11 +2,11 @@ import { MapItem } from "@halsp/router";
 import { OpenApiBuilder } from "openapi3-ts-remove-yaml";
 import { Parser } from "../src/parser";
 
-function runParserTest(routerMap?: readonly MapItem[]) {
+async function runParserTest(routerMap?: readonly MapItem[]) {
   const builder = new OpenApiBuilder();
   process.chdir("test/parser");
   try {
-    new Parser(routerMap ?? [], builder).parse();
+    await new Parser(routerMap ?? [], builder).parse();
   } finally {
     process.chdir("../..");
   }
@@ -16,7 +16,7 @@ function runParserTest(routerMap?: readonly MapItem[]) {
 
 describe("parser", () => {
   it("should parse", async () => {
-    const doc = runParserTest();
+    const doc = await runParserTest();
     expect(doc["openapi"]).toBe("3.0.0");
   });
 
@@ -47,7 +47,7 @@ describe("parser", () => {
         methods: ["get"],
       }),
     ];
-    const doc = runParserTest(mapItems);
+    const doc = await runParserTest(mapItems);
     expect("post" in doc["paths"]["/test1"]).toBeTruthy();
   });
 
@@ -60,7 +60,7 @@ describe("parser", () => {
         methods: ["get"],
       }),
     ];
-    const doc = runParserTest(mapItems);
+    const doc = await runParserTest(mapItems);
     expect("get" in doc["paths"]["/def"]).toBeTruthy();
   });
 
@@ -73,13 +73,13 @@ describe("parser", () => {
         methods: ["get"],
       }),
     ];
-    const doc = runParserTest(mapItems);
+    const doc = await runParserTest(mapItems);
     expect(doc["paths"]["/err"]["get"]["tags"]).toBeUndefined();
   });
 });
 
 describe("body", () => {
-  function getDoc(actionName: string) {
+  async function getDoc(actionName: string) {
     const mapItems = [
       new MapItem({
         path: "body.ts",
@@ -88,7 +88,7 @@ describe("body", () => {
         methods: ["post"],
       }),
     ];
-    return runParserTest(mapItems) as any;
+    return (await runParserTest(mapItems)) as any;
   }
   function getRequestContent(doc: any) {
     return doc["paths"]["/test"]["post"]["requestBody"]["content"][
@@ -97,7 +97,7 @@ describe("body", () => {
   }
 
   it("should parse string body", async () => {
-    const doc = getDoc("StringBody");
+    const doc = await getDoc("StringBody");
     expect(getRequestContent(doc)).toEqual({
       schema: {
         type: "string",
@@ -107,7 +107,7 @@ describe("body", () => {
   });
 
   it("should compose partial body and model body", async () => {
-    const doc = getDoc("PartialBody");
+    const doc = await getDoc("PartialBody");
     expect(getRequestContent(doc)).toEqual({
       schema: {
         properties: {
@@ -126,7 +126,7 @@ describe("body", () => {
   });
 
   it("should parse string body twice", async () => {
-    const doc = getDoc("StringBodyTwice");
+    const doc = await getDoc("StringBodyTwice");
     expect(getRequestContent(doc)).toEqual({
       schema: {
         type: "string",
@@ -136,7 +136,7 @@ describe("body", () => {
   });
 
   it("should set schema from pipe", async () => {
-    const doc = getDoc("DtoSchema");
+    const doc = await getDoc("DtoSchema");
     expect(getRequestContent(doc)).toEqual({
       schema: {
         type: "object",
@@ -147,7 +147,7 @@ describe("body", () => {
   });
 
   it("should override schema when dto class has decorators", async () => {
-    const doc = getDoc("DtoSchemaOverride");
+    const doc = await getDoc("DtoSchemaOverride");
     expect(getRequestContent(doc)).toEqual({
       schema: {
         type: "object",
@@ -159,7 +159,7 @@ describe("body", () => {
 });
 
 describe("content type", () => {
-  it("should set default content types", () => {
+  it("should set default content types", async () => {
     const mapItems = [
       new MapItem({
         path: "content-type.ts",
@@ -168,14 +168,14 @@ describe("content type", () => {
         methods: ["post"],
       }),
     ];
-    const doc = runParserTest(mapItems);
+    const doc = await runParserTest(mapItems);
 
     expect(
       Object.keys(doc["paths"]["/test"]["post"]["requestBody"]["content"]),
     ).toEqual(["application/json"]);
   });
 
-  it("should set default content types when @ContentTypes value is empty array", () => {
+  it("should set default content types when @ContentTypes value is empty array", async () => {
     const mapItems = [
       new MapItem({
         path: "content-type.ts",
@@ -184,14 +184,14 @@ describe("content type", () => {
         methods: ["post"],
       }),
     ];
-    const doc = runParserTest(mapItems);
+    const doc = await runParserTest(mapItems);
 
     expect(
       Object.keys(doc["paths"]["/test"]["post"]["requestBody"]["content"]),
     ).toEqual(["application/json"]);
   });
 
-  it("should set custom content types", () => {
+  it("should set custom content types", async () => {
     const mapItems = [
       new MapItem({
         path: "content-type.ts",
@@ -200,14 +200,14 @@ describe("content type", () => {
         methods: ["post"],
       }),
     ];
-    const doc = runParserTest(mapItems);
+    const doc = await runParserTest(mapItems);
 
     expect(
       Object.keys(doc["paths"]["/test"]["post"]["requestBody"]["content"]),
     ).toEqual(["mt"]);
   });
 
-  it("should set multiple custom content types", () => {
+  it("should set multiple custom content types", async () => {
     const mapItems = [
       new MapItem({
         path: "content-type.ts",
@@ -216,7 +216,7 @@ describe("content type", () => {
         methods: ["post"],
       }),
     ];
-    const doc = runParserTest(mapItems);
+    const doc = await runParserTest(mapItems);
 
     expect(
       Object.keys(doc["paths"]["/test"]["post"]["requestBody"]["content"]),
@@ -234,7 +234,7 @@ describe("ignore", () => {
         methods: ["post"],
       }),
     ];
-    const doc = runParserTest(mapItems);
+    const doc = await runParserTest(mapItems);
 
     expect(doc["paths"]["/ignore"]).toEqual({});
   });
@@ -248,7 +248,7 @@ describe("ignore", () => {
         methods: ["post"],
       }),
     ];
-    const doc = runParserTest(mapItems);
+    const doc = await runParserTest(mapItems);
 
     expect(doc["paths"]["/ignore"]["post"]["parameters"]).toEqual([]);
   });
@@ -262,7 +262,7 @@ describe("ignore", () => {
         methods: ["post"],
       }),
     ];
-    const doc = runParserTest(mapItems);
+    const doc = await runParserTest(mapItems);
 
     expect(doc["paths"]["/ignore"]["post"]["parameters"]).toEqual([]);
   });
@@ -276,7 +276,7 @@ describe("ignore", () => {
         methods: ["post"],
       }),
     ];
-    const doc = runParserTest(mapItems);
+    const doc = await runParserTest(mapItems);
 
     expect(
       doc["paths"]["/ignore"]["post"]["requestBody"]["content"][
@@ -299,7 +299,7 @@ describe("ignore", () => {
         methods: ["post"],
       }),
     ];
-    const doc = runParserTest(mapItems);
+    const doc = await runParserTest(mapItems);
 
     expect(doc["paths"]["/ignore"]["post"]["parameters"]).toEqual([
       {
@@ -332,7 +332,7 @@ describe("response", () => {
   }
 
   it("should set response body", async () => {
-    const doc = getDoc("ResponseBody");
+    const doc = await getDoc("ResponseBody");
     expect(doc["components"]["schemas"]["ResultDto"]).not.toBeUndefined();
     expect(doc["components"]["schemas"]["TestDto"]).not.toBeUndefined();
     expect(getResponses(doc)).toEqual({
@@ -348,7 +348,7 @@ describe("response", () => {
   });
 
   it("should set response array body", async () => {
-    const doc = getDoc("ResponseArrayBody");
+    const doc = await getDoc("ResponseArrayBody");
     expect(doc["components"]["schemas"]["ResultDto"]).not.toBeUndefined();
     expect(doc["components"]["schemas"]["TestDto"]).not.toBeUndefined();
     expect(getResponses(doc)).toEqual({
@@ -369,7 +369,7 @@ describe("response", () => {
   });
 
   it("should set response body by schema", async () => {
-    const doc = getDoc("ResponseSchema");
+    const doc = await getDoc("ResponseSchema");
     expect(getResponses(doc)).toEqual({
       default: {
         content: {
@@ -390,7 +390,7 @@ describe("response", () => {
   });
 
   it("should set response body with status 200", async () => {
-    const doc = getDoc("StatusResponseBody");
+    const doc = await getDoc("StatusResponseBody");
     expect(getResponses(doc)).toEqual({
       "200": {
         content: {
@@ -404,7 +404,7 @@ describe("response", () => {
   });
 
   it("should set response body with status 200 and default", async () => {
-    const doc = getDoc("StatusAndDefaultResponseBody");
+    const doc = await getDoc("StatusAndDefaultResponseBody");
 
     const content = {
       content: {
@@ -421,7 +421,7 @@ describe("response", () => {
   });
 
   it("should set response description", async () => {
-    const doc = getDoc("ResponseDescription");
+    const doc = await getDoc("ResponseDescription");
     expect(getResponses(doc)).toEqual({
       default: {
         description: "desc",
@@ -430,7 +430,7 @@ describe("response", () => {
   });
 
   it("should set response description with status 200", async () => {
-    const doc = getDoc("ResponseStatusDescription");
+    const doc = await getDoc("ResponseStatusDescription");
     expect(getResponses(doc)).toEqual({
       "200": {
         description: "desc",
@@ -439,7 +439,7 @@ describe("response", () => {
   });
 
   it("should set response description with status 200", async () => {
-    const doc = getDoc("ResponseStatusAndDefaultDescription");
+    const doc = await getDoc("ResponseStatusAndDefaultDescription");
     expect(getResponses(doc)).toEqual({
       default: {
         description: "desc",
@@ -451,7 +451,7 @@ describe("response", () => {
   });
 
   it("should set response headers", async () => {
-    const doc = getDoc("ResponseHeaders");
+    const doc = await getDoc("ResponseHeaders");
     expect(getResponses(doc)).toEqual({
       default: {
         description: "",
@@ -468,7 +468,7 @@ describe("response", () => {
   });
 
   it("should set response headers with status", async () => {
-    const doc = getDoc("ResponseStatusHeaders");
+    const doc = await getDoc("ResponseStatusHeaders");
     expect(getResponses(doc)).toEqual({
       "200": {
         description: "",
@@ -482,7 +482,7 @@ describe("response", () => {
   });
 
   it("should set response headers with status and default", async () => {
-    const doc = getDoc("ResponseStatusAndDefaultHeaders");
+    const doc = await getDoc("ResponseStatusAndDefaultHeaders");
     expect(getResponses(doc)).toEqual({
       default: {
         description: "",
@@ -507,7 +507,7 @@ describe("response", () => {
   });
 
   it("should set response content types", async () => {
-    const doc = getDoc("ResponseContentTypes");
+    const doc = await getDoc("ResponseContentTypes");
     expect(getResponses(doc)).toEqual({
       default: {
         content: {
@@ -524,7 +524,7 @@ describe("response", () => {
   });
 
   it("should set response content types", async () => {
-    const doc = getDoc("ResponseStatusContentTypes");
+    const doc = await getDoc("ResponseStatusContentTypes");
     expect(getResponses(doc)).toEqual({
       default: {
         content: {
@@ -574,7 +574,7 @@ describe("array", () => {
   }
 
   it("should parse dto item", async () => {
-    const doc = getDoc("NotArray");
+    const doc = await getDoc("NotArray");
     expect(getRequestContent(doc)).toEqual({
       schema: {
         properties: {
@@ -589,7 +589,7 @@ describe("array", () => {
   });
 
   it("should parse array dto", async () => {
-    const doc = getDoc("ArrayModel");
+    const doc = await getDoc("ArrayModel");
     expect(getRequestContent(doc)).toEqual({
       schema: {
         type: "array",
@@ -601,7 +601,7 @@ describe("array", () => {
   });
 
   it("should parse two-dimensional array dto", async () => {
-    const doc = getDoc("TwoDimensionalArray");
+    const doc = await getDoc("TwoDimensionalArray");
     expect(getRequestContent(doc)).toEqual({
       schema: {
         type: "array",
@@ -616,7 +616,7 @@ describe("array", () => {
   });
 
   it("should parse string array body", async () => {
-    const doc = getDoc("StringArrayBody");
+    const doc = await getDoc("StringArrayBody");
     expect(getRequestContent(doc)).toEqual({
       schema: {
         type: "array",
@@ -628,17 +628,17 @@ describe("array", () => {
   });
 
   it("should be ignore when parse string array header", async () => {
-    const doc = getDoc("StringArrayParam");
+    const doc = await getDoc("StringArrayParam");
     expect(getRequestParameters(doc)).toEqual([]);
   });
 
   it("should be ignore when parse string array header", async () => {
-    const doc = getDoc("ModelArrayParam");
+    const doc = await getDoc("ModelArrayParam");
     expect(getRequestParameters(doc)).toEqual([]);
   });
 
   it("should parse model header with array string property", async () => {
-    const doc = getDoc("ParamStringArrayProperty");
+    const doc = await getDoc("ParamStringArrayProperty");
     expect(getRequestParameters(doc)).toEqual([
       {
         description: "desc",
@@ -665,7 +665,7 @@ describe("array", () => {
   });
 
   it("should parse model body with array model property", async () => {
-    const doc = getDoc("BodyModelArrayProperty");
+    const doc = await getDoc("BodyModelArrayProperty");
     expect(getRequestContent(doc)).toEqual({
       schema: {
         properties: {
@@ -685,7 +685,7 @@ describe("array", () => {
   });
 
   it("should parse array model body with array model property", async () => {
-    const doc = getDoc("ArrayBodyModelArrayProperty");
+    const doc = await getDoc("ArrayBodyModelArrayProperty");
     expect(getRequestContent(doc)).toEqual({
       schema: {
         type: "array",

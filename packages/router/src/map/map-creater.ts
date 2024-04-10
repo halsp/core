@@ -1,4 +1,4 @@
-import { isFunction, ObjectConstructor } from "@halsp/core";
+import { isFunction, ObjectConstructor, safeImport } from "@halsp/core";
 import { existsSync, lstatSync, readdirSync } from "fs";
 import path from "path";
 import { Action, getActionMetadata } from "../action";
@@ -11,7 +11,7 @@ import { getModuleConfig, isModule } from "./module";
 export default class MapCreater {
   constructor(private readonly dir: string) {}
 
-  public create(): MapItem[] {
+  public async create(): Promise<MapItem[]> {
     if (
       !this.dir ||
       !existsSync(this.dirPath) ||
@@ -20,19 +20,19 @@ export default class MapCreater {
       return [];
     }
 
-    return this.readFilesFromFolder("", []);
+    return await this.readFilesFromFolder("", []);
   }
 
   private get dirPath(): string {
     return path.resolve(process.cwd(), this.dir);
   }
 
-  private readFilesFromFolder(folderRePath: string, result: MapItem[]) {
+  private async readFilesFromFolder(folderRePath: string, result: MapItem[]) {
     const storageItems = readdirSync(path.join(this.dirPath, folderRePath)).map(
       (item) => path.join(folderRePath, item),
     );
 
-    const files = this.getFilesModules(storageItems);
+    const files = await this.getFilesModules(storageItems);
     files.forEach((file) => {
       file.modules.forEach((module) => {
         const mapItems = this.createMapItems(
@@ -51,47 +51,56 @@ export default class MapCreater {
       })
       .sort();
     for (let i = 0; i < folders.length; i++) {
-      this.readFilesFromFolder(folders[i], result);
+      await this.readFilesFromFolder(folders[i], result);
     }
 
     return result;
   }
 
-  private getFilesModules(files: string[]) {
-    return files
-      .map((storageItem) => {
-        const filePath = path.join(this.dirPath, storageItem);
-        const stat = lstatSync(filePath);
-        if (!stat.isFile()) return null;
-        if (storageItem.endsWith(".d.ts")) {
-          return null;
-        }
-        if (!storageItem.match(/\.(m|c)?(j|t)s$/)) {
-          return null;
-        }
+  private async getFilesModules(files: string[]) {
+    const result: {
+      path: string;
+      modules: {
+        action: ObjectConstructor<Action>;
+        actionName: string;
+      }[];
+    }[] = [];
 
-        const module = _require(filePath);
-        const modules = Object.keys(module)
-          .map((actionName) => {
-            const action: ObjectConstructor<Action> = module[actionName];
-            if (isFunction(action) && action.prototype instanceof Action) {
-              return {
-                action,
-                actionName,
-              };
-            } else {
-              return null;
-            }
-          })
-          .filter((item) => !!item)
-          .map((item) => item as Exclude<typeof item, null>);
-        return {
-          modules,
-          path: storageItem,
-        };
-      })
-      .filter((item) => !!item)
-      .map((item) => item as Exclude<typeof item, null>);
+    for (const storageItem of files) {
+      const filePath = path.join(this.dirPath, storageItem);
+      const stat = lstatSync(filePath);
+      if (!stat.isFile()) {
+        continue;
+      }
+      if (storageItem.endsWith(".d.ts")) {
+        continue;
+      }
+      if (!storageItem.match(/\.(m|c)?(j|t)s$/)) {
+        continue;
+      }
+
+      const module = (await safeImport(filePath)) ?? {};
+      const modules = Object.keys(module)
+        .map((actionName) => {
+          const action: ObjectConstructor<Action> = module[actionName];
+          if (isFunction(action) && action.prototype instanceof Action) {
+            return {
+              action: action as ObjectConstructor<Action>,
+              actionName,
+            };
+          } else {
+            return null;
+          }
+        })
+        .filter((item) => !!item)
+        .map((item) => item!);
+      result.push({
+        modules,
+        path: storageItem,
+      });
+    }
+
+    return result;
   }
 
   private createMapItems(

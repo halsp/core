@@ -6,7 +6,7 @@ import { getModuleConfig, isModule } from "./module";
 export default class MapParser {
   constructor(private readonly options: RouterOptionsMerged) {}
 
-  public getMap(): MapItem[] {
+  public async getMap(): Promise<MapItem[]> {
     let map: MapItem[];
     if (this.options.map?.length) {
       map = this.options.map.map((m) => {
@@ -23,7 +23,7 @@ export default class MapParser {
         return mapItem;
       });
     } else {
-      map = new MapCreater(this.options.dir).create();
+      map = await new MapCreater(this.options.dir).create();
     }
 
     map.forEach((item) => {

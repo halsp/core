@@ -13,7 +13,7 @@ export const HALSP_CLI_PLUGIN_POSTBUILD = async ({ cacheDir }) => {
   const routerDirPath = getDefaultDir(cacheDir);
   const routerDir = path.join(cacheDir, routerDirPath);
 
-  const map = new MapCreater(routerDir).create();
+  const map = await new MapCreater(routerDir).create();
   const routerConfig: RouterDistOptions = {
     dir: routerDirPath,
     map: map.map((m) => m.plainObject),

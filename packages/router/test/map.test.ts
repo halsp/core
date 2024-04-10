@@ -10,13 +10,14 @@ import { HALSP_ROUTER_DIR } from "../src/constant";
 
 describe("map", () => {
   it("should be empty when use MapCreater and router dir not exist", async () => {
-    const map = new MapCreater("not-exist").create();
+    const map = await new MapCreater("not-exist").create();
     expect(map).toEqual([]);
   });
 
   it("should be empty when use MapParser and router dir not exist", async () => {
-    const map = new MapParser({
+    const map = await new MapParser({
       dir: "test/not-exist",
+      map: [],
     }).getMap();
     expect(map).toEqual([]);
   });
