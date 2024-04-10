@@ -55,9 +55,7 @@
     "@halsp/core": "^2.3.4",
     "@halsp/http": "^2.3.4"
   },
-  "devDependencies": {
-    "@types/shelljs": "^0.8.15"
-  },
+  "devDependencies": {},
   "files": [
     "/dist-cjs/**/*",
     "/dist-mjs/**/*",

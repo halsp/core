@@ -56,9 +56,7 @@
   },
   "devDependencies": {
     "@types/qs": "^6.9.14",
-    "@types/shelljs": "^0.8.15",
     "@types/supertest": "^6.0.2",
-    "shelljs": "^0.8.5",
     "supertest": "^6.3.4"
   },
   "files": [
