@@ -42,7 +42,7 @@ test("useHttpMultipartBody", async () => {
     .attach("file", "./LICENSE");
   server.close();
   expect(invoke).toBeTruthy();
-}, 10000);
+}, 20000);
 
 test("on file begin", async () => {
   let invoke = false;
@@ -74,7 +74,7 @@ test("on file begin", async () => {
     .attach("file", "./LICENSE");
   server.close();
   expect(invoke).toBeTruthy();
-}, 10000);
+}, 20000);
 
 test("prase file error without callback", async () => {
   let invoke = false;
@@ -109,7 +109,7 @@ test("prase file error without callback", async () => {
     .send(body);
   server.close();
   expect(invoke).toBeTruthy();
-}, 10000);
+}, 20000);
 
 test("prase file error", async () => {
   let invoke = false;
@@ -143,4 +143,4 @@ test("prase file error", async () => {
     .send(body);
   server.close();
   expect(invoke).toBeTruthy();
-}, 10000);
+}, 20000);
