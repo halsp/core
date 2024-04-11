@@ -11,7 +11,7 @@ const initMap = new WeakMap<Startup, boolean>();
 Startup.prototype.run = async function (...args: any[]) {
   if (!initMap.has(this)) {
     initMap.set(this, true);
-    await this["initialize"]();
+    await this["initialize"](...args);
   }
   return await this["invoke"](...args);
 };
