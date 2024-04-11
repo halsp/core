@@ -1,6 +1,6 @@
 {
   "name": "@halsp/router",
-  "version": "2.3.4",
+  "version": "2.3.5",
   "engines": {
     "node": ">=16"
   },
@@ -60,12 +60,12 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^2.3.4",
+    "@halsp/core": "^2.3.5",
     "reflect-metadata": "^0.2.2"
   },
   "devDependencies": {
-    "@halsp/http": "^2.3.4",
-    "@halsp/micro": "^2.3.4"
+    "@halsp/http": "^2.3.5",
+    "@halsp/micro": "^2.3.5"
   },
   "files": [
     "/cli-config/**/*",

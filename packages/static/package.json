@@ -1,6 +1,6 @@
 {
   "name": "@halsp/static",
-  "version": "2.3.4",
+  "version": "2.3.5",
   "description": "Halsp 的静态资源插件",
   "engines": {
     "node": ">=16"
@@ -48,13 +48,13 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^2.3.4",
-    "@halsp/http": "^2.3.4",
+    "@halsp/core": "^2.3.5",
+    "@halsp/http": "^2.3.5",
     "glob": "^10.3.12",
     "mime": "^3.0.0"
   },
   "devDependencies": {
-    "@halsp/native": "^2.3.4",
+    "@halsp/native": "^2.3.5",
     "@types/glob": "^8.1.0",
     "@types/mime": "^3.0.4",
     "commander": "^12.0.0"

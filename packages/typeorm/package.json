@@ -1,6 +1,6 @@
 {
   "name": "@halsp/typeorm",
-  "version": "2.3.4",
+  "version": "2.3.5",
   "description": "Halsp TypeORM 插件",
   "engines": {
     "node": ">=16"
@@ -46,8 +46,8 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^2.3.4",
-    "@halsp/inject": "^2.3.4",
+    "@halsp/core": "^2.3.5",
+    "@halsp/inject": "^2.3.5",
     "reflect-metadata": "^0.2.2",
     "typeorm": "^0.3.20"
   },
