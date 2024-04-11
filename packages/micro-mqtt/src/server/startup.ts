@@ -32,6 +32,7 @@ function initStartup(this: Startup, options: MicroMqttOptions = {}) {
 
   this.extend("listen", async () => {
     await closeInner();
+    await this["initialize"]();
 
     const opt: MicroMqttOptions = { ...options };
     if (!("servers" in options) && !("port" in options)) {

@@ -138,7 +138,7 @@ describe("emit error", () => {
     const server = new grpc.Server();
     await new Promise<number>((resolve, reject) => {
       server.bindAsync(
-        "0.0.0.0:5031",
+        "0.0.0.0:5033",
         grpc.ServerCredentials.createInsecure(),
         (err, port) => {
           if (err) {
@@ -164,7 +164,7 @@ describe("emit error", () => {
 
     const client = new MicroGrpcClient({
       protoFiles: "./test/protos/test.proto",
-      port: 5031,
+      port: 5033,
     });
     client.logger = console as any;
     await client["connect"]();

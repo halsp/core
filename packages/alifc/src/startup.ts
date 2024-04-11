@@ -55,6 +55,7 @@ Startup.prototype.useAlifc = function () {
         get: () => aliRes,
       });
 
+      await this["initialize"]();
       const halspRes = await this["invoke"](ctx);
       aliRes.statusCode = halspRes.status;
       Object.keys(halspRes.headers)

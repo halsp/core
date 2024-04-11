@@ -8,5 +8,6 @@ declare module "../src" {
 }
 
 Startup.prototype.run = async function (...args: any[]) {
+  await this["initialize"](...args);
   return await this["invoke"](...args);
 };

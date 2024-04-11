@@ -12,7 +12,11 @@ import { Register } from "./register";
 import { ObjectConstructor } from "./utils";
 import { HookManager } from "./hook/hook.manager";
 import { HookType, MdHook } from "./hook";
-import { execBeginingHooks, execContextHooks } from "./hook/hook.exec";
+import {
+  execBeginingHooks,
+  execContextHooks,
+  execInitializationHooks,
+} from "./hook/hook.exec";
 
 export class Startup {
   constructor() {
@@ -139,6 +143,9 @@ export class Startup {
     mh: (...args: any[]) => Promise<Context | void>,
   ): this;
 
+  hook(type: HookType.Initialization, mh: (args: any[]) => void): this;
+  hook(type: HookType.Initialization, mh: (args: any[]) => Promise<void>): this;
+
   hook<T extends Middleware = Middleware>(
     mh: (ctx: Context, middleware: T) => void,
     isGlobal?: true,
@@ -167,7 +174,11 @@ export class Startup {
       isGlobal = arg3 as true | undefined;
     }
 
-    if (type == HookType.Context || type == HookType.Begining) {
+    if (
+      type == HookType.Context ||
+      type == HookType.Begining ||
+      type == HookType.Initialization
+    ) {
       isGlobal = true;
     }
 
@@ -200,6 +211,10 @@ export class Startup {
 
     await invokeMiddlewares(ctx, this.#mds, true);
     return ctx.res;
+  }
+
+  protected async initialize(...args: any[]) {
+    await execInitializationHooks(this, args);
   }
 
   logger: ILogger = new BaseLogger();

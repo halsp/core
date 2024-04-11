@@ -98,6 +98,7 @@ function initStartup(this: Startup, options?: NativeOptions) {
         () => resolve(),
       );
     });
+    await this["initialize"]();
     return server;
   });
 

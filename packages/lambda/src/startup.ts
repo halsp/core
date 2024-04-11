@@ -28,6 +28,7 @@ Startup.prototype.useLambda = function () {
         event.path || event.rowPath || event.requestPath || event.url || "",
       );
 
+    await this["initialize"]();
     await this["invoke"](ctx);
     return await getStruct(ctx);
   }).useHttp();

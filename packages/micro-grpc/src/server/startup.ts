@@ -27,6 +27,7 @@ function initStartup(this: Startup, options: MicroGrpcOptions) {
   let server: grpc.Server | undefined = undefined;
   this.extend("listen", async () => {
     await close.call(this, server);
+    await this["initialize"]();
     server = new grpc.Server();
 
     const opt: MicroGrpcOptions = { ...options };
@@ -62,7 +63,6 @@ function initStartup(this: Startup, options: MicroGrpcOptions) {
       );
     });
 
-    server.start();
     this.logger.info(`Server started, listening port: ${bindPort}`);
 
     return server;

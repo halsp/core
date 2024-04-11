@@ -21,6 +21,7 @@ export type ContextHook = (
 export type BeginingHook = (
   ctx: Context,
 ) => boolean | Promise<boolean | void> | void;
+export type InitializationHook = (args: any[]) => Promise<void> | void;
 
 export type MdHook<T extends Middleware | MiddlewareConstructor = any> =
   | MiddlewareResultHook<T>
@@ -28,11 +29,13 @@ export type MdHook<T extends Middleware | MiddlewareConstructor = any> =
   | ErrorMdHook<T>
   | UnhandledMdHook<T>
   | BeginingHook
-  | ContextHook;
+  | ContextHook
+  | InitializationHook;
 
 export enum HookType {
-  Begining,
+  Initialization,
   Context,
+  Begining,
   BeforeInvoke,
   AfterInvoke,
   BeforeNext,

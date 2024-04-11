@@ -28,6 +28,7 @@ function initStartup(this: Startup, options?: MicroTcpOptions) {
 
   this.extend("listen", async () => {
     await closeServer(server);
+    await this["initialize"]();
 
     if (options?.handle) {
       await new Promise<void>((resolve) => {

@@ -46,7 +46,7 @@ describe("service", () => {
 
     const testService = client.getService<TestService>(
       "test",
-      "TestService",
+      "TestServicE",
     ) as TestService;
     const result = await testService.testMethod({
       reqMessage: "abc",

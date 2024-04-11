@@ -21,6 +21,7 @@ function initStartup(this: Startup, options?: MicroRedisOptions) {
   let pub: redis.RedisClientType | undefined = undefined;
   this.extend("listen", async () => {
     await close.call(this, sub, pub);
+    await this["initialize"]();
 
     const opt: MicroRedisOptions = { ...options };
     if (!("url" in opt)) {

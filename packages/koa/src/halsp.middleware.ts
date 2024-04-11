@@ -15,6 +15,7 @@ export function koaHalsp(config: (startup: Startup) => void) {
     await koaNext();
     await koaResToHalspRes(koaCtx, halspCtx.res);
   });
+  let initialize = false;
 
   return async function (koaCtx: KoaContext, koaNext: Next) {
     const ctx = new Context();
@@ -36,6 +37,11 @@ export function koaHalsp(config: (startup: Startup) => void) {
     ctx.set(KOA_NEXT, koaNext);
 
     await koaResToHalspRes(koaCtx, ctx.res);
+
+    if (!initialize) {
+      initialize = true;
+      await startup["initialize"]();
+    }
     const res = await startup["invoke"](ctx);
     await halspResToKoaRes(res, koaCtx);
   };

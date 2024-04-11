@@ -21,6 +21,7 @@ function initStartup(this: Startup, options: MicroNatsOptions = {}) {
   let connection: nats.NatsConnection | undefined = undefined;
   this.extend("listen", async () => {
     await close.call(this, connection);
+    await this["initialize"]();
 
     const opt: MicroNatsOptions = { ...options };
     if (!("servers" in options) && !("port" in options)) {

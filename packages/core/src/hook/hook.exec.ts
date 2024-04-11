@@ -8,6 +8,7 @@ import {
   BeginingHook,
   BooleanResultHook,
   UnhandledMdHook,
+  InitializationHook,
 } from "./hook.item";
 import { HookManager } from "./hook.manager";
 
@@ -88,6 +89,14 @@ export async function execBeginingHooks(ctx: Context) {
     if (typeof hookResult == "boolean" && !hookResult) {
       return false;
     }
+  }
+}
+
+export async function execInitializationHooks(startup: Startup, args: any[]) {
+  const hooks = HookManager.getGlobalHooks(startup, HookType.Initialization);
+  for (const hookItem of hooks) {
+    const hook = hookItem.hook as InitializationHook;
+    await hook(args);
   }
 }
 
