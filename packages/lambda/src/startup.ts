@@ -11,6 +11,7 @@ declare module "@halsp/core" {
 }
 
 Startup.prototype.useLambda = function () {
+  let initialize = false;
   return this.extend("run", async (event: Dict, context: Dict) => {
     const ctx = new Context();
     defineCtxProperty(ctx, event, context);
@@ -28,7 +29,10 @@ Startup.prototype.useLambda = function () {
         event.path || event.rowPath || event.requestPath || event.url || "",
       );
 
-    await this["initialize"]();
+    if (!initialize) {
+      initialize = true;
+      await this["initialize"]();
+    }
     await this["invoke"](ctx);
     return await getStruct(ctx);
   }).useHttp();

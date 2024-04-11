@@ -14,9 +14,15 @@ declare module "@halsp/core" {
 }
 
 Startup.prototype.useAlifc = function () {
+  let initialize = false;
   return this.extend(
     "run",
     async (aliReq: AliReq, aliRes: AliRes, aliContext: any) => {
+      if (!initialize) {
+        initialize = true;
+        await this["initialize"]();
+      }
+
       const ctx = new Context();
       ctx.req
         .setPath(aliReq.path)
@@ -55,7 +61,6 @@ Startup.prototype.useAlifc = function () {
         get: () => aliRes,
       });
 
-      await this["initialize"]();
       const halspRes = await this["invoke"](ctx);
       aliRes.statusCode = halspRes.status;
       Object.keys(halspRes.headers)

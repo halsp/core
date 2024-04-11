@@ -88,6 +88,7 @@ function initStartup(this: Startup, options?: NativeOptions) {
 
   this.extend("listen", async () => {
     await closeServer(server);
+    await this["initialize"]();
 
     await new Promise<void>((resolve) => {
       server.listen(
@@ -98,7 +99,6 @@ function initStartup(this: Startup, options?: NativeOptions) {
         () => resolve(),
       );
     });
-    await this["initialize"]();
     return server;
   });
 

@@ -21,10 +21,14 @@ function getError(ctx: Context) {
 }
 
 const ctxMap = new WeakMap<Startup, Context | Request>();
+const initMap = new WeakMap<Startup, boolean>();
 Startup.prototype.test = async function (): Promise<Response> {
   process.env.NODE_ENV = "test";
 
-  await this["initialize"]();
+  if (!initMap.has(this)) {
+    initMap.set(this, true);
+    await this["initialize"]();
+  }
   const res = await this["invoke"](ctxMap.get(this) ?? new Context());
 
   const err = getError(res.ctx);

@@ -18,6 +18,11 @@ export function koaHalsp(config: (startup: Startup) => void) {
   let initialize = false;
 
   return async function (koaCtx: KoaContext, koaNext: Next) {
+    if (!initialize) {
+      initialize = true;
+      await startup["initialize"]();
+    }
+
     const ctx = new Context();
     ctx.req
       .setPath(koaCtx.path)
@@ -38,10 +43,6 @@ export function koaHalsp(config: (startup: Startup) => void) {
 
     await koaResToHalspRes(koaCtx, ctx.res);
 
-    if (!initialize) {
-      initialize = true;
-      await startup["initialize"]();
-    }
     const res = await startup["invoke"](ctx);
     await halspResToKoaRes(res, koaCtx);
   };
