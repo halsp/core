@@ -72,7 +72,7 @@ export class ValidatePipe<T extends object = any, R extends T = any>
           ? item
           : (item.constraints as Record<string, string>),
       );
-    this.throwMsg(msgs);
+    await this.throwMsg(msgs);
   }
 
   private async validateParent(
@@ -102,10 +102,10 @@ export class ValidatePipe<T extends object = any, R extends T = any>
     );
     msgs.push(...customMsgs);
 
-    this.throwMsg(msgs);
+    await this.throwMsg(msgs);
   }
 
-  private throwMsg(msgs: (Record<string, string> | string)[]) {
+  private async throwMsg(msgs: (Record<string, string> | string)[]) {
     const list: string[] = [];
     for (const msg of msgs) {
       if (typeof msg == "string") {
@@ -118,7 +118,7 @@ export class ValidatePipe<T extends object = any, R extends T = any>
     }
 
     if (list.length) {
-      throw createBadRequestError(list.length == 1 ? list[0] : list);
+      throw await createBadRequestError(list.length == 1 ? list[0] : list);
     }
   }
 

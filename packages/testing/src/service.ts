@@ -1,5 +1,6 @@
 import "@halsp/core";
 import { Context, ObjectConstructor, Startup } from "@halsp/core";
+import type {} from "@halsp/inject";
 
 declare module "@halsp/core" {
   interface Startup {
@@ -18,8 +19,6 @@ Startup.prototype.expectInject = function <T extends object>(
   service: ObjectConstructor<T> | string,
   fn: (service: T, ctx: Context) => void | Promise<void>,
 ) {
-  _require("@halsp/inject") as typeof import("@halsp/inject");
-
   return this.useInject().use(async (ctx, next) => {
     await next();
 

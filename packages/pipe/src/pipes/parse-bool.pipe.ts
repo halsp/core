@@ -16,7 +16,7 @@ export class ParseBoolPipe
   }
   readonly #options: ParseBoolPipeOptions;
 
-  transform({ value }) {
+  async transform({ value }) {
     if (typeof value == "boolean") {
       return value;
     } else if (!this.#options.ignoreNumber && (value == 1 || value == "1")) {
@@ -47,6 +47,6 @@ export class ParseBoolPipe
       return false;
     }
 
-    throw createBadRequestError("Parse bool failed");
+    throw await createBadRequestError("Parse bool failed");
   }
 }

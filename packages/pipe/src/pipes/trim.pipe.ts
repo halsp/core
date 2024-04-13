@@ -19,13 +19,15 @@ export class TrimPipe implements PipeTransform<string, string> {
   }
   readonly #options: TrimPipeOptions;
 
-  transform({ value }) {
+  async transform({ value }) {
     if (typeof value != "string" && !!this.#options.notString) {
       return this.#options.notString(value);
     }
 
     if (typeof value != "string") {
-      throw createBadRequestError("Validation failed (string is expected)");
+      throw await createBadRequestError(
+        "Validation failed (string is expected)",
+      );
     }
 
     if (this.#options.start && this.#options.end) {

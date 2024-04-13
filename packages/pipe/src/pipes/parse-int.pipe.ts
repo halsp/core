@@ -2,7 +2,7 @@ import { createBadRequestError } from "./error";
 import { PipeTransform } from "./pipe-transform";
 
 export class ParseIntPipe implements PipeTransform<string | number, number> {
-  transform({ value }) {
+  async transform({ value }) {
     if (typeof value == "string") {
       value = parseInt(value, 10);
     }
@@ -11,7 +11,7 @@ export class ParseIntPipe implements PipeTransform<string | number, number> {
       return Math.floor(value);
     }
 
-    throw createBadRequestError(
+    throw await createBadRequestError(
       "Validation failed (numeric string is expected)",
     );
   }
