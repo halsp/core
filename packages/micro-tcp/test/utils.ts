@@ -1,4 +1,4 @@
-import { ClientPacket } from "@halsp/micro";
+import { ClientPacket } from "@halsp/micro/common.internal";
 import net from "net";
 
 export async function sendData(
