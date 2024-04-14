@@ -1,8 +1,8 @@
-import { MicroNatsOptions } from "../options";
+import { MicroNatsOptions } from "./options";
 import { Context, getHalspPort, Startup } from "@halsp/core";
 import * as nats from "nats";
 import { handleMessage } from "@halsp/micro/server";
-import { ServerPacket } from "@halsp/micro";
+import { ServerPacket } from "@halsp/micro/common.internal";
 
 const usedMap = new WeakMap<Startup, boolean>();
 Startup.prototype.useMicroNats = function (options?: MicroNatsOptions) {

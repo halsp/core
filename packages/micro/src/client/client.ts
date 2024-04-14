@@ -1,5 +1,5 @@
 import { ILogger } from "@halsp/core";
-import { ServerPacket } from "../packet";
+import { ServerPacket } from "../common.internal/packet";
 import { v4 as uuid } from "uuid";
 
 export abstract class IMicroClient {

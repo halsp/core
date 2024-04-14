@@ -1,5 +1,5 @@
 import { Startup } from "@halsp/core";
-import { MicroNatsClient } from "../src";
+import { MicroNatsClient } from "../src/client";
 import "../src/server";
 
 describe("startup", () => {

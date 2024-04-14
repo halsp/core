@@ -1,7 +1,9 @@
 import * as nats from "nats";
-import { MicroNatsOptions } from "../options";
+import { MicroNatsOptions } from "./options";
 import "./startup";
 import "@halsp/micro/server";
+
+export { MicroNatsOptions };
 
 declare module "@halsp/core" {
   interface Request {

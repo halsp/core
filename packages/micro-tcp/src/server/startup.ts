@@ -1,5 +1,5 @@
-import { ServerPacket } from "@halsp/micro";
-import { MicroTcpOptions } from "../options";
+import { ServerPacket } from "@halsp/micro/common.internal";
+import { MicroTcpOptions } from "./options";
 import * as net from "net";
 import { closeServer, getHalspPort, logAddress, Startup } from "@halsp/core";
 import { handleMessage } from "@halsp/micro/server";

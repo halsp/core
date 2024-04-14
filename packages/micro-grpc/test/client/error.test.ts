@@ -1,6 +1,6 @@
 import * as grpc from "@grpc/grpc-js";
 import * as grpcLoader from "@grpc/proto-loader";
-import { MicroGrpcClient, WriteIterator } from "../../src";
+import { MicroGrpcClient, WriteIterator } from "../../src/client";
 
 describe("error", () => {
   it("should send stream request and throw error", async () => {
@@ -121,13 +121,25 @@ describe("error", () => {
     });
     await client["connect"]();
 
-    let err: Error | undefined;
-    try {
-      await client.send("test/testService1/testMethod", {});
-    } catch (e) {
-      err = e as Error;
+    {
+      let err: Error | undefined;
+      try {
+        await client.send("test/testService1/testMethod", {});
+      } catch (e) {
+        err = e as Error;
+      }
+      expect(err?.message).toBe("The service or method is not exist");
     }
-    expect(err?.message).toBe("The service or method is not exist");
+
+    {
+      let err: Error | undefined;
+      try {
+        await client.send("test/testService/testMethod1", {});
+      } catch (e) {
+        err = e as Error;
+      }
+      expect(err?.message).toBe("The service or method is not exist");
+    }
   });
 });
 

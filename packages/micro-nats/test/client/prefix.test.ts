@@ -1,4 +1,4 @@
-import { MicroNatsClient } from "../../src";
+import { MicroNatsClient } from "../../src/client";
 
 describe("prefix", () => {
   it("should subscribe and publish pattern with prefix", async () => {

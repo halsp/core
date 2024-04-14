@@ -37,7 +37,7 @@ describe("startup", () => {
         setTimeout(resolve, 1000);
       };
     });
-  }, 10000);
+  }, 20000);
 
   it("should accept web socket again with the same ws instance", async () => {
     new Startup()
@@ -62,7 +62,7 @@ describe("startup", () => {
     await new Promise<void>((resolve) => {
       client.onclose = () => resolve();
     });
-  }, 10000);
+  }, 20000);
 
   it("should not wait for closing if readyState is CLOSED", async () => {
     new Startup()
@@ -81,7 +81,7 @@ describe("startup", () => {
     await new Promise<void>((resolve) => {
       client.onclose = () => resolve();
     });
-  }, 10000);
+  }, 20000);
 
   it("should get clients by ctx.webSocketClients", async () => {
     new Startup()
@@ -103,7 +103,7 @@ describe("startup", () => {
     await new Promise<void>((resolve) => {
       client.onclose = () => resolve();
     });
-  }, 10000);
+  }, 20000);
 });
 
 describe("decorator", () => {

@@ -1,4 +1,4 @@
-import { parseJsonBuffer } from "../src";
+import { parseJsonBuffer } from "../src/common.internal";
 
 describe("parse json buffer", () => {
   it("should parse json buffer", async () => {

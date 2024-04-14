@@ -1,5 +1,5 @@
 import { Startup } from "@halsp/core";
-import { MicroException } from "../../src";
+import { MicroException } from "../../src/server";
 import "../../src/server";
 import "@halsp/testing";
 

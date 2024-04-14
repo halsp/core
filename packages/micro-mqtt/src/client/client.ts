@@ -1,6 +1,7 @@
-import { parseJsonBuffer, IMicroClient } from "@halsp/micro";
+import { IMicroClient } from "@halsp/micro/client";
+import { parseJsonBuffer } from "@halsp/micro/common.internal";
 import * as mqtt from "mqtt";
-import { MicroMqttClientOptions } from "../options";
+import { MicroMqttClientOptions } from "./options";
 
 export class MicroMqttClient extends IMicroClient {
   constructor(protected readonly options: MicroMqttClientOptions = {}) {

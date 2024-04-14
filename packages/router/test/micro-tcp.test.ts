@@ -1,7 +1,7 @@
 import "@halsp/testing";
 import "@halsp/micro-tcp/server";
 import "./utils";
-import { MicroTcpClient } from "@halsp/micro-tcp";
+import { MicroTcpClient } from "@halsp/micro-tcp/client";
 import { Startup } from "@halsp/core";
 
 describe("micro-nats", () => {

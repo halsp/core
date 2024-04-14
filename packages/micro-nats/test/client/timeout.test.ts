@@ -1,4 +1,4 @@
-import { MicroNatsClient } from "../../src";
+import { MicroNatsClient } from "../../src/client";
 
 describe("timeout", () => {
   it("should return timeout without callback", async () => {

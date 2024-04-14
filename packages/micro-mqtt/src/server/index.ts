@@ -1,7 +1,9 @@
 import type mqtt from "mqtt";
-import { MicroMqttOptions } from "../options";
+import { MicroMqttOptions } from "./options";
 import "./startup";
 import "@halsp/micro/server";
+
+export { MicroMqttOptions };
 
 declare module "@halsp/core" {
   interface Startup {
@@ -15,5 +17,3 @@ declare module "@halsp/core" {
     get packet(): mqtt.IPublishPacket;
   }
 }
-
-export { MicroMqttOptions } from "../options";

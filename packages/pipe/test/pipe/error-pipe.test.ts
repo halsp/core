@@ -1,6 +1,6 @@
 import { createBadRequestError } from "../../src/pipes/error";
 import { BadRequestException } from "@halsp/http";
-import { MicroException } from "@halsp/micro";
+import { MicroException } from "@halsp/micro/server";
 
 describe("parse failed", () => {
   it("should create BadRequestException if env is http", async () => {

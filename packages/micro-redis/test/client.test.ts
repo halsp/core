@@ -1,4 +1,4 @@
-import { MicroRedisClient } from "../src";
+import { MicroRedisClient } from "../src/client";
 
 describe("redis client", () => {
   describe("emit", () => {

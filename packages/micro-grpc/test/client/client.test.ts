@@ -1,5 +1,5 @@
 import { runin } from "@halsp/testing";
-import { MicroGrpcClient } from "../../src";
+import { MicroGrpcClient } from "../../src/client";
 
 describe("client", () => {
   it("should load default protos", async () => {

@@ -1,4 +1,4 @@
-import { MicroMqttClient } from "../../src";
+import { MicroMqttClient } from "../../src/client";
 
 describe("timeout", () => {
   it("should return timeout without callback", async () => {

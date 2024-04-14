@@ -46,6 +46,11 @@
       "import": "./dist-mjs/server/index.mjs",
       "types": "./dist-mjs/server/index.d.ts"
     },
+    "./common.internal": {
+      "require": "./dist-cjs/common.internal/index.cjs",
+      "import": "./dist-mjs/common.internal/index.mjs",
+      "types": "./dist-mjs/common.internal/index.d.ts"
+    },
     "./package.json": "./package.json"
   },
   "typesVersions": {
@@ -55,6 +60,9 @@
       ],
       "server": [
         "./dist-mjs/server/index.d.ts"
+      ],
+      "common.internal": [
+        "./dist-mjs/common.internal/index.d.ts"
       ]
     }
   },

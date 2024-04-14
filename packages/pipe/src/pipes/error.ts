@@ -5,7 +5,7 @@ export async function createBadRequestError(message: string) {
     const { BadRequestException } = await safeImport("@halsp/http");
     return new BadRequestException(message);
   } else if (process.env.HALSP_ENV == "micro") {
-    const { MicroException } = await safeImport("@halsp/micro");
+    const { MicroException } = await safeImport("@halsp/micro/server");
     return new MicroException(message);
   } else {
     return new Error(message);

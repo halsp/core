@@ -23,3 +23,4 @@ declare module "@halsp/core" {
 }
 
 export { handleMessage } from "./startup";
+export { MicroException } from "./exception";

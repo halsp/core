@@ -1,4 +1,4 @@
-import { MicroNatsClient } from "../../src";
+import { MicroNatsClient } from "../../src/client";
 
 describe("return", () => {
   async function runTest(data?: Buffer, err?: Error, returnHeaders?: true) {

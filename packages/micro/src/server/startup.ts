@@ -7,8 +7,9 @@ import {
   Response,
   Startup,
 } from "@halsp/core";
-import { ClientPacket, ServerPacket } from "../packet";
-import { MicroException } from "../exception";
+import { ServerPacket } from "../common.internal/packet";
+import { MicroException } from "./exception";
+import type { ClientPacket } from "../common.internal/packet";
 
 declare module "@halsp/core" {
   interface Startup {

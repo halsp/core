@@ -14,7 +14,7 @@ describe("validate failed", () => {
     process.env.HALSP_ENV = "micro";
     const err = await createBadRequestError("test");
 
-    const { MicroException } = _require("@halsp/micro");
+    const { MicroException } = _require("@halsp/micro/server");
     expect(err instanceof MicroException).toBeTruthy();
     expect(err.message).toBe("test");
   });

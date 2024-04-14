@@ -1,5 +1,5 @@
 import "../../src/server";
-import { MicroMqttClient } from "../../src";
+import { MicroMqttClient } from "../../src/client";
 import * as mqtt from "mqtt";
 import { Startup } from "@halsp/core";
 

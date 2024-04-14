@@ -1,4 +1,4 @@
-import { MicroNatsClient } from "../../src";
+import { MicroNatsClient } from "../../src/client";
 
 describe("connect", () => {
   it("should connect with default host and port", async () => {

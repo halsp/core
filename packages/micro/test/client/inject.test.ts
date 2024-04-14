@@ -3,7 +3,7 @@ import "@halsp/testing";
 import { InjectMicroClient, useMicroClient } from "../../src/client";
 import * as net from "net";
 import { InjectType } from "@halsp/inject";
-import { IMicroClient, MicroClient } from "../../src";
+import { IMicroClient, MicroClient } from "../../src/client";
 
 class TestClient extends IMicroClient {
   async connect() {

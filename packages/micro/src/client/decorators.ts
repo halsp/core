@@ -1,8 +1,5 @@
 import { MICRO_IDENTITY_KEY } from "./constant";
+import { Inject } from "@halsp/inject";
 
-export const MicroClient = (identity?: string) => {
-  const { Inject } = _require(
-    "@halsp/inject",
-  ) as typeof import("@halsp/inject");
-  return Inject(MICRO_IDENTITY_KEY + (identity ?? ""));
-};
+export const MicroClient = (identity?: string) =>
+  Inject(MICRO_IDENTITY_KEY + (identity ?? ""));

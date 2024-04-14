@@ -1,4 +1,4 @@
-import { MicroTcpClient } from "../src";
+import { MicroTcpClient } from "../src/client";
 import "../src/server";
 import "../src/client";
 import { Startup } from "@halsp/core";

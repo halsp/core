@@ -1,4 +1,4 @@
-import { MicroGrpcOptions } from "../options";
+import { MicroGrpcOptions } from "./options";
 import * as grpc from "@grpc/grpc-js";
 import {
   Context,

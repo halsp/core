@@ -1,4 +1,5 @@
-import { MicroTcpOptions, MicroTcpClient } from "../src";
+import { MicroTcpClient } from "../src/client";
+import { MicroTcpOptions } from "../src/server";
 import "../src/server";
 import { sendData, sendMessage } from "./utils";
 import net, { Server } from "net";

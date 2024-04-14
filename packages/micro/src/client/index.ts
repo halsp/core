@@ -1,5 +1,5 @@
-import { Context } from "@halsp/core";
 import "@halsp/inject";
+import { Context } from "@halsp/core";
 import { MICRO_IDENTITY_KEY } from "./constant";
 
 declare module "@halsp/core" {
@@ -16,3 +16,5 @@ Context.prototype.getMicroClient = async function (
 };
 
 export { useMicroClient, InjectMicroClient } from "./use-client";
+export { IMicroClient } from "./client";
+export { MicroClient } from "./decorators";

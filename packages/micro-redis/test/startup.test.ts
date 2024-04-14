@@ -1,4 +1,4 @@
-import { MicroRedisClient } from "../src";
+import { MicroRedisClient } from "../src/client";
 import { Startup } from "@halsp/core";
 import "../src/server";
 
