@@ -52,7 +52,7 @@
     "@halsp/body": "^2.3.5",
     "@halsp/core": "^2.3.5",
     "@halsp/http": "^2.3.5",
-    "qs": "^6.12.0"
+    "qs": "^6.12.1"
   },
   "devDependencies": {
     "@types/qs": "^6.9.14",

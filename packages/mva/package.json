@@ -56,7 +56,7 @@
     "@halsp/view": "^2.3.5"
   },
   "devDependencies": {
-    "ejs": "^3.1.9"
+    "ejs": "^3.1.10"
   },
   "files": [
     "/dist-cjs/**/*",

@@ -55,7 +55,7 @@
   },
   "devDependencies": {
     "@types/consolidate": "^0.14.4",
-    "ejs": "^3.1.9",
+    "ejs": "^3.1.10",
     "pug": "^3.0.2"
   },
   "files": [

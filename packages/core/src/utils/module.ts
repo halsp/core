@@ -4,15 +4,21 @@ import url from "url";
 export async function safeImport<T = any>(name: string) {
   try {
     try {
-      return (await import(name)) as T;
+      return (await dynamicImport(name)) as T;
     } catch {
       try {
-        return (await import(url.pathToFileURL(name).toString())) as T;
-      } catch {
         return _require(name) as T;
+      } catch {
+        return (await dynamicImport(url.pathToFileURL(name).toString())) as T;
       }
     }
   } catch {
     return null;
   }
 }
+
+const dynamicImport = new Function(
+  "specifier",
+  `return import(specifier);
+  `,
+) as <T = any>(specifier: string) => Promise<T>;

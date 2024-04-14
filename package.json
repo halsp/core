@@ -28,13 +28,13 @@
     "postinstall": "sh scripts/init-cli-deps.sh"
   },
   "devDependencies": {
-    "@commitlint/cli": "^19.2.1",
-    "@commitlint/config-conventional": "^19.1.0",
+    "@commitlint/cli": "^19.2.2",
+    "@commitlint/config-conventional": "^19.2.2",
     "@halsp/cli": "*",
     "@types/jest": "^29.5.12",
-    "@types/node": "^20.12.4",
-    "@typescript-eslint/eslint-plugin": "^7.5.0",
-    "@typescript-eslint/parser": "^7.5.0",
+    "@types/node": "^20.12.7",
+    "@typescript-eslint/eslint-plugin": "^7.6.0",
+    "@typescript-eslint/parser": "^7.6.0",
     "codecov": "^3.8.3",
     "cross-env": "^7.0.3",
     "eslint": "^8.57.0",
@@ -47,7 +47,7 @@
     "prettier": "^3.2.5",
     "ts-jest": "^29.1.2",
     "ts-node": "10.9.2",
-    "typescript": "5.4.3"
+    "typescript": "5.4.5"
   },
   "workspaces": [
     "packages/*"
