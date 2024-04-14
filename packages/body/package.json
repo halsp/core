@@ -1,6 +1,6 @@
 {
   "name": "@halsp/body",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "Halsp 的 Http Body 解析插件",
   "engines": {
     "node": ">=16"
@@ -49,8 +49,8 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^2.4.0",
-    "@halsp/http": "^2.4.0",
+    "@halsp/core": "^2.4.1",
+    "@halsp/http": "^2.4.1",
     "co-body": "^6.1.0",
     "formidable": "^3.5.1",
     "type-is": "^1.6.18"
