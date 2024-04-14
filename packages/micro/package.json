@@ -1,6 +1,6 @@
 {
   "name": "@halsp/micro",
-  "version": "2.3.5",
+  "version": "2.4.0",
   "description": "Halsp 微服务基础框架",
   "engines": {
     "node": ">=16"
@@ -78,11 +78,11 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^2.3.5",
+    "@halsp/core": "^2.4.0",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "@halsp/inject": "^2.3.5",
+    "@halsp/inject": "^2.4.0",
     "@types/uuid": "^9.0.8"
   },
   "files": [
