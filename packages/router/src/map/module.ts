@@ -2,6 +2,7 @@ import path from "path";
 import * as fs from "fs";
 import MapItem from "./map-item";
 import { DEFAULT_MODULES_DIR, HALSP_ROUTER_IS_MODULE } from "../constant";
+import { safeImport } from "@halsp/core";
 
 export interface RouterModule {
   prefix?: string;
@@ -25,16 +26,22 @@ function findModulePath(dir: string, file: string): string | null {
 
   moduleDir = moduleDir.replace(/\/.+$/, "");
 
-  const jsPath = path.join(dir, moduleDir, "module.js");
-  if (fs.existsSync(jsPath)) {
-    return path.join(moduleDir, "module").replace(/\\/g, "/");
+  const files = [
+    "module.js",
+    "module.cjs",
+    "module.ejs",
+    "module.ts",
+    "module.cts",
+    "module.cjs",
+  ].map((item) => ({
+    name: item,
+    path: path.join(dir, moduleDir, item),
+  }));
+  for (const fileItem of files) {
+    if (fs.existsSync(fileItem.path)) {
+      return path.join(moduleDir, fileItem.name).replace(/\\/g, "/");
+    }
   }
-
-  const tsPath = path.join(dir, moduleDir, "module.ts");
-  if (fs.existsSync(tsPath)) {
-    return path.join(moduleDir, "module").replace(/\\/g, "/");
-  }
-
   return null;
 }
 
@@ -43,13 +50,13 @@ function getModuleFilePath(dir: string, file: string) {
   return moduleFilePath ?? undefined;
 }
 
-export function getModuleConfig(
+export async function getModuleConfig(
   dir: string,
   file: string,
-): RouterModule | undefined {
+): Promise<RouterModule | undefined> {
   const moduleFilePath = getModuleFilePath(dir, file);
   if (moduleFilePath) {
-    const moduleRequire = _require(path.resolve(dir, moduleFilePath));
+    const moduleRequire = await safeImport(path.resolve(dir, moduleFilePath));
     return moduleRequire.default ?? moduleRequire;
   }
 }
