@@ -103,6 +103,5 @@ function register(
 }
 
 function createHeaders() {
-  const natsPkg = _require("nats");
-  return natsPkg.headers() as nats.MsgHdrs;
+  return nats.headers();
 }

@@ -20,9 +20,8 @@ export class MicroRedisClient extends IMicroClient {
       opt.url = `redis://localhost:6379`;
     }
 
-    const redisPkg = _require("redis");
-    const pub = redisPkg.createClient(opt) as redis.RedisClientType;
-    const sub = redisPkg.createClient(opt) as redis.RedisClientType;
+    const pub = redis.createClient(opt) as redis.RedisClientType;
+    const sub = redis.createClient(opt) as redis.RedisClientType;
 
     this.pub = pub;
     this.sub = sub;

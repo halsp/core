@@ -33,16 +33,16 @@ export default class MapCreater {
     );
 
     const files = await this.getFilesModules(storageItems);
-    files.forEach((file) => {
-      file.modules.forEach((module) => {
-        const mapItems = this.createMapItems(
+    for (const file of files) {
+      for (const module of file.modules) {
+        const mapItems = await this.createMapItems(
           file.path,
           module.actionName,
           module.action,
         );
         result.push(...mapItems);
-      });
-    });
+      }
+    }
 
     const folders = storageItems
       .filter((storageItem) => {
@@ -103,7 +103,7 @@ export default class MapCreater {
     return result;
   }
 
-  private createMapItems(
+  private async createMapItems(
     file: string,
     actionName: string,
     action: ObjectConstructor<Action>,
@@ -114,7 +114,7 @@ export default class MapCreater {
     let prefix: string | undefined;
     let deepDir: string | undefined;
     if (isItemModule) {
-      const moduleConfig = getModuleConfig(this.dir, file);
+      const moduleConfig = await getModuleConfig(this.dir, file);
       prefix = moduleConfig?.prefix;
       deepDir = moduleConfig?.deepDir ?? "";
     }

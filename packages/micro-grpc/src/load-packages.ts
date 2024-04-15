@@ -1,5 +1,5 @@
-import type grpcLoader from "@grpc/proto-loader";
-import type grpc from "@grpc/grpc-js";
+import * as grpcLoader from "@grpc/proto-loader";
+import * as grpc from "@grpc/grpc-js";
 import path from "path";
 import { glob } from "glob";
 
@@ -21,12 +21,7 @@ export async function loadPackages(
       .map((f: string) => path.join(proptosDir, f));
   }
 
-  const grpcLoaderPkg = _require("@grpc/proto-loader");
-  const definition = await grpcLoaderPkg.load(
-    protoFiles,
-    options.loaderOptions,
-  );
+  const definition = await grpcLoader.load(protoFiles, options.loaderOptions);
 
-  const grpcPkg = _require("@grpc/grpc-js");
-  return grpcPkg.loadPackageDefinition(definition);
+  return grpc.loadPackageDefinition(definition);
 }

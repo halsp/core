@@ -11,7 +11,7 @@ type SendOptions = Omit<nats.SubscriptionOptions, "callback"> & {
 export class MicroNatsClient extends IMicroClient {
   constructor(protected readonly options: MicroNatsClientOptions = {}) {
     super();
-    this.#jsonCodec = _require("nats").JSONCodec();
+    this.#jsonCodec = nats.JSONCodec();
   }
 
   #jsonCodec!: nats.Codec<any>;

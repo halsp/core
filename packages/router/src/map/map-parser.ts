@@ -26,14 +26,14 @@ export default class MapParser {
       map = await new MapCreater(this.options.dir).create();
     }
 
-    map.forEach((item) => {
-      addDecorators(item, this.options.decorators);
+    for (const mapItem of map) {
+      addDecorators(mapItem, this.options.decorators);
 
       if (isModule(this.options.dir)) {
-        const module = getModuleConfig(this.options.dir, item.path);
-        addDecorators(item, module?.decorators);
+        const module = await getModuleConfig(this.options.dir, mapItem.path);
+        addDecorators(mapItem, module?.decorators);
       }
-    });
+    }
 
     return map;
   }
