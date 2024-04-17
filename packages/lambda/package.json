@@ -1,6 +1,6 @@
 {
   "name": "@halsp/lambda",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "description": "将 Halsp 托管到 serverless 云函数，如腾讯云云函数、阿里云云函数、awa lambda、azure functions 等",
   "engines": {
     "node": ">=16"
@@ -52,8 +52,8 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^2.4.1",
-    "@halsp/http": "^2.4.1"
+    "@halsp/core": "^2.4.2",
+    "@halsp/http": "^2.4.2"
   },
   "files": [
     "/dist-cjs/**/*",
