@@ -8,8 +8,8 @@ import { Status405Middleware } from "./middlewares/status405.middleware";
 import { FileOptions, DirectoryOptions } from "./options";
 
 export { FileOptions, DirectoryOptions };
-export { HALSP_CLI_PLUGIN_CONFIG_HOOK } from "./cli-config";
-export { HALSP_CLI_PLUGIN_ATTACH } from "./cli-plugin";
+export { HALSP_CLI_PLUGIN_CONFIG_HOOK } from "./cli.config";
+export { HALSP_CLI_PLUGIN_ATTACH } from "./cli.attach.serve";
 
 declare module "@halsp/core" {
   interface Startup {
