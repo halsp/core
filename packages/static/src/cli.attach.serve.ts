@@ -5,6 +5,7 @@ import path from "path";
 
 export const HALSP_CLI_PLUGIN_ATTACH = {
   register,
+  dependencies: ["@halsp/native"],
 };
 
 async function register(command: Command) {
