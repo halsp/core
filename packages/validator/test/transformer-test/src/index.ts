@@ -7,7 +7,7 @@ export class TestDto {
   @V()
   b!: string;
 
-  @V.IsInt()
+  @V.IsInt().IsInt().IsInt()
   c!: string;
 
   @V().IsInt()

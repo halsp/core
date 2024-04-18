@@ -19,6 +19,8 @@ const transormer: ts.TransformerFactory<ts.SourceFile> = (context) => {
             undefined,
             [],
           );
+        } else if (tsc.isCallExpression(node)) {
+          return tsc.visitEachChild(node, visitDecoratorExpression, context);
         }
         return tsc.visitEachChild(node, visit, context);
       },
