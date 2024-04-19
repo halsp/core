@@ -1,6 +1,6 @@
 {
   "name": "@halsp/jwt",
-  "version": "2.4.2",
+  "version": "2.4.3",
   "description": "基于 jsonwebtoken 和 @halsp/inject 的 JWT 中间件",
   "engines": {
     "node": ">=16"
@@ -48,8 +48,8 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^2.4.2",
-    "@halsp/inject": "^2.4.2",
+    "@halsp/core": "^2.4.3",
+    "@halsp/inject": "^2.4.3",
     "@types/jsonwebtoken": "^9.0.6",
     "jsonwebtoken": "^9.0.2",
     "reflect-metadata": "^0.2.2"
