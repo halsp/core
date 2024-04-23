@@ -47,9 +47,7 @@
   "license": "MIT",
   "dependencies": {
     "@halsp/core": "^2.4.3",
-    "@halsp/inject": "^2.4.3",
-    "class-transformer": "^0.5.1",
-    "reflect-metadata": "^0.2.2"
+    "@halsp/inject": "^2.4.3"
   },
   "files": [
     "/dist-cjs/**/*",

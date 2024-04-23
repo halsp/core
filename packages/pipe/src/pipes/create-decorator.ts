@@ -6,11 +6,11 @@ import {
   isClass,
   isUndefined,
   ObjectConstructor,
+  isObject,
 } from "@halsp/core";
 import { GlobalPipeItem, LambdaPipe, PipeItem } from ".";
 import { GLOBAL_PIPE_BAG } from "../constant";
 import { GlobalPipeType } from "../global-pipe-type";
-import { plainToClass } from "class-transformer";
 import { addPipeRecord } from "../pipe-req-record";
 
 export type PipeReqType = "query" | "param" | "header" | "body";
@@ -71,9 +71,15 @@ function getPropertyType(
   }
 }
 
-function getObjectFromDict(cls: any, dict?: Dict) {
+async function getObjectFromDict(ctx: Context, cls: any, dict?: Dict) {
   if (dict && isClass(cls)) {
-    return plainToClass(cls, dict);
+    const obj = await ctx.getService(cls);
+    Object.keys(dict).forEach((k) => {
+      if (k in obj && isUndefined(obj[k])) {
+        obj[k] = dict[k];
+      }
+    });
+    return obj;
   } else {
     return dict;
   }
@@ -96,10 +102,7 @@ export function createDecorator(type: PipeReqType, args: any[]) {
         async (ctx, parent) => {
           const property = args[0];
           const dict = handler(ctx);
-          const val =
-            dict && getObjectFromDict(propertyType, dict)
-              ? dict[property]
-              : undefined;
+          const val = dict && isObject(dict) ? dict[property] : undefined;
           return await execPipes(
             ctx,
             parent,
@@ -130,7 +133,7 @@ export function createDecorator(type: PipeReqType, args: any[]) {
           undefined,
           args[1],
           args[2],
-          getObjectFromDict(propertyType, handler(ctx)),
+          await getObjectFromDict(ctx, propertyType, handler(ctx)),
           propertyType,
           [],
         ),
@@ -156,7 +159,7 @@ export function createDecorator(type: PipeReqType, args: any[]) {
             undefined,
             propertyKey,
             parameterIndex,
-            getObjectFromDict(propertyType, handler(ctx)),
+            await getObjectFromDict(ctx, propertyType, handler(ctx)),
             propertyType,
             pipes,
           ),
