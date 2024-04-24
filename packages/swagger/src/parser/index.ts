@@ -121,7 +121,7 @@ export class Parser {
 
     setActionValue(this.builder, operation, actionClassRules);
 
-    const pipeReqRecords = getPipeRecords(action);
+    const pipeReqRecords = this.getActionPipRecords(action);
     const rules = getRules(action);
 
     for (const record of pipeReqRecords) {
@@ -131,6 +131,32 @@ export class Parser {
         this.parseParam(operation, action, record, rules);
       }
     }
+  }
+
+  private getActionPipRecords(action: ObjectConstructor) {
+    const result = [...getPipeRecords(action)];
+    result.forEach((item) => {
+      if (item.propertyKey) {
+        const propertyConstructor = Reflect.getMetadata(
+          "design:type",
+          action.prototype,
+          item.propertyKey,
+        );
+        if (isClass(propertyConstructor)) {
+          result.push(...this.getActionPipRecords(propertyConstructor));
+        }
+      }
+    });
+    return result.reduce<PipeReqRecord[]>((pre, cur) => {
+      if (
+        !pre.some(
+          (item) => item.type == cur.type && item.property == cur.property,
+        )
+      ) {
+        pre.push(cur);
+      }
+      return pre;
+    }, []);
   }
 
   private parseBody(
@@ -209,7 +235,7 @@ export class Parser {
         this.builder,
         properties,
         action,
-        record.property,
+        record.propertyKey as string,
         rules,
       );
 

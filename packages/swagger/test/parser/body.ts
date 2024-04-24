@@ -45,6 +45,20 @@ export class StringBodyTwice extends Action {
   }
 }
 
+@V().Tags("test").Summary("summary")
+export class StringBodyTwice2 extends Action {
+  @Body("property")
+  @V().Description("abc")
+  private readonly b1!: string;
+  @Body("property")
+  @V().Description("def")
+  private readonly b2!: number;
+
+  async invoke(): Promise<void> {
+    this.ok();
+  }
+}
+
 class TestSchemaDto {}
 
 @V().Tags("test").Summary("summary")

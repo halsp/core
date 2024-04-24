@@ -125,12 +125,27 @@ describe("body", () => {
     });
   });
 
-  it("should parse string body twice", async () => {
+  it("should not parse same body twice", async () => {
     const doc = await getDoc("StringBodyTwice");
     expect(getRequestContent(doc)).toEqual({
       schema: {
         type: "string",
-        description: "def",
+        description: "abc",
+      },
+    });
+  });
+
+  it("should not parse same body twice", async () => {
+    const doc = await getDoc("StringBodyTwice2");
+    expect(getRequestContent(doc)).toEqual({
+      schema: {
+        properties: {
+          b1: {
+            type: "string",
+            description: "abc",
+          },
+        },
+        type: "object",
       },
     });
   });
@@ -694,5 +709,20 @@ describe("array", () => {
         },
       },
     });
+  });
+});
+
+describe("deep", () => {
+  it("shoude parse default", async () => {
+    const mapItems = [
+      new MapItem({
+        path: "deep.ts",
+        actionName: "TestDeep",
+        url: "test",
+        methods: ["get"],
+      }),
+    ];
+    const doc = await runParserTest(mapItems);
+    console.log("doc", doc["paths"]["/test"]["get"]);
   });
 });
