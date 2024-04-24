@@ -73,7 +73,7 @@
   "dependencies": {
     "@halsp/core": "^2.4.3",
     "@halsp/micro": "^2.4.3",
-    "nats": "^2.22.0"
+    "nats": "^2.23.0"
   },
   "files": [
     "/dist-cjs/**/*",

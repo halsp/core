@@ -61,7 +61,7 @@
     "@types/koa-cors": "0.0.6",
     "@types/koa__cors": "^5.0.0",
     "@types/koa__router": "^12.0.4",
-    "@types/qs": "^6.9.14",
+    "@types/qs": "^6.9.15",
     "@types/supertest": "^6.0.2",
     "supertest": "^6.3.4"
   },
