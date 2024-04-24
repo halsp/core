@@ -1,6 +1,6 @@
 {
   "name": "@halsp/http",
-  "version": "2.4.3",
+  "version": "2.4.4",
   "description": "支持 Halsp HTTP 请求",
   "engines": {
     "node": ">=16"
@@ -47,7 +47,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^2.4.3",
+    "@halsp/core": "^2.4.4",
     "http-status-codes": "^2.3.0",
     "mime-types": "^2.1.35"
   },
