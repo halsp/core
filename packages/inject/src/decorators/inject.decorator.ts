@@ -89,3 +89,8 @@ function injectCustom<T>(
 export function getClassProptotype(target: any) {
   return isClass(target) && "prototype" in target ? target.prototype : target;
 }
+
+export function getClassConstractor(target: any) {
+  const cons = "constructor";
+  return cons in target && isClass(target[cons]) ? target[cons] : target;
+}
