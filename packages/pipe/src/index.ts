@@ -1,12 +1,15 @@
 import { Startup } from "@halsp/core";
 import { GLOBAL_PIPE_BAG } from "./constant";
-import { GlobalPipeType } from "./global-pipe-type";
-import { GlobalPipeItem, PipeItem } from "./pipes";
+import { GlobalPipeType } from "./global/global-pipe-type";
+import { PipeItem } from "./pipe-item";
+import { GlobalPipeItem } from "./global";
 
-export { Query, Body, Param, Header } from "./decorators";
+export { Query, Body, Param, Header, Property } from "./decorators";
+export { TransformArgs } from "./pipe-transform";
+export { PipeReqType } from "./pipe-req-type";
+export { PipeItem } from "./pipe-item";
+export { PipeTransform } from "./pipe-transform";
 export {
-  PipeTransform,
-  PipeItem,
   ParseBoolPipe,
   ParseBoolPipeOptions,
   ParseFloatPipe,
@@ -15,9 +18,7 @@ export {
   DefaultValuePipeOptions,
   TrimPipe,
   TrimPipeOptions,
-  TransformArgs,
-  PipeReqType,
-} from "./pipes";
+} from "./presets";
 
 export { PipeReqRecord, getPipeRecords } from "./pipe-req-record";
 export { GlobalPipeType };

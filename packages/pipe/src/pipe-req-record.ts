@@ -1,6 +1,7 @@
-import { PipeItem, PipeReqType } from "./pipes";
+import { PipeItem } from "./pipe-item";
+import { PipeReqType } from "./pipe-req-type";
 import { PIPE_RECORDS_METADATA } from "./constant";
-import { isClass } from "@halsp/core";
+import { getClassProptotype } from "@halsp/inject";
 
 export interface PipeReqRecord {
   pipes: PipeItem[];
@@ -10,17 +11,13 @@ export interface PipeReqRecord {
   parameterIndex?: number;
 }
 
-function getProptotype(target: any) {
-  return isClass(target) ? target.prototype : target;
-}
-
 export function getPipeRecords(target: any): ReadonlyArray<PipeReqRecord> {
-  target = getProptotype(target);
+  target = getClassProptotype(target);
   return Reflect.getMetadata(PIPE_RECORDS_METADATA, target) ?? [];
 }
 
 function setPipeRecords(target: any, records: PipeReqRecord[]) {
-  target = getProptotype(target);
+  target = getClassProptotype(target);
   Reflect.defineMetadata(PIPE_RECORDS_METADATA, records, target);
 }
 

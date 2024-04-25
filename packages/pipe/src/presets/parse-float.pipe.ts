@@ -1,14 +1,14 @@
 import { createBadRequestError } from "./error";
-import { PipeTransform } from "./pipe-transform";
+import { PipeTransform } from "../pipe-transform";
 
-export class ParseIntPipe implements PipeTransform<string | number, number> {
+export class ParseFloatPipe implements PipeTransform<string | number, number> {
   async transform({ value }) {
     if (typeof value == "string") {
-      value = parseInt(value, 10);
+      value = parseFloat(value);
     }
 
     if (value == value) {
-      return Math.floor(value);
+      return value;
     }
 
     throw await createBadRequestError(

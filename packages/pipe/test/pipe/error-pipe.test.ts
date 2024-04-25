@@ -1,4 +1,4 @@
-import { createBadRequestError } from "../../src/pipes/error";
+import { createBadRequestError } from "../../src/presets/error";
 import { BadRequestException } from "@halsp/http";
 import { MicroException } from "@halsp/micro/server";
 

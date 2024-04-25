@@ -1,5 +1,6 @@
-import { PipeItem } from "../pipes";
-import { createDecorator } from "../pipes/create-decorator";
+import { PipeItem } from "../pipe-item";
+import { createReqDecorator } from "./create-req-decorator";
+import { createPropertyDecorator } from "./create-property-decorator";
 
 export function Query(
   property: string,
@@ -15,7 +16,7 @@ export function Query(
   parameterIndex: number,
 ): void;
 export function Query(...args: any[]): any {
-  return createDecorator("query", args);
+  return createReqDecorator("query", args);
 }
 
 export function Body(
@@ -32,7 +33,7 @@ export function Body(
   parameterIndex: number,
 ): void;
 export function Body(...args: any[]): any {
-  return createDecorator("body", args);
+  return createReqDecorator("body", args);
 }
 
 export function Param(
@@ -49,7 +50,7 @@ export function Param(
   parameterIndex: number,
 ): void;
 export function Param(...args: any[]): any {
-  return createDecorator("param", args);
+  return createReqDecorator("param", args);
 }
 
 export function Header(
@@ -66,5 +67,15 @@ export function Header(
   parameterIndex: number,
 ): void;
 export function Header(...args: any[]): any {
-  return createDecorator("header", args);
+  return createReqDecorator("header", args);
+}
+
+export function Property(
+  property: string,
+  ...pipes: PipeItem[]
+): PropertyDecorator;
+export function Property(...pipes: PipeItem[]): PropertyDecorator;
+export function Property(target: any, propertyKey: string | symbol): void;
+export function Property(...args: any[]): any {
+  return createPropertyDecorator("property", args);
 }

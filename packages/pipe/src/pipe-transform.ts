@@ -1,5 +1,5 @@
 import { Context, ObjectConstructor } from "@halsp/core";
-import { PipeItem } from "./pipe";
+import { PipeItem } from "./pipe-item";
 
 export interface TransformArgs<T = any, U extends object = any> {
   value: T;

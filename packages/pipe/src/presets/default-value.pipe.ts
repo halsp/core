@@ -1,5 +1,5 @@
 import { isNull, isNumber, isUndefined } from "@halsp/core";
-import { PipeTransform } from "./pipe-transform";
+import { PipeTransform } from "../pipe-transform";
 
 export interface DefaultValuePipeOptions {
   ignoreNull?: boolean;

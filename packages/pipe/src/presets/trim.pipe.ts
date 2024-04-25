@@ -1,5 +1,5 @@
 import { createBadRequestError } from "./error";
-import { PipeTransform } from "./pipe-transform";
+import { PipeTransform } from "../pipe-transform";
 
 export interface TrimPipeOptions {
   start?: boolean;

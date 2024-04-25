@@ -1,4 +1,4 @@
-import { PipeTransform, TransformArgs } from "./pipe-transform";
+import { PipeTransform, TransformArgs } from "../pipe-transform";
 
 export class LambdaPipe<T = any, R = any> implements PipeTransform<T, R> {
   constructor(
