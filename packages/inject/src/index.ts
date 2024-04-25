@@ -1,5 +1,5 @@
 import "./startup";
 
-export { Inject, createInject } from "./decorators";
+export { Inject, createInject, getClassProptotype } from "./decorators";
 export { InjectType } from "./inject-type";
 export { IService } from "./interfaces";

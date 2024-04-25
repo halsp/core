@@ -42,7 +42,7 @@ export function Inject(
 }
 
 function injectProperty(target: any, propertyKey: string | symbol) {
-  target = getProptotype(target);
+  target = getClassProptotype(target);
   const args =
     (Reflect.getMetadata(PROPERTY_METADATA, target) as (string | symbol)[]) ??
     [];
@@ -55,7 +55,7 @@ function injectKey(key: string) {
     propertyKey: string | symbol,
     parameterIndex?: number,
   ) {
-    target = getProptotype(target);
+    target = getClassProptotype(target);
     const args =
       (Reflect.getMetadata(KEY_METADATA, target) as InjectKey[]) ?? [];
     Reflect.defineMetadata(
@@ -86,6 +86,6 @@ function injectCustom<T>(
   };
 }
 
-export function getProptotype(target: any) {
-  return isClass(target) ? target.prototype : target;
+export function getClassProptotype(target: any) {
+  return isClass(target) && "prototype" in target ? target.prototype : target;
 }
