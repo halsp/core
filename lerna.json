@@ -1,6 +1,6 @@
 {
   "packages": ["packages/*"],
   "npmClient": "yarn",
-  "version": "2.4.4",
+  "version": "2.4.5",
   "ignoreChanges": ["packages/*/test/**", "**/*.md"]
 }

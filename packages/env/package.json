@@ -1,6 +1,6 @@
 {
   "name": "@halsp/env",
-  "version": "2.4.4",
+  "version": "2.4.5",
   "description": "Halsp 的环境配置插件，可以根据运行环境加载不同的配置",
   "engines": {
     "node": ">=16"
@@ -47,7 +47,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^2.4.4",
+    "@halsp/core": "^2.4.5",
     "dotenv": "^16.4.5"
   },
   "files": [

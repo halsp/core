@@ -1,6 +1,6 @@
 {
   "name": "@halsp/pipe",
-  "version": "2.4.4",
+  "version": "2.4.5",
   "description": "Halsp 的管道插件，用于校验、转换、格式化请求参数",
   "engines": {
     "node": ">=16"
@@ -46,8 +46,8 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^2.4.4",
-    "@halsp/inject": "^2.4.4"
+    "@halsp/core": "^2.4.5",
+    "@halsp/inject": "^2.4.5"
   },
   "files": [
     "/dist-cjs/**/*",

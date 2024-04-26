@@ -1,6 +1,6 @@
 {
   "name": "@halsp/inject",
-  "version": "2.4.4",
+  "version": "2.4.5",
   "engines": {
     "node": ">=16"
   },
@@ -48,7 +48,7 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^2.4.4",
+    "@halsp/core": "^2.4.5",
     "reflect-metadata": "^0.2.2"
   },
   "files": [

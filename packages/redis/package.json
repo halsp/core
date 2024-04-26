@@ -1,6 +1,6 @@
 {
   "name": "@halsp/redis",
-  "version": "2.4.4",
+  "version": "2.4.5",
   "description": "Halsp Redis 插件",
   "engines": {
     "node": ">=16"
@@ -46,8 +46,8 @@
   "author": "hal-wang",
   "license": "MIT",
   "dependencies": {
-    "@halsp/core": "^2.4.4",
-    "@halsp/inject": "^2.4.4",
+    "@halsp/core": "^2.4.5",
+    "@halsp/inject": "^2.4.5",
     "redis": "^4.6.13",
     "reflect-metadata": "^0.2.2"
   },
