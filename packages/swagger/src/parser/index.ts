@@ -28,7 +28,6 @@ import {
   parseModelProperty,
   pipeTypeToDocType,
   setComponentModelSchema,
-  setModelSchema,
   typeToApiType,
 } from "./utils";
 
@@ -121,42 +120,22 @@ export class Parser {
 
     setActionValue(this.builder, operation, actionClassRules);
 
-    const pipeReqRecords = this.getActionPipRecords(action);
+    const pipeRecords = getPipeRecords(action);
     const rules = getRules(action);
 
-    for (const record of pipeReqRecords) {
+    for (const record of pipeRecords) {
       if (record.type == "body") {
         this.parseBody(operation, action, record, rules);
+      } else if (record.type == "property") {
+        const propertyRecord: PipeReqRecord = {
+          ...record,
+          property: record.propertyKey as string,
+        };
+        this.parseBody(operation, action, propertyRecord, rules);
       } else {
         this.parseParam(operation, action, record, rules);
       }
     }
-  }
-
-  private getActionPipRecords(action: ObjectConstructor) {
-    const result = [...getPipeRecords(action)];
-    result.forEach((item) => {
-      if (item.propertyKey) {
-        const propertyConstructor = Reflect.getMetadata(
-          "design:type",
-          action.prototype,
-          item.propertyKey,
-        );
-        if (isClass(propertyConstructor)) {
-          result.push(...this.getActionPipRecords(propertyConstructor));
-        }
-      }
-    });
-    return result.reduce<PipeReqRecord[]>((pre, cur) => {
-      if (
-        !pre.some(
-          (item) => item.type == cur.type && item.property == cur.property,
-        )
-      ) {
-        pre.push(cur);
-      }
-      return pre;
-    }, []);
   }
 
   private parseBody(
@@ -221,9 +200,8 @@ export class Parser {
     requestBody.content[contentType] = contentTypeObj;
 
     if (!!record.property) {
-      contentTypeObj.schema = contentTypeObj.schema ?? {
-        type: "object",
-      };
+      contentTypeObj.schema = contentTypeObj.schema ?? {};
+      contentTypeObj.schema["type"] = "object";
       const contentTypeSchema = contentTypeObj.schema as SchemaObject;
       contentTypeSchema.properties = contentTypeSchema.properties ?? {};
       const properties = contentTypeSchema.properties as Exclude<
@@ -237,6 +215,7 @@ export class Parser {
         action,
         record.propertyKey as string,
         rules,
+        record.property,
       );
 
       contentTypeSchema.required = Object.keys(properties).filter(
@@ -248,11 +227,10 @@ export class Parser {
     } else {
       const modelType = this.getPipeRecordModelType(action, record);
       const type = typeToApiType(modelType);
+      contentTypeObj.schema = contentTypeObj.schema ?? {};
+      contentTypeObj.schema["type"] = type;
       if (type == "array") {
-        contentTypeObj.schema = {
-          type,
-          items: {},
-        };
+        contentTypeObj.schema["items"] ??= {};
         setSchemaValue(
           this.builder,
           contentTypeObj.schema as SchemaObject,
@@ -268,26 +246,16 @@ export class Parser {
           );
         });
       } else if (isClass(modelType)) {
-        contentTypeObj.schema = contentTypeObj.schema ?? {
-          type,
-          properties: {},
-        };
+        contentTypeObj.schema["properties"] ??= {};
+        contentTypeObj.schema["$ref"] =
+          `#/components/schemas/${modelType.name}`;
         setSchemaValue(
           this.builder,
           contentTypeObj.schema as SchemaObject,
           rules,
         );
-
         setComponentModelSchema(this.builder, modelType, rules);
-        setModelSchema(
-          this.builder,
-          modelType,
-          contentTypeObj.schema as SchemaObject,
-        );
       } else {
-        contentTypeObj.schema = contentTypeObj.schema ?? {
-          type,
-        };
         setSchemaValue(
           this.builder,
           contentTypeObj.schema as SchemaObject,

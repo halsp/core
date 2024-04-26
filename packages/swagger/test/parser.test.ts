@@ -110,13 +110,10 @@ describe("body", () => {
     const doc = await getDoc("PartialBody");
     expect(getRequestContent(doc)).toEqual({
       schema: {
+        $ref: "#/components/schemas/TestDto",
         properties: {
           b: {
             description: "abc",
-            type: "string",
-          },
-          test: {
-            description: "test",
             type: "string",
           },
         },
@@ -125,24 +122,24 @@ describe("body", () => {
     });
   });
 
-  it("should not parse same body twice", async () => {
+  it("should parse same body twice", async () => {
     const doc = await getDoc("StringBodyTwice");
     expect(getRequestContent(doc)).toEqual({
       schema: {
-        type: "string",
-        description: "abc",
+        type: "number",
+        description: "def",
       },
     });
   });
 
-  it("should not parse same body twice", async () => {
+  it("should parse same body twice", async () => {
     const doc = await getDoc("StringBodyTwice2");
     expect(getRequestContent(doc)).toEqual({
       schema: {
         properties: {
-          b1: {
-            type: "string",
-            description: "abc",
+          property: {
+            type: "number",
+            description: "def",
           },
         },
         type: "object",
@@ -155,6 +152,7 @@ describe("body", () => {
     expect(getRequestContent(doc)).toEqual({
       schema: {
         type: "object",
+        $ref: "#/components/schemas/TestSchemaDto",
         description: "desc",
         properties: {},
       },
@@ -166,6 +164,7 @@ describe("body", () => {
     expect(getRequestContent(doc)).toEqual({
       schema: {
         type: "object",
+        $ref: "#/components/schemas/TestSchemaOverrideDto",
         description: "desc2",
         properties: {},
       },
@@ -296,12 +295,11 @@ describe("ignore", () => {
     expect(
       doc["paths"]["/ignore"]["post"]["requestBody"]["content"][
         "application/json"
-      ]["schema"]["properties"],
+      ]["schema"],
     ).toEqual({
-      b1: {
-        nullable: false,
-        type: "string",
-      },
+      type: "object",
+      properties: {},
+      $ref: "#/components/schemas/TestDto",
     });
   });
 
@@ -587,17 +585,16 @@ describe("array", () => {
   function getRequestParameters(doc: any) {
     return doc["paths"]["/test"]["post"]["parameters"];
   }
+  function getScheme(doc: any) {
+    return doc["components"]["schemas"];
+  }
 
   it("should parse dto item", async () => {
     const doc = await getDoc("NotArray");
     expect(getRequestContent(doc)).toEqual({
       schema: {
-        properties: {
-          b1: {
-            description: "desc",
-            type: "string",
-          },
-        },
+        $ref: "#/components/schemas/TestDto",
+        properties: {},
         type: "object",
       },
     });
@@ -612,6 +609,10 @@ describe("array", () => {
           $ref: "#/components/schemas/TestDto",
         },
       },
+    });
+    expect(getScheme(doc)["TestDto"]).toEqual({
+      type: "object",
+      properties: { b1: { type: "string", description: "desc" } },
     });
   });
 
@@ -683,19 +684,24 @@ describe("array", () => {
     const doc = await getDoc("BodyModelArrayProperty");
     expect(getRequestContent(doc)).toEqual({
       schema: {
-        properties: {
-          b1: {
-            items: {
-              $ref: "#/components/schemas/TestDto",
-            },
-            type: "array",
-          },
-          b2: {
-            $ref: "#/components/schemas/TestDto",
-          },
-        },
+        $ref: "#/components/schemas/ModelArrayPropertyDto",
+        properties: {},
         type: "object",
       },
+    });
+    expect(getScheme(doc)["ModelArrayPropertyDto"]).toEqual({
+      type: "object",
+      properties: {
+        b1: {
+          type: "array",
+          items: { $ref: "#/components/schemas/TestDto" },
+        },
+        b2: { $ref: "#/components/schemas/TestDto" },
+      },
+    });
+    expect(getScheme(doc)["TestDto"]).toEqual({
+      type: "object",
+      properties: { b1: { type: "string", description: "desc" } },
     });
   });
 
@@ -723,6 +729,26 @@ describe("deep", () => {
       }),
     ];
     const doc = await runParserTest(mapItems);
-    console.log("doc", doc["paths"]["/test"]["get"]);
+
+    expect(
+      doc.paths["/test"].get.requestBody.content["application/json"],
+    ).toEqual({
+      schema: {
+        type: "object",
+        properties: {
+          b2: {
+            type: "string",
+          },
+        },
+        $ref: "#/components/schemas/TestDto",
+      },
+    });
+    expect(doc.components!.schemas).toEqual({
+      TestDto: {
+        type: "object",
+        properties: { b: { type: "number", nullable: false } },
+        required: ["b"],
+      },
+    });
   });
 });

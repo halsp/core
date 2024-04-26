@@ -1,5 +1,5 @@
 import { isClass, isUndefined, ObjectConstructor } from "@halsp/core";
-import { PipeReqType } from "@halsp/pipe";
+import { getPipeRecords, PipeReqType } from "@halsp/pipe";
 import {
   getRules,
   RuleRecord,
@@ -54,7 +54,7 @@ export function pipeTypeToDocType(pipeType: PipeReqType): ParameterLocation {
   }
 }
 
-export function setModelSchema(
+function setModelSchema(
   builder: OpenApiBuilder,
   modelType: ObjectConstructor,
   schema: SchemaObject,
@@ -64,6 +64,7 @@ export function setModelSchema(
     undefined
   >;
 
+  const records = getPipeRecords(modelType);
   const rules = getRules(modelType);
   setSchemaValue(
     builder,
@@ -84,6 +85,9 @@ export function setModelSchema(
       return prev;
     }, {});
   for (const propertyKey in propertiesRules) {
+    const property =
+      records.filter((r) => r.propertyKey == propertyKey)[0]?.property ??
+      propertyKey;
     const propertyRules = propertiesRules[propertyKey];
     if (existIgnore(propertyRules)) {
       continue;
@@ -95,10 +99,11 @@ export function setModelSchema(
       modelType,
       propertyKey,
       propertyRules,
+      property,
     );
 
-    if ((propertiesObject[propertyKey] as SchemaObject).nullable == false) {
-      requiredProperties.push(propertyKey);
+    if ((propertiesObject[property] as SchemaObject).nullable == false) {
+      requiredProperties.push(property);
     }
   }
   if (!requiredProperties.length) {
@@ -112,7 +117,9 @@ export function parseModelProperty(
   modelType: ObjectConstructor,
   propertyKey: string,
   rules: RuleRecord[],
+  property?: string,
 ) {
+  property ??= propertyKey;
   const propertyCls = Reflect.getMetadata(
     "design:type",
     modelType.prototype,
@@ -121,32 +128,28 @@ export function parseModelProperty(
 
   const type = typeToApiType(propertyCls);
   if (type == "array") {
-    propertiesObject[propertyKey] = {
+    propertiesObject[property] = {
       type: type,
       items: {},
     };
     getNamedValidates(rules, lib.Items.name).forEach((v) => {
       parseArraySchema(
         builder,
-        propertiesObject[propertyKey] as SchemaObject,
+        propertiesObject[property!] as SchemaObject,
         lib,
         v.args[0] as ArrayItemType,
       );
     });
   } else if (isClass(propertyCls)) {
-    propertiesObject[propertyKey] = {
+    propertiesObject[property] = {
       $ref: `#/components/schemas/${propertyCls.name}`,
     } as ReferenceObject;
     setComponentModelSchema(builder, propertyCls);
   } else {
-    propertiesObject[propertyKey] = {
+    propertiesObject[property] = {
       type: typeToApiType(propertyCls),
     };
-    setSchemaValue(
-      builder,
-      propertiesObject[propertyKey] as SchemaObject,
-      rules,
-    );
+    setSchemaValue(builder, propertiesObject[property] as SchemaObject, rules);
   }
 }
 
