@@ -4,10 +4,10 @@ import url from "url";
 export async function safeImport<T = any>(name: string) {
   try {
     try {
-      return (await dynamicImport(name)) as T;
+      return _require(name) as T;
     } catch {
       try {
-        return _require(name) as T;
+        return (await dynamicImport(name)) as T;
       } catch {
         return (await dynamicImport(url.pathToFileURL(name).toString())) as T;
       }
