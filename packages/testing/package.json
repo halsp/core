@@ -59,7 +59,7 @@
     "@halsp/micro-redis": "^2.4.5",
     "@halsp/micro-tcp": "^2.4.5",
     "@halsp/native": "^2.4.5",
-    "supertest": "^6.3.4"
+    "supertest": "^7.0.0"
   },
   "files": [
     "/dist-cjs/**/*",

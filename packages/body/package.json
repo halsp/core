@@ -60,7 +60,7 @@
     "@types/formidable": "^3.4.5",
     "@types/supertest": "^6.0.2",
     "@types/type-is": "^1.6.6",
-    "supertest": "^6.3.4"
+    "supertest": "^7.0.0"
   },
   "files": [
     "/dist-cjs/**/*",
